@@ -1,0 +1,656 @@
+{
+    "channelCreate": {
+        "description": {
+            "withUser": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\ncreated\n{{type}} {{channel}} / `{{channel.name}}` / `{{channel.id}}`",
+            "withoutUser": "{{type}} {{channel}} / `{{channel.name}}` / `{{channel.id}}` was created"
+        },
+        "author": {
+            "title": "{{type}} was created"
+        }
+    },
+    "channelDelete": {
+        "description": {
+            "withUser": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\ndeleted\n{{type}} `{{channel.name}}` / `{{channel.id}}`",
+            "withoutUser": "{{type}} `{{channel.name}}` / `{{channel.id}}` was deleted"
+        },
+        "author": {
+            "title": "{{type}} was deleted"
+        }
+    },
+    "channelPin": {
+        "description": {
+            "withAuthor": {
+                "withAudit": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\npinned [This Message](https://discord.com/channels/{{guild.id}}/{{channel.id}}/{{msg.id}} \"Click to jump to Message\")\nfrom {{author}} / `{{author.tag}}` / `{{author.id}}`\n in Channel {{channel}} / `{{channel.name}}` / `{{channel.id}}`"
+            },
+            "withoutAuthor": {
+                "withAudit": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas pinned a Message\nin Channel {{channel}} / `{{channel.name}}` / `{{channel.id}}`"
+            }
+        },
+        "author": {
+            "title": "Message was pinned"
+        }
+    },
+    "channelUnPin": {
+        "description": {
+            "withAuthor": {
+                "withAudit": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nunpinned [This Message](https://discord.com/channels/{{guild.id}}/{{channel.id}}/{{msg.id}} \"Click to jump to Message\")\nfrom {{author}} / `{{author.tag}}` / `{{author.id}}`\n in Channel {{channel}} / `{{channel.name}}` / `{{channel.id}}`"
+            },
+            "withoutAuthor": {
+                "withAudit": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas unpinned a Message\nin Channel {{channel}} / `{{channel.name}}` / `{{channel.id}}`"
+            }
+        },
+        "author": {
+            "title": "Message was unpinned"
+        }
+    },
+    "channelPinUpdate": {
+        "description": {
+            "withoutAuthor": {
+                "withoutAudit": "The Message Pins were updated\nin Channel {{channel}} / `{{channel.name}}` / `{{channel.id}}`"
+            }
+        },
+        "author": {
+            "title": "Message Pins were updated"
+        }
+    },
+    "channelUpdate": {
+        "description": {
+            "withAudit": "User {{user.mention}} / `{{user.username}}#{{user.discriminator}}` / `{{user.id}}`\nhas Updated\n{{type}} {{channel.mention}} / `{{channel.name}}` / `{{channel.id}}`",
+            "withoutAudit": "{{type}} {{channel.mention}} / `{{channel.name}}` / `{{channel.id}}` was updated"
+        },
+        "author": {
+            "title": "{{type}} was updated"
+        }
+    },
+    "emojiCreate": {
+        "description": {
+            "withUser": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\ncreated\nEmoji {{emoji}} / `{{emoji.name}}` / `{{emoji.id}}`",
+            "withoutUser": "Emoji {{emoji}} / `{{emoji.name}}` / `{{emoji.id}}` was created"
+        },
+        "author": {
+            "title": "Emoji was created"
+        }
+    },
+    "emojiDelete": {
+        "description": {
+            "withUser": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\ndeleted\nEmoji / `{{emoji.name}}` / `{{emoji.id}}`",
+            "withoutUser": "Emoji {{emoji}} / `{{emoji.name}}` / `{{emoji.id}}` was deleted"
+        },
+        "author": {
+            "title": "Emoji was deleted"
+        }
+    },
+    "emojiUpdate": {
+        "description": {
+            "withUser": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nupdated\nEmoji {{oldEmoji}} / `{{oldEmoji.name}}` / `{{oldEmoji.id}}`\nto\nEmoji {{newEmoji}} / `{{newEmoji.name}}` / `{{newEmoji.id}}`",
+            "withoutUser": "Emoji {{oldEmoji}} / `{{oldEmoji.name}}` / `{{oldEmoji.id}}` was updated\nto\n{{newEmoji}} / `{{newEmoji.name}}` / `{{newEmoji.id}}`"
+        },
+        "author": {
+            "title": "Emoji was updated"
+        }
+    },
+    "guildBanAdd": {
+        "description": {
+            "withUser": "Executor {{user}} / `{{user.tag}}` / `{{user.id}}`\nbanned\nTarget {{target}} / `{{target.tag}}` / `{{target.id}}`",
+            "withoutUser": "User {{target}} / `{{target.tag}}` / `{{target.id}}` was banned"
+        },
+        "author": {
+            "title": "User was banned"
+        }
+    },
+    "guildBanRemove": {
+        "description": {
+            "withUser": "Executor {{user}} / `{{user.tag}}` / `{{user.id}}`\nunbanned\nTarget {{target}} / `{{target.tag}}` / `{{target.id}}`",
+            "withoutUser": "User {{target}} / `{{target.tag}}` / `{{target.id}}` was unbanned"
+        },
+        "author": {
+            "title": "User was unbanned"
+        }
+    },
+    "guildCreate": {
+        "author": "Recommended Commands you should check out first:",
+        "fields": {
+            "one": {
+                "name": "`{{prefix}}help setup`",
+                "value": "All Commands to get started on setting up my behavior"
+            },
+            "two": {
+                "name": "`{{prefix}}help settings`",
+                "value": "All Settings related Commands"
+            },
+            "three": {
+                "name": "`{{prefix}}help logging`",
+                "value": "All Logging related Commands"
+            },
+            "four": {
+                "name": "`{{prefix}}help`",
+                "value": "The basic Help Embed"
+            },
+            "five": {
+                "name": "`{{prefix}}contact` `{{prefix}}invite` `{{prefix}}support`",
+                "value": "If you are stuck, something isn't working or you have Data Deletion Requests, use these Commands to contact Support"
+            }
+        },
+        "title": "Default Prefix: `{{prefix}}`"
+    },
+    "guildIntegrationsUpdate": {
+        "description": {
+            "withUser": "Executor {{user}} / `{{user.tag}}` / `{{user.id}}`\nupdated\nIntegration Name: `{{integration.name}}` / ID: `{{integration.id}}`\n\n**Changes**:"
+        },
+        "author": {
+            "title": "Integration was updated"
+        }
+    },
+    "guildIntegrationsRemove": {
+        "description": {
+            "withoutAudit": "Executor {{user}} / `{{user.tag}}` / `{{user.id}}`\nremoved\nIntegration Name: `{{integration.name}}` / ID: `{{integration.id}}`\n\nAdditional Information (if any):",
+            "withAudit": "Executor {{user}} / `{{user.tag}}` / `{{user.id}}`\nremoved\nIntegration Name: `{{integration.name}}` / ID: `{{integration.id}}`\nby removing\nBot {{bot}} / `{{bot.tag}}` / `{{bot.id}}`\n\nAdditional Information (if any):"
+
+        },
+        "author": {
+            "title": "Integration was removed"
+        }
+    },
+    "guildIntegrationsCreate": {
+        "description": {
+            "withUser": "Executor {{user}} / `{{user.tag}}` / `{{user.id}}`\nadded\nIntegration Name: `{{integration.name}}` / ID: `{{integration.id}}`\n\nAdditional Information (if any):"
+        },
+        "author": {
+            "title": "Integration was added"
+        }
+    },
+    "guildMemberAddGiveaway": {
+        "author": {
+            "title": "You joined {{member.guild.name}}"
+        },
+        "description": "You will now be able to claim your prize in [{{guild.name}}](https://discordapp.com/channels/{{guild.id}}/{{channel.id}}/{{message.id}} \"Click to view Giveaway\") if you win."
+    },
+    "guildMemberAddLog": {
+        "author": {
+            "titleUser": "Member Joined",
+            "titleBot": "Bot was added"
+        },
+        "descriptionBot": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nadded\nBot {{bot}} / `{{bot.tag}}` / `{{bot.id}}`\nto the Server",
+        "descriptionUser": "User {{user}} / `{{user.tag}}` / `{{user.id}}` has joined the Server",
+        "descriptionBotNoAudit": "Bot {{bot}} / `{{bot.tag}}` / `{{bot.id}}`\nwas added to the Server",
+        "inviteInfoTitle": "Invite Info",
+        "inviteInfoUses": "__Invite used:__ {{invite.url}} / `{{invite.code}}`\n__Inviter__ (__Invite Creator__): {{invite.inviter}} / `{{invite.inviter.tag}}` / `{{invite.inviter.id}}`\n__Invite uses:__ `{{invite.uses}}`",
+        "inviteInfo": "__Invite used:__ {{invite.url}} / `{{invite.code}}`\n__Inviter__ (__Invite Creator__): {{invite.inviter}} / `{{invite.inviter.tag}}`"
+    },
+    "guildMemberAddVerification": {
+        "author": {
+            "name": "Ayako Verification"
+        },
+        "description": "<a:ToiletSpin:709805618030182510> **Welcome to {{guild.name}}!**",
+        "footer": "You can't read the text? Don't panic! A new Captcha Code will be sent to you every Minute until you verified",
+        "field": "If you don't verify, you won't be able to use the server!",
+        "finishDesc": "**Thank you for verifying!**\n{{finishdesc}}",
+        "kickMsg": "You have been kicked from `{{guild.name}}` because you didn't verify.\nYou can rejoin anytime with this link:",
+        "hint": "Hint",
+        "hintmsg": "Please type the letters in the image you see below -> Example: `mhjkl` \n**The captcha contains 5 Letters, no numbers**",
+        "kickReason": "Invite for unverified and kicked User {{user.tag}} / {{user.id}}",
+        "openDMs": "`{{user}} **Please open your DM's** in order to verify as human. A Captcha will then be sent within 1 Minute.\n **You can close your DM's afterwards**.`",
+        "wrongInput": "That was wrong... Are you a robot?.\nThe solution was `{{solution}}`",
+        "finishedTitle": "Nice! You finished the Verification"
+    },
+    "guildMemberAddWelcome": {
+        "welcome": "Hi %i205 <a:Wave4:711645667118022779>\nWelcome to {{guild.name}}~\nFell free to look around <:comfy:759895974159843338>"
+    },
+    "guildMemberRemove": {
+        "author": {
+            "nameLeave": "Member left",
+            "nameKick": "Member was kicked"
+        },
+        "descriptionKicked": "Executor {{user}} / `{{user.tag}}` / `{{user.id}}`\nkicked\nTarget {{target}} / `{{target.tag}}` / `{{target.id}}`",
+        "descriptionLeft": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nleft the Server"
+    },
+    "guildMemberUpdateNickname": {
+        "author": {
+            "name": "Member Nickname updated"
+        },
+        "descriptionUser": "Executor {{user}} / `{{user.tag}}` / `{{user.id}}`\nupdated the Nickname of\nTarget {{target}} / `{{target.tag}}` / `{{target.id}}`",
+        "descriptionNoUser": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nupdated their own Nickname",
+        "descriptionNoAudit": "The Nickname of\nUser {{user}} / `{{user.tag}}` / `{{user.id}}`\nwas updated"
+    },
+    "guildMemberUpdateVerify": {
+        "author": {
+            "name": "Member has verified"
+        },
+        "description": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas passed the welcome screen and agreed to the Rules"
+    },
+    "guildMemberUpdateRoles": {
+        "author": {
+            "name": "Member Roles updated"
+        },
+        "descriptionUser": "Executor {{user}} / `{{user.tag}}` / `{{user.id}}`\nupdated the Roles of\nTarget {{target}} / `{{target.tag}}` / `{{target.id}}`",
+        "descriptionNoUser": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nupdated their own Roles"
+    },
+    "guildUpdate": {
+        "author": {
+            "name": "Server Updated"
+        },
+        "standardWithAudit": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas updated this Servers ",
+        "standardWithoutAudit": "The Servers {{type}} was updated",
+        "IconOld": "The old Server Icon should be visible on the Bottom of this Embed",
+        "IconNew": "The new Server Icon should be visible on the Side of this Embed",
+        "splashOld": "The old Server Splash Screen Image should be visible on the Bottom of this Embed",
+        "splashNew": "The new Server Splash Screen Image should be visible on the Side of this Embed",
+        "discoverySplashOld": "The old Server Discovery Splash Screen Image should be visible on the Bottom of this Embed",
+        "discoverySplashNew": "The new Server Discovery Splash Screen Image should be visible on the Side of this Embed",
+        "bannerOld": "The old Server Banner should be visible on the Bottom of this Embed",
+        "bannerNew": "The new Server Banner should be visible on the Side of this Embed",
+        "ownerSwitch": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas given Owner to\nTarget {{target}} / `{{target.tag}}` / `{{target.id}}`",
+        "BoostAdd": "Someone has boosted this Server\nIt is now Boost Tier {{tier}} with {{boosters}} Boosters",
+        "BoostRemove": "Someone has stopped boosting this Server\nIt is now Boost Tier {{tier}} with {{boosters}} Boosters",
+        "antispam": "Anti-Spam was temporarily disabled due to a Server Outage\nIt is now re-enabled."
+    },
+    "inviteCreate": {
+        "author": {
+            "name": "Invite Created"
+        },
+        "descriptionNoUser": "An Invite was created",
+        "channel": "This Invite leads to",
+        "url": "Invite URL",
+        "expires": "Expires at",
+        "age": "The maximum age before this Invite expires",
+        "uses": "The maximum uses before this Invite expires",
+        "used": "The amount of times this Invite was used",
+        "targetedUser": "The User this Invite was targeted at",
+        "description": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas created an Invite"
+    },
+    "inviteDelete": {
+        "author": {
+            "name": "Invite Deleted / Expired"
+        },
+        "descriptionNoUser": "An Invite was deleted or expired",
+        "channel": "This Invite lead to",
+        "url": "Invite URL",
+        "expires": "Expired at",
+        "age": "The maximum age at which this Invite expries",
+        "uses": "The maximum uses at which this Invite expires",
+        "targetedUser": "The User this Invite was targeted at",
+        "description": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas deleted an Invite"
+    },
+    "messageDelete": {
+        "author": {
+            "name": "Message Deleted"
+        },
+        "descriptionWithoutAudit": "A Message of\nUser {{user}} / `{{user.tag}}` / `{{user.id}}`\nin\nChannel {{channel}} / `{{channel.name}}` / `{{channel.id}}`\nwas deleted",
+        "descriptionWithAudit": "Executor {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas deleted a Message of\nUser {{target}} / `{{target.tag}}` / `{{target.id}}`\nin\nChannel {{channel}} / `{{channel.name}}` / `{{channel.id}}`"
+    },
+    "messageDeleteBulk": {
+        "author": {
+            "name": "Message Bulk Deleted"
+        },
+        "descriptionWithoutAudit": "{{amount}} Message(s) in\nChannel {{channel}} / `{{channel.name}}` / `{{channel.id}}`\nwere bulk deleted",
+        "descriptionWithAudit": "{{amount}} Message(s) in\nChannel {{channel}} / `{{channel.name}}` / `{{channel.id}}`\nwere bulk deleted by\nUser {{user}} / `{{user.tag}}` / `{{user.id}}` "
+    },
+    "messageReactionAddGiveaway": {
+        "author": {
+            "name": "Ayako Giveaways"
+        },
+        "title": {
+            "denied": "Entry Denied",
+            "accepted": "Entry Accepted"
+        },
+        "description": {
+            "ClickText": "Click to join the Server",
+            "rejectedText": "You do not qualify for entering this [Giveaway]",
+            "acceptedText": "To claim the prize you should join"
+        }
+    },
+    "messageReactionRemoveAll": {
+        "author": {
+            "name": "Reactions Remove All"
+        },
+        "description": "Someone has deleted all reactions of this [Message]({{link}} \"Click to jump to the Message\")"
+    },
+    "messageUpdateLogUpdate": {
+        "author": {
+            "name": "Message Update"
+        },
+        "description": "User {{msg.author}} / `{{msg.author.tag}}` / `{{msg.author.id}}`\nhas updated their [Message]({{link}} \"Click to jump to the Message\") in\nChannel {{msg.channel}} / `{{msg.channel.name}}` / `{{msg.channel.id}}`",
+        "oldContent": "Old Content",
+        "newContent": "New Content"
+    },
+    "messageUpdateLogPublish": {
+        "author": {
+            "name": "Message Published"
+        },
+        "description": "Someone has published this [Message]({{link}} \"Click to jump to the Message\") from\nUser {{msg.author}} / `{{msg.author.tag}}` / `{{msg.author.id}}`\nin\nChannel {{msg.channel}} / `{{msg.channel.name}}` / `{{msg.channel.id}}`"
+    },
+    "roleCreate": {
+        "author": {
+            "name": "Role Created"
+        },
+        "descriptionWithAudit": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas created\nRole {{role}} / `{{role.name}}` / `{{role.id}}`",
+        "descriptionAutorole": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas created\nAutorole {{role}} / `{{role.name}}` / `{{role.id}}`",
+        "descriptionWithoutAudit": "Someone has created\nRole {{role}} / `{{role.name}}` / `{{role.id}}`"
+    },
+    "roleRemove": {
+        "author": {
+            "name": "Role Deleted"
+        },
+        "descriptionWithAudit": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas deleted\nRole `{{role.name}}` / `{{role.id}}`",
+        "descriptionAutorole": "Autorole `{{role.name}}` / `{{role.id}}`\nwas deleted since the Bot this Role belonged to left or was kicked from the Server.",
+        "descriptionWithoutAudit": "Someone has deleted\nRole `{{role.name}}` / `{{role.id}}`"
+    },
+    "roleUpdate": {
+        "author": {
+            "name": "Role Updated"
+        },
+        "descriptionWithAudit": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas updated\nRole {{role}} / `{{role.name}}` / `{{role.id}}`\n\n**Changes:** ",
+        "descriptionWithoutAudit": "Someone has updated\nRole {{role}} / `{{role.name}}` / `{{role.id}}`\n\n**Changes:** "
+    },
+    "userUpdate": {
+        "author": {
+            "name": "User Updated"
+        },
+        "description": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas updated\n\n**Changes:** ",
+        "avatar": "New Avatar should appear at the right side of this Embed"
+    },
+    "voiceUpdate": {
+        "author": {
+            "name": "Voice State Updated"
+        },
+        "wasMoved": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas moved\nTarget {{target}} / `{{target.tag}}` / `{{target.id}}`\nfrom\n{{oldType}} {{oldChannel}} / `{{oldChannel.name}}` / `{{oldChannel.id}}`\nto\n{{newType}} {{newChannel}} / `{{newChannel.name}}` / `{{newChannel.id}}`",
+        "moved": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nmoved from\n{{oldType}} {{oldChannel}} / `{{oldChannel.name}}` / `{{oldChannel.id}}`\nto\n{{newType}} {{newChannel}} / `{{newChannel.name}}` / `{{newChannel.id}}`",
+        "wasDisconnected": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas disconnected\nTarget {{target}} / `{{target.tag}}` / `{{target.id}}`\nfrom\n{{type}} {{oldChannel}} / `{{oldChannel.name}}` / `{{oldChannel.id}}`",
+        "disconnected": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas disconnected from\n{{type}} {{oldChannel}} / `{{oldChannel.name}}` / `{{oldChannel.id}}`",
+        "connected": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas connected into\n{{type}} {{newChannel}} / `{{newChannel.name}}` / `{{newChannel.id}}`",
+        "wasDeafenedWithAudit": "User {{executor}} / `{{executor.tag}}` / `{{executor.id}}`\nhas deafened\nTarget {{target}} / `{{target.tag}}` / `{{target.id}}`",
+        "wasDeafenedWithoutAudit": "Someone has deafened\nTarget {{target}} / `{{target.tag}}` / `{{target.id}}`",
+        "wasMutedWithAudit": "User {{executor}} / `{{executor.tag}}` / `{{executor.id}}`\nhas muted\nTarget {{target}} / `{{target.tag}}` / `{{target.id}}`",
+        "wasMutedWithoutAudit": "Someone has muted\nTarget {{target}} / `{{target.tag}}` / `{{target.id}}`",
+        "startCamera": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas enabled their Camera",
+        "stopCamera": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas disabled their Camera",
+        "startStream": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas started Streaming",
+        "stopStream": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas stopped Streaming",
+        "setSuppress": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nwas moved to Stage in\nStage Channel {{newChannel}} / `{{newChannel.name}}` / `{{newChannel.id}}`",
+        "unsetSuppress": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nwas moved to Audience in\nStage Channel {{newChannel}} / `{{newChannel.name}}` / `{{newChannel.id}}`",
+        "updated": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas updated themselves",
+        "loweredHand": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas lowered their Hand",
+        "raisedHand": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas raised their Hand"
+    },
+    "ready": {
+        "unmute": {
+            "reason": "Automatically Unmuted "
+        },
+        "disboard": {
+            "bumpMsg": "You can now Bump this server again!\n\n`!d bump`",
+            "title": "Ayako DISBOARD Bump Reminder"
+        },
+        "reminder": {
+            "description": "Your reminder is due!",
+            "failedMsg": "I tried to send a message in the cahnnel you set the Reminder in, but I failed."
+        },
+        "vote": {
+            "author": "12 Hours are over!",
+            "description": "If you want to keep your multiplyer streak up, ([click and vote](https://top.gg/bot/650691698409734151/vote))\n Your multiplyer is currently {{votegain}}x"
+        },
+        "giveaway": {
+            "description": {
+                "role": "{{desc}}\n\n**Requirement:**\nYou should have the Role\n{{role}}",
+                "guild": {
+                    "withInvite": "{{desc}}\n\n**Requirement:**\nYou should be Member of\n[{{servername}}]({{invitelink}} \"Join {{servername}} to claim the prize\")",
+                    "withoutInvite": "{{desc}}\n\n\n\n**Requirement**\nYou should be member of\n{{servername}}"
+                }
+            },
+            "name": "Ayako Giveaways",
+            "endedAt": "Ended At",
+            "endAt": "End At",
+            "winners": "Winner(s)",
+            "roleInaccessible": "Giveaway cancelled, the required Role is deleted or inaccessible\n(You can edit the Giveaway Requirements in `h!giveawayedit` and then reroll the Giveaway)",
+            "leftServer": "Giveaway cancelled, Ayako left requirement Server\n(You can re-invite Ayako and then reroll the Giveaway)",
+            "noparticipants": "Giveaway cancelled, no valid participations",
+            "congraz": "Congratulations, {{usermap}}! You won:",
+            "guide": "React with 🎉 to participate!",
+            "remaining": "Time remaining: {{timeleft}}"
+        },
+        "nitro": {
+            "gotRole": "{{user}} has been given the {{role}} role for boosting longer than {{days}} days"
+        },
+        "prune": {
+            "author": "Members Pruned",
+            "description": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas pruned **{{amount}} Members**\nfor **{{days}} day(s)** of inactivity"
+        }
+    },
+    "time": {
+        "seconds": "Second(s)",
+        "minutes": "Minute(s)",
+        "hours": "Hour(s)",
+        "days": "Day(s)",
+        "weeks": "Week(s)",
+        "months": "Month(s)",
+        "years": "Year(s)",
+        "timeAgo": "{{time}} ago",
+        "timeIn": "in {{time}}"
+    },
+    "permissions": {
+        "deniedPermissions": "Denied Permissions",
+        "grantedPermissions": "Granted Permissions",
+        "deletedPermissionFor": "Deleted Permission for",
+        "grantedPermissionFor": "Granted Permission for",
+        "updatedPermissionFor": "Updated Permission for",
+        "updatedPermissions": "Updated Permissions",
+        "unknownPermission": "Unknown Permission Updates have been made",
+        "unknownPermissionFix": "Grant `View Audit` or `Administrator` to fix this issue",
+        "Permissions": "Permissions",
+        "CREATE_INSTANT_INVITE": "Create Instant Invite",
+        "KICK_MEMBERS": "Kick Members",
+        "BAN_MEMBERS": "Ban Members",
+        "ADMINISTRATOR": "Administrator",
+        "MANAGE_CHANNELS": "Manage Channels",
+        "MANAGE_GUILD": "Manage Guild",
+        "ADD_REACTIONS": "Add Reactions",
+        "VIEW_AUDIT_LOG": "View Audit Log",
+        "PRIORITY_SPEAKER": "Priority Speaker",
+        "VIEW_CHANNEL": "View Channel",
+        "READ_MESSAGES": "Read Messages",
+        "SEND_MESSAGES": "Send Messages",
+        "SEND_TTS_MESSAGES": "Send TTS Messages",
+        "MANAGE_MESSAGES": "Manage Messages",
+        "EMBED_LINKS": "Embed Links",
+        "ATTACH_FILES": "Attach Files",
+        "READ_MESSAGE_HISTORY": "Read Message History",
+        "MENTION_EVERYONE": "Mention Everyone",
+        "EXTERNAL_EMOJIS": "External Emojis",
+        "USE_EXTERNAL_EMOJIS": "Use External Emojis",
+        "CONNECT": "Connect",
+        "SPEAK": "Speak",
+        "MUTE_MEMBERS": "Mute Members",
+        "DEAFEN_MEMBERS": "Deafen Members",
+        "MOVE_MEMBERS": "Move Members",
+        "USE_VAD": "Use Voice Activity",
+        "CHANGE_NICKNAME": "Change Nickname",
+        "MANAGE_NICKNAMES": "Manage Nicknames",
+        "MANAGE_ROLES": "Manage Role",
+        "MANAGE_ROLES_OR_PERMISSIONS": "Manage Roles or Permissions",
+        "MANAGE_WEBHOOKS": "Manage Webhooks",
+        "MANAGE_EMOJIS": "Manage Emojis",
+        "USE_SLASH_COMMANDS": "Use slash Commands",
+        "REQUEST_SPEAK": "Request to Speak",
+        "ALL_GUILD": "All Guild Permissions",
+        "ALL_TEXT": "All Text Channel Permissions",
+        "ALL_VOICE": "All Voice Channel Permissions",
+        "ALL": "All Permissions",
+        "STREAM": "Stream",
+        "VIEW_GUILD_INSIGHTS": "View Guild Insights",
+        "STAGE_MODERATOR": "Stage Moderator",
+        "REQUEST_TO_SPEAK": "Request to Speak"
+    },
+    "channels": {
+        "text": "Text Channel",
+        "dm": "DM Channel",
+        "voice": "Voice Channel",
+        "unknown": "Group DM Channel",
+        "category": "Category",
+        "news": "Announcements Channel",
+        "store": "Store Channel",
+        "stage": "Stage Channel"
+    },
+    "channelsNrSorted": {
+        "0": "Text Channel",
+        "1": "DM Channel",
+        "2": "Voice Channel",
+        "3": "Group DM Channel",
+        "4": "Category",
+        "5": "Announcements Channel",
+        "6": "Store Channel",
+        "13": "Stage Channel"
+    },
+    "features": {
+        "ANIMATED_ICON": "```Animated Icon```\n`(Server can set an animated Server Icon)`",
+        "BANNER": "```Banner```\n`(Server can set a Server Banner Image)`",
+        "COMMERCE": "```Commerce```\n`(Server can use commerce Features(i.e. Create Store Channels))`",
+        "COMMUNITY": "```Community```\n`(Server can enable Welcome Screen)`",
+        "DISCOVERABLE": "```Discoverable```\n`(Server can be discovered in the directory)`",
+        "FEATURABLE": "```Featurable```\n`(Server can be featured in the directory)`",
+        "INVITE_SPLASH": "```Invite Splash```\n`(Server can set an Invite Splash Background)`",
+        "MEMBER_VERIFICATION_GATE_ENABLED": "```Member Verification Gate enabled```\n`(Server has enabled Membership Screening)`",
+        "NEWS": "```News```\n`(Server can create News Channels)`",
+        "PARTNERED": "```Partnered```\n`(Server is officially Partnered with Discord)`",
+        "PREVIEW_ENABLED": "```Preview enabled```\n`(Server can be Previewed before joining)`",
+        "VANITY_URL": "```Vanity URL```\n`(Server has a Vanity URL)`",
+        "VERIFIED": "```Verified```\n`(Server is officially Verified by Discord)`",
+        "VIP_REGIONS": "```VIP Voice Channel Regions```\n`(Server has access to VIP Voice Channels (384kbps))`",
+        "WELCOME_SCREEN_ENBALED": "```Welcome Screen enabled```\n`(Server has welcome Screen enabled)`"
+    },
+    "featuresName": "Features",
+    "mod": {
+        "muteAdd": {
+            "author": "Member was muted",
+            "description": "{{user}} has muted {{target}}",
+            "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
+            "activeMute": "Joined with an active Mute",
+            "activeMuteError": "This User joined with an active Mute.\nHowever I wasn't able to Mute them.\nMissing Permissions",
+            "dm": {
+                "author": "You have been Muted on {{guild.name}}"
+            }
+        },
+        "muteRemove": {
+            "author": "Member was unmuted",
+            "description": "{{user}} has unmuted {{target}}",
+            "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
+            "dm": {
+                "author": "You have been Unmuted on {{guild.name}}"
+            }
+        }
+    },
+    "none": "None",
+    "before": "Before",
+    "after": "After",
+    "unknown": "Unknown",
+    "messageContent": "Message Content",
+    "content": "Content",
+    "embedTitle": "Embed Title",
+    "embedDescription": "Embed Description",
+    "embed": "Embed",
+    "unknownEmbed": "Unknow Embed",
+    "changes": "Changes",
+    "name": "Name",
+    "type": "Type",
+    "position": "Position",
+    "topic": "Topic",
+    "nsfw": "NSFW",
+    "slowmode": "Slowmode",
+    "lastPinat": "Last Pin at",
+    "role": "Role",
+    "member": "Member",
+    "deny": "Deny",
+    "allow": "Allow",
+    "wasAdded": "was added",
+    "wasRemoved": "was removed",
+    "neutral": "Neutral",
+    "bitrate": "Bitrate",
+    "closed": "Closed",
+    "opened": "Opened",
+    "disabled": "Disabled",
+    "region": "Region",
+    "automatic": "Automatic",
+    "video_quality_mode": "Video Quality Mode",
+    "unrestricted": "Unrestricted",
+    "reason": "Reason",
+    "user_limit": "User Limit",
+    "rate_limit_per_user": "User Limit",
+    "enabled": "Enabled",
+    "syncing": "Syncing",
+    "syncedAt": "Synced at",
+    "enlableEmotes": "Give access to globally accessible emotes",
+    "expireBehavior": {
+        "name": "What happens when subscription expires",
+        "zero": "Remove Role {{role}}",
+        "one": "Kick User from Guild"
+    },
+    "expireGracePeriod": "The grace period in which subscriptions expire",
+    "user": "User",
+    "account": "Account",
+    "subscribers": "Subscribers",
+    "revoked": "Revoked",
+    "application": "Application",
+    "createdAt": "Created at",
+    "joinedAt": "Joined at",
+    "unverifiedTooLong": "Unverified for too long",
+    "tooManyRoles": "Too many Roles to be displayed",
+    "roles": "Roles",
+    "nickname": "Nickname",
+    "permission_overwrites": "Permission Overwrites",
+    "rtc_region": "Region",
+    "afkTimeout": "AFK Timeout",
+    "afkChannelID": "AFK Channel",
+    "systemChannelID": "System Channel",
+    "embedEnabled": "Embed Enabled",
+    "verificationLevel": {
+        "verificationLevel": "Verification Level",
+        "NONE": "```None```\n`(Unrestricted)`",
+        "LOW": "```Low```\n`(Must have a verified E-Mail on Account)`",
+        "MEDIUM": "```Medium```\n`(Must be registered on Discord for longer than 5 Minutes)`",
+        "HIGH": "```High```\n`(Must be a Member of this Server for longer than 10 Minutes)`",
+        "VERY_HIGH": "```Very High```\n`(Must have a verified Phone Number on Account)`"
+    },
+    "verificationLevelName": "Verification Level",
+    "explicitContentFilter": {
+        "explicitContentFilter": "Explicit Content Filter",
+        "DISABLED": "`Disabled (Media Content will not be scanned)`",
+        "MEMBERS_WITHOUT_ROLES": "`Members without Roles (Media Content sent by Members without roles will be scanned)`",
+        "ALL_MEMBERS": "`All Members (Media Content sent by all Members will be scanned)`" 
+    },
+    "explicitContentFilterName": "Explicit Content Filter",
+    "mfaLevel": {
+        "mfaLevel": "2 Factor Authentification",
+        "0": "```None```\n`(This Server does not require a 2FA for Moderator Actions)`",
+        "1": "```Elevated```\n`(This Server requires a 2FA for Moderator Actions)`"
+    },
+    "mfaLevelName": "2 Factor Authentification",
+    "defaultMessageNotifications": {
+        "ALL": "```All Messages```\n`(Members will receive Notifications for all Messages by Default)`",
+        "MENTIONS": "```Only Mentions```\n`(Members will receive Notifications only for @mentions by Default)`"
+    },
+    "defaultMessageNotificationsName": "Default Message Notification",
+    "vanityURLCode": "Vanity URL Code",
+    "rulesChannelID": "Rules Channel",
+    "publicUpdatesChannelID": "Public Updates Channel",
+    "preferredLocale": "Server Region",
+    "description": "Description",
+    "premiumSubscriptionCount": "Booster Count",
+    "available": "Available State",
+    "icon": "Icon",
+    "splash": "Splash Image",
+    "discoverySplash": "Discovery Splash Image",
+    "banner": "Banner Image",
+    "title": "Title",
+    "color": "Color",
+    "hoisted": "Hoisted",
+    "mentionable": "Mentionable",
+    "tags": "Tags",
+    "avatar": "Avatar",
+    "username": "Username",
+    "discriminator": "Discriminator / Tag",
+    "channel": "Channel",
+    "deaf": "Deafened",
+    "mute": "Muted",
+    "camera": "Camera",
+    "streaming": "Streaming",
+    "suppress": "Suppressed",
+    "requestToSpeak": "Request To Speak"
+}

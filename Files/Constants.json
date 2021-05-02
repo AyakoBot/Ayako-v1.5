@@ -1,0 +1,269 @@
+{
+    "channelCreate": {
+        "color": "GREEN",
+        "author": {
+            "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673217172897822/ChannelCreate.png",
+            "link": "https://discord.com/channels/{{channel.guild.id}}/{{channel.id}}"
+        }
+    },
+    "channelDelete": {
+        "color": "RED",
+        "author": {
+            "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673218522808361/ChannelDelete.png"
+        }
+    },
+    "channelPin": {
+        "color": "GREEN",
+        "author": {
+            "image": "https://cdn.discordapp.com/attachments/760152457799401532/832029343206211614/PinAdd.png",
+            "link": "https://discord.com/channels/{{guild.id}}/{{channel.id}}/{{msg.id}}"
+        }
+    },
+    "channelUnPin": {
+        "color": "RED",
+        "author": {
+            "image": "https://cdn.discordapp.com/attachments/760152457799401532/832029341968891974/PinRemove.png",
+            "link": "https://discord.com/channels/{{guild.id}}/{{channel.id}}/{{msg.id}}"
+        }
+    },
+    "channelPinUpdate": {
+        "color": "YELLOW",
+        "author": {
+            "image": "https://cdn.discordapp.com/attachments/760152457799401532/832029346880421918/PinUpdate.png"
+        }
+    },
+    "channelUpdate": {
+        "color": "YELLOW",
+        "author": {
+            "image": "https://cdn.discordapp.com/attachments/760152457799401532/831674121997123624/ChannelUpdate.png",
+            "link": "https://discord.com/channels/{{channel.guild.id}}/{{channel.id}}"
+        }
+    },
+    "emojiCreate": {
+        "color": "GREEN",
+        "author": {
+            "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673209342263296/emojiDelete.png",
+            "link": "https://cdn.discordapp.com/emojis/{{emoji.id}}.{{ending}}"
+        }
+    },
+    "emojiDelete": {
+        "color": "RED",
+        "author": {
+            "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673209342263296/emojiDelete.png",
+            "link": "https://cdn.discordapp.com/emojis/{{emoji.id}}.{{ending}}"
+        }
+    },
+    "emojiUpdate": {
+        "color": "YELLOW",
+        "author": {
+            "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673221350162462/emojiUpdate.png",
+            "link": "https://cdn.discordapp.com/emojis/{{emoji.id}}.{{ending}}"
+        }
+    },
+    "guildBanAdd": {
+        "color": "GREEN",
+        "author": {
+            "image": "https://cdn.discordapp.com/attachments/760152457799401532/831682933777235968/BanAdd.png"
+        }
+    },
+    "guildBanRemove": {
+        "color": "RED",
+        "author": {
+            "image": "https://cdn.discordapp.com/attachments/760152457799401532/831682931952844851/BanRemove.png"
+        }
+    },
+    "guildCreate": {
+        "logEmbed": {
+            "guildName": "Guild Name",
+            "guildId": "Guild ID",
+            "memberCount": "Membercount",
+            "currentGuildCount": "Ayako is now in {{client.guilds.cache.size}} guilds",
+            "joinedAGuild": "<@&669894051851403294> joined a new Guild",
+            "guildOwner": "Guild Owner"
+        }
+    },
+    "guildDelete": {
+        "logEmbed": {
+            "color": "RED",
+            "guildName": "Guild Name",
+            "guildId": "Guild ID",
+            "memberCount": "Membercount",
+            "currentGuildCount": "Ayako is now in {{client.guilds.cache.size}} guilds",
+            "joinedAGuild": "<@&669894051851403294> left a Guild",
+            "guildOwner": "Guild Owner"
+        }
+    },
+    "guildIntegrationsUpdate": {
+        "color": "YELLOW",
+        "author": {
+            "image": "https://cdn.discordapp.com/attachments/760152457799401532/832079482864926760/IntegrationsUpdate.png"
+        }
+    },
+    "guildIntegrationsRemove": {
+        "color": "RED",
+        "author": {
+            "image": "https://cdn.discordapp.com/attachments/760152457799401532/832079483955576883/IntegrationsDelete.png"
+        }
+    },
+    "guildIntegrationsCreate": {
+        "color": "GREEN",
+        "author": {
+            "image": "https://cdn.discordapp.com/attachments/760152457799401532/832079485481255002/IntegrationsCreate.png"
+        }
+    },
+    "guildMemberAddLog": {
+        "color": "GREEN",
+        "author": {
+            "image": "https://cdn.discordapp.com/attachments/760152457799401532/832837384936620032/GuildMemberAdd.png",
+            "link": "https://discord.com/channels/@me/{{user.id}}"
+        }
+    },
+    "guildMemberRemove": {
+        "author": {
+           "kickImage": "https://cdn.discordapp.com/attachments/760152457799401532/833915327199969290/kick.png",
+           "leaveImage": "https://cdn.discordapp.com/attachments/760152457799401532/833915889077846036/GuildMemberRemove.png",
+           "link": "https://discord.com/channels/@me/{{user.id}}"
+        },
+        "color": "RED"
+    },
+    "guildMemberUpdate": {
+        "author": {
+           "image": "https://cdn.discordapp.com/attachments/760152457799401532/834254630644219944/GuildMemberUpdate.png",
+           "link": "https://discord.com/channels/@me/{{user.id}}"
+        },
+        "color": "YELLOW"
+    },
+    "guildUpdate": {
+        "author": {
+            "image": ""
+        },
+        "color": "YELLOW"
+    },
+    "inviteCreate": {
+        "author": {
+            "image": "",
+            "link": "https://discord.com/channels/@me/{{user.id}}"
+        },
+        "color": "GREEN"
+    },
+    "inviteDelete": {
+        "author": {
+            "image": "",
+            "link": "https://discord.com/channels/@me/{{user.id}}"
+        },
+        "color": "RED"
+    },
+    "messageDelete": {
+        "author": {
+            "image": "",
+            "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
+        },
+        "color": "RED"
+    },
+    "messageDeleteBulk": {
+        "author": {
+            "image": "",
+            "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}"
+        },
+        "color": "RED"
+    },
+    "messageReactionAddGiveaway": {
+        "author": {
+            "image": ""
+        },
+        "color": "ff0000",
+        "url": "https://discordapp.com/channels/{{reaction.message.guild.id}}/{{reaction.message.channel.id}}/{{reaction.message.id}}"
+    },
+    "messageReactionRemoveAll": {
+        "author": {
+            "image": "",
+            "link": "https://discordapp.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
+        },
+        "color": "RED"
+    },
+    "messageUpdateLogUpdate": {
+        "author": {
+            "image": "",
+            "link": "https://discordapp.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
+        },
+        "color": "YELLOW"
+    },
+    "messageUpdateLogPublish": {
+        "author": {
+            "image": "",
+            "link": "https://discordapp.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
+        },
+        "color": "GREEN"
+    },
+    "prune": {
+        "author": {
+            "image": ""
+        },
+        "color": "RED"
+    },
+    "roleCreate": {
+        "author": {
+            "image": ""
+        },
+        "color": "GREEN"
+    },
+    "roleRemove": {
+        "author": {
+            "image": ""
+        },
+        "color": "RED"
+    },
+    "roleUpdate": {
+        "author": {
+            "image": ""
+        },
+        "color": "YELLOW"
+    },
+    "userUpdate": {
+        "author": {
+            "image": "",
+            "link": "https://discord.com/channels/@me/{{user.id}}"
+        },
+        "color": "YELLOW"
+    },
+    "voiceUpdate": {
+        "author": {
+            "image": ""
+        },
+        "color": "YELLOW",
+        "joinColor": "GREEN",
+        "leaveColor": "RED"
+    },
+    "enabled": "<:enabled:831360855018962944>",
+    "disabled": "<:disabled:831360826048774176>",
+    "switch": {
+        "disable": "<:disableYesSwitch:831557872952934411><:neutralNoSwitch:831559195215134790><:enableNoSwitch:831557873086758962>",
+        "enable": "<:disableNoSwitch:831557873070637066><:neutralNoSwitch:831559195215134790><:enableYesSwitch:831557872818192457>",
+        "neutral": "<:disableNoSwitch:831557873070637066><:neutralYesSwitch:831559195185905704><:enableNoSwitch:831557873086758962>"
+    },
+    "standard": {
+        "color": "#b0ff00",
+        "name": "Ayako",
+        "guildLogChannel": "718181439354437693",
+        "errorLogChannel": "829148971125047328",
+        "prefix": "h!",
+        "invite": "https://discord.com/api/oauth2/authorize?client_id=650691698409734151&permissions=4194168055&scope=bot",
+        "image": "https://ayakobot.com/DefaultEmbedImage"
+    },
+    "mod": {
+        "muteAdd": {
+            "color": "ff0000",
+            "author": {
+                "image": "",
+                "link": "https://discord.com/channels/{{guild.id}}"
+            }
+        },
+        "muteRemove": {
+            "color": "00ff00",
+            "author": {
+                "image": "",
+                "link": "https://discord.com/channels/{{guild.id}}"
+            }
+        }
+    }
+}
