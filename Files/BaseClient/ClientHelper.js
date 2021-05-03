@@ -376,6 +376,13 @@ module.exports = {
 			format: 'png'
 		});
 	},
+	avatarURL(webhook) {
+		return webhook.avatarURL({
+			dynamic: true,
+			size: 2048,
+			format: 'png'
+		});
+	},
 	async languageSelector(guild) {
 		if (guild.id) {
 			//const resLan = await this.query(`SELECT * FROM language WHERE guildid = '${guild.id}'`);

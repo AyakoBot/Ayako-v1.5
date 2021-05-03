@@ -232,7 +232,7 @@ client.on('presenceUpdate', (oldPresence, newPresence) => {
 	file.execute(oldPresence, newPresence);
 });
 client.on('webhookUpdate', (data) => {
-	const file = require('./Files/Events/webhookEvent/webhooksUpdate.js'); 
+	const file = require('./Files/Events/webhookEvents/webhookUpdate.js'); 
 	file.execute(data);
 });
 client.on('typingStart', (channel, user) => {

@@ -98,6 +98,10 @@ discoverySplashURL(user)
 dynamically displays the discovery splash image of a guild
 
 
+avatarURL(webhook)
+dynamically displays the avatar of a webhook
+
+
 language selector(guild)
 select the required language of the given guild
 

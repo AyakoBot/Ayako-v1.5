@@ -20,7 +20,7 @@
     "channelPin": {
         "description": {
             "withAuthor": {
-                "withAudit": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\npinned [This Message](https://discord.com/channels/{{guild.id}}/{{channel.id}}/{{msg.id}} \"Click to jump to Message\")\nfrom {{author}} / `{{author.tag}}` / `{{author.id}}`\n in Channel {{channel}} / `{{channel.name}}` / `{{channel.id}}`"
+                "withAudit": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\npinned [This Message](https://discord.com/channels/{{guild.id}}/{{channel.id}}/{{msg.id}} \"Click to jump to Message\")\nfrom {{author}} / `{{author.tag}}` / `{{author.id}}`\nin Channel {{channel}} / `{{channel.name}}` / `{{channel.id}}`"
             },
             "withoutAuthor": {
                 "withAudit": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas pinned a Message\nin Channel {{channel}} / `{{channel.name}}` / `{{channel.id}}`"
@@ -33,7 +33,7 @@
     "channelUnPin": {
         "description": {
             "withAuthor": {
-                "withAudit": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nunpinned [This Message](https://discord.com/channels/{{guild.id}}/{{channel.id}}/{{msg.id}} \"Click to jump to Message\")\nfrom {{author}} / `{{author.tag}}` / `{{author.id}}`\n in Channel {{channel}} / `{{channel.name}}` / `{{channel.id}}`"
+                "withAudit": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nunpinned [This Message](https://discord.com/channels/{{guild.id}}/{{channel.id}}/{{msg.id}} \"Click to jump to Message\")\nfrom {{author}} / `{{author.tag}}` / `{{author.id}}`\nin Channel {{channel}} / `{{channel.name}}` / `{{channel.id}}`"
             },
             "withoutAuthor": {
                 "withAudit": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas unpinned a Message\nin Channel {{channel}} / `{{channel.name}}` / `{{channel.id}}`"
@@ -189,7 +189,7 @@
         "hint": "Hint",
         "hintmsg": "Please type the letters in the image you see below -> Example: `mhjkl` \n**The captcha contains 5 Letters, no numbers**",
         "kickReason": "Invite for unverified and kicked User {{user.tag}} / {{user.id}}",
-        "openDMs": "`{{user}} **Please open your DM's** in order to verify as human. A Captcha will then be sent within 1 Minute.\n **You can close your DM's afterwards**.`",
+        "openDMs": "`{{user}} **Please open your DM's** in order to verify as human. A Captcha will then be sent within 1 Minute.\n**You can close your DM's afterwards**.`",
         "wrongInput": "That was wrong... Are you a robot?.\nThe solution was `{{solution}}`",
         "finishedTitle": "Nice! You finished the Verification"
     },
@@ -353,24 +353,27 @@
         "author": {
             "name": "Voice State Updated"
         },
-        "wasMoved": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas moved\nTarget {{target}} / `{{target.tag}}` / `{{target.id}}`\nfrom\n{{oldType}} {{oldChannel}} / `{{oldChannel.name}}` / `{{oldChannel.id}}`\nto\n{{newType}} {{newChannel}} / `{{newChannel.name}}` / `{{newChannel.id}}`",
-        "moved": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nmoved from\n{{oldType}} {{oldChannel}} / `{{oldChannel.name}}` / `{{oldChannel.id}}`\nto\n{{newType}} {{newChannel}} / `{{newChannel.name}}` / `{{newChannel.id}}`",
-        "wasDisconnected": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas disconnected\nTarget {{target}} / `{{target.tag}}` / `{{target.id}}`\nfrom\n{{type}} {{oldChannel}} / `{{oldChannel.name}}` / `{{oldChannel.id}}`",
-        "disconnected": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas disconnected from\n{{type}} {{oldChannel}} / `{{oldChannel.name}}` / `{{oldChannel.id}}`",
-        "connected": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas connected into\n{{type}} {{newChannel}} / `{{newChannel.name}}` / `{{newChannel.id}}`",
-        "wasDeafenedWithAudit": "User {{executor}} / `{{executor.tag}}` / `{{executor.id}}`\nhas deafened\nTarget {{target}} / `{{target.tag}}` / `{{target.id}}`",
-        "wasDeafenedWithoutAudit": "Someone has deafened\nTarget {{target}} / `{{target.tag}}` / `{{target.id}}`",
-        "wasMutedWithAudit": "User {{executor}} / `{{executor.tag}}` / `{{executor.id}}`\nhas muted\nTarget {{target}} / `{{target.tag}}` / `{{target.id}}`",
-        "wasMutedWithoutAudit": "Someone has muted\nTarget {{target}} / `{{target.tag}}` / `{{target.id}}`",
-        "startCamera": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas enabled their Camera",
-        "stopCamera": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas disabled their Camera",
-        "startStream": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas started Streaming",
-        "stopStream": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas stopped Streaming",
-        "setSuppress": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nwas moved to Stage in\nStage Channel {{newChannel}} / `{{newChannel.name}}` / `{{newChannel.id}}`",
-        "unsetSuppress": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nwas moved to Audience in\nStage Channel {{newChannel}} / `{{newChannel.name}}` / `{{newChannel.id}}`",
-        "updated": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas updated themselves",
-        "loweredHand": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas lowered their Hand",
-        "raisedHand": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas raised their Hand"
+        "description": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nVoice State Updated",
+        "deaf": "Before: `{{oldState.deaf}}`\nAfter: `{{newState.deaf}}`\n\n**Deaf Status**\nBefore: `{{oldState.deaf}}`\nAfter: `{{newState.deaf}}`",
+        "deafAudit": "Before: `{{oldState.deaf}}`\nAfter: `{{newState.deaf}}`\n\n**Deaf Status**\nBefore: `{{oldState.deaf}}`\nAfter: `{{newState.deaf}}`\nExecutor: {{user}} / `{{user.tag}}` / `{{user.id}}`",
+        "deafNoAudit": "Before: `{{oldState.deaf}}`\nAfter: `{{newState.deaf}}`\n\n**Deaf Status**\nBefore: `{{oldState.deaf}}`\nAfter: `{{newState.deaf}}`\nExecutor: Unknown",
+        "mute": "Before: `{{oldState.selfMute}}`\nAfter: `{{newState.selfMute}}`\n\n**Mute Status**\nBefore: `{{oldState.mute}}`\nAfter: `{{newState.mute}}`",
+        "muteAudit": "Before: `{{oldState.serverMute}}`\nAfter: `{{newState.serverMute}}`\n\n**Mute Status**\nBefore: `{{oldState.mute}}`\nAfter: `{{newState.mute}}`\nExecutor: {{user}} / `{{user.tag}}` / `{{user.id}}`",
+        "muteNoAudit": "Before: `{{oldState.serverMute}}`\nAfter: `{{newState.serverMute}}`\n\n**Mute Status**\nBefore: `{{oldState.mute}}`\nAfter: `{{newState.mute}}`\nExecutor: Unknown",
+        "moved": "Before: {{oldType}} {{oldChannel}} / `{{oldChannel.name}}` / `{{oldChannel.id}}`\nAfter: {{newType}} {{newChannel}} / `{{newChannel.name}}` / `{{newChannel.id}}`",
+        "movedAudit": "Before: {{oldType}} {{oldChannel}} / `{{oldChannel.name}}` / `{{oldChannel.id}}`\nAfter: {{newType}} {{newChannel}} / `{{newChannel.name}}` / `{{newChannel.id}}`\nExecutor: {{user}} / `{{user.tag}}` / `{{user.id}}`",
+        "movedNoAudit": "Before: {{oldType}} {{oldChannel}} / `{{oldChannel.name}}` / `{{oldChannel.id}}`\nAfter: {{newType}} {{newChannel}} / `{{newChannel.name}}` / `{{newChannel.id}}`\nExecutor: Unknown",
+        "disconnected": "Before: {{oldType}} {{oldChannel}} / `{{oldChannel.name}}` / `{{oldChannel.id}}`\nAfter: `None (disconnected)`",
+        "disconnectedAudit": "Before: {{oldType}} {{oldChannel}} / `{{oldChannel.name}}` / `{{oldChannel.id}}`\nAfter: `None (disconnected)`\nExecutor: {{user}} / `{{user.tag}}` / `{{user.id}}`",
+        "connected": "Before: `None (connected)`\nAfter: {{newType}} {{newChannel}} / `{{newChannel.name}}` / `{{newChannel.id}}`",
+        "startCamera": "Enabled Camera",
+        "stopCamera": "Disabled Camera",
+        "startStream": "Started Streaming",
+        "stopStream": "Stopped Streaming",
+        "setSuppress": "Moved to Stage in\nStage Channel {{newChannel}} / `{{newChannel.name}}` / `{{newChannel.id}}`",
+        "unsetSuppress": "Moved to Audience in\nStage Channel {{newChannel}} / `{{newChannel.name}}` / `{{newChannel.id}}`",
+        "loweredHand": "Lowered their Hand",
+        "raisedHand": "Raised their Hand"
     },
     "ready": {
         "unmute": {
@@ -386,7 +389,7 @@
         },
         "vote": {
             "author": "12 Hours are over!",
-            "description": "If you want to keep your multiplyer streak up, ([click and vote](https://top.gg/bot/650691698409734151/vote))\n Your multiplyer is currently {{votegain}}x"
+            "description": "If you want to keep your multiplyer streak up, ([click and vote](https://top.gg/bot/650691698409734151/vote))\nYour multiplyer is currently {{votegain}}x"
         },
         "giveaway": {
             "description": {
@@ -652,5 +655,8 @@
     "camera": "Camera",
     "streaming": "Streaming",
     "suppress": "Suppressed",
-    "requestToSpeak": "Request To Speak"
+    "requestToSpeak": "Request To Speak",
+    "moved": "Moved",
+    "disconnected": "Disconnected",
+    "connected": "Connected"
 }
