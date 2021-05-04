@@ -43,7 +43,7 @@ module.exports = {
 					const user = await client.users.fetch(res.rows[i].userid);
 					const guild = client.guilds.cache.get(res.rows[i].guildid);
 					if (guild && guild.id) {
-						const member = await ch.member(user);
+						const member = await ch.member(guild, user);
 						const language = ch.languageSelector(guild);
 						if (user && user.id) {
 							content += `HANDLING = ${user.id} / ${user.username} - ${guild.id} / ${guild.name}\n`;

@@ -29,7 +29,6 @@ module.exports = {
 			}
 		}
 		if (requirement) {
-			console.log(res.rows[0]);
 			let dmChannel;
 			const embed = new Discord.MessageEmbed()
 				.setAuthor(lan.author.name, Constants.standard.icon, Constants.standard.invite);

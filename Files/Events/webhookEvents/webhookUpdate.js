@@ -13,18 +13,18 @@ module.exports = {
 			const r = res.rows[0];
 			const logchannel = client.channels.cache.get(r.webhookEvents);
 			if (logchannel && logchannel.id) {
-				const webhooks = (await data.fetchWebhooks()).filter(w => w.channel.id == data.id);
+				const webhooks = await data.fetchWebhooks().catch(() => {});
 				const audits = [];
 				const auditsCreate = await guild.fetchAuditLogs({limit: 3, type: 50});
 				const auditsUpdate = await guild.fetchAuditLogs({limit: 3, type: 51});
 				const auditsDelete = await guild.fetchAuditLogs({limit: 3, type: 52});
-				if (auditsCreate && auditsCreate.entries) audits.push(auditsCreate.entries); 
-				if (auditsUpdate && auditsUpdate.entries) audits.push(auditsUpdate.entries); 
-				if (auditsDelete && auditsDelete.entries) audits.push(auditsDelete.entries); 
+				if (auditsCreate && auditsCreate.entries) auditsCreate.entries.forEach(a => audits.push(a)); 
+				if (auditsUpdate && auditsUpdate.entries) auditsUpdate.entries.forEach(a => audits.push(a)); 
+				if (auditsDelete && auditsDelete.entries) auditsDelete.entries.forEach(a => audits.push(a)); 
 				let entry; let webhook;
-				if (audits.size > 0) {
-					audits.forEach(a => webhooks.forEach(w => {if (w.id == a.target.id) entry = a; webhook = w;}));
-					entry = entry.first();
+				if (audits.length > 0) {
+					audits.sort((a, b) => b.id - a.id);
+					audits.forEach(a => webhooks.forEach(w => {if (w.id == a.target.id) {entry = a; webhook = w;}}));
 					const embed = new Discord.MessageEmbed();
 					if (entry.actionType == 'CREATE') {
 						const lan = language.webhookCreate;
@@ -41,15 +41,46 @@ module.exports = {
 					if (entry.actionType == 'UPDATE') {
 						const lan = language.webhookUpdate;
 						const con = Constants.webhookUpdate;
-
+						const changedKey = [];
+						console.log(entry);
+						embed.setColor(con.color);
+						embed.setAuthor(lan.author.name, con.author.image);
+						for (const [key, before, after] of entry.changes) {
+							if (key == 'name') {
+								embed.addField(language.name, `${language.before}: \`${before}\`\n${language.after}: \`${after}\``); 
+								changedKey.push(language.name);
+							}
+							if (key == 'channel_id') {
+								const oldChannel = client.channels.cache.get(before); 
+								const newChannel = client.channels.cache.get(after); 
+								embed.addField(language.channel, `${language.before}: ${oldChannel ? `${oldChannel} / \`${oldChannel.name}\` / \`${oldChannel.id}\`` : `${language.unknown} / \`${language.unknown}\` / \`${before}\``}\n${language.after}: ${newChannel ? `${newChannel} / \`${newChannel.name}\` / \`${newChannel.id}\`` : `${language.unknown} / \`${language.unknown}\` / \`${after}\``}`); 
+								changedKey.push(language.channel);
+							}
+							if (key == 'avatar_hash') {
+								webhook.wanted = 'avatar';
+								const path = await ch.downloader(webhook, ch.avatarURL(webhook));
+								if (path) {
+									const name = await ch.getName(path);
+									embed.attachFiles([path]);
+									embed.setThumbnail(`attachment://${name}`);
+									embed.addField(language.avatar, lan.avatar);
+								}
+							}
+						}
 					}
 					if (entry.actionType == 'DELETE') {
 						const lan = language.webhookDelete;
 						const con = Constants.webhookDelete;
-
-
+						embed.setColor(con.color);
+						embed.setAuthor(lan.author.name, con.author.image);
+						if (webhook.avatar) embed.setThumbnail(ch.avatarURL(webhook));
+						if (webhook.name) embed.addField(language.name, webhook.name);
+						if (webhook.channelID) embed.addField(language.pointsTo, `<#${webhook.channelID}>`);
+						if (webhook.type) embed.addField(language.type, webhook.type == 'Incoming' ? language.incoming : language.channelFollower);
+						if (entry.reason) embed.addField(language.reason, entry.reason);
+						embed.setDescription(ch.stp(lan.description, {user: entry.executor, channel: data, name: webhook.name}));
 					}
-					ch.send(embed);
+					//if (embed.description) ch.send(logchannel, embed);
 				}
 			}
 		}
