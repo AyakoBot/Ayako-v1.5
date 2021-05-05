@@ -8,7 +8,7 @@ module.exports = {
 		if (!data.guild) return; //we only want to process channels here since webhook events should always be hooked to a channel
 		const guild = data.guild;
 		const language = await ch.languageSelector(guild);
-		const res = await ch.query(`SELECT * FROM logchannels WHERE guildid = '${guild.id}'`);
+		const res = await ch.query(`SELECT * FROM logchannels WHERE guildid = '${guild.id}';`);
 		if (res && res.rowCount > 0) {
 			const r = res.rows[0];
 			const logchannel = client.channels.cache.get(r.webhookEvents);

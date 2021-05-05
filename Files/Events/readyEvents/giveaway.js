@@ -7,7 +7,7 @@ require('moment-duration-format');
 
 module.exports = {
 	async execute() {
-		const res = await ch.query('SELECT * FROM giveawaysettings');
+		const res = await ch.query('SELECT * FROM giveawaysettings;');
 		if (res && res.rowCount > 0) {
 			res.rows.forEach(async (row) => {
 				const r = row;
@@ -56,7 +56,7 @@ module.exports = {
 													.setFooter(language.ready.giveaway.endedAt)
 													.addField(language.ready.giveaway.roleInaccessible, '\u200b');
 												msg.edit(embed).catch(() => {});
-												ch.query(`UPDATE giveawaysettings SET ended = 'true' WHERE messageid = '${msg.id}'`);
+												ch.query(`UPDATE giveawaysettings SET ended = 'true' WHERE messageid = '${msg.id}';`);
 												return;
 											}
 										}
@@ -73,7 +73,7 @@ module.exports = {
 													.setFooter(language.ready.giveaway.endedAt)
 													.addField(language.ready.giveaway.leftServer, '\u200b');
 												msg.edit(embed).catch(() => {});
-												ch.query(`UPDATE giveawaysettings SET ended = 'true' WHERE messageid = '${msg.id}'`);
+												ch.query(`UPDATE giveawaysettings SET ended = 'true' WHERE messageid = '${msg.id}';`);
 												return;
 											}
 										}
@@ -103,7 +103,7 @@ module.exports = {
 									}
 									msg.edit(embed).catch(() => {});
 								}
-								ch.query(`UPDATE giveawaysettings SET ended = 'true' WHERE messageid = '${r.messageid}'`);
+								ch.query(`UPDATE giveawaysettings SET ended = 'true' WHERE messageid = '${r.messageid}';`);
 							}
 						} else if (endat > Date.now() && ended == false) {
 							const msg = await channel.messages.fetch(r.messageid).catch(() => {});

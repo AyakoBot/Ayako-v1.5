@@ -7,7 +7,7 @@ module.exports = {
 	async execute() {
 		const Logchannel = client.channels.cache.get('781724288830013481');
 		let content = `${new Date(Date.now()).toLocaleString()}\n`;
-		const result = await ch.query('SELECT * FROM nitrosettings');
+		const result = await ch.query('SELECT * FROM nitrosettings;');
 		if (result && result.rowCount > 0) {
 			for (let j = 0; j < result.rowCount; j++) {
 				const roleid = result.rows[j].boosterroleid;
@@ -16,14 +16,14 @@ module.exports = {
 					const role = guild.roles.cache.get(roleid);
 					if (role && role.id) {
 						role.members.forEach(async (member) => {
-							const res = await ch.query(`SELECT * FROM nitroboosters WHERE userid = '${member.user.id}' AND guildid = '${guild.id}'`);
+							const res = await ch.query(`SELECT * FROM nitroboosters WHERE userid = '${member.user.id}' AND guildid = '${guild.id}';`);
 							if (res.rowCount == 0) {
-								ch.query(`INSERT INTO nitroboosters (guildid, userid, days, stillactive) VALUES ('${guild.id}', '${member.user.id}', '0', 'true')`);
+								ch.query(`INSERT INTO nitroboosters (guildid, userid, days, stillactive) VALUES ('${guild.id}', '${member.user.id}', '0', 'true');`);
 								content += `ADDED to true = ${member.user.id} / ${member.user.username} - ${guild.id} / ${guild.name}\n`;
 							} 
 							if (res.rowCount !== 0) {
-								ch.query(`UPDATE nitroboosters SET stillactive = 'true' WHERE userid = '${member.user.id}' AND guildid = '${guild.id}'`);
-								content += `SET to true = ${member.user.id} / ${member.user.username} - ${guild.id} / ${guild.name}\n`;
+								ch.query(`UPDATE nitroboosters SET stillactive = 'true' WHERE userid = '${member.user.id}' AND guildid = '${guild.id}';`);
+								content += `SET to true = ${member.user.id} / ${member.user.username} - ${guild.id} / ${guild.name} ;\n`;
 							}
 						});
 					} else {
@@ -36,7 +36,7 @@ module.exports = {
 				}
 			}
 		}
-		const res = await ch.query('SELECT * FROM nitroboosters');
+		const res = await ch.query('SELECT * FROM nitroboosters;');
 		if (res && res.rowCount > 0) {
 			for (let i = 0; i < res.rowCount; i++) {
 				if (res.rows[i].stillactive == true) {
@@ -47,7 +47,7 @@ module.exports = {
 						const language = ch.languageSelector(guild);
 						if (user && user.id) {
 							content += `HANDLING = ${user.id} / ${user.username} - ${guild.id} / ${guild.name}\n`;
-							const resS = await ch.query(`SELECT * FROM nitrosettings WHERE guildid = '${guild.id}'`);
+							const resS = await ch.query(`SELECT * FROM nitrosettings WHERE guildid = '${guild.id}';`);
 							if (resS && resS.rowCount > 0) {
 								const boosterroleid = resS.rows[0].boosterroleid;
 								const boosterrole = guild.roles.cache.get(boosterroleid);
@@ -56,18 +56,18 @@ module.exports = {
 								if (nitrologchannelid !== null) {
 									NitroLogChannel = guild.channels.cache.get(nitrologchannelid);
 								}
-								const resR = await ch.query(`SELECT * FROM nitroroles WHERE guildid = '${guild.id}'`);
+								const resR = await ch.query(`SELECT * FROM nitroroles WHERE guildid = '${guild.id}';`);
 								if (resR.rowCount == 0) {
 									if (member) {
 										if (member.roles.cache.has(boosterrole.id)) {
 											let Days = res.rows[i].days;
 											Days++;
-											ch.query(`UPDATE nitroboosters SET days = '${Days}' WHERE userid = '${user.id}' AND guildid = '${guild.id}'`);
+											ch.query(`UPDATE nitroboosters SET days = '${Days}' WHERE userid = '${user.id}' AND guildid = '${guild.id}';`);
 											content += `UPDATED days = ${user.id} / ${user.username} - ${guild.id} / ${guild.name}\n`;
 										} else {
 											if (res.rows[i].stillactive == true) {
-												ch.query(`UPDATE nitroboosters SET stillactive = 'false' WHERE userid = '${user.id}' AND guildid = '${guild.id}'`);
-												content += `SET to false = ${user.id} / ${user.username} - ${guild.id} / ${guild.name}\n`;
+												ch.query(`UPDATE nitroboosters SET stillactive = 'false' WHERE userid = '${user.id}' AND guildid = '${guild.id}';`);
+												content += `SET to false = ${user.id} / ${user.username} - ${guild.id} / ${guild.name} ;\n`;
 											}
 										}
 									}
@@ -76,7 +76,7 @@ module.exports = {
 										if (member.roles.cache.has(boosterrole.id)) {
 											let Days = res.rows[i].days;
 											Days++;
-											ch.query(`UPDATE nitroboosters SET days = '${Days}' WHERE userid = '${user.id}' AND guildid = '${guild.id}'`);
+											ch.query(`UPDATE nitroboosters SET days = '${Days}' WHERE userid = '${user.id}' AND guildid = '${guild.id}';`);
 											content += `UPDATED days = ${user.id} / ${user.username} - ${guild.id} / ${guild.name}\n`;
 											for (let l = 0; l < resR.rowCount; l++) {
 												if (res.rows[i].days > resR.rows[l].days) {
@@ -97,13 +97,13 @@ module.exports = {
 											}
 										} else {
 											if (res.rows[i].stillactive == true) {
-												ch.query(`UPDATE nitroboosters SET stillactive = 'false' WHERE userid = '${user.id}' AND guildid = '${guild.id}'`);
-												content += `SET to false = ${user.id} / ${user.username} - ${guild.id} / ${guild.name}\n`;
+												ch.query(`UPDATE nitroboosters SET stillactive = 'false' WHERE userid = '${user.id}' AND guildid = '${guild.id}';`);
+												content += `SET to false = ${user.id} / ${user.username} - ${guild.id} / ${guild.name} ;\n`;
 											}
 										}
 									} else {
-										ch.query(`UPDATE nitroboosters SET stillactive = 'false' WHERE userid = '${user.id}' AND guildid = '${guild.id}'`);
-										content += `SET to false = ${user.id} / ${user.username} - ${guild.id} / ${guild.name}\n`;
+										ch.query(`UPDATE nitroboosters SET stillactive = 'false' WHERE userid = '${user.id}' AND guildid = '${guild.id}';`);
+										content += `SET to false = ${user.id} / ${user.username} - ${guild.id} / ${guild.name} ;\n`;
 									}
 								}
 							}

@@ -6,7 +6,7 @@ const Discord = require('discord.js');
 module.exports = {
 	async execute(msgs) {
 		const guild = msgs.first().guild;
-		const res = await ch.query(`SELECT * FROM logchannels WHERE guildid = '${guild.id}'`);
+		const res = await ch.query(`SELECT * FROM logchannels WHERE guildid = '${guild.id}';`);
 		if (res && res.rowCount > 0) {
 			const r = res.rows[0];
 			const logchannel = client.channels.cache.get(r.channelEvents);

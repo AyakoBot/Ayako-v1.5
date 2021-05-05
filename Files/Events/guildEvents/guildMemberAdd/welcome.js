@@ -4,7 +4,7 @@ const Discord = require('discord.js');
 module.exports = {
 	async execute(member, user) {
 		const guild = member.guild;
-		const res = await ch.query(`SELECT * FROM welcome WHERE guildid = '${guild.id}'`);
+		const res = await ch.query(`SELECT * FROM welcome WHERE guildid = '${guild.id}';`);
 		if (res && res.rowCount > 0) {
 			const r = res.rows[0];
 			if (r.enabledtof == true) {

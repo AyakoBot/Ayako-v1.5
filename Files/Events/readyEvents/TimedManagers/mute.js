@@ -4,7 +4,7 @@ const ch = require('../../../BaseClient/ClientHelper');
 module.exports = {
 	async execute() {
 		client.guilds.cache.forEach(async guild => {
-			const res = await ch.query(`SELECT * FROM warns WHERE type = 'Mute' AND guildid = '${guild.id}'`);
+			const res = await ch.query(`SELECT * FROM warns WHERE type = 'Mute' AND guildid = '${guild.id}';`);
 			if (res && res.rowCount > 0) {
 				for (let i = 0; i < res.rowCount; i++) {
 					const r = res.rows[i];
@@ -15,7 +15,7 @@ module.exports = {
 							let muteroleid;
 							let muterole;
 							if (guild && guild.id) {
-								const res = await ch.query(`SELECT muteroleid FROM muterole WHERE guildid = '${guild.id}'`);
+								const res = await ch.query(`SELECT muteroleid FROM muterole WHERE guildid = '${guild.id}';`);
 								if (res && res.rowCount > 0) {
 									muteroleid = res.rows[0].muteroleid;
 									muterole = guild.roles.cache.find(r => r.id === muteroleid);

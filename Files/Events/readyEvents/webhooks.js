@@ -4,7 +4,7 @@ const Constants = require('../../Constants.json');
 
 module.exports = {
 	async execute() {
-		const res = await ch.query('SELECT * FROM webhooks');
+		const res = await ch.query('SELECT * FROM webhooks;');
 		if (res && res.rowCount > 0) {
 			res.rows.forEach(async (row) => {
 				const webhook = await client.fetchWebhook(row.webhook, row.token).catch(() => {});

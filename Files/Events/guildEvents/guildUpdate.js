@@ -10,7 +10,7 @@ module.exports = {
 		const language = await ch.languageSelector(newGuild);
 		const lan = language.guildUpdate;
 		const con = Constants.guildUpdate;
-		const res = await ch.query(`SELECT * FROM logchannels WHERE guildid = '${newGuild.id}'`);
+		const res = await ch.query(`SELECT * FROM logchannels WHERE guildid = '${newGuild.id}';`);
 		if (res && res.rowCount > 0) {
 			const r = res.rows[0];
 			const logchannel = client.channels.cache.get(r.channelEvents);
@@ -23,14 +23,14 @@ module.exports = {
 				oldGuild.change = [];
 				if (oldGuild.available == false && newGuild.available == true) {
 					oldGuild.change.push('available');
-					const res = await ch.query(`SELECT * FROM antispamsettings WHERE guildid = '${newGuild.id}'`);
+					const res = await ch.query(`SELECT * FROM antispamsettings WHERE guildid = '${newGuild.id}';`);
 					if (res && res.rowCount > 0) {
-						ch.query(`UPDATE antispamsettings SET forceDisabled = false WHERE guildid = '${newGuild.id}'`);
+						ch.query(`UPDATE antispamsettings SET forceDisabled = false WHERE guildid = '${newGuild.id}';`);
 						embed.setDescription(lan.antispam);
 					}
 				} else if (oldGuild.available == true && newGuild.available == false) {
-					const res = await ch.query(`SELECT * FROM antispamsettings WHERE guildid = '${newGuild.id}'`);
-					if (res && res.rowCount > 0) ch.query(`UPDATE antispamsettings SET forceDisabled = true WHERE guildid = '${newGuild.id}'`);
+					const res = await ch.query(`SELECT * FROM antispamsettings WHERE guildid = '${newGuild.id}';`);
+					if (res && res.rowCount > 0) ch.query(`UPDATE antispamsettings SET forceDisabled = true WHERE guildid = '${newGuild.id}';`);
 					return;
 				}
 				if (oldGuild.name !== newGuild.name) {

@@ -14,7 +14,7 @@ module.exports = {
 		let reqGuild;
 		let requirement;
 		let invitelink;
-		const res = await ch.query(`SELECT * FROM giveawaysettings WHERE messageid = '${reaction.message.id}'`);
+		const res = await ch.query(`SELECT * FROM giveawaysettings WHERE messageid = '${reaction.message.id}';`);
 		if (res && res.rowCount > 0) {
 			const r = res.rows[0];
 			requirement = r.requirement;

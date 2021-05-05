@@ -8,7 +8,7 @@ module.exports = {
 		if (oldMsg.channel.type !== 'news' || newMsg.channel.type !== 'news') return;
 		if (oldMsg.crosspostable == newMsg.crosspostable) return;
 		const guild = oldMsg.guild;
-		const res = await ch.query(`SELECT * FROM logchannels WHERE guildid = '${guild.id}'`);
+		const res = await ch.query(`SELECT * FROM logchannels WHERE guildid = '${guild.id}';`);
 		if (res && res.rowCount > 0) {
 			const r = res.rows[0];
 			const logchannel = client.channels.cache.get(r.channelEvents);

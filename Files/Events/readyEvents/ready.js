@@ -13,7 +13,7 @@ module.exports = {
 			//require('./websiteFetcher').execute();
 			if (new Date().getHours() == 0) {
 				require('./nitro').execute();
-				ch.query('DELETE FROM toxicitycheck');
+				ch.query('DELETE FROM toxicitycheck;');
 			}
 		}, 3600000);
 		setInterval(() => {

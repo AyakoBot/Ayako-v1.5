@@ -362,8 +362,7 @@ module.exports = {
 	},
 	async languageSelector(guild) {
 		if (guild.id) {
-			//const resLan = await this.query(`SELECT * FROM language WHERE guildid = '${guild.id}'`);
-			const resLan = await this.query('SELECT * FROM language WHERE guildid = \'669893888856817665\'');
+			const resLan = await this.query(`SELECT * FROM language WHERE guildid = '${guild.id}';`);
 			let lang = 'en';
 			if (resLan && resLan.rowCount > 0) {
 				lang = resLan.rows[0].language;

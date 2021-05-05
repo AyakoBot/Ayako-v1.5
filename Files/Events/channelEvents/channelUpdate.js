@@ -10,7 +10,7 @@ module.exports = {
 		if (channel.type === 1 || channel.type === 3) return;
 		if (channel.position !== oldChannel.position) return;
 		const guild = channel.guild;
-		const res = await ch.query(`SELECT * FROM logchannels WHERE guildid = '${guild.id}'`);
+		const res = await ch.query(`SELECT * FROM logchannels WHERE guildid = '${guild.id}';`);
 		if (res && res.rowCount > 0) {
 			const r = res.rows[0];
 			const logchannel = client.channels.cache.get(r.channelEvents);

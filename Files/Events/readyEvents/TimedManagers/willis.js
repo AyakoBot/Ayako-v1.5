@@ -8,7 +8,7 @@ module.exports = {
 		if (channel) {
 			const m = await channel.messages.fetch('827248223922946118').catch(() => {});
 			if (m && m.id) {
-				const res = await ch.query('SELECT * FROM stats');
+				const res = await ch.query('SELECT * FROM stats;');
 				let participants = 0;
 				if (res.rows[0].willis) {
 					participants = res.rows[0].count;

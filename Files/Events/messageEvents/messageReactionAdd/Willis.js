@@ -12,7 +12,7 @@ module.exports = {
 			if (member && msg.author.id && msg.author.id) {
 				if (member.roles.cache.has('278332463141355520') || member.roles.cache.has('293928278845030410') || member.roles.cache.has('768540224615612437')) {
 					const logchannel = client.channels.cache.get('805860525300776980');
-					const res = await ch.query('SELECT * FROM stats');
+					const res = await ch.query('SELECT * FROM stats;');
 					if (reaction.emoji.name == '✅') {
 						reaction.message.delete().catch(() => {});
 						if (msg.author) {

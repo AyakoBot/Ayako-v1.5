@@ -4,7 +4,7 @@ module.exports = {
 	async execute(oldPresence, newPresence) {
 		if (!oldPresence || !newPresence) return; 
 		const user = newPresence.user;
-		const res = await ch.query(`SELECT * FROM status WHERE userid = '${user.id}'`);
+		const res = await ch.query(`SELECT * FROM status WHERE userid = '${user.id}';`);
 		if (res && res.rowCount > 0) {
 			if (newPresence.status == 'online') {
 				if (oldPresence.status == 'online') return;
@@ -59,7 +59,7 @@ module.exports = {
 				`, true);
 			} else {
 				if (newPresence.status == 'online') {
-					const res = await ch.query(`INSERT INTO status (userid, offline, offlinesince, dnd, dndsince, online, onlinesince, idle, idlesince) VALUES ('${user.id}', 'false', null, 'false', null, 'true', '${Date.now()}', 'false', null)`, true);
+					const res = await ch.query(`INSERT INTO status (userid, offline, offlinesince, dnd, dndsince, online, onlinesince, idle, idlesince) VALUES ('${user.id}', 'false', null, 'false', null, 'true', '${Date.now()}', 'false', null);`, true);
 					if (!res) {
 						if (oldPresence.status == 'online') return;
 						ch.query(`
@@ -75,7 +75,7 @@ module.exports = {
 					}
 				}
 				if (newPresence.status == 'dnd') {
-					const res = await ch.query(`INSERT INTO status (userid, offline, offlinesince, dnd, dndsince, online, onlinesince, idle, idlesince) VALUES ('${user.id}', 'false', null, 'true', '${Date.now()}', 'false', null, 'false', null)`, true);
+					const res = await ch.query(`INSERT INTO status (userid, offline, offlinesince, dnd, dndsince, online, onlinesince, idle, idlesince) VALUES ('${user.id}', 'false', null, 'true', '${Date.now()}', 'false', null, 'false', null);`, true);
 					if (!res) {
 						if (oldPresence.status == 'dnd') return;
 						ch.query(`
@@ -91,7 +91,7 @@ module.exports = {
 					}
 				}
 				if (newPresence.status == 'idle') {
-					const res = await ch.query(`INSERT INTO status (userid, offline, offlinesince, dnd, dndsince, online, onlinesince, idle, idlesince) VALUES ('${user.id}', 'false', null, 'false', null, 'false', null, 'true', '${Date.now()}')`, true);
+					const res = await ch.query(`INSERT INTO status (userid, offline, offlinesince, dnd, dndsince, online, onlinesince, idle, idlesince) VALUES ('${user.id}', 'false', null, 'false', null, 'false', null, 'true', '${Date.now()}');`, true);
 					if (!res) {
 						if (oldPresence.status == 'idle') return;
 						ch.query(`
@@ -108,7 +108,7 @@ module.exports = {
 					
 				}
 				if (newPresence.status == 'offline') {
-					const res = await ch.query(`INSERT INTO status (userid, offline, offlinesince, dnd, dndsince, online, onlinesince, idle, idlesince) VALUES ('${user.id}', 'true', '${Date.now()}', 'false', null, 'false', null, 'false', null)`, true);
+					const res = await ch.query(`INSERT INTO status (userid, offline, offlinesince, dnd, dndsince, online, onlinesince, idle, idlesince) VALUES ('${user.id}', 'true', '${Date.now()}', 'false', null, 'false', null, 'false', null);`, true);
 					if (!res) {
 						if (oldPresence.status == 'offline') return;
 						ch.query(`
@@ -127,7 +127,7 @@ module.exports = {
 			}
 		} else {
 			if (newPresence.status == 'online') {
-				const res = await ch.query(`INSERT INTO status (userid, offline, offlinesince, dnd, dndsince, online, onlinesince, idle, idlesince) VALUES ('${user.id}', 'false', null, 'false', null, 'true', '${Date.now()}', 'false', null)`, true);
+				const res = await ch.query(`INSERT INTO status (userid, offline, offlinesince, dnd, dndsince, online, onlinesince, idle, idlesince) VALUES ('${user.id}', 'false', null, 'false', null, 'true', '${Date.now()}', 'false', null);`, true);
 				if (!res) {
 					if (oldPresence.status == 'online') return;
 					ch.query(`
@@ -143,7 +143,7 @@ module.exports = {
 				}
 			}
 			if (newPresence.status == 'dnd') {
-				const res = await ch.query(`INSERT INTO status (userid, offline, offlinesince, dnd, dndsince, online, onlinesince, idle, idlesince) VALUES ('${user.id}', 'false', null, 'true', '${Date.now()}', 'false', null, 'false', null)`, true);
+				const res = await ch.query(`INSERT INTO status (userid, offline, offlinesince, dnd, dndsince, online, onlinesince, idle, idlesince) VALUES ('${user.id}', 'false', null, 'true', '${Date.now()}', 'false', null, 'false', null);`, true);
 				if (!res) {
 					if (oldPresence.status == 'dnd') return;
 					ch.query(`
@@ -159,7 +159,7 @@ module.exports = {
 				}
 			}
 			if (newPresence.status == 'idle') {
-				const res = await ch.query(`INSERT INTO status (userid, offline, offlinesince, dnd, dndsince, online, onlinesince, idle, idlesince) VALUES ('${user.id}', 'false', null, 'false', null, 'false', null, 'true', '${Date.now()}')`, true);
+				const res = await ch.query(`INSERT INTO status (userid, offline, offlinesince, dnd, dndsince, online, onlinesince, idle, idlesince) VALUES ('${user.id}', 'false', null, 'false', null, 'false', null, 'true', '${Date.now()}');`, true);
 				if (!res) {
 					if (oldPresence.status == 'idle') return;
 					ch.query(`
@@ -175,7 +175,7 @@ module.exports = {
 				}
 			}
 			if (newPresence.status == 'offline') {
-				const res = await ch.query(`INSERT INTO status (userid, offline, offlinesince, dnd, dndsince, online, onlinesince, idle, idlesince) VALUES ('${user.id}', 'true', '${Date.now()}', 'false', null, 'false', null, 'false', null)`, true);
+				const res = await ch.query(`INSERT INTO status (userid, offline, offlinesince, dnd, dndsince, online, onlinesince, idle, idlesince) VALUES ('${user.id}', 'true', '${Date.now()}', 'false', null, 'false', null, 'false', null);`, true);
 				if (!res) {
 					if (oldPresence.status == 'offline') return;
 					ch.query(`

@@ -5,7 +5,7 @@ const Discord = require('discord.js');
 
 module.exports = {
 	async execute() {
-		const res = await ch.query('SELECT * FROM disboard');
+		const res = await ch.query('SELECT * FROM disboard;');
 		if (res && res.rowCount > 0) {
 			for (let i = 0; i < res.rows.length; i++) {
 				const role = `<@&${res.rows[i].role}>`;

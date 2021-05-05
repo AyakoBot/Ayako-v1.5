@@ -7,7 +7,7 @@ module.exports = {
 		let contained = false;
 		if (oldMsg.content.toLowerCase().includes('https://') || oldMsg.content.toLowerCase().includes('http://')) return;
 		if (newMsg.content.toLowerCase().includes('https://') || newMsg.content.toLowerCase().includes('https://')) return;
-		const res = await ch.query(`SELECT * FROM blacklists WHERE guildid = '${oldMsg.guild.id}'`);
+		const res = await ch.query(`SELECT * FROM blacklists WHERE guildid = '${oldMsg.guild.id}';`);
 		if (res && res.rowCount > 0) {
 			const r = res.rows[0];
 			const args = newMsg.content.split(/ +/);
@@ -28,7 +28,7 @@ module.exports = {
 			}
 		}
 		if (contained == false) {
-			const res = await ch.query(`SELECT * FROM esnipe WHERE channelid = '${oldMsg.channel.id}'`);
+			const res = await ch.query(`SELECT * FROM esnipe WHERE channelid = '${oldMsg.channel.id}';`);
 			if (res && res.rowCount > 0) {
 				ch.query(`
                         UPDATE esnipe SET before = '${oldMsg.content.replace(/'/g, '').replace(/`/g, '')}' WHERE channelid = '${oldMsg.channel.id}';
@@ -36,7 +36,7 @@ module.exports = {
                         UPDATE esnipe SET userid = '${oldMsg.author.id}' WHERE channelid = '${oldMsg.channel.id}';
                         `);
 			} else {
-				ch.query(`INSERT INTO esnipe (channelid, userid, before, after) VALUES ('${oldMsg.channel.id}', '${oldMsg.author.id}', '${oldMsg.content.replace(/'/g, '').replace(/`/g, '')}', '${newMsg.content.replace(/'/g, '').replace(/`/g, '')}')`).catch(()  => {});
+				ch.query(`INSERT INTO esnipe (channelid, userid, before, after) VALUES ('${oldMsg.channel.id}', '${oldMsg.author.id}', '${oldMsg.content.replace(/'/g, '').replace(/`/g, '')}', '${newMsg.content.replace(/'/g, '').replace(/`/g, '')}');`).catch(()  => {});
 			}
 		}
 	}

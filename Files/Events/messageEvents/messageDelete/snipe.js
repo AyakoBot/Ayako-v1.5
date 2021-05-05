@@ -3,7 +3,7 @@ const ch = require('../../../BaseClient/ClientHelper');
 module.exports = {
 	async execute(msg) {
 		let contained = false;
-		const res = await ch.query(`SELECT * FROM blacklists WHERE guildid = '${msg.guild.id}'`);
+		const res = await ch.query(`SELECT * FROM blacklists WHERE guildid = '${msg.guild.id}';`);
 		if (msg.content.toLowerCase().includes('https://')) return;
 		if (res && res.rowCount > 0) {
 			const args = msg.content.split(/ +/);
@@ -24,14 +24,14 @@ module.exports = {
 			}
 		}
 		if (contained == false) {
-			const res = await ch.query(`SELECT * FROM snipe WHERE channelid = '${msg.channel.id}'`);
+			const res = await ch.query(`SELECT * FROM snipe WHERE channelid = '${msg.channel.id}';`);
 			if (res && res.rowCount > 0) {
 				ch.query(`
                     UPDATE snipe SET text = '${msg.content.replace(/'/g, '').replace(/`/g, '')}' WHERE channelid = '${msg.channel.id}';
                     UPDATE snipe SET userid = '${msg.author.id}' WHERE channelid = '${msg.channel.id}';
                     `);
 			} else {
-				ch.query(`INSERT INTO snipe (channelid, userid, text) VALUES ('${msg.channel.id}', '${msg.author.id}', '${msg.content.replace(/'/g, '').replace(/`/g, '')}')`).catch(()  => {});
+				ch.query(`INSERT INTO snipe (channelid, userid, text) VALUES ('${msg.channel.id}', '${msg.author.id}', '${msg.content.replace(/'/g, '').replace(/`/g, '')}');`).catch(()  => {});
 			}
 		}
 

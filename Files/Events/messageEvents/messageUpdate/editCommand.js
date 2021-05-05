@@ -8,7 +8,7 @@ module.exports = {
 		let prefix2;
 		let prefix1 = 'h!';
 		if (newMsg.channel.type !== 'dm') {
-			const res = await ch.query(`SELECT prefix FROM prefix WHERE guildid = '${newMsg.guild.id}'`);
+			const res = await ch.query(`SELECT prefix FROM prefix WHERE guildid = '${newMsg.guild.id}';`);
 			if (res && res.rowCount > 0) prefix2 = res.rows[0].prefix;
 			else prefix2 = prefix1;
 		} else {

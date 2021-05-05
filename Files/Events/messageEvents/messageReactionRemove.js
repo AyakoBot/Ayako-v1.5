@@ -6,7 +6,7 @@ module.exports = {
 		if (user.id == client.user.id) return; 
 		const guild = reaction.message.guild;
 		const isUnicode = ch.containsNonLatinCodepoints(reaction.emoji.name);
-		const res = await ch.query(`SELECT * FROM reactionroles WHERE msgid = '${reaction.message.id}' AND emoteid = '${isUnicode ? reaction.emoji.name : reaction.emoji.id}'`);	
+		const res = await ch.query(`SELECT * FROM reactionroles WHERE msgid = '${reaction.message.id}' AND emoteid = '${isUnicode ? reaction.emoji.name : reaction.emoji.id}';`);	
 		if (res && res.rowCount > 0) {
 			for (let i = 0; i < res.rowCount; i++) {
 				const member = await ch.member(guild, user);
