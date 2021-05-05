@@ -52,7 +52,7 @@ module.exports = {
 					}
 				}
 				if (args[0] == 'test') {
-					
+					console.log(ch.stp(Constants.messageUpdateLogUpdate.author.link, {msg: msg}));
 				}
 				if (args[0] == 'restart') {
 					await ch.send(msg.channel, 'Restarting...');
