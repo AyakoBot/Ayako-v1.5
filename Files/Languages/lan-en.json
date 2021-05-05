@@ -375,6 +375,25 @@
         "loweredHand": "Lowered their Hand",
         "raisedHand": "Raised their Hand"
     },
+    "webhookCreate": {
+        "author": {
+            "name": "Webhook Created"
+        },
+        "description": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas created\nWebhook `{{webhook.name}}` / `{{webhook.id}}`\nin\nChannel {{channel}} / `{{channel.name}}` / `{{channel.id}}`"
+    },
+    "webhookUpdate": {
+        "author": {
+            "name": "Webhook Updated"
+        },
+        "description": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas updated\nWebhook `{{webhook.name}}` / `{{webhook.id}}`\nin\nChannel {{channel}} / `{{channel.name}}` / `{{channel.id}}`",
+        "avatar": "New Avatar should appear at the right side of this Embed"
+    },
+    "webhookDelete": {
+        "author": {
+            "name": "Webhook Deleted"
+        },
+        "description": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas deleted a Webhook from\nChannel {{channel}} / `{{channel.name}}` / `{{channel.id}}`"
+    },
     "ready": {
         "unmute": {
             "reason": "Automatically Unmuted "
@@ -658,5 +677,7 @@
     "requestToSpeak": "Request To Speak",
     "moved": "Moved",
     "disconnected": "Disconnected",
-    "connected": "Connected"
+    "connected": "Connected",
+    "channelFollower": "Channel Follower",
+    "incoming": "Incoming"
 }

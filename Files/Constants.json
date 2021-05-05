@@ -234,6 +234,24 @@
         "joinColor": "GREEN",
         "leaveColor": "RED"
     },
+    "webhookCreate": {
+        "author": {
+            "image": ""
+        },
+        "color": "GREEN"
+    },
+    "webhookUpdate": {
+        "author": {
+            "image": ""
+        },
+        "color": "YELLOW"
+    },
+    "webhookDelete": {
+        "author": {
+            "image": ""
+        },
+        "color": "RED"
+    },
     "enabled": "<:enabled:831360855018962944>",
     "disabled": "<:disabled:831360826048774176>",
     "switch": {
@@ -248,7 +266,11 @@
         "errorLogChannel": "829148971125047328",
         "prefix": "h!",
         "invite": "https://discord.com/api/oauth2/authorize?client_id=650691698409734151&permissions=4194168055&scope=bot",
-        "image": "https://ayakobot.com/DefaultEmbedImage"
+        "image": "https://ayakobot.com/DefaultEmbedImage",
+        "webhook": {
+            "name": "Ayako Logging",
+            "avatar": "https://cdn.discordapp.com/attachments/760152457799401532/813219032802525204/pngfind.com-gavel-png-348962.png"
+        }
     },
     "mod": {
         "muteAdd": {
