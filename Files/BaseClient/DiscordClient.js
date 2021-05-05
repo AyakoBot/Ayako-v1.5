@@ -26,5 +26,6 @@ client.login(auth.token).then(() => {
 });
 
 client.invites = new Map();
+client.channelWebhooks = new Map();
 
 module.exports = { client };

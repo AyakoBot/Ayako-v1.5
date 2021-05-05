@@ -26,29 +26,30 @@ module.exports = {
 		if (!fs.existsSync('.\\Files\\Downloads\\Users')) fs.mkdirSync('.\\Files\\Downloads\\Users');
 	},
 	async send(channel, content, options) {
+		let webhook;
+		if (client.channelWebhooks.get(channel.id)) webhook = client.channelWebhooks.get(channel.id);
 		let m;
-		if (typeof(content) == 'string') {
-			if (options) {
-				m = await channel.send(content, options).catch((e) => {this.logger('Send Error', e);});
-			} else {
-				m = await channel.send(content).catch((e) => {this.logger('Send Error', e);});
-			}
+		if (webhook && !channel.force) {
+			if (typeof(content) == 'string') {
+				if (options) m = await webhook.send(content, options).catch(() => {channel.force = true; this.send(channel, content, options);});
+				else m = await webhook.send(content).catch(() => {channel.force = true; this.send(channel, content);});
+			} else m = await webhook.send(content).catch(() => {channel.force = true; this.send(channel, content);});
+			if (m) m.sentAs = webhook;
 		} else {
-			m = await channel.send(content).catch((e) => {this.logger('Send Error', e);});
+			if (typeof(content) == 'string') {
+				if (options) m = await channel.send(content, options).catch((e) => {this.logger('Send Error', e);});
+				else m = await channel.send(content).catch((e) => {this.logger('Send Error', e);});
+			} else m = await channel.send(content).catch((e) => {this.logger('Send Error', e);});
+			if (m) m.sentAs = client.user;
 		}
 		return m;
 	},
 	async reply(msg, content, options) {
 		let m;
 		if (typeof(content) == 'string') {
-			if (options) {
-				m = await msg.reply(content, {options}).catch((e) => {this.logger('Reply Error', e);});
-			} else {
-				m = await msg.reply(content).catch((e) => {this.logger('Reply Error', e);});
-			}
-		} else {
-			m = await msg.reply(content).catch((e) => {this.logger('Reply Error', e);});
-		}
+			if (options) m = await msg.reply(content, {options}).catch((e) => {this.logger('Reply Error', e);});
+			else m = await msg.reply(content).catch((e) => {this.logger('Reply Error', e);});
+		} else m = await msg.reply(content).catch((e) => {this.logger('Reply Error', e);});
 		return m;
 	},
 	stp(expression, Object) {
@@ -58,36 +59,12 @@ module.exports = {
 			const Result = Object[newValue[0]];
 			if (Result) {
 				if (newValue.length > 1) {
-					decided = Result[newValue[1]];
-					if (newValue.length > 2) {
-						decided = decided[newValue[2]];
-						if (newValue.length > 3) {
-							decided = decided[newValue[3]];
-							if (newValue.length > 4) {
-								decided = decided[newValue[4]];
-								if (newValue.length > 5) {
-									decided = decided[newValue[5]];
-									if (newValue.length > 6) {
-										decided = decided[newValue[6]];
-									} else {
-										return decided;
-									}
-								} else {
-									return decided;
-								}
-							} else {
-								return decided;
-							}
-						} else {
-							return decided;
-						}
-					} else {
-						return decided;
+					for (let i = 1; i < newValue.length; i++) {
+						if (i == 1) decided = Result[newValue[i]];
+						if (i > 1) decided = decided[newValue[i]];
 					}
 					return decided;
-				} else {
-					return Result;
-				}
+				} else return Result;
 			}
 		});
 		return text;

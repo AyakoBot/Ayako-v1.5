@@ -8,6 +8,7 @@ module.exports = {
 		console.log(`Login at ${new Date(Date.now()).toLocaleString()}`);
 		// statcord.autopost();
 		client.guilds.cache.forEach(async guild => client.invites.set(guild.id, await guild.fetchInvites().catch(() => {})));
+		require('./webhooks.js').execute();
 		setInterval(() => {
 			//require('./websiteFetcher').execute();
 			if (new Date().getHours() == 0) {
