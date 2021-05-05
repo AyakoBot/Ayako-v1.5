@@ -30,7 +30,7 @@ module.exports = {
 								} else {
 									const language = await ch.languageSelector('en');
 									const embed = new Discord.MessageEmbed()
-										.setDescription(`${language.ready.reminder}\`\`\`${text}\`\`\``)
+										.setDescription(`${language.ready.reminder.description}\`\`\`${text}\`\`\``)
 										.setColor(Constants.standard.color)
 										.setTimestamp();
 									ch.send(user, embed);
