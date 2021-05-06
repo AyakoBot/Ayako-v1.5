@@ -1,10 +1,10 @@
 const { client } = require('../../BaseClient/DiscordClient');
-const ch = require('../../BaseClient/ClientHelper'); 
-const Constants = require('../../Constants.json');
 const Discord = require('discord.js');
 
 module.exports = {
 	async execute(msgs) {
+		const ch = client.ch;
+		const Constants = client.constants;
 		const guild = msgs.first().guild;
 		const res = await ch.query(`SELECT * FROM logchannels WHERE guildid = '${guild.id}';`);
 		if (res && res.rowCount > 0) {

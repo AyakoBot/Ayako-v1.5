@@ -1,9 +1,9 @@
-const ch = require('../../../BaseClient/ClientHelper');
 const { client } = require('../../../BaseClient/DiscordClient');
 
 module.exports = {
 	async execute(rawmember, user) {
 		const guild = rawmember.guild;
+		const ch = client.ch;
 		let wasMuted = null;
 		const res = await ch.query(`SELECT * FROM warns WHERE closed = 'false' AND type = 'Mute' AND guildid = '${guild.id}' AND userid = '${user.id}' AND closed = null;`);
 		let Muterole;

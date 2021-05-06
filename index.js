@@ -1,52 +1,51 @@
 const { client } = require('./Files/BaseClient/DiscordClient.js');
-const ch = require('./Files/BaseClient/ClientHelper.js');
-ch.pathCheck();
+client.ch.pathCheck();
 //const { AP } = require('./Files/BaseClient/DBL');
-
 
 // eslint-disable-next-line no-undef
 process.setMaxListeners(Infinity);
+
 //Discord Info events
 //client.on('debug', (log) => {console.log(log);});
 
 client.on('error', (error) => {
-	ch.logger('Discord Client\'s WebSocket encountered a connection error', error);
+	client.ch.logger('Discord Client\'s WebSocket encountered a connection error', error);
 });
 client.on('invalidated', () => {
 	console.error('Discord Client was invalidated!');
 });
 client.on('rateLimit', (rateLimitInfo) => {
-	ch.logger('Discord Client was RateLimited', `Timeout: ${rateLimitInfo.timeout}\nLimit: ${rateLimitInfo.limit}\nMethod: ${rateLimitInfo.method}\nPath: ${rateLimitInfo.path}\nRoute: ${rateLimitInfo.route}`);
+	client.ch.logger('Discord Client was RateLimited', `Timeout: ${rateLimitInfo.timeout}\nLimit: ${rateLimitInfo.limit}\nMethod: ${rateLimitInfo.method}\nPath: ${rateLimitInfo.path}\nRoute: ${rateLimitInfo.route}`);
 });
 client.on('ready', () => {
 	const file = require('./Files/Events/readyEvents/ready.js'); 
 	file.execute();
 });
 client.on('shardDisconnect', (event, id) => {
-	ch.logger(`Discord Client Shard with ID ${id} was Disconnected!`, event);
+	client.ch.logger(`Discord Client Shard with ID ${id} was Disconnected!`, event);
 });
 client.on('shardError', (error, shardID) => {
-	ch.logger(`Discord Client Shard with ID ${shardID} has enountered an Error!`, error);
+	client.ch.logger(`Discord Client Shard with ID ${shardID} has enountered an Error!`, error);
 });
 client.on('shardReady', (id, unavailableGuilds) => {
 	if (unavailableGuilds) {
-		ch.logger(`Discord Client Shard with ID ${id} is Ready. Unavailable Guilds:`, unavailableGuilds);
+		client.ch.logger(`Discord Client Shard with ID ${id} is Ready. Unavailable Guilds:`, unavailableGuilds);
 	} else {
-		ch.logger(`Discord Client Shard with ID ${id} is Ready.`);
+		client.ch.logger(`Discord Client Shard with ID ${id} is Ready.`);
 	}
 });
 client.on('shardReconnecting', (id) => {
-	ch.logger(`Discord Client Shard with ID ${id} is Reconnecting.`);
+	client.ch.logger(`Discord Client Shard with ID ${id} is Reconnecting.`);
 });
 client.on('shardResume', (id, replayedEvents) => {
-	ch.logger(`Discord Client Shard with ID ${id} is now Resuming.`, replayedEvents+' replayed Events');
+	client.ch.logger(`Discord Client Shard with ID ${id} is now Resuming.`, replayedEvents+' replayed Events');
 });
 client.on('raw', (event) => {
 	const file = require('./Files/Events/rawEvents/raw.js'); 
 	file.execute(event);
 });
 client.on('warn', (err, id) => {
-	ch.logger(`Discord Client Shard with ID ${id} recieved a warning`, err);
+	client.ch.logger(`Discord Client Shard with ID ${id} recieved a warning`, err);
 });
 //guild Events
 client.on('channelCreate', (channel) => {
@@ -146,7 +145,7 @@ client.on('inviteDelete', (invite) => {
 
 //message Events
 client.on('message', (msg) => {
-	const file = require('./Files/Events/messageEvents/message'); 
+	const file = require('./Files/Events/messageEvents/message/message.js'); 
 	file.execute(msg);
 });
 client.on('messageDelete', (msg) => {
@@ -219,7 +218,7 @@ client.on('userUpdate', (oldUser, newUser) => {
 //Custom Events
 // eslint-disable-next-line no-undef
 process.on('unhandledRejection', error => {
-	ch.logger('Unhandled Rejection', error);
+	client.ch.logger('Unhandled Rejection', error);
 });
 
 client.on('muteAdd', (executor, target, guild, reason) => {

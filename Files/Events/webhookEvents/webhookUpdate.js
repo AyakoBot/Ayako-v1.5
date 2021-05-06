@@ -1,11 +1,11 @@
 const { client } = require('../../BaseClient/DiscordClient');
-const ch = require('../../BaseClient/ClientHelper'); 
-const Constants = require('../../Constants.json');
 const Discord = require('discord.js');
 
 module.exports = {
 	async execute(data) {
 		if (!data.guild) return; //we only want to process channels here since webhook events should always be hooked to a channel
+		const ch = client.ch;
+		const Constants = client.constants;
 		const guild = data.guild;
 		const language = await ch.languageSelector(guild);
 		const res = await ch.query(`SELECT * FROM logchannels WHERE guildid = '${guild.id}';`);

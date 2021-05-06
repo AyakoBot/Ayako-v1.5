@@ -1,12 +1,12 @@
 const { client } = require('../../BaseClient/DiscordClient');
-const ch = require('../../BaseClient/ClientHelper'); 
-const Constants = require('../../Constants.json');
 const Discord = require('discord.js');
 
 
 /* eslint-disable no-case-declarations */
 module.exports = {
 	async execute(oldGuild, newGuild) {
+		const ch = client.ch;
+		const Constants = client.constants;
 		const language = await ch.languageSelector(newGuild);
 		const lan = language.guildUpdate;
 		const con = Constants.guildUpdate;

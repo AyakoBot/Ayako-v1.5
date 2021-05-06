@@ -1,8 +1,8 @@
 const { client } = require('../../BaseClient/DiscordClient');
-const ch = require('../../BaseClient/ClientHelper'); 
 
 module.exports = {
 	async execute(event) {
+		const ch = client.ch;
 		if (event.t == 'MESSAGE_REACTION_ADD') {
 			const channel = client.channels.cache.get(event.d.channel_id);
 			if (channel.messages.cache.has(event.d.message_id)) return;

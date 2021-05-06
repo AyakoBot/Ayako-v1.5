@@ -1,8 +1,8 @@
 const { client } = require('../../../BaseClient/DiscordClient');
-const ch = require('../../../BaseClient/ClientHelper'); 
 
 module.exports = {
 	execute() {
+		const ch = client.ch;
 		let totalrolecount = 0;
 		let totalusers = 0;
 		client.guilds.cache.forEach(guild => {

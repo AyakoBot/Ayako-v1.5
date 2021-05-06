@@ -1,6 +1,4 @@
 const { client } = require('../../BaseClient/DiscordClient');
-const ch = require('../../BaseClient/ClientHelper'); 
-const Constants = require('../../Constants.json');
 const Discord = require('discord.js');
 
 module.exports = {
@@ -8,6 +6,8 @@ module.exports = {
 		if (oldChannel.type === 'dm') return;
 		if (newChannel.position !== oldChannel.position) return; // flawed logic
 		if (newChannel.children !== oldChannel.children) return; // unnecessary since we already handle parents
+		const ch = require('../../BaseClient/ClientHelper'); 
+		const Constants = require('../../Constants.json');
 		const guild = newChannel.guild;
 		const res = await ch.query(`SELECT * FROM logchannels WHERE guildid = '${guild.id}';`);
 		if (res && res.rowCount > 0) {
@@ -179,14 +179,14 @@ module.exports = {
 function send(logchannel, embed, language) {
 	embed.fields.forEach((field) => {
 		if (field.value.length > 1024 || embed.length > 6000) {
-			const re1 = new RegExp(Constants.switch.disable, 'g');
-			const re2 = new RegExp(Constants.switch.neutral, 'g');
-			const re3 = new RegExp(Constants.switch.enable, 'g');
+			const re1 = new RegExp(client.constants.switch.disable, 'g');
+			const re2 = new RegExp(client.constants.switch.neutral, 'g');
+			const re3 = new RegExp(client.constants.switch.enable, 'g');
 			field.value = field.value
 				.replace(re1, language.deny)
 				.replace(re2, language.neutral)
 				.replace(re3, language.allow);
 		}
 	});
-	ch.send(logchannel, embed);
+	client.ch.send(logchannel, embed);
 }

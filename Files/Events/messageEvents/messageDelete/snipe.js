@@ -1,8 +1,9 @@
-const ch = require('../../../BaseClient/ClientHelper');
+const { client } = require('../../../BaseClient/DiscordClient.js');
 
 module.exports = {
 	async execute(msg) {
 		let contained = false;
+		const ch = client.ch;
 		const res = await ch.query(`SELECT * FROM blacklists WHERE guildid = '${msg.guild.id}';`);
 		if (msg.content.toLowerCase().includes('https://')) return;
 		if (res && res.rowCount > 0) {

@@ -1,8 +1,8 @@
 const { client } = require('../../../BaseClient/DiscordClient');
-const ch = require('../../../BaseClient/ClientHelper'); 
 
 module.exports = {
 	async execute(oldMsg, newMsg) {
+		const ch = client.ch;
 		if (oldMsg.content == newMsg.content) return;
 		if (oldMsg.pinned !== newMsg.pinned) return;
 		let prefix2;

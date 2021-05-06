@@ -1,7 +1,8 @@
-const ch = require('../../BaseClient/ClientHelper'); 
+const { client } = require('../../BaseClient/DiscordClient.js');
 
 module.exports = {
 	async execute(oldUser, newUser) {
+		const ch = client.ch;
 		if (oldUser.username !== newUser.username) {
 			const res = await ch.query(`SELECT * FROM status WHERE userid = '${newUser.id}';`);
 			const username = newUser.username.replace(/'/g, '').replace(/`/g, '');

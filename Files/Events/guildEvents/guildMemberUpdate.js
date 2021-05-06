@@ -1,10 +1,10 @@
 const { client } = require('../../BaseClient/DiscordClient');
-const ch = require('../../BaseClient/ClientHelper'); 
-const Constants = require('../../Constants.json');
 const Discord = require('discord.js');
 
 module.exports = {
 	async execute(oldMember, newMember) {
+		const ch = client.ch;
+		const Constants = client.constants;
 		const member = await newMember.fetch();
 		const user = await client.users.fetch(member.user.id);
 		const guild = member.guild;

@@ -1,10 +1,10 @@
 const { client } = require('../../BaseClient/DiscordClient');
-const ch = require('../../BaseClient/ClientHelper'); 
 const Discord = require('discord.js');
-const Constants = require('../../Constants.json');
 
 module.exports = {
 	async execute() {
+		const ch = client.ch;
+		const Constants = client.constants;
 		const Logchannel = client.channels.cache.get('781724288830013481');
 		let content = `${new Date(Date.now()).toLocaleString()}\n`;
 		const result = await ch.query('SELECT * FROM nitrosettings;');

@@ -1,7 +1,8 @@
-const ch = require('../../BaseClient/ClientHelper'); 
+const { client } = require('../../BaseClient/DiscordClient.js');
 
 module.exports = {
 	async execute(oldPresence, newPresence) {
+		const ch = client.ch;
 		if (!oldPresence || !newPresence) return; 
 		const user = newPresence.user;
 		const res = await ch.query(`SELECT * FROM status WHERE userid = '${user.id}';`);

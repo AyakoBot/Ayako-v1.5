@@ -1,12 +1,12 @@
 const { client } = require('../../../BaseClient/DiscordClient');
-const ch = require('../../../BaseClient/ClientHelper'); 
-const Constants = require('../../../Constants.json');
 const Discord = require('discord.js');
 
 module.exports = {
 	async execute(oldMsg, newMsg) {
 		if (oldMsg.channel.type !== 'news' || newMsg.channel.type !== 'news') return;
 		if (oldMsg.crosspostable == newMsg.crosspostable) return;
+		const ch = client.ch;
+		const Constants = client.constants;
 		const guild = oldMsg.guild;
 		const res = await ch.query(`SELECT * FROM logchannels WHERE guildid = '${guild.id}';`);
 		if (res && res.rowCount > 0) {

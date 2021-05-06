@@ -1,10 +1,10 @@
 const { client } = require('../../../BaseClient/DiscordClient');
-const ch = require('../../../BaseClient/ClientHelper'); 
-const Constants = require('../../../Constants.json');
 const Discord = require('discord.js');
 
 module.exports = {
 	async execute() {
+		const ch = client.ch;
+		const Constants = client.constants;
 		const res = await ch.query('SELECT * FROM levelglobal WHERE reminderdone = \'false\';');
 		if (res && res.rowCount > 0) {
 			for (let i = 0; i < res.rowCount; i++) {

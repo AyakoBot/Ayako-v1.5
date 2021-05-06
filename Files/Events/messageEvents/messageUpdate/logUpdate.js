@@ -1,6 +1,4 @@
 const { client } = require('../../../BaseClient/DiscordClient');
-const ch = require('../../../BaseClient/ClientHelper'); 
-const Constants = require('../../../Constants.json');
 const Discord = require('discord.js');
 
 module.exports = {
@@ -8,6 +6,8 @@ module.exports = {
 		if (oldMsg.content == newMsg.content) return;
 		if (oldMsg.pinned !== newMsg.pinned) return;
 		const guild = oldMsg.guild;
+		const ch = client.ch;
+		const Constants = client.constants;
 		const res = await ch.query(`SELECT * FROM logchannels WHERE guildid = '${guild.id}';`);
 		if (res && res.rowCount > 0) {
 			const r = res.rows[0];

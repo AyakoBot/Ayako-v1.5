@@ -1,12 +1,12 @@
 const { client } = require('../../../BaseClient/DiscordClient');
-const ch = require('../../../BaseClient/ClientHelper'); 
-const Constants = require('../../../Constants.json');
 const Discord = require('discord.js');
 
 module.exports = {
 	async execute(reaction, user) {
 		if (user.id == client.user.id) return; 
 		const guild = reaction.message.guild;
+		const ch = client.ch;
+		const Constants = client.constants;
 		const language = await ch.languageSelector(guild);
 		const lan = language.messageReactionAddGiveaway;
 		const con = Constants.messageReactionAddGiveaway;

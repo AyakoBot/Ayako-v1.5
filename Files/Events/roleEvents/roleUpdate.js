@@ -1,15 +1,15 @@
 const { client } = require('../../BaseClient/DiscordClient');
-const ch = require('../../BaseClient/ClientHelper'); 
-const Constants = require('../../Constants.json');
 const Discord = require('discord.js');
-const regexes = {
-	allow: new RegExp(Constants.enabled, 'g'),
-	revoke: new RegExp(Constants.disabled, 'g'),
-};
 
 module.exports = {
 	async execute(oldRole, newRole) {
 		if (oldRole.rawPosition !== newRole.rawPosition) return; // flawed logic
+		const ch = client.ch;
+		const Constants = client.constants;
+		const regexes = {
+			allow: new RegExp(Constants.enabled, 'g'),
+			revoke: new RegExp(Constants.disabled, 'g'),
+		};
 		const guild = newRole.guild;
 		const language = await ch.languageSelector(guild);
 		const lan = language.roleUpdate;

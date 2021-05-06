@@ -20,12 +20,25 @@ for (const file of commandFiles) {
 	client.commands.set(command.name, command);
 }
 
+//Create Language Collection and gather all Language Files
+client.languages = new Discord.Collection();
+const languageFiles = fs.readdirSync('./Files/Languages').filter(file => file.endsWith('.json'));
+for (const file of languageFiles) {
+	const language = require(`../Languages/${file}`);
+	const name = file.replace(/.json/g, '');
+	client.languages.set(name, language);
+}
+
 //Connect to Discord
 client.login(auth.token).then(() => {
 	console.log('| Discord Client connected at '+ new Date().toUTCString());
 });
 
+
 client.invites = new Map();
 client.channelWebhooks = new Map();
+client.ch = require('./ClientHelper.js');
+client.constants = require('../Constants.json');
+
 
 module.exports = { client };

@@ -1,10 +1,10 @@
 const { client } = require('../../BaseClient/DiscordClient');
-const ch = require('../../BaseClient/ClientHelper'); 
 const Discord = require('discord.js');
-const Constants = require('../../Constants.json');
 
 module.exports = {
 	async execute(guild) {
+		const ch = client.ch;
+		const Constants = client.constants;
 		const con = Constants.guildDelete;
 		const logEmbed = new Discord.MessageEmbed()
 			.setDescription(con.logEmbed.joinedAGuild)

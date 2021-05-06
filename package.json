@@ -11,7 +11,6 @@
   "dependencies": {
     "@top-gg/sdk": "^3.1.1",
     "discord.js": "github:discordjs/discord.js",
-    "eris": "^0.15.0",
     "express": "^4.17.1",
     "imgur": "^1.0.1",
     "markdown-escape": "^1.1.0",

@@ -1,8 +1,8 @@
 const { client } = require('../../BaseClient/DiscordClient');
-const ch = require('../../BaseClient/ClientHelper'); 
 
 module.exports = {
 	async execute() {
+		const ch = client.ch;
 		const res = await ch.query('SELECT * FROM stats;');
 		const userCount = res.rows[0].allusers;
 		const random = Math.round(Math.random() * 9);

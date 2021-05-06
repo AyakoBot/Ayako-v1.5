@@ -1,10 +1,10 @@
 const { client } = require('../../../BaseClient/DiscordClient');
-const ch = require('../../../BaseClient/ClientHelper'); 
 const Discord = require('discord.js');
 
 module.exports = {
 	async execute() {
 		const channel = client.channels.cache.get('805839305377447936');
+		const ch = client.ch;
 		if (channel) {
 			const m = await channel.messages.fetch('827248223922946118').catch(() => {});
 			if (m && m.id) {

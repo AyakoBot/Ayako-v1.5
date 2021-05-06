@@ -1,8 +1,8 @@
 const { client } = require('../../../BaseClient/DiscordClient');
-const ch = require('../../../BaseClient/ClientHelper'); 
 
 module.exports = {
 	async execute() {
+		const ch = client.ch;
 		client.guilds.cache.forEach(async guild => {
 			const res = await ch.query(`SELECT * FROM warns WHERE type = 'Mute' AND guildid = '${guild.id}';`);
 			if (res && res.rowCount > 0) {
@@ -43,5 +43,5 @@ module.exports = {
 };
 
 function closed(guild, user, end) {
-	ch.query(`UPDATE warns SET closed = 'true' WHERE guildid = '${guild.id}' AND userid = '${user.id}' AND type = 'Mute' AND duration = '${end}';`);
+	client.ch.query(`UPDATE warns SET closed = 'true' WHERE guildid = '${guild.id}' AND userid = '${user.id}' AND type = 'Mute' AND duration = '${end}';`);
 }

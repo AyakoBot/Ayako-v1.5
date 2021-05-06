@@ -1,6 +1,4 @@
 const { client } = require('../../BaseClient/DiscordClient');
-const ch = require('../../BaseClient/ClientHelper'); 
-const Constants = require('../../Constants.json');
 const Discord = require('discord.js');
 const moment = require('moment');
 require('moment-duration-format');
@@ -9,6 +7,8 @@ module.exports = {
 	async execute(member) {
 		const user = await client.users.fetch(member.user.id);
 		const guild = member.guild;
+		const ch = client.ch;
+		const Constants = client.constants;
 		const language = await ch.languageSelector(guild);
 		const lan = language.guildMemberRemove;
 		const con = Constants.guildMemberRemove;

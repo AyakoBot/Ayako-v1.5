@@ -1,10 +1,10 @@
-const { ch } = require('../../BaseClient/ClientHelper');
 const { client } = require('../../BaseClient/DiscordClient');
-const Constants = require('../../Constants.json');
 const Discord = require('discord.js');
 
 module.exports = {
 	async execute(executor, target, guild, reason) {
+		const ch = client.ch;
+		const Constants = client.constants;
 		const language = await ch.languageSelector(guild);
 		const lan = language.mod.muteRemove;
 		const con = Constants.mod.muteRemove;

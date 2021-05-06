@@ -1,9 +1,9 @@
 const { client } = require('../../BaseClient/DiscordClient');
-const ch = require('../../BaseClient/ClientHelper');
-const Constants = require('../../Constants.json');
 
 module.exports = {
 	async execute() {
+		const ch = client.ch;
+		const Constants = client.constants;
 		const res = await ch.query('SELECT * FROM webhooks;');
 		if (res && res.rowCount > 0) {
 			res.rows.forEach(async (row) => {

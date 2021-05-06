@@ -1,9 +1,10 @@
-const ch = require('../../../BaseClient/ClientHelper');
 const Discord = require('discord.js');
+const { client } = require('../../../BaseClient/DiscordClient');
 
 module.exports = {
 	async execute(member, user) {
 		const guild = member.guild;
+		const ch = client.ch;
 		const res = await ch.query(`SELECT * FROM welcome WHERE guildid = '${guild.id}';`);
 		if (res && res.rowCount > 0) {
 			const r = res.rows[0];

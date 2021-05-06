@@ -1,10 +1,10 @@
 const { client } = require('../../BaseClient/DiscordClient');
-const ch = require('../../BaseClient/ClientHelper'); 
-const Constants = require('../../Constants.json');
 const Discord = require('discord.js');
 
 module.exports = {
 	async execute(emoji) {
+		const ch = client.ch;
+		const Constants = client.constants;
 		const guild = emoji.guild;
 		const language = await ch.languageSelector(guild);
 		const lan = language.emojiDelete;

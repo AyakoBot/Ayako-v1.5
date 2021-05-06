@@ -1,10 +1,10 @@
 const { client } = require('../../../BaseClient/DiscordClient');
-const ch = require('../../../BaseClient/ClientHelper'); 
 const Discord = require('discord.js');
 
 module.exports = {
 	async execute(reaction, user) {
 		if (user.id == client.user.id) return; 
+		const ch = client.ch;
 		const guild = reaction.message.guild;
 		const member = await ch.member(guild, user.id);
 		if (reaction.message.channel.id == '805839305377447936') {

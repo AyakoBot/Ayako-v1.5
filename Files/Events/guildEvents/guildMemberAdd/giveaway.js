@@ -1,10 +1,10 @@
-const ch = require('../../../BaseClient/ClientHelper');
 const { client } = require('../../../BaseClient/DiscordClient');
-const Constants = require('../../../Constants.json');
 const Discord = require('discord.js');
 
 module.exports = {
 	async execute(member, user) {
+		const ch = client.ch;
+		const Constants = client.constants;
 		const res = await ch.query(`SELECT * FROM giveawaysettings WHERE reqserverid = '${member.guild.id}';`);
 		if (res && res.rowCount > 0) {
 			const r = res.rows[0];
