@@ -102,6 +102,7 @@ module.exports = {
 		let path;
 		let pathend;
 		if (msg.channel) {
+			console.log(1);
 			path = `.\\Files\\Downloads\\Guilds\\Guild - ${msg.guild.id}\\Channel - ${msg.channel.id}\\${msg.id}`;
 			let guilddir = `.\\Files\\Downloads\\Guilds\\Guild - ${msg.guild.id}`;
 			if (!fs.existsSync(guilddir)) {
@@ -111,15 +112,19 @@ module.exports = {
 			if (!fs.existsSync(channeldir)) {
 				channeldir = fs.mkdirSync(channeldir);
 			}
-		} else if (msg.animated) {
+		} else if (msg.animated !== undefined && msg.animated !== null) {
 			path = `.\\Files\\Downloads\\Guilds\\Guild - ${msg.guild.id}\\Deleted Emotes\\${msg.id}`;
+			let lastdir = `.\\Files\\Downloads\\Guilds\\Guild - ${msg.guild.id}`;
+			if (!fs.existsSync(lastdir)) {
+				lastdir = fs.mkdirSync(lastdir);
+			}
+			let emotedir = `.\\Files\\Downloads\\Guilds\\Guild - ${msg.guild.id}\\Deleted Emotes`;
+			if (!fs.existsSync(emotedir)) {
+				emotedir = fs.mkdirSync(emotedir);
+			}
 			let guilddir = `.\\Files\\Downloads\\Guilds\\Guild - ${msg.guild.id}`;
 			if (!fs.existsSync(guilddir)) {
 				guilddir = fs.mkdirSync(guilddir);
-			}
-			let channeldir = `.\\Files\\Downloads\\Guilds\\Guild - ${msg.guild.id}\\Deleted Emotes`;
-			if (!fs.existsSync(channeldir)) {
-				channeldir = fs.mkdirSync(channeldir);
 			}
 		} else if (msg.ownerID) {
 			const now = Date.now();
@@ -135,6 +140,7 @@ module.exports = {
 				}
 			}
 		} else if (msg.avatar) {
+			console.log(4);
 			const now = Date.now();
 			if (msg.wanted) {
 				path = `.\\Files\\Downloads\\Users\\User - ${msg.id}\\${now}`;
@@ -165,6 +171,7 @@ module.exports = {
 				await this.download(url[i].url, url[i].path);
 			}
 		} else {
+			console.log(8);
 			await this.download(url, `${path}.${pathend}`);
 		}
 		return `${path}.${pathend}`;

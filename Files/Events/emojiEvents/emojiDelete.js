@@ -21,6 +21,7 @@ module.exports = {
 					entry = audit.sort((a,b) => b.id - a.id);
 					entry = entry.first();
 				}
+				emoji.wanted = 'emote';
 				const path = await ch.downloader(emoji, ch.stp(con.author.link, {emoji: emoji, ending: emoji.animated ? 'gif' : 'png'}));
 				const embed = new Discord.MessageEmbed()
 					.setAuthor(lan.author.title, con.author.image, ch.stp(con.author.link, {emoji: emoji, ending: emoji.animated ? 'gif' : 'png'}))
