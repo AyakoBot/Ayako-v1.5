@@ -264,13 +264,21 @@
         "name": "Ayako",
         "guildLogChannel": "718181439354437693",
         "errorLogChannel": "829148971125047328",
-        "prefix": "h!",
+        "prefix": "t!",
         "invite": "https://discord.com/api/oauth2/authorize?client_id=650691698409734151&permissions=4194168055&scope=bot",
         "image": "https://ayakobot.com/DefaultEmbedImage",
         "webhook": {
             "name": "Ayako Logging",
             "avatar": "https://cdn.discordapp.com/attachments/760152457799401532/839644223074336789/6E81E655-B92C-4EC6-8015-20679059B454.png"
         }
+    },
+    "emotes": {
+        "cross": "<:Cross:746392936807268474>",
+        "crossID": "746392936807268474",
+        "crossLink": "https://cdn.discordapp.com/emojis/746392936807268474.png?v=1",
+        "tick": "<:tick:670163913370894346>",
+        "tickID": "670163913370894346",
+        "tickLink": "https://cdn.discordapp.com/emojis/670163913370894346.png?v=1"
     },
     "mod": {
         "muteAdd": {

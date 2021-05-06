@@ -1,0 +1,45 @@
+const fs = require('fs');
+
+module.exports = {
+	name: 'reload',
+	perm: 0,
+	category: 'Owner',
+	aliases: ['r'],
+	description: 'Reloads Command File',
+	usage: 'h!reload [command Name]',
+	exe(msg) {
+		const args = msg.args;
+		if (!args.length) return msg.channel.send(`You didn't pass any command to reload, ${msg.author}!`);
+		if (args[0].toLowerCase() == 'all') {
+			const commandFiles = fs.readdirSync('./Files/Commands').filter(file => file.endsWith('.js'));
+			let i = 0;
+			let o = 0;
+			for (const file of commandFiles) {
+				i++;
+				delete require.cache[require.resolve(`./${file}`)];
+				try {
+					const newCommand = require(`./${file}`);
+					msg.client.commands.set(newCommand.name, newCommand);
+				} catch (error) {
+					msg.channel.send(`There was an error while reloading a command \`${file.replace('.js', '')}\`:\n\`\`\`${error.stack}\`\`\``);
+					i--;
+					o++;
+				}
+			}
+			if (o > 0) msg.channel.send(`Reloaded ${i} command files\nFailed to reload ${o} command files`);
+			else msg.channel.send(`Reloaded ${i} command files`);
+		} else {
+			const commandName = args.slice(0).join(' ').toLowerCase();
+			const command = msg.client.commands.get(commandName) || msg.client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+			if (!command) return msg.channel.send(`There is no command with name or alias \`${commandName}\`, ${msg.author}!`);
+			delete require.cache[require.resolve(`./${command.name}.js`)];
+			try {
+				const newCommand = require(`./${command.name}.js`);
+				msg.client.commands.set(newCommand.name, newCommand);
+				msg.channel.send(`Command \`${command.name}\` was reloaded!`);
+			} catch (error) {
+				msg.channel.send(`There was an error while reloading a command \`${command.name}\`:\n\`\`\`${error.stack}\`\`\``);
+			}
+		}
+	}
+};

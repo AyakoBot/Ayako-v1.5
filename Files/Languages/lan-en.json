@@ -73,7 +73,7 @@
     },
     "emojiDelete": {
         "description": {
-            "withUser": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\ndeleted\nEmoji / `{{emoji.name}}` / `{{emoji.id}}`",
+            "withUser": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\ndeleted\nEmoji `{{emoji.name}}` / `{{emoji.id}}`",
             "withoutUser": "Emoji {{emoji}} / `{{emoji.name}}` / `{{emoji.id}}` was deleted"
         },
         "author": {
@@ -682,5 +682,17 @@
     "connected": "Connected",
     "channelFollower": "Channel Follower",
     "incoming": "Incoming",
-    "stageOpen": "Stage Channel Opened/Closed"
+    "stageOpen": "Stage Channel Opened/Closed",
+    "commands": {
+        "commandHandler": {
+            "GuildOnly": "This Command is not made for DMs, please try again in a Server",
+            "PleaseWait": "Please wait `{{time}}` more Second(s)",
+            "CategoryDisabled": "Category `{{category}}` was disabled by the Server Administration",
+            "CommandDisabled": "Command `{{name}}` was disabled by the Server Administration",
+            "creatorOnly": "Only my Creator can use this Command (`Lars_und_so#0666`)",
+            "ownerOnly": "Only the Owner of this Server can use this Command",
+            "missingPermissions": "You don't have enough Permissions to use this Command",
+            "verifyMessage": "You just issued a **moderation command** by **editing your message**. \nDo you want to **proceed or abort**."
+        }
+    }
 }

@@ -34,10 +34,8 @@ client.login(auth.token).then(() => {
 	console.log('| Discord Client connected at '+ new Date().toUTCString());
 });
 
-
 client.invites = new Map();
 client.channelWebhooks = new Map();
-client.ch = require('./ClientHelper.js');
 client.constants = require('../Constants.json');
 
 
