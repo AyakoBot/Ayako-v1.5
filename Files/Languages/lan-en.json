@@ -610,6 +610,7 @@
     "user": "User",
     "account": "Account",
     "subscribers": "Subscribers",
+    "granted": "Granted",
     "revoked": "Revoked",
     "application": "Application",
     "createdAt": "Created at",

@@ -1,11 +1,10 @@
 const Discord = require('discord.js');
-const { statcord } = require('../../../BaseClient/Statcord');
+//const { statcord } = require('../../../BaseClient/Statcord');
 const auth = require('../../../BaseClient/auth.json');
 const cooldowns = new Discord.Collection();
 
 module.exports = {
 	async execute(msg) {
-		console.log(0);
 		const Constants = msg.client.constants;
 		const ch = msg.client.ch;
 		let prefix;
@@ -19,6 +18,7 @@ module.exports = {
 		else if (msg.content.toLowerCase().startsWith(prefixCustom)) prefix = prefixCustom;
 		else return;
 		if (!prefix) return;
+		msg.language = await msg.client.ch.languageSelector(msg.guild);
 		const args = msg.content.slice(prefix.length).split(/ +/);
 		const commandName = args.shift().toLowerCase();
 		const command = msg.client.commands.get(commandName) || msg.client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
@@ -29,7 +29,6 @@ module.exports = {
 		else this.cooldownCheck(msg);
 	},
 	async cooldownCheck(msg) {
-		console.log(1);
 		if (msg.author.id == auth.ownerID) {
 			cooldowns.set(msg.command.name, new Discord.Collection());
 			this.categoryCheck(msg);
@@ -44,7 +43,6 @@ module.exports = {
 				const expirationTime = +timestamps.get(msg.channel.id) + +cooldownAmount;
 				if (now < expirationTime) {
 					const timeLeft = (expirationTime - now) / 1000;
-					msg.language = await msg.client.ch.languageSelector(msg.guild);
 					const m = await msg.client.ch.reply(msg, msg.client.ch.stp(msg.language.commands.commandHandler.PleaseWait, {time: timeLeft.toFixed(1)}), {allowedMentions: {repliedUser: true}});
 					setTimeout(() => {
 						m.delete().catch(() => {});
@@ -57,7 +55,6 @@ module.exports = {
 		}
 	},
 	async categoryCheck(msg) {
-		console.log(2);
 		let category = msg.command.category;
 		if (category) {
 			category = category.toLowerCase();
@@ -70,7 +67,6 @@ module.exports = {
 		this.thisGuildOnly(msg);
 	},
 	async thisGuildOnly(msg) {
-		console.log(3);
 		if (msg.command.thisGuildOnly && !msg.command.thisGuildOnly.includes(msg.guild.id)) return;
 		this.commandCheck(msg);
 	},
@@ -82,7 +78,6 @@ module.exports = {
 		this.permissionCheck(msg);
 	},
 	async permissionCheck(msg) {
-		console.log(4);
 		if (msg.command.perm == 0) {
 			if (msg.author.id !== auth.ownerID) return msg.client.ch.reply(msg, msg.language.commands.commandHandler.creatorOnly);
 			else return this.editCheck(msg);
@@ -136,14 +131,12 @@ module.exports = {
 		}
 	},
 	async editCheck(msg) {
-		console.log(5);
 		if (msg.editedTimestamp) {
 			if (msg.command.category == 'Moderation') this.editVerifier(msg);
 			else this.commandExe(msg);
 		} else this.commandExe(msg);
 	},
 	async editVerifier(msg) {
-		console.log(6);
 		const m = await msg.client.ch.reply(msg, msg.client.language.commands.commandHandler.verifyMessgae);
 		m.react(msg.constants.emotes.tickID).catch(() => {});
 		m.react(msg.constants.emotes.crossID).catch(() => {});
@@ -174,12 +167,10 @@ module.exports = {
 		}).catch(() => {m.delete().catch(() => {});});
 	},
 	async DMcommand(msg) {
-		console.log(7);
 		if (msg.command.dm) this.commandExe(msg);
 		else msg.client.ch.reply(msg, msg.language.commands.commandHandler.GuildOnly);
 	},
 	async commandExe(msg) {
-		console.log(8);
 		if (msg.channel.type !== 'dm') {
 			const res = await msg.client.ch.query(`SELECT * FROM logchannel WHERE guildid = '${msg.guild.id}';`);
 			if (res && res.rowCount > 0) msg.logchannel = msg.client.channels.cache.get(res.rows[0].modlogs);
@@ -191,7 +182,7 @@ module.exports = {
 		} catch(e)  {
 			const channel = msg.client.channels.cache.get(msg.client.constants.errorchannel);
 			const embed = new Discord.MessageEmbed()
-				.setAuthor('Command Error', msg.client.Constants.emotes.crossLink, msg.url)
+				.setAuthor('Command Error', msg.client.constants.emotes.crossLink, msg.url)
 				.setTimestamp()
 				.setDescription(`\`\`\`${e.stack}\`\`\``)
 				.addField('Message', `\`\`\`${msg}\`\`\``)

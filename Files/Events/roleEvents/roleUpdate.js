@@ -51,16 +51,20 @@ module.exports = {
 					for (let i = 0; i < newMap.length; i++) {
 						const map = newMap[i];
 						if (!oldMap.includes(map)) {
-							content += `${Constants.enabled} ${language.permissions[map]}\n`;
+							content += `${Constants.enabled} \`${language.permissions[map]}\`\n`;
 						}
 					}
 					for (let i = 0; i < oldMap.length; i++) {
 						const map = oldMap[i];
 						if (!newMap.includes(map)) {
-							content += `${Constants.disabled} ${language.permissions[map]}\n`;
+							content += `${Constants.disabled} \`${language.permissions[map]}\`\n`;
 						}
 					}
-					if (content !== '') embed.addField(language.permissions.updatedPermissions, content);
+					if (content !== '') {
+						if (content.length > 1024) content = content.replace(regexes.revoke, language.revoked);
+						if (content.length > 1024) content = content.replace(regexes.allow, language.granted);
+						embed.addField(language.permissions.updatedPermissions, content);
+					}
 				}
 				const audits = await guild.fetchAuditLogs({limit: 3, type: 31});
 				let entry;
@@ -71,16 +75,7 @@ module.exports = {
 				}
 				if (entry) embed.setDescription(ch.stp(lan.descriptionWithAudit, {user: entry.executor, role: newRole})+ChangedKey.map(o => ` \`${o}\``));
 				else embed.setDescription(ch.stp(lan.descriptionWithoutAudit, {role: newRole})+ChangedKey.map(o => ` \`${o}\``));
-				if (embed.fields.length > 0) {
-					for (let i = 0; i < embed.fields.length; i++) {
-						const value = embed.fields[i].value;
-						if (value.length > 1024) {
-							embed.fields[i].value = value.replace(regexes.allow, language.allow);
-							embed.fields[i].value = value.replace(regexes.revoke, language.revoked);
-						}
-					}
-					ch.send(logchannel, embed);
-				}
+				if (embed.fields.length > 0) ch.send(logchannel, embed);
 			}
 		} 
 	}
