@@ -5,6 +5,7 @@ const Discord = require('discord.js');
 
 module.exports = {
 	async execute(oldState, newState) {
+		if (!oldState || !newState) return;
 		const guild = oldState.guild;
 		const language = await ch.languageSelector(guild);
 		const lan = language.voiceUpdate;

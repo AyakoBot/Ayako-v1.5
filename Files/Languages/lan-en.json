@@ -55,8 +55,8 @@
     },
     "channelUpdate": {
         "description": {
-            "withAudit": "User {{user.mention}} / `{{user.username}}#{{user.discriminator}}` / `{{user.id}}`\nhas Updated\n{{type}} {{channel.mention}} / `{{channel.name}}` / `{{channel.id}}`",
-            "withoutAudit": "{{type}} {{channel.mention}} / `{{channel.name}}` / `{{channel.id}}` was updated"
+            "withAudit": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas Updated\n{{type}} {{channel}} / `{{channel.name}}` / `{{channel.id}}`",
+            "withoutAudit": "{{type}} {{channel}} / `{{channel.name}}` / `{{channel.id}}` was updated"
         },
         "author": {
             "title": "{{type}} was updated"
@@ -451,10 +451,12 @@
     "permissions": {
         "deniedPermissions": "Denied Permissions",
         "grantedPermissions": "Granted Permissions",
-        "deletedPermissionFor": "Deleted Permission for",
-        "grantedPermissionFor": "Granted Permission for",
-        "updatedPermissionFor": "Updated Permission for",
+        "removedPermissions": "Removed Permissions",
         "updatedPermissions": "Updated Permissions",
+        "deniedPermissionsFor": "Denied Permission for",
+        "grantedPermissionFor": "Granted Permission for",
+        "removedPermissionsFor": "Removed Permissions for",
+        "updatedPermissionFor": "Updated Permission for",
         "unknownPermission": "Unknown Permission Updates have been made",
         "unknownPermissionFix": "Grant `View Audit` or `Administrator` to fix this issue",
         "Permissions": "Permissions",
@@ -594,7 +596,7 @@
     "unrestricted": "Unrestricted",
     "reason": "Reason",
     "user_limit": "User Limit",
-    "rate_limit_per_user": "User Limit",
+    "rate_limit_per_user": "Slowmode",
     "enabled": "Enabled",
     "syncing": "Syncing",
     "syncedAt": "Synced at",
@@ -679,5 +681,6 @@
     "disconnected": "Disconnected",
     "connected": "Connected",
     "channelFollower": "Channel Follower",
-    "incoming": "Incoming"
+    "incoming": "Incoming",
+    "stageOpen": "Stage Channel Opened/Closed"
 }

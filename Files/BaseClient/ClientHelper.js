@@ -252,51 +252,6 @@ module.exports = {
 		return unix;
 	},
 	ms(input) {return ms(input);},
-	eris2Lan(perm, language) {
-		let res;
-		if (perm == 'createInstantInvite') res = language.permissions.CREATE_INSTANT_INVITE;
-		else if (perm == 'kickMembers') res = language.permissions.KICK_MEMBERS;
-		else if (perm == 'banMembers') res = language.permissions.BAN_MEMBERS;
-		else if (perm == 'administrator') res = language.permissions.ADMINISTRATOR;
-		else if (perm == 'manageChannels') res = language.permissions.MANAGE_CHANNELS;
-		else if (perm == 'manageGuild') res = language.permissions.MANAGE_GUILD;
-		else if (perm == 'addReactions') res = language.permissions.ADD_REACTIONS;
-		else if (perm == 'viewAuditLog') res = language.permissions.VIEW_AUDIT_LOG;
-		else if (perm == 'viewAuditLogs') res = language.permissions.VIEW_AUDIT_LOG;
-		else if (perm == 'voicePrioritySpeaker') res = language.permissions.PRIORITY_SPEAKER;
-		else if (perm == 'voiceStream') res = language.permissions.STREAM;
-		else if (perm == 'stream') res = language.permissions.STREAM;
-		else if (perm == 'viewChannel') res = language.permissions.VIEW_CHANNEL;
-		else if (perm == 'readMessages') res = language.permissions.READ_MESSAGES;
-		else if (perm == 'sendMessages') res = language.permissions.SEND_MESSAGES;
-		else if (perm == 'sendTTSMessages') res = language.permissions.SEND_TTS_MESSAGES;
-		else if (perm == 'manageMessages') res = language.permissions.MANAGE_MESSAGES;
-		else if (perm == 'embedLinks') res = language.permissions.EMBED_LINKS;
-		else if (perm == 'attachFiles') res = language.permissions.ATTACH_FILES;
-		else if (perm == 'readMessageHistory') res = language.permissions.READ_MESSAGE_HISTORY;
-		else if (perm == 'mentionEveryone') res = language.permissions.MENTION_EVERYONE;
-		else if (perm == 'useExternalEmojis') res = language.permissions.USE_EXTERNAL_EMOJIS;
-		else if (perm == 'externalEmojis') res = language.permissions.EXTERNAL_EMOJIS;
-		else if (perm == 'viewGuildInsights') res = language.permissions.VIEW_GUILD_INSIGHTS;
-		else if (perm == 'voiceConnect') res = language.permissions.CONNECT;
-		else if (perm == 'voiceSpeak') res = language.permissions.SPEAK;
-		else if (perm == 'voiceMuteMembers') res = language.permissions.MUTE_MEMBERS;
-		else if (perm == 'voiceDeafenMembers') res = language.permissions.DEAFEN_MEMBERS;
-		else if (perm == 'voiceMoveMembers') res = language.permissions.MOVE_MEMBERS;
-		else if (perm == 'voiceUseVAD') res = language.permissions.USE_VAD;
-		else if (perm == 'changeNickname') res = language.permissions.CHANGE_NICKNAME;
-		else if (perm == 'manageNicknames') res = language.permissions.MANAGE_NICKNAMES;
-		else if (perm == 'manageRoles') res = language.permissions.MANAGE_ROLES;
-		else if (perm == 'manageWebhooks') res = language.permissions.MANAGE_WEBHOOKS;
-		else if (perm == 'manageEmojis') res = language.permissions.MANAGE_EMOJIS;
-		else if (perm == 'useSlashCommands') res = language.permissions.USE_SLASH_COMMANDS;
-		else if (perm == 'voiceRequestToSpeak') res = language.permissions.REQUEST_SPEAK;
-		else if (perm == 'allGuild') res = language.permissions.ALL_GUILD;
-		else if (perm == 'allText') res = language.permissions.ALL_TEXT;
-		else if (perm == 'allVoice') res = language.permissions.ALL_VOICE;
-		else if (perm == 'all') res = language.permissions.ALL;
-		return res;
-	},
 	getDifference (array1, array2) {
 		return array1.filter(i => {
 			return array2.indexOf(i) < 0;
@@ -304,19 +259,6 @@ module.exports = {
 	},
 	toTitleCase (str) {
 		return str.replace(regexes.strReplacer1, ' ').replace(regexes.strReplacer2, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
-	},
-	transformAuditLogEntry (nameOfKey, before, after, language) {
-		nameOfKey = nameOfKey.toLowerCase();
-		if (nameOfKey == 'nsfw') return { name: language[nameOfKey], before: before ? language.enabled : language.disabled, after: after ? language.enabled : language.disabled };
-		else if (nameOfKey == 'topic') return { name: language[nameOfKey], before: before ? escape(before.replace(regexes.auditLogTransform, '\\~'), ['angle brackets']) : language.none, after: after ? escape(after.replace(regexes.auditLogTransform, '\\~'), ['angle brackets']) : language.none };
-		else if (nameOfKey == 'rate_limit_per_user') return { name: language[nameOfKey], before: `${before} `+language.time.seconds, after: `${after} `+language.time.seconds };
-		else if (nameOfKey == 'name') return { name: language[nameOfKey], before, after };
-		else if (nameOfKey == 'type') return { name: language[nameOfKey], before: language.channelsNrSorted[before], after: language.channelsNrSorted[after] };
-		else if (nameOfKey == 'bitrate') return { name: language[nameOfKey], before: `${parseInt(before) / 1000}kbps`, after: `${parseInt(after) / 1000}kbps` };
-		else if (nameOfKey == 'rtc_region') return { name: language[nameOfKey], before: before || language.automatic, after: after || language.automatic };
-		else if (nameOfKey == 'video_quality_mode') return { name: language[nameOfKey], before: before === 1 ? language.automatic : '720p', after: after === 1 ? language.automatic : '720p' };
-		else if (nameOfKey == 'user_limit') return { name: language[nameOfKey], before: before !== 0 ? before : language.unrestricted, after: after !== 0 ? after : language.unrestricted };
-		else return { before: language.unknown, after: language.unknown };
 	},
 	displayAvatarURL(user) {
 		return user.displayAvatarURL({

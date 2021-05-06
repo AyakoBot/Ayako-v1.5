@@ -1,5 +1,4 @@
 const { client } = require('./Files/BaseClient/DiscordClient.js');
-const { bot } = require('./Files/BaseClient/ErisClient.js');
 const ch = require('./Files/BaseClient/ClientHelper.js');
 ch.pathCheck();
 //const { AP } = require('./Files/BaseClient/DBL');
@@ -49,33 +48,6 @@ client.on('raw', (event) => {
 client.on('warn', (err, id) => {
 	ch.logger(`Discord Client Shard with ID ${id} recieved a warning`, err);
 });
-bot.on('disconnect', () => {
-	console.error('Eris Client disconnected from Discord');
-});
-bot.on('error', (err, id) => {
-	ch.logger(`Eris Client Shard with ID ${id} encountered an Error`, err);
-});
-bot.on('error', (err, id) => {
-	ch.logger(`Eris Client Shard with ID ${id} encountered an Error`, err);
-});
-bot.on('ready', () => {
-	ch.logger('Eris Client is now ready');
-});
-bot.on('shardPreReady', (id) => {
-	ch.logger(`Eris Client Shard with ID ${id} is Pre-Ready`);
-});
-bot.on('shardReady', (id) => {
-	ch.logger(`Eris Client Shard with ID ${id} is Ready`);
-});
-bot.on('shardResume', (id) => {
-	ch.logger(`Eris Client Shard with ID ${id} is now Resuming`);
-});
-bot.on('shardDisconnect', (err, id) => {
-	ch.logger(`Eris Client Shard with ID ${id} encountered an Error`);
-});
-bot.on('warn', (err, id) => {
-	ch.logger(`Eris Client Shard with ID ${id} recieved a warning`, err);
-});
 //guild Events
 client.on('channelCreate', (channel) => {
 	const file = require('./Files/Events/channelEvents/channelCreate.js'); 
@@ -89,7 +61,7 @@ client.on('channelPinsUpdate', (channel, time) => {
 	const file = require('./Files/Events/channelEvents/channelPinsUpdate.js'); 
 	file.execute(channel, time);
 });
-bot.on('channelUpdate', (channel, oldChannel) => {
+client.on('channelUpdate', (channel, oldChannel) => {
 	const file = require('./Files/Events/channelEvents/channelUpdate.js'); 
 	file.execute(channel, oldChannel);
 });
