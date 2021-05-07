@@ -541,26 +541,6 @@
         "WELCOME_SCREEN_ENBALED": "```Welcome Screen enabled```\n`(Server has welcome Screen enabled)`"
     },
     "featuresName": "Features",
-    "mod": {
-        "muteAdd": {
-            "author": "Member was muted",
-            "description": "{{user}} has muted {{target}}",
-            "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
-            "activeMute": "Joined with an active Mute",
-            "activeMuteError": "This User joined with an active Mute.\nHowever I wasn't able to Mute them.\nMissing Permissions",
-            "dm": {
-                "author": "You have been Muted on {{guild.name}}"
-            }
-        },
-        "muteRemove": {
-            "author": "Member was unmuted",
-            "description": "{{user}} has unmuted {{target}}",
-            "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
-            "dm": {
-                "author": "You have been Unmuted on {{guild.name}}"
-            }
-        }
-    },
     "none": "None",
     "before": "Before",
     "after": "After",
@@ -684,6 +664,37 @@
     "channelFollower": "Channel Follower",
     "incoming": "Incoming",
     "stageOpen": "Stage Channel Opened/Closed",
+    "spam": "Spam",
+    "mod": {
+        "muteAdd": {
+            "author": "Member was muted",
+            "description": "{{user}} has muted {{target}}",
+            "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
+            "activeMute": "Joined with an active Mute",
+            "activeMuteError": "This User joined with an active Mute.\nHowever I wasn't able to Mute them.\nMissing Permissions",
+            "dm": {
+                "author": "You have been Muted on {{guild.name}}"
+            }
+        },
+        "muteRemove": {
+            "author": "Member was unmuted",
+            "description": "{{user}} has unmuted {{target}}",
+            "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
+            "dm": {
+                "author": "You have been Unmuted on {{guild.name}}"
+            }
+        },
+        "banAdd": {
+            "reply": "{{user}} was warned\nWarn Number {{nr}}"
+        },
+        "warnAdd": {
+            "DMtitle": "You have been warned on the Server __{{guild.name}}__",
+            "log": {
+                "author": "{{target.username}} has been warned",
+                "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas warned by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`"
+            }
+        }
+    },
     "commands": {
         "commandHandler": {
             "GuildOnly": "This Command is not made for DMs, please try again in a Server",
@@ -694,6 +705,10 @@
             "ownerOnly": "Only the Owner of this Server can use this Command",
             "missingPermissions": "You don't have enough Permissions to use this Command",
             "verifyMessage": "You just issued a **moderation command** by **editing your message**. \nDo you want to **proceed or abort**."
+        },
+        "antispamHandler": {
+            "banErrorMessage": "I was unable to ban {{user}}. `Insufficient Permissions`",
+            "kickErrorMessage": "I was unable to kick {{user}}. `Insufficient Permissions`"
         }
     }
 }

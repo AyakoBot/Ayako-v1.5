@@ -294,6 +294,13 @@
                 "image": "",
                 "link": "https://discord.com/channels/{{guild.id}}"
             }
+        },
+        "banAdd": {
+            "color": "ff0000"
+        },
+        "warnAdd": {
+            "color": "ff0000",
+
         }
     }
 }

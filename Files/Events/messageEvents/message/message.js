@@ -1,5 +1,11 @@
 module.exports = {
-	execute(msg) {
+	async execute(msg) {
 		require('./commandHandler').execute(msg);
+		if (!msg.editedAt) {
+			if (msg.client.uptime > 10000) {
+				const res = await msg.client.ch.query('SELECT * FROM stats;');
+				if (res.rows[0].antispam == true) require('./antispam').execute(msg); 
+			}
+		}
 	}
 };

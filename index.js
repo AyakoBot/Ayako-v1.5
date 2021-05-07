@@ -230,47 +230,51 @@ client.on('muteRemove', (executor, target, guild, reason) => {
 	const file = require('./Files/Events/modEvents/muteRemove.js'); 
 	file.execute(executor, target, guild, reason);
 });
+client.on('banAdd', (executor, target, guild, reason) => {
+	const file = require('./Files/Events/modEvents/muteAdd.js'); 
+	file.execute(executor, target, guild, reason);
+});
+client.on('banRemove', (executor, target, guild, reason) => {
+	const file = require('./Files/Events/modEvents/muteRemove.js'); 
+	file.execute(executor, target, guild, reason);
+});
+client.on('kickAdd', (executor, target, guild, reason) => {
+	const file = require('./Files/Events/modEvents/muteAdd.js'); 
+	file.execute(executor, target, guild, reason);
+});
+client.on('warnAdd', (executor, target, guild, reason) => {
+	const file = require('./Files/Events/modEvents/muteAdd.js'); 
+	file.execute(executor, target, guild, reason);
+});
+client.on('warnRemove', (executor, target, guild, reason) => {
+	const file = require('./Files/Events/modEvents/muteAdd.js'); 
+	file.execute(executor, target, guild, reason);
+});
 /*
 AP.on('posted', () => {
   console.log('Posted stats to Top.gg!')
 })
 */
 
+// AntiSpam Events
 
-/*
-antiSpam.on('error', (message, error, type) => {
-
-console.log(`${message.author.tag} couldn't receive the sanction '${type}', error: ${error}`);
+client.on('antispamBanAdd', (msg) => {
+	const file = require('./Files/Events/antispamEvents/banAdd.js'); 
+	file.execute(msg);
 });
-antiSpam.on('banAdd', (msg) => {
-
-const eventfile = client.eventfiles.get('AntiSpamBanAdd');
-eventfile.execute(msg, client);
+client.on('antispamKickAdd', (msg) => {
+	const file = require('./Files/Events/antispamEvents/kickAdd.js'); 
+	file.execute(msg);
 });
-antiSpam.on('kickAdd', (msg) => {
-
-const eventfile = client.eventfiles.get('AntiSpamKickAdd');
-eventfile.execute(msg, client);
+client.on('antispamMuteAdd', (msg) => {
+	const file = require('./Files/Events/antispamEvents/muteAdd.js'); 
+	file.execute(msg);
 });
-antiSpam.on('muteAdd', (msg) => {
-
-const eventfile = client.eventfiles.get('AntiSpamMuteAdd');
-eventfile.execute(msg, client, pool);
+client.on('antispamOfwarnAdd', (msg) => {
+	const file = require('./Files/Events/antispamEvents/ofwarnAdd.js'); 
+	file.execute(msg);
 });
-antiSpam.on('ofwarnAdd', (msg) => {
-
-const eventfile = client.eventfiles.get('AntiSpamOfWarnAdd');
-eventfile.execute(msg, client, pool);
+client.on('antispamWarnAdd', (msg) => {
+	const file = require('./Files/Events/antispamEvents/warnAdd.js'); 
+	file.execute(msg);
 });
-client.on('message', (msg) => {
-
-const eventfile = client.eventfiles.get('MessageEvent');
-eventfile.execute(msg, client, pool);
-if (client.uptime > 10000) {
-if (!msg._edits || msg._edits == 0) {
-antiSpam.message(msg);
-}
-}
-}); 
-
-*/

@@ -1,5 +1,5 @@
 const { client } = require('../../BaseClient/DiscordClient');
-const { statcord } = require('../../BaseClient/Statcord');
+//const { statcord } = require('../../BaseClient/Statcord');
 
 module.exports = {
 	async execute() {
@@ -14,6 +14,7 @@ module.exports = {
 			if (new Date().getHours() == 0) {
 				require('./nitro').execute();
 				ch.query('DELETE FROM toxicitycheck;');
+				require('../messageEvents/message/antispam').resetData();
 			}
 		}, 3600000);
 		setInterval(() => {
