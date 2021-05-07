@@ -222,33 +222,33 @@ process.on('unhandledRejection', error => {
 	client.ch.logger('Unhandled Rejection', error);
 });
 
-client.on('muteAdd', (executor, target, guild, reason) => {
+client.on('muteAdd', (executor, target, reason, msg) => {
 	const file = require('./Files/Events/modEvents/muteAdd.js'); 
-	file.execute(executor, target, guild, reason);
+	file.execute(executor, target, reason, msg);
 });
-client.on('muteRemove', (executor, target, guild, reason) => {
+client.on('muteRemove', (executor, target, reason, msg) => {
 	const file = require('./Files/Events/modEvents/muteRemove.js'); 
-	file.execute(executor, target, guild, reason);
+	file.execute(executor, target, reason, msg);
 });
-client.on('banAdd', (executor, target, guild, reason) => {
-	const file = require('./Files/Events/modEvents/muteAdd.js'); 
-	file.execute(executor, target, guild, reason);
+client.on('banAdd', (executor, target, reason, msg) => {
+	const file = require('./Files/Events/modEvents/banAdd.js'); 
+	file.execute(executor, target, reason, msg);
 });
-client.on('banRemove', (executor, target, guild, reason) => {
-	const file = require('./Files/Events/modEvents/muteRemove.js'); 
-	file.execute(executor, target, guild, reason);
+client.on('banRemove', (executor, target, reason, msg) => {
+	const file = require('./Files/Events/modEvents/banRemove.js'); 
+	file.execute(executor, target, reason, msg);
 });
-client.on('kickAdd', (executor, target, guild, reason) => {
-	const file = require('./Files/Events/modEvents/muteAdd.js'); 
-	file.execute(executor, target, guild, reason);
+client.on('kickAdd', (executor, target, reason, msg) => {
+	const file = require('./Files/Events/modEvents/kickAdd.js'); 
+	file.execute(executor, target, reason, msg);
 });
-client.on('warnAdd', (executor, target, guild, reason) => {
-	const file = require('./Files/Events/modEvents/muteAdd.js'); 
-	file.execute(executor, target, guild, reason);
+client.on('warnAdd', (executor, target, reason, msg) => {
+	const file = require('./Files/Events/modEvents/warnAdd.js'); 
+	file.execute(executor, target, reason, msg);
 });
-client.on('warnRemove', (executor, target, guild, reason) => {
-	const file = require('./Files/Events/modEvents/muteAdd.js'); 
-	file.execute(executor, target, guild, reason);
+client.on('warnRemove', (executor, target, reason, msg) => {
+	const file = require('./Files/Events/modEvents/warnRemove.js'); 
+	file.execute(executor, target, reason, msg);
 });
 /*
 AP.on('posted', () => {

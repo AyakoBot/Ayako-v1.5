@@ -25,6 +25,7 @@ module.exports = {
 		if (!command) return;
 		msg.args = args;
 		msg.command = command;
+		if (msg.author.id == auth.ownerID && command.name == 'eval') return command.exe(msg);
 		if (msg.channel.type == 'dm') this.DMcommand(command, args, msg);
 		else this.cooldownCheck(msg);
 	},

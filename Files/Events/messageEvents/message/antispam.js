@@ -1,3 +1,5 @@
+const { client } = require("../../../BaseClient/DiscordClient");
+
 const antiSpamSettings = {
 	warnThreshold: 7,
 	ofwarnThreshold: 10,
@@ -34,8 +36,6 @@ let data = {
 	users: []
 };
 
-
-
 module.exports = {
 	async execute(msg) {
 		if (msg.channel.type == 'dm') return;
@@ -65,10 +65,10 @@ module.exports = {
 		else warnnr = 1;
 		msg.member = await msg.client.ch.member(msg.guild, msg.author);
 		if (!msg.member) return;
-		if (msg.member.permissions.has('ADMINISTRATOR')) return;
+		if (msg.member.permissions.has(8n)) return;
 		if (guildSettings.bpchannelID) {if (guildSettings.bpchannelID.includes(msg.channel.id)) return;}
 		if (guildSettings.bpuserID) {if (guildSettings.bpuserID.includes(msg.author.id)) return;}
-		if (msg.member.roles.cache.some(role => guildSettings.bproleID.includes(role.id))) return;
+		if (guildSettings.bproleID) {if (msg.member.roles.cache.some(role => guildSettings.bproleID.includes(role.id))) return;}
 		msg.language = await msg.client.ch.languageSelector(msg.guild);
 		const banUser = async () => {
 			data.messageCache = data.messageCache.filter(m => m.author !== msg.author.id);
@@ -132,6 +132,7 @@ module.exports = {
 		return;
 	},
 	resetData() {
+		client.ch.logger(`AntiSpam Data Clear\nCleared a total of ${data.messageCache.length} messages`, `messageCache: ${data.messageCache.length}\nofwarnedUsers: ${data.ofwarnedUsers.length}\nmutedUsers: ${data.mutedUsers.length}\nbannedUsers: ${data.bannedUsers.length}\nkickedUsers: ${data.kickedUsers.length}\nwarnedUsers: ${data.warnedUsers.length}`);
 		data = {
 			messageCache: [],
 			ofwarnedUsers: [],

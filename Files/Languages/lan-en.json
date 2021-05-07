@@ -685,13 +685,17 @@
             }
         },
         "banAdd": {
-            "reply": "{{user}} was warned\nWarn Number {{nr}}"
+            "reply": "{{user}} was banned"
         },
         "warnAdd": {
+            "reply": "{{user}} was warned\nWarn Number {{nr}}",
             "DMtitle": "You have been warned on the Server __{{guild.name}}__",
             "log": {
                 "author": "{{target.username}} has been warned",
                 "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas warned by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`"
+            },
+            "antispam": {
+                "description": "**Please stop Spamming**"
             }
         }
     },
