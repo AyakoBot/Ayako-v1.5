@@ -3,6 +3,17 @@ const Discord = require('discord.js');
 module.exports = {
 	async execute(executor, target, reason, msg) {
 		let warnnr; 
+		const em = new Discord.MessageEmbed()
+			.setColor(con.color)
+			.setDescription(msg.client.constants.emotes.loading, lan.loading);
+		const emMsg = await msg.client.ch.reply(msg, em);
+		const member = await msg.client.ch.member(msg.guild, target);
+		const exec = await msg.client.ch.member(msg.guild, executor);
+		if (exec?.roles.highest.rawPosition < member?.roles.highest.rawPosition || exec?.roles.highest.rawPosition == member?.roles.highest.rawPosition) {
+			em.setDescription(msg.client.constants.emotes.cross, lan.exeNoPerms);
+			emMsg?.edit(em);
+			return false;
+		}
 		const res = await msg.client.ch.query(`SELECT * FROM warns WHERE guildid = '${msg.guild.id}' AND userid = '${target.id}';`);
 		if (res && res.rowCount > 0) warnnr = res.rowCount+1;
 		else warnnr = 1;
@@ -40,5 +51,8 @@ module.exports = {
 				.setTimestamp();
 			if (logchannel) msg.client.ch.send(logchannel, WarnLogEmbed);
 		}
+		em.setDescription(msg.client.constants.emotes.tick, lan.success);
+		emMsg?.edit(em);
+		return true;
 	}
 };

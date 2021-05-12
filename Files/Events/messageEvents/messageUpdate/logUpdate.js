@@ -28,10 +28,10 @@ module.exports = {
 						const chunks = [];
 						chunks.first = oldMsg.content.substr(0, maxFieldSize-1) + '\u2026';
 						chunks.last = '\u2026'+oldMsg.content.substr(maxFieldSize-1, maxFieldSize * 2);
-						embed.addField(lan.newContent, chunks.first);
+						embed.addField(lan.oldContent, chunks.first);
 						embed.addField('\u200b', chunks.last);
 					} else {
-						embed.addField(lan.newContent, oldMsg.content);
+						embed.addField(lan.oldContent, oldMsg.content);
 					}
 				}
 				if (newMsg.content) {

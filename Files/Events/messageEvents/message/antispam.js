@@ -1,4 +1,4 @@
-const { client } = require("../../../BaseClient/DiscordClient");
+const { client } = require('../../../BaseClient/DiscordClient');
 
 const antiSpamSettings = {
 	warnThreshold: 7,

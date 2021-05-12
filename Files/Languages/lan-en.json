@@ -673,19 +673,65 @@
             "activeMute": "Joined with an active Mute",
             "activeMuteError": "This User joined with an active Mute.\nHowever I wasn't able to Mute them.\nMissing Permissions",
             "dm": {
-                "author": "You have been Muted on {{guild.name}}"
-            }
+                "author": "You have been muted on {{guild.name}}"
+            },
+            "hasRole": "This User is already muted",
+            "exeNoPerms": "You can't mute this Member",
+            "meNoPerms": "I can't mute this Member `Missing Permissions`",
+            "success": "User {{target}} was muted",
+            "noRole": "I wasn't able to find a Mute Role"
         },
         "muteRemove": {
             "author": "Member was unmuted",
-            "description": "{{user}} has unmuted {{target}}",
+            "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas unmuted by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
             "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
             "dm": {
-                "author": "You have been Unmuted on {{guild.name}}"
-            }
+                "author": "You have been unmuted on {{guild.name}}"
+            },
+            "exeNoPerms": "You can't mute this Member",
+            "hasNoRole": "This User isn't muted",
+            "success": "User {{target}} was unmuted",
+            "noRole": "I wasn't able to find a Mute Role"
         },
         "banAdd": {
-            "reply": "{{user}} was banned"
+            "author": "User was banned",
+            "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas banned by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
+            "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
+            "dm": {
+                "author": "You have been banned from {{guild.name}}"
+            },
+            "exeNoPerms": "You can't ban this User",
+            "permissionError": "I don't have enough permissions to ban this User",
+            "error": "I wasn't able to ban this User!",
+            "alreadyBanned": "This User is already banned",
+            "success": "User {{target}} was banned",
+            "loading": "Banning User..."
+        },        
+        "banRemove": {
+            "author": "User was unbanned",
+            "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas unbanned by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
+            "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
+            "dm": {
+                "author": "You have been unbanned from {{guild.name}}"
+            },
+            "exeNoPerms": "You can't unban this User",
+            "permissionError": "I don't have enough permissions to unban this User",
+            "error": "I wasn't able to unban this User!",
+            "notBanned": "This User isn't banned",
+            "success": "User {{target}} was unbanned"
+        },
+        "kickAdd": {
+            "author": "Member was kicked",
+            "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas kicked by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
+            "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
+            "dm": {
+                "author": "You have been kicked from {{guild.name}}"
+            },
+            "exeNoPerms": "You can't kick this Member",
+            "noMember": "This User is not a Member of this Server",
+            "permissionError": "I don't have enough permissions to kick this Member",
+            "error": "I wasn't able to kick this Member!",
+            "success": "User {{target}} was kicked"
         },
         "warnAdd": {
             "reply": "{{user}} was warned\nWarn Number {{nr}}",
@@ -694,9 +740,11 @@
                 "author": "{{target.username}} has been warned",
                 "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas warned by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`"
             },
+            "exeNoPerms": "You can't warn this Member",
             "antispam": {
                 "description": "**Please stop Spamming**"
-            }
+            },
+            "success": "User {{target}} was warned"
         }
     },
     "commands": {

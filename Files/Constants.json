@@ -273,26 +273,36 @@
         }
     },
     "emotes": {
-        "cross": "<:Cross:746392936807268474>",
+        "cross": "<:Cross:746392936807268474> ",
         "crossID": "746392936807268474",
         "crossLink": "https://cdn.discordapp.com/emojis/746392936807268474.png?v=1",
-        "tick": "<:tick:670163913370894346>",
+        "tick": "<:tick:670163913370894346> ",
         "tickID": "670163913370894346",
-        "tickLink": "https://cdn.discordapp.com/emojis/670163913370894346.png?v=1"
+        "tickLink": "https://cdn.discordapp.com/emojis/670163913370894346.png?v=1",
+        "loading": "<a:Loading:780543908861182013> ",
+        "loadingID": "780543908861182013",
+        "loadingLink": "https://cdn.discordapp.com/emojis/780543908861182013.gif?v=1"
     },
     "mod": {
         "muteAdd": {
             "color": "ff0000",
             "author": {
                 "image": "",
-                "link": "https://discord.com/channels/{{guild.id}}"
+                "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
             }
         },
         "muteRemove": {
             "color": "00ff00",
             "author": {
                 "image": "",
-                "link": "https://discord.com/channels/{{guild.id}}"
+                "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
+            }
+        },
+        "kickAdd": {
+            "color": "ff0000",
+            "author": {
+                "image": "",
+                "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
             }
         },
         "banAdd": {
