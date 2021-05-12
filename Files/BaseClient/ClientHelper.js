@@ -102,7 +102,6 @@ module.exports = {
 		let path;
 		let pathend;
 		if (msg.channel) {
-			console.log(1);
 			path = `.\\Files\\Downloads\\Guilds\\Guild - ${msg.guild.id}\\Channel - ${msg.channel.id}\\${msg.id}`;
 			let guilddir = `.\\Files\\Downloads\\Guilds\\Guild - ${msg.guild.id}`;
 			if (!fs.existsSync(guilddir)) {
@@ -140,7 +139,6 @@ module.exports = {
 				}
 			}
 		} else if (msg.avatar) {
-			console.log(4);
 			const now = Date.now();
 			if (msg.wanted) {
 				path = `.\\Files\\Downloads\\Users\\User - ${msg.id}\\${now}`;
@@ -171,7 +169,6 @@ module.exports = {
 				await this.download(url[i].url, url[i].path);
 			}
 		} else {
-			console.log(8);
 			await this.download(url, `${path}.${pathend}`);
 		}
 		return `${path}.${pathend}`;
