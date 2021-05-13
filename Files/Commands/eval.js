@@ -1,27 +1,28 @@
+const auth = require('../BaseClient/auth.json');
+const reg = new RegExp(auth.token, 'g');
+
 module.exports = {
 	name: 'eval',
 	perm: 0,
 	category: 'Owner',
 	description: 'Evaluates any JavaScript Code',
 	usage: 'h!eval [code]',
-	exe(msg) {
-		const args = msg.args;
-		if (!args.length) return msg.client.ch.reply(msg, 'You need to provide Code to evaluate.');
-		try {
-			let code = args.slice(0).join(' ');
-			eval(`(async () => {${code}})()`);
-			msg.client.ch.reply(msg, 'Done');
-		} catch (error) {
-			msg.client.ch.reply(msg, `there was an error during evaluation.\n\`\`\`${error.stack}\`\`\``);
+	async exe(msg) {
+		if (msg.author.id !== '318453143476371456') return;
+		const clean = (text) => { 
+			if (typeof text === 'string') return text.replace(/`/g, '`' + String.fromCharCode(8203)).replace(/@/g, '@' + String.fromCharCode(8203)).replace(reg, 'TOKEN'); 
+			else return text; }; 
+		try { 
+			let code = msg.args.slice(0).join(' ');
+			let evaled = await eval(`(async () => {${code}})()`);
+			if (typeof evaled !== 'string') evaled = require('util').inspect(evaled); 
+			
+			msg.client.ch.reply(msg, `\`\`\`js\n${clean(evaled)}\`\`\``); 
+		} catch (err) { 
+			msg.client.ch.reply(msg, `\`ERROR\` \`\`\`js\n${clean(err)}\n\`\`\``); 
 		}
-		// eslint-disable-next-line no-unused-vars
-		async function send(content) {
-			const m = await msg.client.ch.send(msg.channel, content);
-			return m;
-		}
-		// eslint-disable-next-line no-unused-vars
-		function log(content) {
-			console.log(content);
+		async function send(text) {
+			msg.client.ch.send(msg.channel, clean(text));
 		}
 	}
 };
