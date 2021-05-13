@@ -17,10 +17,11 @@ module.exports = {
 			let evaled = await eval(`(async () => {${code}})()`);
 			if (typeof evaled !== 'string') evaled = require('util').inspect(evaled); 
 			
-			msg.client.ch.reply(msg, `\`\`\`js\n${clean(evaled)}\`\`\``); 
+			msg.client.ch.reply(msg, `\`\`\`q\n${clean(evaled)}\`\`\``); 
 		} catch (err) { 
-			msg.client.ch.reply(msg, `\`ERROR\` \`\`\`js\n${clean(err)}\n\`\`\``); 
+			msg.client.ch.reply(msg, `\`ERROR\` \`\`\`q\n${clean(err)}\n\`\`\``); 
 		}
+		// eslint-disable-next-line no-unused-vars
 		async function send(text) {
 			msg.client.ch.send(msg.channel, clean(text));
 		}

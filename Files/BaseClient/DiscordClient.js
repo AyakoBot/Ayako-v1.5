@@ -1,11 +1,12 @@
 const Discord = require('discord.js');
 const auth = require('./auth.json');
 const fs = require('fs');
+
 //Create Discord Client
 const client = new Discord.Client({ 
 	shards:'auto', 
-	partials: ['MESSAGE', 'REACTION', 'CHANNEL'],
-	intents: ['GUILDS', 'GUILD_MEMBERS', 'GUILD_BANS', 'GUILD_EMOJIS', 'GUILD_INTEGRATIONS', 'GUILD_WEBHOOKS', 'GUILD_INVITES', 'GUILD_VOICE_STATES', 'GUILD_MESSAGES', 'GUILD_MESSAGE_REACTIONS', 'GUILD_MESSAGE_TYPING', 'DIRECT_MESSAGES', 'DIRECT_MESSAGE_REACTIONS', 'DIRECT_MESSAGE_TYPING'],
+	partials: ['MESSAGE', 'REACTION', 'CHANNEL', 'USER', 'GUILD_MEMBER'],
+	intents: new Discord.Intents(32767),
 	allowedMentions: {
 		parse: ['users', 'roles'],
 		repliedUser: false
