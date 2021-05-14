@@ -4,7 +4,7 @@ const auth = require('../../../BaseClient/auth.json');
 const cooldowns = new Discord.Collection();
 
 module.exports = {
-	async execute(msg) {
+	async prefix(msg) {
 		const Constants = msg.client.constants;
 		const ch = msg.client.ch;
 		let prefix;
@@ -25,12 +25,14 @@ module.exports = {
 		if (!command) return;
 		msg.args = args;
 		msg.command = command;
-		if (msg.author.id == auth.ownerID && command.name == 'eval') return command.exe(msg);
-		if (msg.channel.type == 'dm') this.DMcommand(command, args, msg);
-		else this.cooldownCheck(msg);
+		return msg;
 	},
-	async cooldownCheck(msg) {
+	async execute(rawmsg) {
+		const msg = await this.prefix(rawmsg);
+		if (!msg) return; 
+		if (msg.channel.type == 'dm') this.DMcommand(msg);
 		if (msg.author.id == auth.ownerID) {
+			if (msg.command.name == 'eval') return msg.command.exe(msg);
 			cooldowns.set(msg.command.name, new Discord.Collection());
 			this.categoryCheck(msg);
 		} else {
