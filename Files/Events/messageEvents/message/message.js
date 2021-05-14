@@ -7,6 +7,9 @@ module.exports = {
 		require('./toxicity').execute(msg);
 		require('./willis').execute(msg);
 		require('./DMlog').execute(msg);
+		require('./other').execute(msg);
+		require('./shoob').execute(msg);
+		require('./nadeko').execute(msg);
 		if (!msg.editedAt) {
 			if (msg.client.uptime > 10000) {
 				const res = await msg.client.ch.query('SELECT * FROM stats;');
