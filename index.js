@@ -222,6 +222,10 @@ process.on('unhandledRejection', error => {
 	client.ch.logger('Unhandled Rejection', error);
 });
 
+client.on('tempmuteAdd', (executor, target, reason, msg, duration) => {
+	const file = require('./Files/Events/modEvents/tempmuteAdd.js'); 
+	file.execute(executor, target, reason, msg, duration);
+});
 client.on('muteAdd', (executor, target, reason, msg) => {
 	const file = require('./Files/Events/modEvents/muteAdd.js'); 
 	file.execute(executor, target, reason, msg);

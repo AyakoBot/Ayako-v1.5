@@ -295,6 +295,13 @@
                 "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
             }
         },
+        "tempmuteAdd": {
+            "color": "ff0000",
+            "author": {
+                "image": "",
+                "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
+            }
+        },
         "muteRemove": {
             "color": "00ff00",
             "author": {
@@ -315,5 +322,8 @@
         "warnAdd": {
             "color": "ff0000"
         }
+    },
+    "commands": {
+        "toxicityCheck": "ff0000"
     }
 }

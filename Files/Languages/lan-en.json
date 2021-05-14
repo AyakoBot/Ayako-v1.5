@@ -676,10 +676,25 @@
             "dm": {
                 "author": "You have been muted on {{guild.name}}"
             },
-            "hasRole": "This User is already muted",
+            "hasRole": "This Member is already muted",
             "exeNoPerms": "You can't mute this Member",
             "meNoPerms": "I can't mute this Member `Missing Permissions`",
-            "success": "User {{target}} was muted",
+            "success": "Member {{target}} was muted",
+            "noRole": "I wasn't able to find a Mute Role"
+        },
+        "tempmuteAdd": {
+            "author": "Member was tempmuted",
+            "description": "{{user}} has tempmuted {{target}}",
+            "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
+            "activeMute": "Joined with an active Mute",
+            "activeMuteError": "This User joined with an active Mute.\nHowever I wasn't able to Mute them.\nMissing Permissions",
+            "dm": {
+                "author": "You have been tempmuted on {{guild.name}}"
+            },
+            "hasRole": "This Member is already tempmuted",
+            "exeNoPerms": "You can't tempmuted this Member",
+            "meNoPerms": "I can't tempmuted this Member `Missing Permissions`",
+            "success": "Member {{target}} was tempmuted",
             "noRole": "I wasn't able to find a Mute Role"
         },
         "muteRemove": {
@@ -690,8 +705,8 @@
                 "author": "You have been unmuted on {{guild.name}}"
             },
             "exeNoPerms": "You can't mute this Member",
-            "hasNoRole": "This User isn't muted",
-            "success": "User {{target}} was unmuted",
+            "hasNoRole": "This Member isn't muted",
+            "success": "Member {{target}} was unmuted",
             "noRole": "I wasn't able to find a Mute Role"
         },
         "banAdd": {
@@ -772,6 +787,12 @@
                 "description": "Level Ups are indicated by me reacting to your message with {{emote1}}{{emote2}}",
                 "footer": "You will only be notified every 10 Levels."
             }
+        },
+        "toxicityCheck": {
+            "warning": "{{user}} Please do not use this word!",
+            "warnReason": "Repeatedly sending Blacklisted words",
+            "author": "Ayako Blacklist",
+            "info": "The following words are Blacklisted on **{{guild.name}}**:\n"
         }
     }
 }

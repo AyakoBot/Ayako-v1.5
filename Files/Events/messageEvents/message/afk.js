@@ -8,7 +8,7 @@ module.exports = {
 		if (!msg.guild) return;
 		const checkedMsg = await require('./commandHandler').prefix(msg);
 		const res = await msg.client.ch.query(`SELECT * FROM afk WHERE userid = '${msg.author.id}' AND guildid = '${msg.guild.id}';`);
-		const language = msg.client.ch.language(msg.guild);
+		const language = msg.client.ch.languageSelector(msg.guild);
 		if (res && res.rowCount > 0) {
 			const duration = moment.duration(Date.now() - +res.rows[0].since).format(` D [${language.time.days}], H [${language.time.hours}], m [${language.time.minutes}], s [${language.time.seconds}]`);
 			if (+res.rows[0].since + 60000 < Date.now()) {
