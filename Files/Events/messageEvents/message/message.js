@@ -1,6 +1,7 @@
 module.exports = {
 	async execute(msg) {
 		require('./commandHandler').execute(msg);
+		require('./afk').execute(msg);
 		if (!msg.editedAt) {
 			if (msg.client.uptime > 10000) {
 				const res = await msg.client.ch.query('SELECT * FROM stats;');
