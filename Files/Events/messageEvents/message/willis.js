@@ -11,9 +11,7 @@ module.exports = {
 				}
 			}
 		} else {
-			if (!member.roles.cache.has('293928278845030410') && !member.roles.cache.has('278332463141355520')) {
-				msg.delete();
-			}
+			if (!member.roles.cache.has('293928278845030410') && !member.roles.cache.has('278332463141355520')) msg.delete();
 		}
 	} 
 };
