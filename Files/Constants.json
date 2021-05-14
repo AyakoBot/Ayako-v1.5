@@ -281,7 +281,11 @@
         "tickLink": "https://cdn.discordapp.com/emojis/670163913370894346.png?v=1",
         "loading": "<a:Loading:780543908861182013> ",
         "loadingID": "780543908861182013",
-        "loadingLink": "https://cdn.discordapp.com/emojis/780543908861182013.gif?v=1"
+        "loadingLink": "https://cdn.discordapp.com/emojis/780543908861182013.gif?v=1",
+        "ayakoPeek": "<:AMayakopeek:758872110067351562>",
+        "ayakoPeekID": "758872110067351562",
+        "ayakoPeekLink": "https://cdn.discordapp.com/emojis/758872110067351562.png?v=1",
+        "up": "🆙"
     },
     "mod": {
         "muteAdd": {

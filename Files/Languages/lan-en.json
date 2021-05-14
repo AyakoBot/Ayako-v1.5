@@ -762,6 +762,16 @@
         "antispamHandler": {
             "banErrorMessage": "I was unable to ban {{user}}. `Insufficient Permissions`",
             "kickErrorMessage": "I was unable to kick {{user}}. `Insufficient Permissions`"
+        },
+        "afkHandler": {
+            "deletedAfk": "I've deleted your AFK\nYou have been AFK for {{time}}"
+        },
+        "leveling": {
+            "levelUp": {
+                "author": "{{user.tag}} just advanced to level {{level}}",
+                "description": "Level Ups are indicated by me reacting to your message with {{emote1}}{{emote2}}",
+                "footer": "You will only be notified every 10 Levels."
+            }
         }
     }
 }
