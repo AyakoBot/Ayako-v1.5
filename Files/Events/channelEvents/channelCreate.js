@@ -28,18 +28,35 @@ module.exports = {
 						.setDescription(ch.stp(lan.description.withUser, {user: entry.executor, channel: channel, type: language.channels[channel.type]}))
 						.setColor(con.color)
 						.setTimestamp();
-					if (channel.permissionOverwrites.size > 0) {
-						for (let i = 0; i < channel.permissionOverwrites.length; i++) {
-							const overwrite = channel.permissionOverwrites[i];
-							if (overwrite.type === 'role') {
-								const role = channel.guild.roles.cache.get(r => r.id === overwrite.id);
-								if (role.id === channel.guild.id) return;
-								
-								console.log(overwrite.deny);
-							}
-							if (overwrite.type === 'user') {
-								console.log(overwrite.deny);
-							}
+					for (let i = 0; channel.permissionOverwrites.length > i; i++) {
+
+						const newPerm = channel.permissionOverwrites[i];
+						const oldPerm = channel.permissionOverwrites[i];
+						oldPerm.deny = null; oldPerm.allow = null;
+						const [tBit1, Bit1] = ch.bitUniques(oldPerm.deny, newPerm.deny);
+						const [tBit2, Bit2] = ch.bitUniques(oldPerm.allow, newPerm.allow);
+						const tBit3 = tBit1.add([...tBit2]);
+						const Bit3 = tBit3.remove([...Bit1]).remove([...Bit2]);
+						let neutral = `${oldPerm.type == 'member' ? `<@${oldPerm.id}>` : oldPerm.type == 'role' ? `<@&${oldPerm.id}>` : language.unknown+' '+oldPerm}\n`; 
+						let disable = `${newPerm.type == 'member' ? `<@${newPerm.id}>` : newPerm.type == 'role' ? `<@&${newPerm.id}>` : language.unknown+' '+newPerm}\n`;
+						let enable = `${newPerm.type == 'member' ? `<@${newPerm.id}>` : newPerm.type == 'role' ? `<@&${newPerm.id}>` : language.unknown+' '+newPerm}\n`;
+						for (let i = 0; Bit1.toArray().length > i; i++) {
+							disable += `${Constants.switch.disable} \`${language.permissions[Bit1.toArray()[i]]}\`\n`;
+						}
+						for (let i = 0; Bit2.toArray().length > i; i++) {
+							enable += `${Constants.switch.enable} \`${language.permissions[Bit2.toArray()[i]]}\`\n`;
+						}
+						for (let i = 0; Bit3.toArray().length > i; i++) {
+							neutral += `${Constants.switch.neutral} \`${language.permissions[Bit3.toArray()[i]]}\`\n`;
+						}
+						if (neutral.includes('`')) {
+							embed.addField(`${language.permissions.removedPermissionsFor} ${oldPerm.type == 'member' ? language.member : language.role}`, neutral);
+						}
+						if (disable.includes('`')) {
+							embed.addField(`${language.permissions.deniedPermissionsFor} ${newPerm.type == 'member' ? language.member : language.role}`, disable);
+						}
+						if (enable.includes('`')) {
+							embed.addField(`${language.permissions.grantedPermissionFor} ${newPerm.type == 'member' ? language.member : language.role}`, enable);
 						}
 					}
 					for (let i = 0; entry.changes.length > i; i++) {

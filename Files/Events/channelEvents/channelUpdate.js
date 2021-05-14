@@ -101,7 +101,7 @@ module.exports = {
 						if (createdPerm) newPerms.forEach(n => oldPerms.forEach(o => {if (o !== n) createdPerm = n;}));
 						embed.addField(language.permissions.grantedPermissionFor, createdPerm.type == 'member' ? `${language.member} <@${createdPerm.id}>` : createdPerm.type == 'role' ? `${language.role} <@&${createdPerm.id}>` : language.unknown+' '+createdPerm);
 					} else {
-						for (let i = 0; newPerms.length > i; i++) {
+						for (let i = 0; newPerms.length > oldPerms.length ? newPerms.length : oldPerms.length> i; i++) {
 							const newPerm = newPerms[i];
 							const oldPerm = oldPerms[i];
 							const [tBit1, Bit1] = ch.bitUniques(oldPerm.deny, newPerm.deny);

@@ -7,7 +7,7 @@ module.exports = {
 		if (!msg.channel.type || msg.channel.type == 'dm') return;
 		if (!msg.author || msg.author.bot) return;
 		const member = await msg.client.ch.member(msg.guild, msg.author);
-		if (member.permissions.has(8)) return;
+		if (member.permissions.has(8n)) return;
 		const result = await msg.client.ch.query(`SELECT * FROM blacklists WHERE guildid = '${msg.guild.id}';`);
 		if (result && result.rowCount > 0) {
 			if (result.rows[0].active == false) return;
@@ -21,10 +21,11 @@ module.exports = {
 						if (`${blwords[i]}` !== '') words.push(argr.toLowerCase());
 					}
 				}
-				if (!words) return;
+				if (!words[0]) return;
+				console.log(words);
 				await msg.delete().catch(() => {});
-				const language = msg.client.ch.languageSelector(msg.guild);
-				const m = await msg.client.ch.send(msg.client.ch.stp(language.commands.toxicityCheck, {user: msg.author}));
+				const language = await msg.client.ch.languageSelector(msg.guild);
+				const m = await msg.client.ch.send(msg.channel, msg.client.ch.stp(language.commands.toxicityCheck.warning, {user: msg.author}));
 				if (m) setTimeout(() => {m.delete().catch(() => {});}, 10000);
 				const embed = new Discord.MessageEmbed()
 					.setAuthor(msg.client.constants.standard.image, language.commands.toxicityCheck.author, msg.client.constants.standard.invite)
