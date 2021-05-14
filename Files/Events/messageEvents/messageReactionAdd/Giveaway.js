@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 
 module.exports = {
 	async execute(reaction, user) {
-		if (user.id == client.user.id) return; 
+		if (user.id == client.user.id) return;
 		const guild = reaction.message.guild;
 		const ch = client.ch;
 		const Constants = client.constants;
@@ -18,6 +18,14 @@ module.exports = {
 		if (res && res.rowCount > 0) {
 			const r = res.rows[0];
 			requirement = r.requirement;
+			if (reaction.message.createdTimestamp > Date.now()-1000) {
+				const DMchannel  = await client.users.cache.get(r.host).createDM().catch(() => {});
+				if (DMchannel) client.ch.send(DMchannel, lan.warnedFast);
+				const DMchannel2  = await user.createDM().catch(() => {});
+				if (DMchannel2) client.ch.send(DMchannel2, lan.warnFast);
+				reaction.users.remove(user).catch(() => {});
+				return;
+			}
 			if (requirement) {
 				if (requirement.includes('role')) {
 					reqRole = guild.roles.cache.find(role => role.id === r.reqroleid);

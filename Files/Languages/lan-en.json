@@ -286,6 +286,8 @@
         "descriptionWithAudit": "{{amount}} Message(s) in\nChannel {{channel}} / `{{channel.name}}` / `{{channel.id}}`\nwere bulk deleted by\nUser {{user}} / `{{user.tag}}` / `{{user.id}}` "
     },
     "messageReactionAddGiveaway": {
+        "warnFast": "You reacted to a Giveaway less than 1 Second after it was created.\nDue to this you have been reported to the Giveaway Host and your reaction was removed.\n**If you are not a Bot, just react to the Giveaway again**",
+        "warnedFast": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nCould potentially be a Giveaway Farm User-Bot since they reacted to your Giveaway less than 1 Second after it's creation.\n**Manual review is required**",
         "author": {
             "name": "Ayako Giveaways"
         },
