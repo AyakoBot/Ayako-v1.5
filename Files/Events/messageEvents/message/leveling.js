@@ -7,7 +7,7 @@ module.exports = {
 		if (!msg.author) return;
 		if (msg.author.bot) return;
 		if (msg.channel.type == 'dm') return;
-		const language = msg.client.ch.languageSelector(msg.guild);
+		const language = await msg.client.ch.languageSelector(msg.guild);
 		const resG = await msg.client.ch.query(`SELECT * FROM levelglobal WHERE userid = '${msg.author.id}';`);
 		if (resG && resG.rowCount > 0) {
 			const resSpam = await msg.client.ch.query(`SELECT * FROM antilevelspam WHERE userid = '${msg.author.id}';`);
