@@ -682,7 +682,7 @@
             "exeNoPerms": "You can't mute this Member",
             "meNoPerms": "I can't mute this Member `Missing Permissions`",
             "success": "Member {{target}} was muted",
-            "noRole": "I wasn't able to find a Mute Role"
+            "noRole": "I wasn't able to find a Mute Role\nVisit `h!muterole` to set or create one"
         },
         "tempmuteAdd": {
             "author": "Member was tempmuted",
@@ -697,7 +697,7 @@
             "exeNoPerms": "You can't tempmuted this Member",
             "meNoPerms": "I can't tempmuted this Member `Missing Permissions`",
             "success": "Member {{target}} was tempmuted",
-            "noRole": "I wasn't able to find a Mute Role"
+            "noRole": "I wasn't able to find a Mute Role\nVisit `h!muterole` to set or create one"
         },
         "muteRemove": {
             "author": "Member was unmuted",
@@ -709,7 +709,7 @@
             "exeNoPerms": "You can't mute this Member",
             "hasNoRole": "This Member isn't muted",
             "success": "Member {{target}} was unmuted",
-            "noRole": "I wasn't able to find a Mute Role"
+            "noRole": "I wasn't able to find a Mute Role\nVisit `h!muterole` to set or create one"
         },
         "banAdd": {
             "author": "User was banned",
