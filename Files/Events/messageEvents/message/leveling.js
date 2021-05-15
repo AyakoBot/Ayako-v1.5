@@ -63,9 +63,28 @@ module.exports = {
 				}, 60000);
 				const result = await msg.client.ch.query(`SELECT * FROM levelserver WHERE userid = '${msg.author.id}' AND guildid = '${msg.guild.id}';`);
 				if (result && result.rowCount > 0) {
+					const member = await msg.client.ch.member(msg.guild, msg.author);
+					for (const id of result.rows[0].blroleid) {
+						const role = msg.guild.roles.cache.get(id);
+						if (!role) {
+							result.rows[0].blroleid.splice(result.rows[0].blroleid.indexOf(id), 1);
+							msg.client.ch.query(`UPDATE levelserver SET blroleid = ARRAY[${result.rows[0].blroleid}] WHERE guildid = '${msg.guild.id}';`);
+						} else if (member.roles.cache.has(role.id)) return;
+					}
 					const curXP = result.rows[0].xp;
 					const curLvL = result.rows[0].level;
-					const newXP = Math.floor(Math.random() * 10 + 15) * +settings.xpgain;
+					let multiplier;
+					const mRes = await msg.client.ch.query(`SELECT * FROM levelmultiroles WHERE guildid = '${msg.guild.id}';`);
+					if (mRes && mRes.rowCount > 0) {
+						mRes.rows.forEach(async row => {
+							const role = msg.guild.roles.cache.get(row.role);
+							if (!role) return msg.client.ch.query(`DELETE FROM levelmultiroles WHERE guildid = '${msg.guild.id}' AND roleid = '${row.roleid}';`);
+							else {
+								if (member && member.roles.cache.has(role.id)) multiplier + row.multiplier;
+							}
+						});
+					}
+					const newXP = Math.floor(Math.random() * 10 + 15) * +settings.xpgain * multiplier ? multiplier : 1;
 					const XP = +curXP + +newXP;
 					await msg.client.ch.query(`UPDATE levelserver SET xp = '${XP}' WHERE userid = '${msg.author.id}' AND guildid = '${msg.guild.id}';`);
 					const newLevel = +curLvL + 1;
