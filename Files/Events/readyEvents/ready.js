@@ -12,6 +12,7 @@ module.exports = {
 		setInterval(() => {
 			//require('./websiteFetcher').execute();
 			if (new Date().getHours() == 0) {
+				client.guilds.cache.forEach(g => {require('../guildEvents/guildCreate/nitro').execute(g);});
 				require('./nitro').execute();
 				ch.query('DELETE FROM toxicitycheck;');
 				require('../messageEvents/message/antispam').resetData();

@@ -23,16 +23,23 @@ module.exports = {
 			if (game.name == 'Custom Status') return;
 			if (game.when == 'old') {
 				game.name = game.name.replace(/`/g, '').replace(/'/g, '');
-				const timePlayed = now - game.createdTimestamp;
-				const res = ch.query(`SELECT * FROM games WHERE userid = '${oldPresence.user.id}' AND gamename = '${game.name}' AND lastcreated = '${game.createdTimestamp}';`);
-				if (res && res.rowCount > 0) ch.query(`UPDATE games SET playduration = '${timePlayed}' WHERE userid = '${oldPresence.user.id}' AND gamename = '${game.name}' AND lastcreated = '${game.createdTimestamp}';`);
-				else ch.query(`INSERT INTO games (userid, gamename, playduration, lastcreated) VALUES ('${oldPresence.user.id}', '${game.name}', '${timePlayed}', '${game.createdTimestamp}');`);
+				const timePlayed = `${now - game.createdTimestamp}`;
+				ch.query(`
+				INSERT INTO games (userid, gamename, playduration, lastcreated) 
+				VALUES ('${oldPresence.user.id}', '${game.name}', '${timePlayed}', '${game.createdTimestamp}')
+				ON CONFLICT (userid, gamename) 
+				DO UPDATE SET playduration = '${timePlayed}';
+				`);
 			} else if (game.when == 'new') {
 				game.name = game.name.replace(/`/g, '').replace(/'/g, '');
-				const res = await ch.query(`SELECT * FROM games WHERE userid = '${newPresence.user.id}' AND gamename = '${game.name}';`);
-				if (res && res.rowCount > 0) ch.query(`UPDATE games SET lastcreated = '${game.createdTimestamp}' WHERE userid = '${newPresence.user.id}' AND gamename = '${game.name}';`);
-				else ch.query(`INSERT INTO games (userid, gamename, playduration, lastcreated) VALUES ('${newPresence.user.id}', '${game.name}', null, '${game.createdTimestamp}');`);
+				ch.query(`
+				INSERT INTO games (userid, gamename, lastcreated) 
+				VALUES ('${newPresence.user.id}', '${game.name}', '${game.createdTimestamp}')
+				ON CONFLICT (userid, gamename)
+				DO UPDATE SET lastcreated = '${game.createdTimestamp}';
+				`);
 			}
 		});
-	}
+	},
 };
+

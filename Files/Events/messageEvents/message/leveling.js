@@ -64,12 +64,14 @@ module.exports = {
 				const result = await msg.client.ch.query(`SELECT * FROM levelserver WHERE userid = '${msg.author.id}' AND guildid = '${msg.guild.id}';`);
 				if (result && result.rowCount > 0) {
 					const member = await msg.client.ch.member(msg.guild, msg.author);
-					for (const id of result.rows[0].blroleid) {
-						const role = msg.guild.roles.cache.get(id);
-						if (!role) {
-							result.rows[0].blroleid.splice(result.rows[0].blroleid.indexOf(id), 1);
-							msg.client.ch.query(`UPDATE levelserver SET blroleid = ARRAY[${result.rows[0].blroleid}] WHERE guildid = '${msg.guild.id}';`);
-						} else if (member.roles.cache.has(role.id)) return;
+					if (result.rows[0].blroleid) {
+						for (const id of [...result.rows[0].blroleid.entries()]) {
+							const role = msg.guild.roles.cache.get(id);
+							if (!role) {
+								result.rows[0].blroleid.splice(result.rows[0].blroleid.indexOf(id), 1);
+								msg.client.ch.query(`UPDATE levelserver SET blroleid = ARRAY[${result.rows[0].blroleid}] WHERE guildid = '${msg.guild.id}';`);
+							} else if (member.roles.cache.has(role.id)) return;
+						}
 					}
 					const curXP = result.rows[0].xp;
 					const curLvL = result.rows[0].level;
