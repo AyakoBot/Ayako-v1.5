@@ -12,8 +12,8 @@ module.exports = {
 					guild.client.ch.query(`UPDATE nitrosettings SET boosterroleid = '${role.id}' WHERE guildid = '${guild.id}';`);
 					return;
 				}
-				if (Role && Role.tags?.premiumSubscriberRole) role = Role;
 			}
+			if (Role && Role.tags?.premiumSubscriberRole) role = Role;
 		}
 	}
 };

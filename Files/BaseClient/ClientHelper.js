@@ -69,17 +69,12 @@ module.exports = {
 		});
 		return text;
 	},
-	async query(query, willOccure) {
-		let res;
-		if (willOccure) {
-			res = await pool.query(query).catch(() => {});
-		} else {
-			res = await pool.query(query).catch((err) =>{
-				this.logger('Pool Query Error', err);
-			});
-		}
+	async query(query) {
+		const res = await pool.query(query).catch((err) =>{
+			this.logger('Pool Query Error', err);
+		});
 		if (res) return res;
-		return null;
+		else return null;
 	},
 	async logger(type, log) {
 		if (client && client.user) {
