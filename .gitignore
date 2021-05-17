@@ -1,3 +1,4 @@
 node_modules
 Files/BaseClient/auth.json
 Files/Downloads
+.vscode

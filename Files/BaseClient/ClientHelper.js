@@ -71,6 +71,7 @@ module.exports = {
 	},
 	async query(query) {
 		const res = await pool.query(query).catch((err) =>{
+			console.log(query);
 			this.logger('Pool Query Error', err);
 		});
 		if (res) return res;

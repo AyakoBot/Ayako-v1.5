@@ -8,4 +8,5 @@ module.exports = {
 		msg.channel.bulkDelete(msgs).catch(() => {});
 		const language = await msg.client.ch.languageSelector(msg.guild);
 		msg.client.emit('kickAdd', msg.client.user, msg.author, 'Ayako AntiSpam | '+language.spam, msg);
-	}};
+	}
+};

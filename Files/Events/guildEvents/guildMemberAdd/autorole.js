@@ -10,7 +10,7 @@ module.exports = {
 			for (let i = 0; i < +res.rowCount; i++) {
 				const r = res.rows[i];
 				const role = guild.roles.cache.get(r.roleid);
-				member.roles.add(role).catch(() => {});
+				if (role) member.roles.add(role).catch(() => {});
 			} 
 		}   
 	}
