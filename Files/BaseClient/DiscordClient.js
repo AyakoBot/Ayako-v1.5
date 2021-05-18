@@ -34,19 +34,27 @@ client.events = new Discord.Collection();
 const eventsDir = fs.readdirSync('./Files/Events');
 const reg = new RegExp('.js', 'g');
 for (const folder of eventsDir) {
-	const key = folder.replace(/Events/g, '');
-	const eventFiles = fs.readdirSync(`./Files/Events/${folder}`);
-	for (const file of eventFiles) {
-		if (file.endsWith('.js') && file.startsWith(key)) {
-			const event = require(`../Events/${folder}/${file}`);
-			client.events.set(file.replace(reg, ''), event);
-		} else {
-			if (file.startsWith(key) && !file.endsWith('.js')) {
-				for (const eventFolderFile of fs.readdirSync(`./Files/Events/${folder}/${file}`)) {
-					if (`${eventFolderFile}`.endsWith('.js') && `${eventFolderFile}`.startsWith(key)) {
-						const event = require(`../Events/${folder}/${file}/${eventFolderFile}`);
-						client.events.set(eventFolderFile.replace(reg, ''), event);
-					} 
+	if (folder.endsWith('.js')) {
+		const event = require(`../Events/${folder}`);
+		event.path = `../Events/${folder}`;
+		client.events.set(folder.replace(reg, ''), event);
+	} else {
+		const key = folder.replace(/Events/g, '');
+		const eventFiles = fs.readdirSync(`./Files/Events/${folder}`);
+		for (const file of eventFiles) {
+			if (file.endsWith('.js') && file.startsWith(key)) {
+				const event = require(`../Events/${folder}/${file}`);
+				event.path = `../Events/${folder}/${file}`;
+				client.events.set(file.replace(reg, ''), event);
+			} else {
+				if (file.startsWith(key) && !file.endsWith('.js')) {
+					for (const eventFolderFile of fs.readdirSync(`./Files/Events/${folder}/${file}`)) {
+						if (`${eventFolderFile}`.endsWith('.js') && `${eventFolderFile}`.startsWith(key)) {
+							const event = require(`../Events/${folder}/${file}/${eventFolderFile}`);
+							event.path = `../Events/${folder}/${file}/${eventFolderFile}`;
+							client.events.set(eventFolderFile.replace(reg, ''), event);
+						} 
+					}
 				}
 			}
 		}
