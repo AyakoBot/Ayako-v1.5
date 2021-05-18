@@ -1,7 +1,6 @@
-const { client } = require('../../BaseClient/DiscordClient.js');
-
 module.exports = {
 	async execute(oldUser, newUser) {
+		const client = oldUser ? oldUser.client : newUser.client;
 		const ch = client.ch;
 		if (oldUser.username !== newUser.username) {
 			const username = newUser.username.replace(/'/g, '').replace(/`/g, '');

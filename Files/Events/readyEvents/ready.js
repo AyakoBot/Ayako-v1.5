@@ -1,8 +1,9 @@
-const { client } = require('../../BaseClient/DiscordClient');
 //const { statcord } = require('../../BaseClient/Statcord');
 
 module.exports = {
+	once: true,
 	async execute() {
+		const { client } = require('../../BaseClient/DiscordClient');
 		console.log(`|Logged in as Ayako\n|-> Bot: ${client.user.tag}`);
 		console.log(`Login at ${new Date(Date.now()).toLocaleString()}`);
 		const ch = client.ch;

@@ -1,8 +1,8 @@
-const { client } = require('../../BaseClient/DiscordClient');
 const Discord = require('discord.js');
 
 module.exports = {
 	async execute(channel) {
+		const client = channel.client;
 		const guild = channel.guild;
 		const ch = require('../../BaseClient/ClientHelper'); 
 		const Constants = require('../../Constants.json');

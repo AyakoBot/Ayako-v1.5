@@ -1,7 +1,6 @@
-const { client } = require('../../../BaseClient/DiscordClient');
-
 module.exports = {
 	async execute() {
+		const { client } = require('../../../BaseClient/DiscordClient');
 		const ch = client.ch;
 		client.guilds.cache.forEach(async guild => {
 			const res = await ch.query(`SELECT * FROM warns WHERE type = 'Mute' AND guildid = '${guild.id}';`);
@@ -27,7 +26,7 @@ module.exports = {
 											const language = await ch.languageSelector(guild);
 											if (member.roles.cache.has(muterole.id)) {
 												await member.roles.remove(muterole).catch(() => {});
-												client.emit('muteRemove', client.user, user, guild, language.ready.unmute.reason);
+												client.emit('muteRemove', (client.user, user, guild, language.ready.unmute.reason));
 												closed(guild, user, end);
 											} else closed(guild, user, end);
 										} else closed(guild, user, end);
@@ -43,5 +42,6 @@ module.exports = {
 };
 
 function closed(guild, user, end) {
+	const client = guild.client;
 	client.ch.query(`UPDATE warns SET closed = 'true' WHERE guildid = '${guild.id}' AND userid = '${user.id}' AND type = 'Mute' AND duration = '${end}';`);
 }

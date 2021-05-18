@@ -1,8 +1,8 @@
-const { client } = require('../../BaseClient/DiscordClient');
 const Discord = require('discord.js');
 
 module.exports = {
 	async execute(oldChannel, newChannel) {
+		const client = oldChannel ? oldChannel.client : newChannel.client;
 		if (oldChannel.type === 'dm') return;
 		if (newChannel.position !== oldChannel.position) return; // flawed logic
 		if (newChannel.children !== oldChannel.children) return; // unnecessary since we already handle parents
@@ -177,6 +177,7 @@ module.exports = {
 	}
 };
 function send(logchannel, embed, language) {
+	const client = logchannel.client;
 	embed.fields.forEach((field) => {
 		if (field.value.length > 1024 || embed.length > 6000) {
 			const re1 = new RegExp(client.constants.switch.disable, 'g');

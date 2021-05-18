@@ -1,6 +1,6 @@
 module.exports = {
-	execute(oldUser, newUser) {
+	async execute(oldUser, newUser) {
 		require('./log.js').execute(oldUser, newUser);
-		require('./usernameLog.js').execute(oldUser, newUser);
+		require('./nameLog.js').execute(oldUser, newUser);
 	}
 };

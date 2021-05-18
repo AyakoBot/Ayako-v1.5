@@ -1,7 +1,6 @@
-const { client } = require('../../../BaseClient/DiscordClient');
-
 module.exports = {
 	async execute(rawmember, user) {
+		const client = user.client;
 		const guild = rawmember.guild;
 		const ch = client.ch;
 		let wasMuted = null;
@@ -41,9 +40,9 @@ module.exports = {
 			const language = await ch.languageSelector(guild);
 			const lan = language.mod.mute;
 			if (wasMuted == true) {
-				client.emit('muteAdd', (client.user, user, guild, lan.activeMute));
+				client.emit('modMuteAdd', (client.user, user, guild, lan.activeMute));
 			} else if (wasMuted == false) {
-				client.emit('muteRemove', (client.user, user, guild, lan.activeMuteError));
+				client.emit('modMuteRemove', (client.user, user, guild, lan.activeMuteError));
 			}
 		}
 	}

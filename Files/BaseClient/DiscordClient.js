@@ -29,6 +29,29 @@ for (const file of languageFiles) {
 	const name = file.replace(/.json/g, '');
 	client.languages.set(name, language);
 }
+//Create Event Collection and gather all Event Files
+client.events = new Discord.Collection();
+const eventsDir = fs.readdirSync('./Files/Events');
+const reg = new RegExp('.js', 'g');
+for (const folder of eventsDir) {
+	const key = folder.replace(/Events/g, '');
+	const eventFiles = fs.readdirSync(`./Files/Events/${folder}`);
+	for (const file of eventFiles) {
+		if (file.endsWith('.js') && file.startsWith(key)) {
+			const event = require(`../Events/${folder}/${file}`);
+			client.events.set(file.replace(reg, ''), event);
+		} else {
+			if (file.startsWith(key) && !file.endsWith('.js')) {
+				for (const eventFolderFile of fs.readdirSync(`./Files/Events/${folder}/${file}`)) {
+					if (`${eventFolderFile}`.endsWith('.js') && `${eventFolderFile}`.startsWith(key)) {
+						const event = require(`../Events/${folder}/${file}/${eventFolderFile}`);
+						client.events.set(eventFolderFile.replace(reg, ''), event);
+					} 
+				}
+			}
+		}
+	}
+}
 
 //Connect to Discord
 client.login(auth.token).then(() => {
@@ -38,6 +61,6 @@ client.login(auth.token).then(() => {
 client.invites = new Map();
 client.channelWebhooks = new Map();
 client.constants = require('../Constants.json');
-
+client.setMaxListeners(61);
 
 module.exports = { client };

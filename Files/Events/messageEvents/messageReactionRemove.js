@@ -1,7 +1,6 @@
-const { client } = require('../../BaseClient/DiscordClient');
-
 module.exports = {
 	async execute(reaction, user) {
+		const client = reaction.client;
 		if (user.id == client.user.id) return; 
 		const ch = client.ch;
 		const guild = reaction.message.guild;

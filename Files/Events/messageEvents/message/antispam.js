@@ -74,21 +74,21 @@ module.exports = {
 			data.messageCache = data.messageCache.filter(m => m.author !== msg.author.id);
 			data.bannedUsers.push(msg.author.id);
 			if (!msg.member.bannable) return msg.client.ch.send(msg.channel, msg.client.ch.stp(msg.language.commands.antispamHandler.banErrorMessage, {user: msg.author}));
-			return msg.client.emit('antispamBanAdd', msg);
+			return msg.client.emit('antispamBanAdd', (msg));
 		};
 		const kickUser = async () => {
 			data.messageCache = data.messageCache.filter(m => m.author !== msg.author.id);
 			data.kickedUsers.push(msg.author.id);
 			if (!msg.member.kickable) return msg.client.ch.send(msg.channel, msg.client.ch.stp(msg.language.commands.antispamHandler.kickErrorMessage, {user: msg.author}));
-			return msg.client.emit('antispamKickAdd', msg);
+			return msg.client.emit('antispamKickAdd', (msg));
 		};
 		const warnUser = async () => {
 			data.warnedUsers.push(msg.author.id);
-			return msg.client.emit('antispamWarnAdd', msg);
+			return msg.client.emit('antispamWarnAdd', (msg));
 		};
 		const muteUser = async () => {
 			data.mutedUsers.push(msg.author.id);
-			return msg.client.emit('antispamMuteAdd', msg);
+			return msg.client.emit('antispamMuteAdd', (msg));
 		};
 		const ofwarnUser = async () => {
 			data.ofwarnedUsers.push(msg.author.id);
@@ -98,7 +98,7 @@ module.exports = {
 				else if (warnnr == guildSettings.muteAfterWarnsAmount && guildSettings.muteEnabledToF == true) await muteUser(msg);
 				else msg.client.emit('antispamOfwarnAdd', msg);
 			} 
-			if (guildSettings.readOfWarnsToF == false) msg.client.emit('ofwarnAdd', msg);
+			if (guildSettings.readOfWarnsToF == false) msg.client.emit('ofwarnAdd', (msg));
 			return;
 		};
 		data.messageCache.push({
@@ -111,23 +111,23 @@ module.exports = {
 
 		if (!data.warnedUsers.includes(msg.author.id) && (spamMatches === antiSpamSettings.warnThreshold || messageMatches === antiSpamSettings.maxDuplicatesWarning)) {
 			warnUser(msg);
-			return msg.client.emit('spamThresholdWarn', msg, messageMatches === antiSpamSettings.maxDuplicatesWarning);
+			return msg.client.emit('spamThresholdWarn', (msg, messageMatches === antiSpamSettings.maxDuplicatesWarning));
 		}
 		if (!data.mutedUsers.includes(msg.author.id) && (spamMatches === antiSpamSettings.muteThreshold || messageMatches === antiSpamSettings.maxDuplicatesMute)) {
 			if (guildSettings.muteEnabledToF == true) muteUser(msg);
-			return msg.client.emit('spamThresholdMute', msg, messageMatches === antiSpamSettings.maxDuplicatesMute);
+			return msg.client.emit('spamThresholdMute', (msg, messageMatches === antiSpamSettings.maxDuplicatesMute));
 		}
 		if (!data.ofwarnedUsers.includes(msg.author.id) && (spamMatches === antiSpamSettings.ofwarnThreshold || messageMatches === antiSpamSettings.maxDuplicatesofWarning)) {
 			if (guildSettings.giveofficialWarnsToF == true) ofwarnUser(msg);
-			return msg.client.emit('spamThresholdOfWarn', msg, messageMatches === antiSpamSettings.maxDuplicatesofWarning);
+			return msg.client.emit('spamThresholdOfWarn', (msg, messageMatches === antiSpamSettings.maxDuplicatesofWarning));
 		}
 		if (!data.kickedUsers.includes(msg.author.id) && (spamMatches === antiSpamSettings.kickThreshold || messageMatches === antiSpamSettings.maxDuplicatesKick)) {
 			if (guildSettings.kickEnabledToF == true) await kickUser(msg);
-			return msg.client.emit('spamThresholdKick', msg, messageMatches === antiSpamSettings.maxDuplicatesKick);
+			return msg.client.emit('spamThresholdKick', (msg, messageMatches === antiSpamSettings.maxDuplicatesKick));
 		}
 		if (spamMatches === antiSpamSettings.banThreshold || messageMatches === antiSpamSettings.maxDuplicatesBan) {
 			if (guildSettings.banEnabledToF == true) await banUser(msg);
-			return msg.client.emit('spamThresholdBan', msg, messageMatches === antiSpamSettings.maxDuplicatesBan);
+			return msg.client.emit('spamThresholdBan', (msg, messageMatches === antiSpamSettings.maxDuplicatesBan));
 		}
 		return;
 	},

@@ -1,7 +1,6 @@
-const { client } = require('../../BaseClient/DiscordClient');
-
 module.exports = {
 	async execute(oldPresence, newPresence) {
+		const client = oldPresence ? oldPresence.client : newPresence.client;
 		const now = Date.now();
 		const ch = client.ch;
 		if (oldPresence == newPresence) return;

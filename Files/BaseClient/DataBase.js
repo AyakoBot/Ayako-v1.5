@@ -9,7 +9,7 @@ const pool = new Pool({
 	password: auth.pSQLpw,
 	port: 5432,
 });
-pool.query('SELECT NOW() as now', (err) => {
+pool.query('SELECT NOW() as now;', (err) => {
 	if (err) {
 		ch.logger('| Couldn\'t connect to DataBase', err.stack);
 	} else {

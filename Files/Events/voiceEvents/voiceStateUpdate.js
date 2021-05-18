@@ -1,9 +1,9 @@
-const { client } = require('../../BaseClient/DiscordClient');
 const Discord = require('discord.js');
 
 module.exports = {
 	async execute(oldState, newState) {
 		if (!oldState || !newState) return;
+		const client = oldState ? oldState.client : newState.client;
 		const ch = client.ch;
 		const Constants = client.constants;
 		const guild = oldState.guild;

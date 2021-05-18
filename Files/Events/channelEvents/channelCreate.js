@@ -1,9 +1,9 @@
-const { client } = require('../../BaseClient/DiscordClient');
 const Discord = require('discord.js');
 
 module.exports = {
 	async execute(channel) {
 		if (channel.type === 'dm' || channel.type === 'group_dm') return;
+		const client = channel.client;
 		const ch = client.ch;
 		const Constants = client.constants;
 		const guild = channel.guild;

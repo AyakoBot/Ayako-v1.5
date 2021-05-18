@@ -1,8 +1,8 @@
-const { client } = require('../../BaseClient/DiscordClient');
 const Discord = require('discord.js');
 
 module.exports = {
 	async execute(emoji) {
+		const client = emoji.client;
 		const guild = emoji.guild;
 		const ch = require('../../BaseClient/ClientHelper'); 
 		const Constants = require('../../Constants.json');

@@ -1,8 +1,8 @@
-const { client } = require('../../../BaseClient/DiscordClient');
 const Discord = require('discord.js');
 
 module.exports = {
 	async execute() {
+		const { client } = require('../../../BaseClient/DiscordClient');
 		const ch = client.ch;
 		const Constants = client.constants;
 		const res = await ch.query('SELECT * FROM disboard;');

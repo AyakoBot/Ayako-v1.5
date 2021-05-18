@@ -1,9 +1,9 @@
-const { client } = require('../../BaseClient/DiscordClient');
 const Discord = require('discord.js');
 
 module.exports = {
 	async execute(data) {
 		if (!data.guild) return; //we only want to process channels here since webhook events should always be hooked to a channel
+		const client = data.client;
 		const ch = client.ch;
 		const Constants = client.constants;
 		const guild = data.guild;

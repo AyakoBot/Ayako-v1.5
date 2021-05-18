@@ -4,9 +4,9 @@ module.exports = {
 			limit: 100,
 		}).catch(() => {});
 		const filterBy = msg.author.id;
-		msgs = msgs.filter(m => m.author.id === filterBy).array().slice(0, 13);
+		msgs = msgs.filter(m => m.author.id === filterBy).array().slice(0, 18);
 		msg.channel.bulkDelete(msgs).catch(() => {});
 		const language = await msg.client.ch.languageSelector(msg.guild);
-		msg.client.emit('tempmuteAdd', msg.client.user, msg.author, 'Ayako AntiSpam | '+language.spam, msg, msg.client.ch.ms('1h'));
+		msg.client.emit('modWarnAdd', (msg.client.user, msg.author, 'Ayako AntiSpam | '+language.spam));
 	}
 };

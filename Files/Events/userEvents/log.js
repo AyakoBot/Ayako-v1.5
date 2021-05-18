@@ -1,8 +1,8 @@
-const { client } = require('../../BaseClient/DiscordClient');
 const Discord = require('discord.js');
 
 module.exports = {
 	async execute(oldUser, newUser) {
+		const client = oldUser ? oldUser.client : newUser.client;
 		const ch = client.ch;
 		const Constants = client.constants;
 		client.guilds.cache.forEach(async (guild) => {

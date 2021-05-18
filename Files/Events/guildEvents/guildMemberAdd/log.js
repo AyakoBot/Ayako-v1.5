@@ -1,10 +1,10 @@
-const { client } = require('../../../BaseClient/DiscordClient');
 const Discord = require('discord.js');
 const moment = require('moment');
 require('moment-duration-format');
 
 module.exports = {
 	async execute(member, user) {
+		const client = user.client;
 		const guild = member.guild;
 		const ch = client.ch;
 		const Constants = client.constants;

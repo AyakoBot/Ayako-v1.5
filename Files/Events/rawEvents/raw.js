@@ -1,7 +1,6 @@
-const { client } = require('../../BaseClient/DiscordClient');
-
 module.exports = {
 	async execute(event) {
+		const { client } = require('../../BaseClient/DiscordClient');
 		const ch = client.ch;
 		if (event.t == 'MESSAGE_REACTION_ADD') {
 			const channel = client.channels.cache.get(event.d.channel_id);
