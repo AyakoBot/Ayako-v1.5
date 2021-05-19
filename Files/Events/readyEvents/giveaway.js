@@ -51,7 +51,7 @@ module.exports = {
 												const embed = new Discord.MessageEmbed()
 													.setDescription(description)
 													.setTimestamp(new Date(+endat).toUTCString())
-													.setColor(msg.client.ch.member(msg.guild, msg.client.user).displayHexColor())
+													.setColor((await client.ch.member(guild, client.user)).displayHexColor)
 													.setAuthor(language.ready.giveaway.name, Constants.standard.image, Constants.standard.link)
 													.setFooter(language.ready.giveaway.endedAt)
 													.addField(language.ready.giveaway.roleInaccessible, '\u200b');
@@ -68,7 +68,7 @@ module.exports = {
 												const embed = new Discord.MessageEmbed()
 													.setDescription(description)
 													.setTimestamp(new Date(+endat).toUTCString())
-													.setColor(await (client.ch.member(guild, client.user)).displayHexColor())
+													.setColor((await client.ch.member(guild, client.user)).displayHexColor)
 													.setAuthor(language.ready.giveaway.name, Constants.standard.image, Constants.standard.link)
 													.setFooter(language.ready.giveaway.endedAt)
 													.addField(language.ready.giveaway.leftServer, '\u200b');
@@ -87,13 +87,13 @@ module.exports = {
 									const embed = new Discord.MessageEmbed()
 										.setDescription(description)
 										.setTimestamp(new Date(+endat).toUTCString())
-										.setColor(await (client.ch.member(guild, client.user)).displayHexColor())
+										.setColor((await client.ch.member(guild, client.user)).displayHexColor)
 										.setAuthor(language.ready.giveaway.name, Constants.standard.image, Constants.standard.link)
 										.setFooter(language.ready.giveaway.endedAt);
 									if(users && users.length > 0) {
 										embed.addField(language.ready.giveaway.winners, users.map(w => `<@${w.id}>`).join(', '));
 										const winnerembed = new Discord.MessageEmbed()
-											.setColor(await (client.ch.member(guild, client.user)).displayHexColor())
+											.setColor((await client.ch.member(guild, client.user)).displayHexColor)
 											.setDescription(description)
 											.setFooter(language.ready.giveaway.endAt)
 											.setTimestamp(new Date(+endat).toUTCString());
@@ -110,7 +110,7 @@ module.exports = {
 							if (msg && msg.id) {
 								const timeleft = moment.duration(+endat - Date.now()).format(`D [${language.time.days}], H [${language.time.hours}], m [${language.time.minutes}], s [${language.time.seconds}]`);
 								const giveawayEmbed = new Discord.MessageEmbed()
-									.setColor(await (client.ch.member(guild, client.user)).displayHexColor())
+									.setColor((await client.ch.member(guild, client.user)).displayHexColor)
 									.setAuthor(language.ready.giveaway.name, Constants.standard.image, Constants.standard.link)
 									.setDescription(`\u200b${description}`)
 									.addField(language.ready.giveaway.guide, ch.stp(language.ready.giveaway.remaining, {timeleft: timeleft}))
