@@ -19,7 +19,7 @@ module.exports = {
 					}
 					Gif.forEach(async gif => {
 						const embed = new Discord.MessageEmbed()
-							.setColor(msg.client.constants.standard.color)
+							.setColor(msg.client.ch.member(msg.guild, msg.client.user).displayHexColor())
 							.setAuthor(msg.author.tag, msg.client.ch.displayAvatarURL(msg.author), msg.client.constants.standard.invite);
 						if (msg.content.length > 0) embed.setDescription(msg.content);
 						if (isImageUrl(gif)) {

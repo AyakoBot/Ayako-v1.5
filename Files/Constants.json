@@ -252,6 +252,27 @@
         },
         "color": "RED"
     },
+    "commandCreate": {
+        "color": "GREEN",
+        "author": {
+            "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673209342263296/commandCreate.png",
+            "link": ""
+        }
+    },
+    "commandDelete": {
+        "color": "RED",
+        "author": {
+            "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673209342263296/commandDelete.png",
+            "link": ""
+        }
+    },
+    "commandUpdate": {
+        "color": "YELLOW",
+        "author": {
+            "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673221350162462/commandUpdate.png",
+            "link": ""
+        }
+    },
     "enabled": "<:enabled:831360855018962944>",
     "disabled": "<:disabled:831360826048774176>",
     "switch": {

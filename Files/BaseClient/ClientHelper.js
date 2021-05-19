@@ -368,5 +368,5 @@ module.exports = {
 		bit1 = bit1.remove([...bit]);
 		bit2 = bit2.remove([...bit]);
 		return [bit1, bit2];
-	}
+	},
 };

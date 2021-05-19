@@ -63,7 +63,7 @@ module.exports = {
 						embed
 							.setTitle(lan.title.accepted)
 							.setDescription(`${lan.description.acceptedText} [${reqGuild.name}](${invitelink} "${lan.description.ClickText}").`)
-							.setColor(Constants.standard.color);
+							.setColor(ch.member(guild, client.user).displayHexColor());
 					}
 				}
 			}

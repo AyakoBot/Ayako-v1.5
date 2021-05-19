@@ -396,6 +396,30 @@
         },
         "description": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas deleted a Webhook from\nChannel {{channel}} / `{{channel.name}}` / `{{channel.id}}`"
     },
+    "commandCreate": {
+        "author": {
+            "name": "Command Created"
+        },
+        "description": "Command `{{command.name}}` / `{{command.id}}` created",
+        "isDefault": "Default Command (created when Bot is added to the Server)",
+        "isNotDefault": "Not a Default Command"
+    },
+    "commandUpdate": {
+        "author": {
+            "name": "Command Updated"
+        },
+        "description": "Command `{{command.name}}` / `{{command.id}}` updated",
+        "isDefault": "Default Command (created when Bot is added to the Server)",
+        "isNotDefault": "Not a Default Command"
+    },
+    "commandDelete": {
+        "author": {
+            "name": "Command Deleted"
+        },
+        "description": "Command `{{command.name}}` / `{{command.id}}` deleted",
+        "isDefault": "Default Command (created when Bot is added to the Server)",
+        "isNotDefault": "Not a Default Command"
+    },
     "ready": {
         "unmute": {
             "reason": "Automatically Unmuted "
@@ -598,6 +622,7 @@
     "application": "Application",
     "createdAt": "Created at",
     "joinedAt": "Joined at",
+    "defaultPermission": "Default Permissions",
     "unverifiedTooLong": "Unverified for too long",
     "tooManyRoles": "Too many Roles to be displayed",
     "roles": "Roles",
@@ -615,6 +640,17 @@
         "MEDIUM": "```Medium```\n`(Must be registered on Discord for longer than 5 Minutes)`",
         "HIGH": "```High```\n`(Must be a Member of this Server for longer than 10 Minutes)`",
         "VERY_HIGH": "```Very High```\n`(Must have a verified Phone Number on Account)`"
+    },
+    "commandType": {
+        "SUB_COMMAND": "Sub Command",
+        "SUB_COMMAND_GROUP": "Sub Command Group",
+        "STRING": "String",
+        "INTEGER": "Integer",
+        "BOOLEAN": "Boolean",
+        "USER": "User",
+        "CHANNEL": "Channel",
+        "ROLE": "Role",
+        "MENTIONABLE": "Mentionable"
     },
     "verificationLevelName": "Verification Level",
     "explicitContentFilter": {

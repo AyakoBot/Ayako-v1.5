@@ -2,7 +2,8 @@ const Discord = require('discord.js');
 
 module.exports = {
 	async execute(guild, user) {
-		const client = user.client;
+		console.log(guild, user);
+		const client = guild.client;
 		const ch = client.ch;
 		const Constants = client.constants;
 		const language = await ch.languageSelector(guild);

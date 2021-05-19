@@ -4,7 +4,6 @@ module.exports = {
 	async execute() {
 		const { client } = require('../../../BaseClient/DiscordClient');
 		const ch = client.ch;
-		const Constants = client.constants;
 		const res = await ch.query('SELECT * FROM reminders;');
 		if (res && res.rowCount > 0) {
 			for (let i = 0; i < res.rows.length; i++) {
@@ -22,7 +21,7 @@ module.exports = {
 									const language = await ch.languageSelector(guild);
 									const embed = new Discord.MessageEmbed()
 										.setDescription(`${language.ready.reminder}\`\`\`${text}\`\`\``)
-										.setColor(Constants.standard.color)
+										.setColor(client.ch.member(guild, client.user).displayHexColor())
 										.setTimestamp();
 									const m = await ch.send(channel, `${user}`, embed);
 									if (!m || !m.id) ch.send(user, language.ready.reminder.failedMsg, embed);
@@ -31,7 +30,7 @@ module.exports = {
 									const language = await ch.languageSelector('en');
 									const embed = new Discord.MessageEmbed()
 										.setDescription(`${language.ready.reminder.description}\`\`\`${text}\`\`\``)
-										.setColor(Constants.standard.color)
+										.setColor(client.ch.member(guild, client.user).displayHexColor())
 										.setTimestamp();
 									ch.send(user, embed);
 									ch.query(`DELETE FROM reminders WHERE userid = '${user.id}' AND duration = '${duration}';`);
