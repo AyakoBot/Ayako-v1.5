@@ -94,12 +94,12 @@ module.exports = {
 						typeID = 15;
 						oldPerms.forEach(o => newPerms.forEach(n => {if (n !== o) deletedPerm = o;}));
 						if (deletedPerm) embed.addField(language.permissions.removedPermissionsFor, deletedPerm.type == 'member' ? `${language.member} <@${deletedPerm.id}>` : deletedPerm.type == 'role' ? `${language.role} <@&${deletedPerm.id}>` : language.unknown+' '+deletedPerm);
-						changedKey.push(language.permission_overwrites);
+						if (deletedPerm) changedKey.push(language.permission_overwrites);
 					} else if (oldPerms.length < newPerms.length) {
 						let createdPerm;
 						typeID = 13;
-						if (createdPerm) newPerms.forEach(n => oldPerms.forEach(o => {if (o !== n) createdPerm = n;}));
-						embed.addField(language.permissions.grantedPermissionFor, createdPerm.type == 'member' ? `${language.member} <@${createdPerm.id}>` : createdPerm.type == 'role' ? `${language.role} <@&${createdPerm.id}>` : language.unknown+' '+createdPerm);
+						newPerms.forEach(n => oldPerms.forEach(o => {if (o !== n) createdPerm = n;}));
+						if (createdPerm) embed.addField(language.permissions.grantedPermissionFor, createdPerm.type == 'member' ? `${language.member} <@${createdPerm.id}>` : createdPerm.type == 'role' ? `${language.role} <@&${createdPerm.id}>` : language.unknown+' '+createdPerm);
 					} else {
 						for (let i = 0; newPerms.length > oldPerms.length ? newPerms.length : oldPerms.length> i; i++) {
 							const newPerm = newPerms[i];

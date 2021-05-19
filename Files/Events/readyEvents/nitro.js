@@ -4,7 +4,6 @@ module.exports = {
 	async execute() {
 		const { client } = require('../../BaseClient/DiscordClient');
 		const ch = client.ch;
-		const Constants = client.constants;
 		const Logchannel = client.channels.cache.get('781724288830013481');
 		let content = `${new Date(Date.now()).toLocaleString()}\n`;
 		const result = await ch.query('SELECT * FROM nitrosettings;');
@@ -88,7 +87,7 @@ module.exports = {
 																const logembed = new Discord.MessageEmbed()
 																	.setDescription(ch.stp(language.nitro.gotRole, {user: user, role: specialrole, days: resR.rows[l].days}))
 																	.setTimestamp()
-																	.setColor(Constants.standard.color);
+																	.setColor(await (client.ch.member(guild, client.user)).displayHexColor());
 																if (NitroLogChannel) NitroLogChannel.send(logembed).catch(() => {});
 															}
 														}

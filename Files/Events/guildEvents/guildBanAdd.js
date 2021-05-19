@@ -2,7 +2,6 @@ const Discord = require('discord.js');
 
 module.exports = {
 	async execute(guild, user) {
-		console.log(guild, user);
 		const client = guild.client;
 		const ch = client.ch;
 		const Constants = client.constants;
