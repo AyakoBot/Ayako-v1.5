@@ -23,6 +23,7 @@ module.exports = {
 		const commandName = args.shift().toLowerCase();
 		const command = msg.client.commands.get(commandName) || msg.client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 		if (!command) return;
+		msg.lan = msg.language.commands[`${command.name}`];
 		msg.args = args;
 		msg.command = command;
 		return msg;
@@ -130,8 +131,8 @@ module.exports = {
 					if (!member.permissions.has(msg.command.perm)) return msg.client.ch.reply(msg, msg.language.commands.commandHandler.missingPermissions);
 				} else if (!member.permissions.has(msg.command.perm)) return msg.client.ch.reply(msg, msg.language.commands.commandHandler.missingPermissions);
 			} else if (!member.permissions.has(msg.command.perm)) return msg.client.ch.reply(msg, msg.language.commands.commandHandler.missingPermissions);
-			this.editCheck(msg);
 		}
+		this.editCheck(msg);
 	},
 	async editCheck(msg) {
 		if (msg.editedTimestamp) {
@@ -181,6 +182,8 @@ module.exports = {
 		if (msg.author.id == msg.client.user.id) msg.delete();
 		try {
 			//statcord.postCommand(msg.command.name, msg.author.id).catch(() => {});
+			console.log(2);
+			console.log(msg.command);
 			msg.command.exe(msg);
 		} catch(e)  {
 			const channel = msg.client.channels.cache.get(msg.client.constants.errorchannel);

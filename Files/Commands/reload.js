@@ -4,6 +4,7 @@ module.exports = {
 	name: 'reload',
 	perm: 0,
 	category: 'Owner',
+	dm: true,
 	aliases: ['r'],
 	description: 'Reloads Command File',
 	usage: 'h!reload [command Name]',

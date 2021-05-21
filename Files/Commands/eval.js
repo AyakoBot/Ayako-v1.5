@@ -4,6 +4,7 @@ const reg = new RegExp(auth.token, 'g');
 module.exports = {
 	name: 'eval',
 	perm: 0,
+	dm: true,
 	category: 'Owner',
 	description: 'Evaluates any JavaScript Code',
 	usage: 'h!eval [code]',

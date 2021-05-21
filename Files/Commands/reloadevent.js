@@ -2,6 +2,7 @@ module.exports = {
 	name: 'reloadevent',
 	perm: 0,
 	category: 'Owner',
+	dm: true,
 	aliases: ['rv'],
 	description: 'Reloads an Event File',
 	usage: 'h!reloadevent [event Name]\nh!reloadevent constants\nh!reloadevent ch\nh!reloadevent lan [language]',

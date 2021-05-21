@@ -831,6 +831,29 @@
             "warnReason": "Repeatedly sending Blacklisted words",
             "author": "Ayako Blacklist",
             "info": "The following words are Blacklisted on **{{guild.name}}**:\n"
+        },
+        "8ball": {
+            "author": "8ball",
+            "question": "Question",
+            "answer": "Answer",
+            "answers": {
+                "0": "It is certain.",
+                "1": "It is decidedly so.",
+                "2": "Without a doubt.",
+                "3": "Yes - definitely.",
+                "4": "You may rely on it.",
+                "5": "As I see it, yes.",
+                "6": "Most likely.",
+                "7": "Outlook good.",
+                "8": "Yes.",
+                "9": "Signs point to yes.",
+                "10": "Don't count on it.",
+                "11": "My reply is no.",
+                "12": "My sources say no.",
+                "13": "Outlook not so good.",
+                "14": "Very doubtful.",
+                "15": "It is certain."
+            }
         }
     }
 }

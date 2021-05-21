@@ -99,7 +99,7 @@ module.exports = {
 									.setAuthor(msg.client.ch.stp(language.commands.leveling.levelUp.author, {user: msg.author, level: newLevel}), msg.client.ch.displayAvatarURL(msg.author))
 									.setTimestamp()
 									.setDescription(msg.client.ch.stp(language.commands.leveling.levelUp.description, {emote1: msg.client.constants.emotes.ayakoPeek, emote2: msg.client.constants.emotes.up}))
-									.setColor((await msg.client.ch.member(msg.guild, msg.client.user)).displayHexColor)
+									.setColor(msg.guild.me.displayHexColor)
 									.setFooter(language.commands.leveling.levelUp.footer);
 								const m = await msg.client.ch.send(msg.channel, LevelUpEmbed);
 								setTimeout(() => {m.delete().catch(() => {});}, 10000);
@@ -113,7 +113,7 @@ module.exports = {
 								const LevelUpEmbed = new Discord.MessageEmbed()
 									.setAuthor(msg.client.ch.stp(language.commands.leveling.levelUp.author, {user: msg.author, level: newLevel}), msg.client.ch.displayAvatarURL(msg.author))
 									.setTimestamp()
-									.setColor((await msg.client.ch.member(msg.guild, msg.client.user)).displayHexColor)
+									.setColor(msg.guild.me.displayHexColor)
 									.setFooter(language.commands.leveling.levelUp.footer);
 								const m = await msg.client.ch.send(msg.channel, LevelUpEmbed);
 								setTimeout(() => {m.delete().catch(() => {});}, 10000);							
@@ -128,7 +128,7 @@ module.exports = {
 							} else if (settings.lvlupmode == 'messages') {
 								const embed = new Discord.MessageEmbed()
 									.setAuthor(`${leveluptext}`, msg.client.ch.displayAvatarURL(msg.author))
-									.setColor((await msg.client.ch.member(msg.guild, msg.client.user)).displayHexColor)
+									.setColor(msg.guild.me.displayHexColor);
 								let channel;
 								if (settings.lvlupchannel) {
 									channel = msg.client.channels.cache.get(settings.lvlupchannel);

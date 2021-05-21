@@ -87,7 +87,7 @@ module.exports = {
 																const logembed = new Discord.MessageEmbed()
 																	.setDescription(ch.stp(language.nitro.gotRole, {user: user, role: specialrole, days: resR.rows[l].days}))
 																	.setTimestamp()
-																	.setColor((await client.ch.member(guild, client.user)).displayHexColor);
+																	.setColor(guild.me.displayHexColor);
 																if (NitroLogChannel) NitroLogChannel.send(logembed).catch(() => {});
 															}
 														}

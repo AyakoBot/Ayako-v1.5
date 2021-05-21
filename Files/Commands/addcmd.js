@@ -1,6 +1,7 @@
 module.exports = {
 	name: 'addcmd',
 	perm: 0,
+	dm: true,
 	category: 'Owner',
 	description: 'Adds a Command File',
 	usage: 'h!addcmd [command Name]',

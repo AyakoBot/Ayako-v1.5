@@ -21,7 +21,7 @@ module.exports = {
 									const language = await ch.languageSelector(guild);
 									const embed = new Discord.MessageEmbed()
 										.setDescription(`${language.ready.reminder}\`\`\`${text}\`\`\``)
-										.setColor((await client.ch.member(guild, client.user)).displayHexColor)
+										.setColor(guild.me.displayHexColor)
 										.setTimestamp();
 									const m = await ch.send(channel, `${user}`, embed);
 									if (!m || !m.id) ch.send(user, language.ready.reminder.failedMsg, embed);
@@ -30,7 +30,7 @@ module.exports = {
 									const language = await ch.languageSelector('en');
 									const embed = new Discord.MessageEmbed()
 										.setDescription(`${language.ready.reminder.description}\`\`\`${text}\`\`\``)
-										.setColor((await client.ch.member(guild, client.user)).displayHexColor)
+										.setColor(guild.me.displayHexColor)
 										.setTimestamp();
 									ch.send(user, embed);
 									ch.query(`DELETE FROM reminders WHERE userid = '${user.id}' AND duration = '${duration}';`);
