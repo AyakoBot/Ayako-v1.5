@@ -182,8 +182,6 @@ module.exports = {
 		if (msg.author.id == msg.client.user.id) msg.delete();
 		try {
 			//statcord.postCommand(msg.command.name, msg.author.id).catch(() => {});
-			console.log(2);
-			console.log(msg.command);
 			msg.command.exe(msg);
 		} catch(e)  {
 			const channel = msg.client.channels.cache.get(msg.client.constants.errorchannel);

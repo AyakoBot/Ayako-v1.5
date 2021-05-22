@@ -6,16 +6,16 @@ module.exports = {
 	description: 'Adds a Command File',
 	usage: 'h!addcmd [command Name]',
 	/* eslint-disable */
-	execute(msg) {
+	exe(msg) {
         /* eslint-enable */
 		const args = msg.args;
-		if (!args[0]) {return msg.reply('Please enter a valid command');}
+		if (!args[0]) return msg.client.ch.reply(msg, 'Please enter a valid command');
 		const newCommand = require(`./${args[0]}.js`);
 		try {
 			msg.client.commands.set(newCommand.name, newCommand);
-			msg.channel.send(`Command \`${newCommand.name}\` was added!`);
+			msg.client.ch.reply(msg, `Command \`${newCommand.name}\` was added!`);
 		} catch (error) {
-			msg.channel.send(`There was an error while adding a command \`${args[0]}\`:\n\`\`\`${error.stack}\`\`\``);
+			msg.client.ch.reply(msg, `There was an error while adding a command \`${args[0]}\`:\n\`\`\`${error.stack}\`\`\``);
 		}
 	}
 };

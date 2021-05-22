@@ -30,7 +30,6 @@ module.exports = {
 									if (!member.roles.cache.has(separator.id)) await member.roles.add(separator).catch((e) => {console.log(e);});
 								}
 							}
-							console.log(member.user.id, aknowledgedSeperator, separator.id);
 							if (aknowledgedSeperator == false && member.roles.cache.has(separator.id)) await member.roles.remove(separator).catch((e) => {console.log(e);});
 						}
 					} else ch.query(`UPDATE roleseparator SET active = false WHERE separator = '${row.separator}';`);

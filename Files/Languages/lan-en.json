@@ -696,6 +696,7 @@
     "camera": "Camera",
     "streaming": "Streaming",
     "suppress": "Suppressed",
+    "cancel": "cancel",
     "requestToSpeak": "Request To Speak",
     "moved": "Moved",
     "disconnected": "Disconnected",
@@ -854,6 +855,15 @@
                 "14": "Very doubtful.",
                 "15": "It is certain."
             }
+        },
+        "addRole": {
+            "reason": "addRole Command executed by {{user.tag}}",
+            "created": "{{role}} was created",
+            "noName": "You have to at least provide a Name for the Role"
+        },
+        "delRole": {
+            "chooseRole": "I found {{amount}} Roles with the Name `{{role.name}}`\n**Please choose the right one.**",
+            "cancel": "Reply with |{{language.cancel}}| to abort"
         }
     }
 }
