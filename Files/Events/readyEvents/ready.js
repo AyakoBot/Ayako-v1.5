@@ -11,6 +11,7 @@ module.exports = {
 		client.guilds.cache.forEach(async guild => client.invites.set(guild.id, await guild.fetchInvites().catch(() => {})));
 		require('./webhooks.js').execute();
 		setInterval(() => {
+			require('./roleSeparator').execute();
 			//require('./websiteFetcher').execute();
 			if (new Date().getHours() == 0) {
 				client.guilds.cache.forEach(g => {require('../guildEvents/guildCreate/nitro').execute(g);});

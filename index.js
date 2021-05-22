@@ -14,4 +14,6 @@ for (const rawevent of [...client.events.entries()]) {
 
 // eslint-disable-next-line no-undef
 process.on('unhandledRejection', (error) => {client.ch.logger('Unhandled Rejection', error);});
+// eslint-disable-next-line no-undef
+process.on('TypeError', (error) => {client.ch.logger('Type Error', error);});
 //AP.on('posted', () => {console.log('Posted stats to Top.gg!')})

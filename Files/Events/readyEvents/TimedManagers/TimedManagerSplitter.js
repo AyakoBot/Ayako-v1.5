@@ -6,6 +6,5 @@ module.exports = {
 		require('./stats').execute();
 		require('./voteReminder').execute();
 		require('./willis').execute();
-		require('./roleSeparator').execute();
 	}
 };
