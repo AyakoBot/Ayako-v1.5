@@ -3,9 +3,10 @@ module.exports = {
 	name: '8ball',
 	perm: null,
 	dm: true,
+	takesFirstArg: true,
 	category: 'Fun',
 	description: 'Let 8ball decide!',
-	usage: 'h!8ball [yes or no question]',
+	usage: ['8ball [yes or no question]'],
 	async exe(msg) {
 		console.log(3);
 		const random = Math.floor(Math.random() * 15);

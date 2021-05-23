@@ -5,9 +5,10 @@ module.exports = {
 	name: 'eval',
 	perm: 0,
 	dm: true,
+	takesFirstArg: true,
 	category: 'Owner',
 	description: 'Evaluates any JavaScript Code',
-	usage: 'h!eval [code]',
+	usage: ['eval [code]'],
 	async exe(msg) {
 		if (msg.author.id !== '318453143476371456') return;
 		const clean = (text) => { 

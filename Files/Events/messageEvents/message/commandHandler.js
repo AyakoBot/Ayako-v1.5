@@ -21,8 +21,12 @@ module.exports = {
 		msg.language = await msg.client.ch.languageSelector(msg.guild);
 		const args = msg.content.slice(prefix.length).split(/ +/);
 		const commandName = args.shift().toLowerCase();
-		const command = msg.client.commands.get(commandName) || msg.client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+		let command = msg.client.commands.get(commandName) || msg.client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 		if (!command) return;
+		if (command.takesFirstArg && !args[0]) {
+			msg.triedCMD = command;
+			command = msg.client.commands.get('cmdhelp');
+		}
 		msg.lan = msg.language.commands[`${command.name}`];
 		msg.args = args;
 		msg.command = command;
@@ -35,7 +39,6 @@ module.exports = {
 		if (msg.author.id == auth.ownerID) {
 			if (msg.command.name == 'eval') return msg.command.exe(msg);
 			cooldowns.set(msg.command.name, new Discord.Collection());
-			this.categoryCheck(msg);
 		} else {
 			if (!cooldowns.has(msg.command.name)) cooldowns.set(msg.command.name, new Discord.Collection());
 			const now = Date.now();
@@ -55,8 +58,8 @@ module.exports = {
 				}
 			}
 			timestamps.set(msg.channel.id, now);
-			this.categoryCheck(msg);
 		}
+		this.categoryCheck(msg);
 	},
 	async categoryCheck(msg) {
 		let category = msg.command.category;
@@ -82,6 +85,16 @@ module.exports = {
 		this.permissionCheck(msg);
 	},
 	async permissionCheck(msg) {
+		const perms = typeof msg.command.perm == 'bigint' ? new Discord.Permissions(msg.command.perm) : undefined;
+		if (perms && !msg.guild.me.permissions.has(perms)) {
+			const [neededPerms1, ] = msg.client.ch.bitUniques(perms, msg.guild.me.permissions);
+			const embed = new Discord.MessageEmbed()
+				.setAuthor(msg.language.error, msg.client.constants.standard.errorImage, msg.client.constants.standard.invite)
+				.setColor(msg.client.constants.error)
+				.setDescription(msg.client.ch.makeUnderlined(msg.language.permissions.error.msg))
+				.addField(msg.client.ch.makeBold(msg.language.permissions.error.needed), neededPerms1.has(8n) ? `${msg.client.ch.makeInlineCode(msg.language.permissions.ADMINISTRATOR)}` : neededPerms1.toArray().map(p => `${msg.client.ch.makeInlineCode(msg.language.permissions[p])}`));
+			return msg.client.ch.reply(msg, embed);
+		}
 		if (msg.command.perm == 0) {
 			if (msg.author.id !== auth.ownerID) return msg.client.ch.reply(msg, msg.language.commands.commandHandler.creatorOnly);
 			else return this.editCheck(msg);
@@ -92,43 +105,13 @@ module.exports = {
 			const member = await msg.client.ch.member(msg.guild, msg.author);
 			const names = ['ban', 'unban', 'mute', 'unmute', 'tempmute', 'kick', 'clear', 'announce', 'pardon', 'warn', 'edit', 'takerole', 'giverole'];
 			if (names.includes(msg.command.name)) {
-				const res = await msg.client.ch.query(`SELECT * FROM modroles WHERE guildid = '${msg.guild.id}';`);
+				const res = await msg.client.ch.query(`SELECT * FROM modrolesnew WHERE guildid = '${msg.guild.id}';`);
 				if (res && res.rowCount > 0) {
-					const r = res.rows[0];
-					if (r.adminrole) { 
-						const role = msg.guild.roles.cache.find(role => role.id === r.adminrole);
-						if (role && role.id && member.roles.cache.has(role.id)) {
-							const res2 = await msg.client.ch.query(`SELECT * FROM modperms WHERE guildid = '${msg.guild.id}' AND type = 'admin' AND permission = '${msg.command.name}';`);
-							if (res2 && res2.rowCount > 0) {
-								const r2 = res2.rows[0];
-								if (r2.granted) return this.editCheck(msg);
-								else return msg.client.ch.reply(msg, msg.language.commands.commandHandler.missingPermissions);
-							}
-						}
+					for (const r of res.rows) {
+						const role = msg.guild.roles.cache.get(r.roleid);
+						if (role && msg.member.roles.cache.has(role.id)) return this.editCheck(msg);
+						else return this.editCheck(msg);
 					}
-					if (r.modrole) { 
-						const role = msg.guild.roles.cache.find(role => role.id === r.modrole);
-						if (role && role.id && member.roles.cache.has(role.id)) {
-							const res2 = await msg.client.ch.query(`SELECT * FROM modperms WHERE guildid = '${msg.guild.id}' AND type = 'admin' AND permission = '${msg.command.name}';`);
-							if (res2 && res2.rowCount > 0) {
-								const r2 = res2.rows[0];
-								if (r2.granted) return this.editCheck(msg);
-								else return msg.client.ch.reply(msg, msg.language.commands.commandHandler.missingPermissions);
-							}
-						}
-					}
-					if (r.trialmodrole) { 
-						const role = msg.guild.roles.cache.find(role => role.id === r.trialmodrole);
-						if (role && role.id && member.roles.cache.has(role.id)) {
-							const res2 = await msg.client.ch.query(`SELECT * FROM modperms WHERE guildid = '${msg.guild.id}' AND type = 'admin' AND permission = '${msg.command.name}';`);
-							if (res2 && res2.rowCount > 0) {
-								const r2 = res2.rows[0];
-								if (r2.granted) return this.editCheck(msg);
-								else return msg.client.ch.reply(msg, msg.language.commands.commandHandler.missingPermissions);
-							}
-						}
-					}
-					if (!member.permissions.has(msg.command.perm)) return msg.client.ch.reply(msg, msg.language.commands.commandHandler.missingPermissions);
 				} else if (!member.permissions.has(msg.command.perm)) return msg.client.ch.reply(msg, msg.language.commands.commandHandler.missingPermissions);
 			} else if (!member.permissions.has(msg.command.perm)) return msg.client.ch.reply(msg, msg.language.commands.commandHandler.missingPermissions);
 		}
@@ -171,8 +154,14 @@ module.exports = {
 		}).catch(() => {m.delete().catch(() => {});});
 	},
 	async DMcommand(msg) {
-		if (msg.command.dm) this.commandExe(msg);
-		else msg.client.ch.reply(msg, msg.language.commands.commandHandler.GuildOnly);
+		if (msg.command.dm) {
+			if (msg.command.takesFirstArg && !msg.args[0]) {
+				msg.triedCMD = msg.command;
+				msg.command = msg.client.commands.get('cmdhelp');
+				this.categoryCheck(msg);
+			} else this.categoryCheck(msg);
+		} else msg.client.ch.reply(msg, msg.language.commands.commandHandler.GuildOnly);
+
 	},
 	async commandExe(msg) {
 		if (msg.channel.type !== 'dm') {
@@ -182,6 +171,7 @@ module.exports = {
 		if (msg.author.id == msg.client.user.id) msg.delete();
 		try {
 			//statcord.postCommand(msg.command.name, msg.author.id).catch(() => {});
+			console.log(msg.command.name);
 			msg.command.exe(msg);
 		} catch(e)  {
 			const channel = msg.client.channels.cache.get(msg.client.constants.errorchannel);

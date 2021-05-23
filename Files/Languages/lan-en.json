@@ -475,6 +475,10 @@
         "timeIn": "in {{time}}"
     },
     "permissions": {
+        "error": {
+            "msg": "I'm missing Permissions to execute this Command",
+            "needed": "Needed Permissions:"
+        },
         "deniedPermissions": "Denied Permissions",
         "grantedPermissions": "Granted Permissions",
         "removedPermissions": "Removed Permissions",
@@ -514,12 +518,12 @@
         "USE_VAD": "Use Voice Activity",
         "CHANGE_NICKNAME": "Change Nickname",
         "MANAGE_NICKNAMES": "Manage Nicknames",
-        "MANAGE_ROLES": "Manage Role",
+        "MANAGE_ROLES": "Manage Roles",
         "MANAGE_ROLES_OR_PERMISSIONS": "Manage Roles or Permissions",
         "MANAGE_WEBHOOKS": "Manage Webhooks",
         "MANAGE_EMOJIS": "Manage Emojis",
         "USE_SLASH_COMMANDS": "Use slash Commands",
-        "'USE_APPLICATION_COMMANDS'": "Use application Commands",
+        "USE_APPLICATION_COMMANDS": "Use application Commands",
         "REQUEST_SPEAK": "Request to Speak",
         "ALL_GUILD": "All Guild Permissions",
         "ALL_TEXT": "All Text Channel Permissions",
@@ -593,6 +597,8 @@
     "wasAdded": "was added",
     "wasRemoved": "was removed",
     "neutral": "Neutral",
+    "problem": "Problem",
+    "solution": "Solution",
     "bitrate": "Bitrate",
     "closed": "Closed",
     "opened": "Opened",
@@ -619,6 +625,13 @@
     "subscribers": "Subscribers",
     "granted": "Granted",
     "revoked": "Revoked",
+    "aliases": "Aliases",
+    "command": "Command",
+    "category": "Category",
+    "dms": "DMs",
+    "AyakoOwner": "Ayako Owner",
+    "ServerOwner": "Server Owner",
+    "error": "Error",
     "application": "Application",
     "createdAt": "Created at",
     "joinedAt": "Joined at",
@@ -676,6 +689,12 @@
     "publicUpdatesChannelID": "Public Updates Channel",
     "preferredLocale": "Server Region",
     "description": "Description",
+    "usage": "Usage",
+    "required": "Required",
+    "optional": "Optional",
+    "freeToAccess": "Free to access",
+    "requiredPermissions": "Required Permissions",
+    "thisGuildOnly": "This Guild(s) Only",
     "premiumSubscriptionCount": "Booster Count",
     "available": "Available State",
     "icon": "Icon",
@@ -706,6 +725,10 @@
     "stageOpen": "Stage Channel Opened/Closed",
     "spam": "Spam",
     "mod": {
+        "warning": {
+            "text": "You just issued a **Moderation Command** on a User with a **Mod Role**. \nDo you want to **proceed** or **abort**.",
+            "proceed": "proceed"
+        },
         "muteAdd": {
             "author": "Member was muted",
             "description": "{{user}} has muted {{target}}",
@@ -760,7 +783,9 @@
             "error": "I wasn't able to ban this User!",
             "alreadyBanned": "This User is already banned",
             "success": "User {{target}} was banned",
-            "loading": "Banning User..."
+            "loading": "Banning User...",
+            "selfBan": "You can't ban yourself",
+            "meBan": "I won't ban myself"
         },        
         "banRemove": {
             "author": "User was unbanned",
@@ -863,7 +888,26 @@
         },
         "delRole": {
             "chooseRole": "I found {{amount}} Roles with the Name `{{role.name}}`\n**Please choose the right one.**",
-            "cancel": "Reply with |{{language.cancel}}| to abort"
+            "cancel": "Reply with |{{language.cancel}}| to abort",
+            "deleted": "`{{role.name}}` was deleted",
+            "noRoleFound": "I couldn't find that Role",
+            "error": {
+                "rolePosProblem": "My highest Role is below the Role you want to delete\nor\nMy highest Role is the same as the Role you want to delete",
+                "rolePosSolution": "Give me a Role higher than one you want to delete\nor\nMove my highest Role above the one you want to delete",
+                "roleManagedProblem": "The Role you want to delete is managed by an Integration or Bot\nI can't delete managed Roles",
+                "roleManagedSolution": "Remove the Integration or Bot from your Server to have it automatically deleted\nYou can use my Role Info command to find out what Integration or Bot manages that Role"
+            }
+        },
+        "cmdh": {
+            "notValid": "That was not a valid Command",
+            "inviteReason": "Command specific Help Command used on {{msg.guild.name}} in {{msg.channel.name}}",
+            "dmsTrue": "Usable in DMs",
+            "dmsFalse": "Usable in Servers only"
+
+        },
+        "ban": {
+            "noUser": "I couldn't find that User",
+            "reason": "No Reason given"
         }
     }
 }

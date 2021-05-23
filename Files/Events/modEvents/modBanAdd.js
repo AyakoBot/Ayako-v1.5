@@ -7,24 +7,34 @@ module.exports = {
 		const con = msg.client.constants.mod.banAdd;
 		const em = new Discord.MessageEmbed()
 			.setColor(con.color)
-			.setDescription(msg.client.constants.emotes.loading, lan.loading);
+			.setDescription(msg.client.constants.emotes.loading+' '+lan.loading);
 		const emMsg = await msg.client.ch.reply(msg, em);
 		const member = await msg.client.ch.member(msg.guild, target);
 		const exec = await msg.client.ch.member(msg.guild, executor);
-		if (exec?.roles.highest.rawPosition < member?.roles.highest.rawPosition || exec?.roles.highest.rawPosition == member?.roles.highest.rawPosition) {
-			em.setDescription(msg.client.constants.emotes.cross, lan.exeNoPerms);
+		if (exec?.roles.highest.rawPosition <= member?.roles.highest.rawPosition) {
+			em.setDescription(msg.client.constants.emotes.cross+' '+lan.exeNoPerms);
 			emMsg?.edit(em);
 			return false;
 		}
-		if (!member?.bannable) {
-			em.setDescription(msg.client.constants.emotes.cross, lan.permissionError);
+		if (executor.id == target.id) {
+			em.setDescription(msg.client.constants.emotes.cross+' '+lan.selfBan);
+			emMsg?.edit(em);
+			return false;
+		}
+		if (target.id == msg.client.user.id) {
+			em.setDescription(msg.client.constants.emotes.cross+' '+lan.meBan);
+			emMsg?.edit(em);
+			return false;
+		}
+		if (member?.bannable == false) {
+			em.setDescription(msg.client.constants.emotes.cross+' '+lan.permissionError);
 			emMsg?.edit(em);
 			return false;
 		}
 		else {
 			const banned = await msg.guild.bans.fetch(target).catch(() => {});
 			if (banned) {
-				em.setDescription(msg.client.constants.emotes.cross, lan.alreadyBanned);
+				em.setDescription(msg.client.constants.emotes.cross+' '+lan.alreadyBanned);
 				emMsg?.edit(em);
 				return false;
 			}
@@ -33,10 +43,10 @@ module.exports = {
 				.setDescription(`${language.reason}: \`\`\`${reason}\`\`\``)
 				.setColor(con.color)
 				.setTimestamp()
-				.setAuthor(lan.dm.author, lan.author.image, msg.client.ch.stp(lan.author.link), {guild: msg.guild});
+				.setAuthor(lan.dm.author, lan.author.image, msg.client.ch.stp(con.author.link, {guild: msg.guild}));
 			const m = await msg.client.ch.send(dmChannel, DMembed);
 			let err;
-			const ban = await member.ban({reason: reason, days: 1}).catch((e) => {err = e;});
+			const ban = await msg.guild.members.ban(target, {reason: reason, days: 1}).catch((e) => {err = e;});
 			if (ban) {
 				const res = await msg.client.ch.query(`SELECT * FROM logchannels WHERE guildid = '${msg.guild.id}';`);
 				let logchannel;
@@ -52,12 +62,12 @@ module.exports = {
 				if (logchannel) msg.client.ch.send(logchannel, embed);
 			} else {
 				m?.delete().catch(()  => {});
-				em.setDescription(msg.client.constants.emotes.cross, lan.error+` \`\`\`${err}\`\`\``);
+				em.setDescription(msg.client.constants.emotes.cross+lan.error+` \`\`\`${err}\`\`\``);
 				emMsg?.edit(em);
 				return false;
 			}
 		}
-		em.setDescription(msg.client.constants.emotes.tick, lan.success);
+		em.setDescription(msg.client.constants.emotes.tick+' '+msg.client.ch.stp(lan.success, {target: target}));
 		emMsg?.edit(em);
 		return true;
 	}

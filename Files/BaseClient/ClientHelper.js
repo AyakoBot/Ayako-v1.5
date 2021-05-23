@@ -8,6 +8,7 @@ const DiscordEpoch = 1420070400000;
 const ms = require('ms');
 const Constants = require('../Constants.json');
 const { imgur } = require('./ImgurClient');
+const URL = require('url');
 const regexes = {
 	templateMatcher: /{{\s?([^{}\s]*)\s?}}/g,
 	strReplacer1: /_/g,
@@ -96,7 +97,8 @@ module.exports = {
 	},
 	async downloader(msg, url) {
 		let path;
-		let pathend;
+		const pathers = url.split('.');
+		let pathend  = `${pathers[pathers.length-1]}`.replace(URL.parse(url).search, '');
 		if (msg.channel) {
 			path = `.\\Files\\Downloads\\Guilds\\Guild - ${msg.guild.id}\\Channel - ${msg.channel.id}\\${msg.id}`;
 			let guilddir = `.\\Files\\Downloads\\Guilds\\Guild - ${msg.guild.id}`;
@@ -149,17 +151,13 @@ module.exports = {
 			msg.attachments = msg.attachments.map(o => o);
 			for (let i = 0; i < msg.attachments.length; i++) {
 				path = `${path}-${i}`;
-				let patharr = msg.attachments[i].name.split('.');
-				pathend = patharr[patharr.length-1];
 				const urlArray = {
 					url: msg.attachments[i].url,
 					path: `${path}.${pathend}`
 				};
 				url[i] = urlArray;
 			}
-		} else {
-			pathend = msg.animated ? 'gif' : 'png';
-		}
+		} else (msg.animated !== undefined && msg.animated !== null) ? pathend = msg.animated ? 'gif' : 'png' : '';
 		if (Array.isArray(url)) {
 			for (let i = 0; i < url.length; i++) {
 				await this.download(url[i].url, url[i].path);
@@ -362,11 +360,52 @@ module.exports = {
 		if (guild.members.cache.get(id)) return await guild.members.cache.get(id).fetch();
 		else return null;
 	},
-	bitDuplicates(bit1, bit2){return new Discord.Permissions(bit1.bitfield & bit2.bitfield);},
-	bitUniques(bit1, bit2){
+	bitDuplicates(bit1, bit2) {return new Discord.Permissions(bit1.bitfield & bit2.bitfield);},
+	bitUniques(bit1, bit2) {
 		const bit = new Discord.Permissions(bit1.bitfield & bit2.bitfield);
 		bit1 = bit1.remove([...bit]);
 		bit2 = bit2.remove([...bit]);
 		return [bit1, bit2];
 	},
+	makeCodeBlock(text) {return '```'+text+'```';},
+	makeInlineCode(text) {return '`'+text+'`';},
+	makeBold(text) {return '**'+text+'**';},
+	makeUnderlined(text) {return '__'+text+'__';},
+	async modRoleWaiter(msg) {
+		const m = await this.reply(msg, msg.language.mod.warning.text, {allowedMentions: {repliedUser: true}});
+		m.react(client.constants.emotes.tickID).catch(() => {});
+		m.react(client.consatnts.emotes.crossID).catch(() => {});
+		msg.channel.awaitMessages(m => m.author.id == msg.author.id,
+			{max: 1, time: 30000}).then(rawcollected => {
+			if (!rawcollected.first()) {
+				m.delete().catch(() => {});
+				return false;
+			}
+			const answer = rawcollected.first().content.toLowerCase();
+			if (answer == 'y' || answer == msg.language.mod.warning.proceed) {
+				if (m.deleted == false) {
+					rawcollected.first().delete().catch(() => {});
+					m.delete().catch(() => {});
+					return true;
+				}
+			} else {
+				m.delete().catch(() => {});
+				return false;
+			}
+		}).catch(() => {m.delete().catch(() => {});});
+		m.awaitReactions((reaction, user) => (reaction.emoji.id === client.consatnts.emotes.crossID || reaction.emoji.id === client.constants.emotes.tickID) && user.id === msg.author.id,
+			{max: 1, time: 60000}).then(rawcollected => {
+			if (!rawcollected.first()) {
+				m.delete().catch(() => {});
+				return false;
+			}
+			if (rawcollected.first()._emoji.id == client.constants.emotes.tickID) {
+				m.delete().catch(() => {});
+				return true;
+			} else {
+				m.delete().catch(() => {});
+				return false;
+			}
+		}).catch(() => {m.delete().catch(() => {});});
+	}
 };

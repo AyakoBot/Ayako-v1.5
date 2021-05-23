@@ -5,8 +5,9 @@ module.exports = {
 	name: 'addrole',
 	perm: 268435456n,
 	category: 'Roles',
+	takesFirstArg: true,
 	description: 'Create a new Role in your Server with standard Permissions.',
-	usage: 'h!addrole (hex color code or 000000) [name of the new Role]',
+	usage: ['addrole (Hex Color Code) [name of the new Role]'],
 	async exe(msg) {
 		const color = re.test(msg.args[0]) ? msg.args[0] : '||000000';
 		let RoleName;

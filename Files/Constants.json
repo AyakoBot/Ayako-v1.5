@@ -288,26 +288,41 @@
         "prefix": "t!",
         "invite": "https://discord.com/api/oauth2/authorize?client_id=650691698409734151&permissions=4194168055&scope=bot",
         "image": "https://ayakobot.com/DefaultEmbedImage",
+        "errorImage": "https://ayakobot.com/DefaultErrorImage",
         "webhook": {
             "name": "Ayako Logging",
             "avatar": "https://cdn.discordapp.com/attachments/760152457799401532/839644223074336789/6E81E655-B92C-4EC6-8015-20679059B454.png"
         }
     },
     "emotes": {
-        "cross": "<:Cross:746392936807268474> ",
+        "cross": "<:Cross:746392936807268474>",
         "crossID": "746392936807268474",
         "crossLink": "https://cdn.discordapp.com/emojis/746392936807268474.png?v=1",
-        "tick": "<:tick:670163913370894346> ",
+        "tick": "<:tick:670163913370894346>",
         "tickID": "670163913370894346",
         "tickLink": "https://cdn.discordapp.com/emojis/670163913370894346.png?v=1",
-        "loading": "<a:Loading:780543908861182013> ",
+        "loading": "<a:Loading:780543908861182013>",
         "loadingID": "780543908861182013",
         "loadingLink": "https://cdn.discordapp.com/emojis/780543908861182013.gif?v=1",
         "ayakoPeek": "<:AMayakopeek:758872110067351562>",
         "ayakoPeekID": "758872110067351562",
         "ayakoPeekLink": "https://cdn.discordapp.com/emojis/758872110067351562.png?v=1",
-        "up": "🆙"
+        "up": "🆙",
+        "numbers": {
+            "0": ":zero:",
+            "1": ":one:",
+            "2": ":two:",
+            "3": ":three",
+            "4": ":four:",
+            "5": ":five:",
+            "6": ":six:",
+            "7": ":seven:",
+            "8": ":eight:",
+            "9": ":nine:",
+            "ten": ":ten:"
+        }
     },
+    "error": "ff0000",
     "mod": {
         "muteAdd": {
             "color": "ff0000",
@@ -338,7 +353,11 @@
             }
         },
         "banAdd": {
-            "color": "ff0000"
+            "color": "ff0000",
+            "author": {
+                "image": "",
+                "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
+            }
         },
         "warnAdd": {
             "color": "ff0000"

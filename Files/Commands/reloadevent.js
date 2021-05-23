@@ -3,9 +3,10 @@ module.exports = {
 	perm: 0,
 	category: 'Owner',
 	dm: true,
+	takesFirstArg: true,
 	aliases: ['rv'],
 	description: 'Reloads an Event File',
-	usage: 'h!reloadevent [event Name]\nh!reloadevent constants\nh!reloadevent ch\nh!reloadevent lan [language]',
+	usage: ['reloadevent [event Name]','reloadevent constants','reloadevent ch','reloadevent lan [language]'],
 	exe(msg) {
 		const args = msg.args;
 		const client = msg.client;
@@ -22,8 +23,8 @@ module.exports = {
 			}
 		} else if (name.toLowerCase() == 'lan') {
 			try {
+				delete require.cache[require.resolve(`../Languages/lan-${args[1]}.json`)];
 				const lan = require(`../Languages/lan-${args[1]}.json`);
-				delete require.cache[lan];
 				client.languages.set(`lan-${args[1]}`, lan);
 				ch.reply(msg, `Language File \`lan-${args[1]}.json\` was reloaded!`);
 			} catch(e) {

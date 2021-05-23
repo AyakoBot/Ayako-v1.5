@@ -5,9 +5,10 @@ module.exports = {
 	perm: 0,
 	category: 'Owner',
 	dm: true,
+	takesFirstArg: true,
 	aliases: ['r'],
-	description: 'Reloads Command File',
-	usage: 'h!reload [command Name]',
+	description: 'Reloads a Command File',
+	usage: ['reload [command Name]'],
 	exe(msg) {
 		const args = msg.args;
 		if (!args.length) return msg.channel.send(`You didn't pass any command to reload, ${msg.author}!`);

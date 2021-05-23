@@ -2,12 +2,11 @@ module.exports = {
 	name: 'addcmd',
 	perm: 0,
 	dm: true,
+	takesFirstArg: true,
 	category: 'Owner',
 	description: 'Adds a Command File',
-	usage: 'h!addcmd [command Name]',
-	/* eslint-disable */
+	usage: ['addcmd [command Name]'],
 	exe(msg) {
-        /* eslint-enable */
 		const args = msg.args;
 		if (!args[0]) return msg.client.ch.reply(msg, 'Please enter a valid command');
 		const newCommand = require(`./${args[0]}.js`);
