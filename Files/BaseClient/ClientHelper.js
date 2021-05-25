@@ -97,8 +97,9 @@ module.exports = {
 	},
 	async downloader(msg, url) {
 		let path;
-		const pathers = url.split('.');
-		let pathend  = `${pathers[pathers.length-1]}`.replace(URL.parse(url).search, '');
+		const pathers = url ? url.split('.') : null;
+		let pathend;
+		if (pathers) pathend = `${pathers[pathers.length-1]}`.replace(URL.parse(url).search, '');
 		if (msg.channel) {
 			path = `.\\Files\\Downloads\\Guilds\\Guild - ${msg.guild.id}\\Channel - ${msg.channel.id}\\${msg.id}`;
 			let guilddir = `.\\Files\\Downloads\\Guilds\\Guild - ${msg.guild.id}`;
@@ -151,6 +152,8 @@ module.exports = {
 			msg.attachments = msg.attachments.map(o => o);
 			for (let i = 0; i < msg.attachments.length; i++) {
 				path = `${path}-${i}`;
+				let pather = msg.attachments[i].url.split('.');
+				pathend = `${pather[pather.length-1]}`;
 				const urlArray = {
 					url: msg.attachments[i].url,
 					path: `${path}.${pathend}`

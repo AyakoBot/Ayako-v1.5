@@ -3,14 +3,12 @@ const Discord = require('discord.js');
 module.exports = {
 	name: 'delrole',
 	perm: 268435456n,
-	category: 'Roles',
 	takesFirstArg: true,
-	description: 'Delete a Role from your Server.',
-	usage: ['delrole [ID or @mention]'],
+	dm: false,
 	async exe(msg) {
 		let role = msg.guild.roles.cache.get(msg.args[0].replace(/\D+/g, ''));
 		const language = msg.language;
-		const lan = language.commands.delRole;
+		const lan = msg.lan;
 		if (!role || !role.id) msg.client.ch.reply(msg, lan.noRoleFound);
 		const Embed = new Discord.MessageEmbed();
 		if (role.managed) {

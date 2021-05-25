@@ -4,9 +4,7 @@ module.exports = {
 	perm: 268435456n, 
 	dm: true,
 	takesFirstArg: false,
-	category: 'Owner',
-	description: 'Unspecified',
-	usage: ['execute (options)'],
+	// eslint-disable-next-line no-unused-vars
 	exe(msg) {
 		console.log('I was executed!');
 	}

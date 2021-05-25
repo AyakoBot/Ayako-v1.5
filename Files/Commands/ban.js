@@ -3,14 +3,10 @@ module.exports = {
 	perm: 4n,
 	dm: false,
 	takesFirstArg: true,
-	category: 'Moderation',
-	description: 'Bans a User from the Server',
-	usage: ['ban [user ID or mention] (reason)'],
 	aliases: null,
 	async exe(msg) {
 		const user = await msg.client.users.fetch(msg.args[0].replace(/\D+/g, ''));
-		const language = msg.language;
-		const lan = language.commands.ban;
+		const lan = msg.lan;
 		if (!user) return msg.client.ch.reply(msg, lan.noUser);
 		let banReason = msg.args.slice(1).join(' ') ? msg.args.slice(1).join(' ') : lan.reason;
 		const guildmember = await msg.client.ch.member(msg.guild, user);

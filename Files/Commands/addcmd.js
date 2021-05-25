@@ -3,9 +3,6 @@ module.exports = {
 	perm: 0,
 	dm: true,
 	takesFirstArg: true,
-	category: 'Owner',
-	description: 'Adds a Command File',
-	usage: ['addcmd [command Name]'],
 	exe(msg) {
 		const args = msg.args;
 		if (!args[0]) return msg.client.ch.reply(msg, 'Please enter a valid command');

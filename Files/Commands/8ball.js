@@ -1,14 +1,11 @@
 const Discord = require('discord.js');
+
 module.exports = {
 	name: '8ball',
 	perm: null,
 	dm: true,
 	takesFirstArg: true,
-	category: 'Fun',
-	description: 'Let 8ball decide!',
-	usage: ['8ball [yes or no question]'],
 	async exe(msg) {
-		console.log(3);
 		const random = Math.floor(Math.random() * 15);
 		const question = msg.args.slice(0).join(' ');
 		const answer = msg.lan.answers[random];

@@ -4,17 +4,14 @@ const re = /[0-9A-Fa-f]{6}/g;
 module.exports = {
 	name: 'addrole',
 	perm: 268435456n,
-	category: 'Roles',
 	takesFirstArg: true,
-	description: 'Create a new Role in your Server with standard Permissions.',
-	usage: ['addrole (Hex Color Code) [name of the new Role]'],
+	dm: false,
 	async exe(msg) {
 		const color = re.test(msg.args[0]) ? msg.args[0] : '||000000';
 		let RoleName;
 		if (color === '||000000') RoleName = msg.args.slice(0).join(' ');
 		else RoleName = msg.args.slice(1).join(' ');
-		const language = await msg.client.ch.languageSelector(msg.guild);
-		const lan = language.commands.addRole;
+		const lan = msg.lan;
 		if (!RoleName) return msg.client.ch.reply(msg, lan.noName);
 		const role = await msg.guild.roles.create({
 			name: `${RoleName}`,

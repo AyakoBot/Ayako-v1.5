@@ -5,15 +5,15 @@ module.exports = {
 	DMallowed: 'Yes',
 	description: 'Contact the Ayako Bot Devs and send them a Message',
 	usage: 'h!contact [message]',
-	/* eslint-disable */
-	execute(msg, args, client, prefix, command, logchannelid, permLevel, errorchannelID ) {
-		/* eslint-enable */
-		const tta = args.slice(0).join(' ');
+	execute(msg) {
+		const tta = msg.args.slice(0).join(' ');
 		if (!tta) return msg.reply('You need to specify what you want me to send to the Bot Owner');
 		const SuggestEmbed = new Discord.MessageEmbed()
 			.setAuthor(`${msg.author.tag} / ${msg.author.id} / ${msg.guild.name}`, msg.author.displayAvatarURL())
 			.setDescription(tta)
 			.addField('\u200B', `${msg.url}`);
+		msg.attachments.map(o => o);
+		for (const attachment of msg.attachments) {SuggestEmbed.addField('Attachment', `${attachment.url}`)
 		client.channels.cache.get('745080980431175792').send(SuggestEmbed);
 		const SuggestReplyEmbed = new Discord.MessageEmbed()
 			.setTitle('Thank you for your contact')

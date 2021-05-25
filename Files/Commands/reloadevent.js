@@ -1,12 +1,9 @@
 module.exports = {
 	name: 'reloadevent',
 	perm: 0,
-	category: 'Owner',
 	dm: true,
 	takesFirstArg: true,
 	aliases: ['rv'],
-	description: 'Reloads an Event File',
-	usage: ['reloadevent [event Name]','reloadevent constants','reloadevent ch','reloadevent lan [language]'],
 	exe(msg) {
 		const args = msg.args;
 		const client = msg.client;

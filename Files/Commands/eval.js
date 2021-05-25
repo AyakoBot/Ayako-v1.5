@@ -6,11 +6,8 @@ module.exports = {
 	perm: 0,
 	dm: true,
 	takesFirstArg: true,
-	category: 'Owner',
-	description: 'Evaluates any JavaScript Code',
-	usage: ['eval [code]'],
 	async exe(msg) {
-		if (msg.author.id !== '318453143476371456') return;
+		if (msg.author.id !== auth.ownerID) return;
 		const clean = (text) => { 
 			if (typeof text === 'string') return text.replace(/`/g, '`' + String.fromCharCode(8203)).replace(/@/g, '@' + String.fromCharCode(8203)).replace(reg, 'TOKEN'); 
 			else return text; }; 

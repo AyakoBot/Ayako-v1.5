@@ -724,6 +724,7 @@
     "incoming": "Incoming",
     "stageOpen": "Stage Channel Opened/Closed",
     "spam": "Spam",
+    "requestedBy": "Requested by {{user.tag}}",
     "mod": {
         "warning": {
             "text": "You just issued a **Moderation Command** on a User with a **Mod Role**. \nDo you want to **proceed** or **abort**.",
@@ -859,6 +860,9 @@
             "info": "The following words are Blacklisted on **{{guild.name}}**:\n"
         },
         "8ball": {
+            "description": "Let 8ball decide",
+            "usage": ["8ball [yes or no question]"],
+            "category": "Fun",
             "author": "8ball",
             "question": "Question",
             "answer": "Answer",
@@ -881,12 +885,23 @@
                 "15": "It is certain."
             }
         },
-        "addRole": {
+        "addcmd": {
+            "description": "Adds a Command File",
+            "usage": ["addcmd [command Name]"],
+            "category": "Owner"
+        },
+        "addrole": {
+            "description": "Create a new Role in your Server with standard Permissions.",
+            "usage": ["addrole (Hex Color Code) [name of the new Role]"],
+            "category": "Roles",
             "reason": "addRole Command executed by {{user.tag}}",
             "created": "{{role}} was created",
             "noName": "You have to at least provide a Name for the Role"
         },
-        "delRole": {
+        "delrole": {
+            "description": "Delete a Role from your Server.",
+            "usage": ["delrole [ID or @mention]"],
+            "category": "Roles",
             "chooseRole": "I found {{amount}} Roles with the Name `{{role.name}}`\n**Please choose the right one.**",
             "cancel": "Reply with |{{language.cancel}}| to abort",
             "deleted": "`{{role.name}}` was deleted",
@@ -898,7 +913,10 @@
                 "roleManagedSolution": "Remove the Integration or Bot from your Server to have it automatically deleted\nYou can use my Role Info command to find out what Integration or Bot manages that Role"
             }
         },
-        "cmdh": {
+        "cmdhelp": {
+            "description": "Show how a specified Command works",
+            "usage": ["cmdhelp [command name]"],
+            "category": "Info",
             "notValid": "That was not a valid Command",
             "inviteReason": "Command specific Help Command used on {{msg.guild.name}} in {{msg.channel.name}}",
             "dmsTrue": "Usable in DMs",
@@ -906,8 +924,54 @@
 
         },
         "ban": {
+            "description": "Bans a User from the Server",
+            "usage": ["ban [user ID or mention] (reason)"],
+            "category": "Moderation",
             "noUser": "I couldn't find that User",
             "reason": "No Reason given"
+        },
+        "reloadevent": {
+            "category": "Owner",
+            "description": "Reloads an Event File",
+            "usage": ["reloadevent [event Name]","reloadevent constants","reloadevent ch","reloadevent lan [language]"]
+        },
+        "reload": {
+            "category": "Owner",
+            "description": "Reloads a Command File",
+            "usage": ["reload [command Name]"]
+        },
+        "execute": {
+            "category": "Owner",
+            "description": "Unspecified",
+            "usage": ["execute (options)"]
+        },
+        "eval": {
+            "category": "Owner",
+            "description": "Evaluates any JavaScript Code",
+            "usage": ["eval [code]"]
+        },
+        "afk": {
+            "category": "Chat",
+            "description": "Display a AFK text whenever someone pings you, automatically deleted if you send a message after creating your AFK",
+            "usage": ["afk (text)"],
+            "afkText": "{{username}} is AFK **since**",
+            "afkText2": "{{slice}}\n{{username}} is AFK **since**",
+            "updatedTo": "Alright, I've updated your AFK to\n{{text}}",
+            "updated": "I've updated your AFK",
+            "noLinks": "You may not set Links as AFK.",
+            "set": "Alrihgt, I've set your AFK",
+            "setTo": "Alright, I've set your AFK to\n{{text}}"
+        },
+        "avatar": {
+            "category": "User",
+            "description": "Display the Avatar of you or someone else in full size",
+            "usage": ["avatar (user ID or mention)"],
+            "avatarOf": "Avatar of {{user.tag}}"
+        },
+        "contact": {
+            "category": "Info",
+            "description": "Display a AFK text whenever someone pings you, automatically deleted if you send a message after creating your AFK",
+            "usage": ["afk (text)"],
         }
     }
 }
