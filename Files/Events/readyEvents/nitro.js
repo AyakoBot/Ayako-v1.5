@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 
 module.exports = {
 	async execute() {
+		return;
 		const { client } = require('../../BaseClient/DiscordClient');
 		const ch = client.ch;
 		const Logchannel = client.channels.cache.get('781724288830013481');

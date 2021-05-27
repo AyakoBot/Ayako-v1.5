@@ -5,9 +5,7 @@ module.exports = {
 	Category: 'Fun',
 	description: 'Snipe the last deleted message of a channel',
 	usage: 'h!snipe',
-	/* eslint-disable */
-	async execute(msg, args, client, prefix, command, logchannelid, permLevel, errorchannelID ) {
-		/* eslint-enable */
+	async execute(msg) {
 		if (msg.guild.id == '108176345204264960') return;
 		if (msg.channel.id == '741756746636198090') return;
 		const res = await pool.query(`SELECT * FROM snipe WHERE channelid = '${msg.channel.id}';`);

@@ -430,7 +430,7 @@
         },
         "reminder": {
             "description": "Your reminder is due!",
-            "failedMsg": "I tried to send a message in the cahnnel you set the Reminder in, but I failed."
+            "failedMsg": "I tried to send a message in the channel you set the Reminder in {{channel}}, but I failed."
         },
         "vote": {
             "author": "12 Hours are over!",
@@ -598,6 +598,7 @@
     "wasRemoved": "was removed",
     "neutral": "Neutral",
     "problem": "Problem",
+    "prefix": "Prefix",
     "solution": "Solution",
     "bitrate": "Bitrate",
     "closed": "Closed",
@@ -697,6 +698,7 @@
     "thisGuildOnly": "This Guild(s) Only",
     "premiumSubscriptionCount": "Booster Count",
     "available": "Available State",
+    "settings": "Settings",
     "icon": "Icon",
     "splash": "Splash Image",
     "discoverySplash": "Discovery Splash Image",
@@ -970,8 +972,44 @@
         },
         "contact": {
             "category": "Info",
-            "description": "Display a AFK text whenever someone pings you, automatically deleted if you send a message after creating your AFK",
-            "usage": ["afk (text)"],
+            "description": "Contact the Ayako Bot Devs and send them a Message",
+            "usage": ["contact [message]"],
+            "thanks": {
+                "thanks": "Thank you for contacting us!",
+                "desc": "We will look at this as soon as we can and notify you if theres an update",
+                "field": "Your User ID has been saved, in case of command abuse we will exclude you from using this Command again"
+            }
+        },
+        "massban": {
+            "categoy": "Moderation",
+            "description": "Ban as many users from the server as the Discord Character limit lets you",
+            "usage": ["massban [user IDs or mentions] (reason)"],
+            "already": "(already banned)",
+            "youCant": "(You can't ban this User)",
+            "iCant": "(I can't ban this User)",
+            "selfban": "(You can't ban yourself)",
+            "reason": "No Reason given",
+            "noRaidIDs": "There are currently no Raid IDs to ban",
+            "ohno": "(Something went wrong while banning)",
+            "descS": "Users I successfully banned will appear here",
+            "descSLoading": "Successfully banned | Loading",
+            "sBannedUsers": "Successfully banned {{amount}} users",
+            "descF": "Users I failed to ban will appear here",
+            "descFLoading": "Failed to ban | Loading",
+            "fBannedUsers": "Failed to ban {{amount}} times",
+            "finish": "Finished Bans",
+            "failed": "Failed to Ban",
+            "banReason": "Massban Executor: {{user.tag}} | {{reason}}",
+            "log": {
+                "author": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nmassbanned {{amount}} Users",
+                "desc": "{{amount}} Users have been banned"
+            }
+        },
+        "settings": {
+            "overview": {
+                "author": "Ayako Server Settings",
+                "desc": "Settings can be displayed and edited with this Command: `{{prefix}}settings [command]`\n\n**Available Command Settings**:{{commands}}"
+            }    
         }
     }
 }

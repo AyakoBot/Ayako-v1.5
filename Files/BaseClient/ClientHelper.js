@@ -25,6 +25,7 @@ module.exports = {
 		if (!fs.existsSync('.\\Files\\Downloads\\Messages\\Bulk Deletes')) fs.mkdirSync('.\\Files\\Downloads\\Messages\\Bulk Deletes');
 		if (!fs.existsSync('.\\Files\\Downloads\\Guilds')) fs.mkdirSync('.\\Files\\Downloads\\Guilds');
 		if (!fs.existsSync('.\\Files\\Downloads\\Users')) fs.mkdirSync('.\\Files\\Downloads\\Users');
+		if (!fs.existsSync('.\\Files\\Downloads\\Massbans')) fs.mkdirSync('.\\Files\\Downloads\\Massbans');
 	},
 	async send(channel, content, options) {
 		let webhook;
@@ -92,7 +93,6 @@ module.exports = {
 					console.error(type);
 				}
 			}
-			
 		}
 	},
 	async downloader(msg, url) {
@@ -102,40 +102,26 @@ module.exports = {
 		if (pathers) pathend = `${pathers[pathers.length-1]}`.replace(URL.parse(url).search, '');
 		if (msg.channel) {
 			path = `.\\Files\\Downloads\\Guilds\\Guild - ${msg.guild.id}\\Channel - ${msg.channel.id}\\${msg.id}`;
-			let guilddir = `.\\Files\\Downloads\\Guilds\\Guild - ${msg.guild.id}`;
-			if (!fs.existsSync(guilddir)) {
-				guilddir = fs.mkdirSync(guilddir);
-			}
-			let channeldir = `.\\Files\\Downloads\\Guilds\\Guild - ${msg.guild.id}\\Channel - ${msg.channel.id}`;
-			if (!fs.existsSync(channeldir)) {
-				channeldir = fs.mkdirSync(channeldir);
-			}
+			const guilddir = `.\\Files\\Downloads\\Guilds\\Guild - ${msg.guild.id}`;
+			if (!fs.existsSync(guilddir)) fs.mkdirSync(guilddir);
+			const channeldir = `.\\Files\\Downloads\\Guilds\\Guild - ${msg.guild.id}\\Channel - ${msg.channel.id}`;
+			if (!fs.existsSync(channeldir)) fs.mkdirSync(channeldir);
 		} else if (msg.animated !== undefined && msg.animated !== null) {
 			path = `.\\Files\\Downloads\\Guilds\\Guild - ${msg.guild.id}\\Deleted Emotes\\${msg.id}`;
-			let lastdir = `.\\Files\\Downloads\\Guilds\\Guild - ${msg.guild.id}`;
-			if (!fs.existsSync(lastdir)) {
-				lastdir = fs.mkdirSync(lastdir);
-			}
-			let emotedir = `.\\Files\\Downloads\\Guilds\\Guild - ${msg.guild.id}\\Deleted Emotes`;
-			if (!fs.existsSync(emotedir)) {
-				emotedir = fs.mkdirSync(emotedir);
-			}
-			let guilddir = `.\\Files\\Downloads\\Guilds\\Guild - ${msg.guild.id}`;
-			if (!fs.existsSync(guilddir)) {
-				guilddir = fs.mkdirSync(guilddir);
-			}
+			const lastdir = `.\\Files\\Downloads\\Guilds\\Guild - ${msg.guild.id}`;
+			if (!fs.existsSync(lastdir)) fs.mkdirSync(lastdir);
+			const emotedir = `.\\Files\\Downloads\\Guilds\\Guild - ${msg.guild.id}\\Deleted Emotes`;
+			if (!fs.existsSync(emotedir)) fs.mkdirSync(emotedir);
+			const guilddir = `.\\Files\\Downloads\\Guilds\\Guild - ${msg.guild.id}`;
+			if (!fs.existsSync(guilddir)) fs.mkdirSync(guilddir);
 		} else if (msg.ownerID) {
 			const now = Date.now();
 			if (msg.wanted) {
 				path = `.\\Files\\Downloads\\Guilds\\Guild - ${msg.id}\\${msg.wanted}\\${now}`;
-				let guilddir = `.\\Files\\Downloads\\Guilds\\Guild - ${msg.id}`;
-				if (!fs.existsSync(guilddir)) {
-					guilddir = fs.mkdirSync(guilddir);
-				}
-				let channeldir = `.\\Files\\Downloads\\Guilds\\Guild - ${msg.id}\\${msg.wanted}`;
-				if (!fs.existsSync(channeldir)) {
-					channeldir = fs.mkdirSync(channeldir);
-				}
+				const guilddir = `.\\Files\\Downloads\\Guilds\\Guild - ${msg.id}`;
+				if (!fs.existsSync(guilddir)) fs.mkdirSync(guilddir);
+				const channeldir = `.\\Files\\Downloads\\Guilds\\Guild - ${msg.id}\\${msg.wanted}`;
+				if (!fs.existsSync(channeldir)) fs.mkdirSync(channeldir);
 			}
 		} else if (msg.avatar) {
 			const now = Date.now();
@@ -162,12 +148,8 @@ module.exports = {
 			}
 		} else (msg.animated !== undefined && msg.animated !== null) ? pathend = msg.animated ? 'gif' : 'png' : '';
 		if (Array.isArray(url)) {
-			for (let i = 0; i < url.length; i++) {
-				await this.download(url[i].url, url[i].path);
-			}
-		} else {
-			await this.download(url, `${path}.${pathend}`);
-		}
+			for (let i = 0; i < url.length; i++) {await this.download(url[i].url, url[i].path);}
+		} else await this.download(url, `${path}.${pathend}`);
 		return `${path}.${pathend}`;
 	},
 	async makeFile(path) {
@@ -254,9 +236,7 @@ module.exports = {
 	},
 	ms(input) {return ms(input);},
 	getDifference (array1, array2) {
-		return array1.filter(i => {
-			return array2.indexOf(i) < 0;
-		});
+		return array1.filter(i => {return array2.indexOf(i) < 0;});
 	},
 	toTitleCase (str) {
 		return str.replace(regexes.strReplacer1, ' ').replace(regexes.strReplacer2, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
@@ -307,9 +287,7 @@ module.exports = {
 		if (guild.id) {
 			const resLan = await this.query(`SELECT * FROM language WHERE guildid = '${guild.id}';`);
 			let lang = 'en';
-			if (resLan && resLan.rowCount > 0) {
-				lang = resLan.rows[0].language;
-			}
+			if (resLan && resLan.rowCount > 0) lang = resLan.rows[0].language;
 			const language = require(`../Languages/lan-${lang}.json`);
 			return language;
 		} else {
@@ -320,41 +298,45 @@ module.exports = {
 	async txtFileWriter(object) {
 		object = object.map(o => o);
 		let content = '';
-		for (let i = 0; i < object.length; i++) {
-			let urls = '';
-			const msg = []; const o = object[i];
-			msg.author = o.author;
-			msg.timestamp = this.getUnix(o.id);
-			msg.content = o.content;
-			if (o.attachments) {
-				o.attachments = o.attachments.map(o => o);
-				for (let j = 0; j < o.attachments.length; j++) {
-					const json = await imgur.uploadUrl(o.attachments[j].url).catch(() => {});
-					if (json) {
-						urls += ` ${json.link} `;
+		if (object[0].source == 'massban') {
+			for (let i = 0; i < object.length; i++) {
+				content += `${object[i].tag} / ${object[i].id}\n`;
+			}
+			const now = Date.now();
+			const path = `.\\Files\\Downloads\\Massbans\\Guild - ${object[0].guild.id}\\${now}.txt`;
+			const guilddir = `.\\Files\\Downloads\\Massbans\\Guild - ${object[0].guild.id}`;
+			if (!fs.existsSync(guilddir)) fs.mkdirSync(guilddir);
+			fs.writeFile(path, content, (err) => {if (err) throw err;});
+			return path;
+		} else if (!object[0].source) {
+			for (let i = 0; i < object.length; i++) {
+				let urls = '';
+				const msg = []; const o = object[i];
+				msg.author = o.author;
+				msg.timestamp = this.getUnix(o.id);
+				msg.content = o.content;
+				if (o.attachments) {
+					o.attachments = o.attachments.map(o => o);
+					for (let j = 0; j < o.attachments.length; j++) {
+						const json = await imgur.uploadUrl(o.attachments[j].url).catch(() => {});
+						if (json) {
+							urls += ` ${json.link} `;
+						}
 					}
 				}
+				content += `\n${msg.author && msg.author.tag ? msg.author.tag : 'Unknown Author'} (${msg.author && msg.author.id ? msg.author.id : 'Unknown Author'}) at ${new Date(msg.timestamp).toUTCString()}\n${urls !== '' ? `Attachments: ${urls}\n` : ''}${msg.content ? msg.content : 'Unknown Content'}\n`;
 			}
-			content += `\n${msg.author && msg.author.tag ? msg.author.tag : 'Unknown Author'} (${msg.author && msg.author.id ? msg.author.id : 'Unknown Author'}) at ${new Date(msg.timestamp).toUTCString()}\n${urls !== '' ? `Attachments: ${urls}\n` : ''}${msg.content ? msg.content : 'Unknown Content'}\n`;
+			const now = Date.now();
+			const path = `.\\Files\\Downloads\\Messages\\Bulk Deletes\\Guild - ${object[0].guild.id}\\Channel - ${object[0].channel.id}\\${now}.txt`;
+			const guilddir = `.\\Files\\Downloads\\Messages\\Bulk Deletes\\Guild - ${object[0].guild.id}`;
+			if (!fs.existsSync(guilddir)) fs.mkdirSync(guilddir);
+			const channeldir = `.\\Files\\Downloads\\Messages\\Bulk Deletes\\Guild - ${object[0].guild.id}\\Channel - ${object[0].channel.id}`;
+			if (!fs.existsSync(channeldir)) fs.mkdirSync(channeldir);
+			fs.writeFile(path, content, (err) => {if (err) throw err;});
+			return path;
 		}
-		const now = Date.now();
-		const path = `.\\Files\\Downloads\\Messages\\Bulk Deletes\\Guild - ${object[0].guild.id}\\Channel - ${object[0].channel.id}\\${now}.txt`;
-		let guilddir = `.\\Files\\Downloads\\Messages\\Bulk Deletes\\Guild - ${object[0].guild.id}`;
-		if (!fs.existsSync(guilddir)) {
-			guilddir = fs.mkdirSync(guilddir);
-		}
-		let channeldir = `.\\Files\\Downloads\\Messages\\Bulk Deletes\\Guild - ${object[0].guild.id}\\Channel - ${object[0].channel.id}`;
-		if (!fs.existsSync(channeldir)) {
-			channeldir = fs.mkdirSync(channeldir);
-		}
-		await fs.writeFile(path, content, (err) => {
-			if (err) throw err;
-		});
-		return path;
 	},
-	containsNonLatinCodepoints(text) {
-		return regexes.tester.test(text);
-	},
+	containsNonLatinCodepoints(text) {return regexes.tester.test(text);},
 	async member(guild, user) {
 		let id;
 		if (user.id) id = user.id;

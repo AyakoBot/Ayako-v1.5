@@ -309,18 +309,21 @@
         "ayakoPeekLink": "https://cdn.discordapp.com/emojis/758872110067351562.png?v=1",
         "up": "🆙",
         "numbers": {
-            "0": ":zero:",
-            "1": ":one:",
-            "2": ":two:",
-            "3": ":three",
-            "4": ":four:",
-            "5": ":five:",
-            "6": ":six:",
-            "7": ":seven:",
-            "8": ":eight:",
-            "9": ":nine:",
-            "ten": ":ten:"
-        }
+            "0": "0⃣",
+            "1": "1⃣",
+            "2": "2⃣",
+            "3": "3⃣",
+            "4": "4⃣",
+            "5": "5⃣",
+            "6": "6⃣",
+            "7": "7⃣",
+            "8": "8⃣",
+            "9": "9⃣",
+            "ten": "🔟"
+        },
+        "settings": "<:Settings:781982956138659880>",
+        "settingsID": "781982956138659880",
+        "settingsLink": "https://cdn.discordapp.com/emojis/781982956138659880.png?v=1"
     },
     "error": "ff0000",
     "mod": {
@@ -364,6 +367,13 @@
         }
     },
     "commands": {
-        "toxicityCheck": "ff0000"
+        "toxicityCheck": "ff0000",
+        "massban": {
+            "success": "1aff00",
+            "fail": "ff0000",
+            "log": {
+                "color": "ff0000"
+            }
+        }
     }
 }

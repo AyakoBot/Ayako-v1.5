@@ -26,11 +26,8 @@ module.exports = {
 					.setTimestamp()
 					.setColor(con.color)
 					.setAuthor(lan.author.name, con.author.image, ch.stp(con.author.link, {msg: msgs.first()}));
-				if (entry) {
-					embed.setDescription(ch.stp(lan.descriptionWithAudit, {user: entry.executor, channel: msgs.first().channel, amount: msgs.size}));
-				} else {
-					embed.setDescription(ch.stp(lan.descriptionWithoutAudit, {channel: msgs.first().channel, amount: msgs.size}));
-				}
+				if (entry) embed.setDescription(ch.stp(lan.descriptionWithAudit, {user: entry.executor, channel: msgs.first().channel, amount: msgs.size}));
+				else embed.setDescription(ch.stp(lan.descriptionWithoutAudit, {channel: msgs.first().channel, amount: msgs.size}));
 				if (path) {
 					ch.send(logchannel, {
 						embed: embed,
@@ -38,11 +35,7 @@ module.exports = {
 							attachment: path,
 						}]
 					});
-				} else {
-					ch.send(logchannel, {
-						embed: embed,
-					});
-				}
+				} else ch.send(logchannel, {embed: embed});
 			}
 		}
 	}
