@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install .config/husky"
   },
   "author": "Lars_und_so#0666",
   "license": "ISC",
@@ -12,18 +13,19 @@
     "@top-gg/sdk": "^3.1.1",
     "discord.js": "github:discordjs/discord.js",
     "express": "^4.17.1",
-    "imgur": "^1.0.1",
+    "husky": "^6.0.0",
+    "imgur": "^1.0.2",
     "is-image-url": "^1.1.8",
     "markdown-escape": "^1.1.0",
     "moment": "^2.29.1",
     "moment-duration-format": "^2.3.2",
     "ms": "^2.1.3",
-    "pg": "^8.5.1",
-    "statcord.js": "^3.1.7",
+    "pg": "^8.6.0",
+    "statcord.js": "^3.2.0",
     "tenorjs": "^1.0.8",
     "topgg-autoposter": "^1.1.10"
   },
   "devDependencies": {
-    "eslint": "^7.23.0"
+    "eslint": "^7.27.0"
   }
 }

@@ -8,6 +8,7 @@ module.exports = {
 		console.log(`Login at ${new Date(Date.now()).toLocaleString()}`);
 		const ch = client.ch;
 		// statcord.autopost();
+		require('./slashcommands.js').execute();
 		client.guilds.cache.forEach(async guild => client.invites.set(guild.id, await guild.fetchInvites().catch(() => {})));
 		require('./webhooks.js').execute();
 		setInterval(() => {

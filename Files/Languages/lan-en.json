@@ -640,6 +640,7 @@
     "unverifiedTooLong": "Unverified for too long",
     "tooManyRoles": "Too many Roles to be displayed",
     "roles": "Roles",
+    "edit": "edit",
     "nickname": "Nickname",
     "permission_overwrites": "Permission Overwrites",
     "rtc_region": "Region",
@@ -715,6 +716,11 @@
     "deaf": "Deafened",
     "mute": "Muted",
     "camera": "Camera",
+    "small": "Small",
+    "big": "Big",
+    "interactionsMode": "Interactions Size",
+    "muteRole": "Mute Role",
+    "settingsOverview": "Settings Overview",
     "streaming": "Streaming",
     "suppress": "Suppressed",
     "cancel": "cancel",
@@ -1005,11 +1011,165 @@
                 "desc": "{{amount}} Users have been banned"
             }
         },
+        "restart": {
+            "category": "Owner",
+            "description": "Restart Ayako",
+            "usage": ["restart"]
+        },
         "settings": {
+            "categoy": "Info",
+            "description": "Display the Ayako Server Settings",
+            "usage": ["settings", "settings [command]"],
             "overview": {
-                "author": "Ayako Server Settings",
-                "desc": "Settings can be displayed and edited with this Command: `{{prefix}}settings [command]`\n\n**Available Command Settings**:{{commands}}"
-            }    
+                "category": ["None"],
+                "author": "Ayako Settings",
+                "desc": "Settings can be displayed and edited with this Command: `{{prefix}}settings [command]`\n\n```Other = 🔵\nRoles = 🔴\nChannels = 🟢\nChats = 🟡```\n**Available Command Settings**:\n{{commands}}",
+                "muteRoleError": "Mute Role Deleted!"
+            },
+            "antispam": {
+                "category": ["Auto Moderation"],
+                "author": "Ayako Anti-Spam Settings",
+                "ban": "Ban Members",
+                "kick": "Kick Members",
+                "mute": "Mute Members",
+                "warn": "Warn Members",
+                "muteAfter": "Mute after **{{amount}}** warns",
+                "kickAfter": "Kick after **{{amount}}** warns",
+                "banAfter": "Ban after **{{amount}}** warns",
+                "antispam": "Anti-Spam",
+                "bpchannels": "Bypassed Channels",
+                "bproles": "Bypassed Roles",
+                "bpusers": "Bypassed Users",
+                "readWarns": "**Read Warnings** (required for the following 3 options)",
+                "howToEdit": "Edit by typing \n`edit` in the next 30 Seconds or\n`{{prefix}}settings antispam edit`",
+                "edit": {
+                    "author": "[Edit Mode] Ayako Anti-Spam Settings",
+                    "howToEdit": "Enter any of the triggers shown in the [box] infront of the option you want to edit",
+                    "ban": {
+                        "name": "[{{trigger}}] Ban Members",
+                        "trigger": ["`bm`","`ban`"] 
+                    },
+                    "kick": {
+                        "name": "[{{trigger}}] Kick Members",
+                        "trigger": ["`km`","`kick`"] 
+                    },
+                    "mute": {
+                        "name": "[{{trigger}}] Mute Members",
+                        "trigger": ["`mm`","`mute`"] 
+                    },
+                    "warn": {
+                        "name": "[{{trigger}}] Warn Members",
+                        "trigger": ["`wm`","`warn`"] 
+                    },
+                    "muteAfter": {
+                        "name": "[{{trigger}}] Mute after **{{amount}}** warns",
+                        "trigger": ["`maw`","`mute after`"] 
+                    },
+                    "kickAfter": {
+                        "name": "[{{trigger}}] Kick after **{{amount}}** warns",
+                        "trigger": ["`kaw`","`kick after`"] 
+                    },
+                    "banAfter": {
+                        "name": "[{{trigger}}] Ban after **{{amount}}** warns",
+                        "trigger": ["`baw`","`ban after`"] 
+                    },
+                    "antispam": {
+                        "name": "[{{trigger}}] Anti-Spam",
+                        "trigger": ["`active`"] 
+                    },
+                    "bpchannels": {
+                        "name": "[{{trigger}}] Bypassed Channels",
+                        "trigger": ["`Channel ID(s) or mention(s)`"] 
+                    },
+                    "bproles": {
+                        "name": "[{{trigger}}] Bypassed Roles",
+                        "trigger": ["`Role ID(s) or mention(s)`"] 
+                    },
+                    "bpusers": {
+                        "name": "[{{trigger}}] Bypassed Users",
+                        "trigger": ["`User ID(s) or mention(s)`"] 
+                    },
+                    "readWarns": {
+                        "name": "[{{trigger}}] **Read Warnings** (required for the following 3 options)",
+                        "trigger": ["`rw`","`read warns`"] 
+                    }
+                }
+            },
+            "autorole": {
+                "category": ["Automation"]
+            },
+            "blacklist": {
+                "category": ["Auto Moderation"]
+            },
+            "cooldowns": {
+                "category": ["Automation"]
+            },
+            "disabled": {
+                "category": ["Automation", "None"]
+            },
+            "disboard": {
+                "category": ["Automation"]
+            },
+            "gifposter": {
+                "category": ["Compaction", "Automation"]
+            },
+            "giveaways": {
+                "category": ["Automation", "Fun"]
+            },
+            "interactions": {
+                "category": ["Compaction", "Fun"]
+            },
+            "language": {
+                "category": ["None"]
+            },
+            "leveling": {
+                "category": ["Automation"]
+            },
+            "logs": {
+                "category": ["Automation"]
+            },
+            "modroles": {
+                "category": ["Moderation"]
+            },
+            "muterole": {
+                "category": ["Moderation"]
+            },
+            "nitro": {
+                "category": ["Automation"]
+            },
+            "prefix": {
+                "category": ["None"]
+            },
+            "reactionroles": {
+                "category": ["Automation"]
+            },
+            "selfroles": {
+                "category": ["Automation"]
+            },
+            "snipe": {
+                "category": ["Fun"]
+            },
+            "suggestions": {
+                "category": ["Automation"]
+            },
+            "ticketing": {
+                "category": ["Automation"]
+            },
+            "user": {
+                "category": ["None"]
+            },
+            "vc": {
+                "category": ["Automation", "Fun"]
+            },
+            "verification": {
+                "category": ["Automation"]
+            },
+            "welcome": {
+                "category": ["Automation"]
+            },
+            "separators": {
+                "category": ["Automation"]
+            }
         }
     }
 }

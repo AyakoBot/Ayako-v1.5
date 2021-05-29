@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const { pool } = require('../files/Database.js');
+
 module.exports = {
 	name: 'snipe',
 	Category: 'Fun',

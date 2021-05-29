@@ -1,5 +1,7 @@
 const auth = require('../BaseClient/auth.json');
 const reg = new RegExp(auth.token, 'g');
+// eslint-disable-next-line no-unused-vars
+const Discord = require('discord.js');
 
 module.exports = {
 	name: 'eval',

@@ -392,5 +392,5 @@ module.exports = {
 				return false;
 			}
 		}).catch(() => {m.delete().catch(() => {});});
-	}
+	},
 };

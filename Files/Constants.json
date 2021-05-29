@@ -286,7 +286,7 @@
         "guildLogChannel": "718181439354437693",
         "errorLogChannel": "829148971125047328",
         "prefix": "t!",
-        "invite": "https://discord.com/api/oauth2/authorize?client_id=650691698409734151&permissions=4194168055&scope=bot",
+        "invite": "https://discord.com/api/oauth2/authorize?client_id=650691698409734151&permissions=4261276919&scope=bot%20applications.commands",
         "image": "https://ayakobot.com/DefaultEmbedImage",
         "errorImage": "https://ayakobot.com/DefaultErrorImage",
         "webhook": {
@@ -323,7 +323,20 @@
         },
         "settings": "<:Settings:781982956138659880>",
         "settingsID": "781982956138659880",
-        "settingsLink": "https://cdn.discordapp.com/emojis/781982956138659880.png?v=1"
+        "settingsLink": "https://cdn.discordapp.com/emojis/781982956138659880.png?v=1",
+        "small": "<:Small2:756379369739386910><:Small1:756379345190387712>",
+        "small1ID": "756379369739386910",
+        "small1Link": "https://cdn.discordapp.com/emojis/756379369739386910.png?v=1",
+        "small2ID": "756379345190387712",
+        "small2Link": "https://cdn.discordapp.com/emojis/756379345190387712.png?v=1",
+        "big": "<:Big:756380855395549256>",
+        "bigID": "756380855395549256",
+        "bigLink": "https://cdn.discordapp.com/emojis/756380855395549256.png?v=1",
+        "warning": "⚠️",
+        "green": "🟢",
+        "yellow": "🟡",
+        "blue": "🔵",
+        "red": "🔴"
     },
     "error": "ff0000",
     "mod": {
@@ -374,6 +387,9 @@
             "log": {
                 "color": "ff0000"
             }
+        },
+        "settings": {
+            "color": "ffffff"
         }
     }
 }

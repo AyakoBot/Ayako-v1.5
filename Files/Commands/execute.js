@@ -1,3 +1,5 @@
+const Discord = require('discord.js');
+
 module.exports = {
 	name: 'execute',
 	aliases: ['e'],
@@ -6,6 +8,6 @@ module.exports = {
 	takesFirstArg: false,
 	// eslint-disable-next-line no-unused-vars
 	exe(msg) {
-		console.log('I was executed!');
+		
 	}
 };
