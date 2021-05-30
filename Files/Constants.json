@@ -391,7 +391,7 @@
         "settings": {
             "color": "ffffff",
             "edit": {
-                    "antispamtof": {
+                "antispam": {
                     "banenabledtof": "boolean",
                     "kickenabledtof": "boolean",
                     "muteenabledtof": "boolean",

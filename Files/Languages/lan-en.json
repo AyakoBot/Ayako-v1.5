@@ -710,6 +710,8 @@
     "mentionable": "Mentionable",
     "tags": "Tags",
     "avatar": "Avatar",
+    "found": "Found",
+    "failed": "Failed",
     "username": "Username",
     "discriminator": "Discriminator / Tag",
     "channel": "Channel",
@@ -967,7 +969,7 @@
             "updatedTo": "Alright, I've updated your AFK to\n{{text}}",
             "updated": "I've updated your AFK",
             "noLinks": "You may not set Links as AFK.",
-            "set": "Alrihgt, I've set your AFK",
+            "set": "Alright, I've set your AFK",
             "setTo": "Alright, I've set your AFK to\n{{text}}"
         },
         "avatar": {
@@ -1099,15 +1101,30 @@
                     },
                     "bpchannelid": {
                         "name": "[{{trigger}}] Bypassed Channels",
-                        "trigger": ["`Channel ID(s) or mention(s)`"]
+                        "trigger": ["`channel`"],
+                        "answers": "`Mention(s) or ID(s)`",
+                        "fail": {
+                            "no": "I couldn't find this Channel\n",
+                            "wrongGuild": "This Channel is not Part of this Server\n"
+                        }
                     },
                     "bproleid": {
                         "name": "[{{trigger}}] Bypassed Roles",
-                        "trigger": ["`Role ID(s) or mention(s)`"] 
+                        "trigger": ["`role`"],
+                        "answers": "`Mention(s) or ID(s)`",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
                     },
                     "bpuserid": {
                         "name": "[{{trigger}}] Bypassed Users",
-                        "trigger": ["`User ID(s) or mention(s)`"] 
+                        "trigger": ["`user`"],
+                        "answers": "`Mention(s) or ID(s)`",
+                        "fail": {
+                            "no": "I couldn't find this User\n",
+                            "wrongGuild": "This User is not Part of this Server\n"
+                        }
                     },
                     "readofwarnstof": {
                         "name": "[{{trigger}}] **Read Warnings** (required for the following 3 options)",
