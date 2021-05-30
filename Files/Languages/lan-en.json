@@ -1042,56 +1042,78 @@
                 "bpusers": "Bypassed Users",
                 "readWarns": "**Read Warnings** (required for the following 3 options)",
                 "howToEdit": "Edit by typing \n`edit` in the next 30 Seconds or\n`{{prefix}}settings antispam edit`",
+                "valid": "Valid Answers",
+                "edited": "Successfully edited\n```{{edited}}```",
+                "oldValue": "Old value",
+                "newValue": "New value",
                 "edit": {
                     "author": "[Edit Mode] Ayako Anti-Spam Settings",
                     "howToEdit": "Enter any of the triggers shown in the [box] infront of the option you want to edit",
-                    "ban": {
+                    "banenabledtof": {
                         "name": "[{{trigger}}] Ban Members",
-                        "trigger": ["`bm`","`ban`"] 
+                        "trigger": ["`bm`","`ban`"],
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
                     },
-                    "kick": {
+                    "kickenabledtof": {
                         "name": "[{{trigger}}] Kick Members",
-                        "trigger": ["`km`","`kick`"] 
+                        "trigger": ["`km`","`kick`"],
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `False`"
                     },
-                    "mute": {
+                    "muteenabledtof": {
                         "name": "[{{trigger}}] Mute Members",
-                        "trigger": ["`mm`","`mute`"] 
+                        "trigger": ["`mm`","`mute`"],
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
                     },
-                    "warn": {
+                    "giveofficialwarnstof": {
                         "name": "[{{trigger}}] Warn Members",
-                        "trigger": ["`wm`","`warn`"] 
+                        "trigger": ["`wm`","`warn`"],
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
                     },
-                    "muteAfter": {
+                    "muteafterwarnsamount": {
                         "name": "[{{trigger}}] Mute after **{{amount}}** warns",
-                        "trigger": ["`maw`","`mute after`"] 
+                        "trigger": ["`maw`","`mute after`"],
+                        "answers": "`Number`",
+                        "recommended": "Recommended: `3`"
                     },
-                    "kickAfter": {
+                    "kickafterwarnsamount": {
                         "name": "[{{trigger}}] Kick after **{{amount}}** warns",
-                        "trigger": ["`kaw`","`kick after`"] 
+                        "trigger": ["`kaw`","`kick after`"],
+                        "answers": "`Number`",
+                        "recommended": "Recommended: `5`"
                     },
-                    "banAfter": {
+                    "banafterwarnsamount": {
                         "name": "[{{trigger}}] Ban after **{{amount}}** warns",
-                        "trigger": ["`baw`","`ban after`"] 
+                        "trigger": ["`baw`","`ban after`"],
+                        "answers": "`Number`",
+                        "recommended": "Recommended: `6`"
                     },
-                    "antispam": {
+                    "antispamtof": {
                         "name": "[{{trigger}}] Anti-Spam",
-                        "trigger": ["`active`"] 
+                        "trigger": ["`active`"],
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
                     },
-                    "bpchannels": {
+                    "bpchannelid": {
                         "name": "[{{trigger}}] Bypassed Channels",
-                        "trigger": ["`Channel ID(s) or mention(s)`"] 
+                        "trigger": ["`Channel ID(s) or mention(s)`"]
                     },
-                    "bproles": {
+                    "bproleid": {
                         "name": "[{{trigger}}] Bypassed Roles",
                         "trigger": ["`Role ID(s) or mention(s)`"] 
                     },
-                    "bpusers": {
+                    "bpuserid": {
                         "name": "[{{trigger}}] Bypassed Users",
                         "trigger": ["`User ID(s) or mention(s)`"] 
                     },
-                    "readWarns": {
+                    "readofwarnstof": {
                         "name": "[{{trigger}}] **Read Warnings** (required for the following 3 options)",
-                        "trigger": ["`rw`","`read warns`"] 
+                        "trigger": ["`rw`","`read warns`"],
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
                     }
                 }
             },

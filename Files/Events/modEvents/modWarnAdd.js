@@ -3,6 +3,7 @@ const Discord = require('discord.js');
 module.exports = {
 	async execute(executor, target, reason, msg) {
 		let warnnr; 
+		const con = msg.client.constants.mod.warnAdd;
 		const em = new Discord.MessageEmbed()
 			.setColor(con.color)
 			.setDescription(msg.client.constants.emotes.loading, lan.loading);
@@ -28,7 +29,6 @@ module.exports = {
 		msg.client.ch.query(`INSERT INTO warns (guildid, userid, reason, type, warnnr, dateofwarn, warnedinchannelid, warnedbyuserid, warnedinchannelname, warnedbyusername, msgurl) VALUES ('${msg.guild.id}', '${target.id}', '${reason.replace(/'/g, '')}', 'Warn', '${warnnr}', '${Date.now()}', '${msg.channel.id}', '${executor.id}', '${msg.channel.name.replace(/'/g, '')}', '${executor.username.replace(/'/g, '')}', '${msg.url}');`);
 		const language = msg.client.ch.languageSelector(msg.guild);
 		const lan = language.mod.warnAdd;
-		const con = msg.client.constants.mod.warnAdd;
 		const embed = new Discord.MessageEmbed()
 			.setColor(con.color)
 			.setDescription(msg.client.ch.stp(lan.reply, {user: msg.author, nr: warnnr}))

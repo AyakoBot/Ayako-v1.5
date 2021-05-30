@@ -50,7 +50,7 @@ module.exports = {
 			const rolecheck = await rolechecker(msg, res);
 			if (channelcheck || rolecheck) r = (await msg.client.ch.query(`SELECT * FROM antispamsettings WHERE guildid = '${msg.guild.id}';`)).rows[0];
 			const embed = new Discord.MessageEmbed()
-				.setDescription(msg.lan2.howToEdit)
+				.setDescription('__'+msg.lan2.howToEdit+'__')
 				.addFields(
 					{name: msg.client.ch.stp(msg.lan2.antispam.name, {trigger: msg.lan2.antispam.trigger}), value: r.antispamtof ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled, inline: false},
 					{name: msg.client.ch.stp(msg.lan2.bpchannels.name, {trigger: msg.lan2.bpchannels.trigger}), value: r.bpchannelid && r.bpchannelid !== [] ? r.bpchannelid.map(id => ` <#${id}>`) : msg.language.none, inline: false},
@@ -64,7 +64,6 @@ module.exports = {
 					{name: msg.client.ch.stp(msg.lan2.kick.name, {trigger: msg.lan2.kick.trigger}), value: r.kickenabledtof ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled, inline: true},
 					{name: msg.client.ch.stp(msg.lan2.ban.name, {trigger: msg.lan2.ban.trigger}), value: r.banenabledtof ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled, inline: true},
 				)
-				.setColor(msg.client.constants.commands.settings.color)
 				.setAuthor(msg.lan2.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
 				.setFooter(msg.lan2.howToEdit);
 			const m = await msg.client.ch.reply(msg, embed);
@@ -72,19 +71,60 @@ module.exports = {
 			if (!collected.first()) return;
 			const editAnswers = {};
 			let answer = collected.first().content.toLowerCase();
-			msg.lan.edit = msg.lan.edit.map(o => o);
-			for (let i = 0; i < msg.lan.edit.length; i++) {
+			for (let i = 0; i < Object.keys(msg.lan.edit).length; i++) {
 				const name = Object.getOwnPropertyNames(msg.lan.edit);
-				console.log(name);
 				if (name[i] !== 'author' && name[i] !== 'howToEdit') {
 					editAnswers[name[i]] = msg.lan.edit[name[i]].trigger;
-					editAnswers[name[i]].forEach(l => {l.replace(/`/g, '')}); 
+					for (let j = 0; j < Object.keys(editAnswers[name[i]]).length; j++) {editAnswers[name[i]][j] = editAnswers[name[i]][j].replace(/`/g, '');}
 				}
 			}
-			console.log(editAnswers);
+			for (let i = 0; i < Object.keys(editAnswers).length; i++) {
+				const name = Object.getOwnPropertyNames(editAnswers);
+				if (editAnswers[name[i]].includes(answer)) {
+					collected.first().delete().catch(() => {});
+					const editEmbed = new Discord.MessageEmbed()
+						.setAuthor(msg.lan2.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
+						.addField(msg.lan.valid, msg.lan2[name[i]].answers);
+					if (msg.lan2[name[i]].recommended) editEmbed.setDescription('**'+msg.client.ch.stp(msg.lan.edit[name[i]].name, {trigger: msg.lan.edit[name[i]].trigger.map(e => `\`${e}\``), amount: '-'})+'**\n\n'+msg.lan2[name[i]].recommended);
+					else editEmbed.setDescription('**'+msg.client.ch.stp(msg.lan.edit[name[i]].name, {trigger: msg.lan2[name[i]].trigger.map(e => `\`${e}\``), amount: '-'})+'**');
+					await m.edit(editEmbed).catch(() => {});
+					if (msg.client.constants.commands.settings.edit.antispam[name[i]] == 'number') {
+						collected = await msg.channel.awaitMessages(m => m.author.id == msg.author.id, {max: 1, time: 60000});
+						if (!collected.first()) return;
+						answer = collected.first().content.toLowerCase();
+						if (typeof parseInt(answer) == 'number' && !isNaN(answer)) {
+							collected.first().delete().catch(() => {});
+							const editedEmbed = new Discord.MessageEmbed()
+								.setAuthor(msg.lan2.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
+								.setDescription(msg.client.ch.stp(msg.lan.edited, {edited: msg.client.ch.stp(msg.lan.edit[name[i]].name, {trigger: msg.lan.edit[name[i]].trigger.map(e => `${e}`), amount: '-'})}))
+								.addField(msg.lan.oldValue, r[name[i]])
+								.addField(msg.lan.newValue, answer);
+							m.edit(editedEmbed).catch(() => {});
+							msg.client.ch.query(`UPDATE antispamsettings SET ${name[i]} = ${answer} WHERE guildid = '${msg.guild.id}';`);
+						} else this.notValid(msg);
+					} else if (msg.client.constants.commands.settings.edit.antispam[name[i]] == 'boolean') {
+						const boolAnswer = answer == 'true' ? true : answer == 'false' ? false : undefined;
+						if (!boolAnswer) this.notValid(msg);
+						else {
+							collected.first().delete().catch(() => {});
+							const editedEmbed = new Discord.MessageEmbed()
+								.setAuthor(msg.lan2.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
+								.setDescription(msg.client.ch.stp(msg.lan.edited, {edited: msg.client.ch.stp(msg.lan.edit[name[i]].name, {trigger: msg.lan.edit[name[i]].trigger.map(e => `${e}`), amount: '-'})}))
+								.addField(msg.lan.oldValue, r[name[i]])
+								.addField(msg.lan.newValue, answer);
+							m.edit(editedEmbed).catch(() => {});
+							msg.client.ch.query(`UPDATE antispamsettings SET ${name[i]} = ${answer} WHERE guildid = '${msg.guild.id}';`);
+						}
+					}
+				} 
+			}
+
 		} else this.setup(msg);
 	},
 	async setup(msg) {
+
+	},
+	async notValid(msg) {
 
 	}
 };

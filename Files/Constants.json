@@ -389,7 +389,23 @@
             }
         },
         "settings": {
-            "color": "ffffff"
+            "color": "ffffff",
+            "edit": {
+                    "antispamtof": {
+                    "banenabledtof": "boolean",
+                    "kickenabledtof": "boolean",
+                    "muteenabledtof": "boolean",
+                    "giveofficialwarnstof": "boolean",
+                    "muteafterwarnsamount": "number",
+                    "kickafterwarnsamount": "number",
+                    "banafterwarnsamount": "number",
+                    "antispamtof": "boolean",
+                    "bpchannelid": "mention",
+                    "bproleid": "mention",
+                    "bpuserid": "mention",
+                    "readofwarnstof": "boolean"
+                }
+            }
         }
     }
 }
