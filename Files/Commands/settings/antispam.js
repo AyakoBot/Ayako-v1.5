@@ -101,10 +101,10 @@ module.exports = {
 								.addField(msg.lan.newValue, answer);
 							m.edit(editedEmbed).catch(() => {});
 							msg.client.ch.query(`UPDATE antispamsettings SET ${name[i]} = ${answer} WHERE guildid = '${msg.guild.id}';`);
-						} else this.notValid(msg);
+						} else this.notValid(msg, collected.first(), name[i]);
 					} else if (msg.client.constants.commands.settings.edit.antispam[name[i]] == 'boolean') {
 						const boolAnswer = answer == 'true' ? true : answer == 'false' ? false : undefined;
-						if (boolAnswer == undefined) this.notValid(msg);
+						if (boolAnswer == undefined) this.notValid(msg, collected.first(), name[i]);
 						else {
 							collected.first().delete().catch(() => {});
 							const editedEmbed = new Discord.MessageEmbed()
@@ -122,11 +122,8 @@ module.exports = {
 						const got = []; const fail = [];
 						await Promise.all(args.map(async raw => {
 							const id = raw.replace(/\D+/g, '');
-							const request = type !== 'roles' ? (await msg.client[type].fetch(id).catch(() => {})) : (await msg.guild[type].fetch(id)).catch(() => {});
-							if (!request || !request.id) {
-								fail.push(`\`${raw}\` ${msg.lan.edit[name[i]].fail.no}`);
-								console.log(fail);
-							}
+							const request = type !== 'roles' ? (await msg.client[type].fetch(id).catch(() => {})) : (await msg.guild[type].fetch(id));
+							if (!request || !request.id) fail.push(`\`${raw}\` ${msg.lan.edit[name[i]].fail.no}`);
 							else {
 								if (type !== 'users' && request.guild !== msg.guild) fail.push(`\`${raw}\` ${msg.lan.edit[name[i]].fail.wrongGuild}`);
 								else got.push(id);
@@ -135,19 +132,35 @@ module.exports = {
 						collected.first().delete().catch(() => {});
 						const endEmbed = new Discord.MessageEmbed()
 							.setAuthor(msg.lan2.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite);
-						if (got.length > 0) endEmbed.addField(msg.language.found, got.map(a => a));
+						if (got.length > 0) endEmbed.addField(msg.language.finished, got.map(a => a));
 						if (fail.length > 0) endEmbed.addField(msg.language.failed, fail.map(a => a));
 						m.edit(endEmbed).catch(() => {});
+						if (got.length > 0) {
+							got.forEach(id => { 
+								if (r[name[i]] && r[name[i]].includes(id)) {
+									const index = r[name[i]].indexOf(id);
+									r[name[i]].splice(index, 1);
+								} else if (r[name[i]].length > 0) r[name[i]].push(id);
+								else r[name[i]] = [id];
+							});
+							if (r[name[i]].length > 0) msg.client.ch.query(`UPDATE antispamsettings SET ${name[i]} = ARRAY[${r[name[i]]}] WHERE guildid = '${msg.guild.id}';`);
+							else msg.client.ch.query(`UPDATE antispamsettings SET ${name[i]} = null WHERE guildid = '${msg.guild.id}';`);
+						}
 					}
 				} 
 			}
-
 		} else this.setup(msg);
 	},
 	async setup(msg) {
 
 	},
-	async notValid(msg) {
+	async notValid(msg, m, name) {
+		const embed = new Discord.MessageEmbed()
+			.setAuthor(msg.lan2.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
+			.setDescription(msg.lan.notValid)
+			.addField(msg.lan.valid, msg.lan2[name].answers)
+			.setFooter(msg.lan.pleaseRestart);
+		msg.client.ch.reply(m, embed);
 
 	}
 };
