@@ -15,9 +15,9 @@ module.exports = {
 				const embed = new Discord.MessageEmbed()
 					.addFields(
 						{name: msg.lan.antispam, value: r.antispamtof ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled, inline: false},
-						{name: msg.lan.bpchannels, value: r.bpchannelid && r.bpchannelid !== [] ? r.bpchannelid.map(id => ` <#${id}>`) : msg.language.none, inline: false},
-						{name: msg.lan.bpusers, value: r.bpuserid && r.bpuserid !== [] ? r.bpuserid.map(id => ` <@${id}>`) : msg.language.none, inline: false},
-						{name: msg.lan.bproles, value: r.bproleid && r.bproleid !== [] ? r.bproleid.map(id => ` <@&${id}>`) : msg.language.none, inline: false},
+						{name: msg.lan.bpchannels, value: r.bpchannelid && r.bpchannelid !== [] ? `${r.bpchannelid.map(id => ` <#${id}>`)}`.length > 0 ? r.bpchannelid.map(id => ` <#${id}>`) : msg.language.none : msg.language.none, inline: false},
+						{name: msg.lan.bpusers, value: r.bpuserid && r.bpuserid !== [] ? `${r.bpuserid.map(id => ` <@${id}>`)}`.length > 0 ? r.bpuserid.map(id => ` <@${id}>`) : msg.language.none : msg.language.none, inline: false},
+						{name: msg.lan.bproles, value: r.bproleid && r.bproleid !== [] ? `${r.bproleid.map(id => ` <@&${id}>`)}`.length > 0 ? r.bproleid.map(id => ` <@&${id}>`) : msg.language.none : msg.language.none, inline: false},
 						{name: '\u200b', value: '\u200b', inline: false},
 						{name: '\u200b', value: `${msg.lan.readWarns}\n${r.readofwarnstof ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled}\n\n${msg.client.ch.stp(msg.lan.muteAfter, {amount: r.muteafterwarnsamount})}\n${msg.client.ch.stp(msg.lan.kickAfter, {amount: r.kickafterwarnsamount})}\n${msg.client.ch.stp(msg.lan.banAfter, {amount: r.banafterwarnsamount})}`, inline: false},
 						{name: '\u200b', value: '\u200b', inline: false},
@@ -53,9 +53,9 @@ module.exports = {
 				.setDescription('__'+msg.lan2.howToEdit+'__')
 				.addFields(
 					{name: msg.client.ch.stp(msg.lan2.antispamtof.name, {trigger: msg.lan2.antispamtof.trigger.includes('`') ? msg.lan2.antispamtof.trigger : msg.lan2.antispamtof.trigger.map(f => `\`${f}\``)}), value: r.antispamtof ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled, inline: false},
-					{name: msg.client.ch.stp(msg.lan2.bpchannelid.name, {trigger: msg.lan2.bpchannelid.trigger.includes('`') ? msg.lan2.bpchannelid.trigger : msg.lan2.bpchannelid.trigger.map(f => `\`${f}\``)}), value: r.bpchannelid && r.bpchannelid !== [] ? r.bpchannelid.map(id => ` <#${id}>`) : msg.language.none, inline: false},
-					{name: msg.client.ch.stp(msg.lan2.bpuserid.name, {trigger: msg.lan2.bpuserid.trigger.includes('`') ? msg.lan2.bpuserid.trigger : msg.lan2.bpuserid.trigger.map(f => `\`${f}\``)}), value: r.bpuserid && r.bpuserid !== [] ? r.bpuserid.map(id => ` <@${id}>`) : msg.language.none, inline: false},
-					{name: msg.client.ch.stp(msg.lan2.bproleid.name, {trigger: msg.lan2.bproleid.trigger.includes('`') ? msg.lan2.bproleid.trigger : msg.lan2.bproleid.trigger.map(f => `\`${f}\``)}), value: r.bproleid && r.bproleid !== [] ? r.bproleid.map(id => ` <@&${id}>`) : msg.language.none, inline: false},
+					{name: msg.client.ch.stp(msg.lan2.bpchannelid.name, {trigger: msg.lan2.bpchannelid.trigger.includes('`') ? msg.lan2.bpchannelid.trigger : msg.lan2.bpchannelid.trigger.map(f => `\`${f}\``)}), value: r.bpchannelid && r.bpchannelid !== [] ? `${r.bpchannelid.map(id => ` <#${id}>`)}`.length > 0 ? r.bpchannelid.map(id => ` <#${id}>`) : msg.language.none : msg.language.none, inline: false},
+					{name: msg.client.ch.stp(msg.lan2.bpuserid.name, {trigger: msg.lan2.bpuserid.trigger.includes('`') ? msg.lan2.bpuserid.trigger : msg.lan2.bpuserid.trigger.map(f => `\`${f}\``)}), value: r.bpuserid && r.bpuserid !== [] ? `${r.bpuserid.map(id => ` <@${id}>`)}`.length > 0 ? r.bpuserid.map(id => ` <@${id}>`) : msg.language.none : msg.language.none, inline: false},
+					{name: msg.client.ch.stp(msg.lan2.bproleid.name, {trigger: msg.lan2.bproleid.trigger.includes('`') ? msg.lan2.bproleid.trigger : msg.lan2.bproleid.trigger.map(f => `\`${f}\``)}), value: r.bproleid && r.bproleid !== [] ? `${r.bproleid.map(id => ` <@&${id}>`)}`.length > 0 ? r.bproleid.map(id => ` <@&${id}>`) : msg.language.none : msg.language.none, inline: false},
 					{name: '\u200b', value: '\u200b', inline: false},
 					{name: '\u200b', value: `${msg.client.ch.stp(msg.lan2.readofwarnstof.name, {trigger: msg.lan2.readofwarnstof.trigger.includes('`') ? msg.lan2.readofwarnstof.trigger : msg.lan2.readofwarnstof.trigger.map(f => `\`${f}\``)})}\n${r.readofwarnstof ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled}\n\n${msg.client.ch.stp(msg.lan2.muteafterwarnsamount.name, {amount: r.muteafterwarnsamount, trigger: msg.lan2.muteafterwarnsamount.trigger.includes('`') ? msg.lan2.muteafterwarnsamount.trigger : msg.lan2.muteafterwarnsamount.trigger.map(f => `\`${f}\``)})}\n${msg.client.ch.stp(msg.lan2.kickafterwarnsamount.name, {amount: r.kickafterwarnsamount, trigger: msg.lan2.kickafterwarnsamount.trigger.includes('`') ? msg.lan2.kickafterwarnsamount.trigger : msg.lan2.kickafterwarnsamount.trigger.map(f => `\`${f}\``)})}\n${msg.client.ch.stp(msg.lan2.banafterwarnsamount.name, {amount: r.banafterwarnsamount, trigger: msg.lan2.banafterwarnsamount.trigger.includes('`') ? msg.lan2.banafterwarnsamount.trigger : msg.lan2.banafterwarnsamount.trigger.map(f => `\`${f}\``)})}`, inline: false},
 					{name: '\u200b', value: '\u200b', inline: false},
@@ -96,11 +96,15 @@ module.exports = {
 							collected.first().delete().catch(() => {});
 							const editedEmbed = new Discord.MessageEmbed()
 								.setAuthor(msg.lan2.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
-								.setDescription(msg.client.ch.stp(msg.lan.edited, {edited: msg.client.ch.stp(msg.lan.edit[name[i]].name.replace(/\*/g, ''), {trigger: msg.lan.edit[name[i]].trigger.map(e => `${e}`), amount: '-'})}))
+								.setDescription(msg.client.ch.stp(msg.lan.done, {loading: msg.client.constants.emotes.loading})+'\n\n'+msg.client.ch.stp(msg.lan.edited, {edited: msg.client.ch.stp(msg.lan.edit[name[i]].name.replace(/\*/g, ''), {trigger: msg.lan.edit[name[i]].trigger.map(e => `${e}`), amount: '-'})}))
 								.addField(msg.lan.oldValue, r[name[i]])
 								.addField(msg.lan.newValue, answer);
 							m.edit(editedEmbed).catch(() => {});
 							msg.client.ch.query(`UPDATE antispamsettings SET ${name[i]} = ${answer} WHERE guildid = '${msg.guild.id}';`);
+							const index = msg.args.indexOf(msg.language.edit);
+							msg.args.splice(index, 1);
+							msg.m = m;
+							setTimeout(() => {this.exe(msg);}, 5000);
 						} else this.notValid(msg, collected.first(), name[i]);
 					} else if (msg.client.constants.commands.settings.edit.antispam[name[i]] == 'boolean') {
 						const boolAnswer = answer == 'true' ? true : answer == 'false' ? false : undefined;
@@ -109,11 +113,15 @@ module.exports = {
 							collected.first().delete().catch(() => {});
 							const editedEmbed = new Discord.MessageEmbed()
 								.setAuthor(msg.lan2.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
-								.setDescription(msg.client.ch.stp(msg.lan.edited, {edited: msg.client.ch.stp(msg.lan.edit[name[i]].name.replace(/\*/g, ''), {trigger: msg.lan.edit[name[i]].trigger.map(e => `${e}`), amount: '-'})}))
+								.setDescription(msg.client.ch.stp(msg.lan.done, {loading: msg.client.constants.emotes.loading})+'\n\n'+msg.client.ch.stp(msg.lan.edited, {edited: msg.client.ch.stp(msg.lan.edit[name[i]].name.replace(/\*/g, ''), {trigger: msg.lan.edit[name[i]].trigger.map(e => `${e}`), amount: '-'})}))
 								.addField(msg.lan.oldValue, r[name[i]])
 								.addField(msg.lan.newValue, answer);
 							m.edit(editedEmbed).catch(() => {});
 							msg.client.ch.query(`UPDATE antispamsettings SET ${name[i]} = ${answer} WHERE guildid = '${msg.guild.id}';`);
+							const index = msg.args.indexOf(msg.language.edit);
+							msg.args.splice(index, 1);
+							msg.m = m;
+							setTimeout(() => {this.exe(msg);}, 5000);
 						}
 					} else if (msg.client.constants.commands.settings.edit.antispam[name[i]] == 'mention') {
 						const type = name[i].replace(/bp/g, '').replace(/id/g, '')+'s';
@@ -149,9 +157,7 @@ module.exports = {
 						const index = msg.args.indexOf(msg.language.edit);
 						msg.args.splice(index, 1);
 						msg.m = m;
-						setTimeout(() => {
-							this.exe(msg);
-						}, 5000);
+						setTimeout(() => {this.exe(msg);}, 5000);
 					}
 				} 
 			}
@@ -173,9 +179,7 @@ module.exports = {
 				.setAuthor(msg.lan.setup.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
 				.setDescription(msg.client.ch.stp(msg.lan.setup.done, {loading: msg.client.constants.emotes.loading}));
 			await msg.m.edit(endEmbed);
-			setTimeout(() => {
-				this.exe(msg);
-			}, 5000);
+			setTimeout(() => {this.exe(msg);}, 5000);
 		} else if (answer == msg.language.no) {
 			collected.first().delete().catch(() => {});
 			const endEmbed = new Discord.MessageEmbed()
@@ -196,7 +200,7 @@ module.exports = {
 
 async function channelchecker(msg, res) {
 	const r = res.rows[0];
-	if (!r.bpchannelid) return false;
+	if (!r.bpchannelid || r.bpchannelid.length < 0) return false;
 	else {
 		r.bpchannelid.forEach((channelid) => {
 			const channel = msg.guild.channels.cache.get(channelid);
@@ -212,7 +216,7 @@ async function channelchecker(msg, res) {
 }
 async function rolechecker(msg, res) {
 	const r = res.rows[0];
-	if (!r.bproleid) return false;
+	if (!r.bproleid || r.bproleid.length < 0) return false;
 	else {
 		r.bproleid.forEach((roleid) => {
 			const role = msg.guild.roles.cache.get(roleid);
