@@ -52,24 +52,24 @@ module.exports = {
 			const embed = new Discord.MessageEmbed()
 				.setDescription('__'+msg.lan2.howToEdit+'__')
 				.addFields(
-					{name: msg.client.ch.stp(msg.lan2.antispamtof.name, {trigger: msg.lan2.antispamtof.trigger}), value: r.antispamtof ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled, inline: false},
-					{name: msg.client.ch.stp(msg.lan2.bpchannelid.name, {trigger: msg.lan2.bpchannelid.trigger}), value: r.bpchannelid && r.bpchannelid !== [] ? r.bpchannelid.map(id => ` <#${id}>`) : msg.language.none, inline: false},
-					{name: msg.client.ch.stp(msg.lan2.bpuserid.name, {trigger: msg.lan2.bpuserid.trigger}), value: r.bpuserid && r.bpuserid !== [] ? r.bpuserid.map(id => ` <@${id}>`) : msg.language.none, inline: false},
-					{name: msg.client.ch.stp(msg.lan2.bproleid.name, {trigger: msg.lan2.bproleid.trigger}), value: r.bproleid && r.bproleid !== [] ? r.bproleid.map(id => ` <@&${id}>`) : msg.language.none, inline: false},
+					{name: msg.client.ch.stp(msg.lan2.antispamtof.name, {trigger: msg.lan2.antispamtof.trigger.includes('`') ? msg.lan2.antispamtof.trigger : msg.lan2.antispamtof.trigger.map(f => `\`${f}\``)}), value: r.antispamtof ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled, inline: false},
+					{name: msg.client.ch.stp(msg.lan2.bpchannelid.name, {trigger: msg.lan2.bpchannelid.trigger.includes('`') ? msg.lan2.bpchannelid.trigger : msg.lan2.bpchannelid.trigger.map(f => `\`${f}\``)}), value: r.bpchannelid && r.bpchannelid !== [] ? r.bpchannelid.map(id => ` <#${id}>`) : msg.language.none, inline: false},
+					{name: msg.client.ch.stp(msg.lan2.bpuserid.name, {trigger: msg.lan2.bpuserid.trigger.includes('`') ? msg.lan2.bpuserid.trigger : msg.lan2.bpuserid.trigger.map(f => `\`${f}\``)}), value: r.bpuserid && r.bpuserid !== [] ? r.bpuserid.map(id => ` <@${id}>`) : msg.language.none, inline: false},
+					{name: msg.client.ch.stp(msg.lan2.bproleid.name, {trigger: msg.lan2.bproleid.trigger.includes('`') ? msg.lan2.bproleid.trigger : msg.lan2.bproleid.trigger.map(f => `\`${f}\``)}), value: r.bproleid && r.bproleid !== [] ? r.bproleid.map(id => ` <@&${id}>`) : msg.language.none, inline: false},
 					{name: '\u200b', value: '\u200b', inline: false},
-					{name: '\u200b', value: `${msg.client.ch.stp(msg.lan2.readofwarnstof.name, {trigger: msg.lan2.readofwarnstof.trigger})}\n${r.readofwarnstof ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled}\n\n${msg.client.ch.stp(msg.lan2.muteafterwarnsamount.name, {amount: r.muteafterwarnsamount, trigger: msg.lan2.muteafterwarnsamount.trigger})}\n${msg.client.ch.stp(msg.lan2.kickafterwarnsamount.name, {amount: r.kickafterwarnsamount, trigger: msg.lan2.kickafterwarnsamount.trigger})}\n${msg.client.ch.stp(msg.lan2.banafterwarnsamount.name, {amount: r.banafterwarnsamount, trigger: msg.lan2.banafterwarnsamount.trigger})}`, inline: false},
+					{name: '\u200b', value: `${msg.client.ch.stp(msg.lan2.readofwarnstof.name, {trigger: msg.lan2.readofwarnstof.trigger.includes('`') ? msg.lan2.readofwarnstof.trigger : msg.lan2.readofwarnstof.trigger.map(f => `\`${f}\``)})}\n${r.readofwarnstof ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled}\n\n${msg.client.ch.stp(msg.lan2.muteafterwarnsamount.name, {amount: r.muteafterwarnsamount, trigger: msg.lan2.muteafterwarnsamount.trigger.includes('`') ? msg.lan2.muteafterwarnsamount.trigger : msg.lan2.muteafterwarnsamount.trigger.map(f => `\`${f}\``)})}\n${msg.client.ch.stp(msg.lan2.kickafterwarnsamount.name, {amount: r.kickafterwarnsamount, trigger: msg.lan2.kickafterwarnsamount.trigger.includes('`') ? msg.lan2.kickafterwarnsamount.trigger : msg.lan2.kickafterwarnsamount.trigger.map(f => `\`${f}\``)})}\n${msg.client.ch.stp(msg.lan2.banafterwarnsamount.name, {amount: r.banafterwarnsamount, trigger: msg.lan2.banafterwarnsamount.trigger.includes('`') ? msg.lan2.banafterwarnsamount.trigger : msg.lan2.banafterwarnsamount.trigger.map(f => `\`${f}\``)})}`, inline: false},
 					{name: '\u200b', value: '\u200b', inline: false},
-					{name: msg.client.ch.stp(msg.lan2.giveofficialwarnstof.name, {trigger: msg.lan2.giveofficialwarnstof.trigger}), value: r.giveofficialwarnstof ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled, inline: true},
-					{name: msg.client.ch.stp(msg.lan2.muteenabledtof.name, {trigger: msg.lan2.muteenabledtof.trigger}), value: r.muteenabledtof ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled, inline: true},
-					{name: msg.client.ch.stp(msg.lan2.kickenabledtof.name, {trigger: msg.lan2.kickenabledtof.trigger}), value: r.kickenabledtof ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled, inline: true},
-					{name: msg.client.ch.stp(msg.lan2.banenabledtof.name, {trigger: msg.lan2.banenabledtof.trigger}), value: r.banenabledtof ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled, inline: true},
+					{name: msg.client.ch.stp(msg.lan2.giveofficialwarnstof.name, {trigger: msg.lan2.giveofficialwarnstof.trigger.includes('`') ? msg.lan2.giveofficialwarnstof.trigger : msg.lan2.giveofficialwarnstof.trigger.map(f => `\`${f}\``)}), value: r.giveofficialwarnstof ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled, inline: true},
+					{name: msg.client.ch.stp(msg.lan2.muteenabledtof.name, {trigger: msg.lan2.muteenabledtof.trigger.includes('`') ? msg.lan2.muteenabledtof.trigger : msg.lan2.muteenabledtof.trigger.map(f => `\`${f}\``)}), value: r.muteenabledtof ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled, inline: true},
+					{name: msg.client.ch.stp(msg.lan2.kickenabledtof.name, {trigger: msg.lan2.kickenabledtof.trigger.includes('`') ? msg.lan2.kickenabledtof.trigger : msg.lan2.kickenabledtof.trigger.map(f => `\`${f}\``)}), value: r.kickenabledtof ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled, inline: true},
+					{name: msg.client.ch.stp(msg.lan2.banenabledtof.name, {trigger: msg.lan2.banenabledtof.trigger.includes('`') ? msg.lan2.banenabledtof.trigger : msg.lan2.banenabledtof.trigger.map(f => `\`${f}\``)}), value: r.banenabledtof ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled, inline: true},
 				)
 				.setAuthor(msg.lan2.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
 				.setFooter(msg.lan2.howToEdit);
 			const m = await msg.client.ch.reply(msg, embed);
 			let collected = await msg.channel.awaitMessages(m => m.author.id == msg.author.id, {max: 1, time: 60000});
 			if (!collected.first()) return;
-			const editAnswers = {};
+			const editAnswers = {}; 
 			let answer = collected.first().content.toLowerCase();
 			for (let i = 0; i < Object.keys(msg.lan.edit).length; i++) {
 				const name = Object.getOwnPropertyNames(msg.lan.edit);
@@ -84,7 +84,7 @@ module.exports = {
 					collected.first().delete().catch(() => {});
 					const editEmbed = new Discord.MessageEmbed()
 						.setAuthor(msg.lan2.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
-						.addField(msg.lan.valid, msg.lan2[name[i]].answers);
+						.addField(msg.language.commands.settings.valid, msg.lan2[name[i]].answers);
 					if (msg.lan2[name[i]].recommended) editEmbed.setDescription('**'+msg.client.ch.stp(msg.lan.edit[name[i]].name, {trigger: msg.lan.edit[name[i]].trigger.map(e => `\`${e}\``), amount: '-'})+'**\n\n'+msg.lan2[name[i]].recommended);
 					else editEmbed.setDescription('**'+msg.client.ch.stp(msg.lan.edit[name[i]].name, {trigger: msg.lan2[name[i]].trigger.map(e => `\`${e}\``), amount: '-'})+'**');
 					await m.edit(editEmbed).catch(() => {});
@@ -113,7 +113,6 @@ module.exports = {
 								.addField(msg.lan.oldValue, r[name[i]])
 								.addField(msg.lan.newValue, answer);
 							m.edit(editedEmbed).catch(() => {});
-							console.log(`UPDATE antispamsettings SET ${name[i]} = ${answer} WHERE guildid = '${msg.guild.id}';`);
 							msg.client.ch.query(`UPDATE antispamsettings SET ${name[i]} = ${answer} WHERE guildid = '${msg.guild.id}';`);
 						}
 					} else if (msg.client.constants.commands.settings.edit.antispam[name[i]] == 'mention') {
@@ -162,7 +161,7 @@ module.exports = {
 		const embed = new Discord.MessageEmbed()
 			.setAuthor(msg.lan.setup.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
 			.setDescription(msg.lan.setup.question)
-			.addField(msg.lan.valid, msg.lan.setup.answers);
+			.addField(msg.language.commands.settings.valid, msg.lan.setup.answers);
 		msg.m = await msg.client.ch.reply(msg, embed);
 		let collected = await msg.channel.awaitMessages(m => m.author.id == msg.author.id, {max: 1, time: 60000});
 		if (!collected.first()) return;
@@ -189,7 +188,7 @@ module.exports = {
 		const embed = new Discord.MessageEmbed()
 			.setAuthor(msg.lan.setup.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
 			.setDescription(msg.lan.notValid)
-			.addField(msg.lan.valid, msg.lan2[name].answers)
+			.addField(msg.language.commands.settings.valid, msg.lan2[name].answers)
 			.setFooter(msg.lan.pleaseRestart);
 		msg.client.ch.reply(m, embed);
 	}
