@@ -1213,7 +1213,139 @@
                 }
             },
             "blacklist": {
-                "category": ["Auto Moderation"]
+                "category": ["Auto Moderation"],
+                "words": "Blacklisted Words",
+                "blacklist": "Blacklist",
+                "punishments": "Punishments",
+                "author": "Ayako Blacklist Settings",
+                "warn": "Warn Members",
+                "mute": "Mute Members",
+                "kick": "Kick Members",
+                "ban": "Ban Members",
+                "bpchannels": "Bypassed Channels",
+                "bproles": "Bypassed Roles",
+                "bpusers": "Bypassed Users",
+                "warnAfter": "Warn after **{{amount}}** blacklisted Words",
+                "muteAfter": "Mute after **{{amount}}** blacklisted Words",
+                "kickAfter": "Kick after **{{amount}}** blacklisted Words",
+                "banAfter": "Ban after **{{amount}}** blacklisted Words",
+                "clearnInt": "Clear Interval (The Interval in which the blacklisted-words-said Count is cleared)",
+                "howToEdit": "Edit by typing \n`edit` in the next 30 Seconds or\n`{{prefix}}settings blacklist edit`",
+                "notValid": "This Answer was not valid",
+                "edited": "Successfully edited\n```{{edited}}```",
+                "oldValue": "Old value",
+                "pleaseRestart": "Please Restart",
+                "newValue": "New value",
+                "done": "Edit finished\nRedirecting {{loading}}",
+                "clearInt": "Clear Interval",
+                "clearInt2": "(The Interval in which the blacklisted-words-said Count is cleared)\n",
+                "setup": {
+                    "author": "[Setup Mode] Ayako Blacklist Settings",
+                    "question": "Would you like to set-up Ayako Blacklist?",
+                    "answers": "`Yes` or `No`",
+                    "done": "Setup finished\nRedirecting {{loading}}",
+                    "abort": "Setup aborted"
+                },
+                "edit": {
+                    "howToEdit": "Enter any of the triggers shown in the [box] infront of the option you want to edit",
+                    "author": "[Edit Mode] Ayako Blacklist Settings",
+                    "active": {
+                        "name": "[{{trigger}}] Blacklist",
+                        "trigger": ["`active`"],
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "words": {
+                        "name": "[{{trigger}}] Blacklisted Words",
+                        "trigger": ["`words`"],
+                        "answers": "`words`",
+                        "recommended": "If you enter Multiple Words or Sentences, split them with `#`"
+                    },
+                    "warntof": {
+                        "name": "[{{trigger}}] Warn Members",
+                        "trigger": ["`wm`", "`warn`"],
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "mutetof": {
+                        "name": "[{{trigger}}] Mute Members",
+                        "trigger": ["`mm`", "`mute`"],
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "kicktof": {
+                        "name": "[{{trigger}}] Kick Members",
+                        "trigger": ["`km`", "`kick`"],
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `False`"
+                    },
+                    "bantof": {
+                        "name": "[{{trigger}}] Ban Members",
+                        "trigger": ["`bm`", "`ban`"],
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "warnafter": {
+                        "name": "[{{trigger}}] Warn after **{{amount}}** blacklisted Words",
+                        "trigger": ["`wa`", "`warn after`"],
+                        "answers": "`Number`",
+                        "recommended": "Recommended: `4`"
+                    },
+                    "muteafter": {
+                        "name": "[{{trigger}}] Mute after **{{amount}}** blacklisted Words",
+                        "trigger": ["`ma`", "`mute after`"],
+                        "answers": "`Number`",
+                        "recommended": "Recommended: `6`"
+                    },
+                    "kickafter": {
+                        "name": "[{{trigger}}] Kick after **{{amount}}** blacklisted Words",
+                        "trigger": ["`ka`", "`kick after`"],
+                        "answers": "`Number`",
+                        "recommended": "Recommended: `8`"
+                    },
+                    "banafter": {
+                        "name": "[{{trigger}}] Ban after **{{amount}}** blacklisted Words",
+                        "trigger": ["`ba`", "`ban after`"],
+                        "answers": "`Number`",
+                        "recommended": "Recommended: `10`"
+                    },
+                    "bpchannelid": {
+                        "name": "[{{trigger}}] Bypassed Channels",
+                        "trigger": ["`channel`"],
+                        "answers": "`Mention(s) or ID(s)`",
+                        "recommended": "This is a switch.\nIf the entered Channel is already added it will be removed.",
+                        "fail": {
+                            "no": "I couldn't find this Channel\n",
+                            "wrongGuild": "This Channel is not Part of this Server\n"
+                        }
+                    },
+                    "bproleid": {
+                        "name": "[{{trigger}}] Bypassed Roles",
+                        "trigger": ["`role`"],
+                        "answers": "`Mention(s) or ID(s)`",
+                        "recommended": "This is a switch.\nIf the entered Role is already added it will be removed.",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
+                    },
+                    "bpuserid": {
+                        "name": "[{{trigger}}] Bypassed Users",
+                        "trigger": ["`user`"],
+                        "answers": "`Mention(s) or ID(s)`",
+                        "recommended": "This is a switch.\nIf the entered User is already added it will be removed.",
+                        "fail": {
+                            "no": "I couldn't find this User\n",
+                            "wrongGuild": "This User is not Part of this Server\n"
+                        }
+                    },
+                    "clearint": {
+                        "name": "[{{trigger}}] Clear Interval",
+                        "trigger": ["`clear`"],
+                        "answers": "`time`",
+                        "recommended": "Recommended: `24 hours`"
+                    }
+                }
             },
             "cooldowns": {
                 "category": ["Automation"]

@@ -49,7 +49,6 @@ module.exports = {
 	async reply(msg, content, options) {
 		let m;
 		options ? options.failIfNotExists = false : '';
-		console.log(content, options)
 		if (typeof(content) == 'string') {
 			if (options) m = await msg.reply(content, {options}).catch((e) => {this.logger('Reply Error', e);});
 			else m = await msg.reply(content, {failIfNotExists: false}).catch((e) => {this.logger('Reply Error', e);});

@@ -410,8 +410,24 @@
                     "botroleid": "mention",
                     "userroleid": "mention",
                     "allroleid": "mention"
+                },
+                "blacklist": {
+                    "active": "boolean",
+                    "warntof": "boolean",
+                    "mutetof": "boolean",
+                    "kicktof": "boolean",
+                    "bantof": "boolean",
+                    "warnafter": "number",
+                    "muteafter": "number",
+                    "kickafter": "boolean",
+                    "banafter": "mention",
+                    "bpchannelid": "mention",
+                    "bproleid": "mention",
+                    "bpuserid": "mention",
+                    "clearint": "time",
+                    "words": "string"
                 }
-            }
+            }   
         }
     }
 }
