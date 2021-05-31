@@ -21,7 +21,6 @@ module.exports = {
 						wordText += wordArr[i]+new Array(22 - wordArr[i].length).join(' ');
 					}
 				} else (wordText = msg.language.none);
-				console.log(r.words);
 				const embed = new Discord.MessageEmbed()
 					.setDescription(msg.lan.words+'\n\n'+msg.client.ch.makeCodeBlock(wordText))
 					.addFields(
