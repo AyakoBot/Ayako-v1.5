@@ -29,7 +29,7 @@ module.exports = {
 					.setColor(msg.client.constants.commands.settings.color)
 					.setAuthor(msg.lan.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite);
 				if (msg.member.permissions.has(new Discord.Permissions(this.perm))) embed.setDescription(msg.client.ch.stp(msg.lan.howToEdit, {prefix: msg.client.constants.standard.prefix}));
-				msg.client.ch.reply(msg, embed);
+				msg.m ? msg.m.edit(embed) : msg.client.ch.reply(msg, embed);
 				if (msg.member.permissions.has(new Discord.Permissions(this.perm))) {
 					const collected = await msg.channel.awaitMessages(m => m.author.id == msg.author.id, {max: 1, time: 30000});
 					if (!collected || !collected.first()) return;
@@ -131,7 +131,8 @@ module.exports = {
 						}));
 						collected.first().delete().catch(() => {});
 						const endEmbed = new Discord.MessageEmbed()
-							.setAuthor(msg.lan2.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite);
+							.setAuthor(msg.lan2.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
+							.setDescription(msg.client.ch.stp(msg.lan.done, {loading: msg.client.constants.emotes.loading}));
 						if (got.length > 0) endEmbed.addField(msg.language.finished, got.map(a => a));
 						if (fail.length > 0) endEmbed.addField(msg.language.failed, fail.map(a => a));
 						m.edit(endEmbed).catch(() => {});
@@ -140,33 +141,59 @@ module.exports = {
 								if (r[name[i]] && r[name[i]].includes(id)) {
 									const index = r[name[i]].indexOf(id);
 									r[name[i]].splice(index, 1);
-								} else if (r[name[i]].length > 0) r[name[i]].push(id);
+								} else if (r[name[i]] && r[name[i]].length > 0) r[name[i]].push(id);
 								else r[name[i]] = [id];
 							});
 							if (r[name[i]].length > 0) msg.client.ch.query(`UPDATE antispamsettings SET ${name[i]} = ARRAY[${r[name[i]]}] WHERE guildid = '${msg.guild.id}';`);
 							else msg.client.ch.query(`UPDATE antispamsettings SET ${name[i]} = null WHERE guildid = '${msg.guild.id}';`);
 						}
+						const index = msg.args.indexOf(msg.language.edit);
+						msg.args.splice(index, 1);
+						msg.m = m;
+						setTimeout(() => {
+							this.exe(msg);
+						}, 5000);
 					}
 				} 
 			}
 		} else this.setup(msg);
 	},
 	async setup(msg) {
-
+		const embed = new Discord.MessageEmbed()
+			.setAuthor(msg.lan.setup.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
+			.setDescription(msg.lan.setup.question)
+			.addField(msg.lan.valid, msg.lan.setup.answers);
+		msg.m = await msg.client.ch.reply(msg, embed);
+		let collected = await msg.channel.awaitMessages(m => m.author.id == msg.author.id, {max: 1, time: 60000});
+		if (!collected.first()) return;
+		const answer = collected.first().content.toLowerCase();
+		if (answer == msg.language.yes) {
+			await msg.client.ch.query(`INSERT INTO antispamsettings (antispamtof, giveofficialwarnstof, muteafterwarnsamount, kickafterwarnsamount, banafterwarnsamount, readofwarnstof, muteenabledtof, kickenabledtof, banenabledtof, guildid) VALUES (true, true, 3, 5, 6, true, true, false, true, '${msg.guild.id}');`);
+			collected.first().delete().catch(() => {});
+			const endEmbed = new Discord.MessageEmbed()
+				.setAuthor(msg.lan.setup.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
+				.setDescription(msg.client.ch.stp(msg.lan.setup.done, {loading: msg.client.constants.emotes.loading}));
+			await msg.m.edit(endEmbed);
+			setTimeout(() => {
+				this.exe(msg);
+			}, 5000);
+		} else if (answer == msg.language.no) {
+			collected.first().delete().catch(() => {});
+			const endEmbed = new Discord.MessageEmbed()
+				.setAuthor(msg.lan.setup.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
+				.setDescription(msg.lan.setup.abort);
+			msg.m.edit(endEmbed);
+		}
 	},
 	async notValid(msg, m, name) {
 		const embed = new Discord.MessageEmbed()
-			.setAuthor(msg.lan2.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
+			.setAuthor(msg.lan.setup.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
 			.setDescription(msg.lan.notValid)
 			.addField(msg.lan.valid, msg.lan2[name].answers)
 			.setFooter(msg.lan.pleaseRestart);
 		msg.client.ch.reply(m, embed);
-
 	}
 };
-
-
-
 
 async function channelchecker(msg, res) {
 	const r = res.rows[0];

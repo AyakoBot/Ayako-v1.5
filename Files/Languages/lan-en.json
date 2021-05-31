@@ -711,6 +711,8 @@
     "mentionable": "Mentionable",
     "tags": "Tags",
     "avatar": "Avatar",
+    "yes": "yes",
+    "no": "no",
     "found": "Found",
     "failed": "Failed",
     "username": "Username",
@@ -1051,6 +1053,14 @@
                 "oldValue": "Old value",
                 "pleaseRestart": "Please Restart",
                 "newValue": "New value",
+                "done": "Edit finished\nRedirecting {{loading}}",
+                "setup": {
+                    "author": "[Setup Mode] Ayako Anti-Spam Settings",
+                    "question": "Would you to set-up Ayako Anti-Spam?",
+                    "answers": "`Yes` or `No`",
+                    "done": "Setup finished\nRedirecting {{loading}}",
+                    "abort": "Setup aborted"
+                },
                 "edit": {
                     "author": "[Edit Mode] Ayako Anti-Spam Settings",
                     "howToEdit": "Enter any of the triggers shown in the [box] infront of the option you want to edit",
