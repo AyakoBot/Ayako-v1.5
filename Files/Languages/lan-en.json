@@ -1022,6 +1022,7 @@
             "usage": ["restart"]
         },
         "settings": {
+            "valid": "Valid Answers",
             "categoy": "Info",
             "description": "Display the Ayako Server Settings",
             "usage": ["settings", "settings [command]"],
@@ -1047,7 +1048,6 @@
                 "bpusers": "Bypassed Users",
                 "readWarns": "**Read Warnings** (required for the following 3 options)",
                 "howToEdit": "Edit by typing \n`edit` in the next 30 Seconds or\n`{{prefix}}settings antispam edit`",
-                "valid": "Valid Answers",
                 "notValid": "This Answer was not valid",
                 "edited": "Successfully edited\n```{{edited}}```",
                 "oldValue": "Old value",
@@ -1056,7 +1056,7 @@
                 "done": "Edit finished\nRedirecting {{loading}}",
                 "setup": {
                     "author": "[Setup Mode] Ayako Anti-Spam Settings",
-                    "question": "Would you to set-up Ayako Anti-Spam?",
+                    "question": "Would you like to set-up Ayako Anti-Spam?",
                     "answers": "`Yes` or `No`",
                     "done": "Setup finished\nRedirecting {{loading}}",
                     "abort": "Setup aborted"
@@ -1151,7 +1151,66 @@
                 }
             },
             "autorole": {
-                "category": ["Automation"]
+                "category": ["Automation"],
+                "howToEdit": "Edit by typing \n`edit` in the next 30 Seconds or\n`{{prefix}}settings autorole edit`",
+                "author": "Ayako Auto-Role Settings",
+                "autorole": "Auto-Role",
+                "botRole": "Roles given to joining Bots",
+                "userRole": "Roles given to joining Users",
+                "allRole": "Roles given to joining Bots and Users",
+                "notValid": "This Answer was not valid",
+                "edited": "Successfully edited\n```{{edited}}```",
+                "oldValue": "Old value",
+                "pleaseRestart": "Please Restart",
+                "newValue": "New value",
+                "done": "Edit finished\nRedirecting {{loading}}",
+                "setup": {
+                    "author": "[Setup Mode] Ayako Auto-Role Settings",
+                    "question": "Would you like to set-up Ayako Auto-Role?",
+                    "answers": "`Yes` or `No`",
+                    "done": "Setup finished\nRedirecting {{loading}}",
+                    "abort": "Setup aborted"
+                },
+                "edit": {
+                    "howToEdit": "Enter any of the triggers shown in the [box] infront of the option you want to edit",
+                    "author": "[Edit Mode] Ayako Auto-Role Settings",
+                    "active": {
+                        "name": "[{{trigger}}] Auto-Role",
+                        "trigger": ["`active`"],
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "botroleid": {
+                        "name": "[{{trigger}}] Roles given to joining Bots",
+                        "trigger": ["`bots`"],
+                        "answers": "`Mention(s) or ID(s)`",
+                        "recommended": "This is a switch.\nIf the entered Role is already added it will be removed.",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
+                    },
+                    "userroleid": {
+                        "name": "[{{trigger}}] Roles given to joining Users",
+                        "trigger": ["`users`"],
+                        "answers": "`Mention(s) or ID(s)`",
+                        "recommended": "This is a switch.\nIf the entered Role is already added it will be removed.",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
+                    },
+                    "allroleid": {
+                        "name": "[{{trigger}}] Roles given to joining Bots and Users",
+                        "trigger": ["`all`"],
+                        "answers": "`Mention(s) or ID(s)`",
+                        "recommended": "This is a switch.\nIf the entered Role is already added it will be removed.",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
+                    }
+                }
             },
             "blacklist": {
                 "category": ["Auto Moderation"]

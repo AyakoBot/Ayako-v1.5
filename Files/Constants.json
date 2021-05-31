@@ -404,6 +404,12 @@
                     "bproleid": "mention",
                     "bpuserid": "mention",
                     "readofwarnstof": "boolean"
+                },
+                "autorole": {
+                    "active": "boolean",
+                    "botroleid": "mention",
+                    "userroleid": "mention",
+                    "allroleid": "mention"
                 }
             }
         }
