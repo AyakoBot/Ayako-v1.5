@@ -434,7 +434,7 @@
                 },
                 "interactions": {
                     "size": "boolean",
-                    "block": "name"
+                    "block": "string"
                 }
             }   
         }

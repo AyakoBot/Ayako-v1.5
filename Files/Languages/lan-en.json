@@ -1420,28 +1420,29 @@
                 "oldValue": "Old value",
                 "newValue": "New value",
                 "size": "Interaction Size",
-                "big": "big",
-                "small": "small",
-                "block": "Blocked Interactions",
+                "big": "Big",
+                "small": "Small",
+                "block": "**Blocked Interactions**",
                 "setup": {
-                    "author": "[Setup Mode] Ayako Interaction Settings",
                     "question": "Would you like to set-up Ayako Interaction?",
                     "answers": "`Yes` or `No`",
                     "done": "Setup finished\nRedirecting {{loading}}",
                     "abort": "Setup aborted"
                 },
                 "edit": { 
+                    "howToEdit": "Enter any of the triggers shown in the [box] infront of the option you want to edit",
+                    "author": "[Edit Mode] Ayako Interaction Settings",
                     "size": {
                         "name": "[{{trigger}}] Interaction Size",
                         "trigger": ["`size`"],
-                        "answers": "`True` or `False`",
+                        "answers": "`Big` or `Small`",
                         "recommended": "Recommended: `small`"
                     },
                     "block": {
                         "name": "[{{trigger}}] Blocked Interactions",
                         "trigger": ["`block`"],
                         "answers": "Interaction Name",
-                        "recommended": "(`pat`, `hug`, `cuddle` etc.)`"
+                        "recommended": "(`pat`, `hug`, `cuddle` etc.)"
                     }
                 }
             },

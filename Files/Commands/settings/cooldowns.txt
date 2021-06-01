@@ -5,35 +5,22 @@ module.exports = {
 	perm: 8192n,
 	type: 1,
 	async exe(msg) {
-		const res = await msg.client.ch.query(`SELECT * FROM blacklist WHERE guildid = '${msg.guild.id}';`);
+		const res = await msg.client.ch.query(`SELECT * FROM cooldowns WHERE guildid = '${msg.guild.id}';`);
 		if (msg.args[1] && msg.args[1].toLowerCase() === msg.language.edit) this.edit(msg);
 		else {
 			if (res && res.rowCount > 0) {
-				let r = res.rows[0];
-				const rolecheck = await rolechecker(msg, res);
-				const channelcheck = await channelchecker(msg, res);
-				if (rolecheck || channelcheck) r = (await msg.client.ch.query(`SELECT * FROM blacklist WHERE guildid = '${msg.guild.id}';`)).rows[0];
-				const wordArr = [];
-				let wordText = '';
-				if (r.words && r.words.length > 0) {
-					for (let i = 0; i < r.words.length; i++) {
-						wordArr[i] = `${r.words[i]}⠀`;
-						wordText += wordArr[i]+new Array(22 - wordArr[i].length).join(' ');
-					}
-				} else (wordText = msg.language.none);
+				const channelText = [];
+				for (const row of res.rows) {
+					const channel = msg.client.channels.cache.get(row.channelid);
+					if (channel) channelText.push(`${channel} / \`${channel.name}\` / \`${channel.id}\` - \`${row.command} - ${ms(parseInt(row.cooldown))}\``);
+					else msg.client.ch.query(`DELETE FROM cooldowns WHERE channelid = '${row.channelid}';`);
+				}
+				const r = res.rows[0];
+
 				const embed = new Discord.MessageEmbed()
-					.setDescription(msg.lan.words+'\n\n'+msg.client.ch.makeCodeBlock(wordText))
+					.setDescription(channelText.join())
 					.addFields(
-						{name: msg.lan.blacklist, value: r.active ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled, inline: false},
-						{name: msg.lan.words, value: r.words && r.words !== [] ? `${r.words.map(word => `\`${word}\``)}`.length > 0 ? `${r.words.map(word => `\`${word}\``)}`.replace(/\n/, ' ') : msg.language.none : msg.language.none},
-						{name: '\u200b', value: '\u200b', inline: false},
-						{name: msg.lan.bpchannels, value: r.bpchannelid && r.bpchannelid !== [] ? `${r.bpchannelid.map(id => ` <#${id}>`)}`.length > 0 ? r.bpchannelid.map(id => ` <#${id}>`) : msg.language.none : msg.language.none, inline: false},
-						{name: msg.lan.bpusers, value: r.bpuserid && r.bpuserid !== [] ? `${r.bpuserid.map(id => ` <@${id}>`)}`.length > 0 ? r.bpuserid.map(id => ` <@${id}>`) : msg.language.none : msg.language.none, inline: false},
-						{name: msg.lan.bproles, value: r.bproleid && r.bproleid !== [] ? `${r.bproleid.map(id => ` <@&${id}>`)}`.length > 0 ? r.bproleid.map(id => ` <@&${id}>`) : msg.language.none : msg.language.none, inline: false},
-						{name: '\u200b', value: '\u200b', inline: false},
-						{name: msg.lan.punishments, value: `${msg.lan.warn}\n${r.warntof ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled}\n${msg.lan.mute}\n${r.mutetof ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled}\n${msg.lan.kick}\n${r.kicktof ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled}\n${msg.lan.ban}\n${r.bantof ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled}`, inline: false},
-						{name: '\u200b', value: `${msg.client.ch.stp(msg.lan.warnAfter, {amount: r.warnafter})}\n${msg.client.ch.stp(msg.lan.muteAfter, {amount: r.muteafter})}\n${msg.client.ch.stp(msg.lan.kickAfter, {amount: r.kickafter})}\n${msg.client.ch.stp(msg.lan.banAfter, {amount: r.banafter})}\n`, inline: false},
-						{name: msg.lan.clearInt, value: msg.lan.clearInt2+`\`${ms(parseInt(r.clearint))}\``, inline: false},
+						{name: msg.lan.cooldowns, value: r.active ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled, inline: false},
 					)
 					.setColor(msg.client.constants.commands.settings.color)
 					.setAuthor(msg.lan.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite);
@@ -55,8 +42,6 @@ module.exports = {
 		const res = await msg.client.ch.query(`SELECT * FROM blacklist WHERE guildid = '${msg.guild.id}';`);
 		if (res && res.rowCount > 0) {
 			let r = res.rows[0];
-			const rolecheck = await rolechecker(msg, res);
-			if (rolecheck) r = (await msg.client.ch.query(`SELECT * FROM blacklist WHERE guildid = '${msg.guild.id}';`)).rows[0];
 			const embed = new Discord.MessageEmbed()
 				.setDescription('__'+msg.lan2.howToEdit+'__')
 				.addFields(
@@ -183,25 +168,25 @@ module.exports = {
 							setTimeout(() => {this.exe(msg);}, 5000);
 						}
 					} else if (msg.client.constants.commands.settings.edit.blacklist[name[i]] == 'string') {
-						const newWords = [];
 						collected.first().delete().catch(() => {});
 						const args = answer.split(/#+/);
+						const words = [];
 						await Promise.all(args.map(async word => {
 							if (word.startsWith(' ')) word = word.slice(1);
 							if (word.endsWith(' ')) word = word.slice(0 ,-1);
-							if (r.words && r.words.length > 0 && r.words.includes(word)) r.words.splice(`'${r.words.indexOf(word)}'`, 1);
-							else newWords.push(`'${word}'`);
+							if (r.words && r.words.length > 0 && r.words.includes(word)) r.words.splice(r.words.indexOf(word), 1);
+							else words.push(word);
 						}));
-						if (r.words) for (let i = 0; i < r.words.length; i++) {if (!r.words[i].startsWith('\'') && !r.words[i].endsWith('\'')) r.words[i] = `'${r.words[i]}'`;}
-						if (r.words && r.words.length > 0) r.words = r.words.concat(newWords);
-						else r.words = newWords;
-						if (r.words.length > 0) msg.client.ch.query(`UPDATE blacklist SET ${name[i]} = ARRAY[${r.words}] WHERE guildid = '${msg.guild.id}';`);
-						else msg.client.ch.query(`UPDATE blacklist SET ${name[i]} = null WHERE guildid = '${msg.guild.id}';`);
+						if (r.words && words.length > 0) r.words.push(words);
+						else r.words = words;
 						const editedEmbed = new Discord.MessageEmbed()
 							.setAuthor(msg.lan2.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
 							.setDescription(msg.client.ch.stp(msg.lan.done, {loading: msg.client.constants.emotes.loading})+'\n\n'+msg.client.ch.stp(msg.lan.edited, {edited: msg.client.ch.stp(msg.lan.edit[name[i]].name.replace(/\*/g, ''), {trigger: msg.lan.edit[name[i]].trigger.map(e => `${e}`), amount: '-'})}))
 							.addField(msg.lan.words, r[name[i]] && r[name[i]] !== [] ? `${r[name[i]].map(word => ` \`${word}\``)}`.length > 0 ? `${r[name[i]].map(word => `\`${word}\``)}`.replace(/\n/g, '') : msg.language.none : msg.language.none);
 						m.edit(editedEmbed).catch(() => {});
+						for (let i = 0; i < words.length; i++) {words[i] = `'${words[i]}'`;}
+						if (words.length > 0) msg.client.ch.query(`UPDATE blacklist SET ${name[i]} = ARRAY[${words}] WHERE guildid = '${msg.guild.id}';`);
+						else msg.client.ch.query(`UPDATE blacklist SET ${name[i]} = null WHERE guildid = '${msg.guild.id}';`);
 						const index = msg.args.indexOf(msg.language.edit);
 						msg.args.splice(index, 1);
 						msg.m = m;
@@ -238,42 +223,10 @@ module.exports = {
 	},
 	async notValid(msg, m, name) {
 		const embed = new Discord.MessageEmbed()
-			.setAuthor(msg.lan.edit.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
+			.setAuthor(msg.lan.setup.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
 			.setDescription(msg.lan.notValid)
 			.addField(msg.language.commands.settings.valid, msg.lan2[name].answers)
 			.setFooter(msg.lan.pleaseRestart);
 		msg.client.ch.reply(m, embed);
 	}
 };
-async function channelchecker(msg, res) {
-	const r = res.rows[0];
-	if (!r.bpchannelid || r.bpchannelid.length < 0) return false;
-	else {
-		r.bpchannelid.forEach((channelid) => {
-			const channel = msg.guild.channels.cache.get(channelid);
-			if (!channel) {
-				const index = r.bpchannelid.indexOf(channelid);
-				if (index > -1) r.bpchannelid.splice(index, 1);
-				if (r.bpchannelid.length == 0) msg.client.ch.query(`UPDATE blacklist SET bpchannelid = null WHERE guildid = '${msg.guild.id}';`);
-				else msg.client.ch.query(`UPDATE blacklist SET bpchannelid = ARRAY[${r.bpchannelid}] WHERE guildid = '${msg.guild.id}';`);
-				return true;
-			} else if (channel && channel.id) return false;
-		});
-	}
-}
-async function rolechecker(msg, res) {
-	const r = res.rows[0];
-	if (!r.bproleid || r.bproleid.length < 0) return false;
-	else {
-		r.bproleid.forEach((roleid) => {
-			const role = msg.guild.roles.cache.get(roleid);
-			if (!role) {
-				const index = r.bproleid.indexOf(roleid);
-				if (index > -1) r.bproleid.splice(index, 1);
-				if (r.bproleid.length == 0) msg.client.ch.query(`UPDATE blacklist SET bproleid = null WHERE guildid = '${msg.guild.id}';`);
-				else msg.client.ch.query(`UPDATE blacklist SET bproleid = ARRAY[${r.bproleid}] WHERE guildid = '${msg.guild.id}';`);
-				return true;
-			} else if (role && role.id) return false;
-		});
-	}
-}

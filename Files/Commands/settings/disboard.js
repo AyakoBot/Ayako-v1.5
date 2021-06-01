@@ -154,7 +154,7 @@ module.exports = {
 	},
 	async notValid(msg, m, name) {
 		const embed = new Discord.MessageEmbed()
-			.setAuthor(msg.lan.setup.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
+			.setAuthor(msg.lan.edit.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
 			.setDescription(msg.lan.notValid)
 			.addField(msg.language.commands.settings.valid, msg.lan2[name].answers)
 			.setFooter(msg.lan.pleaseRestart);
