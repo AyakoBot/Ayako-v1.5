@@ -1217,7 +1217,6 @@
                 "words": "Blacklisted Words",
                 "blacklist": "Blacklist",
                 "punishments": "Punishments",
-                "author": "Ayako Blacklist Settings",
                 "warn": "Warn Members",
                 "mute": "Mute Members",
                 "kick": "Kick Members",
@@ -1229,16 +1228,16 @@
                 "muteAfter": "Mute after **{{amount}}** blacklisted Words",
                 "kickAfter": "Kick after **{{amount}}** blacklisted Words",
                 "banAfter": "Ban after **{{amount}}** blacklisted Words",
-                "clearnInt": "Clear Interval (The Interval in which the blacklisted-words-said Count is cleared)",
-                "howToEdit": "Edit by typing \n`edit` in the next 30 Seconds or\n`{{prefix}}settings blacklist edit`",
-                "notValid": "This Answer was not valid",
-                "edited": "Successfully edited\n```{{edited}}```",
-                "oldValue": "Old value",
-                "pleaseRestart": "Please Restart",
-                "newValue": "New value",
-                "done": "Edit finished\nRedirecting {{loading}}",
                 "clearInt": "Clear Interval",
                 "clearInt2": "(The Interval in which the blacklisted-words-said Count is cleared)\n",
+                "author": "Ayako Blacklist Settings",
+                "howToEdit": "Edit by typing \n`edit` in the next 30 Seconds or\n`{{prefix}}settings blacklist edit`",
+                "edited": "Successfully edited\n```{{edited}}```",
+                "pleaseRestart": "Please Restart",
+                "done": "Edit finished\nRedirecting {{loading}}",
+                "notValid": "This Answer was not valid",
+                "oldValue": "Old value",
+                "newValue": "New value",
                 "setup": {
                     "author": "[Setup Mode] Ayako Blacklist Settings",
                     "question": "Would you like to set-up Ayako Blacklist?",
@@ -1354,16 +1353,97 @@
                 "category": ["Automation", "None"]
             },
             "disboard": {
-                "category": ["Automation"]
+                "active": "Active",
+                "role": "Ping Role",
+                "channel": "Channel",
+                "category": ["Automation"],
+                "author": "Ayako DISBOARD Settings",
+                "howToEdit": "Edit by typing \n`edit` in the next 30 Seconds or\n`{{prefix}}settings disboard edit`",
+                "edited": "Successfully edited\n```{{edited}}```",
+                "pleaseRestart": "Please Restart",
+                "done": "Edit finished\nRedirecting {{loading}}",
+                "notValid": "This Answer was not valid",
+                "oldValue": "Old value",
+                "newValue": "New value",
+                "setup": {
+                    "author": "[Setup Mode] Ayako DISBOARD Settings",
+                    "question": "Would you like to set-up Ayako DISBOARD?",
+                    "answers": "`Yes` or `No`",
+                    "done": "Setup finished\nRedirecting {{loading}}",
+                    "abort": "Setup aborted"
+                },
+                "edit": {
+                    "howToEdit": "Enter any of the triggers shown in the [box] infront of the option you want to edit",
+                    "author": "[Edit Mode] Ayako DISBOARD Settings",
+                    "enabled": {
+                        "name": "[{{trigger}}] DISBOARD",
+                        "trigger": ["`active`"],
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "role": {
+                        "name": "[{{trigger}}] Ping Role",
+                        "trigger": ["`role`"],
+                        "answers": "`Mention or ID`",
+                        "recommended": "The Role that will be pinged when you can use `!d bump` again",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
+                    },
+                    "channelid": {
+                        "name": "[{{trigger}}] Channel",
+                        "trigger": ["`channel`"],
+                        "answers": "`Mention or ID`",
+                        "recommended": "The Channel in which Bump Reminders will be sent",
+                        "fail": {
+                            "no": "I couldn't find this Channel\n",
+                            "wrongGuild": "This Channel is not Part of this Server\n"
+                        }
+                    }
+                }
+            },
+            "forcecooldowns": {
+                "category": ["Automation", "Compaction"]
             },
             "gifposter": {
                 "category": ["Compaction", "Automation"]
             },
-            "giveaways": {
-                "category": ["Automation", "Fun"]
-            },
             "interactions": {
-                "category": ["Compaction", "Fun"]
+                "category": ["Compaction", "Fun"],
+                "author": "Ayako Interaction Settings",
+                "howToEdit": "Edit by typing \n`edit` in the next 30 Seconds or\n`{{prefix}}settings interactions edit`",
+                "edited": "Successfully edited\n```{{edited}}```",
+                "pleaseRestart": "Please Restart",
+                "done": "Edit finished\nRedirecting {{loading}}",
+                "notValid": "This Answer was not valid",
+                "oldValue": "Old value",
+                "newValue": "New value",
+                "size": "Interaction Size",
+                "big": "big",
+                "small": "small",
+                "block": "Blocked Interactions",
+                "setup": {
+                    "author": "[Setup Mode] Ayako Interaction Settings",
+                    "question": "Would you like to set-up Ayako Interaction?",
+                    "answers": "`Yes` or `No`",
+                    "done": "Setup finished\nRedirecting {{loading}}",
+                    "abort": "Setup aborted"
+                },
+                "edit": { 
+                    "size": {
+                        "name": "[{{trigger}}] Interaction Size",
+                        "trigger": ["`size`"],
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `small`"
+                    },
+                    "block": {
+                        "name": "[{{trigger}}] Blocked Interactions",
+                        "trigger": ["`block`"],
+                        "answers": "Interaction Name",
+                        "recommended": "(`pat`, `hug`, `cuddle` etc.)`"
+                    }
+                }
             },
             "language": {
                 "category": ["None"]
@@ -1416,6 +1496,20 @@
             "separators": {
                 "category": ["Automation"]
             }
+        },
+        "help": {
+
+        },
+        "giveaway": {
+                "category": ["Automation", "Fun"],
+                "embed": {
+                    "list": "`{{prefix}}list` - List all running Giveaways on your Server",
+                    "create": "`{{prefix}}create` - Create a Giveaway (step by step)",
+                    "createOne": "`{{prefix}}createone [winners] [duration] [prize]` - Create a Giveaway (single Command)",
+                    "edit": "`{{prefix}}edit [message ID]` - Edit a Giveaway",
+                    "delete": "`{{prefix}}delete [message ID]` - Delete a Giveaway",
+                    "reroll": "`{{prefix}}reroll [message ID]` - Reroll a Giveaway"
+                }
         }
     }
 }

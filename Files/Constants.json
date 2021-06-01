@@ -426,6 +426,15 @@
                     "bpuserid": "mention",
                     "clearint": "time",
                     "words": "string"
+                },
+                "disboard": {
+                    "enabled": "boolean",
+                    "channelid": "mention",
+                    "role": "mention"
+                },
+                "interactions": {
+                    "size": "boolean",
+                    "block": "name"
                 }
             }   
         }
