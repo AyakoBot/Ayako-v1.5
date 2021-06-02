@@ -5,7 +5,7 @@ module.exports = {
 	type: 1,
 	async exe(msg) {
 		const res = await msg.client.ch.query(`SELECT * FROM antispamsettings WHERE guildid = '${msg.guild.id}';`);
-		if (msg.args[1] && msg.args[1].toLowerCase() === msg.language.edit) this.edit(msg);
+		if (msg.args[1] && msg.args[1].toLowerCase() === msg.language.edit && msg.member.permissions.has(new Discord.Permissions(this.perm))) this.edit(msg);
 		else {
 			if (res && res.rowCount > 0) {
 				let r = res.rows[0];

@@ -719,6 +719,9 @@
     "discriminator": "Discriminator / Tag",
     "channel": "Channel",
     "deaf": "Deafened",
+    "id": "ID",
+    "number": "Number",
+    "list": "list",
     "mute": "Muted",
     "camera": "Camera",
     "small": "Small",
@@ -1424,7 +1427,7 @@
                 "small": "Small",
                 "block": "**Blocked Interactions**",
                 "setup": {
-                    "question": "Would you like to set-up Ayako Interaction?",
+                    "question": "Would you like to set-up Ayako Interactions?",
                     "answers": "`Yes` or `No`",
                     "done": "Setup finished\nRedirecting {{loading}}",
                     "abort": "Setup aborted"
@@ -1495,7 +1498,58 @@
                 "category": ["Automation"]
             },
             "separators": {
-                "category": ["Automation"]
+                "category": ["Automation"],
+                "author": "Ayako Role-Separator Settings",
+                "howToEdit": "Edit by typing \n`edit` in the next 30 Seconds or\n`{{prefix}}settings separator edit`",
+                "edited": "Successfully edited\n```{{edited}}```",
+                "pleaseRestart": "Please Restart",
+                "done": "Edit finished\nRedirecting {{loading}}",
+                "notValid": "This Answer was not valid",
+                "oldValue": "Old value",
+                "newValue": "New value",
+                "stoprole": "Stop Role",
+                "separator": "Separator Role",
+                "edit": { 
+                    "howToEdit": "Enter any of the triggers shown in the [box] infront of the option you want to edit",
+                    "author": "[Edit Mode] Ayako Role-Separator Settings",
+                    "separator": {
+                        "name": "[{{trigger}}] Role",
+                        "trigger": ["`separator`"],
+                        "answers": "`Mention or ID`",
+                        "recommended": "The Role which separates the Members Roles",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
+                    },
+                    "stoprole": {
+                        "name": "[{{trigger}}] Role",
+                        "trigger": ["`stoprole`"],
+                        "answers": "`Mention or ID`",
+                        "recommended": "The Role which Role at which the Separator Role stops assigning itself to separate the Members Roles\nIf any of the Roles between the Separator Role itself and the Stop Role is added to a Member, the Separator Role is auto-assigned.",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
+                    },
+                    "active": {
+                        "name": "[{{trigger}}] Separator Active",
+                        "trigger": ["`active`"],
+                        "answers": "`True` or `False`"
+                    },
+                    "more": {
+                        "name": "[{{trigger}}] Add / Remove a Separator",
+                        "trigger": ["`add`", "`remove`"],
+                        "answers": "`add` or `remove`"
+                    }
+                },
+                "list": {
+                    "name": "List affected Roles by typing \n`list [number]` in the next 30 Seconds or\n`{{prefix}}settings separator list [number]`",
+                    "separatorRole": "Separator Role",
+                    "stopRole": "Stop Role",
+                    "affectedRoles": "Affected Roles",
+                    "notExistent":  "This Number doesn't exist"
+                }
             }
         },
         "help": {

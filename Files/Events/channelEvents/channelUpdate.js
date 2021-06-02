@@ -99,7 +99,6 @@ module.exports = {
 								if (o !== n) deletedPerm = o;
 							}));
 						}
-						console.log(deletedPerm);
 						embed.addField(language.permissions.removedPermissionsFor, deletedPerm.type == 'member' ? `${language.member} <@${deletedPerm.id}>` : deletedPerm.type == 'role' ? `${language.role} <@&${deletedPerm.id}>` : language.unknown+' '+deletedPerm);
 					} else if (oldPerms.length < newPerms.length) {
 						changedKey.push(language.permission_overwrites);
@@ -112,7 +111,6 @@ module.exports = {
 								if (o !== n) createdPerm = n;
 							}));
 						}
-						console.log(createdPerm);
 						embed.addField(language.permissions.grantedPermissionFor, createdPerm.type == 'member' ? `${language.member} <@${createdPerm.id}>` : createdPerm.type == 'role' ? `${language.role} <@&${createdPerm.id}>` : language.unknown+' '+createdPerm);
 					} else {
 						for (let i = 0; newPerms.length > oldPerms.length ? newPerms.length : oldPerms.length> i; i++) {

@@ -435,6 +435,12 @@
                 "interactions": {
                     "size": "boolean",
                     "block": "string"
+                },
+                "serparators": {
+                    "separator": "mention",
+                    "active": "boolean",
+                    "stoprole": "mention",
+                    "more": "string"
                 }
             }   
         }
