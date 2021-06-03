@@ -46,7 +46,7 @@ module.exports = {
 		const res = await ch.query(`SELECT * FROM roleseparator WHERE active = true AND guildid = '${msg.guild.id}';`);
 		const r = res.rows[0];
 		if (r.lastrun+ms('7d') > Date.now()) return false;
-		msg.client.ch.query(`UPDATE roleseparator SET lastrun = '${Date.now()}';`);
+		msg.client.ch.query(`UPDATE roleseparator SET lastrun = '${Date.now()}' WHERE guildid = '${msg.guild.id}';`);
 		await msg.guild.members.fetch();
 		const roles = [];
 		for (let i = 0; members.length > i; i++) {
