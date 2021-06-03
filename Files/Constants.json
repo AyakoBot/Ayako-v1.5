@@ -436,11 +436,12 @@
                     "size": "boolean",
                     "block": "string"
                 },
-                "serparators": {
-                    "separator": "mention",
+                "separators": {
                     "active": "boolean",
                     "stoprole": "mention",
-                    "more": "string"
+                    "remove": "number",
+                    "add": "mention",
+                    "edit": "number"
                 }
             }   
         }

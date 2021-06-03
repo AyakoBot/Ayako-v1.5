@@ -1507,21 +1507,12 @@
                 "notValid": "This Answer was not valid",
                 "oldValue": "Old value",
                 "newValue": "New value",
+                "deleted": "Deleted",
                 "stoprole": "Stop Role",
                 "separator": "Separator Role",
                 "edit": { 
                     "howToEdit": "Enter any of the triggers shown in the [box] infront of the option you want to edit",
                     "author": "[Edit Mode] Ayako Role-Separator Settings",
-                    "separator": {
-                        "name": "[{{trigger}}] Role",
-                        "trigger": ["`separator`"],
-                        "answers": "`Mention or ID`",
-                        "recommended": "The Role which separates the Members Roles",
-                        "fail": {
-                            "no": "I couldn't find this Role\n",
-                            "wrongGuild": "This Role is not Part of this Server\n"
-                        }
-                    },
                     "stoprole": {
                         "name": "[{{trigger}}] Role",
                         "trigger": ["`stoprole`"],
@@ -1537,10 +1528,30 @@
                         "trigger": ["`active`"],
                         "answers": "`True` or `False`"
                     },
-                    "more": {
-                        "name": "[{{trigger}}] Add / Remove a Separator",
-                        "trigger": ["`add`", "`remove`"],
-                        "answers": "`add` or `remove`"
+                    "add": {
+                        "name": "[{{trigger}}] Add a Separator",
+                        "trigger": ["`add`"],
+                        "answers": "`Separator Role ID or Mention`",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        },
+                        "stopRole": {
+                            "question": "Do you want a stop Role?\n(A Role which tells the separator at what Role to stop self-assigning)",
+                            "answers": "`Role ID or mention` or `no`"
+                        }
+                    },
+                    "remove": {
+                        "name": "[{{trigger}}] Remove a Separator",
+                        "trigger": ["`remove`"],
+                        "answers": "`Separator Number`"
+                    },
+                    "edit": {
+                        "name": "[{{trigger}}] Edit a Separator",
+                        "trigger": ["`edit`"],
+                        "answers": "`Separator Number`",
+                        "question": "What do you want to edit?",
+                        "editing": "Editing\n{{role}} / `{{role.id}}`\nNumber: `{{nr}}`"
                     }
                 },
                 "list": {
