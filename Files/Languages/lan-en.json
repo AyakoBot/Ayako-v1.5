@@ -705,6 +705,7 @@
     "splash": "Splash Image",
     "discoverySplash": "Discovery Splash Image",
     "banner": "Banner Image",
+    "aborted": "Aborted",
     "title": "Title",
     "color": "Color",
     "hoisted": "Hoisted",
@@ -1552,6 +1553,16 @@
                         "answers": "`Separator Number`",
                         "question": "What do you want to edit?",
                         "editing": "Editing\n{{role}} / `{{role.id}}`\nNumber: `{{nr}}`"
+                    },
+                    "oneTimeRunner": {
+                        "name": "[{{trigger}}] Apply the Separators to every Member of your Server",
+                        "trigger": ["`once`"],
+                        "description": "Can only be run once every __7 days__.",
+                        "cant": "You don't have any Separators set so you can't uset his function",
+                        "time": "You can't use this Function just yet since your Server used it in the past 7 days",
+                        "recommended": "Are you sure you want to run this Function?\nThis can only be run __**once** every 7 Days__",
+                        "stats": "Adding Roles to {{amount}} Server Members\nThis Process may take up to {{time}} until finished",
+                        "answers": "`Yes` or `No`"
                     }
                 },
                 "list": {

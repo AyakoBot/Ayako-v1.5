@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const ms = require('ms');
 
 module.exports = {
 	perm: 268435456n,
@@ -36,7 +37,7 @@ module.exports = {
 		msg.lan2 = msg.lan.edit;
 		const res = await msg.client.ch.query(`SELECT * FROM roleseparator WHERE guildid = '${msg.guild.id}';`);
 		const embed = new Discord.MessageEmbed()
-			.setDescription('__'+msg.lan2.howToEdit+'__\n\n'+msg.client.ch.stp(msg.lan2.remove.name, {trigger: msg.lan.edit.remove.trigger.map(e => `\`${e}\``), amount: '-'})+'\n'+msg.client.ch.stp(msg.lan2.add.name, {trigger: msg.lan.edit.add.trigger.map(e => `\`${e}\``), amount: '-'})+'\n'+msg.client.ch.stp(msg.lan2.edit.name, {trigger: msg.lan.edit.edit.trigger.map(e => `\`${e}\``), amount: '-'}))
+			.setDescription('__'+msg.lan2.howToEdit+'__\n\n'+msg.client.ch.stp(msg.lan2.remove.name, {trigger: msg.lan.edit.remove.trigger.map(e => `\`${e}\``), amount: '-'})+'\n'+msg.client.ch.stp(msg.lan2.add.name, {trigger: msg.lan.edit.add.trigger.map(e => `\`${e}\``), amount: '-'})+'\n'+msg.client.ch.stp(msg.lan2.edit.name, {trigger: msg.lan.edit.edit.trigger.map(e => `\`${e}\``), amount: '-'})+'\n\n'+msg.client.ch.stp(msg.lan2.edit.name, {trigger: msg.lan.edit.oneTimeRunner.trigger.map(e => `\`${e}\``), amount: '-'}))
 			.setAuthor(msg.lan2.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
 			.setFooter(msg.lan2.howToEdit);
 		const m = await msg.client.ch.reply(msg, embed);
@@ -188,8 +189,36 @@ module.exports = {
 								}
 							}	
 						} else return this.notValid(msg, m, name[i]);
-					} else this.notValid(msg, m, name[i]);
-				}
+					}
+				} else  if (msg.client.constants.commands.settings.edit.separators[name[i]] == 'name') {
+					if (res && res.rowCount > 0) {
+						if (answer == msg.language.yes) {
+							collected.first().delete().catch(() => {});
+							const result = await require('../../Events/guildEvents/guildMemberUpdate/separator').oneTimeRunner(msg);
+							if (!result) {
+								const errorEmbed = new Discord.MessageEmbed()
+									.setAuthor(msg.lan2.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
+									.setDescription(msg.lan2[name[i]].time);
+								m.edit(errorEmbed).catch(() => {});
+							} else {
+								const successEmbed = new Discord.MessageEmbed()
+									.setAuthor(msg.lan2.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
+									.setDescription(msg.client.ch.stp(msg.lan2[name[i]].stats, {amount: result.length, time: ms(result.length*1500*10)}));
+								m.edit(successEmbed).catch(() => {});
+							}
+						} else {
+							const embed = new Discord.MessageEmbed()
+								.setAuthor(msg.lan2.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
+								.setDescription(msg.language.aborted);
+							m.edit(embed).catch(() => {});
+						}
+					} else {
+						const embed = new Discord.MessageEmbed()
+							.setAuthor(msg.lan2.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
+							.setDescription(msg.lan2[name[i]].cant);
+						m.edit(embed).catch(() => {});
+					}
+				} else this.notValid(msg, m, name[i]);
 			} 
 		}
 	},
@@ -223,7 +252,7 @@ module.exports = {
 		}
 		if (nr > res.rowCount-1) embed.setDescription(msg.lan2.notExistent);
 		msg.client.ch.reply(msg, embed);
-	}
+	},
 };
 
 async function checker(msg, res) {

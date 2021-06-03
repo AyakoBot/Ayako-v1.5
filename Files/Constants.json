@@ -441,7 +441,8 @@
                     "stoprole": "mention",
                     "remove": "number",
                     "add": "mention",
-                    "edit": "number"
+                    "edit": "number",
+                    "oneTimeRunner": "name"
                 }
             }   
         }
