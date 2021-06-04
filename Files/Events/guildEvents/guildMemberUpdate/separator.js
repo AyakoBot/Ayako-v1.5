@@ -72,19 +72,20 @@ module.exports = {
 				}
 			}
 		}
-		if (roles.length > 0) {
-			for (let i = 0; i < roles.length; i++) {
-				const member = roles[i];
+		const uniques = [...new Set(roles)];
+		if (uniques.length > 0) {
+			for (let i = 0; i < uniques.length; i++) {
+				const member = uniques[i];
 				if (member.giveTheseRoles) {
 					setTimeout(async  () => {
 						for (let i = 0; i < member.giveTheseRoles.length; i++) {
 							const role = member.giveTheseRoles[i];
 							if (!member.roles.cache.has(role.id)) await member.roles.add(role).catch(() => {});
 						}
-					}, (1500*roles[i==0?0:i-1].giveTheseRoles.length)+i*1500);
+					}, (1500*uniques[i==0?0:i-1].giveTheseRoles.length)+i*1500);
 				}
 			}
 		}
-		return roles;
+		return uniques;
 	}
 };
