@@ -10,7 +10,8 @@ module.exports = {
 		require('./other').execute(msg);
 		require('./shoob').execute(msg);
 		require('./nadeko').execute(msg);
-		require('./gifSender.js').execute(msg);
+		require('./gifSender').execute(msg);
+		require('./chatLinker').execute(msg);
 		if (!msg.editedAt) {
 			if (msg.client.uptime > 10000) {
 				const res = await msg.client.ch.query('SELECT * FROM stats;');

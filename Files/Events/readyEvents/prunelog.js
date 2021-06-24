@@ -19,7 +19,7 @@ module.exports = {
 					if (audits && audits.entries) {
 						entry = audits.entries.sort((a,b) => b.id - a.id);
 						entry = entry.first();
-						if (ch.getUnix(entry.id) > Date.now()-120000) {
+						if (entry && ch.getUnix(entry.id) > Date.now()-120000) {
 							const embed = new Discord.MessageEmbed()
 								.setAuthor(lan.author, con.author.image)
 								.setDescription(ch.stp(lan.description, {user: entry.executor, amount: entry.extra.removed, days: entry.extra.days}))

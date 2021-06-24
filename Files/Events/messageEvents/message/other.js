@@ -6,7 +6,7 @@ module.exports = {
 		const member = await msg.client.ch.member(msg.guild, msg.author);
 		if (msg.guild.id == '366219406776336385' && msg.channel.id !== '801804774759727134') {
 			if (msg.content.toLocaleLowerCase().includes('discord.gg/')) {
-				if (msg.author.id !== '267835618032222209' || msg.author.id !== '400086473337995265') {
+				if (msg.author.id !== '267835618032222209' && msg.author.id !== '400086473337995265') {
 					if (member) {
 						if (!member.permissions.has('MANAGE_GUILD')) {
 							if (msg.channel.id !== '765732828892758026') {
@@ -21,7 +21,7 @@ module.exports = {
 			} 
 			if (msg.content.toLowerCase().startsWith('https://') || msg.content.toLowerCase().startsWith('http://')) {
 				if (member) {
-					if (member.roles.cache.has('369619820867747844') || member.roles.cache.has('367781331683508224') || member.roles.cache.has('585576789376630827') || msg.channel.id == '367403201646952450' || msg.channel.id == '777660259200270376') return;
+					if (member.roles.cache.has('369619820867747844') || member.roles.cache.has('367781331683508224') || member.roles.cache.has('585576789376630827') || msg.channel.id == '367403201646952450' || msg.channel.id == '777660259200270376' || msg.channel.id == '851779578846117888') return;
 					msg.delete().then(msg.client.ch.reply(msg, 'You are not allowed to post links yet. `Needed role: Level 30 | VIP | Nobles`').then(send => { setTimeout(function(){  send.delete().catch(() => {});  }, 10000);  }).catch(() => {})).catch(() => {});
 				} else {
 					msg.delete().catch(() => {});
