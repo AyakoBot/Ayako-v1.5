@@ -1030,6 +1030,7 @@
             "categoy": "Info",
             "description": "Display the Ayako Server Settings",
             "usage": ["settings", "settings [command]"],
+            "invalSettings": "These Settings don't exist, please enter a valid Setting",
             "overview": {
                 "category": ["None"],
                 "author": "Ayako Settings",

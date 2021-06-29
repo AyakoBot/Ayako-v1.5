@@ -46,6 +46,7 @@ module.exports = {
 			msg.client.ch.reply(msg, embed);
 		} else {
 			const file = settings.get(msg.args[0].toLowerCase());
+			if (!file) return msg.client.ch.reply(msg, msg.lan.invalSettings);
 			msg.lan = msg.lan[msg.args[0].toLowerCase()];
 			if (msg.args[1] && file.perm && !msg.member.permissions.has(new Discord.Permissions(file.perm))) return msg.client.ch.reply(msg, msg.language.commands.commandHandler.missingPermissions);
 			else file.exe(msg);

@@ -18,8 +18,8 @@ module.exports = {
 							const stopRole = guild.roles.cache.get(row.stoprole);
 							if (stopRole) {
 								guild.roles.cache.forEach(r => {
-									if (stopRole.rawPosition > separator.rawPosition) if (r.rawPosition < stopRole.rawPosition && r.rawPosition > separator.rawPosition) roles.push(r.id);
-									else if (stopRole.rawPosition < separator.rawPosition) if (r.rawPosition > stopRole.rawPosition && r.rawPosition < separator.rawPosition) roles.push(r.id);
+									if ((stopRole.rawPosition > separator.rawPosition) && (r.rawPosition < stopRole.rawPosition && r.rawPosition > separator.rawPosition)) roles.push(r.id);
+									else if ((stopRole.rawPosition < separator.rawPosition) && (r.rawPosition > stopRole.rawPosition && r.rawPosition < separator.rawPosition)) roles.push(r.id);
 								});
 							} else ch.query(`UPDATE roleseparator SET active = false WHERE stoprole = '${row.stoprole}';`);
 						} else guild.roles.cache.forEach(r => {if (r.rawPosition > separator.rawPosition) roles.push(r.id);});
@@ -45,7 +45,7 @@ module.exports = {
 		const ch = client.ch;
 		const res = await ch.query(`SELECT * FROM roleseparator WHERE active = true AND guildid = '${msg.guild.id}';`);
 		const r = res.rows[0];
-		if (r.lastrun+ms('7d') > Date.now()) return false;
+		if (+r.lastrun + +ms('7d') > Date.now()) return false;
 		msg.client.ch.query(`UPDATE roleseparator SET lastrun = '${Date.now()}' WHERE guildid = '${msg.guild.id}';`);
 		await msg.guild.members.fetch();
 		const roles = [];
