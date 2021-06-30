@@ -74,7 +74,7 @@ module.exports = {
 				.setAuthor(msg.lan2.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
 				.setFooter(msg.lan2.howToEdit);
 			const m = await msg.client.ch.reply(msg, embed);
-			let collected = await msg.channel.awaitMessages(m => m.author.id == msg.author.id, {max: 1, time: 60000});
+			let collected = await msg.channel.awaitMessages({filter: m => m.author.id == msg.author.id, max: 1, time: 60000});
 			if (!collected.first()) return;
 			const editAnswers = {};
 			let answer = collected.first().content.toLowerCase();
@@ -95,7 +95,7 @@ module.exports = {
 					if (msg.lan2[name[i]].recommended) editEmbed.setDescription('**'+msg.client.ch.stp(msg.lan.edit[name[i]].name, {trigger: msg.lan.edit[name[i]].trigger.map(e => `\`${e}\``), amount: '-'})+'**\n\n'+msg.lan2[name[i]].recommended);
 					else editEmbed.setDescription('**'+msg.client.ch.stp(msg.lan.edit[name[i]].name, {trigger: msg.lan2[name[i]].trigger.map(e => `\`${e}\``), amount: '-'})+'**');
 					await m.edit(editEmbed).catch(() => {});
-					collected = await msg.channel.awaitMessages(m => m.author.id == msg.author.id, {max: 1, time: 60000});
+					collected = await msg.channel.awaitMessages({filter: m => m.author.id == msg.author.id, max: 1, time: 60000});
 					if (!collected.first()) return;
 					answer = collected.first().content.toLowerCase();
 					if (msg.client.constants.commands.settings.edit.blacklist[name[i]] == 'number') {
@@ -217,7 +217,7 @@ module.exports = {
 			.setDescription(msg.lan.setup.question)
 			.addField(msg.language.commands.settings.valid, msg.lan.setup.answers);
 		msg.m = await msg.client.ch.reply(msg, embed);
-		let collected = await msg.channel.awaitMessages(m => m.author.id == msg.author.id, {max: 1, time: 60000});
+		let collected = await msg.channel.awaitMessages({filter: m => m.author.id == msg.author.id, max: 1, time: 60000});
 		if (!collected.first()) return;
 		const answer = collected.first().content.toLowerCase();
 		if (answer == msg.language.yes) {

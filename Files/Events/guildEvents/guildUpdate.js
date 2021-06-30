@@ -34,6 +34,7 @@ module.exports = {
 					entry = await getAudits(newGuild);
 					embed.addField(language.name, `${language.before}: \`${oldGuild.name}\`\n${language.after}: \`${newGuild.name}\``);
 				}
+				let path;
 				if (oldGuild.icon !== newGuild.icon) {
 					oldGuild.change.push('icon');
 					entry = await getAudits(newGuild);
@@ -41,8 +42,8 @@ module.exports = {
 					newGuild.wanted = 'icon';
 					const oldPath = await ch.downloader(oldGuild, ch.iconURL(oldGuild));
 					if (oldPath) {
+						path = oldPath;
 						const name = await ch.getName(oldPath);
-						embed.attachFiles([oldPath]);
 						embed.setImage(`attachment://${name}`);
 						embed.addField('\u200b', lan.IconOld);
 					}
@@ -54,8 +55,8 @@ module.exports = {
 					newGuild.wanted = 'splash';
 					const oldPath = await ch.downloader(oldGuild, ch.splashURL(oldGuild));
 					if (oldPath) {
+						path = oldPath;
 						const name = await ch.getName(oldPath);
-						embed.attachFiles([oldPath]);
 						embed.setImage(`attachment://${name}`);
 						embed.addField('\u200b', lan.splashOld);
 					}
@@ -67,8 +68,8 @@ module.exports = {
 					newGuild.wanted = 'discoverySplash';
 					const oldPath = await ch.downloader(oldGuild, ch.discoverySplashURL(oldGuild));
 					if (oldPath) {
+						path = oldPath;
 						const name = await ch.getName(oldPath);
-						embed.attachFiles([oldPath]);
 						embed.setImage(`attachment://${name}`);
 						embed.addField('\u200b', lan.discoverySplashOld);
 					}
@@ -80,8 +81,8 @@ module.exports = {
 					newGuild.wanted = 'banner';
 					const oldPath = await ch.downloader(oldGuild, ch.bannerURL(oldGuild));
 					if (oldPath) {
+						path = oldPath;
 						const name = await ch.getName(oldPath);
-						embed.attachFiles([oldPath]);
 						embed.setImage(`attachment://${name}`);
 						embed.addField('\u200b', lan.bannerOld);
 					}
@@ -189,7 +190,10 @@ module.exports = {
 						}
 					}
 				}
-				if (embed.description) ch.send(logchannel, embed);
+				if (embed.description) {
+					if (path) ch.send(logchannel, {embeds: [embed], files: [path]});
+					else ch.send(logchannel, {embeds: [embed]});
+				}
 			}
 		}
 	}

@@ -28,14 +28,8 @@ module.exports = {
 					.setAuthor(lan.author.name, con.author.image, ch.stp(con.author.link, {msg: msgs.first()}));
 				if (entry) embed.setDescription(ch.stp(lan.descriptionWithAudit, {user: entry.executor, channel: msgs.first().channel, amount: msgs.size}));
 				else embed.setDescription(ch.stp(lan.descriptionWithoutAudit, {channel: msgs.first().channel, amount: msgs.size}));
-				if (path) {
-					ch.send(logchannel, {
-						embed: embed,
-						files: [{
-							attachment: path,
-						}]
-					});
-				} else ch.send(logchannel, {embed: embed});
+				if (path) ch.send(logchannel, {embeds: [embed], files: [path]});
+				else ch.send(logchannel, {embeds: [embed]});
 			}
 		}
 	}

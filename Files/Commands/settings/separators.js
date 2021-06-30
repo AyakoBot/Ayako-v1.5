@@ -41,7 +41,7 @@ module.exports = {
 			.setAuthor(msg.lan2.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
 			.setFooter(msg.lan2.howToEdit);
 		const m = await msg.client.ch.reply(msg, embed);
-		let collected = await msg.channel.awaitMessages(m => m.author.id == msg.author.id, {max: 1, time: 60000});
+		let collected = await msg.channel.awaitMessages({filter: m => m.author.id == msg.author.id, max: 1, time: 60000});
 		if (!collected.first()) return;
 		const editAnswers = {}; 
 		let answer = collected.first().content.toLowerCase();
@@ -62,7 +62,7 @@ module.exports = {
 				if (msg.lan2[name[i]].recommended) editEmbed.setDescription('**'+msg.client.ch.stp(msg.lan.edit[name[i]].name, {trigger: msg.lan.edit[name[i]].trigger.map(e => `\`${e}\``), amount: '-'})+'**\n\n'+msg.lan2[name[i]].recommended);
 				else editEmbed.setDescription('**'+msg.client.ch.stp(msg.lan.edit[name[i]].name, {trigger: msg.lan2[name[i]].trigger.map(e => `\`${e}\``), amount: '-'})+'**');
 				m.edit(editEmbed).catch(() => {});
-				collected = await msg.channel.awaitMessages(m => m.author.id == msg.author.id, {max: 1, time: 60000});
+				collected = await msg.channel.awaitMessages({filter: m => m.author.id == msg.author.id, max: 1, time: 60000});
 				if (!collected.first()) return;
 				answer = collected.first().content.toLowerCase();
 				if (msg.client.constants.commands.settings.edit.separators[name[i]] == 'mention' && name[i] == 'add') {
@@ -77,7 +77,7 @@ module.exports = {
 							.setDescription(msg.lan2[name[i]].stopRole.question)
 							.addField(msg.language.commands.settings.valid, msg.lan2[name[i]].stopRole.answers);
 						m.edit(stopEmbed).catch(() => {});
-						let collected = await msg.channel.awaitMessages(m => m.author.id == msg.author.id, {max: 1, time: 60000});
+						let collected = await msg.channel.awaitMessages({filter: m => m.author.id == msg.author.id, max: 1, time: 60000});
 						if (!collected.first()) return;
 						answer = collected.first().content.toLowerCase();
 						collected.first().delete().catch(() => {});
@@ -125,7 +125,7 @@ module.exports = {
 									{name: msg.client.ch.stp(msg.lan2.stoprole.name, {trigger: msg.lan2.stoprole.trigger.includes('`') ? msg.lan2.stoprole.trigger : msg.lan2.stoprole.trigger.map(f => `\`${f}\``)}), value: r.stoprole ? msg.guild.roles.cache.get(r.stoprole) : msg.language.none}
 								);
 							m.edit(newembed).catch(() => {});
-							let collected = await msg.channel.awaitMessages(m => m.author.id == msg.author.id, {max: 1, time: 60000});
+							let collected = await msg.channel.awaitMessages({filter: m => m.author.id == msg.author.id, max: 1, time: 60000});
 							if (!collected.first()) return;
 							answer = collected.first().content.toLowerCase();
 							const editeditAnswers = {}; 
@@ -146,7 +146,7 @@ module.exports = {
 									if (msg.lan2[name[i]].recommended) editEmbed.setDescription('**'+msg.client.ch.stp(msg.lan.edit[name[i]].name, {trigger: msg.lan.edit[name[i]].trigger.map(e => `\`${e}\``), amount: '-'})+'**\n\n'+msg.lan2[name[i]].recommended);
 									else editEmbed.setDescription('**'+msg.client.ch.stp(msg.lan.edit[name[i]].name, {trigger: msg.lan2[name[i]].trigger.map(e => `\`${e}\``), amount: '-'})+'**');
 									m.edit(editEmbed).catch(() => {});
-									collected = await msg.channel.awaitMessages(m => m.author.id == msg.author.id, {max: 1, time: 60000});
+									collected = await msg.channel.awaitMessages({filter: m => m.author.id == msg.author.id, max: 1, time: 60000});
 									if (!collected.first()) return;
 									answer = collected.first().content.toLowerCase();
 									if (msg.client.constants.commands.settings.edit.separators[newName[i]] == 'boolean') {

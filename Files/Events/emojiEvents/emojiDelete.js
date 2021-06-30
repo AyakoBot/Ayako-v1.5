@@ -29,7 +29,6 @@ module.exports = {
 					.setTimestamp();
 				if (path) {
 					const name = await ch.getName(path);
-					embed.attachFiles([path]);
 					embed.setThumbnail(`attachment://${name}`);
 				}
 				if (entry && entry.id) {
@@ -37,7 +36,8 @@ module.exports = {
 				} else {
 					embed.setDescription(ch.stp(lan.description.withoutUser, {emoji: emoji}));
 				}
-				ch.send(logchannel, embed);
+				if (path) ch.send(logchannel, {embeds: [embed], files: [path]});
+				else ch.send(logchannel, embed);
 			}
 		}
 	}

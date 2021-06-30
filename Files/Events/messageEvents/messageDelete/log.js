@@ -51,7 +51,6 @@ module.exports = {
 				}
 				if (path) {
 					const name = await ch.getName(path);
-					embed.attachFiles([path]);
 					embed.setImage(`attachment://${name}`);
 				}
 				if (msg.embeds.size > 0) {
@@ -60,7 +59,8 @@ module.exports = {
 						if (msg.embeds[i].description) embed.addField(language.embedDescription, msg.embeds[i].description);
 					}
 				}
-				ch.send(logchannel, embed);
+				if (path) ch.send(logchannel, {embeds: [embed], files: [path]});
+				else ch.send(logchannel, {embeds: [embed]});
 			}
 		}
 	}

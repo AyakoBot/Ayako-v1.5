@@ -21,16 +21,16 @@ module.exports = {
 							.setTimestamp()
 							.setAuthor(lan.author.name, con.author.image, ch.stp(con.author.link, {user: newUser}))
 							.setColor(con.color);
+						const file = [];
 						if (oldUser.avatar !== newUser.avatar) {
 							changedKey.push(language.avatar);
 							newUser.wanted = 'avatar';
 							const path = await ch.downloader(newUser, ch.displayAvatarURL(newUser));
 							if (path) {
-								const name = await ch.getName(path);
-								console.log(path);
-								embed.attachFiles([path]);
-								embed.setThumbnail(`attachment://${name}`);
+								file.path = path;
+								file.name = await ch.getName(path);
 								embed.addField(language.avatar, lan.avatar);
+								embed.setThumbnail(`attachment://${file.name}`);
 							}
 						}
 						if (oldUser.username !== newUser.username) {
@@ -42,7 +42,11 @@ module.exports = {
 							embed.addField(language.discriminator, `${language.before}: \`${oldUser.discriminator}\`\n${language.after}: \`${newUser.discriminator}\``);
 						}
 						embed.setDescription(ch.stp(lan.description, {user: newUser})+changedKey.map(o => ` \`${o}\``));
-						if (embed.fields.length > 0) ch.send(logchannel, embed);
+						if (embed.fields.length > 0) {
+							if (file) {
+								ch.send(logchannel, {embeds: [embed], files: [file.path]});
+							} else ch.send(logchannel, {embeds: [embed]});
+						}
 					}
 				}
 			}
