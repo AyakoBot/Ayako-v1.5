@@ -23,7 +23,7 @@ module.exports = {
 				}
 			}
 			if (msg.member.permissions.has(new Discord.Permissions(this.perm))) embed.setDescription(msg.client.ch.stp(msg.lan.howToEdit, {prefix: msg.client.constants.standard.prefix})+'\n\n'+msg.client.ch.stp(msg.lan.list.name, {prefix: msg.client.constants.standard.prefix}));
-			msg.m ? msg.m.edit(embed) : msg.client.ch.reply(msg, embed);
+			msg.m ? msg.m.edit({embeds: [embed]}) : msg.client.ch.reply(msg, embed);
 			const collected = await msg.channel.awaitMessages({filter: m => m.author.id == msg.author.id, max: 1, time: 30000});
 			if (!collected || !collected.first()) return;
 			else {
@@ -61,7 +61,7 @@ module.exports = {
 					.addField(msg.language.commands.settings.valid, msg.lan2[name[i]].answers);
 				if (msg.lan2[name[i]].recommended) editEmbed.setDescription('**'+msg.client.ch.stp(msg.lan.edit[name[i]].name, {trigger: msg.lan.edit[name[i]].trigger.map(e => `\`${e}\``), amount: '-'})+'**\n\n'+msg.lan2[name[i]].recommended);
 				else editEmbed.setDescription('**'+msg.client.ch.stp(msg.lan.edit[name[i]].name, {trigger: msg.lan2[name[i]].trigger.map(e => `\`${e}\``), amount: '-'})+'**');
-				m.edit(editEmbed).catch(() => {});
+				m.edit({embeds: [editEmbed]}).catch(() => {});
 				collected = await msg.channel.awaitMessages({filter: m => m.author.id == msg.author.id, max: 1, time: 60000});
 				if (!collected.first()) return;
 				answer = collected.first().content.toLowerCase();
@@ -76,7 +76,7 @@ module.exports = {
 							.setAuthor(msg.lan2.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
 							.setDescription(msg.lan2[name[i]].stopRole.question)
 							.addField(msg.language.commands.settings.valid, msg.lan2[name[i]].stopRole.answers);
-						m.edit(stopEmbed).catch(() => {});
+						m.edit({embeds: [stopEmbed]}).catch(() => {});
 						let collected = await msg.channel.awaitMessages({filter: m => m.author.id == msg.author.id, max: 1, time: 60000});
 						if (!collected.first()) return;
 						answer = collected.first().content.toLowerCase();
@@ -92,11 +92,11 @@ module.exports = {
 						.setAuthor(msg.lan2.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
 						.setDescription(content)	
 						.addField(msg.lan.newValue, `${msg.lan.separator}: ${sep}\n${stopRole ? `${msg.lan.stoprole}: ${stopRole}` : ''}`);							
-					m.edit(endEmbed).catch(() => {});
+					m.edit({embeds: [endEmbed]}).catch(() => {});
 					const index = msg.args.indexOf(msg.language.edit);
 					msg.args.splice(index, 1);
 					msg.m = m;
-					setTimeout(() => {this.exe(msg);}, 5000);
+					setTimeout(() => {this.exe(msg);}, 3000);
 				} else if (msg.client.constants.commands.settings.edit.separators[name[i]] == 'number') {
 					collected.first().delete().catch(() => {});
 					if (name[i] == 'remove') {
@@ -108,11 +108,11 @@ module.exports = {
 								.setAuthor(msg.lan2.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
 								.setDescription(msg.client.ch.stp(msg.lan.done, {loading: msg.client.constants.emotes.loading}))
 								.addField(msg.lan.deleted, `\`${r.separator}\` / ${msg.guild.roles.cache.get(r.separator)}\n${msg.language.number}: ${answer}`);
-							m.edit(endEmbed).catch(() => {});
+							m.edit({embeds: [endEmbed]}).catch(() => {});
 							const index = msg.args.indexOf(msg.language.edit);
 							msg.args.splice(index, 1);
 							msg.m = m;
-							setTimeout(() => {this.exe(msg);}, 5000);
+							setTimeout(() => {this.exe(msg);}, 3000);
 						} else return this.notValid(msg, m, name[i]);
 					} else if (name[i] == 'edit') {
 						const r = res.rows[answer];
@@ -121,10 +121,10 @@ module.exports = {
 								.setAuthor(msg.lan2.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
 								.setDescription(msg.lan2.edit.question+'\n\n'+msg.client.ch.stp(msg.lan2.edit.editing, {role: msg.guild.roles.cache.get(r.separator), nr: answer}))
 								.addFields(
-									{name: msg.client.ch.stp(msg.lan2.active.name, {trigger: msg.lan2.active.trigger.includes('`') ? msg.lan2.active.trigger : msg.lan2.active.trigger.map(f => `\`${f}\``)}), value: r.active ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled},
-									{name: msg.client.ch.stp(msg.lan2.stoprole.name, {trigger: msg.lan2.stoprole.trigger.includes('`') ? msg.lan2.stoprole.trigger : msg.lan2.stoprole.trigger.map(f => `\`${f}\``)}), value: r.stoprole ? msg.guild.roles.cache.get(r.stoprole) : msg.language.none}
+									{name: msg.client.ch.stp(msg.lan2.active.name, {trigger: msg.lan2.active.trigger.includes('`') ? msg.lan2.active.trigger : msg.lan2.active.trigger.map(f => `\`${f}\``)}), value: `${r.active ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled}`},
+									{name: msg.client.ch.stp(msg.lan2.stoprole.name, {trigger: msg.lan2.stoprole.trigger.includes('`') ? msg.lan2.stoprole.trigger : msg.lan2.stoprole.trigger.map(f => `\`${f}\``)}), value: `${r.stoprole ? msg.guild.roles.cache.get(r.stoprole) : msg.language.none}`}
 								);
-							m.edit(newembed).catch(() => {});
+							m.edit({embeds: [newembed]}).catch(() => {});
 							let collected = await msg.channel.awaitMessages({filter: m => m.author.id == msg.author.id, max: 1, time: 60000});
 							if (!collected.first()) return;
 							answer = collected.first().content.toLowerCase();
@@ -145,7 +145,7 @@ module.exports = {
 										.addField(msg.language.commands.settings.valid, msg.lan2[name[i]].answers);
 									if (msg.lan2[name[i]].recommended) editEmbed.setDescription('**'+msg.client.ch.stp(msg.lan.edit[name[i]].name, {trigger: msg.lan.edit[name[i]].trigger.map(e => `\`${e}\``), amount: '-'})+'**\n\n'+msg.lan2[name[i]].recommended);
 									else editEmbed.setDescription('**'+msg.client.ch.stp(msg.lan.edit[name[i]].name, {trigger: msg.lan2[name[i]].trigger.map(e => `\`${e}\``), amount: '-'})+'**');
-									m.edit(editEmbed).catch(() => {});
+									m.edit({embeds: [editEmbed]}).catch(() => {});
 									collected = await msg.channel.awaitMessages({filter: m => m.author.id == msg.author.id, max: 1, time: 60000});
 									if (!collected.first()) return;
 									answer = collected.first().content.toLowerCase();
@@ -158,13 +158,13 @@ module.exports = {
 											const endEmbed = new Discord.MessageEmbed()
 												.setAuthor(msg.lan2.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
 												.setDescription(msg.client.ch.stp(msg.lan.done, {loading: msg.client.constants.emotes.loading}))
-												.addField(msg.lan.oldValue, r[name[i]])
+												.addField(msg.lan.oldValue, `${r[name[i]]}`)
 												.addField(msg.lan.newValue, answer);						
-											m.edit(endEmbed).catch(() => {});
+											m.edit({embeds: [endEmbed]}).catch(() => {});
 											const index = msg.args.indexOf(msg.language.edit);
 											msg.args.splice(index, 1);
 											msg.m = m;
-											setTimeout(() => {this.exe(msg);}, 5000);
+											setTimeout(() => {this.exe(msg);}, 3000);
 										}
 									} else if (msg.client.constants.commands.settings.edit.separators[newName[i]] == 'mention' && newName[i] == 'stoprole') {
 										const newRole = msg.guild.roles.cache.get(answer.replace(/\D+/g, ''));
@@ -178,13 +178,13 @@ module.exports = {
 										const endEmbed = new Discord.MessageEmbed()
 											.setAuthor(msg.lan2.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
 											.setDescription(content)
-											.addField(msg.lan.oldValue, r[name[i]])
+											.addField(msg.lan.oldValue, `${r[name[i]]}`)
 											.addField(msg.lan.newValue, answer);						
-										m.edit(endEmbed).catch(() => {});
+										m.edit({embeds: [endEmbed]}).catch(() => {});
 										const index = msg.args.indexOf(msg.language.edit);
 										msg.args.splice(index, 1);
 										msg.m = m;
-										setTimeout(() => {this.exe(msg);}, 5000);
+										setTimeout(() => {this.exe(msg);}, 3000);
 									}
 								}
 							}	
@@ -199,24 +199,24 @@ module.exports = {
 								const errorEmbed = new Discord.MessageEmbed()
 									.setAuthor(msg.lan2.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
 									.setDescription(msg.lan2[name[i]].time);
-								m.edit(errorEmbed).catch(() => {});
+								m.edit({embeds: [errorEmbed]}).catch(() => {});
 							} else {
 								const successEmbed = new Discord.MessageEmbed()
 									.setAuthor(msg.lan2.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
 									.setDescription(msg.client.ch.stp(msg.lan2[name[i]].stats, {amount: result.length, time: ms(result.length*1500*10)}));
-								m.edit(successEmbed).catch(() => {});
+								m.edit({embeds: [successEmbed]}).catch(() => {});
 							}
 						} else {
 							const embed = new Discord.MessageEmbed()
 								.setAuthor(msg.lan2.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
 								.setDescription(msg.language.aborted);
-							m.edit(embed).catch(() => {});
+							m.edit({embeds: [embed]}).catch(() => {});
 						}
 					} else {
 						const embed = new Discord.MessageEmbed()
 							.setAuthor(msg.lan2.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
 							.setDescription(msg.lan2[name[i]].cant);
-						m.edit(embed).catch(() => {});
+						m.edit({embeds: [embed]}).catch(() => {});
 					}
 				} else this.notValid(msg, m, name[i]);
 			} 

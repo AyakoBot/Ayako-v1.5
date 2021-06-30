@@ -12,12 +12,12 @@ module.exports = {
 				const embed = new Discord.MessageEmbed()
 					.setDescription('**'+msg.lan.block+'**\n'+(r.block && r.block.length > 0 ? `${r.block.map(b => ` \`${b}\``)}`.length > 0 ? `${r.block.map(b => ` \`${b}\``)}` : msg.language.none : msg.language.none))
 					.addFields(
-						{name: msg.lan.size, value: r.size ? msg.client.constants.emotes.small+' '+msg.lan.small : msg.client.constants.emotes.big+' '+msg.lan.big, inline: false},
+						{name: msg.lan.size, value: `${r.size ? msg.client.constants.emotes.small+' '+msg.lan.small : msg.client.constants.emotes.big+' '+msg.lan.big}`, inline: false},
 					)
 					.setColor(msg.client.constants.commands.settings.color)
 					.setAuthor(msg.lan.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite);
 				if (msg.member.permissions.has(new Discord.Permissions(this.perm))) embed.setDescription(msg.client.ch.stp(msg.lan.howToEdit, {prefix: msg.client.constants.standard.prefix})+'\n\n**'+msg.lan.block+'**\n'+(r.block && r.block.length > 0 ? `${r.block.map(b => ` \`${b}\``)}`.length > 0 ? `${r.block.map(b => ` \`${b}\``)}` : msg.language.none : msg.language.none));
-				msg.m ? msg.m.edit(embed) : msg.client.ch.reply(msg, embed);
+				msg.m ? msg.m.edit({embeds: [embed]}) : msg.client.ch.reply(msg, embed);
 				if (msg.member.permissions.has(new Discord.Permissions(this.perm))) {
 					const collected = await msg.channel.awaitMessages({filter: m => m.author.id == msg.author.id, max: 1, time: 30000});
 					if (!collected || !collected.first()) return;
@@ -37,7 +37,7 @@ module.exports = {
 			const embed = new Discord.MessageEmbed()
 				.setDescription('__'+msg.lan2.howToEdit+'__\n\n'+msg.client.ch.stp(msg.lan2.block.name, {trigger: msg.lan2.block.trigger.includes('`') ? msg.lan2.block.trigger : msg.lan2.block.trigger.map(f => `\`${f}\``)})+'\n'+(r.block && r.block.length > 0 ? `${r.block.map(b => ` \`${b}\``)}`.length > 0 ? `${r.block.map(b => ` \`${b}\``)}` : msg.language.none : msg.language.none))
 				.addFields(
-					{name: msg.client.ch.stp(msg.lan2.size.name, {trigger: msg.lan2.size.trigger.includes('`') ? msg.lan2.size.trigger : msg.lan2.size.trigger.map(f => `\`${f}\``)}), value: r.size ? msg.client.constants.emotes.small+' '+msg.lan.small : msg.client.constants.emotes.big+' '+msg.lan.big, inline: false},
+					{name: msg.client.ch.stp(msg.lan2.size.name, {trigger: msg.lan2.size.trigger.includes('`') ? msg.lan2.size.trigger : msg.lan2.size.trigger.map(f => `\`${f}\``)}), value: `${r.size ? msg.client.constants.emotes.small+' '+msg.lan.small : msg.client.constants.emotes.big+' '+msg.lan.big}`, inline: false},
 				)
 				.setAuthor(msg.lan2.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
 				.setFooter(msg.lan2.howToEdit);
@@ -62,7 +62,7 @@ module.exports = {
 						.addField(msg.language.commands.settings.valid, msg.lan2[name[i]].answers);
 					if (msg.lan2[name[i]].recommended) editEmbed.setDescription('**'+msg.client.ch.stp(msg.lan.edit[name[i]].name, {trigger: msg.lan.edit[name[i]].trigger.map(e => `\`${e}\``), amount: '-'})+'**\n\n'+msg.lan2[name[i]].recommended);
 					else editEmbed.setDescription('**'+msg.client.ch.stp(msg.lan.edit[name[i]].name, {trigger: msg.lan2[name[i]].trigger.map(e => `\`${e}\``), amount: '-'})+'**');
-					await m.edit(editEmbed).catch(() => {});
+					m.edit({embeds: [editEmbed]}).catch(() => {});
 					let collected = await msg.channel.awaitMessages({filter: m => m.author.id == msg.author.id, max: 1, time: 60000});
 					if (!collected.first()) return;
 					answer = collected.first().content.toLowerCase();
@@ -74,14 +74,14 @@ module.exports = {
 							const editedEmbed = new Discord.MessageEmbed()
 								.setAuthor(msg.lan2.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
 								.setDescription(msg.client.ch.stp(msg.lan.done, {loading: msg.client.constants.emotes.loading})+'\n\n'+msg.client.ch.stp(msg.lan.edited, {edited: msg.client.ch.stp(msg.lan.edit[name[i]].name.replace(/\*/g, ''), {trigger: msg.lan.edit[name[i]].trigger.map(e => `${e}`), amount: '-'})}))
-								.addField(msg.lan.oldValue, r[name[i]])
+								.addField(msg.lan.oldValue, `${r[name[i]]}`)
 								.addField(msg.lan.newValue, answer);
-							m.edit(editedEmbed).catch(() => {});
+							m.edit({embeds: [editedEmbed]}).catch(() => {});
 							msg.client.ch.query(`UPDATE interactions SET ${name[i]} = ${answer} WHERE guildid = '${msg.guild.id}';`);
 							const index = msg.args.indexOf(msg.language.edit);
 							msg.args.splice(index, 1);
 							msg.m = m;
-							setTimeout(() => {this.exe(msg);}, 5000);
+							setTimeout(() => {this.exe(msg);}, 3000);
 						}
 					} else if (msg.client.constants.commands.settings.edit.interactions[name[i]] == 'string') {
 						const interactionFiles = fs.readdirSync('./Files/Commands/interactions').filter(file => file.endsWith('.js'));
@@ -113,12 +113,12 @@ module.exports = {
 						const endEmbed = new Discord.MessageEmbed()
 							.setAuthor(msg.lan2.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
 							.setDescription(msg.client.ch.stp(msg.lan.done, {loading: msg.client.constants.emotes.loading}))								
-							.addField(msg.lan.block, r[name[i]] && r[name[i]] !== [] ? `${r[name[i]].map(word => ` \`${word}\``)}`.length > 0 ? `${r[name[i]].map(word => `\`${word}\``)}`.replace(/\n/g, '') : msg.language.none : msg.language.none);
-						m.edit(endEmbed).catch(() => {});
+							.addField(msg.lan.block, `${r[name[i]] && r[name[i]] !== [] ? `${r[name[i]].map(word => ` \`${word}\``)}`.length > 0 ? `${r[name[i]].map(word => `\`${word}\``)}`.replace(/\n/g, '') : msg.language.none : msg.language.none}`);
+						m.edit({embeds: [endEmbed]}).catch(() => {});
 						const index = msg.args.indexOf(msg.language.edit);
 						msg.args.splice(index, 1);
 						msg.m = m;
-						setTimeout(() => {this.exe(msg);}, 5000);
+						setTimeout(() => {this.exe(msg);}, 3000);
 					} 
 				} 
 			}
@@ -139,14 +139,14 @@ module.exports = {
 			const endEmbed = new Discord.MessageEmbed()
 				.setAuthor(msg.lan.setup.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
 				.setDescription(msg.client.ch.stp(msg.lan.setup.done, {loading: msg.client.constants.emotes.loading}));
-			await msg.m.edit(endEmbed);
-			setTimeout(() => {this.exe(msg);}, 5000);
+			msg.m.edit({embeds: [endEmbed]}).catch(() => {});
+			setTimeout(() => {this.exe(msg);}, 3000);
 		} else if (answer == msg.language.no) {
 			collected.first().delete().catch(() => {});
 			const endEmbed = new Discord.MessageEmbed()
 				.setAuthor(msg.lan.setup.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
 				.setDescription(msg.lan.setup.abort);
-			msg.m.edit(endEmbed);
+			msg.m.edit({embeds: [endEmbed]}).catch(() => {});
 		}
 	},
 	async notValid(msg, m, name) {
