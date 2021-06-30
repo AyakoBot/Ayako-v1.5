@@ -31,29 +31,36 @@ module.exports = {
 		let webhook;
 		if (client.channelWebhooks.get(channel.id)) webhook = client.channelWebhooks.get(channel.id);
 		let m;
+		if (options && options.type == 'rich') {
+			const oldOptions = options;
+			options = {}; 
+			options.embeds = [oldOptions];
+		} else options = {};
+		options.failIfNotExists = false;
+		if (content && content.type == 'rich') options.embeds ? options.embeds.push(content) : options.embeds = [content];
+		else if (typeof(content) !== 'string') options = content;
+		else options.content = content;
 		if (webhook && !channel.force) {
-			if (typeof(content) == 'string') {
-				if (options) m = await webhook.send(content, options).catch(() => {channel.force = true; this.send(channel, content, options);});
-				else m = await webhook.send(content).catch(() => {channel.force = true; this.send(channel, content);});
-			} else m = await webhook.send(content).catch(() => {channel.force = true; this.send(channel, content);});
+			m = await webhook.send(options).catch(() => {channel.force = true; this.send(channel, options);});
 			if (m) m.sentAs = webhook;
 		} else {
-			if (typeof(content) == 'string') {
-				if (options) m = await channel.send(content, options).catch((e) => {this.logger('Send Error', e);});
-				else m = await channel.send(content).catch((e) => {this.logger('Send Error', e);});
-			} else m = await channel.send(content).catch((e) => {this.logger('Send Error', e);});
+			m = await channel.send(options).catch((e) => {this.logger('Send Error', e);});
 			if (m) m.sentAs = client.user;
 		}
 		return m;
 	},
 	async reply(msg, content, options) {
-		let m;
-		options ? options.failIfNotExists = false : '';
-		if (typeof(content) == 'string') {
-			if (options) m = await msg.reply(content, {options}).catch((e) => {this.logger('Reply Error', e);});
-			else m = await msg.reply(content, {failIfNotExists: false}).catch((e) => {this.logger('Reply Error', e);});
-		} else m = await msg.reply({embed: content, failIfNotExists: false}).catch((e) => {this.logger('Reply Error', e);});
-		return m;
+		if (options && options.type == 'rich') {
+			const oldOptions = options;
+			options = {}; 
+			options.embeds = [oldOptions];
+		} else options = {};
+		options.failIfNotExists = false;
+		if (content && content.type == 'rich') options.embeds ? options.embeds.push(content) : options.embeds = [content];
+		else if (typeof(content) !== 'string') options = content;
+		else options.content = content;
+		console.log(options);
+		return await msg.reply(options).catch((e) => {this.logger('Reply Error', e);});
 	},
 	stp(expression, Object) {
 		let text = expression.replace(regexes.templateMatcher, (substring, value) => {
@@ -358,40 +365,48 @@ module.exports = {
 	makeBold(text) {return '**'+text+'**';},
 	makeUnderlined(text) {return '__'+text+'__';},
 	async modRoleWaiter(msg) {
-		const m = await this.reply(msg, msg.language.mod.warning.text, {allowedMentions: {repliedUser: true}});
-		m.react(client.constants.emotes.tickID).catch(() => {});
-		m.react(client.consatnts.emotes.crossID).catch(() => {});
-		msg.channel.awaitMessages(m => m.author.id == msg.author.id,
-			{max: 1, time: 30000}).then(rawcollected => {
-			if (!rawcollected.first()) {
-				m.delete().catch(() => {});
-				return false;
-			}
-			const answer = rawcollected.first().content.toLowerCase();
-			if (answer == 'y' || answer == msg.language.mod.warning.proceed) {
-				if (m.deleted == false) {
-					rawcollected.first().delete().catch(() => {});
+		const SUCCESS = new Discord.MessageButton()
+			.setCustomID('modProceedAction')
+			.setLabel(msg.language.mod.warning.proceed)
+			.setStyle('SUCCESS')
+			.setEmoji(client.constants.emotes.tickID);
+		const DANGER = new Discord.MessageButton()
+			.setCustomID('modAbortAction')
+			.setLabel(msg.language.mod.warning.abort)
+			.setEmoji(client.constants.emotes.crossID)
+			.setStyle('DANGER');
+		const m = await this.reply(msg, {content: msg.language.mod.warning.text, components: [[SUCCESS],[DANGER]], allowedMentions: {repliedUser: true}});
+		msg.channel.awaitMessages({filter: m => m.author.id == msg.author.id, max: 1, time: 30000})
+			.then(rawcollected => {
+				if (!rawcollected.first()) {
+					m.delete().catch(() => {});
+					return false;
+				}
+				const answer = rawcollected.first().content.toLowerCase();
+				if (answer == 'y' || answer == msg.language.mod.warning.proceed.toLowerCase()) {
+					if (m.deleted == false) {
+						rawcollected.first().delete().catch(() => {});
+						m.delete().catch(() => {});
+						return true;
+					}
+				} else {
+					m.delete().catch(() => {});
+					return false;
+				}
+			}).catch(() => {m.delete().catch(() => {});});
+		const collector = new Discord.MessageComponentInteractionCollector(m, {time: 30000});
+		collector.on('collect', answer => {
+			if (answer.user.id !== msg.author.id) {
+				answer.reply({embeds: [new Discord.MessageEmbed().setColor(client.constants.error).setDescription(msg.language.notYourButton).setAuthor(msg.language.error, client.constants.standard.image, client.constants.standard.invite)], ephemeral: true});
+			} else {
+				if (answer.customID == 'modProceedAction') {
 					m.delete().catch(() => {});
 					return true;
+				} else if (answer.customID == 'modAbortAction') {
+					m.delete().catch(() => {});
+					return false;
 				}
-			} else {
-				m.delete().catch(() => {});
-				return false;
 			}
-		}).catch(() => {m.delete().catch(() => {});});
-		m.awaitReactions((reaction, user) => (reaction.emoji.id === client.consatnts.emotes.crossID || reaction.emoji.id === client.constants.emotes.tickID) && user.id === msg.author.id,
-			{max: 1, time: 60000}).then(rawcollected => {
-			if (!rawcollected.first()) {
-				m.delete().catch(() => {});
-				return false;
-			}
-			if (rawcollected.first()._emoji.id == client.constants.emotes.tickID) {
-				m.delete().catch(() => {});
-				return true;
-			} else {
-				m.delete().catch(() => {});
-				return false;
-			}
-		}).catch(() => {m.delete().catch(() => {});});
+		});
 	},
 };

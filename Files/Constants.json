@@ -443,6 +443,15 @@
                     "add": "mention",
                     "edit": "number",
                     "oneTimeRunner": "name"
+                },
+                "snipe": {
+                    "active": "boolean",
+                    "blchannelid": "mention",
+                    "blroleid": "mention",
+                    "links": "boolean",
+                    "invites": "boolean",
+                    "blwords": "boolean",
+                    "bots": "boolean"
                 }
             }   
         }
