@@ -3,6 +3,7 @@ const Discord = require('discord.js');
 
 module.exports = {
 	async execute(oldMsg, newMsg) {
+		if (!oldMsg.content || !newMsg.content) return;
 		if (oldMsg.content == newMsg.content) return;
 		if (oldMsg.pinned !== newMsg.pinned) return;
 		const guild = oldMsg.guild;

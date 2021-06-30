@@ -24,7 +24,7 @@ module.exports = {
 			}
 			if (msg.member.permissions.has(new Discord.Permissions(this.perm))) embed.setDescription(msg.client.ch.stp(msg.lan.howToEdit, {prefix: msg.client.constants.standard.prefix})+'\n\n'+msg.client.ch.stp(msg.lan.list.name, {prefix: msg.client.constants.standard.prefix}));
 			msg.m ? msg.m.edit(embed) : msg.client.ch.reply(msg, embed);
-			const collected = await msg.channel.awaitMessages(m => m.author.id == msg.author.id, {max: 1, time: 30000});
+			const collected = await msg.channel.awaitMessages({filter: m => m.author.id == msg.author.id, max: 1, time: 30000});
 			if (!collected || !collected.first()) return;
 			else {
 				const answer = collected.first().content.toLowerCase();

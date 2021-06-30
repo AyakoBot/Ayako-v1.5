@@ -742,10 +742,12 @@
     "stageOpen": "Stage Channel Opened/Closed",
     "spam": "Spam",
     "requestedBy": "Requested by {{user.tag}}",
+    "notYourButton": "This Button is not meant for you",
     "mod": {
         "warning": {
             "text": "You just issued a **Moderation Command** on a User with a **Mod Role**. \nDo you want to **proceed** or **abort**.",
-            "proceed": "proceed"
+            "proceed": "Proceed",
+            "abort": "Abort"
         },
         "muteAdd": {
             "author": "Member was muted",
@@ -1479,7 +1481,78 @@
                 "category": ["Automation"]
             },
             "snipe": {
-                "category": ["Fun"]
+                "category": ["Fun"],
+                "author": "Ayako Role-Separator Settings",
+                "howToEdit": "Edit by typing \n`edit` in the next 30 Seconds or\n`{{prefix}}settings separator edit`",
+                "edited": "Successfully edited\n```{{edited}}```",
+                "pleaseRestart": "Please Restart",
+                "done": "Edit finished\nRedirecting {{loading}}",
+                "notValid": "This Answer was not valid",
+                "oldValue": "Old value",
+                "newValue": "New value",
+                "blchannels": "Blacklisted Channels",
+                "blroles": "Blacklisted Roles",
+                "link": "Links snipeable",
+                "invite": "Invites snipeable",
+                "blwords": "Words saved as Blacklisted snipeable",
+                "bots": "Bot Messages snipeable",
+                "active": "Active",
+                "setup": {
+                    "author": "[Setup Mode] Ayako Snipe Settings",
+                    "question": "Would you like to set-up Ayako Snipe?",
+                    "answers": "`Yes` or `No`",
+                    "done": "Setup finished\nRedirecting {{loading}}",
+                    "abort": "Setup aborted"
+                },
+                "edit": {
+                    "howToEdit": "Enter any of the triggers shown in the [box] infront of the option you want to edit",
+                    "author": "[Edit Mode] Ayako Role-Separator Settings",
+                    "blroleid": {
+                        "name": "[{{trigger}}] Blacklisted Roles",
+                        "trigger": ["`roles`"],
+                        "answers": "`Mention or ID`",
+                        "recommended": "Deleted Messages of Members with these Roles won't be snipeable\nThis is a switch.\nIf the entered Channel is already bypassed it will be removed.",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
+                    },
+                    "blchannelid": {
+                        "name": "[{{trigger}}] Blacklisted Channels",
+                        "trigger": ["`channels`"],
+                        "answers": "`Mention or ID`",
+                        "recommended": "Deleted Messages of Members in these Channels won't be snipeable\nThis is a switch.\nIf the entered Channel is already bypassed it will be removed.",
+                        "fail": {
+                            "no": "I couldn't find this Channel\n",
+                            "wrongGuild": "This Channel is not Part of this Server\n"
+                        }
+                    },
+                    "active": {
+                        "name": "[{{trigger}}] Snipe",
+                        "trigger": ["`active`"],
+                        "answers": "`True` or `False`"
+                    },
+                    "links": {
+                        "name": "[{{trigger}}] Links snipeable",
+                        "trigger": ["`links`"],
+                        "answers": "`True` or `False`"
+                    },
+                    "invites": {
+                        "name": "[{{trigger}}] Invites snipeable",
+                        "trigger": ["`invites`"],
+                        "answers": "`True` or `False`"
+                    },
+                    "blwords": {
+                        "name": "[{{trigger}}] Words saved as Blacklisted snipeable",
+                        "trigger": ["`words`"],
+                        "answers": "`True` or `False`"
+                    },
+                    "bots": {
+                        "name": "[{{trigger}}] Bot Messages snipeable",
+                        "trigger": ["`bots`"],
+                        "answers": "`True` or `False`"
+                    }
+                }
             },
             "suggestions": {
                 "category": ["Automation"]

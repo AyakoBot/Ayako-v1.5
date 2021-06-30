@@ -14,21 +14,25 @@ module.exports = {
 		if (exec?.roles.highest.rawPosition <= member?.roles.highest.rawPosition) {
 			em.setDescription(msg.client.constants.emotes.cross+' '+lan.exeNoPerms);
 			emMsg?.edit(em);
+			console.log(0);
 			return false;
 		}
 		if (executor.id == target.id) {
 			em.setDescription(msg.client.constants.emotes.cross+' '+lan.selfBan);
 			emMsg?.edit(em);
+			console.log(1);
 			return false;
 		}
 		if (target.id == msg.client.user.id) {
 			em.setDescription(msg.client.constants.emotes.cross+' '+lan.meBan);
 			emMsg?.edit(em);
+			console.log(2);
 			return false;
 		}
 		if (member?.bannable == false) {
 			em.setDescription(msg.client.constants.emotes.cross+' '+lan.permissionError);
 			emMsg?.edit(em);
+			console.log(3);
 			return false;
 		}
 		else {
@@ -36,6 +40,7 @@ module.exports = {
 			if (banned) {
 				em.setDescription(msg.client.constants.emotes.cross+' '+lan.alreadyBanned);
 				emMsg?.edit(em);
+				console.log(4);
 				return false;
 			}
 			const dmChannel = await target.createDM().catch(() => {});
@@ -43,7 +48,7 @@ module.exports = {
 				.setDescription(`${language.reason}: \`\`\`${reason}\`\`\``)
 				.setColor(con.color)
 				.setTimestamp()
-				.setAuthor(lan.dm.author, lan.author.image, msg.client.ch.stp(con.author.link, {guild: msg.guild}));
+				.setAuthor(msg.client.ch.stp(lan.dm.author, {guild: msg.guild}), lan.author.image, msg.client.ch.stp(con.author.link, {guild: msg.guild}));
 			const m = await msg.client.ch.send(dmChannel, DMembed);
 			let err;
 			const ban = await msg.guild.members.ban(target, {reason: reason, days: 1}).catch((e) => {err = e;});
@@ -64,11 +69,13 @@ module.exports = {
 				m?.delete().catch(()  => {});
 				em.setDescription(msg.client.constants.emotes.cross+lan.error+` \`\`\`${err}\`\`\``);
 				emMsg?.edit(em);
+				console.log(5);
 				return false;
 			}
 		}
 		em.setDescription(msg.client.constants.emotes.tick+' '+msg.client.ch.stp(lan.success, {target: target}));
 		emMsg?.edit(em);
+		console.log(6);
 		return true;
 	}
 };

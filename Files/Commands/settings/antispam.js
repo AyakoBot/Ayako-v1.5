@@ -13,25 +13,26 @@ module.exports = {
 				const rolecheck = await rolechecker(msg, res);
 				if (channelcheck || rolecheck) r = (await msg.client.ch.query(`SELECT * FROM antispamsettings WHERE guildid = '${msg.guild.id}';`)).rows[0];
 				const embed = new Discord.MessageEmbed()
-					.addFields(
-						{name: msg.lan.antispam, value: r.antispamtof ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled, inline: false},
-						{name: msg.lan.bpchannels, value: r.bpchannelid && r.bpchannelid !== [] ? `${r.bpchannelid.map(id => ` <#${id}>`)}`.length > 0 ? r.bpchannelid.map(id => ` <#${id}>`) : msg.language.none : msg.language.none, inline: false},
-						{name: msg.lan.bpusers, value: r.bpuserid && r.bpuserid !== [] ? `${r.bpuserid.map(id => ` <@${id}>`)}`.length > 0 ? r.bpuserid.map(id => ` <@${id}>`) : msg.language.none : msg.language.none, inline: false},
-						{name: msg.lan.bproles, value: r.bproleid && r.bproleid !== [] ? `${r.bproleid.map(id => ` <@&${id}>`)}`.length > 0 ? r.bproleid.map(id => ` <@&${id}>`) : msg.language.none : msg.language.none, inline: false},
-						{name: '\u200b', value: '\u200b', inline: false},
-						{name: '\u200b', value: `${msg.lan.readWarns}\n${r.readofwarnstof ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled}\n\n${msg.client.ch.stp(msg.lan.muteAfter, {amount: r.muteafterwarnsamount})}\n${msg.client.ch.stp(msg.lan.kickAfter, {amount: r.kickafterwarnsamount})}\n${msg.client.ch.stp(msg.lan.banAfter, {amount: r.banafterwarnsamount})}`, inline: false},
-						{name: '\u200b', value: '\u200b', inline: false},
-						{name: msg.lan.warn, value: r.giveofficialwarnstof ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled, inline: true},
-						{name: msg.lan.mute, value: r.muteenabledtof ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled, inline: true},
-						{name: msg.lan.kick, value: r.kickenabledtof ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled, inline: true},
-						{name: msg.lan.ban, value: r.banenabledtof ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled, inline: true},
-					)
+					.addField(msg.lan.antispam,r.antispamtof ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled, false)
+					.addField(msg.lan.bpchannels, `${r.bpchannelid && r.bpchannelid !== [] ? `${r.bpchannelid.map(id => ` <#${id}>`)}`.length > 0 ? r.bpchannelid.map(id => ` <#${id}>`) : msg.language.none : msg.language.none}`, false)
+					.addField(msg.lan.bpusers, `${r.bpuserid && r.bpuserid !== [] ? `${r.bpuserid.map(id => ` <@${id}>`)}`.length > 0 ? r.bpuserid.map(id => ` <@${id}>`) : msg.language.none : msg.language.none}`, false)
+					.addField(msg.lan.bproles, `${r.bproleid && r.bproleid !== [] ? `${r.bproleid.map(id => ` <@&${id}>`)}`.length > 0 ? r.bproleid.map(id => ` <@&${id}>`) : msg.language.none : msg.language.none}`, false)
+					.addField('\u200b', '\u200b', false)
+					.addField('\u200b', `${msg.lan.readWarns}\n${r.readofwarnstof ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled}\n\n${msg.client.ch.stp(msg.lan.muteAfter, {amount: r.muteafterwarnsamount})}\n${msg.client.ch.stp(msg.lan.kickAfter, {amount: r.kickafterwarnsamount})}\n${msg.client.ch.stp(msg.lan.banAfter, {amount: r.banafterwarnsamount})}`, false)
+					.addField('\u200b', '\u200b', false)
+					.addField(msg.lan.warn, r.giveofficialwarnstof ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled, true)
+					.addField(msg.lan.mute, r.muteenabledtof ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled, true)
+					.addField(msg.lan.kick, r.kickenabledtof ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled, true)
+					.addField(msg.lan.ban, r.banenabledtof ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled, true)
 					.setColor(msg.client.constants.commands.settings.color)
 					.setAuthor(msg.lan.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite);
 				if (msg.member.permissions.has(new Discord.Permissions(this.perm))) embed.setDescription(msg.client.ch.stp(msg.lan.howToEdit, {prefix: msg.client.constants.standard.prefix}));
 				msg.m ? msg.m.edit(embed) : msg.client.ch.reply(msg, embed);
 				if (msg.member.permissions.has(new Discord.Permissions(this.perm))) {
-					const collected = await msg.channel.awaitMessages(m => m.author.id == msg.author.id, {max: 1, time: 30000});
+					console.log(1)
+					const collected = await msg.channel.awaitMessages({filter: m => m.author.id == msg.author.id, max: 1, time: 30000});
+					console.log(2)
+					console.log(collected);
 					if (!collected || !collected.first()) return;
 					else {
 						const answer = collected.first().content.toLowerCase();

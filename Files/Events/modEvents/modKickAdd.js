@@ -32,7 +32,7 @@ module.exports = {
 				.setDescription(`${language.reason}: \`\`\`${reason}\`\`\``)
 				.setColor(con.color)
 				.setTimestamp()
-				.setAuthor(lan.dm.author, lan.author.image, msg.client.ch.stp(lan.author.link), {guild: msg.guild});
+				.setAuthor(msg.client.ch.stp(lan.dm.author, {guild: msg.guild}), lan.author.image, msg.client.ch.stp(lan.author.link), {guild: msg.guild});
 			const m = msg.client.ch.send(dmChannel, DMembed);
 			let err;
 			const kick = await member.kick(reason).catch((e) => {err = e;});

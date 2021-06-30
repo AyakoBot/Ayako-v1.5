@@ -45,7 +45,7 @@ module.exports = {
 					.setDescription(`${language.reason}: \`\`\`${reason}\`\`\``)
 					.setColor(con.color)
 					.setTimestamp()
-					.setAuthor(lan.dm.author, lan.author.image, msg.client.ch.stp(lan.author.link), {guild: msg.guild});
+					.setAuthor(msg.client.ch.stp(lan.dm.author, {guild: msg.guild}), lan.author.image, msg.client.ch.stp(lan.author.link), {guild: msg.guild});
 				msg.client.ch.send(dmChannel, DMembed);
 				const res = await msg.client.ch.query(`SELECT * FROM logchannels WHERE guildid = '${msg.guild.id}';`);
 				if (res && res.rowCount > 0) logchannel = msg.client.channels.cache.get(res.rows[0].guildEvents);

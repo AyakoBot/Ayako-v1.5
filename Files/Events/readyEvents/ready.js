@@ -21,17 +21,10 @@ module.exports = {
 				require('../messageEvents/message/antispam').resetData();
 			}
 		}, 3600000);
-		setInterval(() => {
-			require('./TimedManagers/timedManagerSplitter').execute();
-		}, 2000);
-		setInterval(() => {
-			require('./giveaway.js').execute();
-		}, 11000);
-		setInterval(() => {
-			require('./prunelog.js').execute();
-		}, 120000);
-		setInterval(() => {
-			require('./presence.js').execute();
-		}, 60000);
+		setInterval(() => {require('./TimedManagers/timedManagerSplitter').execute();}, 2000);
+		setInterval(() => {require('./giveaway.js').execute();}, 11000);
+		setInterval(() => {require('./prunelog.js').execute();}, 120000);
+		setInterval(() => {require('./presence.js').execute();}, 60000);
+		setInterval(() => {console.log(new Date().toUTCString());}, 600000);
 	}
 };

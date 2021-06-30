@@ -27,6 +27,7 @@ module.exports = {
 							const path = await ch.downloader(newUser, ch.displayAvatarURL(newUser));
 							if (path) {
 								const name = await ch.getName(path);
+								console.log(path);
 								embed.attachFiles([path]);
 								embed.setThumbnail(`attachment://${name}`);
 								embed.addField(language.avatar, lan.avatar);

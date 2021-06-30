@@ -92,7 +92,7 @@ module.exports = {
 				.setAuthor(msg.language.error, msg.client.constants.standard.errorImage, msg.client.constants.standard.invite)
 				.setColor(msg.client.constants.error)
 				.setDescription(msg.client.ch.makeUnderlined(msg.language.permissions.error.msg))
-				.addField(msg.client.ch.makeBold(msg.language.permissions.error.needed), neededPerms1.has(8n) ? `${msg.client.ch.makeInlineCode(msg.language.permissions.ADMINISTRATOR)}` : neededPerms1.toArray().map(p => `${msg.client.ch.makeInlineCode(msg.language.permissions[p])}`));
+				.addField(msg.client.ch.makeBold(msg.language.permissions.error.needed), `${neededPerms1.has(8n) ? `${msg.client.ch.makeInlineCode(msg.language.permissions.ADMINISTRATOR)}` : neededPerms1.toArray().map(p => `${msg.client.ch.makeInlineCode(msg.language.permissions[p])}`)}`);
 			return msg.client.ch.reply(msg, embed);
 		}
 		if (msg.command.perm == 0) {
