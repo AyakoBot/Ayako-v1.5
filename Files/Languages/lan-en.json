@@ -742,7 +742,31 @@
     "stageOpen": "Stage Channel Opened/Closed",
     "spam": "Spam",
     "requestedBy": "Requested by {{user.tag}}",
-    "notYourButton": "This Button is not meant for you",
+    "notYours": "This Interaction is not meant for you",
+    "next": "Next",
+    "prev": "Previous",
+    "timeError": "Time ran out",
+    "page": "Page",
+    "done": "Done",
+    "selected": "Selected",
+    "select": {
+        "roles": {
+            "select": "Select 1 or more Roles",
+            "desc": "Select the Role(s) you want to add/remove below"
+        },
+        "channels": {
+            "select": "Select 1 or more Channels",
+            "desc": "Select the Channel(s) you want to add/remove below"
+        },
+        "role": {
+            "select": "Select a Role",
+            "desc": "Select the Role you want to add/remove below"
+        },
+        "channel": {
+            "select": "Select a Channel",
+            "desc": "Select the Channel you want to add/remove below"
+        }
+    },
     "mod": {
         "warning": {
             "text": "You just issued a **Moderation Command** on a User with a **Mod Role**. \nDo you want to **proceed** or **abort**.",
@@ -1029,10 +1053,25 @@
         },
         "settings": {
             "valid": "Valid Answers",
+            "notValid": "This Answer was not valid",
+            "howToEdit": "Edit by typing \n`edit` in the next 30 Seconds or\n`{{prefix}}settings antispam edit`",
             "categoy": "Info",
             "description": "Display the Ayako Server Settings",
+            "pleaseRestart": "Please Restart",
+            "edited": "Successfully edited\n```{{edited}}```",
+            "oldValue": "Old value",
+            "newValue": "New value",
+            "done": "Edit finished\nRedirecting {{loading}}",
             "usage": ["settings", "settings [command]"],
             "invalSettings": "These Settings don't exist, please enter a valid Setting",
+            "author": "Ayako {{type}} Settings",
+            "authorEdit": "[Edit Mode] Ayako {{type}} Settings",
+            "setup": {
+                "question": "Would you like to set-up Ayako {{type}}?",
+                "answers": "`Yes` or `No`",
+                "done": "Setup finished\nRedirecting {{loading}}",
+                "abort": "Setup aborted"
+            },
             "overview": {
                 "category": ["None"],
                 "author": "Ayako Settings",
@@ -1041,7 +1080,7 @@
             },
             "antispam": {
                 "category": ["Auto Moderation"],
-                "author": "Ayako Anti-Spam Settings",
+                "type": "Anti-Spam",
                 "ban": "Ban Members",
                 "kick": "Kick Members",
                 "mute": "Mute Members",
@@ -1049,25 +1088,10 @@
                 "muteAfter": "Mute after **{{amount}}** warns",
                 "kickAfter": "Kick after **{{amount}}** warns",
                 "banAfter": "Ban after **{{amount}}** warns",
-                "antispam": "Anti-Spam",
                 "bpchannels": "Bypassed Channels",
                 "bproles": "Bypassed Roles",
                 "bpusers": "Bypassed Users",
                 "readWarns": "**Read Warnings** (required for the following 3 options)",
-                "howToEdit": "Edit by typing \n`edit` in the next 30 Seconds or\n`{{prefix}}settings antispam edit`",
-                "notValid": "This Answer was not valid",
-                "edited": "Successfully edited\n```{{edited}}```",
-                "oldValue": "Old value",
-                "pleaseRestart": "Please Restart",
-                "newValue": "New value",
-                "done": "Edit finished\nRedirecting {{loading}}",
-                "setup": {
-                    "author": "[Setup Mode] Ayako Anti-Spam Settings",
-                    "question": "Would you like to set-up Ayako Anti-Spam?",
-                    "answers": "`Yes` or `No`",
-                    "done": "Setup finished\nRedirecting {{loading}}",
-                    "abort": "Setup aborted"
-                },
                 "edit": {
                     "author": "[Edit Mode] Ayako Anti-Spam Settings",
                     "howToEdit": "Enter any of the triggers shown in the [box] infront of the option you want to edit",
@@ -1122,22 +1146,16 @@
                     "bpchannelid": {
                         "name": "[{{trigger}}] Bypassed Channels",
                         "trigger": ["`channel`"],
-                        "answers": "`Mention(s) or ID(s)`",
                         "recommended": "This is a switch.\nIf the entered Channel is already bypassed it will be removed.",
-                        "fail": {
-                            "no": "I couldn't find this Channel\n",
-                            "wrongGuild": "This Channel is not Part of this Server\n"
-                        }
+                        "select": "Select 1 or more Channels",
+                        "desc": "Select the Channel(s) you want to bypass below"
                     },
                     "bproleid": {
                         "name": "[{{trigger}}] Bypassed Roles",
                         "trigger": ["`role`"],
-                        "answers": "`Mention(s) or ID(s)`",
                         "recommended": "This is a switch.\nIf the entered Role is already bypassed it will be removed.",
-                        "fail": {
-                            "no": "I couldn't find this Role\n",
-                            "wrongGuild": "This Role is not Part of this Server\n"
-                        }
+                        "select": "Select 1 or more Roles",
+                        "desc": "Select the Role(s) you want to bypass below"
                     },
                     "bpuserid": {
                         "name": "[{{trigger}}] Bypassed Users",
@@ -1159,27 +1177,11 @@
             },
             "autorole": {
                 "category": ["Automation"],
-                "howToEdit": "Edit by typing \n`edit` in the next 30 Seconds or\n`{{prefix}}settings autorole edit`",
-                "author": "Ayako Auto-Role Settings",
-                "autorole": "Auto-Role",
+                "type": "Auto-Role",
                 "botRole": "Roles given to joining Bots",
                 "userRole": "Roles given to joining Users",
                 "allRole": "Roles given to joining Bots and Users",
-                "notValid": "This Answer was not valid",
-                "edited": "Successfully edited\n```{{edited}}```",
-                "oldValue": "Old value",
-                "pleaseRestart": "Please Restart",
-                "newValue": "New value",
-                "done": "Edit finished\nRedirecting {{loading}}",
-                "setup": {
-                    "author": "[Setup Mode] Ayako Auto-Role Settings",
-                    "question": "Would you like to set-up Ayako Auto-Role?",
-                    "answers": "`Yes` or `No`",
-                    "done": "Setup finished\nRedirecting {{loading}}",
-                    "abort": "Setup aborted"
-                },
                 "edit": {
-                    "howToEdit": "Enter any of the triggers shown in the [box] infront of the option you want to edit",
                     "author": "[Edit Mode] Ayako Auto-Role Settings",
                     "active": {
                         "name": "[{{trigger}}] Auto-Role",
@@ -1192,38 +1194,31 @@
                         "trigger": ["`bots`"],
                         "answers": "`Mention(s) or ID(s)`",
                         "recommended": "This is a switch.\nIf the entered Role is already added it will be removed.",
-                        "fail": {
-                            "no": "I couldn't find this Role\n",
-                            "wrongGuild": "This Role is not Part of this Server\n"
-                        }
+                        "select": "Select 1 or more Roles",
+                        "desc": "Select the Role(s) you want to add/remove below"
                     },
                     "userroleid": {
                         "name": "[{{trigger}}] Roles given to joining Users",
                         "trigger": ["`users`"],
                         "answers": "`Mention(s) or ID(s)`",
                         "recommended": "This is a switch.\nIf the entered Role is already added it will be removed.",
-                        "fail": {
-                            "no": "I couldn't find this Role\n",
-                            "wrongGuild": "This Role is not Part of this Server\n"
-                        }
+                        "select": "Select 1 or more Roles",
+                        "desc": "Select the Role(s) you want to add/remove below"
                     },
                     "allroleid": {
                         "name": "[{{trigger}}] Roles given to joining Bots and Users",
                         "trigger": ["`all`"],
                         "answers": "`Mention(s) or ID(s)`",
                         "recommended": "This is a switch.\nIf the entered Role is already added it will be removed.",
-                        "fail": {
-                            "no": "I couldn't find this Role\n",
-                            "wrongGuild": "This Role is not Part of this Server\n"
-                        }
+                        "select": "Select 1 or more Roles",
+                        "desc": "Select the Role(s) you want to add/remove below"
                     }
                 }
             },
             "blacklist": {
                 "category": ["Auto Moderation"],
+                "type": "Blacklist",
                 "words": "Blacklisted Words",
-                "blacklist": "Blacklist",
-                "punishments": "Punishments",
                 "warn": "Warn Members",
                 "mute": "Mute Members",
                 "kick": "Kick Members",
@@ -1237,24 +1232,7 @@
                 "banAfter": "Ban after **{{amount}}** blacklisted Words",
                 "clearInt": "Clear Interval",
                 "clearInt2": "(The Interval in which the blacklisted-words-said Count is cleared)\n",
-                "author": "Ayako Blacklist Settings",
-                "howToEdit": "Edit by typing \n`edit` in the next 30 Seconds or\n`{{prefix}}settings blacklist edit`",
-                "edited": "Successfully edited\n```{{edited}}```",
-                "pleaseRestart": "Please Restart",
-                "done": "Edit finished\nRedirecting {{loading}}",
-                "notValid": "This Answer was not valid",
-                "oldValue": "Old value",
-                "newValue": "New value",
-                "setup": {
-                    "author": "[Setup Mode] Ayako Blacklist Settings",
-                    "question": "Would you like to set-up Ayako Blacklist?",
-                    "answers": "`Yes` or `No`",
-                    "done": "Setup finished\nRedirecting {{loading}}",
-                    "abort": "Setup aborted"
-                },
                 "edit": {
-                    "howToEdit": "Enter any of the triggers shown in the [box] infront of the option you want to edit",
-                    "author": "[Edit Mode] Ayako Blacklist Settings",
                     "active": {
                         "name": "[{{trigger}}] Blacklist",
                         "trigger": ["`active`"],
@@ -1319,21 +1297,13 @@
                         "name": "[{{trigger}}] Bypassed Channels",
                         "trigger": ["`channel`"],
                         "answers": "`Mention(s) or ID(s)`",
-                        "recommended": "This is a switch.\nIf the entered Channel is already added it will be removed.",
-                        "fail": {
-                            "no": "I couldn't find this Channel\n",
-                            "wrongGuild": "This Channel is not Part of this Server\n"
-                        }
+                        "recommended": "This is a switch.\nIf the entered Channel is already added it will be removed."
                     },
                     "bproleid": {
                         "name": "[{{trigger}}] Bypassed Roles",
                         "trigger": ["`role`"],
                         "answers": "`Mention(s) or ID(s)`",
-                        "recommended": "This is a switch.\nIf the entered Role is already added it will be removed.",
-                        "fail": {
-                            "no": "I couldn't find this Role\n",
-                            "wrongGuild": "This Role is not Part of this Server\n"
-                        }
+                        "recommended": "This is a switch.\nIf the entered Role is already added it will be removed."
                     },
                     "bpuserid": {
                         "name": "[{{trigger}}] Bypassed Users",
@@ -1360,28 +1330,10 @@
                 "category": ["Automation", "None"]
             },
             "disboard": {
-                "active": "Active",
-                "role": "Ping Role",
-                "channel": "Channel",
                 "category": ["Automation"],
-                "author": "Ayako DISBOARD Settings",
-                "howToEdit": "Edit by typing \n`edit` in the next 30 Seconds or\n`{{prefix}}settings disboard edit`",
-                "edited": "Successfully edited\n```{{edited}}```",
-                "pleaseRestart": "Please Restart",
-                "done": "Edit finished\nRedirecting {{loading}}",
-                "notValid": "This Answer was not valid",
-                "oldValue": "Old value",
-                "newValue": "New value",
-                "setup": {
-                    "author": "[Setup Mode] Ayako DISBOARD Settings",
-                    "question": "Would you like to set-up Ayako DISBOARD?",
-                    "answers": "`Yes` or `No`",
-                    "done": "Setup finished\nRedirecting {{loading}}",
-                    "abort": "Setup aborted"
-                },
+                "role": "Ping Role",
+                "type": "DISBOARD",
                 "edit": {
-                    "howToEdit": "Enter any of the triggers shown in the [box] infront of the option you want to edit",
-                    "author": "[Edit Mode] Ayako DISBOARD Settings",
                     "enabled": {
                         "name": "[{{trigger}}] DISBOARD",
                         "trigger": ["`active`"],
@@ -1392,21 +1344,13 @@
                         "name": "[{{trigger}}] Ping Role",
                         "trigger": ["`role`"],
                         "answers": "`Mention or ID`",
-                        "recommended": "The Role that will be pinged when you can use `!d bump` again",
-                        "fail": {
-                            "no": "I couldn't find this Role\n",
-                            "wrongGuild": "This Role is not Part of this Server\n"
-                        }
+                        "recommended": "The Role that will be pinged when you can use `!d bump` again"
                     },
                     "channelid": {
                         "name": "[{{trigger}}] Channel",
                         "trigger": ["`channel`"],
                         "answers": "`Mention or ID`",
-                        "recommended": "The Channel in which Bump Reminders will be sent",
-                        "fail": {
-                            "no": "I couldn't find this Channel\n",
-                            "wrongGuild": "This Channel is not Part of this Server\n"
-                        }
+                        "recommended": "The Channel in which Bump Reminders will be sent"
                     }
                 }
             },
@@ -1418,27 +1362,12 @@
             },
             "interactions": {
                 "category": ["Compaction", "Fun"],
-                "author": "Ayako Interaction Settings",
-                "howToEdit": "Edit by typing \n`edit` in the next 30 Seconds or\n`{{prefix}}settings interactions edit`",
-                "edited": "Successfully edited\n```{{edited}}```",
-                "pleaseRestart": "Please Restart",
-                "done": "Edit finished\nRedirecting {{loading}}",
-                "notValid": "This Answer was not valid",
-                "oldValue": "Old value",
-                "newValue": "New value",
+                "type": "Interactions",
                 "size": "Interaction Size",
                 "big": "Big",
                 "small": "Small",
                 "block": "**Blocked Interactions**",
-                "setup": {
-                    "question": "Would you like to set-up Ayako Interactions?",
-                    "answers": "`Yes` or `No`",
-                    "done": "Setup finished\nRedirecting {{loading}}",
-                    "abort": "Setup aborted"
-                },
                 "edit": { 
-                    "howToEdit": "Enter any of the triggers shown in the [box] infront of the option you want to edit",
-                    "author": "[Edit Mode] Ayako Interaction Settings",
                     "size": {
                         "name": "[{{trigger}}] Interaction Size",
                         "trigger": ["`size`"],
@@ -1469,7 +1398,14 @@
                 "category": ["Moderation"]
             },
             "nitro": {
-                "category": ["Automation"]
+                "category": ["Automation"],
+                "type": "Nitro",
+                "role": "Booster Role",
+                "channel": "Boost Log-Channel",
+                "allBoosters": "All Boosters",
+                "activeBoosters": "Active Boosters",
+                "inactiveBoosters": "Inactive Boosters",
+                "info": "The stats arent corrent? Wait until {{time}}"
             },
             "prefix": {
                 "category": ["None"]
@@ -1482,50 +1418,25 @@
             },
             "snipe": {
                 "category": ["Fun"],
-                "author": "Ayako Role-Separator Settings",
-                "howToEdit": "Edit by typing \n`edit` in the next 30 Seconds or\n`{{prefix}}settings separator edit`",
-                "edited": "Successfully edited\n```{{edited}}```",
-                "pleaseRestart": "Please Restart",
-                "done": "Edit finished\nRedirecting {{loading}}",
-                "notValid": "This Answer was not valid",
-                "oldValue": "Old value",
-                "newValue": "New value",
+                "type": "Snipe",
                 "blchannels": "Blacklisted Channels",
                 "blroles": "Blacklisted Roles",
                 "link": "Links snipeable",
                 "invite": "Invites snipeable",
                 "blwords": "Words saved as Blacklisted snipeable",
                 "bots": "Bot Messages snipeable",
-                "active": "Active",
-                "setup": {
-                    "author": "[Setup Mode] Ayako Snipe Settings",
-                    "question": "Would you like to set-up Ayako Snipe?",
-                    "answers": "`Yes` or `No`",
-                    "done": "Setup finished\nRedirecting {{loading}}",
-                    "abort": "Setup aborted"
-                },
                 "edit": {
-                    "howToEdit": "Enter any of the triggers shown in the [box] infront of the option you want to edit",
-                    "author": "[Edit Mode] Ayako Role-Separator Settings",
                     "blroleid": {
                         "name": "[{{trigger}}] Blacklisted Roles",
                         "trigger": ["`roles`"],
                         "answers": "`Mention or ID`",
-                        "recommended": "Deleted Messages of Members with these Roles won't be snipeable\nThis is a switch.\nIf the entered Channel is already bypassed it will be removed.",
-                        "fail": {
-                            "no": "I couldn't find this Role\n",
-                            "wrongGuild": "This Role is not Part of this Server\n"
-                        }
+                        "recommended": "Deleted Messages of Members with these Roles won't be snipeable\nThis is a switch.\nIf the entered Channel is already bypassed it will be removed."
                     },
                     "blchannelid": {
                         "name": "[{{trigger}}] Blacklisted Channels",
                         "trigger": ["`channels`"],
                         "answers": "`Mention or ID`",
-                        "recommended": "Deleted Messages of Members in these Channels won't be snipeable\nThis is a switch.\nIf the entered Channel is already bypassed it will be removed.",
-                        "fail": {
-                            "no": "I couldn't find this Channel\n",
-                            "wrongGuild": "This Channel is not Part of this Server\n"
-                        }
+                        "recommended": "Deleted Messages of Members in these Channels won't be snipeable\nThis is a switch.\nIf the entered Channel is already bypassed it will be removed."
                     },
                     "active": {
                         "name": "[{{trigger}}] Snipe",
@@ -1574,15 +1485,6 @@
             },
             "separators": {
                 "category": ["Automation"],
-                "author": "Ayako Role-Separator Settings",
-                "howToEdit": "Edit by typing \n`edit` in the next 30 Seconds or\n`{{prefix}}settings separator edit`",
-                "edited": "Successfully edited\n```{{edited}}```",
-                "pleaseRestart": "Please Restart",
-                "done": "Edit finished\nRedirecting {{loading}}",
-                "notValid": "This Answer was not valid",
-                "oldValue": "Old value",
-                "newValue": "New value",
-                "deleted": "Deleted",
                 "stoprole": "Stop Role",
                 "separator": "Separator Role",
                 "edit": { 
@@ -1592,11 +1494,7 @@
                         "name": "[{{trigger}}] Role",
                         "trigger": ["`stoprole`"],
                         "answers": "`Mention or ID`",
-                        "recommended": "The Role which Role at which the Separator Role stops assigning itself to separate the Members Roles\nIf any of the Roles between the Separator Role itself and the Stop Role is added to a Member, the Separator Role is auto-assigned.",
-                        "fail": {
-                            "no": "I couldn't find this Role\n",
-                            "wrongGuild": "This Role is not Part of this Server\n"
-                        }
+                        "recommended": "The Role which Role at which the Separator Role stops assigning itself to separate the Members Roles\nIf any of the Roles between the Separator Role itself and the Stop Role is added to a Member, the Separator Role is auto-assigned."
                     },
                     "active": {
                         "name": "[{{trigger}}] Separator Active",
@@ -1606,15 +1504,7 @@
                     "add": {
                         "name": "[{{trigger}}] Add a Separator",
                         "trigger": ["`add`"],
-                        "answers": "`Separator Role ID or Mention`",
-                        "fail": {
-                            "no": "I couldn't find this Role\n",
-                            "wrongGuild": "This Role is not Part of this Server\n"
-                        },
-                        "stopRole": {
-                            "question": "Do you want a stop Role?\n(A Role which tells the separator at what Role to stop self-assigning)",
-                            "answers": "`Role ID or mention` or `no`"
-                        }
+                        "answers": "`Separator Role ID or Mention`"
                     },
                     "remove": {
                         "name": "[{{trigger}}] Remove a Separator",
@@ -1642,7 +1532,6 @@
                 "list": {
                     "name": "List affected Roles by typing \n`list [number]` in the next 30 Seconds or\n`{{prefix}}settings separator list [number]`",
                     "separatorRole": "Separator Role",
-                    "stopRole": "Stop Role",
                     "affectedRoles": "Affected Roles",
                     "notExistent":  "This Number doesn't exist"
                 }

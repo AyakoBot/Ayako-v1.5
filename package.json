@@ -11,7 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "@top-gg/sdk": "^3.1.1",
-    "discord.js": "^13.0.0-dev.5842e35.1625011425",
+    "discord.js": "^13.0.0-dev.56b5b7e.1625313788",
     "express": "^4.17.1",
     "imgur": "^1.0.2",
     "is-image-url": "^1.1.8",

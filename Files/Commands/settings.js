@@ -48,9 +48,30 @@ module.exports = {
 			const file = settings.get(msg.args[0].toLowerCase());
 			if (!file) return msg.client.ch.reply(msg, msg.lan.invalSettings);
 			msg.lan = msg.lan[msg.args[0].toLowerCase()];
-			if (msg.args[1] && file.perm && !msg.member.permissions.has(new Discord.Permissions(file.perm))) return msg.client.ch.reply(msg, msg.language.commands.commandHandler.missingPermissions);
-			else file.exe(msg);
+			if (!msg.args[1]) display(msg, file);
+			else if (msg.args[1] && file.perm && !msg.member.permissions.has(new Discord.Permissions(file.perm))) return msg.client.ch.reply(msg, msg.language.commands.commandHandler.missingPermissions);
+			else edit(msg, file);
 		}
 		settings = undefined;
 	}
 };
+
+async function display(msg, file) {
+	const embed = file.displayEmbed(msg);
+	msg.client.ch.reply(msg, {embeds: [embed]});
+	const collected = await msg.channel.awaitMessages({filter: (m) => m.author.id == msg.author.id, max: 1, time: 30000});
+	if (!collected) return;
+	if (collected.first() && collected.first().content == msg.language.edit) {
+		if (file.perm && !msg.member.permissions.has(new Discord.Permissions(file.perm))) return msg.client.ch.reply(msg, msg.language.commands.commandHandler.missingPermissions);
+		else edit(msg, file);
+	}
+}
+
+async function edit(msg, file) {
+	file.name = msg.args[0].toLowerCase()+'.js';
+	msg.channel.send(file.name)
+	if (file.perm && !msg.member.permissions.has(new Discord.Permissions(file.perm))) return msg.client.ch.reply(msg, msg.language.commands.commandHandler.missingPermissions);
+	const editEmbed = file.editEmbed(msg);
+	msg.m = await msg.client.ch.reply(msg, {embeds: [editEmbed]});
+
+}

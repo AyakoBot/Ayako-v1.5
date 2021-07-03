@@ -14,7 +14,8 @@ module.exports = {
 			if (typeof text === 'string') return text.replace(/`/g, '`' + String.fromCharCode(8203)).replace(/@/g, '@' + String.fromCharCode(8203)).replace(reg, 'TOKEN'); 
 			else return text; }; 
 		try { 
-			let code = msg.args.slice(0).join(' ');
+			let code = `${msg.args.slice(0).join(' ')}`;
+			if (code.startsWith('```')) code = code.replace(/```js/g, '').replace(/```/g, '');
 			let evaled = await eval(`(async () => {${code}})()`);
 			if (typeof evaled !== 'string') evaled = require('util').inspect(evaled); 
 			

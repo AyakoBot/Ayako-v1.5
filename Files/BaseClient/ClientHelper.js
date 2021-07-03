@@ -59,7 +59,6 @@ module.exports = {
 		if (content && content.type == 'rich') options.embeds ? options.embeds.push(content) : options.embeds = [content];
 		else if (typeof(content) !== 'string') options = content;
 		else options.content = content;
-		console.log(options);
 		return await msg.reply(options).catch((e) => {this.logger('Reply Error', e);});
 	},
 	stp(expression, Object) {
@@ -409,4 +408,12 @@ module.exports = {
 			}
 		});
 	},
+	notYours(interaction, msg) {
+		const embed = new Discord.MessageEmbed()
+			.setAuthor(msg.language.error, client.constants.standard.image, client.constants.standard.invite)
+			.setColor(client.constants.error)
+			.setDescription(msg.language.notYours);
+		interaction.reply({embeds: [embed], ephemeral: true}).catch(() => {});
+	},
+
 };

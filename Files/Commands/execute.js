@@ -8,6 +8,5 @@ module.exports = {
 	takesFirstArg: false,
 	// eslint-disable-next-line no-unused-vars
 	async exe(msg) {
-
 	}
 };

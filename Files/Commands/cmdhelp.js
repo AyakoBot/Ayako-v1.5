@@ -47,6 +47,6 @@ module.exports = {
 			)
 			.setColor(msg.guild.me.displayHexColor)
 			.setTimestamp();
-		msg.channel.send(embed);
+		msg.client.ch.reply(msg, embed);
 	}
 };
