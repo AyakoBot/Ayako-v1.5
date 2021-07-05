@@ -415,5 +415,11 @@ module.exports = {
 			.setDescription(msg.language.notYours);
 		interaction.reply({embeds: [embed], ephemeral: true}).catch(() => {});
 	},
+	collectorEnd(msg) {
+		const embed = new Discord.MessageEmbed()
+			.setDescription(msg.language.timeError)
+			.setColor(msg.client.constants.error);
+		msg.m.edit({embeds: [embed], components: []}).catch(() => {});
+	}
 
 };

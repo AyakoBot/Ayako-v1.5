@@ -742,13 +742,16 @@
     "stageOpen": "Stage Channel Opened/Closed",
     "spam": "Spam",
     "requestedBy": "Requested by {{user.tag}}",
-    "notYours": "This Interaction is not meant for you",
+    "notYours": "You cannot interact with someone else's Messages",
     "next": "Next",
     "prev": "Previous",
     "timeError": "Time ran out",
     "page": "Page",
     "done": "Done",
     "selected": "Selected",
+    "true": "True",
+    "false": "False",
+    "back": "Back",
     "select": {
         "roles": {
             "select": "Select 1 or more Roles",
@@ -1054,7 +1057,8 @@
         "settings": {
             "valid": "Valid Answers",
             "notValid": "This Answer was not valid",
-            "howToEdit": "Edit by typing \n`edit` in the next 30 Seconds or\n`{{prefix}}settings antispam edit`",
+            "howToEdit": "Edit by typing \n`edit` in the next 30 Seconds or\n`{{prefix}}settings {{type}} edit`",
+            "howToEdit2": "Edit by typing one of the triggers shown in the `[box]`\nor press the according Button",
             "categoy": "Info",
             "description": "Display the Ayako Server Settings",
             "pleaseRestart": "Please Restart",
@@ -1066,6 +1070,10 @@
             "invalSettings": "These Settings don't exist, please enter a valid Setting",
             "author": "Ayako {{type}} Settings",
             "authorEdit": "[Edit Mode] Ayako {{type}} Settings",
+            "noEmbed": {
+                "author": "Ayako Settings",
+                "desc": "No Settings available for the selected Setting"
+            },
             "setup": {
                 "question": "Would you like to set-up Ayako {{type}}?",
                 "answers": "`Yes` or `No`",
@@ -1093,8 +1101,6 @@
                 "bpusers": "Bypassed Users",
                 "readWarns": "**Read Warnings** (required for the following 3 options)",
                 "edit": {
-                    "author": "[Edit Mode] Ayako Anti-Spam Settings",
-                    "howToEdit": "Enter any of the triggers shown in the [box] infront of the option you want to edit",
                     "banenabledtof": {
                         "name": "[{{trigger}}] Ban Members",
                         "trigger": ["`bm`","`ban`"],
@@ -1182,7 +1188,6 @@
                 "userRole": "Roles given to joining Users",
                 "allRole": "Roles given to joining Bots and Users",
                 "edit": {
-                    "author": "[Edit Mode] Ayako Auto-Role Settings",
                     "active": {
                         "name": "[{{trigger}}] Auto-Role",
                         "trigger": ["`active`"],

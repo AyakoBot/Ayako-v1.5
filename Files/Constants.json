@@ -308,6 +308,7 @@
         "ayakoPeekID": "758872110067351562",
         "ayakoPeekLink": "https://cdn.discordapp.com/emojis/758872110067351562.png?v=1",
         "up": "🆙",
+        "back": "⬅️",
         "numbers": {
             "0": "0⃣",
             "1": "1⃣",
@@ -402,7 +403,7 @@
                     "antispamtof": "boolean",
                     "bpchannelid": "mention",
                     "bproleid": "mention",
-                    "bpuserid": "mention",
+                    "bpuserid": "user",
                     "readofwarnstof": "boolean"
                 },
                 "autorole": {
@@ -423,7 +424,7 @@
                     "banafter": "mention",
                     "bpchannelid": "mention",
                     "bproleid": "mention",
-                    "bpuserid": "mention",
+                    "bpuserid": "user",
                     "clearint": "time",
                     "words": "string"
                 },
