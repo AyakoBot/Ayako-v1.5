@@ -10,7 +10,7 @@ module.exports = {
 		let contained = false;
 		if (oldMsg.content.toLowerCase().includes('https://') || oldMsg.content.toLowerCase().includes('http://')) return;
 		if (newMsg.content.toLowerCase().includes('https://') || newMsg.content.toLowerCase().includes('https://')) return;
-		const res = await ch.query(`SELECT * FROM blacklists WHERE guildid = '${oldMsg.guild.id}';`);
+		const res = await ch.query(`SELECT * FROM blacklist WHERE guildid = '${oldMsg.guild.id}';`);
 		if (res && res.rowCount > 0) {
 			const r = res.rows[0];
 			const args = newMsg.content.split(/ +/);

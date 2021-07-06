@@ -8,7 +8,7 @@ module.exports = {
 		if (!msg.author || msg.author.bot) return;
 		const member = await msg.client.ch.member(msg.guild, msg.author);
 		if (member.permissions.has(8n)) return;
-		const result = await msg.client.ch.query(`SELECT * FROM blacklists WHERE guildid = '${msg.guild.id}';`);
+		const result = await msg.client.ch.query(`SELECT * FROM blacklist WHERE guildid = '${msg.guild.id}';`);
 		if (result && result.rowCount > 0) {
 			if (result.rows[0].active == false) return;
 			const args = msg.content.split(/ +/);
