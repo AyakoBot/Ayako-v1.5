@@ -59,18 +59,6 @@ module.exports = {
 			}
 			timestamps.set(msg.channel.id, now);
 		}
-		this.categoryCheck(msg);
-	},
-	async categoryCheck(msg) {
-		let category = msg.command.category;
-		if (category) {
-			category = category.toLowerCase();
-			const res = await msg.client.ch.query(`SELECT * FROM disabled WHERE guildid = '${msg.guild.id}';`);
-			if (res && res.rowCount > 0) {
-				if (category == 'moderation (advanced)') category = 'moderationAdvanced';
-				if (res.rows[0][category] == false) return msg.client.ch.reply(msg, msg.client.ch.stp(msg.language.commands.commandHandler.CategoryDisabled, {category: msg.command.category}));
-			}
-		}
 		this.thisGuildOnly(msg);
 	},
 	async thisGuildOnly(msg) {
@@ -158,8 +146,8 @@ module.exports = {
 			if (msg.command.takesFirstArg && !msg.args[0]) {
 				msg.triedCMD = msg.command;
 				msg.command = msg.client.commands.get('cmdhelp');
-				this.categoryCheck(msg);
-			} else this.categoryCheck(msg);
+				this.thisGuildOnly(msg);
+			}
 		} else msg.client.ch.reply(msg, msg.language.commands.commandHandler.GuildOnly);
 
 	},
