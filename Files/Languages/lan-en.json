@@ -768,6 +768,9 @@
         "channel": {
             "select": "Select a Channel",
             "desc": "Select the Channel you want to add/remove below"
+        },
+        "users": {
+            "select": "Type 1 or more User IDs or Mentions"
         }
     },
     "mod": {
@@ -1154,14 +1157,22 @@
                         "trigger": ["`channel`"],
                         "recommended": "This is a switch.\nIf the entered Channel is already bypassed it will be removed.",
                         "select": "Select 1 or more Channels",
-                        "desc": "Select the Channel(s) you want to bypass below"
+                        "desc": "Select the Channel(s) you want to bypass below",
+                        "fail": {
+                            "no": "I couldn't find this Channel\n",
+                            "wrongGuild": "This Channel is not Part of this Server\n"
+                        }
                     },
                     "bproleid": {
                         "name": "[{{trigger}}] Bypassed Roles",
                         "trigger": ["`role`"],
                         "recommended": "This is a switch.\nIf the entered Role is already bypassed it will be removed.",
                         "select": "Select 1 or more Roles",
-                        "desc": "Select the Role(s) you want to bypass below"
+                        "desc": "Select the Role(s) you want to bypass below",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
                     },
                     "bpuserid": {
                         "name": "[{{trigger}}] Bypassed Users",
@@ -1200,7 +1211,11 @@
                         "answers": "`Mention(s) or ID(s)`",
                         "recommended": "This is a switch.\nIf the entered Role is already added it will be removed.",
                         "select": "Select 1 or more Roles",
-                        "desc": "Select the Role(s) you want to add/remove below"
+                        "desc": "Select the Role(s) you want to add/remove below",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
                     },
                     "userroleid": {
                         "name": "[{{trigger}}] Roles given to joining Users",
@@ -1208,7 +1223,11 @@
                         "answers": "`Mention(s) or ID(s)`",
                         "recommended": "This is a switch.\nIf the entered Role is already added it will be removed.",
                         "select": "Select 1 or more Roles",
-                        "desc": "Select the Role(s) you want to add/remove below"
+                        "desc": "Select the Role(s) you want to add/remove below",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
                     },
                     "allroleid": {
                         "name": "[{{trigger}}] Roles given to joining Bots and Users",
@@ -1216,7 +1235,11 @@
                         "answers": "`Mention(s) or ID(s)`",
                         "recommended": "This is a switch.\nIf the entered Role is already added it will be removed.",
                         "select": "Select 1 or more Roles",
-                        "desc": "Select the Role(s) you want to add/remove below"
+                        "desc": "Select the Role(s) you want to add/remove below",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
                     }
                 }
             },
@@ -1302,13 +1325,21 @@
                         "name": "[{{trigger}}] Bypassed Channels",
                         "trigger": ["`channel`"],
                         "answers": "`Mention(s) or ID(s)`",
-                        "recommended": "This is a switch.\nIf the entered Channel is already added it will be removed."
+                        "recommended": "This is a switch.\nIf the entered Channel is already added it will be removed.",
+                        "fail": {
+                            "no": "I couldn't find this Channel\n",
+                            "wrongGuild": "This Channel is not Part of this Server\n"
+                        }
                     },
                     "bproleid": {
                         "name": "[{{trigger}}] Bypassed Roles",
                         "trigger": ["`role`"],
                         "answers": "`Mention(s) or ID(s)`",
-                        "recommended": "This is a switch.\nIf the entered Role is already added it will be removed."
+                        "recommended": "This is a switch.\nIf the entered Role is already added it will be removed.",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
                     },
                     "bpuserid": {
                         "name": "[{{trigger}}] Bypassed Users",
@@ -1349,13 +1380,21 @@
                         "name": "[{{trigger}}] Ping Role",
                         "trigger": ["`role`"],
                         "answers": "`Mention or ID`",
-                        "recommended": "The Role that will be pinged when you can use `!d bump` again"
+                        "recommended": "The Role that will be pinged when you can use `!d bump` again",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
                     },
                     "channelid": {
                         "name": "[{{trigger}}] Channel",
                         "trigger": ["`channel`"],
                         "answers": "`Mention or ID`",
-                        "recommended": "The Channel in which Bump Reminders will be sent"
+                        "recommended": "The Channel in which Bump Reminders will be sent",
+                        "fail": {
+                            "no": "I couldn't find this Channel\n",
+                            "wrongGuild": "This Channel is not Part of this Server\n"
+                        }
                     }
                 }
             },
@@ -1435,13 +1474,21 @@
                         "name": "[{{trigger}}] Blacklisted Roles",
                         "trigger": ["`roles`"],
                         "answers": "`Mention or ID`",
-                        "recommended": "Deleted Messages of Members with these Roles won't be snipeable\nThis is a switch.\nIf the entered Channel is already bypassed it will be removed."
+                        "recommended": "Deleted Messages of Members with these Roles won't be snipeable\nThis is a switch.\nIf the entered Channel is already bypassed it will be removed.",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
                     },
                     "blchannelid": {
                         "name": "[{{trigger}}] Blacklisted Channels",
                         "trigger": ["`channels`"],
                         "answers": "`Mention or ID`",
-                        "recommended": "Deleted Messages of Members in these Channels won't be snipeable\nThis is a switch.\nIf the entered Channel is already bypassed it will be removed."
+                        "recommended": "Deleted Messages of Members in these Channels won't be snipeable\nThis is a switch.\nIf the entered Channel is already bypassed it will be removed.",
+                        "fail": {
+                            "no": "I couldn't find this Channel\n",
+                            "wrongGuild": "This Channel is not Part of this Server\n"
+                        }
                     },
                     "active": {
                         "name": "[{{trigger}}] Snipe",
@@ -1499,7 +1546,11 @@
                         "name": "[{{trigger}}] Role",
                         "trigger": ["`stoprole`"],
                         "answers": "`Mention or ID`",
-                        "recommended": "The Role which Role at which the Separator Role stops assigning itself to separate the Members Roles\nIf any of the Roles between the Separator Role itself and the Stop Role is added to a Member, the Separator Role is auto-assigned."
+                        "recommended": "The Role which Role at which the Separator Role stops assigning itself to separate the Members Roles\nIf any of the Roles between the Separator Role itself and the Stop Role is added to a Member, the Separator Role is auto-assigned.",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
                     },
                     "active": {
                         "name": "[{{trigger}}] Separator Active",

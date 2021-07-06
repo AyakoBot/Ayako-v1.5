@@ -401,16 +401,16 @@
                     "kickafterwarnsamount": "number",
                     "banafterwarnsamount": "number",
                     "antispamtof": "boolean",
-                    "bpchannelid": "mention",
-                    "bproleid": "mention",
-                    "bpuserid": "user",
+                    "bpchannelid": "channels",
+                    "bproleid": "roles",
+                    "bpuserid": "users",
                     "readofwarnstof": "boolean"
                 },
                 "autorole": {
                     "active": "boolean",
-                    "botroleid": "mention",
-                    "userroleid": "mention",
-                    "allroleid": "mention"
+                    "botroleid": "roles",
+                    "userroleid": "roles",
+                    "allroleid": "roles"
                 },
                 "blacklist": {
                     "active": "boolean",
@@ -421,17 +421,17 @@
                     "warnafter": "number",
                     "muteafter": "number",
                     "kickafter": "boolean",
-                    "banafter": "mention",
-                    "bpchannelid": "mention",
-                    "bproleid": "mention",
-                    "bpuserid": "user",
+                    "banafter": "number",
+                    "bpchannelid": "channels",
+                    "bproleid": "roles",
+                    "bpuserid": "users",
                     "clearint": "time",
                     "words": "string"
                 },
                 "disboard": {
                     "enabled": "boolean",
-                    "channelid": "mention",
-                    "role": "mention"
+                    "channelid": "channel",
+                    "role": "role"
                 },
                 "interactions": {
                     "size": "boolean",
@@ -439,22 +439,50 @@
                 },
                 "separators": {
                     "active": "boolean",
-                    "stoprole": "mention",
+                    "stoprole": "role",
                     "remove": "number",
-                    "add": "mention",
+                    "add": "role",
                     "edit": "number",
                     "oneTimeRunner": "name"
                 },
                 "snipe": {
                     "active": "boolean",
-                    "blchannelid": "mention",
-                    "blroleid": "mention",
+                    "blchannelid": "channels",
+                    "blroleid": "roles",
                     "links": "boolean",
                     "invites": "boolean",
                     "blwords": "boolean",
                     "bots": "boolean"
                 }
-            }   
+            },
+            "tablenames": {
+                "antispam": "antispamsettings",
+                "blacklist": "blacklists",
+                "autorole": "autorole",
+                "disabled": "disabledcommands",
+                "disboard": "disboard",
+                "forcecooldowns": "NULL",
+                "gifposter": "gifposter",
+                "leveling": "levelingsettings",
+                "logs": "logchannels",
+                "nitro": "nitrosettings",
+                "reactionroles": "reactionroles",
+                "selfroles": "selfroles",
+                "separators": "roleseparators",
+                "suggestions": "suggestionsettings",
+                "ticketing": "NULL",
+                "vc": "NULL",
+                "verification": "verification",
+                "welcome": "welcome",
+                "language": "language",
+                "overview": "NULL",
+                "prefix": "prefix",
+                "user": "usersettings",
+                "interactions": "interactions",
+                "snipe": "snipesettings",
+                "modroles": "modrolesnew",
+                "muterole": "muterole"
+            }
         }
     }
 }
