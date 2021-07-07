@@ -12,7 +12,7 @@ module.exports = {
 		if (resG && resG.rowCount > 0) {
 			const resSpam = await msg.client.ch.query(`SELECT * FROM antilevelspam WHERE userid = '${msg.author.id}';`);
 			if (resSpam && resSpam.rowCount > 0) {
-				if (msg.content.replace('\'', '').replace('`', '') == resSpam.rows[0].message) return;
+				if (msg.content.replace(/'/g, '').replace('`', '') == resSpam.rows[0].message) return;
 			}
 			const user = msg.client.users.cache.get(resG.rows[0].userid);
 			const curXP = resG.rows[0].xp;
