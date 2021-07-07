@@ -153,7 +153,7 @@ module.exports = {
 	},
 	async commandExe(msg) {
 		if (msg.channel.type !== 'dm') {
-			const res = await msg.client.ch.query(`SELECT * FROM logchannel WHERE guildid = '${msg.guild.id}';`);
+			const res = await msg.client.ch.query(`SELECT * FROM logchannels WHERE guildid = '${msg.guild.id}';`);
 			if (res && res.rowCount > 0) msg.logchannel = msg.client.channels.cache.get(res.rows[0].modlogs);
 		}
 		if (msg.author.id == msg.client.user.id) msg.delete();
