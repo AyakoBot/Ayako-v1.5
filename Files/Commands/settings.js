@@ -654,7 +654,7 @@ async function edit(msg, file, answer) {
 		const embed = new Discord.MessageEmbed()
 			.setColor(msg.client.constants.commands.settings.log.color)
 			.setTimestamp()
-			.setAuthor(msg.client.ch.stp(msg.language.selfLog.author, {setting: msg.file.name}))
+			.setAuthor(msg.client.ch.stp(msg.language.selfLog.author, {setting: msg.lan.type}))
 			.setDescription(msg.client.ch.stp(msg.language.selfLog.description, {msg: msg, setting: msg.file.name}));
 		if (before !== null || (Array.isArray(before) && before.length > 0)) embed.addField(msg.lanSettings.oldValue, `${Array.isArray(before) ? before.map(f => compatibilityType == 'channels' ? ` <#${f}>` : compatibilityType == 'roles' ? ` <@&${f}>` : compatibilityType == 'users' ? ` <@${f}>` : ` ${f}`) : before}`);
 		if (after !== null || (Array.isArray(after) && after.length > 0)) embed.addField(msg.lanSettings.newValue, `${Array.isArray(after) ? after.map(f => compatibilityType == 'channels' ? ` <#${f}>` : compatibilityType == 'roles' ? ` <@&${f}>` : compatibilityType == 'users' ? ` <@${f}>` : ` ${f}`) : after}`);
