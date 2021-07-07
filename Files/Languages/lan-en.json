@@ -463,6 +463,10 @@
             "description": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas pruned **{{amount}} Members**\nfor **{{days}} day(s)** of inactivity"
         }
     },
+    "selfLog": {
+        "author": "Ayako {{setting}} Settings Updated",
+        "description": "User {{msg.author}} / `{{msg.author.tag}}` / `{{msg.author.id}}`\nhas updated Setting `{{setting}}`\n\n**Changes:**"
+    },
     "time": {
         "seconds": "Second(s)",
         "minutes": "Minute(s)",
@@ -771,6 +775,10 @@
         },
         "users": {
             "select": "Type 1 or more User IDs or Mentions"
+        },
+        "number": {
+            "select": "Select the Number",
+            "desc": "Select the new Number below"
         }
     },
     "mod": {
@@ -1064,7 +1072,7 @@
             "howToEdit2": "Edit by typing one of the triggers shown in the `[box]`\nor press the according Button",
             "categoy": "Info",
             "description": "Display the Ayako Server Settings",
-            "pleaseRestart": "Please Restart",
+            "pleaseRestart": "Please try again or type |cancel|",
             "edited": "Successfully edited\n```{{edited}}```",
             "oldValue": "Old value",
             "newValue": "New value",

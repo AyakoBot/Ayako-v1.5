@@ -70,7 +70,7 @@ async function display(msg, file) {
 	let r;
 	const res = await msg.client.ch.query(`SELECT * FROM ${msg.client.constants.commands.settings.tablenames[file.name]} WHERE guildid = '${msg.guild.id}';`);
 	if (res && res.rowCount > 0) r = res.rows[0];
-	else return setup(msg, r);
+	else return setup(msg);
 	const embed = typeof(file.displayEmbed) == 'function' ? file.displayEmbed(msg, r) : noEmbed(msg);
 	embed.setAuthor(msg.client.ch.stp(msg.lanSettings.author, {type: msg.lan.type}), msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite);
 	embed.setDescription(`${msg.client.ch.stp(msg.lanSettings.howToEdit, {prefix: msg.client.constants.standard.prefix, type: file.name})}\n\n${embed.description ? embed.description : ''}`);
@@ -85,6 +85,7 @@ async function display(msg, file) {
 }
 
 async function edit(msg, file, answer) {
+	let compatibilityType;
 	let additionalIdentifiers; let r;
 	file.name = msg.args[0].toLowerCase();
 	msg.file = file;
@@ -130,6 +131,7 @@ async function edit(msg, file, answer) {
 	buttonsCollector.on('end', (collected, reason) => {if (reason == 'time') {msg.client.ch.collectorEnd(msg);}});
 	messageCollector.on('collect', (message) => {
 		if (message.author.id == msg.author.id) {
+			if (message.content == msg.language.cancel) return aborted(msg, [messageCollector, buttonsCollector]);
 			let editing;
 			Object.entries(msg.lan.edit).forEach(e => {e[1].trigger.forEach(trigger => {if (trigger.replace(/`/g, '') == message.content.toLowerCase()) editing = e;});});
 			if (editing) {
@@ -158,7 +160,7 @@ async function edit(msg, file, answer) {
 				const PRIMARY = new Discord.MessageButton()
 					.setCustomID('true')
 					.setLabel(msg.language.true)
-					.setStyle('PRIMARY');
+					.setStyle('SUCCESS');
 				const SECONDARY = new Discord.MessageButton()
 					.setCustomID('false')
 					.setLabel(msg.language.false)
@@ -187,8 +189,9 @@ async function edit(msg, file, answer) {
 			buttonsCollector.on('end', (collected, reason) => {if (reason == 'time') {msg.client.ch.collectorEnd(msg);}});
 			messageCollector.on('collect', (message) => {
 				if (message.author.id == msg.author.id) {
+					if (message.content == msg.language.cancel) return aborted(msg, [messageCollector, buttonsCollector]);
 					newSetting = message.content.toLowerCase() == msg.language.true.toLowerCase() ? true : message.content.toLowerCase() == msg.language.false.toLowerCase() ? false : null;
-					if (newSetting == null) return;
+					if (newSetting == null) return notValid(msg);
 					message.delete().catch(() => {});
 					buttonsCollector.stop();
 					messageCollector.stop();
@@ -197,7 +200,7 @@ async function edit(msg, file, answer) {
 			});
 		} else if (type == 'select') {
 			if (settings == 'channels' || settings == 'roles' || settings == 'channel' || settings == 'role') {
-				const compatibilityType = settings.includes('s') ? settings : settings+'s';
+				compatibilityType = settings.includes('s') ? settings : settings+'s';
 				const req = msg.guild[compatibilityType].cache;
 				req.sort((a,b) => a.rawPosition - b.rawPosition);
 				const options = [];
@@ -228,11 +231,16 @@ async function edit(msg, file, answer) {
 					.setLabel(msg.language.done)
 					.setDisabled(true)
 					.setStyle('PRIMARY');
+				const back = new Discord.MessageButton()
+					.setCustomID('back')
+					.setLabel(msg.language.back)
+					.setEmoji(msg.client.constants.emotes.back)
+					.setStyle('DANGER');
 				const embed = new Discord.MessageEmbed()
 					.setAuthor(msg.client.ch.stp(msg.lanSettings.author, {type: msg.lan.type}), msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
 					.setDescription(`${msg.language.select[settings].desc}\n${msg.language.page}: \`1/${Math.ceil(options.length / 25)}\``);
-				if (answer) answer.update({embeds: [embed], components: [[menu],[prev],[next],[done]]}).catch(() => {});
-				else msg.m.edit({embeds: [embed], components: [[menu],[prev],[next],[done]]}).catch(() => {});
+				if (answer) answer.update({embeds: [embed], components: [[menu],[prev,next],[back,done]]}).catch(() => {});
+				else msg.m.edit({embeds: [embed], components: [[menu],[prev,next],[back,done]]}).catch(() => {});
 				const buttonsCollector = new Discord.MessageComponentInteractionCollector(msg.m, {time: 60000});
 				const messageCollector = new Discord.MessageCollector(msg.channel, {time: 60000});
 				buttonsCollector.on('collect', (clickButton) => {
@@ -266,6 +274,11 @@ async function edit(msg, file, answer) {
 								.setCustomID('done')
 								.setLabel(msg.language.done)
 								.setStyle('PRIMARY');
+							const back = new Discord.MessageButton()
+								.setCustomID('back')
+								.setLabel(msg.language.back)
+								.setEmoji(msg.client.constants.emotes.back)
+								.setStyle('DANGER');
 							if (answered.length > 0) done.setDisabled(false);
 							else done.setDisabled(true);
 							const embed = new Discord.MessageEmbed()
@@ -276,10 +289,8 @@ async function edit(msg, file, answer) {
 							else next.setDisabled(false);
 							if (page > 1) prev.setDisabled(false);
 							else prev.setDisabled(true);
-							clickButton.update({embeds: [embed], components: [[menu],[prev],[next],[done]]}).catch(() => {});
+							clickButton.update({embeds: [embed], components: [[menu],[prev,next],[back,done]]}).catch(() => {});
 						} else if (clickButton.customID == 'done') {
-							messageCollector.stop('finished');
-							buttonsCollector.stop('finished');
 							if (compatibilityType == 'channels' || compatibilityType == 'roles') {
 								if (answered.length > 0) {
 									answered.forEach(id => { 
@@ -301,10 +312,12 @@ async function edit(msg, file, answer) {
 									});
 								}
 							}
+							messageCollector.stop('finished');
+							buttonsCollector.stop('finished');
 							gotNewSettings(r[msg.property], null, clickButton);
 						} else if (clickButton.customID == msg.property) {
 							clickButton.values.forEach(val => {
-								if (!answered.includes(val)) answered.push(msg.guild[settings].cache.get(val).id);
+								if (!answered.includes(val)) msg.guild[settings].cache.get(val) ? answered.push(msg.guild[settings].cache.get(val).id) : '';
 								else answered.splice(answered.indexOf(val), 1);
 							});
 							const menu = new Discord.MessageSelectMenu()
@@ -325,6 +338,11 @@ async function edit(msg, file, answer) {
 								.setCustomID('done')
 								.setLabel(msg.language.done)
 								.setStyle('PRIMARY');
+							const back = new Discord.MessageButton()
+								.setCustomID('back')
+								.setLabel(msg.language.back)
+								.setEmoji(msg.client.constants.emotes.back)
+								.setStyle('DANGER');
 							if (answered.length > 0) done.setDisabled(false);
 							else done.setDisabled(true);
 							let page = clickButton.message.embeds[0].description.split(/`+/)[1].split(/\/+/)[0];
@@ -332,27 +350,25 @@ async function edit(msg, file, answer) {
 								.setAuthor(msg.client.ch.stp(msg.lanSettings.author, {type: msg.lan.type}), msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
 								.setDescription(`${msg.language.select[settings].desc}\n${msg.language.page}: \`${page}/${Math.ceil(+options.length / 25)}\``)
 								.addField(msg.language.selected, `${answered.map(c => settings == 'channels' ? `<#${c}>` : settings == 'roles' ? `<@&${c}>` : ` ${c}`)} `);
-							clickButton.update({embeds: [embed], components: [[menu],[prev],[next],[done]]}).catch(() => {});
-						}
+							clickButton.update({embeds: [embed], components: [[menu],[prev,next],[back,done]]}).catch(() => {});
+						} else if (clickButton.customID == 'back') return edit(msg, msg.file, clickButton);
 					} else msg.client.ch.notYours(clickButton, msg);
 				});
 				messageCollector.on('collect', async (message) => {
 					if (msg.author.id == message.author.id) {
+						if (message.content == msg.language.cancel) return aborted(msg, [messageCollector, buttonsCollector]);
 						message.delete().catch(() => {});
 						if (settings == 'role' || settings == 'channel') {
 							const answerContent = msg.content.replace(/\D+/g, '');
 							const result = msg.guild[compatibilityType].cache.get(answerContent);
-							if (result) {
-								buttonsCollector.stop('finished');
-								messageCollector.stop('finished');
-								answered = r[msg.property];
-							} else notValid(msg);
+							if (result) answered = r[msg.property];
+							else notValid(msg);
 						} else if (settings == 'roles' || settings == 'channels') {
 							const args = message.content.split(/ +/);
-							await Promise.all(args.map(async raw => {
+							Promise.all(args.map(async raw => {
 								const id = raw.replace(/\D+/g, '');
-								const request = await msg.guild[compatibilityType].cache.get(id);
-								if (!request || !request.id) fail.push(`\`${raw}\` ${msg.lan.edit[msg.property].fail.no}`);
+								const request = msg.guild[compatibilityType].cache.get(id);
+								if ((!request || !request.id) && (!r[msg.property] || (r[msg.property] && !r[msg.property].includes(id)))) fail.push(`\`${raw}\` ${msg.lan.edit[msg.property].fail.no}`);
 								else answered.push(id);
 							}));
 							if (answered.length > 0) {
@@ -365,7 +381,9 @@ async function edit(msg, file, answer) {
 								});
 							}
 							answered = r[msg.property];
-						} else answered = message.content;
+						} else return notValid(msg);
+						buttonsCollector.stop('finished');
+						messageCollector.stop('finished');
 						gotNewSettings(answered, fail);
 					}
 				});
@@ -374,13 +392,16 @@ async function edit(msg, file, answer) {
 						const embed = new Discord.MessageEmbed()
 							.setAuthor(msg.client.ch.stp(msg.lanSettings.author, {type: msg.lan.type}), msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
 							.setDescription(msg.language.timeError);
-						msg.m.edit({embeds: [embed]}).catch(() => {});
+						msg.m.edit({embeds: [embed], components: []}).catch(() => {});
 					}
 				});
 			} else if (settings == 'number') {
 				const req = [];
 				for (let i = 0; i < 9999; i++) {req.push(i);}
 				const options = [];
+				req.forEach(r => {
+					options.push({label: `${r}`, value: `${r}`});
+				});
 				const take = [];
 				for(let j = 0; j < 25; j++) {take.push(options[j]);}
 				const menu = new Discord.MessageSelectMenu()
@@ -403,10 +424,16 @@ async function edit(msg, file, answer) {
 					.setLabel(msg.language.done)
 					.setDisabled(true)
 					.setStyle('PRIMARY');
+				const back = new Discord.MessageButton()
+					.setCustomID('back')
+					.setLabel(msg.language.back)
+					.setEmoji(msg.client.constants.emotes.back)
+					.setStyle('DANGER');
 				const embed = new Discord.MessageEmbed()
 					.setAuthor(msg.client.ch.stp(msg.lanSettings.author, {type: msg.lan.type}), msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
 					.setDescription(`${msg.language.select[settings].desc}\n${msg.language.page}: \`1/${Math.ceil(options.length / 25)}\``);
-				msg.m.edit({embeds: [embed], components: [[menu],[prev],[next],[done]]}).catch(() => {});
+				if (answer) answer.update({embeds: [embed], components: [[menu],[prev,next],[back,done]]}).catch(() => {});
+				else msg.m.edit({embeds: [embed], components: [[menu],[prev,next],[back,done]]}).catch(() => {});
 				const buttonsCollector = new Discord.MessageComponentInteractionCollector(msg.m, {time: 60000});
 				const messageCollector = new Discord.MessageCollector(msg.channel, {time: 60000});
 				buttonsCollector.on('collect', (clickButton) => {
@@ -440,35 +467,29 @@ async function edit(msg, file, answer) {
 								.setCustomID('done')
 								.setLabel(msg.language.done)
 								.setStyle('PRIMARY');
+							const back = new Discord.MessageButton()
+								.setCustomID('back')
+								.setLabel(msg.language.back)
+								.setEmoji(msg.client.constants.emotes.back)
+								.setStyle('DANGER');
 							if (answered.length > 0) done.setDisabled(false);
 							else done.setDisabled(true);
 							const embed = new Discord.MessageEmbed()
 								.setAuthor(msg.client.ch.stp(msg.lanSettings.author, {type: msg.lan.type}), msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
 								.setDescription(`${msg.language.select[settings].desc}\n${msg.language.page}: \`${page}/${Math.ceil(+options.length / 25)}\``);
-							if (answered.length > 0) embed.addField(msg.language.selected, `${answered.map(c => ` ${c}`)} `);
+							if (answered.length > 0) embed.addField(msg.language.selected, `${answered} `);
 							if (page >= Math.ceil(+options.length / 25)) next.setDisabled(true);
 							else next.setDisabled(false);
 							if (page > 1) prev.setDisabled(false);
 							else prev.setDisabled(true);
-							clickButton.update({embeds: [embed], components: [[menu],[prev],[next],[done]]}).catch(() => {});
+							clickButton.update({embeds: [embed], components: [[menu],[prev,next],[back,done]]}).catch(() => {});
 						} else if (clickButton.customID == 'done') {
+							if (answered.length > 0) r[msg.property] = answered;
 							messageCollector.stop('finished');
 							buttonsCollector.stop('finished');
-							if (answered.length > 0) {
-								answered.forEach(id => { 
-									if (r[msg.property] && r[msg.property].includes(id)) {
-										const index = r[msg.property].indexOf(id);
-										r[msg.property].splice(index, 1);
-									} else if (r[msg.property] && r[msg.property].length > 0) r[msg.property].push(id);
-									else r[msg.property] = [id];
-								});
-							}
 							gotNewSettings(r[msg.property], null, clickButton);
 						} else if (clickButton.customID == msg.property) {
-							clickButton.values.forEach(channel => {
-								if (!answered.includes(channel)) answered.push(msg.guild[settings].cache.get(channel).id);
-								else answered.splice(answered.indexOf(channel), 1);
-							});
+							answered = clickButton.values[0];
 							const menu = new Discord.MessageSelectMenu()
 								.setCustomID(msg.property)
 								.addOptions(take)
@@ -487,22 +508,40 @@ async function edit(msg, file, answer) {
 								.setCustomID('done')
 								.setLabel(msg.language.done)
 								.setStyle('PRIMARY');
+							const back = new Discord.MessageButton()
+								.setCustomID('back')
+								.setLabel(msg.language.back)
+								.setEmoji(msg.client.constants.emotes.back)
+								.setStyle('DANGER');
 							if (answered.length > 0) done.setDisabled(false);
 							else done.setDisabled(true);
 							let page = clickButton.message.embeds[0].description.split(/`+/)[1].split(/\/+/)[0];
 							const embed = new Discord.MessageEmbed()
 								.setAuthor(msg.client.ch.stp(msg.lanSettings.author, {type: msg.lan.type}), msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
 								.setDescription(`${msg.language.select[settings].desc}\n${msg.language.page}: \`${page}/${Math.ceil(+options.length / 25)}\``)
-								.addField(msg.language.selected, `${answered.map(c => type == 'channels' ? `<#${c}>` : `<@&${c}>`)} `);
-							clickButton.update({embeds: [embed], components: [[menu],[prev],[next],[done]]}).catch(() => {});
-						}
+								.addField(msg.language.selected, `${answered} `);
+							clickButton.update({embeds: [embed], components: [[menu],[prev,next],[back,done]]}).catch(() => {});
+						} else if (clickButton.customID == 'back') return edit(msg, msg.file, clickButton);
 					} else msg.client.ch.notYours(clickButton, msg);
 				});
 				messageCollector.on('collect', async (message) => {
 					if (msg.author.id == message.author.id) {
+						if (message.content == msg.language.cancel) return aborted(msg, [messageCollector, buttonsCollector]);
 						message.delete().catch(() => {});
-						answered = message.content;
-						gotNewSettings(answered, fail, message.content);
+						if (isNaN(parseInt(message.content))) return notValid(msg);
+						answered = message.content.replace(/\D+/g, '').split(/ +/);
+						if (answered.length > 0) {
+							answered.forEach(id => { 
+								if (r[msg.property] && r[msg.property].includes(id)) {
+									const index = r[msg.property].indexOf(id);
+									r[msg.property].splice(index, 1);
+								} else if (r[msg.property] && r[msg.property].length > 0) r[msg.property].push(id);
+								else r[msg.property] = [id];
+							});
+						}
+						messageCollector.stop();
+						buttonsCollector.stop();
+						gotNewSettings(r[msg.property], fail);
 					}
 				});
 				buttonsCollector.on('end', (collected, reason) => {
@@ -513,7 +552,6 @@ async function edit(msg, file, answer) {
 						msg.m.edit({embeds: [embed]}).catch(() => {});
 					}
 				});
-				gotNewSettings(answered, fail, answer);
 			}
 		}  else if (type == 'string') {
 			if (settings == 'users') {
@@ -529,11 +567,33 @@ async function edit(msg, file, answer) {
 				else msg.m.edit({embeds: [embed], components: [[DANGER]]}).catch(() => {});
 				const buttonsCollector = new Discord.MessageComponentInteractionCollector(msg.m, {time: 60000});
 				const messageCollector = new Discord.MessageCollector(msg.channel, {time: 60000});
-				messageCollector.on('collect', (message) => {
+				messageCollector.on('collect', async (message) => {
+					console.log(1);
 					if (message.author.id == msg.author.id) {
+						if (message.content == msg.language.cancel) return aborted(msg, [messageCollector, buttonsCollector]);
+						message.delete().catch(() => {});
+						const args = message.content.split(/ +/);
+						let answered = [];
+						await Promise.all(args.map(async raw => {
+							const id = raw.replace(/\D+/g, '');
+							const request = await msg.client.users.fetch(id).catch(() => {});
+							if ((!request || !request.id) && (!r[msg.property] || (r[msg.property] && !r[msg.property].includes(id)))) fail.push(`\`${raw}\` ${msg.lan.edit[msg.property].fail.no}`);
+							else answered.push(id);
+						}));
+						message.delete().catch(() => {});
+						if (answered.length > 0) {
+							answered.forEach(id => { 
+								id = id.replace(/\D+/g, '');
+								if (r[msg.property] && r[msg.property].includes(id)) {
+									const index = r[msg.property].indexOf(id);
+									r[msg.property].splice(index, 1);
+								} else if (r[msg.property] && r[msg.property].length > 0) r[msg.property].push(id);
+								else r[msg.property] = [id];
+							});
+						}
 						messageCollector.stop();
 						buttonsCollector.stop();
-						gotNewSettings(message.content, fail);
+						gotNewSettings(r[msg.property], fail);
 					}
 				});
 				buttonsCollector.on('collect', (clickButton) => {
@@ -568,25 +628,47 @@ async function edit(msg, file, answer) {
 			if (Array.isArray(oldSettings[msg.property])) embed.addField(msg.lanSettings.oldValue, `${oldSettings[msg.property].map(f => msg.property.includes('user') ? ` <@${f}>` : msg.property.includes('role') ? ` <@&${f}>` : msg.property.includes('channel') ? ` <#${f}>` : ` ${f}`)}`);
 			else embed.addField(msg.lanSettings.oldValue, `${oldSettings[msg.property]}`);
 		}
-		if (Array.isArray(answered)) embed.addField(msg.lanSettings.newValue, `${answered.map(f => ` ${f}`)}`);
-		else embed.addField(msg.lanSettings.newValue, `${answered}`);
-		if (fail) {
-			if (Array.isArray(fail)) embed.addField(msg.lanSettings.newValue, `${fail.map(f => ` ${f}`)}`);
-			else embed.addField(msg.lanSettings.newValue, fail);
+		if ((answered !== undefined && answered !== null) || (answered.length > 0 && Array.isArray(answered))) {
+			if (Array.isArray(answered)) embed.addField(msg.lanSettings.newValue, `${answered.length > 0 ? answered.map(f => compatibilityType == 'channels' ? ` <#${f}>` : compatibilityType == 'roles' ? ` <@&${f}>` : compatibilityType == 'users' ? ` <@${f}>` : ` ${f}`) : msg.language.none}`);
+			else embed.addField(msg.lanSettings.newValue, `${answered !== undefined && answered !== null ? answered : msg.language.none}`);
+		}
+		if (oldSettings && (answered !== undefined && answered !== null) || (answered.length > 0 && Array.isArray(answered))) log(oldSettings[msg.property], answered);
+		else if ((answered !== undefined && answered !== null) || (answered.length > 0 && Array.isArray(answered))) log(null, answered);
+		else if (oldSettings) log(oldSettings[msg.property], null);
+		if (fail && fail.length > 0) {
+			if (Array.isArray(fail)) embed.addField(msg.language.error, `${fail.map(f => ` ${f}`)}`);
+			else embed.addField(msg.language.error, fail);
 		}
 		if (answer) answer.update({embeds: [embed], components: []}).catch(() => {});
 		else msg.m.edit({embeds: [embed], components: []}).catch(() => {});
-		if (r[msg.property].length > 0) msg.client.ch.query(`UPDATE ${msg.client.constants.commands.settings.tablenames[file.name]} SET ${msg.property} = ARRAY[${r[msg.property]}] WHERE guildid = '${msg.guild.id}' ${additionalIdentifiers ? ` AND ${additionalIdentifiers}` : ''};`);
-		else msg.client.ch.query(`UPDATE ${msg.client.constants.commands.settings.tablenames[file.name]} SET ${msg.property} = null WHERE guildid = '${msg.guild.id}' ${additionalIdentifiers ? ` AND ${additionalIdentifiers}` : ''};`);
-		if (Array.isArray(oldSettings[msg.property])) msg.client.ch.query(`UPDATE ${msg.client.constants.commands.settings.tablenames[file.name]} SET ${msg.property} = ARRAY[${oldSettings[msg.property]}] WHERE guildid = '${msg.guild.id}' ${additionalIdentifiers ? ` AND ${additionalIdentifiers}` : ''};`);
-		else msg.client.ch.query(`UPDATE ${msg.client.constants.commands.settings.tablenames[file.name]} SET ${msg.property} = ${oldSettings[msg.property]} WHERE guildid = '${msg.guild.id}' ${additionalIdentifiers ? ` AND ${additionalIdentifiers}` : ''};`);
-		setTimeout(() => {edit(msg, file);}, 3000);
+		r[msg.property] = answered;
+		if (r[msg.property] !== undefined && r[msg.property] !== null) {
+			if (Array.isArray(r[msg.property])) {
+				if (r[msg.property].length > 0) msg.client.ch.query(`UPDATE ${msg.client.constants.commands.settings.tablenames[file.name]} SET ${msg.property} = ARRAY[${r[msg.property]}] WHERE guildid = '${msg.guild.id}' ${additionalIdentifiers ? ` AND ${additionalIdentifiers}` : ''};`); //`
+				else msg.client.ch.query(`UPDATE ${msg.client.constants.commands.settings.tablenames[file.name]} SET ${msg.property} = null WHERE guildid = '${msg.guild.id}' ${additionalIdentifiers ? ` AND ${additionalIdentifiers}` : ''};`); //`
+			} else msg.client.ch.query(`UPDATE ${msg.client.constants.commands.settings.tablenames[file.name]} SET ${msg.property} = ${r[msg.property]} WHERE guildid = '${msg.guild.id}' ${additionalIdentifiers ? ` AND ${additionalIdentifiers}` : ''};`); //`
+			setTimeout(() => {edit(msg, file);}, 3000);
+		}
+	}
+	async function log(before, after) {
+		const embed = new Discord.MessageEmbed()
+			.setColor(msg.client.constants.commands.settings.log.color)
+			.setTimestamp()
+			.setAuthor(msg.client.ch.stp(msg.language.selfLog.author, {setting: msg.file.name}))
+			.setDescription(msg.client.ch.stp(msg.language.selfLog.description, {msg: msg, setting: msg.file.name}));
+		if (before !== null || (Array.isArray(before) && before.length > 0)) embed.addField(msg.lanSettings.oldValue, `${Array.isArray(before) ? before.map(f => compatibilityType == 'channels' ? ` <#${f}>` : compatibilityType == 'roles' ? ` <@&${f}>` : compatibilityType == 'users' ? ` <@${f}>` : ` ${f}`) : before}`);
+		if (after !== null || (Array.isArray(after) && after.length > 0)) embed.addField(msg.lanSettings.newValue, `${Array.isArray(after) ? after.map(f => compatibilityType == 'channels' ? ` <#${f}>` : compatibilityType == 'roles' ? ` <@&${f}>` : compatibilityType == 'users' ? ` <@${f}>` : ` ${f}`) : after}`);
+		const res = await msg.client.ch.query(`SELECT * FROM logchannels WHERE guildid = '${msg.guild.id}';`);
+		if (res && res.rowCount > 0 && res.rows[0].verbositylog) {
+			const channel = msg.client.channels.cache.get(res.rows[0].verbositylog);
+			if (channel) msg.client.ch.send(channel, {embeds: [embed]});
+		}
 	}
 }
 
 
 
-async function setup(msg, r) {
+async function setup(msg) {
 	const embed = new Discord.MessageEmbed()
 		.setAuthor(msg.lan.setup.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
 		.setDescription(msg.lan.setup.question)
@@ -596,7 +678,7 @@ async function setup(msg, r) {
 	if (!collected.first()) return;
 	const answer = collected.first().content.toLowerCase();
 	if (answer == msg.language.yes) {
-		await msg.client.ch.query(`INSERT INTO antispamsettings (antispamtof, giveofficialwarnstof, muteafterwarnsamount, kickafterwarnsamount, banafterwarnsamount, readofwarnstof, muteenabledtof, kickenabledtof, banenabledtof, guildid) VALUES (true, true, 3, 5, 6, true, true, false, true, '${msg.guild.id}');`);
+		await msg.client.ch.query(`INSERT INTO ${msg.client.constants.commands.settings.tablenames[msg.file.name]} (${msg.client.constants.commands.settings.setupQueries[msg.file.name].cols}) VALUES (${msg.client.constants.commands.settings.setupQueries[msg.file.name].vals});`);
 		collected.first().delete().catch(() => {});
 		const endEmbed = new Discord.MessageEmbed()
 			.setAuthor(msg.lan.setup.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
@@ -615,39 +697,12 @@ async function notValid(msg) {
 	const embed = new Discord.MessageEmbed()
 		.setAuthor(`${msg.client.ch.stp(msg.lanSettings.author, {type: msg.lan.type})}`, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
 		.setDescription(`${msg.lanSettings.notValid}`)
-		.addField(msg.language.commands.settings.valid, msg.lan.edit[msg.property].answers)
 		.setFooter(`${msg.lanSettings.pleaseRestart}`);
+	if (msg.lan.edit[msg.property].answers) embed.addField(msg.language.commands.settings.valid, msg.lan.edit[msg.property].answers);
 	msg.client.ch.reply(msg.m, embed);
 }
-async function channelchecker(msg, res) {
-	const r = res.rows[0];
-	if (!r.bpchannelid || r.bpchannelid.length < 0) return false;
-	else {
-		r.bpchannelid.forEach((channelid) => {
-			const channel = msg.guild.channels.cache.get(channelid);
-			if (!channel) {
-				const index = r.bpchannelid.indexOf(channelid);
-				if (index > -1) r.bpchannelid.splice(index, 1);
-				if (r.bpchannelid.length == 0) msg.client.ch.query(`UPDATE antispamsettings SET bpchannelid = null WHERE guildid = '${msg.guild.id}';`);
-				else msg.client.ch.query(`UPDATE antispamsettings SET bpchannelid = ARRAY[${r.bpchannelid}] WHERE guildid = '${msg.guild.id}';`);
-				return true;
-			} else if (channel && channel.id) return false;
-		});
-	}
-}
-async function rolechecker(msg, res) {
-	const r = res.rows[0];
-	if (!r.bproleid || r.bproleid.length < 0) return false;
-	else {
-		r.bproleid.forEach((roleid) => {
-			const role = msg.guild.roles.cache.get(roleid);
-			if (!role) {
-				const index = r.bproleid.indexOf(roleid);
-				if (index > -1) r.bproleid.splice(index, 1);
-				if (r.bproleid.length == 0) msg.client.ch.query(`UPDATE antispamsettings SET bproleid = null WHERE guildid = '${msg.guild.id}';`);
-				else msg.client.ch.query(`UPDATE antispamsettings SET bproleid = ARRAY[${r.bproleid}] WHERE guildid = '${msg.guild.id}';`);
-				return true;
-			} else if (role && role.id) return false;
-		});
-	}
+async function aborted(msg, collectors) {
+	collectors.forEach(collector => collector.stop());
+	msg.m.delete().catch(() => {});
+	msg.reply({content: msg.language.aborted});
 }

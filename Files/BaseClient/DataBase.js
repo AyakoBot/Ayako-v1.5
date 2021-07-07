@@ -5,7 +5,7 @@ const ch = require('./ClientHelper.js');
 const pool = new Pool({
 	user: 'postgres',
 	host: 'localhost',
-	database: 'Ayako_DB',
+	database: 'Ayakov1.5',
 	password: auth.pSQLpw,
 	port: 5432,
 });

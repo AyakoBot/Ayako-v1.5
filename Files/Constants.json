@@ -391,6 +391,9 @@
         },
         "settings": {
             "color": "ffffff",
+            "log": {
+                "color": "YELLOW"
+            },
             "edit": {
                 "antispam": {
                     "banenabledtof": "boolean",
@@ -461,7 +464,7 @@
                 "autorole": "autorole",
                 "disabled": "disabledcommands",
                 "disboard": "disboard",
-                "forcecooldowns": "NULL",
+                "forcecooldowns": null,
                 "gifposter": "gifposter",
                 "leveling": "levelingsettings",
                 "logs": "logchannels",
@@ -470,18 +473,124 @@
                 "selfroles": "selfroles",
                 "separators": "roleseparators",
                 "suggestions": "suggestionsettings",
-                "ticketing": "NULL",
-                "vc": "NULL",
+                "ticketing": null,
+                "vc": null,
                 "verification": "verification",
                 "welcome": "welcome",
                 "language": "language",
-                "overview": "NULL",
+                "overview": null,
                 "prefix": "prefix",
                 "user": "usersettings",
                 "interactions": "interactions",
                 "snipe": "snipesettings",
                 "modroles": "modrolesnew",
                 "muterole": "muterole"
+            },
+            "setupQueries": {
+                "antispam": {
+                    "cols": "antispamtof, giveofficialwarnstof, muteafterwarnsamount, kickafterwarnsamount, banafterwarnsamount, readofwarnstof, muteenabledtof, kickenabledtof, banenabledtof, guildid",
+                    "vals": "true, true, 3, 5, 6, true, true, false, true, '{{msg.guild.id}}'"
+                },
+                "blacklist": {
+                    "cols": "antispamtof, giveofficialwarnstof, muteafterwarnsamount, kickafterwarnsamount, banafterwarnsamount, readofwarnstof, muteenabledtof, kickenabledtof, banenabledtof, guildid",
+                    "vals": "true, true, 3, 5, 6, true, true, false, true, '{{msg.guild.id}}'"
+                },
+                "autorole": {
+                    "cols": "antispamtof, giveofficialwarnstof, muteafterwarnsamount, kickafterwarnsamount, banafterwarnsamount, readofwarnstof, muteenabledtof, kickenabledtof, banenabledtof, guildid",
+                    "vals": "true, true, 3, 5, 6, true, true, false, true, '{{msg.guild.id}}'"
+                },
+                "disabled": {
+                    "cols": "antispamtof, giveofficialwarnstof, muteafterwarnsamount, kickafterwarnsamount, banafterwarnsamount, readofwarnstof, muteenabledtof, kickenabledtof, banenabledtof, guildid",
+                    "vals": "true, true, 3, 5, 6, true, true, false, true, '{{msg.guild.id}}'"
+                },
+                "disboard": {
+                    "cols": "antispamtof, giveofficialwarnstof, muteafterwarnsamount, kickafterwarnsamount, banafterwarnsamount, readofwarnstof, muteenabledtof, kickenabledtof, banenabledtof, guildid",
+                    "vals": "true, true, 3, 5, 6, true, true, false, true, '{{msg.guild.id}}'"
+                },
+                "forcecooldowns": {
+                    "cols": null,
+                    "vals": null
+                },
+                "gifposter": {
+                    "cols": "antispamtof, giveofficialwarnstof, muteafterwarnsamount, kickafterwarnsamount, banafterwarnsamount, readofwarnstof, muteenabledtof, kickenabledtof, banenabledtof, guildid",
+                    "vals": "true, true, 3, 5, 6, true, true, false, true, '{{msg.guild.id}}'"
+                },
+                "leveling": {
+                    "cols": "antispamtof, giveofficialwarnstof, muteafterwarnsamount, kickafterwarnsamount, banafterwarnsamount, readofwarnstof, muteenabledtof, kickenabledtof, banenabledtof, guildid",
+                    "vals": "true, true, 3, 5, 6, true, true, false, true, '{{msg.guild.id}}'"
+                },
+                "logs": {
+                    "cols": "antispamtof, giveofficialwarnstof, muteafterwarnsamount, kickafterwarnsamount, banafterwarnsamount, readofwarnstof, muteenabledtof, kickenabledtof, banenabledtof, guildid",
+                    "vals": "true, true, 3, 5, 6, true, true, false, true, '{{msg.guild.id}}'"
+                },
+                "nitro": {
+                    "cols": "antispamtof, giveofficialwarnstof, muteafterwarnsamount, kickafterwarnsamount, banafterwarnsamount, readofwarnstof, muteenabledtof, kickenabledtof, banenabledtof, guildid",
+                    "vals": "true, true, 3, 5, 6, true, true, false, true, '{{msg.guild.id}}'"
+                },
+                "reactionroles": {
+                    "cols": "antispamtof, giveofficialwarnstof, muteafterwarnsamount, kickafterwarnsamount, banafterwarnsamount, readofwarnstof, muteenabledtof, kickenabledtof, banenabledtof, guildid",
+                    "vals": "true, true, 3, 5, 6, true, true, false, true, '{{msg.guild.id}}'"
+                },
+                "selfroles": {
+                    "cols": "antispamtof, giveofficialwarnstof, muteafterwarnsamount, kickafterwarnsamount, banafterwarnsamount, readofwarnstof, muteenabledtof, kickenabledtof, banenabledtof, guildid",
+                    "vals": "true, true, 3, 5, 6, true, true, false, true, '{{msg.guild.id}}'"
+                },
+                "separators": {
+                    "cols": "antispamtof, giveofficialwarnstof, muteafterwarnsamount, kickafterwarnsamount, banafterwarnsamount, readofwarnstof, muteenabledtof, kickenabledtof, banenabledtof, guildid",
+                    "vals": "true, true, 3, 5, 6, true, true, false, true, '{{msg.guild.id}}'"
+                },
+                "suggestions": {
+                    "cols": "antispamtof, giveofficialwarnstof, muteafterwarnsamount, kickafterwarnsamount, banafterwarnsamount, readofwarnstof, muteenabledtof, kickenabledtof, banenabledtof, guildid",
+                    "vals": "true, true, 3, 5, 6, true, true, false, true, '{{msg.guild.id}}'"
+                },
+                "ticketing": {
+                    "cols": null,
+                    "vals": null
+                },
+                "vc": {
+                    "cols": null,
+                    "vals": null
+                },
+                "verification": {
+                    "cols": "antispamtof, giveofficialwarnstof, muteafterwarnsamount, kickafterwarnsamount, banafterwarnsamount, readofwarnstof, muteenabledtof, kickenabledtof, banenabledtof, guildid",
+                    "vals": "true, true, 3, 5, 6, true, true, false, true, '{{msg.guild.id}}'"
+                },
+                "welcome": {
+                    "cols": "antispamtof, giveofficialwarnstof, muteafterwarnsamount, kickafterwarnsamount, banafterwarnsamount, readofwarnstof, muteenabledtof, kickenabledtof, banenabledtof, guildid",
+                    "vals": "true, true, 3, 5, 6, true, true, false, true, '{{msg.guild.id}}'"
+                },
+                "language": {
+                    "cols": "antispamtof, giveofficialwarnstof, muteafterwarnsamount, kickafterwarnsamount, banafterwarnsamount, readofwarnstof, muteenabledtof, kickenabledtof, banenabledtof, guildid",
+                    "vals": "true, true, 3, 5, 6, true, true, false, true, '{{msg.guild.id}}'"
+                },
+                "overview": {
+                    "cols": null,
+                    "vals": null
+                },
+                "prefix": {
+                    "cols": "antispamtof, giveofficialwarnstof, muteafterwarnsamount, kickafterwarnsamount, banafterwarnsamount, readofwarnstof, muteenabledtof, kickenabledtof, banenabledtof, guildid",
+                    "vals": "true, true, 3, 5, 6, true, true, false, true, '{{msg.guild.id}}'"
+                },
+                "user": {
+                    "cols": "antispamtof, giveofficialwarnstof, muteafterwarnsamount, kickafterwarnsamount, banafterwarnsamount, readofwarnstof, muteenabledtof, kickenabledtof, banenabledtof, guildid",
+                    "vals": "true, true, 3, 5, 6, true, true, false, true, '{{msg.guild.id}}'"
+                },
+                "interactions": {
+                    "cols": "antispamtof, giveofficialwarnstof, muteafterwarnsamount, kickafterwarnsamount, banafterwarnsamount, readofwarnstof, muteenabledtof, kickenabledtof, banenabledtof, guildid",
+                    "vals": "true, true, 3, 5, 6, true, true, false, true, '{{msg.guild.id}}'"
+                },
+                "snipe": {
+                    "cols": "antispamtof, giveofficialwarnstof, muteafterwarnsamount, kickafterwarnsamount, banafterwarnsamount, readofwarnstof, muteenabledtof, kickenabledtof, banenabledtof, guildid",
+                    "vals": "true, true, 3, 5, 6, true, true, false, true, '{{msg.guild.id}}'"
+                },
+                "modroles": {
+                    "cols": "antispamtof, giveofficialwarnstof, muteafterwarnsamount, kickafterwarnsamount, banafterwarnsamount, readofwarnstof, muteenabledtof, kickenabledtof, banenabledtof, guildid",
+                    "vals": "true, true, 3, 5, 6, true, true, false, true, '{{msg.guild.id}}'"
+                },
+                "muterole": {
+                    "cols": "antispamtof, giveofficialwarnstof, muteafterwarnsamount, kickafterwarnsamount, banafterwarnsamount, readofwarnstof, muteenabledtof, kickenabledtof, banenabledtof, guildid",
+                    "vals": "true, true, 3, 5, 6, true, true, false, true, '{{msg.guild.id}}'"
+                }
             }
         }
     }
