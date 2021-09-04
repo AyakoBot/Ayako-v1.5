@@ -1,0 +1,36 @@
+{
+  "name": "ayako-v1.5",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "cd .. && husky install front/.husky"
+  },
+  "author": "Lars_und_so#0666",
+  "license": "ISC",
+  "dependencies": {
+    "@cloudcomponents/cdk-s3-antivirus": "^1.2.0",
+    "@top-gg/sdk": "^3.1.1",
+    "canvas": "^2.8.0",
+    "captcha-canvas": "^2.3.1",
+    "discord.js": "^13.1.0",
+    "express": "^4.17.1",
+    "imgur": "^1.0.2",
+    "is-image-url": "^1.1.8",
+    "markdown-escape": "^1.1.0",
+    "moleculer-antivirus": "^1.2.0",
+    "moment": "^2.29.1",
+    "moment-duration-format": "^2.3.2",
+    "ms": "^2.1.2",
+    "pg": "^8.6.0",
+    "statcord.js": "^3.2.0",
+    "superagent": "^6.1.0",
+    "tenorjs": "^1.0.8",
+    "topgg-autoposter": "^2.0.0",
+    "virustotal-api": "^1.1.6"
+  },
+  "devDependencies": {
+    "eslint": "^7.27.0"
+  }
+}

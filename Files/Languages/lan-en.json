@@ -1,0 +1,2183 @@
+{
+    "channelCreate": {
+        "description": {
+            "withUser": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\ncreated\n{{type}} {{channel}} / `{{channel.name}}` / `{{channel.id}}`",
+            "withoutUser": "{{type}} {{channel}} / `{{channel.name}}` / `{{channel.id}}` was created"
+        },
+        "author": {
+            "title": "{{type}} was created"
+        }
+    },
+    "channelDelete": {
+        "description": {
+            "withUser": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\ndeleted\n{{type}} `{{channel.name}}` / `{{channel.id}}`",
+            "withoutUser": "{{type}} `{{channel.name}}` / `{{channel.id}}` was deleted"
+        },
+        "author": {
+            "title": "{{type}} was deleted"
+        }
+    },
+    "channelPin": {
+        "description": {
+            "withAuthor": {
+                "withAudit": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\npinned [This Message](https://discord.com/channels/{{guild.id}}/{{channel.id}}/{{msg.id}} \"Click to jump to Message\")\nfrom {{author}} / `{{author.tag}}` / `{{author.id}}`\nin Channel {{channel}} / `{{channel.name}}` / `{{channel.id}}`"
+            },
+            "withoutAuthor": {
+                "withAudit": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas pinned a Message\nin Channel {{channel}} / `{{channel.name}}` / `{{channel.id}}`"
+            }
+        },
+        "author": {
+            "title": "Message was pinned"
+        }
+    },
+    "channelUnPin": {
+        "description": {
+            "withAuthor": {
+                "withAudit": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nunpinned [This Message](https://discord.com/channels/{{guild.id}}/{{channel.id}}/{{msg.id}} \"Click to jump to Message\")\nfrom {{author}} / `{{author.tag}}` / `{{author.id}}`\nin Channel {{channel}} / `{{channel.name}}` / `{{channel.id}}`"
+            },
+            "withoutAuthor": {
+                "withAudit": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas unpinned a Message\nin Channel {{channel}} / `{{channel.name}}` / `{{channel.id}}`"
+            }
+        },
+        "author": {
+            "title": "Message was unpinned"
+        }
+    },
+    "channelPinUpdate": {
+        "description": {
+            "withoutAuthor": {
+                "withoutAudit": "The Message Pins were updated\nin Channel {{channel}} / `{{channel.name}}` / `{{channel.id}}`"
+            }
+        },
+        "author": {
+            "title": "Message Pins were updated"
+        }
+    },
+    "channelUpdate": {
+        "description": {
+            "withAudit": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas Updated\n{{type}} {{channel}} / `{{channel.name}}` / `{{channel.id}}`",
+            "withoutAudit": "{{type}} {{channel}} / `{{channel.name}}` / `{{channel.id}}` was updated"
+        },
+        "author": {
+            "title": "{{type}} was updated"
+        }
+    },
+    "emojiCreate": {
+        "description": {
+            "withUser": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\ncreated\nEmoji {{emoji}} / `{{emoji.name}}` / `{{emoji.id}}`",
+            "withoutUser": "Emoji {{emoji}} / `{{emoji.name}}` / `{{emoji.id}}` was created"
+        },
+        "author": {
+            "title": "Emoji was created"
+        }
+    },
+    "emojiDelete": {
+        "description": {
+            "withUser": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\ndeleted\nEmoji `{{emoji.name}}` / `{{emoji.id}}`",
+            "withoutUser": "Emoji {{emoji}} / `{{emoji.name}}` / `{{emoji.id}}` was deleted"
+        },
+        "author": {
+            "title": "Emoji was deleted"
+        }
+    },
+    "emojiUpdate": {
+        "description": {
+            "withUser": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nupdated\nEmoji {{oldEmoji}} / `{{oldEmoji.name}}` / `{{oldEmoji.id}}`\nto\nEmoji {{newEmoji}} / `{{newEmoji.name}}` / `{{newEmoji.id}}`",
+            "withoutUser": "Emoji {{oldEmoji}} / `{{oldEmoji.name}}` / `{{oldEmoji.id}}` was updated\nto\n{{newEmoji}} / `{{newEmoji.name}}` / `{{newEmoji.id}}`"
+        },
+        "author": {
+            "title": "Emoji was updated"
+        }
+    },
+    "guildBanAdd": {
+        "description": {
+            "withUser": "Executor {{user}} / `{{user.tag}}` / `{{user.id}}`\nbanned\nTarget {{target}} / `{{target.tag}}` / `{{target.id}}`",
+            "withoutUser": "User {{target}} / `{{target.tag}}` / `{{target.id}}` was banned"
+        },
+        "author": {
+            "title": "User was banned"
+        }
+    },
+    "guildBanRemove": {
+        "description": {
+            "withUser": "Executor {{user}} / `{{user.tag}}` / `{{user.id}}`\nunbanned\nTarget {{target}} / `{{target.tag}}` / `{{target.id}}`",
+            "withoutUser": "User {{target}} / `{{target.tag}}` / `{{target.id}}` was unbanned"
+        },
+        "author": {
+            "title": "User was unbanned"
+        }
+    },
+    "guildCreate": {
+        "author": "Recommended Commands you should check out first:",
+        "fields": {
+            "one": {
+                "name": "`{{prefix}}help setup`",
+                "value": "All Commands to get started on setting up my behavior"
+            },
+            "two": {
+                "name": "`{{prefix}}help settings`",
+                "value": "All Settings related Commands"
+            },
+            "three": {
+                "name": "`{{prefix}}help logging`",
+                "value": "All Logging related Commands"
+            },
+            "four": {
+                "name": "`{{prefix}}help`",
+                "value": "The basic Help Embed"
+            },
+            "five": {
+                "name": "`{{prefix}}contact` `{{prefix}}invite` `{{prefix}}support`",
+                "value": "If you are stuck, something isn't working or you have Data Deletion Requests, use these Commands to contact Support"
+            }
+        },
+        "title": "Default Prefix: `{{prefix}}`"
+    },
+    "guildIntegrationsUpdate": {
+        "description": {
+            "withUser": "Executor {{user}} / `{{user.tag}}` / `{{user.id}}`\nupdated\nIntegration Name: `{{integration.name}}` / ID: `{{integration.id}}`\n\n**Changes**:"
+        },
+        "author": {
+            "title": "Integration was updated"
+        }
+    },
+    "guildIntegrationsRemove": {
+        "description": {
+            "withoutAudit": "Executor {{user}} / `{{user.tag}}` / `{{user.id}}`\nremoved\nIntegration Name: `{{integration.name}}` / ID: `{{integration.id}}`\n\nAdditional Information (if any):",
+            "withAudit": "Executor {{user}} / `{{user.tag}}` / `{{user.id}}`\nremoved\nIntegration Name: `{{integration.name}}` / ID: `{{integration.id}}`\nby removing\nBot {{bot}} / `{{bot.tag}}` / `{{bot.id}}`\n\nAdditional Information (if any):"
+
+        },
+        "author": {
+            "title": "Integration was removed"
+        }
+    },
+    "guildIntegrationsCreate": {
+        "description": {
+            "withUser": "Executor {{user}} / `{{user.tag}}` / `{{user.id}}`\nadded\nIntegration Name: `{{integration.name}}` / ID: `{{integration.id}}`\n\nAdditional Information (if any):"
+        },
+        "author": {
+            "title": "Integration was added"
+        }
+    },
+    "guildMemberAddGiveaway": {
+        "author": {
+            "title": "You joined {{member.guild.name}}"
+        },
+        "description": "You will now be able to claim your prize in [{{guild.name}}](https://discordapp.com/channels/{{guild.id}}/{{channel.id}}/{{message.id}} \"Click to view Giveaway\") if you win."
+    },
+    "guildMemberAddLog": {
+        "author": {
+            "titleUser": "Member Joined",
+            "titleBot": "Bot was added"
+        },
+        "descriptionBot": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nadded\nBot {{bot}} / `{{bot.tag}}` / `{{bot.id}}`\nto the Server",
+        "descriptionUser": "User {{user}} / `{{user.tag}}` / `{{user.id}}` has joined the Server",
+        "descriptionBotNoAudit": "Bot {{bot}} / `{{bot.tag}}` / `{{bot.id}}`\nwas added to the Server",
+        "inviteInfoTitle": "Invite Info",
+        "inviteInfoUses": "__Invite used:__ {{invite.url}} / `{{invite.code}}`\n__Inviter__ (__Invite Creator__): {{invite.inviter}} / `{{invite.inviter.tag}}` / `{{invite.inviter.id}}`\n__Invite uses:__ `{{invite.uses}}`",
+        "inviteInfo": "__Invite used:__ {{invite.url}} / `{{invite.code}}`\n__Inviter__ (__Invite Creator__): {{invite.inviter}} / `{{invite.inviter.tag}}`"
+    },
+    "guildMemberAddWelcome": {
+        "welcome": "Hi %i205 <a:Wave4:711645667118022779>\nWelcome to {{guild.name}}~\nFell free to look around <:comfy:759895974159843338>"
+    },
+    "guildMemberRemove": {
+        "author": {
+            "nameLeave": "Member left",
+            "nameKick": "Member was kicked"
+        },
+        "descriptionKicked": "Executor {{user}} / `{{user.tag}}` / `{{user.id}}`\nkicked\nTarget {{target}} / `{{target.tag}}` / `{{target.id}}`",
+        "descriptionLeft": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nleft the Server"
+    },
+    "guildMemberUpdateNickname": {
+        "author": {
+            "name": "Member Nickname updated"
+        },
+        "descriptionUser": "Executor {{user}} / `{{user.tag}}` / `{{user.id}}`\nupdated the Nickname of\nTarget {{target}} / `{{target.tag}}` / `{{target.id}}`",
+        "descriptionNoUser": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nupdated their own Nickname",
+        "descriptionNoAudit": "The Nickname of\nUser {{user}} / `{{user.tag}}` / `{{user.id}}`\nwas updated"
+    },
+    "guildMemberUpdateVerify": {
+        "author": {
+            "name": "Member has verified"
+        },
+        "description": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas passed the welcome screen and agreed to the Rules"
+    },
+    "guildMemberUpdateRoles": {
+        "author": {
+            "name": "Member Roles updated"
+        },
+        "descriptionUser": "Executor {{user}} / `{{user.tag}}` / `{{user.id}}`\nupdated the Roles of\nTarget {{target}} / `{{target.tag}}` / `{{target.id}}`",
+        "descriptionNoUser": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nupdated their own Roles"
+    },
+    "guildUpdate": {
+        "author": {
+            "name": "Server Updated"
+        },
+        "standardWithAudit": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas updated this Servers ",
+        "standardWithoutAudit": "The Servers {{type}} was updated",
+        "IconOld": "The old Server Icon should be visible on the Bottom of this Embed",
+        "IconNew": "The new Server Icon should be visible on the Side of this Embed",
+        "splashOld": "The old Server Splash Screen Image should be visible on the Bottom of this Embed",
+        "splashNew": "The new Server Splash Screen Image should be visible on the Side of this Embed",
+        "discoverySplashOld": "The old Server Discovery Splash Screen Image should be visible on the Bottom of this Embed",
+        "discoverySplashNew": "The new Server Discovery Splash Screen Image should be visible on the Side of this Embed",
+        "bannerOld": "The old Server Banner should be visible on the Bottom of this Embed",
+        "bannerNew": "The new Server Banner should be visible on the Side of this Embed",
+        "ownerSwitch": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas given Owner to\nTarget {{target}} / `{{target.tag}}` / `{{target.id}}`",
+        "BoostAdd": "Someone has boosted this Server\nIt is now Boost Tier {{tier}} with {{boosters}} Boosters",
+        "BoostRemove": "Someone has stopped boosting this Server\nIt is now Boost Tier {{tier}} with {{boosters}} Boosters",
+        "antispam": "Anti-Spam was temporarily disabled due to a Server Outage\nIt is now re-enabled."
+    },
+    "inviteCreate": {
+        "author": {
+            "name": "Invite Created"
+        },
+        "descriptionNoUser": "An Invite was created",
+        "channel": "This Invite leads to",
+        "url": "Invite URL",
+        "expires": "Expires at",
+        "age": "The maximum age before this Invite expires",
+        "uses": "The maximum uses before this Invite expires",
+        "used": "The amount of times this Invite was used",
+        "targetedUser": "The User this Invite was targeted at",
+        "description": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas created an Invite"
+    },
+    "inviteDelete": {
+        "author": {
+            "name": "Invite Deleted / Expired"
+        },
+        "descriptionNoUser": "An Invite was deleted or expired",
+        "channel": "This Invite lead to",
+        "url": "Invite URL",
+        "expires": "Expired at",
+        "age": "The maximum age at which this Invite expries",
+        "uses": "The maximum uses at which this Invite expires",
+        "targetedUser": "The User this Invite was targeted at",
+        "description": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas deleted an Invite"
+    },
+    "messageDelete": {
+        "author": {
+            "name": "Message Deleted"
+        },
+        "descriptionWithoutAudit": "A Message of\nUser {{user}} / `{{user.tag}}` / `{{user.id}}`\nin\nChannel {{channel}} / `{{channel.name}}` / `{{channel.id}}`\nwas deleted",
+        "descriptionWithAudit": "Executor {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas deleted a Message of\nUser {{target}} / `{{target.tag}}` / `{{target.id}}`\nin\nChannel {{channel}} / `{{channel.name}}` / `{{channel.id}}`"
+    },
+    "messageDeleteBulk": {
+        "author": {
+            "name": "Message Bulk Deleted"
+        },
+        "descriptionWithoutAudit": "{{amount}} Message(s) in\nChannel {{channel}} / `{{channel.name}}` / `{{channel.id}}`\nwere bulk deleted",
+        "descriptionWithAudit": "{{amount}} Message(s) in\nChannel {{channel}} / `{{channel.name}}` / `{{channel.id}}`\nwere bulk deleted by\nUser {{user}} / `{{user.tag}}` / `{{user.id}}` "
+    },
+    "messageReactionAddGiveaway": {
+        "warnFast": "You reacted to a Giveaway less than 1 Second after it was created.\nDue to this you have been reported to the Giveaway Host and your reaction was removed.\n**If you are not a Bot, just react to the Giveaway again**",
+        "warnedFast": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nCould potentially be a Giveaway Farm User-Bot since they reacted to your Giveaway less than 1 Second after it's creation.\n**Manual review is required**",
+        "author": {
+            "name": "Ayako Giveaways"
+        },
+        "title": {
+            "denied": "Entry Denied",
+            "accepted": "Entry Accepted"
+        },
+        "description": {
+            "ClickText": "Click to join the Server",
+            "rejectedText": "You do not qualify for entering this [Giveaway]",
+            "acceptedText": "To claim the prize you should join"
+        }
+    },
+    "messageReactionRemoveAll": {
+        "author": {
+            "name": "Reactions Remove All"
+        },
+        "description": "Someone has deleted all reactions of this [Message]({{link}} \"Click to jump to the Message\")"
+    },
+    "messageUpdateLogUpdate": {
+        "author": {
+            "name": "Message Update"
+        },
+        "description": "User {{msg.author}} / `{{msg.author.tag}}` / `{{msg.author.id}}`\nhas updated their [Message]({{link}} \"Click to jump to the Message\") in\nChannel {{msg.channel}} / `{{msg.channel.name}}` / `{{msg.channel.id}}`",
+        "oldContent": "Old Content",
+        "newContent": "New Content"
+    },
+    "messageUpdateLogPublish": {
+        "author": {
+            "name": "Message Published"
+        },
+        "description": "Someone has published this [Message]({{link}} \"Click to jump to the Message\") from\nUser {{msg.author}} / `{{msg.author.tag}}` / `{{msg.author.id}}`\nin\nChannel {{msg.channel}} / `{{msg.channel.name}}` / `{{msg.channel.id}}`"
+    },
+    "roleCreate": {
+        "author": {
+            "name": "Role Created"
+        },
+        "descriptionWithAudit": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas created\nRole {{role}} / `{{role.name}}` / `{{role.id}}`",
+        "descriptionAutorole": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas created\nAutorole {{role}} / `{{role.name}}` / `{{role.id}}`",
+        "descriptionWithoutAudit": "Someone has created\nRole {{role}} / `{{role.name}}` / `{{role.id}}`"
+    },
+    "roleRemove": {
+        "author": {
+            "name": "Role Deleted"
+        },
+        "descriptionWithAudit": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas deleted\nRole `{{role.name}}` / `{{role.id}}`",
+        "descriptionAutorole": "Autorole `{{role.name}}` / `{{role.id}}`\nwas deleted since the Bot this Role belonged to left or was kicked from the Server.",
+        "descriptionWithoutAudit": "Someone has deleted\nRole `{{role.name}}` / `{{role.id}}`"
+    },
+    "roleUpdate": {
+        "author": {
+            "name": "Role Updated"
+        },
+        "descriptionWithAudit": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas updated\nRole {{role}} / `{{role.name}}` / `{{role.id}}`\n\n**Changes:** ",
+        "descriptionWithoutAudit": "Someone has updated\nRole {{role}} / `{{role.name}}` / `{{role.id}}`\n\n**Changes:** "
+    },
+    "userUpdate": {
+        "author": {
+            "name": "User Updated"
+        },
+        "description": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas updated\n\n**Changes:** ",
+        "avatar": "New Avatar should appear at the right side of this Embed"
+    },
+    "voiceUpdate": {
+        "author": {
+            "name": "Voice State Updated"
+        },
+        "description": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nVoice State Updated",
+        "deaf": "Before: `{{oldState.deaf}}`\nAfter: `{{newState.deaf}}`\n\n**Deaf Status**\nBefore: `{{oldState.deaf}}`\nAfter: `{{newState.deaf}}`",
+        "deafAudit": "Before: `{{oldState.deaf}}`\nAfter: `{{newState.deaf}}`\n\n**Deaf Status**\nBefore: `{{oldState.deaf}}`\nAfter: `{{newState.deaf}}`\nExecutor: {{user}} / `{{user.tag}}` / `{{user.id}}`",
+        "deafNoAudit": "Before: `{{oldState.deaf}}`\nAfter: `{{newState.deaf}}`\n\n**Deaf Status**\nBefore: `{{oldState.deaf}}`\nAfter: `{{newState.deaf}}`\nExecutor: Unknown",
+        "mute": "Before: `{{oldState.selfMute}}`\nAfter: `{{newState.selfMute}}`\n\n**Mute Status**\nBefore: `{{oldState.mute}}`\nAfter: `{{newState.mute}}`",
+        "muteAudit": "Before: `{{oldState.serverMute}}`\nAfter: `{{newState.serverMute}}`\n\n**Mute Status**\nBefore: `{{oldState.mute}}`\nAfter: `{{newState.mute}}`\nExecutor: {{user}} / `{{user.tag}}` / `{{user.id}}`",
+        "muteNoAudit": "Before: `{{oldState.serverMute}}`\nAfter: `{{newState.serverMute}}`\n\n**Mute Status**\nBefore: `{{oldState.mute}}`\nAfter: `{{newState.mute}}`\nExecutor: Unknown",
+        "moved": "Before: {{oldType}} {{oldChannel}} / `{{oldChannel.name}}` / `{{oldChannel.id}}`\nAfter: {{newType}} {{newChannel}} / `{{newChannel.name}}` / `{{newChannel.id}}`",
+        "movedAudit": "Before: {{oldType}} {{oldChannel}} / `{{oldChannel.name}}` / `{{oldChannel.id}}`\nAfter: {{newType}} {{newChannel}} / `{{newChannel.name}}` / `{{newChannel.id}}`\nExecutor: {{user}} / `{{user.tag}}` / `{{user.id}}`",
+        "movedNoAudit": "Before: {{oldType}} {{oldChannel}} / `{{oldChannel.name}}` / `{{oldChannel.id}}`\nAfter: {{newType}} {{newChannel}} / `{{newChannel.name}}` / `{{newChannel.id}}`\nExecutor: Unknown",
+        "disconnected": "Before: {{oldType}} {{oldChannel}} / `{{oldChannel.name}}` / `{{oldChannel.id}}`\nAfter: `None (disconnected)`",
+        "disconnectedAudit": "Before: {{oldType}} {{oldChannel}} / `{{oldChannel.name}}` / `{{oldChannel.id}}`\nAfter: `None (disconnected)`\nExecutor: {{user}} / `{{user.tag}}` / `{{user.id}}`",
+        "connected": "Before: `None (connected)`\nAfter: {{newType}} {{newChannel}} / `{{newChannel.name}}` / `{{newChannel.id}}`",
+        "startCamera": "Enabled Camera",
+        "stopCamera": "Disabled Camera",
+        "startStream": "Started Streaming",
+        "stopStream": "Stopped Streaming",
+        "setSuppress": "Moved to Stage in\nStage Channel {{newChannel}} / `{{newChannel.name}}` / `{{newChannel.id}}`",
+        "unsetSuppress": "Moved to Audience in\nStage Channel {{newChannel}} / `{{newChannel.name}}` / `{{newChannel.id}}`",
+        "loweredHand": "Lowered their Hand",
+        "raisedHand": "Raised their Hand"
+    },
+    "webhookCreate": {
+        "author": {
+            "name": "Webhook Created"
+        },
+        "description": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas created\nWebhook `{{webhook.name}}` / `{{webhook.id}}`\nin\nChannel {{channel}} / `{{channel.name}}` / `{{channel.id}}`"
+    },
+    "webhookUpdate": {
+        "author": {
+            "name": "Webhook Updated"
+        },
+        "description": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas updated\nWebhook `{{webhook.name}}` / `{{webhook.id}}`\nin\nChannel {{channel}} / `{{channel.name}}` / `{{channel.id}}`",
+        "avatar": "New Avatar should appear at the right side of this Embed"
+    },
+    "webhookDelete": {
+        "author": {
+            "name": "Webhook Deleted"
+        },
+        "description": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas deleted a Webhook from\nChannel {{channel}} / `{{channel.name}}` / `{{channel.id}}`"
+    },
+    "commandCreate": {
+        "author": {
+            "name": "Command Created"
+        },
+        "description": "Command `{{command.name}}` / `{{command.id}}` created",
+        "isDefault": "Default Command (created when Bot is added to the Server)",
+        "isNotDefault": "Not a Default Command"
+    },
+    "commandUpdate": {
+        "author": {
+            "name": "Command Updated"
+        },
+        "description": "Command `{{command.name}}` / `{{command.id}}` updated",
+        "isDefault": "Default Command (created when Bot is added to the Server)",
+        "isNotDefault": "Not a Default Command"
+    },
+    "commandDelete": {
+        "author": {
+            "name": "Command Deleted"
+        },
+        "description": "Command `{{command.name}}` / `{{command.id}}` deleted",
+        "isDefault": "Default Command (created when Bot is added to the Server)",
+        "isNotDefault": "Not a Default Command"
+    },
+    "ready": {
+        "unmute": {
+            "reason": "Automatically Unmuted "
+        },
+        "disboard": {
+            "bumpMsg": "You can now Bump this server again!\n\n`!d bump`",
+            "title": "Ayako DISBOARD Bump Reminder"
+        },
+        "reminder": {
+            "description": "Your reminder is due!",
+            "failedMsg": "I tried to send a message in the channel you set the Reminder in {{channel}}, but I failed."
+        },
+        "vote": {
+            "author": "12 Hours are over!",
+            "description": "If you want to keep your multiplyer streak up, ([click and vote](https://top.gg/bot/650691698409734151/vote))\nYour multiplyer is currently {{votegain}}x"
+        },
+        "giveaway": {
+            "description": {
+                "role": "{{desc}}\n\n**Requirement:**\nYou should have the Role\n{{role}}",
+                "guild": {
+                    "withInvite": "{{desc}}\n\n**Requirement:**\nYou should be Member of\n[{{servername}}]({{invitelink}} \"Join {{servername}} to claim the prize\")",
+                    "withoutInvite": "{{desc}}\n\n\n\n**Requirement**\nYou should be member of\n{{servername}}"
+                }
+            },
+            "name": "Ayako Giveaways",
+            "endedAt": "Ended At",
+            "endAt": "End At",
+            "winners": "Winner(s)",
+            "roleInaccessible": "Giveaway cancelled, the required Role is deleted or inaccessible\n(You can edit the Giveaway Requirements in `h!giveawayedit` and then reroll the Giveaway)",
+            "leftServer": "Giveaway cancelled, Ayako left requirement Server\n(You can re-invite Ayako and then reroll the Giveaway)",
+            "noparticipants": "Giveaway cancelled, no valid participations",
+            "congraz": "Congratulations, {{usermap}}! You won:",
+            "guide": "React with 🎉 to participate!",
+            "remaining": "Time remaining: {{timeleft}}"
+        },
+        "nitro": {
+            "gotRole": "{{user}} has been given the {{role}} role for boosting longer than {{days}} days"
+        },
+        "prune": {
+            "author": "Members Pruned",
+            "description": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas pruned **{{amount}} Members**\nfor **{{days}} day(s)** of inactivity"
+        }
+    },
+    "selfLog": {
+        "author": "Ayako {{setting}} Settings Updated",
+        "description": "User {{msg.author}} / `{{msg.author.tag}}` / `{{msg.author.id}}`\nhas updated Setting `{{setting}}`\n\n\n**Changes:**",
+        "descriptionwithID": "User {{msg.author}} / `{{msg.author.tag}}` / `{{msg.author.id}}`\nhas updated Setting `{{setting}}` with ID `{{id}}`\n\n\n**Changes:**"
+    },
+    "time": {
+        "seconds": "Second(s)",
+        "minutes": "Minute(s)",
+        "hours": "Hour(s)",
+        "days": "Day(s)",
+        "weeks": "Week(s)",
+        "months": "Month(s)",
+        "years": "Year(s)",
+        "timeAgo": "{{time}} ago",
+        "timeIn": "in {{time}}"
+    },
+    "permissions": {
+        "error": {
+            "msg": "I'm missing Permissions to execute this Command",
+            "needed": "Needed Permissions:",
+            "role": "I can't manage this Role"
+        },
+        "deniedPermissions": "Denied Permissions",
+        "grantedPermissions": "Granted Permissions",
+        "removedPermissions": "Removed Permissions",
+        "updatedPermissions": "Updated Permissions",
+        "deniedPermissionsFor": "Denied Permission for",
+        "grantedPermissionFor": "Granted Permission for",
+        "removedPermissionsFor": "Removed Permissions for",
+        "updatedPermissionFor": "Updated Permission for",
+        "unknownPermission": "Unknown Permission Updates have been made",
+        "unknownPermissionFix": "Grant `View Audit` or `Administrator` to fix this issue",
+        "Permissions": "Permissions",
+        "CREATE_INSTANT_INVITE": "Create Instant Invite",
+        "KICK_MEMBERS": "Kick Members",
+        "BAN_MEMBERS": "Ban Members",
+        "ADMINISTRATOR": "Administrator",
+        "MANAGE_CHANNELS": "Manage Channels",
+        "MANAGE_GUILD": "Manage Guild",
+        "ADD_REACTIONS": "Add Reactions",
+        "VIEW_AUDIT_LOG": "View Audit Log",
+        "PRIORITY_SPEAKER": "Priority Speaker",
+        "STREAM": "Stream",
+        "VIEW_CHANNEL": "View Channel",
+        "READ_MESSAGES": "Read Messages",
+        "SEND_MESSAGES": "Send Messages",
+        "SEND_TTS_MESSAGES": "Send TTS Messages",
+        "MANAGE_MESSAGES": "Manage Messages",
+        "EMBED_LINKS": "Embed Links",
+        "ATTACH_FILES": "Attach Files",
+        "READ_MESSAGE_HISTORY": "Read Message History",
+        "MENTION_EVERYONE": "Mention Everyone",
+        "EXTERNAL_EMOJIS": "External Emojis",
+        "USE_EXTERNAL_EMOJIS": "Use External Emojis",
+        "CONNECT": "Connect",
+        "SPEAK": "Speak",
+        "MUTE_MEMBERS": "Mute Members",
+        "DEAFEN_MEMBERS": "Deafen Members",
+        "MOVE_MEMBERS": "Move Members",
+        "USE_VAD": "Use Voice Activity",
+        "CHANGE_NICKNAME": "Change Nickname",
+        "MANAGE_NICKNAMES": "Manage Nicknames",
+        "MANAGE_ROLES": "Manage Roles",
+        "MANAGE_ROLES_OR_PERMISSIONS": "Manage Roles or Permissions",
+        "MANAGE_WEBHOOKS": "Manage Webhooks",
+        "MANAGE_EMOJIS": "Manage Emojis",
+        "USE_SLASH_COMMANDS": "Use slash Commands",
+        "USE_APPLICATION_COMMANDS": "Use application Commands",
+        "REQUEST_SPEAK": "Request to Speak",
+        "ALL_GUILD": "All Guild Permissions",
+        "ALL_TEXT": "All Text Channel Permissions",
+        "ALL_VOICE": "All Voice Channel Permissions",
+        "ALL": "All Permissions",
+        "VIEW_GUILD_INSIGHTS": "View Guild Insights",
+        "STAGE_MODERATOR": "Stage Moderator",
+        "REQUEST_TO_SPEAK": "Request to Speak"
+    },
+    "channels": {
+        "GUILD_TEXT": "Text Channel",
+        "DM": "DM Channel",
+        "GUILD_VOICE": "Voice Channel",
+        "GROUP_DM": "Group DM Channel",
+        "GUILD_CATEGORY": "Category",
+        "GUILD_NEWS": "Announcements Channel",
+        "GUILD_STORE": "Store Channel",
+        "GUILD_STAGE_VOICE": "Stage Channel",
+        "GUILD_NEWS_THREAD": "News Channels public Thread Channel",
+        "GUILD_PUBLIC_THREAD": "Channels public Thread Channel",
+        "GUILD_PRIVATE_THREAD": "Channels private Thread Channel",
+        "UNKNOWN": "A generic Channel of unknown Type"
+    },
+    "channelsNrSorted": {
+        "0": "Text Channel",
+        "1": "DM Channel",
+        "2": "Voice Channel",
+        "3": "Group DM Channel",
+        "4": "Category",
+        "5": "Announcements Channel",
+        "6": "Store Channel",
+        "10": "Stage Channel",
+        "11": "News Channels public Thread Channel",
+        "12": "Channels public Thread Channel",
+        "13": "Channels private Thread Channel"
+    },
+    "features": {
+        "ANIMATED_ICON": "```Animated Icon```\n`(Server can set an animated Server Icon)`",
+        "BANNER": "```Banner```\n`(Server can set a Server Banner Image)`",
+        "COMMERCE": "```Commerce```\n`(Server can use commerce Features(i.e. Create Store Channels))`",
+        "COMMUNITY": "```Community```\n`(Server can enable Welcome Screen)`",
+        "DISCOVERABLE": "```Discoverable```\n`(Server can be discovered in the Server directory)`",
+        "FEATURABLE": "```Featurable```\n`(Server can be featured in the Server directory)`",
+        "INVITE_SPLASH": "```Invite Splash```\n`(Server can set an Invite Splash Background)`",
+        "MEMBER_VERIFICATION_GATE_ENABLED": "```Member Verification Gate enabled```\n`(Server has enabled Membership Screening)`",
+        "NEWS": "```News```\n`(Server can create News Channels)`",
+        "PARTNERED": "```Partnered```\n`(Server is officially Partnered with Discord)`",
+        "PREVIEW_ENABLED": "```Preview enabled```\n`(Server can be Previewed before joining)`",
+        "VANITY_URL": "```Vanity URL```\n`(Server has a Vanity URL)`",
+        "VERIFIED": "```Verified```\n`(Server is officially Verified by Discord)`",
+        "VIP_REGIONS": "```VIP Voice Channel Regions```\n`(Server has access to VIP Voice Channels (384kbps))`",
+        "WELCOME_SCREEN_ENBALED": "```Welcome Screen enabled```\n`(Server has welcome Screen enabled)`"
+    },
+    "featuresName": "Features",
+    "none": "None",
+    "before": "Before",
+    "after": "After",
+    "unknown": "Unknown",
+    "messageContent": "Message Content",
+    "content": "Content",
+    "embedTitle": "Embed Title",
+    "embedDescription": "Embed Description",
+    "embed": "Embed",
+    "unknownEmbed": "Unknow Embed",
+    "changes": "Changes",
+    "name": "Name",
+    "type": "Type",
+    "position": "Position",
+    "topic": "Topic",
+    "affected": "Affected",
+    "nsfw": "NSFW",
+    "slowmode": "Slowmode",
+    "lastPinat": "Last Pin at",
+    "role": "Role",
+    "member": "Member",
+    "deny": "Deny",
+    "allow": "Allow",
+    "wasAdded": "was added",
+    "wasRemoved": "was removed",
+    "DeletedEntry": "Deleted Entry Number {{id}}",
+    "neutral": "Neutral",
+    "problem": "Problem",
+    "prefix": "Prefix",
+    "solution": "Solution",
+    "bitrate": "Bitrate",
+    "closed": "Closed",
+    "opened": "Opened",
+    "disabled": "Disabled",
+    "region": "Region",
+    "automatic": "Automatic",
+    "video_quality_mode": "Video Quality Mode",
+    "unrestricted": "Unrestricted",
+    "reason": "Reason",
+    "user_limit": "User Limit",
+    "rate_limit_per_user": "Slowmode",
+    "enabled": "Enabled",
+    "syncing": "Syncing",
+    "syncedAt": "Synced at",
+    "enlableEmotes": "Give access to globally accessible emotes",
+    "punishments": "Punishments",
+    "regenerate": "Regenerate",
+    "verification": {
+        "author": {
+            "name": "Ayako Verification"
+        },
+        "description": "<a:ToiletSpin:709805618030182510> **Welcome to {{guild.name}}!**",
+        "field": "If you don't verify, you won't be able to use the server!",
+        "finishDesc": "**Thank you for verifying!**\nVerification Finished!",
+        "kickMsg": "You have been kicked from `{{guild.name}}` because you didn't verify.\nYou can rejoin anytime with a valid Invite Link",
+        "hintmsg": "Please type the letters you see on the image below, traced by a line\nExample: `DHION` \n**The captcha contains 5 Letters, no numbers**",
+        "kickReason": "Ayako Verification | Unverified for too long",
+        "openDMs": "{{user}} **Please open your DM's** in order to verify as human. Then re-send the Command `{{prefix}}verify`.\n**You can close your DM's afterwards**.",
+        "wrongInput": "That was wrong... Are you a robot?.\nThe solution was `{{solution}}`\nI added a new Image to the Embed above, try again!",
+        "timeError": "Time ran out for this Verification\nPlease go to <#{{channel}}> and type `{{prefix}}verify` to re-start verification",
+        "log": {
+            "start": "User {{user}} /`{{user.tag}}` / `{{user.id}}`\nstarted Verification",
+            "end": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nfinished Verification"
+        }
+    },
+    "expireBehavior": {
+        "name": "What happens when subscription expires",
+        "zero": "Remove Role {{role}}",
+        "one": "Kick User from Guild"
+    },
+    "expireGracePeriod": "The grace period in which subscriptions expire",
+    "user": "User",
+    "account": "Account",
+    "subscribers": "Subscribers",
+    "granted": "Granted",
+    "revoked": "Revoked",
+    "aliases": "Aliases",
+    "command": "Command",
+    "hint": "Hint",
+    "category": "Category",
+    "dms": "DMs",
+    "finished": "Finished",
+    "AyakoOwner": "Ayako Owner",
+    "ServerOwner": "Server Owner",
+    "error": "Error",
+    "application": "Application",
+    "createdAt": "Created at",
+    "joinedAt": "Joined at",
+    "defaultPermission": "Default Permissions",
+    "unverifiedTooLong": "Unverified for too long",
+    "tooManyRoles": "Too many Roles to be displayed",
+    "roles": "Roles",
+    "edit": "edit",
+    "Edit": "Edit",
+    "nickname": "Nickname",
+    "permission_overwrites": "Permission Overwrites",
+    "rtc_region": "Region",
+    "afkTimeout": "AFK Timeout",
+    "afkChannelID": "AFK Channel",
+    "systemChannelID": "System Channel",
+    "embedEnabled": "Embed Enabled",
+    "verificationLevel": {
+        "verificationLevel": "Verification Level",
+        "NONE": "```None```\n`(Unrestricted)`",
+        "LOW": "```Low```\n`(Must have a verified E-Mail on Account)`",
+        "MEDIUM": "```Medium```\n`(Must be registered on Discord for longer than 5 Minutes)`",
+        "HIGH": "```High```\n`(Must be a Member of this Server for longer than 10 Minutes)`",
+        "VERY_HIGH": "```Very High```\n`(Must have a verified Phone Number on Account)`"
+    },
+    "commandType": {
+        "SUB_COMMAND": "Sub Command",
+        "SUB_COMMAND_GROUP": "Sub Command Group",
+        "STRING": "String",
+        "INTEGER": "Integer",
+        "BOOLEAN": "Boolean",
+        "USER": "User",
+        "CHANNEL": "Channel",
+        "ROLE": "Role",
+        "MENTIONABLE": "Mentionable"
+    },
+    "verificationLevelName": "Verification Level",
+    "explicitContentFilter": {
+        "explicitContentFilter": "Explicit Content Filter",
+        "DISABLED": "`Disabled (Media Content will not be scanned)`",
+        "MEMBERS_WITHOUT_ROLES": "`Members without Roles (Media Content sent by Members without roles will be scanned)`",
+        "ALL_MEMBERS": "`All Members (Media Content sent by all Members will be scanned)`" 
+    },
+    "explicitContentFilterName": "Explicit Content Filter",
+    "mfaLevel": {
+        "mfaLevel": "2 Factor Authentification",
+        "0": "```None```\n`(This Server does not require a 2FA for Moderator Actions)`",
+        "1": "```Elevated```\n`(This Server requires a 2FA for Moderator Actions)`"
+    },
+    "mfaLevelName": "2 Factor Authentification",
+    "defaultMessageNotifications": {
+        "ALL": "```All Messages```\n`(Members will receive Notifications for all Messages by Default)`",
+        "MENTIONS": "```Only Mentions```\n`(Members will receive Notifications only for @mentions by Default)`"
+    },
+    "defaultMessageNotificationsName": "Default Message Notification",
+    "vanityURLCode": "Vanity URL Code",
+    "rulesChannelID": "Rules Channel",
+    "publicUpdatesChannelID": "Public Updates Channel",
+    "preferredLocale": "Server Region",
+    "description": "Description",
+    "usage": "Usage",
+    "required": "Required",
+    "optional": "Optional",
+    "freeToAccess": "Free to access",
+    "requiredPermissions": "Required Permissions",
+    "thisGuildOnly": "This Guild(s) Only",
+    "premiumSubscriptionCount": "Booster Count",
+    "available": "Available State",
+    "settings": "Settings",
+    "icon": "Icon",
+    "splash": "Splash Image",
+    "discoverySplash": "Discovery Splash Image",
+    "banner": "Banner Image",
+    "aborted": "Aborted",
+    "muted": "Muted",
+    "title": "Title",
+    "color": "Color",
+    "hoisted": "Hoisted",
+    "mentionable": "Mentionable",
+    "tags": "Tags",
+    "avatar": "Avatar",
+    "yes": "yes",
+    "no": "no",
+    "Yes": "Yes",
+    "No": "No",
+    "found": "Found",
+    "failed": "Failed",
+    "username": "Username",
+    "discriminator": "Discriminator / Tag",
+    "channel": "Channel",
+    "deaf": "Deafened",
+    "id": "ID",
+    "number": "Number",
+    "list": "list",
+    "List": "List",
+    "mute": "Muted",
+    "camera": "Camera",
+    "small": "Small",
+    "big": "Big",
+    "interactionsMode": "Interactions Size",
+    "muteRole": "Mute Role",
+    "settingsOverview": "Settings Overview",
+    "streaming": "Streaming",
+    "suppress": "Suppressed",
+    "cancel": "cancel",
+    "requestToSpeak": "Request To Speak",
+    "moved": "Moved",
+    "disconnected": "Disconnected",
+    "connected": "Connected",
+    "channelFollower": "Channel Follower",
+    "incoming": "Incoming",
+    "stageOpen": "Stage Channel Opened/Closed",
+    "spam": "Spam",
+    "raid": "Raid",
+    "requestedBy": "Requested by {{user.tag}}",
+    "notYours": "You cannot interact with someone else's Messages",
+    "next": "Next",
+    "prev": "Previous",
+    "timeError": "Time ran out",
+    "page": "Page",
+    "done": "Done",
+    "selected": "Selected",
+    "true": "True",
+    "false": "False",
+    "back": "Back",
+    "cooldown": "Cooldown",
+    "add": "Add",
+    "remove": "Remove",
+    "languages": {
+        "en": {
+            "name": "English",
+            "status": "unfinished"
+        }
+    },
+    "autotypes": {
+        "antispam": "Ayako Anti-Spam",
+        "antiraid": "Ayako Anti-Raid",
+        "blacklist": "Ayako Blacklist"
+    },
+    "select": {
+        "roles": {
+            "select": "Select 1 or more Roles",
+            "desc": "Select the Role(s) you want to add/remove below"
+        },
+        "channels": {
+            "select": "Select 1 or more Channels",
+            "desc": "Select the Channel(s) you want to add/remove below"
+        },
+        "lan": {
+            "select": "Select a Language",
+            "desc": "Select the Language below"
+        },
+        "role": {
+            "select": "Select a Role",
+            "desc": "Select the Role you want to add/remove below"
+        },
+        "channel": {
+            "select": "Select a Channel",
+            "desc": "Select the Channel you want to add/remove below"
+        },
+        "users": {
+            "select": "Type 1 or more User IDs or Mentions"
+        },
+        "number": {
+            "select": "Select the Number",
+            "desc": "Select the new Number below"
+        },
+        "command": {
+            "select": "Select a Command",
+            "desc": "Select the Command below"
+        },
+        "commands": {
+            "select": "Select 1 or more Commands",
+            "desc": "Select 1 or more Commands below"
+        },
+        "seconds": {
+            "select": "Select Seconds",
+            "desc": "Select the Seconds"
+        },
+        "minutes": {
+            "select": "Select Minutes",
+            "desc": "Select the Minutes"
+        },
+        "id": {
+            "select": "Select the Entry",
+            "desc": "Select the Entry below"
+        },
+        "column": {
+            "select": "Select the Column you want to edit",
+            "desc": "Select the Column you want to edit below"
+        },
+        "onetimerunner": {
+            "select": "Are you sure you want to run this Function?\nThis can only be run if the previous Process is finished",
+            "desc": "Click `Yes` or `No`"
+        }
+    },
+    "mod": {
+        "warning": {
+            "text": "You just issued a **Moderation Command** on a User with a **Mod Role**. \nDo you want to **proceed** or **abort**.",
+            "proceed": "Proceed",
+            "abort": "Abort"
+        },
+        "muteAdd": {
+            "author": "Member was muted",
+            "description": "{{user}} has muted {{target}}",
+            "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
+            "activeMute": "Joined with an active Mute",
+            "activeMuteError": "This User joined with an active Mute.\nHowever I wasn't able to Mute them.\nMissing Permissions",
+            "dm": {
+                "author": "You have been muted on {{guild.name}}"
+            },
+            "hasRole": "This Member is already muted",
+            "exeNoPerms": "You can't mute this Member",
+            "meNoPerms": "I can't mute this Member `Missing Permissions`",
+            "success": "Member {{target}} was muted",
+            "noRole": "I wasn't able to find a Mute Role\nVisit `h!settings overview` to set or create one"
+        },
+        "tempmuteAdd": {
+            "author": "Member was tempmuted",
+            "description": "{{user}} has tempmuted {{target}}",
+            "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
+            "activeMute": "Joined with an active Mute",
+            "activeMuteError": "This User joined with an active Mute.\nHowever I wasn't able to Mute them.\nMissing Permissions",
+            "dm": {
+                "author": "You have been tempmuted on {{guild.name}}"
+            },
+            "hasRole": "This Member is already tempmuted",
+            "exeNoPerms": "You can't tempmuted this Member",
+            "meNoPerms": "I can't tempmuted this Member `Missing Permissions`",
+            "success": "Member {{target}} was tempmuted",
+            "noRole": "I wasn't able to find a Mute Role\nVisit `h!settings overview` to set or create one"
+        },
+        "muteRemove": {
+            "author": "Member was unmuted",
+            "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas unmuted by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
+            "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
+            "dm": {
+                "author": "You have been unmuted on {{guild.name}}"
+            },
+            "exeNoPerms": "You can't mute this Member",
+            "hasNoRole": "This Member isn't muted",
+            "success": "Member {{target}} was unmuted",
+            "noRole": "I wasn't able to find a Mute Role\nVisit `h!settings overview` to set or create one"
+        },
+        "banAdd": {
+            "author": "User was banned",
+            "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas banned by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
+            "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
+            "dm": {
+                "author": "You have been banned from {{guild.name}}"
+            },
+            "exeNoPerms": "You can't ban this User",
+            "permissionError": "I don't have enough permissions to ban this User",
+            "error": "I wasn't able to ban this User!",
+            "alreadyBanned": "This User is already banned",
+            "success": "User {{target}} was banned",
+            "loading": "Banning User...",
+            "selfBan": "You can't ban yourself",
+            "meBan": "I won't ban myself"
+        },        
+        "banRemove": {
+            "author": "User was unbanned",
+            "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas unbanned by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
+            "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
+            "dm": {
+                "author": "You have been unbanned from {{guild.name}}"
+            },
+            "exeNoPerms": "You can't unban this User",
+            "permissionError": "I don't have enough permissions to unban this User",
+            "error": "I wasn't able to unban this User!",
+            "notBanned": "This User isn't banned",
+            "success": "User {{target}} was unbanned"
+        },
+        "kickAdd": {
+            "author": "Member was kicked",
+            "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas kicked by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
+            "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
+            "dm": {
+                "author": "You have been kicked from {{guild.name}}"
+            },
+            "exeNoPerms": "You can't kick this Member",
+            "noMember": "This User is not a Member of this Server",
+            "permissionError": "I don't have enough permissions to kick this Member",
+            "error": "I wasn't able to kick this Member!",
+            "success": "User {{target}} was kicked"
+        },
+        "warnAdd": {
+            "reply": "{{user}} was warned\nWarn Number {{nr}}",
+            "DMtitle": "You have been warned on the Server __{{guild.name}}__",
+            "log": {
+                "author": "{{target.username}} has been warned",
+                "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas warned by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`"
+            },
+            "exeNoPerms": "You can't warn this Member",
+            "antispam": {
+                "description": "**Please stop Spamming**"
+            },
+            "success": "User {{target}} was warned"
+        }
+    },
+    "embedBuilder": {
+        "author": "Ayako Embed Builder",
+        "decide": "Decide what to add, edit or remove next via Buttons",
+        "placeholder": "This will be your Embed",
+        "embed": {
+            "title": {
+                "title": "Title",
+                "text": "Title Text",
+                "link": "Title Link"
+            },
+            "description": {
+                "description": "Description"
+            },
+            "author": {
+                "author": "Author",
+                "icon": "Author Icon",
+                "text": "Author Text",
+                "link": "Author Link"
+            },
+            "color": {
+                "color": "Color"
+            },
+            "image": {
+                "image": "Image"
+            },
+            "thumbnail": {
+                "thumbnail": "Thumbnail"
+            },
+            "field": {
+                "field": "Fields",
+                "name": "Field Title",
+                "value": "Field Value",
+                "inline": "Field Inline"
+            },
+            "footer": {
+                "footer": "Footer",
+                "icon": "Footer Icon",
+                "text": "Footer Text",
+                "link": "Footer Link"
+            }, 
+            "timestamp": {
+                "timestamp": "Timestamp"
+            }
+        }
+    },
+    "commands": {
+        "commandHandler": {
+            "GuildOnly": "This Command is not made for DMs, please try again in a Server",
+            "PleaseWait": "Please wait `{{time}}` more Second(s)",
+            "CategoryDisabled": "Category `{{category}}` was disabled by the Server Administration",
+            "CommandDisabled": "Command `{{name}}` was disabled by the Server Administration",
+            "creatorOnly": "Only my Creator can use this Command (`Lars_und_so#0666`)",
+            "ownerOnly": "Only the Owner of this Server can use this Command",
+            "missingPermissions": "You don't have enough Permissions to use this Command",
+            "verifyMessage": "You just issued a **moderation command** by **editing your message**. \nDo you want to **proceed or abort**."
+        },
+        "antispamHandler": {
+            "banErrorMessage": "I was unable to ban {{user}}. `Insufficient Permissions`",
+            "kickErrorMessage": "I was unable to kick {{user}}. `Insufficient Permissions`"
+        },
+        "afkHandler": {
+            "deletedAfk": "I've deleted your AFK\nYou have been AFK for {{time}}"
+        },
+        "leveling": {
+            "levelUp": {
+                "author": "{{user.tag}} just advanced to level {{level}}",
+                "description": "Level Ups are indicated by me reacting to your message with {{emote1}}{{emote2}}",
+                "footer": "You will only be notified every 10 Levels."
+            }
+        },
+        "toxicityCheck": {
+            "warning": "{{user}} Please do not use this word!",
+            "warnReason": "Repeatedly sending Blacklisted words",
+            "author": "Ayako Blacklist",
+            "info": "The following words are Blacklisted on **{{guild.name}}**:\n"
+        },
+        "8ball": {
+            "description": "Let 8ball decide",
+            "usage": ["8ball [yes or no question]"],
+            "category": "Fun",
+            "author": "8ball",
+            "question": "Question",
+            "answer": "Answer",
+            "answers": {
+                "0": "It is certain.",
+                "1": "It is decidedly so.",
+                "2": "Without a doubt.",
+                "3": "Yes - definitely.",
+                "4": "You may rely on it.",
+                "5": "As I see it, yes.",
+                "6": "Most likely.",
+                "7": "Outlook good.",
+                "8": "Yes.",
+                "9": "Signs point to yes.",
+                "10": "Don't count on it.",
+                "11": "My reply is no.",
+                "12": "My sources say no.",
+                "13": "Outlook not so good.",
+                "14": "Very doubtful.",
+                "15": "It is certain."
+            }
+        },
+        "addcmd": {
+            "description": "Adds a Command File",
+            "usage": ["addcmd [command Name]"],
+            "category": "Owner"
+        },
+        "addrole": {
+            "description": "Create a new Role in your Server with standard Permissions.",
+            "usage": ["addrole (Hex Color Code) [name of the new Role]"],
+            "category": "Roles",
+            "reason": "addRole Command executed by {{user.tag}}",
+            "created": "{{role}} was created",
+            "noName": "You have to at least provide a Name for the Role"
+        },
+        "delrole": {
+            "description": "Delete a Role from your Server.",
+            "usage": ["delrole [ID or @mention]"],
+            "category": "Roles",
+            "chooseRole": "I found {{amount}} Roles with the Name `{{role.name}}`\n**Please choose the right one.**",
+            "cancel": "Reply with |{{language.cancel}}| to abort",
+            "deleted": "`{{role.name}}` was deleted",
+            "noRoleFound": "I couldn't find that Role",
+            "error": {
+                "rolePosProblem": "My highest Role is below the Role you want to delete\nor\nMy highest Role is the same as the Role you want to delete",
+                "rolePosSolution": "Give me a Role higher than one you want to delete\nor\nMove my highest Role above the one you want to delete",
+                "roleManagedProblem": "The Role you want to delete is managed by an Integration or Bot\nI can't delete managed Roles",
+                "roleManagedSolution": "Remove the Integration or Bot from your Server to have it automatically deleted\nYou can use my Role Info command to find out what Integration or Bot manages that Role"
+            }
+        },
+        "cmdhelp": {
+            "description": "Show how a specified Command works",
+            "usage": ["cmdhelp [command name]"],
+            "category": "Info",
+            "notValid": "That was not a valid Command",
+            "inviteReason": "Command specific Help Command used on {{msg.guild.name}} in {{msg.channel.name}}",
+            "dmsTrue": "Usable in DMs",
+            "dmsFalse": "Usable in Servers only"
+
+        },
+        "ban": {
+            "description": "Bans a User from the Server",
+            "usage": ["ban [user ID or mention] (reason)"],
+            "category": "Moderation",
+            "noUser": "I couldn't find that User",
+            "reason": "No Reason given"
+        },
+        "reloadevent": {
+            "category": "Owner",
+            "description": "Reloads an Event File",
+            "usage": ["reloadevent [event Name]","reloadevent constants","reloadevent ch","reloadevent lan [language]"]
+        },
+        "reload": {
+            "category": "Owner",
+            "description": "Reloads a Command File",
+            "usage": ["reload [command Name]"]
+        },
+        "execute": {
+            "category": "Owner",
+            "description": "Unspecified",
+            "usage": ["execute (options)"]
+        },
+        "eval": {
+            "category": "Owner",
+            "description": "Evaluates any JavaScript Code",
+            "usage": ["eval [code]"]
+        },
+        "afk": {
+            "category": "Chat",
+            "description": "Display a AFK text whenever someone pings you, automatically deleted if you send a message after creating your AFK",
+            "usage": ["afk (text)"],
+            "afkText": "{{username}} is AFK **since**",
+            "afkText2": "{{slice}}\n{{username}} is AFK **since**",
+            "updatedTo": "Alright, I've updated your AFK to\n{{text}}",
+            "updated": "I've updated your AFK",
+            "noLinks": "You may not set Links as AFK.",
+            "set": "Alright, I've set your AFK",
+            "setTo": "Alright, I've set your AFK to\n{{text}}"
+        },
+        "avatar": {
+            "category": "User",
+            "description": "Display the Avatar of you or someone else in full size",
+            "usage": ["avatar (user ID or mention)"],
+            "avatarOf": "Avatar of {{user.tag}}"
+        },
+        "contact": {
+            "category": "Info",
+            "description": "Contact the Ayako Bot Devs and send them a Message",
+            "usage": ["contact [message]"],
+            "thanks": {
+                "thanks": "Thank you for contacting us!",
+                "desc": "We will look at this as soon as we can and notify you if theres an update",
+                "field": "Your User ID has been saved, in case of command abuse we will exclude you from using this Command again"
+            }
+        },
+        "massban": {
+            "categoy": "Moderation",
+            "description": "Ban as many users from the server as the Discord Character limit lets you",
+            "usage": ["massban [user IDs or mentions] (reason)"],
+            "already": "(already banned)",
+            "youCant": "(You can't ban this User)",
+            "iCant": "(I can't ban this User)",
+            "selfban": "(You can't ban yourself)",
+            "reason": "No Reason given",
+            "noRaidIDs": "There are currently no Raid IDs to ban",
+            "ohno": "(Something went wrong while banning)",
+            "descS": "Users I successfully banned will appear here",
+            "descSLoading": "Successfully banned | Loading",
+            "sBannedUsers": "Successfully banned {{amount}} users",
+            "descF": "Users I failed to ban will appear here",
+            "descFLoading": "Failed to ban | Loading",
+            "fBannedUsers": "Failed to ban {{amount}} times",
+            "finish": "Finished Bans",
+            "failed": "Failed to Ban",
+            "banReason": "Massban Executor: {{user.tag}} | {{reason}}",
+            "log": {
+                "author": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nmassbanned {{amount}} Users",
+                "desc": "{{amount}} Users have been banned"
+            }
+        },
+        "restart": {
+            "category": "Owner",
+            "description": "Restart Ayako",
+            "usage": ["restart"]
+        },
+        "settings": {
+            "valid": "Valid Answers",
+            "notValid": "This Answer was not valid",
+            "howToEdit3": "Click:\n`add` to create a new Entry\n`remove` to remove an existing Entry\n`edit` to edit an existing Entry\n`list` to list an existing Entry",
+            "categoy": "Info",
+            "description": "Display the Ayako Server Settings",
+            "pleaseRestart": "Please try again or type |cancel|",
+            "edited": "Successfully edited\n```{{edited}}```",
+            "oldValue": "Old value",
+            "newValue": "New value",
+            "done": "Edit finished\nRedirecting {{loading}}",
+            "usage": ["settings", "settings [command]"],
+            "invalSettings": "These Settings don't exist, please enter a valid Setting",
+            "author": "Ayako {{type}} Settings",
+            "authorEdit": "[Edit Mode] Ayako {{type}} Settings",
+            "active": "Active",
+            "noEmbed": {
+                "author": "Ayako Settings",
+                "desc": "No Settings available for the selected Setting"
+            },
+            "setup": {
+                "author": "Ayako Settings Set-Up",
+                "question": "Would you like to set-up Ayako {{type}}?",
+                "answers": "`Yes` or `No`",
+                "done": "Setup finished\nRedirecting {{loading}}",
+                "abort": "Setup aborted"
+            },
+            "settings": {
+                "author": "Ayako Settings",
+                "desc": "Settings can be displayed and edited with this Command: `{{prefix}}settings [command]`\n\n```Other = 🔵\nRoles = 🔴\nChannels = 🟢\nChats = 🟡```\n**Available Command Settings**:\n{{commands}}"
+            },
+            "overview": {
+                "category": ["None"],
+                "type": "Overview",
+                "muteroleid": "Mute Role",
+                "interactionsmode": "Interactions Mode",
+                "prefix": "Prefix",
+                "lan": "Bot Language",
+                "edit": {
+                    "muteroleid": {
+                        "name": "Mute Roles",
+                        "select": "Select a Role",
+                        "desc": "**This is not required**\n\nThe Role that will be used to mute Members",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
+                    },
+                    "interactionsmode": {
+                        "name": "Interactions Mode",
+                        "answers": "`True` for Small or `False` for Big",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "prefix": {
+                        "name": "Prefix",
+                        "answers": "Any String",
+                        "recommended": "Recommended: `,`, `.`, `!`"
+                    },
+                    "lan": {
+                        "name": "Bot Language",
+                        "answers": "Language Key",
+                        "recommended": "You might experience translation Issues on Languages marked as `unfinished`"
+                    }
+                }
+            },
+            "antispam": {
+                "category": ["Auto Moderation"],
+                "type": "Anti-Spam",
+                "banenabledtof": "Ban Members",
+                "kickenabledtof": "Kick Members",
+                "muteenabledtof": "Mute Members",
+                "giveofficialwarnstof": "Warn Members",
+                "muteafterwarnsamount": "Mute after **{{amount}}** warns",
+                "kickafterwarnsamount": "Kick after **{{amount}}** warns",
+                "banafterwarnsamount": "Ban after **{{amount}}** warns",
+                "bpchannelid": "Whitelisted Channels",
+                "bproleid": "Whitelisted Roles",
+                "bpuserid": "Whitelisted Users",
+                "readofwarnstof": "**Read Warnings** (required for the following 3 options)",
+                "edit": {
+                    "banenabledtof": {
+                        "name": "Ban Members",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "kickenabledtof": {
+                        "name": "Kick Members",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `False`"
+                    },
+                    "muteenabledtof": {
+                        "name": "Mute Members",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "giveofficialwarnstof": {
+                        "name": "Warn Members",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "muteafterwarnsamount": {
+                        "name": "Mute after **{{amount}}** warns",
+                        "answers": "`Number`",
+                        "recommended": "Recommended: `3`"
+                    },
+                    "kickafterwarnsamount": {
+                        "name": "Kick after **{{amount}}** warns",
+                        "answers": "`Number`",
+                        "recommended": "Recommended: `5`"
+                    },
+                    "banafterwarnsamount": {
+                        "name": "Ban after **{{amount}}** warns",
+                        "answers": "`Number`",
+                        "recommended": "Recommended: `6`"
+                    },
+                    "active": {
+                        "name": "Active",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "bpchannelid": {
+                        "name": "Whitelisted Channels",
+                        "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
+                        "select": "Select 1 or more Channels",
+                        "desc": "Select the Channel(s) you want to bypass below",
+                        "fail": {
+                            "no": "I couldn't find this Channel\n",
+                            "wrongGuild": "This Channel is not Part of this Server\n"
+                        }
+                    },
+                    "bproleid": {
+                        "name": "Whitelisted Roles",
+                        "recommended": "This is a Switch.\nIf the entered Role is already bypassed it will be removed.",
+                        "select": "Select 1 or more Roles",
+                        "desc": "Select the Role(s) you want to bypass below",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
+                    },
+                    "bpuserid": {
+                        "name": "Whitelisted Users",
+                        "answers": "`Mention(s) or ID(s)`",
+                        "recommended": "This is a Switch.\nIf the entered User is already bypassed they will be removed.",
+                        "fail": {
+                            "no": "I couldn't find this User\n",
+                            "wrongGuild": "This User is not Part of this Server\n"
+                        }
+                    },
+                    "readofwarnstof": {
+                        "name": "**Read Warnings** (required for the following 3 options)",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    }
+                }
+            },
+            "antiraid": {
+                "category": ["Auto Moderation"],
+                "type": "Anti-Raid",
+                "edit": {
+                    "active": {
+                        "name": "Active",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    }
+                }
+            },
+            "antivirus": {
+                "category": ["Auto Moderation"],
+                "type": "Anti-Virus",
+                "bantof": "Ban Members",
+                "kicktof": "Kick Members",
+                "mutetof": "Mute Members",
+                "warntof": "Warn Members",
+                "verbaltof": "Verbally warn Members",
+                "muteafterwarnsamount": "Mute after **{{amount}}** warns",
+                "kickafterwarnsamount": "Kick after **{{amount}}** warns",
+                "banafterwarnsamount": "Ban after **{{amount}}** warns",
+                "edit": {
+                    "active": {
+                        "name": "Active",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "bantof": {
+                        "name": "Ban Members",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "kicktof": {
+                        "name": "Kick Members",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `False`"
+                    },
+                    "mutetof": {
+                        "name": "Mute Members",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `False`"
+                    },
+                    "warntof": {
+                        "name": "Warn Members",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "verbaltof": {
+                        "name": "Verbally warn Members",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "muteafterwarnsamount": {
+                        "name": "Mute after **{{amount}}** warns",
+                        "answers": "`Number`",
+                        "recommended": "Recommended: `3`"
+                    },
+                    "kickafterwarnsamount": {
+                        "name": "Kick after **{{amount}}** warns",
+                        "answers": "`Number`",
+                        "recommended": "Recommended: `5`"
+                    },
+                    "banafterwarnsamount": {
+                        "name": "Ban after **{{amount}}** warns",
+                        "answers": "`Number`",
+                        "recommended": "Recommended: `6`"
+                    }
+                }
+            },
+            "autorole": {
+                "category": ["Automation"],
+                "type": "Auto-Role",
+                "botroleid": "Roles given to joining Bots",
+                "userroleid": "Roles given to joining Users",
+                "allroleid": "Roles given to joining Bots and Users",
+                "edit": {
+                    "active": {
+                        "name": "Active",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "botroleid": {
+                        "name": "Roles given to joining Bots",
+                        "answers": "`Mention(s) or ID(s)`",
+                        "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.",
+                        "select": "Select 1 or more Roles",
+                        "desc": "Select the Role(s) you want to add/remove below",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
+                    },
+                    "userroleid": {
+                        "name": "Roles given to joining Users",
+                        "answers": "`Mention(s) or ID(s)`",
+                        "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.",
+                        "select": "Select 1 or more Roles",
+                        "desc": "Select the Role(s) you want to add/remove below",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
+                    },
+                    "allroleid": {
+                        "name": "Roles given to joining Bots and Users",
+                        "answers": "`Mention(s) or ID(s)`",
+                        "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.",
+                        "select": "Select 1 or more Roles",
+                        "desc": "Select the Role(s) you want to add/remove below",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
+                    }
+                }
+            },
+            "blacklist": {
+                "category": ["Auto Moderation"],
+                "type": "Blacklist",
+                "words": "Blacklisted Words",
+                "warntof": "Warn Members",
+                "mutetof": "Mute Members",
+                "kicktof": "Kick Members",
+                "bantof": "Ban Members",
+                "bpchannelid": "Whitelisted Channels",
+                "bproleid": "Whitelisted Roles",
+                "bpuserid": "Whitelisted Users",
+                "warnafter": "Warn after **{{amount}}** blacklisted Words",
+                "muteafter": "Mute after **{{amount}}** blacklisted Words",
+                "kickafter": "Kick after **{{amount}}** blacklisted Words",
+                "banafter": "Ban after **{{amount}}** blacklisted Words",
+                "clearint": "Clear Interval",
+                "clearint2": "(The Interval in which the blacklisted-words-said Count is cleared)\n",
+                "edit": {
+                    "active": {
+                        "name": "Active",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "words": {
+                        "name": "Blacklisted Words",
+                        "answers": "any words or sentences",
+                        "recommended": "If you enter Multiple Words or Sentences, split them with `#`"
+                    },
+                    "warntof": {
+                        "name": "Warn Members",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "mutetof": {
+                        "name": "Mute Members",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "kicktof": {
+                        "name": "Kick Members",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `False`"
+                    },
+                    "bantof": {
+                        "name": "Ban Members",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "warnafter": {
+                        "name": "Warn after **{{amount}}** blacklisted Words",
+                        "answers": "`Number`",
+                        "recommended": "Recommended: `4`"
+                    },
+                    "muteafter": {
+                        "name": "Mute after **{{amount}}** blacklisted Words",
+                        "answers": "`Number`",
+                        "recommended": "Recommended: `6`"
+                    },
+                    "kickafter": {
+                        "name": "Kick after **{{amount}}** blacklisted Words",
+                        "answers": "`Number`",
+                        "recommended": "Recommended: `8`"
+                    },
+                    "banafter": {
+                        "name": "Ban after **{{amount}}** blacklisted Words",
+                        "answers": "`Number`",
+                        "recommended": "Recommended: `10`"
+                    },
+                    "bpchannelid": {
+                        "name": "Whitelisted Channels",
+                        "answers": "`Mention(s) or ID(s)`",
+                        "recommended": "This is a Switch.\nIf the entered Channel is already added it will be removed.",
+                        "fail": {
+                            "no": "I couldn't find this Channel\n",
+                            "wrongGuild": "This Channel is not Part of this Server\n"
+                        }
+                    },
+                    "bproleid": {
+                        "name": "Whitelisted Roles",
+                        "answers": "`Mention(s) or ID(s)`",
+                        "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
+                    },
+                    "bpuserid": {
+                        "name": "Whitelisted Users",
+                        "answers": "`Mention(s) or ID(s)`",
+                        "recommended": "This is a Switch.\nIf the entered User is already added it will be removed.",
+                        "fail": {
+                            "no": "I couldn't find this User\n",
+                            "wrongGuild": "This User is not Part of this Server\n"
+                        }
+                    },
+                    "clearint": {
+                        "name": "Clear Interval",
+                        "answers": "`time`",
+                        "recommended": "Recommended: `24 hours`"
+                    }
+                }
+            },
+            "cooldowns": {
+                "category": ["Automation"],
+                "type": "Cooldowns",
+                "command": "Command",
+                "cooldown": "Cooldown",
+                "activechannelid": "Active Channels",
+                "bproleid": "Whitelisted Roles",
+                "bpchannelid": "Whitelisted Channels",
+                "bpuserid": "Whitelisted Users",
+                "id": "Number",
+                "edit": {
+                    "command": {
+                        "name": "Command",
+                        "answers": "`A Ayako Command or Command Alias`"
+                    },
+                    "cooldown": {
+                        "name": "Cooldown",
+                        "answers": "Time in Seconds"
+                    },
+                    "active": {
+                        "name": "Active",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "activechannelid": {
+                        "name": "Active Channels",
+                        "answers": "`Mention(s) or ID(s)`",
+                        "recommended": "**This is not required**\n\nThis is a Switch.\nIf the entered Channel is already added it will be removed.\nThe Cooldown will only apply in these Channels, if none are set it applies on the whole Server.",
+                        "fail": {
+                            "no": "I couldn't find this Channel\n",
+                            "wrongGuild": "This Channel is not Part of this Server\n"
+                        }
+                    },
+                    "bproleid": {
+                        "name": "Whitelisted Roles",
+                        "answers": "`Mention(s) or ID(s)`",
+                        "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.\nMembers with one of these Roles will bypass the Cooldown.",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
+                    },
+                    "bpchannelid": {
+                        "name": "Whitelisted Channels",
+                        "answers": "`Mention(s) or ID(s)`",
+                        "recommended": "This is a Switch.\nIf the entered Channel is already added it will be removed.\nIf no Active Channels are set and the Cooldown applies on the whole Server, they will not apply on Channels listed here.",
+                        "fail": {
+                            "no": "I couldn't find this Channel\n",
+                            "wrongGuild": "This Channel is not Part of this Server\n"
+                        }
+                    },
+                    "bpuserid": {
+                        "name": "Whitelisted Users",
+                        "answers": "`Mention(s) or ID(s)`",
+                        "recommended": "This is a Switch.\nIf the entered User is already added it will be removed.\nUsers listed here bypass the Cooldown",
+                        "fail": {
+                            "no": "I couldn't find this User\n",
+                            "wrongGuild": "This User is not Part of this Server\n"
+                        }
+                    }
+                },
+                "otherEdits": {
+                    "add": {
+                        "name": "Add a Cooldown",
+                        "process": {
+                            "0": "Respond with a Ayako Command or Command Alias",
+                            "1": "Respond with the Length of this Cooldown **in seconds**"
+                        }
+                    },
+                    "remove": {
+                        "name": "Remove a Cooldown",
+                        "process": {
+                            "0": "Respond with the ID of the Cooldown you want to delete"
+                        }
+                    },
+                    "edit": {
+                        "activechannelid": "The Channels this Cooldown will only be applied in, if none is set the Cooldown will apply in the whole Server\n(If both `Whitelisted Channels` and `Active Channels` contain the same Channel, Whitelisted Channels win)",
+                        "bpuserid": "Users immune to this Cooldown",
+                        "bproleid": "Roles immune to this Cooldown",
+                        "bpchannelid": "Channels immune to this Cooldown\n(If both `Whitelisted Channels` and `Active Channels` contain the same Channel, Whitelisted Channels win)",
+                        "active": "Whether the Cooldown is enabled or not",
+                        "command": "The Command this Cooldown applies to",
+                        "cooldown": "The Length of the Cooldown in Seconds",
+                        "process": {
+                            "0": "What would you like to edit?\nClick on one of the Buttons"
+                        },
+                        "note": {
+                            "command": "Select a Ayako Command or Command Alias",
+                            "bpuserid": "Respond with 1 or more User IDs or Mentions",
+                            "bproleid": "Respond with or Select 1 or more Role IDs or Mentions",
+                            "activechannelid": "Respond with or Select 1 or more Channel IDs or Mentions",
+                            "bpchannelid": "Respond with or Select 1 or more Channel IDs or Mentions)",
+                            "active": "Select `true` or `false`",
+                            "cooldown": "Select a Time in Seconds"
+                        }
+                    }
+                }
+            },
+            "disabled": {
+                "category": ["Automation", "None"],
+                "type": "Disabled",
+                "commands": "Commands",
+                "bproleid": "Whitelisted Roles",
+                "blroleid": "Blacklisted Roles",
+                "channels": "Channels",
+                "bpuserid": "Whitelisted Users",
+                "bluserid": "Blacklisted Users",
+                "id": "Number",
+                "edit": {
+                    "commands": {
+                        "name": "Commands",
+                        "answers": "`Ayako Commands or Aliases`"
+                    },
+                    "active": {
+                        "name": "Active",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "bproleid": {
+                        "name": "Whitelisted Roles",
+                        "answers": "`Mention(s) or ID(s)`",
+                        "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.\nMembers with one of these Roles can still use these Commands.",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
+                    },
+                    "blroleid": {
+                        "name": "Blacklisted Roles",
+                        "answers": "`Mention(s) or ID(s)`",
+                        "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.\nMembers with one of these Roles can not use any of these Commands, even if they have a Role that Whitelists them, doesn't apply if the User itself is Whitelisted.",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
+                    },
+                    "channels": {
+                        "name": "Channel",
+                        "answers": "`Mention(s) or ID(s)`",
+                        "recommended": "**This is not required**\n\nThis is a Switch.\nIf the entered Channel is already added it will be removed.\nThe Channel(s) these Commands are disabled in.",
+                        "fail": {
+                            "no": "I couldn't find this Channel\n",
+                            "wrongGuild": "This Channel is not Part of this Server\n"
+                        }
+                    },
+                    "bpuserid": {
+                        "name": "Whitelisted Users",
+                        "answers": "`Mention(s) or ID(s)`",
+                        "recommended": "This is a Switch.\nIf the entered User is already added it will be removed.\nUsers listed here can use these Commands in the Channels they are disabled in, no matter if they have a Blacklisted Role.",
+                        "fail": {
+                            "no": "I couldn't find this User\n",
+                            "wrongGuild": "This User is not Part of this Server\n"
+                        }
+                    },
+                    "bluserid": {
+                        "name": "Blacklisted Users",
+                        "answers": "`Mention(s) or ID(s)`",
+                        "recommended": "This is a Switch.\nIf the entered User is already added it will be removed.\nUsers listed here can never use these Commands in the Channels they are disabled in, no matter if they have a Whitelisted Role",
+                        "fail": {
+                            "no": "I couldn't find this User\n",
+                            "wrongGuild": "This User is not Part of this Server\n"
+                        }
+                    }
+                },
+                "otherEdits": {
+                    "add": {
+                        "name": "Add disabled Commands",
+                        "process": {
+                            "0": "Select 1 or more Ayako Commands or Command Aliases",
+                            "1": "Respond in which Channel(s) these Commands are disabled"
+                        }
+                    },
+                    "remove": {
+                        "name": "Remove disabled Commands",
+                        "process": {
+                            "0": "Respond with the ID of the disabled Commands you want to delete"
+                        }
+                    },
+                    "edit": {
+                        "active": "Whether these Commands are enabled or not",
+                        "bproleid": "Roles immune to this Restriction",
+                        "blroleid": "Roles reverting the immunity of the Whitelist Role restriction. Members with one of these Roles can't use these Commands, even if they have a Whitelisted Role",
+                        "channels": "The Channel(s) these Commands are disabled in",
+                        "bpuserid": "Users immune to this Restriction. These Users can always these Commands, even if they have a Blacklisted Role",
+                        "bluserid": "Users on which the immunity of Whitelisted Roles is reverted. Users listed here can never use these Commands, even if they have a Whitelisted Role and even if they themselves are listed as Whitelisted User",
+                        "commands": "The Commands which are Restricted",
+                        "process": {
+                            "0": "What would you like to edit?\nClick on one of the Buttons"
+                        },
+                        "note": {
+                            "active": "Select `true` or `false`",
+                            "bproleid": "Respond with or Select 1 or more Role IDs or Mentions",
+                            "blroleid": "Respond with or Select 1 or more Role IDs or Mentions",
+                            "channels": "Respond with or Select 1 or more Channel IDs or Mentions",
+                            "bpuserid": "Respond with 1 or more User IDs or Mentions",
+                            "bluserid": "Respond with 1 or more User IDs or Mentions",
+                            "commands": "Select 1 or more Ayako Commands or Command Aliases"
+                        }
+                    }
+                }
+
+            },
+            "disboard": {
+                "category": ["Automation"],
+                "type": "DISBOARD",
+                "roleid": "Ping Role",
+                "channelid": "Reminder Channel",
+                "repeatreminder": "Repeat Reminder",
+                "edit": {
+                    "active": {
+                        "name": "Active",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "roleid": {
+                        "name": "Ping Role",
+                        "answers": "`Mention or ID`",
+                        "recommended": "**This is not required**\n\nThe Role that will be pinged when you can use `!d bump` again",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
+                    },
+                    "channelid": {
+                        "name": "Channel",
+                        "answers": "`Mention or ID`",
+                        "recommended": "The Channel in which Bump Reminders will be sent",
+                        "fail": {
+                            "no": "I couldn't find this Channel\n",
+                            "wrongGuild": "This Channel is not Part of this Server\n"
+                        }
+                    },
+                    "repeatreminder": {
+                        "name": "Repeat Reminder",
+                        "answers": "Time in Minutes",
+                        "recommended": "**This is not required**\n\nThe Time (in Minutes) after which a new Reminder is sent in case no one has bumped yet"
+                    }
+                }
+            },
+            "forcecooldowns": {
+                "category": ["Automation", "Compaction"]
+            },
+            "gifposter": {
+                "category": ["Compaction", "Automation"]
+            },
+            "interactions": {
+                "category": ["Compaction", "Fun"],
+                "type": "Interactions",
+                "size": "Interaction Size",
+                "block": "**Blocked Interactions**",
+                "edit": { 
+                    "size": {
+                        "name": "Interaction Size",
+                        "answers": "`Big` or `Small`",
+                        "recommended": "Recommended: `small`"
+                    },
+                    "block": {
+                        "name": "Blocked Interactions",
+                        "answers": "Interaction Name",
+                        "recommended": "(`pat`, `hug`, `cuddle` etc.)"
+                    }
+                }
+            },
+            "language": {
+                "category": ["None"]
+            },
+            "leveling": {
+                "category": ["Automation"]
+            },
+            "logs": {
+                "category": ["Automation"]
+            },
+            "modroles": {
+                "category": ["Moderation"]
+            },
+            "muterole": {
+                "category": ["Moderation"]
+            },
+            "nitro": {
+                "category": ["Automation"],
+                "type": "Nitro",
+                "role": "Booster Role",
+                "channel": "Boost Log-Channel",
+                "allBoosters": "All Boosters",
+                "activeBoosters": "Active Boosters",
+                "inactiveBoosters": "Inactive Boosters",
+                "info": "The stats arent corrent? Wait until {{time}}"
+            },
+            "prefix": {
+                "category": ["None"]
+            },
+            "reactionroles": {
+                "category": ["Automation"]
+            },
+            "selfroles": {
+                "category": ["Automation"]
+            },
+            "snipe": {
+                "category": ["Fun"],
+                "type": "Snipe",
+                "blchannelid": "Blacklisted Channels",
+                "blroleid": "Blacklisted Roles",
+                "bluserid": "Blacklisted Users",
+                "links": "Links snipe-able",
+                "invites": "Invites snipe-able",
+                "blwords": "Words saved as Blacklisted snipe-able",
+                "bots": "Bot Messages snipe-able",
+                "deleteable": "Delete-able by Reaction",
+                "deletetime": "Delete Timeout",
+                "edit": {
+                    "active": {
+                        "name": "Active",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "blchannelid": {
+                        "name": "Blacklisted Channels",
+                        "answers": "`Mentions or IDs`",
+                        "recommended": "This is a Switch.\nIf the entered Channel is already blacklisted it will be removed.\nDeleted Messages of Members in these Channels won't be snipe-able",
+                        "fail": {
+                            "no": "I couldn't find this Channel\n",
+                            "wrongGuild": "This Channel is not Part of this Server\n"
+                        }
+                    },
+                    "blroleid": {
+                        "name": "Blacklisted Roles",
+                        "answers": "`Mentions or IDs`",
+                        "recommended": "This is a Switch.\nIf the entered Role is already blacklisted it will be removed.\nDeleted Messages of Members with these Roles won't be snipe-able",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
+                    },
+                    "bluserid": {
+                        "name": "Blacklisted Users",
+                        "answers": "`Mentions or IDs`",
+                        "recommended": "This is a Switch.\nIf the entered User is already blacklisted it will be removed.\nDeleted Messages of these Users won't be snipe-able",
+                        "fail": {
+                            "no": "I couldn't find this User\n",
+                            "wrongGuild": "This User is not Part of this Server\n"
+                        }
+                    },
+                    "links": {
+                        "name": "Links snipe-able",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `False`"
+                    },
+                    "invites": {
+                        "name": "Invites snipe-able",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `False`"
+                    },
+                    "blwords": {
+                        "name": "Words saved as Blacklisted snipe-able",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `False`"
+                    },
+                    "bots": {
+                        "name": "Bot Messages snipe-able",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `False`"
+                    },
+                    "deleteable": {
+                        "name": "Snipes delete-able",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "deletetime": {
+                        "name": "Time until Snipes are deleted",
+                        "answers": "Time in Seconds",
+                        "recommended": "Recommended: `3 Seconds`"
+                    }
+                }
+            },
+            "suggestions": {
+                "category": ["Automation"],
+                "type": "Suggestions",
+                "channelid": "Suggestion Channel",
+                "bluserid": "Blacklisted Users",
+                "blroleid": "Blacklisted Roles",
+                "approverroleid": "Approver / Denyer Roles",
+                "anon": "Anonymous Votes",
+                "edit": {
+                    "active": {
+                        "name": "Active",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "blroleid": {
+                        "name": "Blacklisted Roles",
+                        "answers": "`Mentions or IDs`",
+                        "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.\nUsers with one of these Roles won't be able to send Suggestions",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
+                    },
+                    "bluserid": {
+                        "name": "Blacklisted Users",
+                        "answers": "`Mentions or IDs`",
+                        "recommended": "This is a Switch.\nIf the entered User is already added it will be removed.\nThese Users won't be able to send Suggestions",
+                        "fail": {
+                            "no": "I couldn't find this User\n",
+                            "wrongGuild": "This User is not Part of this Server\n"
+                        }
+                    },
+                    "channelid": {
+                        "name": "Suggestion Channel",
+                        "answers": "`Mention or ID`",
+                        "recommended": "A Channel where Suggestions will be posted",
+                        "fail": {
+                            "no": "I couldn't find this Channel\n",
+                            "wrongGuild": "This Channel is not Part of this Server\n"
+                        }
+                    },
+                    "approverroleid": {
+                        "name": "Approver / Denyer Roles",
+                        "answers": "`Mentions or IDs`",
+                        "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.\nUsers with one of these Roles will be able to approve and deny Suggestions",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
+                    },
+                    "anon": {
+                        "name": "Anonymous Votes",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    }
+                }
+            },
+            "ticketing": {
+                "category": ["Automation"]
+            },
+            "user": {
+                "category": ["None"]
+            },
+            "vc": {
+                "category": ["Automation", "Fun"]
+            },
+            "verification": {
+                "category": ["Automation"],
+                "type": "Verification",
+                "greetdesc": "Greet Embed Description",
+                "logchannel": "Log Channel",
+                "finishedrole": "Verified Role",
+                "finishdesc": "Finished Embed Description",
+                "pendingrole": "Pending Verification Role",
+                "startchannel": "Command Channel",
+                "selfstart": "Self Start",
+                "kickafter": "Kick unverified Users Timeout",
+                "kicktof": "Kick unverified Users after the Timeout",
+                "edit": {
+                    "finishedrole": {
+                        "name": "Verified Role",
+                        "answers": "`Mention or ID`",
+                        "recommended": "The Role applied to Users once passing Verification",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
+                    },
+                    "logchannel": {
+                        "name": "Log Channel",
+                        "answers": "`Mention or ID`",
+                        "recommended": "**This is not required**\n\nThe log Channel where verifications are logged",
+                        "fail": {
+                            "no": "I couldn't find this Channel\n",
+                            "wrongGuild": "This Channel is not Part of this Server\n"
+                        }
+                    },
+                    "greetdesc": {
+                        "name": "Greet Embed Description",
+                        "answers": "Any String",
+                        "recommended": "**This is not required**\n\n`{{user}}` will be replaced with a Mention of the User this Embed is made for"
+                    },
+                    "finishdesc": {
+                        "name": "Finished Embed Description",
+                        "answers": "Any String",
+                        "recommended": "**This is not required**\n\n`{{user}}` will be replaced with a Mention of the User this Embed is made for"
+                    },
+                    "active": {
+                        "name": "Active",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "selfstart": {
+                        "name": "Self Start",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `False`\n\nSetting this to `True` will still require a Command Channel"
+                    },
+                    "pendingrole": {
+                        "name": "Pending Verification Role",
+                        "answers": "`Mention or ID`",
+                        "recommended": "**This is not required\n\nHowever:** If you don't use this Role be sure @everyone does not have permissions to send Messages in any Channel"
+                    },
+                    "startchannel": {
+                        "name": "Command Channel",
+                        "answers": "`Mention or ID`",
+                        "recommended": "Pending Members will have to start Verification with the `{{prefix}}verify` Command here",
+                        "fail": {
+                            "no": "I couldn't find this Channel\n",
+                            "wrongGuild": "This Channel is not Part of this Server\n"
+                        }
+                    },
+                    "kickafter": {
+                        "name": "Kick unverified Users Timeout",
+                        "answers": "Time in Minutes",
+                        "recommended": "Recommended: 30\n\nThe unverified Users Kick Timeout, after it has passed unverified Users will be kicked from the Server"
+                    },
+                    "kicktof": {
+                        "name": "Kick unverified Users after the Timeout",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    }
+
+                }
+            },
+            "welcome": {
+                "category": ["Automation"]
+            },
+            "separators": {
+                "category": ["Automation"],
+                "type": "Separator",
+                "stoprole": "Stop Role",
+                "separator": "Separator Role",
+                "isvarying": "Self-Adapting",
+                "roles": "Roles of this Separator",
+                "oneTimeRunner": "Apply all Separators to every Member of your Server",
+                "edit": { 
+                    "stoprole": {
+                        "name": "Stop-Role",
+                        "answers": "`Mention or ID`",
+                        "recommended": "**This is not required**\n\nThe Role which marks the end to the Separator Roles trigger.\nIf none is defined the Separator Role will work till the very top of the Role List",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
+                    },
+                    "separator": {
+                        "name": "Separator-Role",
+                        "answers": "`Mention or ID`",
+                        "recommended": "The Separator Role, it will be applied to Members if they fulfill following conditions:\n**Self-Adapting `True`**: \nLooking at the Role list of the Server, The Separator Role will be applied if a Member gains any Role between the Seaprator and the Stop Role, if no Stop Role is defined it stops at the top of the Role List. Any Role moved between these 2 Roles or above the Separator Role will instantly start triggering the Separator Role\n\n**Self-Adapting `False`**:\nThe Separator Role will be assinged to Members with at least one of the defined Roles",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
+                    },
+                    "active": {
+                        "name": "Active",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "isvarying": {
+                        "name": "Self-Adapting",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "roles": {
+                        "name": "Roles of this Separator",
+                        "answers": "`Mention or ID`",
+                        "recommended": "This is a Switch.\nIf the entered Role is already bypassed it will be removed.\nRoles entered here will trigger the Separator Role",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
+                    },
+                    "oneTimeRunner": {
+                        "name": "Apply ALL Separators to EVERY Member of your Server",
+                        "description": "Can only be run if the previous Process is finished.",
+                        "cant": "You don't have any Separators set, so you can't uset his function",
+                        "timeout": "The Operation timed out, please contact Support\nhttps://support.ayakobot.com",
+                        "recommended": "Are you sure you want to run this Function?\nThis can only be run if the previous Process is finished",
+                        "stats": "Adding and Removing `{{roles}}` Roles from `{{members}}` Server Members\nThis Process may take until {{finishTime}}.\n\nThis Embed will be updated every Hour (+ Calculation delay depending on the size of your Server)",
+                        "answers": "`Yes` or `No`",
+                        "stillrunning": "The last initiated Process is still running",
+                        "finished": "Process finished, all Roles should be up to Date"
+                    }
+                },
+                "otherEdits": {
+                    "add": {
+                        "name": "Add a Separator",
+                        "process": {
+                            "0": "Select a Role that will be used as Separator"
+                        }
+                    },
+                    "remove": {
+                        "name": "Remove a Separator",
+                        "process": {
+                            "0": "Respond with the ID of the Separator you want to delete"
+                        }
+                    },
+                    "edit": {
+                        "active": "Whether these Separator are enabled or not",
+                        "separator": "The Separator Role, it will be applied to Members if they fulfill following conditions:\n**Self-Adapting `True`**: \nLooking at the Role list of the Server, The Separator Role will be applied if a Member gains any Role between the Seaprator and the Stop Role, if no Stop Role is defined it stops at the top of the Role List. Any Role moved between these 2 Roles or above the Separator Role will instantly start triggering the Separator Role\n\n**Self-Adapting `False`**:\nThe Separator Role will be assinged to Members with at least one of the defined Roles",
+                        "stoprole": "The Role which marks the end to the Separator Roles trigger.\nIf none is defined the Separator Role will work till the very top of the Role List",
+                        "isvarying": "The \"Self-Adapt\" Mode. Wether the Separator should follow defined Roles or Self-Adjust to Support every Role between it and the Stop Role (if no Stop Role is defined the Separator Role will stop at the top of the Role List)",
+                        "roles": "Roles entered here will trigger the Separator Role",
+                        "process": {
+                            "0": "What would you like to edit?\nClick on one of the Buttons"
+                        },
+                        "note": {
+                            "active": "Select `True` or `False`",
+                            "separator": "Respond with or Select 1 Role ID or Mention",
+                            "stoprole": "Respond with or Select 1 Role ID or Mention",
+                            "isvarying": "Respond with or Select 1 or more Channel IDs or Mentions",
+                            "roles": "Respond with 1 or more Role IDs or Mentions"
+                        }
+                    }
+                }
+            },
+            "giveaway": {
+                "category": ["Automation", "Fun"],
+                "embed": {
+                    "list": "`{{prefix}}list` - List all running Giveaways on your Server",
+                    "create": "`{{prefix}}create` - Create a Giveaway (step by step)",
+                    "createOne": "`{{prefix}}createone [winners] [duration] [prize]` - Create a Giveaway (single Command)",
+                    "edit": "`{{prefix}}edit [message ID]` - Edit a Giveaway",
+                    "delete": "`{{prefix}}delete [message ID]` - Delete a Giveaway",
+                    "reroll": "`{{prefix}}reroll [message ID]` - Reroll a Giveaway"
+                }
+            }
+        },
+        "help": {
+
+        }
+    }
+}
