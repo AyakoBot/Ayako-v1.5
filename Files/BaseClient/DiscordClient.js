@@ -6,7 +6,7 @@ const fs = require('fs');
 const client = new Discord.Client({ 
 	shards:'auto', 
 	partials: ['MESSAGE', 'REACTION', 'CHANNEL', 'USER', 'GUILD_MEMBER'],
-	intents: new Discord.Intents(32767),
+	intents: new Discord.Intents(14335),
 	allowedMentions: {
 		parse: ['users', 'roles'],
 		repliedUser: false
