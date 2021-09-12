@@ -5,6 +5,7 @@ module.exports = {
 		const client = newMember ? newMember.client : oldMember.client;
 		const ch = client.ch;
 		const guild = newMember ? newMember.guild : oldMember.guild;
+		if (guild.id == '715121965563772980') return;
 		const ress = await ch.query('SELECT stillrunning FROM roleseparatorsettings WHERE guildid = $1;', [guild.id]);
 		if (ress && ress.rowCount > 0 && ress.rows[0].stillrunning) return; 
 		const member = await guild.members.fetch(newMember.id);
