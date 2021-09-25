@@ -16,7 +16,7 @@ module.exports = {
 					if (duration < Date.now()) {
 						if (user && user.id) {
 							if (guild && guild.id) {
-								const member = await guild.members.fetch(user.id);
+								const member = await guild.members.fetch(user.id).catch(() => {});
 								if (member) {
 									const language = await ch.languageSelector(guild);
 									const embed = new Discord.MessageEmbed()
