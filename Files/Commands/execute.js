@@ -34,14 +34,15 @@ module.exports = {
 				'Luiafk\n'+
 				'MorePotions\n'+
 				'Unlimited Potion Slots\n'+
-				'Antisocial\n'+
+				'Antisocial\n' +
+				'Banner Bonanza\n' +
 				'```'
 			);
 		const Embed2 = new Discord.MessageEmbed()
 			.setTitle('**__Modded Terraria Server Rules__**')
 			.setFooter('This Terraria Server is Managed and Owned by Tamo#4269', 'https://cdn.discordapp.com/avatars/336557540513021952/c32c863424277183078b0f513b176bba.png?size=2048')
 			.addFields( 
-				{name: '1.  No griefing, sabotaging, random world-, or functional destruction', value: '```\nDon\'t grief other People\'s builds or arenas.\nDon\'t sabotage boss fights.\nDon\'t dig out large parts of the world without permission.\nDon\'t move NPCs away from where they live.\nNPC housings are to be placed easily accessible.\n```', inline: false},
+				{name: '1. No griefing, sabotaging, random world-, or functional destruction', value: '```\nDon\'t grief other People\'s builds or arenas.\nDon\'t sabotage boss fights.\nDon\'t dig out large parts of the world without permission.\nDon\'t move NPCs away from where they live.\nNPC housings are to be placed easily accessible.\n```', inline: false},
 				{name: '2. Boss Fights', value: 'Fighting bosses normally is fine, although we\'ll keep our hands off Wall of Flesh, Moon Lord, and Supreme Calamitas until everyone reaches the same stage in the game.', inline: false},
 				{name: '3. Revengence or Death toggle-ers', value: 'It is forbidden to use Revengence or Death toggle-ers.\nThe (Terraria-) Server Owner will be the one to decide what mode the Server will be using, and after it has been chosen, you may not change it.', inline: false},
 				{name: '4. Duping and Glitching', value: 'Duping items through any kind of glitching is not allowed.\nIf you are caught doing so, you will be removed from the Server without further notice.', inline: false},
@@ -56,6 +57,6 @@ module.exports = {
 				{name: '\u200b', value: 'Thanks to <@336557540513021952> For hosting and Managing this Terraria Server', inline: false},
 				
 			);
-		msg.channel.send({embeds: [Embed1, Embed2]});
+		(await msg.client.channels.cache.get('890160907542491146').messages.fetch('891003320448200756')).edit({embeds: [Embed1, Embed2]});
 	}
 };
