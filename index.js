@@ -1,4 +1,4 @@
-const { client } = require('./Files/BaseClient/DiscordClient.js');
+const client = require('./Files/BaseClient/DiscordClient.js');
 client.ch = require('./Files/BaseClient/ClientHelper.js');
 client.ch.pathCheck();
 //const { AP } = require('./Files/BaseClient/DBL');

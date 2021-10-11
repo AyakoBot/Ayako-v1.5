@@ -1,4 +1,4 @@
-const { client } = require('./DiscordClient.js');
+const client = require('./DiscordClient.js');
 const { pool } = require('./DataBase.js');
 const Discord = require('discord.js');
 const fs = require('fs');

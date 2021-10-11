@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const auth = require('./auth.json');
 const fs = require('fs');
+const Eris = require('./ErisClient');
 
 //Create Discord Client
 const client = new Discord.Client({ 
@@ -72,4 +73,6 @@ client.constants = require('../Constants.json');
 client.setMaxListeners(61);
 client.roleQueue = new Discord.Collection();
 
-module.exports = { client };
+client.eris = Eris;
+
+module.exports = client;

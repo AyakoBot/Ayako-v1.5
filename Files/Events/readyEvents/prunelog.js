@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 
 module.exports = {
 	async execute() {
-		const { client } = require('../../BaseClient/DiscordClient');
+		const client = require('../../BaseClient/DiscordClient');
 		client.guilds.cache.forEach(async guild => {
 			const ch = client.ch;
 			const Constants = client.constants;

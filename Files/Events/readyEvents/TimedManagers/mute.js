@@ -1,6 +1,6 @@
 module.exports = {
 	async execute() {
-		const { client } = require('../../../BaseClient/DiscordClient');
+		const client = require('../../../BaseClient/DiscordClient');
 		const ch = client.ch;
 		client.guilds.cache.forEach(async guild => {
 			const res = await ch.query('SELECT * FROM warns WHERE type = $1 AND guildid = $2;', ['Mute', guild.id]);

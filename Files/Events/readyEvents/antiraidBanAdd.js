@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const { client } = require('../../BaseClient/DiscordClient');
+const client = require('../../BaseClient/DiscordClient');
 client.AntiRaidCache = new Discord.Collection();
 
 module.exports = {

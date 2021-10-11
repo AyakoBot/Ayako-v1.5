@@ -1,7 +1,7 @@
 const AutoPoster = require('topgg-autoposter');
 const SDK = require('@top-gg/sdk');
 const auth = require('./auth.json');
-const { client } = require('./DiscordClient.js');
+const client = require('./DiscordClient.js');
 const ch = require('./ClientHelper');
 const express = require('express');
 

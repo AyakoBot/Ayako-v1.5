@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 
 module.exports = {
 	async execute() {
-		const { client } = require('../../../BaseClient/DiscordClient');
+		const client = require('../../../BaseClient/DiscordClient');
 		const channel = client.channels.cache.get('805839305377447936');
 		const ch = client.ch;
 		if (channel) {

@@ -1,6 +1,6 @@
 const Statcord = require('statcord.js');
 const auth = require('./auth.json');
-const { client } = require('./DiscordClient.js');
+const client = require('./DiscordClient.js');
 const ch = require('./ClientHelper.js');
 
 //Create Statcord Client

@@ -5,7 +5,7 @@ const APIDiscordBots = 'https://discord.bots.gg/api/v1/bots/650691698409734151/s
 
 module.exports = {
 	async execute() {
-		const { client } = require('../../BaseClient/DiscordClient');
+		const client = require('../../BaseClient/DiscordClient');
 		const ch = client.ch;
 		const res = await ch.query('SELECT * FROM stats;');
 		const userCount = res.rows[0].allusers;

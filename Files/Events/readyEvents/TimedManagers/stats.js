@@ -1,6 +1,6 @@
 module.exports = {
 	execute() {
-		const { client } = require('../../../BaseClient/DiscordClient');
+		const client = require('../../../BaseClient/DiscordClient');
 		const ch = client.ch;
 		let totalrolecount = 0;
 		let totalusers = 0;

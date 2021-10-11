@@ -1,4 +1,4 @@
-const { client } = require('../../BaseClient/DiscordClient.js');
+const client = require('../../BaseClient/DiscordClient.js');
 const Discord = require('discord.js');
 
 module.exports = {

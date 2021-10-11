@@ -1,4 +1,4 @@
-const { client } = require('../../../BaseClient/DiscordClient');
+const client = require('../../../BaseClient/DiscordClient');
 const Discord = require('discord.js');
 const antiraidSettings = {
 	maxInterval: 15000,
