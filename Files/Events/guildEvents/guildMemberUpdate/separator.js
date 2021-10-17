@@ -2,15 +2,16 @@ const { Worker } = require('worker_threads');
 
 module.exports = {
 	async execute(oldMember, newMember) {
+		return;
 		const client = newMember ? newMember.client : oldMember.client;
 		const ch = client.ch;
 		const guild = newMember ? newMember.guild : oldMember.guild;
-		if (guild.id == '715121965563772980') return;
 		const ress = await ch.query('SELECT stillrunning FROM roleseparatorsettings WHERE guildid = $1;', [guild.id]);
 		if (ress && ress.rowCount > 0 && ress.rows[0].stillrunning) return; 
-		const member = await guild.members.fetch(newMember.id);
+		const member = newMember;
 		const res = await ch.query('SELECT * FROM roleseparator WHERE active = true AND guildid = $1;', [guild.id]);
 		const giveThese = new Array, takeThese = new Array;
+		const language = await ch.languageSelector(guild);
 		if (res && res.rowCount > 0) {
 			res.rows.forEach(async (row) => {
 				const guild = client.guilds.cache.get(row.guildid);
@@ -46,8 +47,9 @@ module.exports = {
 				}
 			});
 		}
-		if (giveThese.length > 0) await member.roles.add(giveThese).catch(() => {});
-		if (takeThese.length > 0) await member.roles.remove(takeThese).catch(() => {});
+		const roles = [...member._roles, giveThese];
+		takeThese.forEach((r) => roles.splice(roles.indexOf(r), 1));
+		if ((giveThese && giveThese.length > 0) || (takeThese && takeThese.length > 0)) await client.eris.editGuildMember(guild.id, member.user.id, { roles: roles }, language.autotypes.separators).catch(() => { }), console.log(1, guild.id, member.user.id);
 	},
 	async oneTimeRunner(msg, embed, clickButton) {
 		const client = msg.client;
@@ -163,13 +165,12 @@ module.exports = {
 				msg.client.separatorAssigner[msg.guild.id][index] = setTimeout(async () => {
 					const giveRoles = raw.giveTheseRoles;
 					const takeRoles = raw.takeTheseRoles;
-					let member = msg.guild.members.cache.get(raw.id);
-					if (!member) {
-						await msg.guild.members.fetch().catch(() => {});
-						member = msg.guild.members.cache.get(raw.id);
+					let member = await msg.guild.members.fetch(raw.id);
+					if (member) {
+						const roles = [...member._roles, giveRoles];
+						takeRoles.forEach((r) => roles.splice(roles.indexOf(r), 1));
+						if ((giveRoles && giveRoles.length > 0) || (takeRoles && takeRoles.length > 0)) await msg.client.eris.editGuildMember(msg.guild.id, member.user.id, { roles: roles }, msg.language.autotypes.separators).catch(() => {});
 					}
-					if (giveRoles && giveRoles.length > 0) await member.roles.add(giveRoles).catch(() => {});
-					if (takeRoles && takeRoles.length > 0) await member.roles.remove(takeRoles).catch(() => {});
 					if (index == (membersWithRoles.length-1) && msg.lastTime) {
 						embed
 							.setAuthor(
@@ -184,7 +185,7 @@ module.exports = {
 						msg.lastTime = true;
 						this.oneTimeRunner(msg, embed);
 					} else msg.client.ch.query('UPDATE roleseparatorsettings SET index = $1, length = $3 WHERE guildid = $2;', [index, msg.guild.id, membersWithRoles.length-1]);
-				}, index * 3000);
+				}, index * 2000);
 			});
 		} else {
 			embed

@@ -644,6 +644,14 @@
                     "cols": ["guildid"],
                     "vals": [["{{msg.guild.id}}"]]
                 },
+                "statschannel": {
+                    "cols": ["guildid, channel, type, id"],
+                    "vals": [["{{msg.guild.id}}", "{{values.channelid}}", "{{values.type}}", "{{values.id}}"]],
+                    "add": ["channel"],
+                    "remove": ["id"],
+                    "removeIdent": "",
+                    "removeReq": ["id", "channel"]
+                },
                 "separators": {
                     "cols": ["guildid, active, id, uniquetimestamp, isvarying, separator", "guildid, stillrunning, active"],
                     "vals": [["{{values.guildid}}", false, "{{values.id}}", "{{values.uniquetimestamp}}", true, "{{values.separator}}"], ["{{values.guildid}}", false, false]],

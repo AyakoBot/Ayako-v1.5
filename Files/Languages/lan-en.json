@@ -790,7 +790,65 @@
     "autotypes": {
         "antispam": "Ayako Anti-Spam",
         "antiraid": "Ayako Anti-Raid",
-        "blacklist": "Ayako Blacklist"
+        "blacklist": "Ayako Blacklist",
+        "statschannel": "Ayako StatsChannel",
+        "separators": "Ayako Separators"
+    },
+    "statschanneltypes": {
+        "member": {
+            "0": "Members Humans",
+            "1": "Members Bots",
+            "2": "Members with Roles",
+            "3": "Members without Roles",
+            "4": "Members Online",
+            "5": "Members DND",
+            "6": "Members Idle",
+            "7": "Members Streaming",
+            "8": "Members Offline",
+            "9": "Members in VC",
+            "10": "Members Online Peak",
+            "11": "Members DND Peak",
+            "12": "Members Idle Peak",
+            "13": "Members Offline Peak",
+            "14": "Members Streaming Peak",
+            "15": "Members all"
+        },
+        "channel": {
+            "0": "Channels Voice",
+            "1": "Channels Text",
+            "2": "Channels News",
+            "3": "Channels Stage",
+            "4": "Channels Category",
+            "5": "Channels Store",
+            "6": "Channels all"
+        },
+        "threads": {
+            "0": "Threads all unarchived",
+            "1": "Threads all archived",
+            "2": "Threads all Public unarchived",
+            "3": "Threads all Public archived",
+            "4": "Threads all Private unarchived",
+            "5": "Threads all Private archived",
+            "6": "Threads all"
+        },
+        "roles": {
+            "0": "Roles hoisted",
+            "1": "Roles unhoisted",
+            "2": "Roles with Color",
+            "3": "Roles without Color",
+            "4": "Roles all"
+        },
+        "messages": {
+            "0": "Messages alltime",
+            "1": "Messages in Channels",
+            "2": "Messages from Roles",
+            "3": "Messages from Roles in Channels",
+            "4": "Messages last Day",
+            "5": "Messages last Week",
+            "6": "Messages last Month",
+            "7": "Messages last Year",
+            "8": "Messages last Hour"
+        }
     },
     "select": {
         "roles": {
@@ -1401,6 +1459,33 @@
                         "name": "Ban after **{{amount}}** warns",
                         "answers": "`Number`",
                         "recommended": "Recommended: `6`"
+                    }
+                }
+            },
+            "statschannel": {
+                "category": ["Automation"],
+                "type": "Stats Channels",
+                "channel": "Channel",
+                "stat": "Statistics",
+                "edit": {
+                    "active": {
+                        "name": "Active",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "channel": {
+                        "name": "Channel",
+                        "recommended": "The Channel this Statistic will be applied to",
+                        "select": "Select 1 Channel",
+                        "desc": "Select the Channel you want to use below",
+                        "fail": {
+                            "no": "I couldn't find this Channel\n",
+                            "wrongGuild": "This Channel is not Part of this Server\n"
+                        }
+                    },
+                    "stat": {
+                        "name": "Stat",
+                        "answers": "Membercount stats: `Humans`, `Bots`, `All`"
                     }
                 }
             },
