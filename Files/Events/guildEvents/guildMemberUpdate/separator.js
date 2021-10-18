@@ -144,7 +144,7 @@ module.exports = {
 				msg.client.separatorAssigner[msg.guild.id][index] = setTimeout(async () => {
 					const giveRoles = raw.giveTheseRoles;
 					const takeRoles = raw.takeTheseRoles;
-					let member = await msg.guild.members.fetch(raw.id);
+					const member = await msg.guild.members.fetch(raw.id).catch(() => {});
 					if (member) {
 						const roles = giveRoles ? [...member._roles, ...giveRoles] : member._roles;
 						if (takeRoles) takeRoles.forEach((r) => roles.splice(roles.indexOf(r), 1));

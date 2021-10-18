@@ -21,16 +21,17 @@
     "imgur": "^1.0.2",
     "is-image-url": "^1.1.8",
     "markdown-escape": "^1.1.0",
-    "moleculer-antivirus": "^1.2.0",
     "moment": "^2.29.1",
     "moment-duration-format": "^2.3.2",
     "ms": "^2.1.2",
+    "node-virustotal": "^3.35.0",
     "npm": "^8.1.0",
     "pg": "^8.6.0",
     "statcord.js": "^3.2.0",
     "superagent": "^6.1.0",
     "tenorjs": "^1.0.8",
     "topgg-autoposter": "^2.0.0",
+    "valid-url": "^1.0.9",
     "virustotal-api": "^1.1.6"
   },
   "devDependencies": {

@@ -9,6 +9,10 @@ module.exports = {
 	takesFirstArg: false,
 	// eslint-disable-next-line no-unused-vars
 	async exe(msg) {
-
+		const VT = require('../BaseClient/VTClient');
+		VT.domainLookup('discordc.gift', (err, res) => {
+			if (err) return console.log(err);
+			return console.log(res);
+		});
 	}
 };
