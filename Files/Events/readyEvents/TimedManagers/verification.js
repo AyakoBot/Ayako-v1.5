@@ -20,8 +20,7 @@ module.exports = {
 										.setColor(client.constants.mod.kickAdd.color);
 									const DM = await member.user.createDM().catch(() => {});
 									if (DM) await client.ch.send(DM, { embeds: [embed] });
-									console.log(lan.kickReason);
-									member.kick({reason: lan.kickReason}).catch(() => {});
+									member.kick(lan.kickReason).catch(() => {});
 								}
 							}
 						});
