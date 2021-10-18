@@ -1,12 +1,12 @@
 const { Worker } = require('worker_threads');
 const ch = require('../../../BaseClient/ClientHelper');
 
-const worker = new Worker('./Files/Events/guildEvents/guildMemberUpdate/separatorUpdater.js');
+const UpdateWorker = new Worker('./Files/Events/guildEvents/guildMemberUpdate/separatorUpdater.js');
 
-worker.on('message', (msg, data) => {
+UpdateWorker.on('message', (msg, data) => {
 	if (msg == 'NO_SEP') ch.query('UPDATE roleseparator SET active = false WHERE separator = $1;', [data.sep]);
 });
-worker.on('error', (error) => {
+UpdateWorker.on('error', (error) => {
 	throw error;
 });
 
@@ -17,7 +17,7 @@ module.exports = {
 		if (ress && ress.rowCount > 0 && ress.rows[0].stillrunning) return;
 		const res = await newMember.client.ch.query('SELECT * FROM roleseparator WHERE active = true AND guildid = $1;', [newMember.guild.id]);
 		const language = await newMember.client.ch.languageSelector(newMember.guild);
-		worker.postMessage(
+		UpdateWorker.postMessage(
 			{ 
 				roles: newMember._roles, 
 				guildid: newMember.guild.id,  
@@ -146,8 +146,8 @@ module.exports = {
 					const takeRoles = raw.takeTheseRoles;
 					let member = await msg.guild.members.fetch(raw.id);
 					if (member) {
-						const roles = [...member._roles, giveRoles];
-						takeRoles.forEach((r) => roles.splice(roles.indexOf(r), 1));
+						const roles = giveRoles ? [...member._roles, ...giveRoles] : member._roles;
+						if (takeRoles) takeRoles.forEach((r) => roles.splice(roles.indexOf(r), 1));
 						if ((giveRoles && giveRoles.length > 0) || (takeRoles && takeRoles.length > 0)) await msg.client.eris.editGuildMember(msg.guild.id, member.user.id, { roles: roles }, msg.language.autotypes.separators).catch(() => {});
 					}
 					if (index == (membersWithRoles.length-1) && msg.lastTime) {
