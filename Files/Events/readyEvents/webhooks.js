@@ -19,8 +19,7 @@ module.exports = {
 						if (webhook) {
 							client.channelWebhooks.set(channel.id, webhook);
 							ch.query(`
-                            UPDATE webhooks SET webhook = $1 WHERE channel = $2; 
-                            UPDATE webhooks SET token = $3 WHERE channel = $2;
+                            UPDATE webhooks SET webhook = $1, token = $3 WHERE channel = $2; 
                             `, [webhook.id, channel.id, webhook.token]);
 						}
 					}

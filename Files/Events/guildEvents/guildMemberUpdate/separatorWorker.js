@@ -1,7 +1,7 @@
 const { parentPort, workerData } = require('worker_threads');
-getMembers(workerData);
+start(workerData);
 
-async function getMembers(wd) {
+async function start(wd) {
 	const res = wd.res, obj = wd.obj;
 	const  membersWithRoles = new Array;
 	const resolved = await new Promise((resolve) => {

@@ -1,55 +1,34 @@
 const { Worker } = require('worker_threads');
+const ch = require('../../../BaseClient/ClientHelper');
+
+const worker = new Worker('./Files/Events/guildEvents/guildMemberUpdate/separatorUpdater.js');
+
+worker.on('message', (msg, data) => {
+	if (msg == 'NO_SEP') ch.query('UPDATE roleseparator SET active = false WHERE separator = $1;', [data.sep]);
+});
+worker.on('error', (error) => {
+	throw error;
+});
 
 module.exports = {
 	async execute(oldMember, newMember) {
-		return;
-		const client = newMember ? newMember.client : oldMember.client;
-		const ch = client.ch;
-		const guild = newMember ? newMember.guild : oldMember.guild;
-		const ress = await ch.query('SELECT stillrunning FROM roleseparatorsettings WHERE guildid = $1;', [guild.id]);
-		if (ress && ress.rowCount > 0 && ress.rows[0].stillrunning) return; 
-		const member = newMember;
-		const res = await ch.query('SELECT * FROM roleseparator WHERE active = true AND guildid = $1;', [guild.id]);
-		const giveThese = new Array, takeThese = new Array;
-		const language = await ch.languageSelector(guild);
-		if (res && res.rowCount > 0) {
-			res.rows.forEach(async (row) => {
-				const guild = client.guilds.cache.get(row.guildid);
-				if (guild) {
-					const sep = guild.roles.cache.get(row.separator);
-					if (sep) {
-						if (row.isvarying) {
-							const stop = row.stoprole ? guild.roles.cache.get(row.stoprole) : null;
-							const affectedRoles = new Array;
-							if (stop) {
-								if (sep.rawPosition > stop.rawPosition) for (let i = stop.rawPosition+1; i < guild.roles.highest.rawPosition && i < sep.rawPosition; i++) affectedRoles.push(guild.roles.cache.find(r => r.rawPosition == i));
-								else for (let i = sep.rawPosition+1; i < guild.roles.highest.rawPosition && i < stop.rawPosition; i++) affectedRoles.push(guild.roles.cache.find(r => r.rawPosition == i));
-							} else if (sep.rawPosition < guild.roles.highest.rawPosition) for (let i = sep.rawPosition+1; i < guild.roles.highest.rawPosition && i < guild.roles.highest.rawPosition; i++) affectedRoles.push(guild.roles.cache.find(r => r.rawPosition == i));
-							const has = new Array;
-							affectedRoles.map(o => o).forEach(role => {
-								if (role) {
-									if (member.roles.cache.has(role.id)) has.push(true);
-									else has.push(false); 
-								}
-							});
-							if (has.includes(true) && !member.roles.cache.has(sep.id)) giveThese.push(sep.id);
-							else if (!has.includes(true) && member.roles.cache.has(sep.id)) takeThese.push(sep.id);
-						} else {
-							const has = new Array;
-							row.roles.forEach(role => {
-								if (member.roles.cache.cache.has(role)) has.push(true);
-								else has.push(false);
-							});
-							if (has.includes(true) && !member.roles.cache.has(sep.id)) giveThese.push(sep.id);
-							else if (!has.includes(true) && member.roles.cache.has(sep.id)) takeThese.push(sep.id);
-						}
-					} else ch.query('UPDATE roleseparator SET active = false WHERE separator = $1;', [row.separator]);
-				}
-			});
-		}
-		const roles = [...member._roles, giveThese];
-		takeThese.forEach((r) => roles.splice(roles.indexOf(r), 1));
-		if ((giveThese && giveThese.length > 0) || (takeThese && takeThese.length > 0)) await client.eris.editGuildMember(guild.id, member.user.id, { roles: roles }, language.autotypes.separators).catch(() => { }), console.log(1, guild.id, member.user.id);
+		if (oldMember._roles.sort().join(',') === newMember._roles.sort().join(',')) return;
+		const ress = await newMember.client.ch.query('SELECT stillrunning FROM roleseparatorsettings WHERE guildid = $1;', [newMember.guild.id]);
+		if (ress && ress.rowCount > 0 && ress.rows[0].stillrunning) return;
+		const res = await newMember.client.ch.query('SELECT * FROM roleseparator WHERE active = true AND guildid = $1;', [newMember.guild.id]);
+		const language = await newMember.client.ch.languageSelector(newMember.guild);
+		worker.postMessage(
+			{ 
+				roles: newMember._roles, 
+				guildid: newMember.guild.id,  
+				userid: newMember.user.id,
+				guildroles: new Map(newMember.guild.roles.cache),
+				highest: newMember.guild.roles.highest,
+				res: res?.rows,
+				language: language
+			} 
+		);
+
 	},
 	async oneTimeRunner(msg, embed, clickButton) {
 		const client = msg.client;
