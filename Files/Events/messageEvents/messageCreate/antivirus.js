@@ -1,9 +1,11 @@
 const { Worker } = require('worker_threads');
+const client = require('../../../BaseClient/DiscordClient');
 
 const AntiVirusWorker = new Worker('./Files/Events/messageEvents/messageCreate/antiVirusWorker.js');
 
 AntiVirusWorker.on('message', (msg, data) => {
-
+	if (msg == 'BLACKLISTED_LINK') client.emit('antivirus_blacklist', { msgid: data.msgid, channelid: data.channelid }, data.link)
+	if (msg == 'SEVERE_LINK') client.emit('antivirus_badlink', { msgid: data.msg.msgid, channelid: data.msg.channelid }, data.link, data.severity, data.VTresponse)
 });
 AntiVirusWorker.on('error', (error) => {
 	throw error;

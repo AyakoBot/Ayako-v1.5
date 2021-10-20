@@ -463,9 +463,7 @@ module.exports = {
 					o.attachments = o.attachments.map(o => o);
 					for (let j = 0; j < o.attachments.length; j++) {
 						const json = await imgur.uploadUrl(o.attachments[j].url).catch(() => {});
-						if (json) {
-							urls += ` ${json.link} `;
-						}
+						if (json) urls += ` ${json.link} `;
 					}
 				}
 				content += `\n${msg.author && msg.author.tag ? msg.author.tag : 'Unknown Author'} (${msg.author && msg.author.id ? msg.author.id : 'Unknown Author'}) at ${new Date(msg.timestamp).toUTCString()}\n${urls !== '' ? `Attachments: ${urls}\n` : ''}${msg.content ? msg.content : 'Unknown Content'}\n`;
