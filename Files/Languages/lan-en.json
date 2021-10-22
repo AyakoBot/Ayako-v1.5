@@ -767,6 +767,7 @@
     "stageOpen": "Stage Channel Opened/Closed",
     "spam": "Spam",
     "raid": "Raid",
+    "maliciousLink": "Malicious Link",
     "requestedBy": "Requested by {{user.tag}}",
     "notYours": "You cannot interact with someone else's Messages",
     "next": "Next",
@@ -790,6 +791,7 @@
     "autotypes": {
         "antispam": "Ayako Anti-Spam",
         "antiraid": "Ayako Anti-Raid",
+        "antivirus": "Ayako Anti-Virus",
         "blacklist": "Ayako Blacklist",
         "statschannel": "Ayako StatsChannel",
         "separators": "Ayako Separators"
@@ -926,7 +928,8 @@
             "exeNoPerms": "You can't mute this Member",
             "meNoPerms": "I can't mute this Member `Missing Permissions`",
             "success": "Member {{target}} was muted",
-            "noRole": "I wasn't able to find a Mute Role\nVisit `h!settings overview` to set or create one"
+            "noRole": "I wasn't able to find a Mute Role\nVisit `h!settings overview` to set or create one",
+            "loading": "Muting User..."
         },
         "tempmuteAdd": {
             "author": "Member was tempmuted",
@@ -941,7 +944,8 @@
             "exeNoPerms": "You can't tempmuted this Member",
             "meNoPerms": "I can't tempmuted this Member `Missing Permissions`",
             "success": "Member {{target}} was tempmuted",
-            "noRole": "I wasn't able to find a Mute Role\nVisit `h!settings overview` to set or create one"
+            "noRole": "I wasn't able to find a Mute Role\nVisit `h!settings overview` to set or create one",
+            "loading": "Temp-Muting User..."
         },
         "muteRemove": {
             "author": "Member was unmuted",
@@ -953,7 +957,8 @@
             "exeNoPerms": "You can't mute this Member",
             "hasNoRole": "This Member isn't muted",
             "success": "Member {{target}} was unmuted",
-            "noRole": "I wasn't able to find a Mute Role\nVisit `h!settings overview` to set or create one"
+            "noRole": "I wasn't able to find a Mute Role\nVisit `h!settings overview` to set or create one",
+            "loading": "Un-Muting User..."
         },
         "banAdd": {
             "author": "User was banned",
@@ -982,7 +987,8 @@
             "permissionError": "I don't have enough permissions to unban this User",
             "error": "I wasn't able to unban this User!",
             "notBanned": "This User isn't banned",
-            "success": "User {{target}} was unbanned"
+            "success": "User {{target}} was unbanned",
+            "loading": "Un-Banning User..."
         },
         "kickAdd": {
             "author": "Member was kicked",
@@ -995,7 +1001,8 @@
             "noMember": "This User is not a Member of this Server",
             "permissionError": "I don't have enough permissions to kick this Member",
             "error": "I wasn't able to kick this Member!",
-            "success": "User {{target}} was kicked"
+            "success": "User {{target}} was kicked",
+            "loading": "Kicking User..."
         },
         "warnAdd": {
             "reply": "{{user}} was warned\nWarn Number {{nr}}",
@@ -1008,7 +1015,11 @@
             "antispam": {
                 "description": "**Please stop Spamming**"
             },
-            "success": "User {{target}} was warned"
+            "antivirus": {
+                "description": "**Please do not post Malicious Links**"
+            },
+            "success": "User {{target}} was warned",
+            "loading": "Warning User..."
         }
     },
     "embedBuilder": {
@@ -1411,9 +1422,10 @@
                 "mutetof": "Mute Members",
                 "warntof": "Warn Members",
                 "verbaltof": "Verbally warn Members",
-                "muteafterwarnsamount": "Mute after **{{amount}}** warns",
-                "kickafterwarnsamount": "Kick after **{{amount}}** warns",
-                "banafterwarnsamount": "Ban after **{{amount}}** warns",
+                "warnafterwarnsamount": "Warn after **{{amount}}** malicious Links",
+                "muteafterwarnsamount": "Mute after **{{amount}}** malicious Links",
+                "kickafterwarnsamount": "Kick after **{{amount}}** malicious Links",
+                "banafterwarnsamount": "Ban after **{{amount}}** malicious Links",
                 "edit": {
                     "active": {
                         "name": "Active",
@@ -1445,20 +1457,25 @@
                         "answers": "`True` or `False`",
                         "recommended": "Recommended: `True`"
                     },
+                    "warnafterwarnsamount": {
+                        "name": "Warn after **{{amount}}** malicious Links",
+                        "answers": "`Number`",
+                        "recommended": "Recommended: `1`"
+                    },
                     "muteafterwarnsamount": {
-                        "name": "Mute after **{{amount}}** warns",
+                        "name": "Mute after **{{amount}}** malicious Links",
+                        "answers": "`Number`",
+                        "recommended": "Recommended: `2`"
+                    },
+                    "kickafterwarnsamount": {
+                        "name": "Kick after **{{amount}}** malicious Links",
                         "answers": "`Number`",
                         "recommended": "Recommended: `3`"
                     },
-                    "kickafterwarnsamount": {
-                        "name": "Kick after **{{amount}}** warns",
-                        "answers": "`Number`",
-                        "recommended": "Recommended: `5`"
-                    },
                     "banafterwarnsamount": {
-                        "name": "Ban after **{{amount}}** warns",
+                        "name": "Ban after **{{amount}}** malicious Links",
                         "answers": "`Number`",
-                        "recommended": "Recommended: `6`"
+                        "recommended": "Recommended: `4`"
                     }
                 }
             },

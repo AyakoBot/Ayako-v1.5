@@ -14,7 +14,7 @@ module.exports = {
 							let muteroleid;
 							let muterole;
 							if (guild && guild.id) {9;
-								const res = await ch.query('SELECT muteroleid FROM muterole WHERE guildid = $1;', [guild.id]);
+								const res = await ch.query('SELECT muteroleid FROM guildsettings WHERE guildid = $1;', [guild.id]);
 								if (res && res.rowCount > 0) {
 									muteroleid = res.rows[0].muteroleid;
 									muterole = guild.roles.cache.find(r => r.id === muteroleid);

@@ -7,6 +7,6 @@ module.exports = {
 		msgs = msgs.filter(m => m.author.id === filterBy).array().slice(0, 18);
 		msg.channel.bulkDelete(msgs).catch(() => {});
 		const language = await msg.client.ch.languageSelector(msg.guild);
-		msg.client.emit('modWarnAdd', msg.client.user, msg.author, 'Ayako AntiSpam | '+language.spam);
+		msg.client.emit('modWarnAdd', msg.client.user, msg.author, language.autotypes.antivirus + ' | ' + language.spam, msg);
 	}
 };

@@ -1,6 +1,6 @@
 module.exports = {
 	async execute(msg) {
 		const language = await msg.client.ch.languageSelector(msg.guild);
-		msg.client.ch.reply(msg, language.mod.warnAdd.antispam.description, {allowedMentions: {repliedUser: true}});
+		msg.client.ch.send(msg.channel, `${msg.author} ${language.mod.warnAdd.antispam.description}`, {allowedMentions: {repliedUser: true}});
 	}
 };

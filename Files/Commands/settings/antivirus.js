@@ -14,6 +14,7 @@ module.exports = {
 				{
 					name: msg.language.punishments, 
 					value: 
+					`${msg.client.ch.stp(msg.lan.warnafterwarnsamount, { amount: r.warnafterwarnsamount ? r.warnafterwarnsamount : '--' })}\n` +
 					`${msg.client.ch.stp(msg.lan.muteafterwarnsamount, {amount: r.muteafterwarnsamount ? r.muteafterwarnsamount : '--'})}\n`+
 					`${msg.client.ch.stp(msg.lan.kickafterwarnsamount, {amount: r.kickafterwarnsamount ? r.kickafterwarnsamount : '--'})}\n`+
 					`${msg.client.ch.stp(msg.lan.banafterwarnsamount, {amount: r.banafterwarnsamount ? r.banafterwarnsamount : '--'})}`, 
@@ -77,6 +78,10 @@ module.exports = {
 			.setCustomId(msg.lan.edit.verbaltof.name)
 			.setLabel(msg.lan.verbaltof)
 			.setStyle(r.verbaltof ? 'SUCCESS' : 'DANGER');
+		const waw = new Discord.MessageButton()
+			.setCustomId(msg.lan.edit.warnafterwarnsamount.name)
+			.setLabel(msg.client.ch.stp(msg.lan.warnafterwarnsamount.replace(/\*/g, ''), { amount: r.warnafterwarnsamount ? r.warnafterwarnsamount : '--' }))
+			.setStyle(!r.readofwarnstof ? 'DANGER' : 'SECONDARY');
 		const maw = new Discord.MessageButton()
 			.setCustomId(msg.lan.edit.muteafterwarnsamount.name)
 			.setLabel(msg.client.ch.stp(msg.lan.muteafterwarnsamount.replace(/\*/g, ''), {amount: r.muteafterwarnsamount ? r.muteafterwarnsamount : '--'}))
@@ -89,6 +94,6 @@ module.exports = {
 			.setCustomId(msg.lan.edit.banafterwarnsamount.name)
 			.setLabel(msg.client.ch.stp(msg.lan.banafterwarnsamount.replace(/\*/g, ''), {amount: r.banafterwarnsamount ? r.banafterwarnsamount : '--'}))
 			.setStyle(!r.readofwarnstof ? 'DANGER' : 'SECONDARY');
-		return [[active], [verbal,warn,mute,kick,ban], [maw,kaw,baw]];
+		return [[active], [verbal, warn, mute, kick, ban], [waw,maw,kaw,baw]];
 	}
 };

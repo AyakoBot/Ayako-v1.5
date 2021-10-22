@@ -4,8 +4,6 @@ module.exports = {
 		'https://raw.githubusercontent.com/deathbybandaid/piholeparser/master/Subscribable-Lists/ParsedBlacklists/TakoYachty-Gift-Card-Killer.txt',
 		'https://raw.githubusercontent.com/danielmiessler/SecLists/master/IOCs/kaspersky-careto-domains.txt',
 		'https://raw.githubusercontent.com/deathbybandaid/piholeparser/master/Subscribable-Lists/ParsedBlacklists/Dshield-Suspicious-High.txt',
-		'https://raw.githubusercontent.com/MetaMask/eth-phishing-detect/master/src/url.txt',
-		'https://dehakkelaar.nl/lists/url.list.txt',
 		'https://phishing.army/download/phishing_army_blocklist_extended.txt'
 	]
 };

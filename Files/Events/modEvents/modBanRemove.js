@@ -7,14 +7,14 @@ module.exports = {
 		const con = msg.client.constants.mod.banAdd;
 		const em = new Discord.MessageEmbed()
 			.setColor(con.color)
-			.setDescription(msg.client.constants.emotes.loading, lan.loading);
+			.setDescription(msg.client.constants.emotes.loading + ' ' +lan.loading);
 		const emMsg = await msg.client.ch.reply(msg, em);
 		const dmChannel = await target.createDM().catch(() => {});
 		const DMembed = new Discord.MessageEmbed()
 			.setDescription(`${language.reason}: \`\`\`${reason}\`\`\``)
 			.setColor(con.color)
 			.setTimestamp()
-			.setAuthor(msg.client.ch.stp(lan.dm.author, {guild: msg.guild}), lan.author.image, msg.client.ch.stp(lan.author.link), {guild: msg.guild});
+			.setAuthor(msg.client.ch.stp(lan.dm.author, { guild: msg.guild }), lan.author.image, msg.client.ch.stp(con.author.link, { guild: msg.guild }));
 		const m = await msg.client.ch.send(dmChannel, DMembed);
 		const ban = await msg.guild.bans.fetch(target).catch(() => {});
 		if (ban) {
@@ -35,18 +35,18 @@ module.exports = {
 				if (logchannel) msg.client.ch.send(logchannel, embed);
 			} else {
 				m?.delete().catch(()  => {});
-				em.setDescription(msg.client.constants.emotes.cross, lan.error+` \`\`\`${err}\`\`\``);
-				emMsg?.edit(em);
+				em.setDescription(msg.client.constants.emotes.cross + ' ' +lan.error+` \`\`\`${err}\`\`\``);
+				emMsg?.edit({embeds: [em]});
 				return false;
 			}
 		} else {
 			m?.delete().catch(()  => {});
-			em.setDescription(msg.client.constants.emotes.cross, lan.notBanned);
-			emMsg?.edit(em);
+			em.setDescription(msg.client.constants.emotes.cross + ' ' +lan.notBanned);
+			emMsg?.edit({embeds: [em]});
 			return false;
 		}
-		em.setDescription(msg.client.constants.emotes.tick, lan.success);
-		emMsg?.edit(em);
+		em.setDescription(msg.client.constants.emotes.tick + ' ' + msg.client.ch.stp(lan.success, { target: target }));
+		emMsg?.edit({embeds: [em]});
 		return true;
 	}
 };

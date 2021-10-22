@@ -1,17 +1,14 @@
 module.exports = {
-	async execute(rawmember, user) {
+	async execute(member, user) {
 		const client = user.client;
-		const guild = rawmember.guild;
+		const guild = member.guild;
 		const ch = client.ch;
 		let wasMuted = null;
 		const res = await ch.query('SELECT * FROM warns WHERE closed = $1 AND type = $2 AND guildid = $3 AND userid = $4 AND closed = $5;', [false, 'Mute', guild.id, user.id, null]);
 		let Muterole;
-		const member = await guild.members.fetch(rawmember.id);
 		if (res && res.rowCount > 0) {
-			const resM = await ch.query('SELECT * FROM muterole WHERE guildid = $1;', [guild.id]);
-			if (resM && resM > 0) {
-				Muterole = guild.roles.cache.find(r => r.id == resM.rows[0].muteroleid);
-			}
+			const resM = await ch.query('SELECT * FROM guildsettings WHERE guildid = $1;', [guild.id]);
+			if (resM && resM > 0) Muterole = guild.roles.cache.find(r => r.id == resM.rows[0].muteroleid);
 			if (!Muterole) Muterole = guild.roles.cache.find(r => r.name.toLowerCase() == 'muted');
 			if (Muterole) {
 				if (!member.roles.cache.has(Muterole.id)) { 
@@ -22,7 +19,7 @@ module.exports = {
 		}
 		const res2 = await ch.query('SELECT * FROM warns WHERE closed = $1 AND type = $2 AND guildid = $3 AND userid = $4 AND closed = $5;', [false, 'Mute', guild.id, user.id, false]);
 		if (res2 && res2.rowCount > 0) {
-			const resM = await ch.query('SELECT * FROM muterole WHERE guildid = $1;', [guild.id]);
+			const resM = await ch.query('SELECT * FROM guildsettings WHERE guildid = $1;', [guild.id]);
 			if (resM && resM > 0) {
 				Muterole = guild.roles.cache.find(r => r.id == resM.rows[0].muteroleid);
 			} else {

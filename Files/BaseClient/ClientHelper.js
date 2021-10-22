@@ -76,7 +76,6 @@ module.exports = {
 			options = {}; 
 			options.embeds = [oldOptions];
 		} else options = {};
-		options.failIfNotExists = false;
 		if (content && content.type == 'rich') options.embeds ? options.embeds.push(content) : options.embeds = [content];
 		else if (typeof(content) !== 'string') options = content;
 		else options.content = content;
@@ -254,10 +253,7 @@ module.exports = {
 			const file = fs.createWriteStream(filePath);
 			let fileInfo = null;
 			const request = proto.get(url, response => {
-				if (response.statusCode !== 200) {
-					reject(new Error(`Failed to get '${url}' (${response.statusCode})`));
-					return;
-				}
+				if (response.statusCode !== 200) return;
 				fileInfo = {
 					mime: response.headers['content-type'],
 					size: parseInt(response.headers['content-length'], 10),

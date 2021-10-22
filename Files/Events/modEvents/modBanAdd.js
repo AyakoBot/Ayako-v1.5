@@ -15,28 +15,28 @@ module.exports = {
 			const exec = await msg.guild.members.fetch(executor.id);
 			if (exec?.roles.highest.rawPosition <= member?.roles.highest.rawPosition) {
 				em.setDescription(msg.client.constants.emotes.cross+' '+lan.exeNoPerms);
-				emMsg?.edit(em);
+				emMsg?.edit({embeds: [em]});
 				return false;
 			}
 			if (executor.id == target.id) {
 				em.setDescription(msg.client.constants.emotes.cross+' '+lan.selfBan);
-				emMsg?.edit(em);
+				emMsg?.edit({embeds: [em]});
 				return false;
 			}
 			if (target.id == msg.client.user.id) {
 				em.setDescription(msg.client.constants.emotes.cross+' '+lan.meBan);
-				emMsg?.edit(em);
+				emMsg?.edit({embeds: [em]});
 				return false;
 			}
 			if (member?.bannable == false) {
 				em.setDescription(msg.client.constants.emotes.cross+' '+lan.permissionError);
-				emMsg?.edit(em);
+				emMsg?.edit({embeds: [em]});
 				return false;
 			}
-			const banned = await msg.guild.bans.fetch(target).catch(() => {});
+			const banned = await msg.guild.bans.fetch(target).catch(() => { });
 			if (banned) {
 				em.setDescription(msg.client.constants.emotes.cross+' '+lan.alreadyBanned);
-				emMsg?.edit(em);
+				emMsg?.edit({embeds: [em]});
 				return false;
 			}
 		}
@@ -65,11 +65,11 @@ module.exports = {
 		} else {
 			m?.delete().catch(()  => {});
 			em.setDescription(msg.client.constants.emotes.cross+lan.error+` \`\`\`${err}\`\`\``);
-			emMsg?.edit(em);
+			emMsg?.edit({embeds: [em]});
 			return false;
 		}
 		em.setDescription(msg.client.constants.emotes.tick+' '+msg.client.ch.stp(lan.success, {target: target}));
-		emMsg?.edit(em);
+		emMsg?.edit({embeds: [em]});
 		return true;
 	}
 };

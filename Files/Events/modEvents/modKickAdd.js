@@ -7,23 +7,23 @@ module.exports = {
 		const con = msg.client.constants.mod.kickAdd;
 		const em = new Discord.MessageEmbed()
 			.setColor(con.color)
-			.setDescription(msg.client.constants.emotes.loading, lan.loading);
+			.setDescription(msg.client.constants.emotes.loading + ' ' + lan.loading);
 		const emMsg = await msg.client.ch.reply(msg, em);
 		const member = await msg.guild.members.fetch(target.id);
 		if (!member) {
-			em.setDescription(msg.client.constants.emotes.cross, lan.noMember);
-			emMsg?.edit(em);
+			em.setDescription(msg.client.constants.emotes.cross + ' ' +lan.noMember);
+			emMsg?.edit({embeds: [em]});
 			return false;
 		}
 		const exec = await msg.guild.members.fetch(executor.id);
 		if (exec.roles.highest.rawPosition < member.roles.highest.rawPosition || exec.roles.highest.rawPosition == member.roles.highest.rawPosition) {
-			em.setDescription(msg.client.constants.emotes.cross, lan.exeNoPerms);
-			emMsg?.edit(em);
+			em.setDescription(msg.client.constants.emotes.cross + ' ' +lan.exeNoPerms);
+			emMsg?.edit({embeds: [em]});
 			return false;
 		}
 		if (!member.kickable) {
-			em.setDescription(msg.client.constants.emotes.cross, lan.permissionError);
-			emMsg?.edit(em);
+			em.setDescription(msg.client.constants.emotes.cross + ' ' +lan.permissionError);
+			emMsg?.edit({embeds: [em]});
 			return false;
 		}
 		else {
@@ -32,7 +32,9 @@ module.exports = {
 				.setDescription(`${language.reason}: \`\`\`${reason}\`\`\``)
 				.setColor(con.color)
 				.setTimestamp()
-				.setAuthor(msg.client.ch.stp(lan.dm.author, {guild: msg.guild}), lan.author.image, msg.client.ch.stp(lan.author.link), {guild: msg.guild});
+				.setAuthor(msg.client.ch.stp(lan.dm.author, {guild: msg.guild}), 
+					lan.author.image, 
+					msg.client.ch.stp(con.author.link, { guild: msg.guild }));
 			const m = msg.client.ch.send(dmChannel, DMembed);
 			let err;
 			const kick = await member.kick(reason).catch((e) => {err = e;});
@@ -51,13 +53,13 @@ module.exports = {
 				if (logchannel) msg.client.ch.send(logchannel, embed);
 			} else {
 				m?.delete().catch(()  => {});
-				em.setDescription(msg.client.constants.emotes.cross, lan.error+` \`\`\`${err}\`\`\``);
-				emMsg?.edit(em);
+				em.setDescription(msg.client.constants.emotes.cross + ' ' +lan.error+` \`\`\`${err}\`\`\``);
+				emMsg?.edit({embeds: [em]});
 				return false;
 			}
 		}
-		em.setDescription(msg.client.constants.emotes.tick, lan.success);
-		emMsg?.edit(em);
+		em.setDescription(msg.client.constants.emotes.tick + ' ' + msg.client.ch.stp(lan.success, { target: target }));
+		emMsg?.edit({embeds: [em]});
 		return true;
 	}
 };

@@ -11,7 +11,8 @@ const client = new Discord.Client({
 	allowedMentions: {
 		parse: ['users', 'roles'],
 		repliedUser: false
-	}
+	},
+	failIfNotExists: false
 });
 
 //Create Command Collection and gather all Command Files
