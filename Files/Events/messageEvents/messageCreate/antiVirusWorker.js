@@ -34,7 +34,7 @@ async function start(data) {
 				if (included == false) {
 					if (blacklist.includes(new URL(link).hostname)) {
 						parentPort.postMessage({ text: 'BLACKLISTED_LINK', link: new URL(link).hostname, msgid: data.msgid, channelid: data.channelid, authorid: data.authorid, row: r});
-						parentPort.postMessage({ text: 'DB_INSERT', url: new URL(link).hostname, severity: 0 });
+						parentPort.postMessage({ text: 'DB_INSERT', url: new URL(link).hostname, severity: null });
 						included = true;
 					} else {
 						const spamHausRes = await SA
@@ -42,7 +42,7 @@ async function start(data) {
 							.set('Authorization', `Bearer ${auth.spamhausToken}`)
 							.set('Content-Type', 'application/json');
 						if (spamHausRes.status == 200) { 
-							parentPort.postMessage({ text: 'DB_INSERT', url: new URL(link).hostname, severity: 0 });
+							parentPort.postMessage({ text: 'DB_INSERT', url: new URL(link).hostname, severity: null });
 							parentPort.postMessage({ text: 'BLACKLISTED_LINK', link: new URL(link).hostname, msgid: data.msgid, channelid: data.channelid, authorid: data.authorid, row: r });
 						} else {
 							let res;
