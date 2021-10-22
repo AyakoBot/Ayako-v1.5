@@ -3,9 +3,9 @@ const Discord = require('discord.js');
 module.exports = {
 	async execute(rawmsg, link) {
 		const client = rawmsg.client;
-		const msg = await client.channels.cache.get(rawmsg.channelid).messages.fetch(rawmsg.msgid).catch(() => {});
 		const user = client.users.cache.get(rawmsg.authorid);
 		const channel = client.channels.cache.get(rawmsg.channelid);
+		const msg = await channel.messages.fetch(rawmsg.msgid).catch(() => {});
 		const guild = channel.guild;
 		const member = guild.members.cache.get(user.id);
 

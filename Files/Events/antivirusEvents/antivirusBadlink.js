@@ -7,7 +7,7 @@ module.exports = {
 		const channel = client.channels.cache.get(rawmsg.channelid);
 		const msg = await channel.messages.fetch(rawmsg.msgid).catch(() => {});
 		const guild = channel.guild;
-		const member = await guild.members.fetch(user.id);
+		const member = guild.members.cache.get(user.id);
 		
 		const phantomMsg = new Discord.Message(
 			client,

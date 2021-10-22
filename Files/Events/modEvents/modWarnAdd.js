@@ -29,11 +29,6 @@ module.exports = {
 			}
 		}
 		msg.client.ch.query('INSERT INTO warns (guildid, userid, reason, type, warnnr, dateofwarn, warnedinchannelid, warnedbyuserid, warnedinchannelname, warnedbyusername, msgurl) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);', [msg.guild.id, target.id, reason, 'Warn', warnnr, Date.now(), msg.channel.id, executor.id, msg.channel.name, executor.username, msg.url]);
-		const embed = new Discord.MessageEmbed()
-			.setColor(con.color)
-			.setDescription(msg.client.ch.stp(lan.reply, {user: msg.author, nr: warnnr}))
-			.setTimestamp();
-		msg.client.ch.reply(msg, embed);
 		const warnEmbed = new Discord.MessageEmbed()
 			.setTitle(msg.client.ch.stp(lan.DMtitle, {guild: msg.guild}))
 			.setColor(con.color)
@@ -51,7 +46,7 @@ module.exports = {
 				.setTimestamp();
 			if (logchannel) msg.client.ch.send(logchannel, WarnLogEmbed);
 		}
-		em.setDescription(msg.client.constants.emotes.tick + ' ' + msg.client.ch.stp(lan.success, { target: target }));
+		em.setDescription(msg.client.constants.emotes.tick + ' ' + msg.client.ch.stp(lan.reply, { target: target, nr: warnnr }));
 		emMsg?.edit({embeds: [em]});
 		return true;
 	}
