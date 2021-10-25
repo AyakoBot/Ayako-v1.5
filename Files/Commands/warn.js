@@ -13,17 +13,19 @@ module.exports = {
 		if (guildmember) {
 			const res = await msg.client.ch.query('SELECT * FROM modrolesnew WHERE guildid = $1;', [msg.guild.id]);
 			if (res && res.rowCount > 0) {
-				for (const r of res.rows) {
-					const role = msg.guild.roles.cache.get(r.roleid);
-					if (role && msg.member.roles.cache.has(role.id)) return warn(await msg.client.ch.modRoleWaiter(msg));
-					else return warn();
-				}
+				const roles = new Array;
+				res.rows.forEach((r) => roles.push(r.roleid));
+				if (guildmember.roles.cache.some(r => roles.includes(r.id))) return warn(false);
+				else return warn();
 			} else return warn();
 		} else return warn();
 
 		async function warn(proceed) {
-			if (proceed == false) return;
-			else msg.client.emit('modWarnAdd', msg.author, user, reason, msg);
+			if (proceed == false) {
+				const modRoleRes = await msg.client.ch.modRoleWaiter(msg);
+				if (modRoleRes) return msg.client.emit('modWarnAdd', msg.author, user, reason, msg);
+				else msg.delete().catch(() => {});
+			} else return msg.client.emit('modWarnAdd', msg.author, user, reason, msg);
 		}
 	}
 };
