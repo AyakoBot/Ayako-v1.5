@@ -8,7 +8,7 @@ module.exports = {
 	dm: false,
 	takesFirstArg: false,
 	aliases: null,
-	async exe(msg) {
+	async execute(msg) {
 		let settings = new Discord.Collection();
 		const settingsFiles = fs.readdirSync('./Files/Commands/settings').filter(file => file.endsWith('.js') && file !== 'setup.js' && file !== 'singleRowManager.js' && file !== 'multiRowManager.js' && file !== 'misc.js');
 		for (const file of settingsFiles) {
@@ -96,6 +96,6 @@ module.exports = {
 		});
 	},
 	async edit(msg, file, answer) {
-		require('./settings/singleRowManager').exe(msg, answer, file);
+		require('./settings/singleRowManager').execute(msg, answer, file);
 	},
 };

@@ -7,7 +7,7 @@ module.exports = {
 	description: 'Calculate the Bots Ping',
 	usage: ['ping'],
 	aliases: [],
-	async exe(msg) {
+	async execute(msg) {
 		const m = await msg.client.ch.reply(msg, '🏓​');
 		msg.react('🏓').catch(() => {});
 		let ping;

@@ -6,7 +6,7 @@ module.exports = {
 	perm: 268435456n,
 	takesFirstArg: true,
 	dm: false,
-	async exe(msg) {
+	async execute(msg) {
 		const color = re.test(msg.args[0]) ? msg.args[0] : '||000000';
 		let RoleName;
 		if (color === '||000000') RoleName = msg.args.slice(0).join(' ');

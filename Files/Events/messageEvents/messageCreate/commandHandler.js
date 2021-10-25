@@ -37,7 +37,7 @@ module.exports = {
 		if (!msg) return; 
 		if (msg.channel.type == 'DM') this.DMcommand(msg);
 		if (msg.author.id == auth.ownerID) {
-			if (msg.command.name == 'eval') return msg.command.exe(msg);
+			if (msg.command.name == 'eval') return msg.command.execute(msg);
 			cooldowns.set(msg.command.name, new Discord.Collection());
 		} else {
 			if (!cooldowns.has(msg.command.name)) cooldowns.set(msg.command.name, new Discord.Collection());
@@ -149,8 +149,9 @@ module.exports = {
 		if (msg.author.id == msg.client.user.id) msg.delete();
 		try {
 			//statcord.postCommand(msg.command.name, msg.author.id).catch(() => {});
-			console.log(msg.command.name);
-			msg.command.exe(msg);
+			console.log('Command executed: ' + msg.command.name);
+			console.log(msg.command);
+			msg.command.execute(msg);
 		} catch(e)  {
 			const channel = msg.client.channels.cache.get(msg.client.constants.errorchannel);
 			const embed = new Discord.MessageEmbed()

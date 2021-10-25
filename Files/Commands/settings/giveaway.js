@@ -6,7 +6,7 @@ module.exports = {
 	dm: false,
 	takesFirstArg: false,
 	aliases: ['g'],
-	async exe(msg) {
+	async execute(msg) {
         if (msg.args[0]) {
 
         } else {

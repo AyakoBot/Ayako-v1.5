@@ -6,7 +6,7 @@ module.exports = {
 	dm: true,
 	takesFirstArg: false,
 	aliases: ['eb'],
-	async exe(msg) {
+	async execute(msg) {
 		const embed = await this.builder(msg);
 		msg.client.ch.reply(msg, embed);
 	},

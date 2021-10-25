@@ -3,7 +3,7 @@ const misc = require('./misc.js');
 const fs = require('fs');
 
 module.exports = {
-	exe(msg, answer) {
+	execute(msg, answer) {
 		this.edit(msg, answer, {});
 	},
 	redirect(msg, i, values, answer, AddRemoveEditView, fail, srmEditing, comesFromSRM) {
@@ -383,7 +383,7 @@ async function repeater(msg, i, embed, values, answer, AddRemoveEditView, fail, 
 			editors.set(editorfile.key, editorfile);
 		}
 		const editor = editors.find(f => f.key.includes(msg.property));
-		const returned = await editor.exe(msg, i, embed, values, answer, AddRemoveEditView, fail, srmEditing, comesFromSRM, answered);
+		const returned = await editor.execute(msg, i, embed, values, answer, AddRemoveEditView, fail, srmEditing, comesFromSRM, answered);
 		if (Array.isArray(returned) && returned[0] == 'repeater') repeater(returned[1], returned[2], returned[3], returned[4], returned[5], returned[6], returned[7], returned[8], returned[9]);
 		else return;
 	} else if (['add', 'remove', 'edit'].includes(AddRemoveEditView)) {

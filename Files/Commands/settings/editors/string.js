@@ -3,7 +3,7 @@ const misc = require('../misc.js');
 
 module.exports = {
 	key: ['string'],
-	async exe(msg, i, embed, values, answer, AddRemoveEditView, fail, srmEditing, comesFromSRM) {
+	async execute(msg, i, embed, values, answer, AddRemoveEditView, fail, srmEditing, comesFromSRM) {
 		embed = new Discord.MessageEmbed()
 			.setAuthor(
 				msg.client.ch.stp(msg.lanSettings.author, {type: msg.lan.type}), 

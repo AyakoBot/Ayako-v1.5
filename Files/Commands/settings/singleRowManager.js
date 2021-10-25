@@ -3,7 +3,7 @@ const misc = require('./misc.js');
 const setuper = require('./setup');
 
 module.exports = {
-	exe(msg, answer, file) {
+	execute(msg, answer, file) {
 		edit(msg, answer, file);
 	},
 	redirecter(msg, answer, AddRemoveEditView, fail, values, origin) {
@@ -16,7 +16,7 @@ async function edit(msg, answer, file, AddRemoveEditView, fail, values, origin) 
 	if (!msg.file) {file.name = msg.args[0].toLowerCase(); msg.file = file;}
 	if (!origin) {
 		const res = await msg.client.ch.query(`SELECT * FROM ${msg.client.constants.commands.settings.tablenames[msg.file.name][0]} WHERE guildid = $1;`, [msg.guild.id]);
-		if (msg.file.setupRequired == false) return require('./multiRowManager').exe(msg, answer);
+		if (msg.file.setupRequired == false) return require('./multiRowManager').execute(msg, answer);
 		else if (!res || res.rowCount == 0) return setuper.execute(msg, answer);
 		else r = res.rows[0];
 	} else r = (await msg.client.ch.query(`SELECT * FROM ${msg.client.constants.commands.settings.tablenames[msg.file.name][0]} WHERE id = $1;`, [values.id])).rows[0];

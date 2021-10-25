@@ -3,7 +3,7 @@ const misc = require('../misc.js');
 
 module.exports = {
 	key: ['onetimerunner'],
-	async exe(msg, i, embed, values, answer, AddRemoveEditView, fail, srmEditing, comesFromSRM, answered) {
+	async execute(msg, i, embed, values, answer, AddRemoveEditView, fail, srmEditing, comesFromSRM, answered) {
 		const yes = new Discord.MessageButton()
 			.setCustomId('yes')
 			.setLabel(msg.language.Yes)

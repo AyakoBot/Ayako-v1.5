@@ -5,7 +5,7 @@ module.exports = {
 	perm: null,
 	dm: true,
 	aliases: ['cmdh', 'commandhelp', 'commandh'],
-	async exe(msg) {
+	async execute(msg) {
 		const commandName = msg.args[0] ? msg.args[0].toLowerCase() : 'help';
 		const reqcommand = msg.triedCMD ? msg.triedCMD : msg.client.commands.get(commandName) || msg.client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 		const language = msg.language;

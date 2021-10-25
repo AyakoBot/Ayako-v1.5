@@ -3,7 +3,7 @@ const misc = require('../misc.js');
 
 module.exports = {
 	key: ['seconds'],
-	async exe(msg, i, embed, values, answer, AddRemoveEditView, fail, srmEditing, comesFromSRM, answered) {
+	async execute(msg, i, embed, values, answer, AddRemoveEditView, fail, srmEditing, comesFromSRM, answered) {
 		const req = [];
 		for (let j = 1; j < 9999; j++) {req.push(j);}
 		const options = [];

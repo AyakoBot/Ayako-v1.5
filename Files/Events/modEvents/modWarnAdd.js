@@ -35,7 +35,7 @@ module.exports = {
 			.setDescription('```'+reason+'```')
 			.setTimestamp();
 		msg.client.ch.send(target, warnEmbed);
-		const res2 = await msg.client.ch.query('SELECT * FROM logchannel WHERE guildid = $1;', [msg.guild.id]);
+		const res2 = await msg.client.ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [msg.guild.id]);
 		if (res2 && res2.rowCount > 0) {
 			const logchannel = msg.client.channels.cache.get(res2.rows[0].modlogs);
 			const WarnLogEmbed = new Discord.MessageEmbed()

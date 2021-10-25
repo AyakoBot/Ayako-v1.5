@@ -8,7 +8,7 @@ module.exports = {
 	description: 'Check if you are in the latest WiLLiS Giveaway',
 	usage: ['amiin'],
 	thisGuildOnly: ['108176345204264960'],
-	async exe(msg) {
+	async execute(msg) {
 		if (msg.channel.id == '805839305377447936') return;
 		let id = msg.args[0] ? msg.args[0] : msg.author.id;
 		const embed = new Discord.MessageEmbed();

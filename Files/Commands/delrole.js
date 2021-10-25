@@ -5,7 +5,7 @@ module.exports = {
 	perm: 268435456n,
 	takesFirstArg: true,
 	dm: false,
-	async exe(msg) {
+	async execute(msg) {
 		let role = msg.guild.roles.cache.get(msg.args[0].replace(/\D+/g, ''));
 		const language = msg.language;
 		const lan = msg.lan;

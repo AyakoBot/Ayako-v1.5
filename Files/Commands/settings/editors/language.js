@@ -3,7 +3,7 @@ const misc = require('../misc.js');
 
 module.exports = {
 	key: ['lan'],
-	async exe(msg, i, embed, values, answer, AddRemoveEditView, fail, srmEditing, comesFromSRM, answered) {
+	async execute(msg, i, embed, values, answer, AddRemoveEditView, fail, srmEditing, comesFromSRM, answered) {
 		const req = [];
 		for (let i = 0; i < Object.entries(msg.language.languages).length; i++) {req.push({lan: Object.entries(msg.language.languages)[i][1].name, fin: Object.entries(msg.language.languages)[i][1].status, flags: msg.client.constants.emotes.flags[Object.entries(msg.language.languages)[i][0]], key: Object.entries(msg.language.languages)[i][0]});}
 		const options = [];

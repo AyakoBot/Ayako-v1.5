@@ -6,7 +6,7 @@ module.exports = {
 	dm: true,
 	takesFirstArg: true,
 	aliases: ['r'],
-	exe(msg) {
+	execute(msg) {
 		const args = msg.args;
 		if (!args.length) return msg.channel.send(`You didn't pass any command to reload, ${msg.author}!`);
 		if (args[0].toLowerCase() == 'all') {

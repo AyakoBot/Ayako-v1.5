@@ -1169,6 +1169,13 @@
             "noUser": "I couldn't find that User",
             "reason": "No Reason given"
         },
+        "warn": {
+            "description": "Warns a User in the Server",
+            "usage": ["warn [user ID or mention] (reason)"],
+            "category": "Moderation",
+            "noUser": "I couldn't find that User",
+            "reason": "No Reason given"
+        },
         "reloadevent": {
             "category": "Owner",
             "description": "Reloads an Event File",

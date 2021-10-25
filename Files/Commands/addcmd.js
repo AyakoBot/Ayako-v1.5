@@ -3,7 +3,7 @@ module.exports = {
 	perm: 0,
 	dm: true,
 	takesFirstArg: true,
-	exe(msg) {
+	execute(msg) {
 		const args = msg.args;
 		if (!args[0]) return msg.client.ch.reply(msg, 'Please enter a valid command');
 		const newCommand = require(`./${args[0]}.js`);

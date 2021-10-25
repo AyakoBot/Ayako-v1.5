@@ -10,7 +10,7 @@ module.exports = {
 	dm: true,
 	takesFirstArg: false,
 	// eslint-disable-next-line no-unused-vars
-	async exe(msg) {
+	async execute(msg) {
 
 	}
 };

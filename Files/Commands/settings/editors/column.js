@@ -3,7 +3,7 @@ const misc = require('../misc.js');
 
 module.exports = {
 	key: ['column'],
-	async exe(msg, i, embed, values, answer, AddRemoveEditView, fail, srmEditing, comesFromSRM, answered) {
+	async execute(msg, i, embed, values, answer, AddRemoveEditView, fail, srmEditing, comesFromSRM, answered) {
 		const options = [];
 		for (let j = 0; j < Object.entries(msg.lan).length; j++) {
 			const name = Object.entries(msg.lan)[j][0], val = Object.entries(msg.lan)[j][1];

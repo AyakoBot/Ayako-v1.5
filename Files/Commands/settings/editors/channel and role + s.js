@@ -3,7 +3,7 @@ const misc = require('../misc.js');
 
 module.exports = {
 	key: ['channel', 'channels', 'role', 'roles'],
-	async exe(msg, i, embed, values, answer, AddRemoveEditView, fail, srmEditing, comesFromSRM, answered) {
+	async execute(msg, i, embed, values, answer, AddRemoveEditView, fail, srmEditing, comesFromSRM, answered) {
 		const req = msg.guild[msg.compatibilityType].cache;
 		req.sort((a,b) => a.rawPosition - b.rawPosition);
 		const options = [];

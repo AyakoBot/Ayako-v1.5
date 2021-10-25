@@ -4,7 +4,7 @@ module.exports = {
 	dm: false,
 	takesFirstArg: true,
 	aliases: null,
-	async exe(msg) {
+	async execute(msg) {
 		const user = await msg.client.users.fetch(msg.args[0].replace(/\D+/g, ''));
 		const lan = msg.lan;
 		if (!user) return msg.client.ch.reply(msg, lan.noUser);

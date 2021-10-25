@@ -4,7 +4,7 @@ module.exports = {
 	dm: true,
 	takesFirstArg: false,
 	aliases: null,
-	async exe(msg) {
+	async execute(msg) {
 		await msg.client.ch.reply(msg, 'Restarting... '+msg.client.constants.emotes.loading);
 		// eslint-disable-next-line no-undef
 		process.exit();

@@ -4,7 +4,7 @@ module.exports = {
 	dm: false,
 	takesFirstArg: false,
 	aliases: null,
-	async exe(msg) {
+	async execute(msg) {
 		const lan = msg.lan;
 		let text = msg.client.ch.stp(lan.afkText, {username: msg.author.username});
 		if (msg.args[0]) text = msg.client.ch.stp(lan.afkText2, {slice: msg.args.slice(0).join(' '), username: msg.author.username});

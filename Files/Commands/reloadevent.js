@@ -4,7 +4,7 @@ module.exports = {
 	dm: true,
 	takesFirstArg: true,
 	aliases: ['rv'],
-	exe(msg) {
+	execute(msg) {
 		const args = msg.args;
 		const client = msg.client;
 		const ch = client.ch;

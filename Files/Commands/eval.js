@@ -10,7 +10,7 @@ module.exports = {
 	perm: 0,
 	dm: true,
 	takesFirstArg: true,
-	async exe(msg) {
+	async execute(msg) {
 		if (msg.author.id !== auth.ownerID) return;
 		const clean = (text) => { 
 			if (typeof text === 'string') return text.replace(/`/g, '`' + String.fromCharCode(8203)).replace(/@/g, '@' + String.fromCharCode(8203)).replace(reg, 'TOKEN'); 

@@ -3,7 +3,7 @@ const fs = require('fs');
 
 module.exports = {
 	perm: 32n,
-	async exe(msg) {
+	async execute(msg) {
 		const res = await msg.client.ch.query(`SELECT * FROM interactions WHERE guildid = '${msg.guild.id}';`);
 		if (msg.args[1] && msg.args[1].toLowerCase() === msg.language.edit && msg.member.permissions.has(new Discord.Permissions(this.perm))) this.edit(msg);
 		else {
@@ -81,7 +81,7 @@ module.exports = {
 							const index = msg.args.indexOf(msg.language.edit);
 							msg.args.splice(index, 1);
 							msg.m = m;
-							setTimeout(() => {this.exe(msg);}, 1000);
+							setTimeout(() => {this.execute(msg);}, 1000);
 						}
 					} else if (msg.client.constants.commands.settings.edit.interactions[name[i]] == 'string') {
 						const interactionFiles = fs.readdirSync('./Files/Commands/interactions').filter(file => file.endsWith('.js'));
@@ -118,7 +118,7 @@ module.exports = {
 						const index = msg.args.indexOf(msg.language.edit);
 						msg.args.splice(index, 1);
 						msg.m = m;
-						setTimeout(() => {this.exe(msg);}, 1000);
+						setTimeout(() => {this.execute(msg);}, 1000);
 					} 
 				} 
 			}
@@ -140,7 +140,7 @@ module.exports = {
 				.setAuthor(msg.lan.setup.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
 				.setDescription(msg.client.ch.stp(msg.lan.setup.done, {loading: msg.client.constants.emotes.loading}));
 			msg.m.edit({embeds: [endEmbed]}).catch(() => {});
-			setTimeout(() => {this.exe(msg);}, 1000);
+			setTimeout(() => {this.execute(msg);}, 1000);
 		} else if (answer == msg.language.no) {
 			collected.first().delete().catch(() => {});
 			const endEmbed = new Discord.MessageEmbed()

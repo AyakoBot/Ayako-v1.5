@@ -64,6 +64,8 @@ async function start(data) {
 								.get(`https://www.virustotal.com/api/v3/domains/${new URL(link).host}`)
 								.set('x-apikey', auth.VTtoken);
 							if (VTget) res = JSON.parse(VTget.text).error ? JSON.parse(VTget.text).error.code : JSON.parse(VTget.text).data.attributes.last_analysis_stats;
+							if (JSON.parse(VTget.text).data.attributes.last_analysis_stats) console.log('VT knows Link');
+							else console.log('VT does not know Link');
 							if (res == 'NotFoundError') {
 								console.log('VT has to analyze Link');
 								const VTpost = await SA
