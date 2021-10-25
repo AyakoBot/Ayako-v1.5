@@ -12,7 +12,7 @@ AntiVirusWorker.on('message', (data) => {
 		(link, severity, uses) VALUES
 		($1, $2, $3)
 		ON CONFLICT (link) DO
-		UPDATE SET uses = antiviruslinks.uses + 1;
+		UPDATE SET uses = antiviruslinks.uses + 1, severity = $2;
 		`, [data.url, data.severity, 1]);
 	}
 });

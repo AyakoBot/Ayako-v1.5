@@ -48,21 +48,21 @@ module.exports = {
 			data.messageCache = data.messageCache.filter(m => m.author !== msg.author.id);
 			data.bannedUsers.push(msg.author.id);
 			if (!msg.member.bannable) return msg.client.ch.send(msg.channel, msg.client.ch.stp(msg.language.commands.antispamHandler.banErrorMessage, {user: msg.author}));
-			return msg.client.emit('antispamBanAdd', (msg));
+			return msg.client.emit('antispamBanAdd', msg);
 		};
 		const kickUser = async () => {
 			data.messageCache = data.messageCache.filter(m => m.author !== msg.author.id);
 			data.kickedUsers.push(msg.author.id);
 			if (!msg.member.kickable) return msg.client.ch.send(msg.channel, msg.client.ch.stp(msg.language.commands.antispamHandler.kickErrorMessage, {user: msg.author}));
-			return msg.client.emit('antispamKickAdd', (msg));
+			return msg.client.emit('antispamKickAdd', msg);
 		};
 		const warnUser = async () => {
 			data.warnedUsers.push(msg.author.id);
-			return msg.client.emit('antispamWarnAdd', (msg));
+			return msg.client.emit('antispamWarnAdd', msg);
 		};
 		const muteUser = async () => {
 			data.mutedUsers.push(msg.author.id);
-			return msg.client.emit('antispamMuteAdd', (msg));
+			return msg.client.emit('antispamMuteAdd', msg);
 		};
 		const ofwarnUser = async () => {
 			data.ofwarnedUsers.push(msg.author.id);
@@ -72,7 +72,7 @@ module.exports = {
 				else if (warnnr == guildSettings.muteafterwarnsamount && guildSettings.muteenabledtof == true) await muteUser(msg);
 				else msg.client.emit('antispamOfwarnAdd', msg);
 			} 
-			if (guildSettings.readofwarnstof == false) msg.client.emit('ofwarnAdd', (msg));
+			if (guildSettings.readofwarnstof == false) msg.client.emit('ofwarnAdd', msg);
 			return;
 		};
 		data.messageCache.push({
