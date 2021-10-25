@@ -19,18 +19,25 @@ async function start(data) {
 	if (links.length == 0) return parentPort.postMessage('NO_LINKS');
 	let list = new Array, url;
 	for (let i = 0; i < linkLists.length; i++) {
-		url = await SA.get(linkLists[i]);
+		url = await SA.get(linkLists[i]).catch(() => {});
 		url = url ? url.text.split(/\n+/) : null;
 		list = [...list, ...url];
 	}
-	let whitelistRes = await SA.get('https://ayakobot.com/cdn/whitelisted.txt');
+	const blacklist = [...new Set(list)];
+	blacklist.forEach((entry, index) => {
+		blacklist[index] = entry.replace(/#{2}-{1}/g, '');
+		if (blacklist[index].startsWith('#')) blacklist.splice(index, 1);
+	});
+
+	let whitelistRes = await SA.get('https://ayakobot.com/cdn/whitelisted.txt').catch(() => {});
 	whitelistRes = whitelistRes ? whitelistRes.text.split(/\n+/) : null;
 
-	const blacklist = [...new Set(list)];
+	whitelistRes.forEach((entry, index) => whitelistRes[index] = entry.replace(/\r/g, ''));
+
 	let included = false;
 	links.forEach(async (link) => {
 		if (new URL(link).hostname) {
-			if (!whitelistRes.includes(new URL(link).hostname)) {
+			if (!whitelistRes.includes(`${new URL(link).hostname}`)) {
 				if (included == false) {
 					if (blacklist.includes(new URL(link).hostname)) {
 						parentPort.postMessage({ text: 'BLACKLISTED_LINK', link: new URL(link).hostname, msgid: data.msgid, channelid: data.channelid, authorid: data.authorid, row: r});
@@ -40,8 +47,8 @@ async function start(data) {
 						const spamHausRes = await SA
 							.get(`https://apibl.spamhaus.net/lookup/v1/dbl/${new URL(link).hostname}`)
 							.set('Authorization', `Bearer ${auth.spamhausToken}`)
-							.set('Content-Type', 'application/json');
-						if (spamHausRes.status == 200) { 
+							.set('Content-Type', 'application/json').catch(() => {});
+						if (spamHausRes && spamHausRes.status == 200) { 
 							parentPort.postMessage({ text: 'DB_INSERT', url: new URL(link).hostname, severity: null });
 							parentPort.postMessage({ text: 'BLACKLISTED_LINK', link: new URL(link).hostname, msgid: data.msgid, channelid: data.channelid, authorid: data.authorid, row: r });
 						} else {
@@ -55,12 +62,12 @@ async function start(data) {
 									.post('https://www.virustotal.com/api/v3/urls')
 									.set('x-apikey', auth.VTtoken)
 									.set('Content-Type', 'multipart/form-data')
-									.field('url', new URL(link).host);
+									.field('url', new URL(link).host).catch(() => { });
 								if (VTpost) res = JSON.parse(VTpost.text).data.id;
 								setTimeout(async () => {
 									const VTsecondGet = await SA
 										.get(`https://www.virustotal.com/api/v3/analyses/${res}`)
-										.set('x-apikey', auth.VTtoken);
+										.set('x-apikey', auth.VTtoken).catch(() => { });
 									if (VTsecondGet) res = JSON.parse(VTsecondGet.text).error ? JSON.parse(VTsecondGet.text).error.code : JSON.parse(VTsecondGet.text).data.attributes.stats;
 									evaluation({ msgid: data.msgid, channelid: data.channelid, authorid: data.authorid}, res, link, r);
 								}, 60000);

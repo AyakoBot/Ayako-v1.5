@@ -2,7 +2,6 @@ const Discord = require('discord.js');
 
 module.exports = {
 	async execute(executor, target, reason, msg) {
-		console.log(msg);
 		const language = await msg.client.ch.languageSelector(msg.guild);
 		const lan = language.mod.muteAdd;
 		const con = msg.client.constants.mod.muteAdd;

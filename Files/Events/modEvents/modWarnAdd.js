@@ -46,7 +46,7 @@ module.exports = {
 				.setTimestamp();
 			if (logchannel) msg.client.ch.send(logchannel, WarnLogEmbed);
 		}
-		em.setDescription(msg.client.constants.emotes.tick + ' ' + msg.client.ch.stp(lan.reply, { target: target, nr: warnnr }));
+		em.setDescription(msg.client.constants.emotes.tick + ' ' + msg.client.ch.stp(lan.reply, { user: target, nr: warnnr }));
 		emMsg?.edit({embeds: [em]});
 		return true;
 	}
