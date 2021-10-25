@@ -1,10 +1,10 @@
 module.exports = {
-	name: 'ban',
+	name: 'warn',
 	perm: 4n,
 	dm: false,
 	takesFirstArg: true,
 	aliases: null,
-	async exe(msg) {
+	async execute(msg) {
 		const user = await msg.client.users.fetch(msg.args[0].replace(/\D+/g, ''));
 		const lan = msg.lan;
 		if (!user) return msg.client.ch.reply(msg, lan.noUser);
@@ -15,15 +15,15 @@ module.exports = {
 			if (res && res.rowCount > 0) {
 				for (const r of res.rows) {
 					const role = msg.guild.roles.cache.get(r.roleid);
-					if (role && msg.member.roles.cache.has(role.id)) return ban(await msg.client.ch.modRoleWaiter(msg));
-					else return ban();
+					if (role && msg.member.roles.cache.has(role.id)) return warn(await msg.client.ch.modRoleWaiter(msg));
+					else return warn();
 				}
-			} else return ban();
-		} else return ban();
+			} else return warn();
+		} else return warn();
 
-		async function ban(proceed) {
+		async function warn(proceed) {
 			if (proceed == false) return;
-			else msg.client.emit('modBanAdd', msg.author, user, reason, msg);
+			else msg.client.emit('modWarnAdd', msg.author, user, reason, msg);
 		}
 	}
 };
