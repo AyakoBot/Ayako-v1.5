@@ -42,6 +42,7 @@ module.exports = {
 	 * @param {object} options - The Options of this Message, if any.
 	 */
 	async send(channel, content, options) {
+		if (typeof channel.send !== 'function') return;
 		let webhook;
 		if (client.channelWebhooks.get(channel.id)) webhook = client.channelWebhooks.get(channel.id);
 		let m;
@@ -71,6 +72,7 @@ module.exports = {
 	 * @param {object} options - The Options of this Reply, if any.
 	 */
 	async reply(msg, content, options) {
+		if (typeof msg.reply !== 'function') return this.send(msg, content, options);
 		if (options && options.type == 'rich') {
 			const oldOptions = options;
 			options = {}; 
@@ -523,47 +525,33 @@ module.exports = {
 	 */
 	async modRoleWaiter(msg) {
 		const SUCCESS = new Discord.MessageButton()
-			.setCustomID('modProceedAction')
+			.setCustomId('modProceedAction')
 			.setLabel(msg.language.mod.warning.proceed)
 			.setStyle('SUCCESS')
-			.setEmoji(client.constants.emotes.tickID);
+			.setEmoji(client.constants.emotes.tickBGID);
 		const DANGER = new Discord.MessageButton()
-			.setCustomID('modAbortAction')
+			.setCustomId('modAbortAction')
 			.setLabel(msg.language.mod.warning.abort)
-			.setEmoji(client.constants.emotes.crossID)
+			.setEmoji(client.constants.emotes.crossBGID)
 			.setStyle('DANGER');
-		const m = await this.reply(msg, {content: msg.language.mod.warning.text, components: [[SUCCESS],[DANGER]], allowedMentions: {repliedUser: true}});
-		msg.channel.awaitMessages({filter: m => m.author.id == msg.author.id, max: 1, time: 30000})
-			.then(rawcollected => {
-				if (!rawcollected.first()) {
-					m.delete().catch(() => {});
-					return false;
-				}
-				const answer = rawcollected.first().content.toLowerCase();
-				if (answer == 'y' || answer == msg.language.mod.warning.proceed.toLowerCase()) {
-					if (m.deleted == false) {
-						rawcollected.first().delete().catch(() => {});
+		const m = await this.reply(msg, {content: msg.language.mod.warning.text, components: this.buttonRower([SUCCESS,DANGER]), allowedMentions: {repliedUser: true}});
+		const collector = m.createMessageComponentCollector({ time: 30000 });
+		return await new Promise((resolve,) => {
+			collector.on('collect', answer => {
+				if (answer.user.id !== msg.author.id) this.notYours(answer, msg);
+				else {
+					if (answer.customId == 'modProceedAction') {
 						m.delete().catch(() => {});
-						return true;
+						resolve(true);
+					} else if (answer.customId == 'modAbortAction') {
+						m.delete().catch(() => {});
+						resolve();
 					}
-				} else {
-					m.delete().catch(() => {});
-					return false;
 				}
-			}).catch(() => {m.delete().catch(() => {});});
-		const collector = new Discord.MessageComponentInteractionCollector(m, {time: 30000});
-		collector.on('collect', answer => {
-			if (answer.user.id !== msg.author.id) {
-				answer.reply({embeds: [new Discord.MessageEmbed().setColor(client.constants.error).setDescription(msg.language.notYourButton).setAuthor(msg.language.error, client.constants.standard.image, client.constants.standard.invite)], ephemeral: true});
-			} else {
-				if (answer.customID == 'modProceedAction') {
-					m.delete().catch(() => {});
-					return true;
-				} else if (answer.customID == 'modAbortAction') {
-					m.delete().catch(() => {});
-					return false;
-				}
-			}
+			});
+			collector.on('end', (collected, reason) => {
+				if (reason == 'time') resolve(), m.delete().catch(() => { });
+			});
 		});
 	},
 	/**
