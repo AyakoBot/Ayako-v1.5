@@ -6,6 +6,7 @@ module.exports = {
 	dm: false,
 	takesFirstArg: true,
 	aliases: null,
+	type: 'mod',
 	async execute(msg) {
 		const args = msg.args[0] == 'ids' ? require('../ids.json').ids : msg.args;
 		if (msg.args[0] == 'ids' && !args[0]) return msg.client.ch.reply(msg, msg.lan.noRaidIDs);

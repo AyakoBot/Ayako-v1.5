@@ -1,9 +1,10 @@
 module.exports = {
 	name: 'warn',
-	perm: 4n,
+	perm: 8192n,
 	dm: false,
 	takesFirstArg: true,
 	aliases: null,
+	type: 'mod',
 	async execute(msg) {
 		const user = await msg.client.users.fetch(msg.args[0].replace(/\D+/g, ''));
 		const lan = msg.lan;

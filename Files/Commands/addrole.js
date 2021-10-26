@@ -6,6 +6,7 @@ module.exports = {
 	perm: 268435456n,
 	takesFirstArg: true,
 	dm: false,
+	type: 'util',
 	async execute(msg) {
 		const color = re.test(msg.args[0]) ? msg.args[0] : '||000000';
 		let RoleName;

@@ -8,6 +8,7 @@ module.exports = {
 	perm: 4n,
 	description: 'Ban a User from Animekos and Gameverse at the same time',
 	usage: ['xban [user ID or mention] (reason)'],
+	type: 'mod',
 	async execute(msg) {
 		const user = msg.args[0].replace(/\D+/g, '');
 		if (!user) return msg.client.ch.reply(msg, 'Couldn\'t find that User');

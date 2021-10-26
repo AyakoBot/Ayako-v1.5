@@ -7,6 +7,7 @@ module.exports = {
 	dm: true,
 	takesFirstArg: false,
 	aliases: [],
+	type: 'info',
 	async execute(msg) {
 		const startMeasure = cpuAverage();
 

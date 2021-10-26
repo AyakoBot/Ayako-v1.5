@@ -5,6 +5,7 @@ module.exports = {
 	perm: null,
 	dm: true,
 	takesFirstArg: false,
+	type: 'info',
 	async execute(msg) {
 		const user = msg.args[0] ? await msg.client.users.fetch(msg.args[0].replace(/\D+/g, '')) : msg.author;
 		const avatarEmbed = new Discord.MessageEmbed()

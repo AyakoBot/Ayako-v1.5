@@ -11,6 +11,7 @@ module.exports = {
 	description: 'Verify on a Server',
 	usage: ['verify'],
 	aliases: [],
+	type: 'auto',
 	async execute(msg) {
 		msg.lan = msg.language.verification;
 		const res = await msg.client.ch.query('SELECT * FROM verification WHERE guildid = $1 AND active = $2;', [msg.guild.id, true]);

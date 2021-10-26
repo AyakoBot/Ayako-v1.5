@@ -5,6 +5,7 @@ module.exports = {
 	perm: null,
 	dm: true,
 	takesFirstArg: true,
+	type: 'fun',
 	async execute(msg) {
 		const random = Math.floor(Math.random() * 15);
 		const question = msg.args.slice(0).join(' ');

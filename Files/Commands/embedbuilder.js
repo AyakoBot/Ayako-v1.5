@@ -112,17 +112,17 @@ module.exports = {
 						});
 					});
 					if (!promise) return msg.client.ch.aborted(msg);
-					console.log(typeof editing2)
+					console.log(typeof editing2);
 
 					editing2 = Object.entries(editing).find(a => a[1] == editing2);
-					console.log(editing)
+					console.log(editing);
 
 				}
 				//console.log(editing)
 				if (!Array.isArray(editing)) editing = Object.entries(editing)[0];
 				const type = msg.client.constants.embedBuilder.embed[editing[0]];
 				const Name = editing[1];
-				const value = null
+				const value = null;
 
 			}
 

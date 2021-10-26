@@ -88,7 +88,11 @@ module.exports = {
 			if (msg.guild.ownerID !== msg.author.id) return msg.client.ch.reply(msg, msg.language.commands.commandHandler.ownerOnly);
 			else return this.editCheck(msg);
 		} else if (typeof msg.command.perm == 'bigint') {
-			const names = ['ban', 'unban', 'mute', 'unmute', 'tempmute', 'kick', 'clear', 'announce', 'pardon', 'warn', 'edit', 'takerole', 'giverole'];
+			const names = new Array;
+			msg.client.commands.each((command) => {
+				if (command.type == 'mod') names.push(command.name);
+			});
+
 			if (names.includes(msg.command.name)) {
 				const res = await msg.client.ch.query('SELECT * FROM modrolesnew WHERE guildid = $1;', [msg.guild.id]);
 				if (res && res.rowCount > 0) {

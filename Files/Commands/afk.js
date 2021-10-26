@@ -4,11 +4,12 @@ module.exports = {
 	dm: false,
 	takesFirstArg: false,
 	aliases: null,
+	type: 'info',
 	async execute(msg) {
 		const lan = msg.lan;
 		let text = msg.client.ch.stp(lan.afkText, {username: msg.author.username});
 		if (msg.args[0]) text = msg.client.ch.stp(lan.afkText2, {slice: msg.args.slice(0).join(' '), username: msg.author.username});
-		if (text.toLowerCase().includes('http://') || text.toLowerCase().includes('https://')) return msg.client.ch.reply(msg, lan.noLinks);
+		if (text.toLowerCase().includes('http://') || text.toLowerCase().includes('https://') || text.toLowerCase().includes('discord.gg')) return msg.client.ch.reply(msg, lan.noLinks);
 		const res = await msg.client.ch.query('SELECT * FROM afk WHERE userid = $1 AND guildid = $2;', [msg.author.id, msg.guild.id]);
 		if (res && res.rowCount > 0) {
 			msg.client.ch.query('UPDATE afk SET text = $1, since = $4 WHERE userid = $2 AND guildid = $3;', [text, msg.author.id, msg.guild.id, Date.now()]);
