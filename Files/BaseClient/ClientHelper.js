@@ -629,6 +629,20 @@ module.exports = {
 	 */
 	CFL(string) {
 		return string.charAt(0).toUpperCase() + string.slice(1);
+	},
+	/**
+	 * Creates a sample Loading Embed.
+	 * @constructor
+	 * @param {object} lan - The Language which is to be used.
+	 * @param {object} guild - The Guild in which this Command was called
+	 */
+	async loadingEmbed(lan, guild) {
+		const embed = new Discord.MessageEmbed()
+			.setAuthor(lan.author, client.constants.emotes.loadingLink, client.constants.standard.invite)
+			.setColor(this.colorGetter(guild?.me))
+			.setDescription(`${client.constants.emotes.loading} ${lan.loading ? lan.loading : (await this.languageSelector(guild)).loading}`);
+		return embed;
 	}
+		
 
 };

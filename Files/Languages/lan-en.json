@@ -660,6 +660,7 @@
     "defaultPermission": "Default Permissions",
     "unverifiedTooLong": "Unverified for too long",
     "tooManyRoles": "Too many Roles to be displayed",
+    "loading": "Loading...",
     "roles": "Roles",
     "edit": "edit",
     "Edit": "Edit",
@@ -1187,6 +1188,23 @@
             "category": "Owner",
             "description": "Reloads an Event File",
             "usage": ["reloadevent [event Name]","reloadevent constants","reloadevent ch","reloadevent lan [language]"]
+        },
+        "ping": {
+            "category": "Info",
+            "description": "Calculates the Bots Ping",
+            "usage": ["ping"]
+        },
+        "workload": {
+            "category": "Info",
+            "description": "Shows the Bots current Workload on the Host System",
+            "usage": ["workload"],
+            "author": "Ayako Workload",
+            "RAM": {
+                "name": "RAM usage",
+                "value": "{{used}} MB out of {{total}} MB"
+            },
+            "CPU": "CPU usage",
+            "runtime": "Host OS runtime"
         },
         "reload": {
             "category": "Owner",
