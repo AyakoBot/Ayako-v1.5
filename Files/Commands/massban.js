@@ -64,7 +64,7 @@ module.exports = {
 		}
 		let banreason = '';
 		if (reason.length == 0) banreason = msg.lan.reason;
-		else reason.forEach((word) => {banreason += ` ${word}`;});
+		else reason.forEach((word) => banreason += ` ${word}`);
 		const con = msg.constants.commands.massban;
 		const uniqueUsers = users.filter((item, pos ,self) => self.indexOf(item) == pos);
 		const uniqueFails = failed.filter((item, pos ,self) => self.indexOf(item) == pos);
@@ -77,17 +77,19 @@ module.exports = {
 				.setTimestamp();
 			const m = await msg.client.ch.reply(msg, replyEmbed);
 			uniqueUsers.forEach(async (user) => {
-				const ban = await msg.guild.members.ban(user, {
+				const ban = await msg.guild.bans.create(user, {
 					days: 1,
 					reason: msg.client.ch.stp(msg.lan.banReason, {user: msg.author, reason: banreason}),
-				}).catch(() => {failed.push(`${user.id} `+msg.lan.ohno);});
+				}).catch(() => failed.push(`${user.id} `+msg.lan.ohno));
 				if (ban) {
 					descS.push(`<@${user.id}>`);
 					if (`${descS}`.length > 2048) replyEmbed.setDescription(msg.client.ch.stp(msg.lan.sBannedUsers, {amount: descS.length}));
 					else replyEmbed.setDescription(`\u200b${descS}`);
 				}
 			});
-			const editIntervalS = setInterval(async () => {if (descS.length !== uniqueUsers.length) await m.edit(replyEmbed);}, 5000);
+			const editIntervalS = setInterval(async () => {
+				if (descS.length !== uniqueUsers.length) await m.edit(replyEmbed);
+			}, 5000);
 			const intervalS = setInterval(async () => {
 				if (descS.length == uniqueUsers.length) {
 					if (`${descS}`.length > 2048) replyEmbed.setDescription(msg.client.ch.stp(msg.lan.sBannedUsers, {amount: descS.length}));

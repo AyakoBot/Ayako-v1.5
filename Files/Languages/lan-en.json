@@ -1237,7 +1237,7 @@
             "ohno": "(Something went wrong while banning)",
             "descS": "Users I successfully banned will appear here",
             "descSLoading": "Successfully banned | Loading",
-            "sBannedUsers": "Successfully banned {{amount}} users",
+            "sBannedUsers": "Successfully banned {{amount}} Users",
             "descF": "Users I failed to ban will appear here",
             "descFLoading": "Failed to ban | Loading",
             "fBannedUsers": "Failed to ban {{amount}} times",
