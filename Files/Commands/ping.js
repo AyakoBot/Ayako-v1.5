@@ -3,9 +3,6 @@ module.exports = {
 	perm: null,
 	dm: true,
 	takesFirstArg: false,
-	category: 'Info',
-	description: 'Calculate the Bots Ping',
-	usage: ['ping'],
 	aliases: [],
 	async execute(msg) {
 		const m = await msg.client.ch.reply(msg, '🏓​');
