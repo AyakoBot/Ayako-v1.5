@@ -622,4 +622,13 @@ module.exports = {
 	colorGetter(member) {
 		return member && member.displayHexColor !== 0 ? member.displayHexColor : 'b0ff00';
 	},
+	/**
+	 * Capitalizes the first Letter of a String.
+	 * @constructor
+	 * @param {string} string - The String of which to capitalize the first Letter.
+	 */
+	CFL(string) {
+		return string.charAt(0).toUpperCase() + string.slice(1);
+	}
+
 };

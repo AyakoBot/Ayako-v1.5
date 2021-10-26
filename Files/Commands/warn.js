@@ -15,17 +15,17 @@ module.exports = {
 			if (res && res.rowCount > 0) {
 				const roles = new Array;
 				res.rows.forEach((r) => roles.push(r.roleid));
-				if (guildmember.roles.cache.some(r => roles.includes(r.id))) return warn(false);
-				else return warn();
-			} else return warn();
-		} else return warn();
+				if (guildmember.roles.cache.some(r => roles.includes(r.id))) return proceed(false);
+				else return proceed();
+			} else return proceed();
+		} else return proceed();
 
-		async function warn(proceed) {
+		async function proceed(proceed) {
 			if (proceed == false) {
 				const modRoleRes = await msg.client.ch.modRoleWaiter(msg);
-				if (modRoleRes) return msg.client.emit('modWarnAdd', msg.author, user, reason, msg);
+				if (modRoleRes) return msg.client.emit(`mod${msg.client.ch.CFL(this.name)}Add`, msg.author, user, reason, msg);
 				else msg.delete().catch(() => {});
-			} else return msg.client.emit('modWarnAdd', msg.author, user, reason, msg);
+			} else return msg.client.emit(`mod${msg.client.ch.CFL(this.name)}Add`, msg.author, user, reason, msg);
 		}
 	}
 };
