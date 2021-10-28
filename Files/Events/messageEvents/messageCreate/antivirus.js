@@ -32,21 +32,28 @@ module.exports = {
 
 			let whitelistRes = await SA.get('https://ayakobot.com/cdn/whitelisted.txt').catch(() => { });
 			whitelistRes = whitelistRes ? whitelistRes.text.split(/\n+/) : null;
-
 			whitelistRes.forEach((entry, index) => whitelistRes[index] = entry.replace(/\r/g, ''));
+			let blacklistRes = await SA.get('https://ayakobot.com/cdn/blacklisted.txt').catch(() => { });
+			blacklistRes = blacklistRes ? blacklistRes.text.split(/\n+/) : null;
+			blacklistRes.forEach((entry, index) => blacklistRes[index] = entry.replace(/\r/g, ''));
 
 			let included = false;
 			links.forEach(async (link) => {
 				const url = new URL(link);
 				if (url.hostname) {
 					console.log('Link Detected: ' + link);
-					if (!whitelistRes.includes(`${url.hostname}`)) {
+					if (blacklistRes.includes(`${url.hostname}`)) {
+						console.log('Blacklist included Link');
+						end({ text: 'BLACKLISTED_LINK', link: url.hostname, msg: msg, row: r });
+						end({ text: 'DB_INSERT', url: url.hostname, severity: null });
+						included = true;
+					} else if (!whitelistRes.includes(`${url.hostname}`)) {
 						console.log('Link is not Whitelisted');
 						if (included == false) {
 							console.log('Message did not contain any Links yet');
 							if (blacklist.includes(url.hostname)) {
 								console.log('Blacklist included Link');
-								end({ text: 'BLACKLISTED_LINK', link: url.hostname, msgid: data.msgid, channelid: data.channelid, authorid: data.authorid, row: r });
+								end({ text: 'BLACKLISTED_LINK', link: url.hostname, msg: msg, row: r });
 								end({ text: 'DB_INSERT', url: url.hostname, severity: null });
 								included = true;
 							} else {
@@ -58,13 +65,13 @@ module.exports = {
 								if (spamHausRes && spamHausRes.status == 200) {
 									console.log('SpamHaus included Link');
 									end({ text: 'DB_INSERT', url: url.hostname, severity: null });
-									end({ text: 'BLACKLISTED_LINK', link: url.hostname, msgid: data.msgid, channelid: data.channelid, authorid: data.authorid, row: r });
+									end({ text: 'BLACKLISTED_LINK', link: url.hostname, msg: msg, row: r });
 								} else {
 									console.log('SpamHaus did not include Link');
 									let res;
 									const VTget = await SA
-										.get(`https://www.virustotal.com/api/v3/domains/${url.host}`)
-										.set('x-apikey', auth.VTtoken);
+										.get(`https://www.virustotal.com/api/v3/domains/${url.hostname}`)
+										.set('x-apikey', auth.VTtoken).catch(() => { });
 									if (VTget) res = JSON.parse(VTget.text).error ? JSON.parse(VTget.text).error.code : JSON.parse(VTget.text).data.attributes.last_analysis_stats;
 									if (JSON.parse(VTget.text).data.attributes.last_analysis_stats) console.log('VT knows Link');
 									else console.log('VT does not know Link');
@@ -74,7 +81,7 @@ module.exports = {
 											.post('https://www.virustotal.com/api/v3/urls')
 											.set('x-apikey', auth.VTtoken)
 											.set('Content-Type', 'multipart/form-data')
-											.field('url', url.host).catch(() => { });
+											.field('url', url.hostname).catch(() => { });
 										if (VTpost) res = JSON.parse(VTpost.text).data.id;
 										setTimeout(async () => {
 											console.log('VT analyze done');
@@ -82,9 +89,9 @@ module.exports = {
 												.get(`https://www.virustotal.com/api/v3/analyses/${res}`)
 												.set('x-apikey', auth.VTtoken).catch(() => { });
 											if (VTsecondGet) res = JSON.parse(VTsecondGet.text).error ? JSON.parse(VTsecondGet.text).error.code : JSON.parse(VTsecondGet.text).data.attributes.stats;
-											evaluation({ msgid: data.msgid, channelid: data.channelid, authorid: data.authorid }, res, link, r);
+											evaluation(msg, res, link, r);
 										}, 60000);
-									} else evaluation({ msgid: data.msgid, channelid: data.channelid, authorid: data.authorid }, res, link, r);
+									} else evaluation(msg, res, link, r);
 								}
 							}
 						}
@@ -94,7 +101,6 @@ module.exports = {
 		}
 	}
 };
-
 
 async function evaluation(msg, VTresponse, url, r) {
 	console.log('Evaluation called');
@@ -125,8 +131,8 @@ async function evaluation(msg, VTresponse, url, r) {
 }
 
 function end(data) {
-	if (data.text == 'BLACKLISTED_LINK') client.emit('antivirusBlacklist', { msgid: data.msgid, channelid: data.channelid, authorid: data.authorid, client: client }, data.link);
-	if (data.text == 'SEVERE_LINK') client.emit('antivirusBadlink', { msgid: data.msg.msgid, channelid: data.msg.channelid, authorid: data.msg.authorid, client: client }, data.link, data.severity, data.VTresponse);
+	if (data.text == 'BLACKLISTED_LINK') client.emit('antivirusBlacklist', data.msg, data.link);
+	if (data.text == 'SEVERE_LINK') client.emit('antivirusBadlink', data.msg, data.link, data.severity, data.VTresponse);
 	if (data.text == 'DB_INSERT') {
 		client.ch.query(`
 		INSERT INTO antiviruslinks
@@ -136,4 +142,4 @@ function end(data) {
 		UPDATE SET uses = antiviruslinks.uses + 1, severity = $2;
 		`, [data.url, data.severity, 1]);
 	}
-});
+}
