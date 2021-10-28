@@ -92,15 +92,13 @@ module.exports = {
 			msg.client.commands.each((command) => {
 				if (command.type == 'mod') names.push(command.name);
 			});
-
 			if (names.includes(msg.command.name)) {
 				const res = await msg.client.ch.query('SELECT * FROM modrolesnew WHERE guildid = $1;', [msg.guild.id]);
 				if (res && res.rowCount > 0) {
-					for (const r of res.rows) {
-						const role = msg.guild.roles.cache.get(r.roleid);
-						if (role && msg.member.roles.cache.has(role.id)) return this.editCheck(msg);
-						else return this.editCheck(msg);
-					}
+					const roles = new Array;
+					res.rows.forEach((r) => roles.push(r.roleid));
+					if (msg.member.roles.cache.some(r => roles.includes(r.id))) return this.editCheck(msg);
+					else if (!msg.member.permissions.has(msg.command.perm)) return msg.client.ch.reply(msg, msg.language.commands.commandHandler.missingPermissions);
 				} else if (!msg.member.permissions.has(msg.command.perm)) return msg.client.ch.reply(msg, msg.language.commands.commandHandler.missingPermissions);
 			} else if (!msg.member.permissions.has(msg.command.perm)) return msg.client.ch.reply(msg, msg.language.commands.commandHandler.missingPermissions);
 		}
