@@ -35,7 +35,7 @@ module.exports = {
 	async execute(rawmsg) {
 		const msg = await this.prefix(rawmsg);
 		if (!msg) return; 
-		if (msg.channel.type == 'DM') this.DMcommand(msg);
+		if (msg.channel.type == 'DM') return this.DMcommand(msg);
 		if (msg.author.id == auth.ownerID) {
 			if (msg.command.name == 'eval') return msg.command.execute(msg);
 			cooldowns.set(msg.command.name, new Discord.Collection());
@@ -152,7 +152,6 @@ module.exports = {
 		try {
 			//statcord.postCommand(msg.command.name, msg.author.id).catch(() => {});
 			console.log('Command executed: ' + msg.command.name);
-			console.log(msg.command);
 			msg.command.execute(msg);
 		} catch(e)  {
 			const channel = msg.client.channels.cache.get(msg.client.constants.errorchannel);
