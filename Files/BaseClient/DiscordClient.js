@@ -72,7 +72,6 @@ client.invites = new Map();
 client.channelWebhooks = new Map();
 client.constants = require('../Constants.json');
 client.setMaxListeners(61);
-client.roleQueue = new Discord.Collection();
 
 client.eris = Eris;
 
