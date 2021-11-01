@@ -15,7 +15,7 @@
     "ansi-regex": "^6.0.1",
     "canvas": "^2.8.0",
     "captcha-canvas": "^2.3.1",
-    "discord.js": "^13.1.0",
+    "discord.js": "^13.3.1",
     "eris": "^0.15.1",
     "express": "^4.17.1",
     "imgur": "^1.0.2",
