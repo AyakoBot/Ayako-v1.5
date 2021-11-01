@@ -128,7 +128,7 @@ async function evaluation(msg, VTresponse, url, r, attributes) {
 	console.log('Link Severity: ' + severity);
 
 	if (severity > 2) end({ text: 'SEVERE_LINK', msg: msg, res: VTresponse, severity: severity, row: r, link: url });
-	else if (attributes && +attributes.creation_date + '000' < Date.now() - 604800000) end({ text: 'NEW_URL', msg: msg, res: VTresponse, severity: severity, row: r, link: url});
+	else if (attributes && +attributes.creation_date + '000' > Date.now() - 604800000) end({ text: 'NEW_URL', msg: msg, res: VTresponse, severity: severity, row: r, link: url});
 	else if (attributes) fs.appendFile('S:/Bots/ws/CDN/whitelisted.txt', `\n${new URL(url).hostname}`, () => {});
 	else client.ch.send(client.channels.cache.get('726252103302905907'), `${url}\n\`\`\`${VTresponse}\`\`\``); 
 }
