@@ -89,9 +89,9 @@ module.exports = {
 												.get(`https://www.virustotal.com/api/v3/analyses/${res}`)
 												.set('x-apikey', auth.VTtoken).catch(() => { });
 											if (VTsecondGet) res = JSON.parse(VTsecondGet.text).error ? JSON.parse(VTsecondGet.text).error.code : JSON.parse(VTsecondGet.text).data.attributes.stats;
-											evaluation(msg, res, link, r);
+											evaluation(msg, res, link, r, JSON.parse(VTsecondGet?.text)?.data?.attributes);
 										}, 60000);
-									} else evaluation(msg, res, link, r);
+									} else evaluation(msg, res, link, r, JSON.parse(VTget?.text)?.data?.attributes);
 								}
 							}
 						}
@@ -102,10 +102,11 @@ module.exports = {
 	}
 };
 
-async function evaluation(msg, VTresponse, url, r) {
+async function evaluation(msg, VTresponse, url, r, attributes) {
 	console.log('Evaluation called');
-	if (VTresponse == 'QuotaExceededError' || (VTresponse.suspicious == undefined || VTresponse.suspicious == null)) return;
+	if (VTresponse == 'QuotaExceededError' || (VTresponse.suspicious == undefined || VTresponse.suspicious == null)) return end({ text: 'DB_INSERT', url: new URL(url).hostname, severity: severity });
 	let severity = 0;
+
 
 	if (VTresponse.suspicious > 10) severity = 1;
 	if (VTresponse.suspicious > 20) severity = 2;
@@ -127,12 +128,15 @@ async function evaluation(msg, VTresponse, url, r) {
 	console.log('Link Severity: ' + severity);
 
 	if (severity > 2) end({ text: 'SEVERE_LINK', msg: msg, res: VTresponse, severity: severity, row: r, link: url });
-	else fs.appendFile('S:/Bots/ws/CDN/whitelisted.txt', `\n${new URL(url).hostname}`, () => {});
+	else if (attributes && +attributes.creation_date + '000' < Date.now() - 604800000) end({ text: 'NEW_URL', msg: msg, res: VTresponse, severity: severity, row: r, link: url});
+	else if (attributes) fs.appendFile('S:/Bots/ws/CDN/whitelisted.txt', `\n${new URL(url).hostname}`, () => {});
+	else client.ch.send(client.channels.cache.get('726252103302905907'), `${url}\n\`\`\`${VTresponse}\`\`\``); 
 }
 
 function end(data) {
-	if (data.text == 'BLACKLISTED_LINK') client.emit('antivirusBlacklist', data.msg, data.link);
-	if (data.text == 'SEVERE_LINK') client.emit('antivirusBadlink', data.msg, data.link, data.severity, data.VTresponse);
+	if (data.text == 'BLACKLISTED_LINK') client.emit('antivirusHandler', data.msg, data.link, 'blacklist');
+	if (data.text == 'SEVERE_LINK') client.emit('antivirusHandler', data.msg, data.link, 'virustotal');
+	if (data.text == 'NEW_URL') client.emit('antivirusHandler', data.msg, data.link, 'newurl');
 	if (data.text == 'DB_INSERT') {
 		client.ch.query(`
 		INSERT INTO antiviruslinks
