@@ -13,7 +13,7 @@ module.exports = {
 		const users = [];
 		const failed = [];
 		const reason = [];
-		const bans = await msg.guild.fetchBans(true);
+		const bans = await msg.guild.fetchBans(true).catch(() => { });
 		for (let i = 0; i < args.length; i++) {
 			const arg = args[i].toLowerCase(); 
 			if (isNaN(arg)) {
@@ -28,7 +28,7 @@ module.exports = {
 							failed.push(`${arg} `+msg.lan.already);
 						} else {
 							if (user.id !== msg.author.id) {
-								const member = await msg.guild.members.fetch(user.id);
+								const member = await msg.guild.members.fetch(user.id).catch(() => { });
 								if (member) {
 									if (+msg.member.roles.highest.rawPosition > +member.roles.highest.rawPosition) {
 										if (+msg.member.roles.highest.rawPosition !== +member.roles.highest.rawPosition) {
@@ -49,7 +49,7 @@ module.exports = {
 						failed.push(`${arg} `+msg.lan.already);
 					} else {
 						if (user.id !== msg.author.id) {
-							const member = await msg.guild.members.fetch(user.id);
+							const member = await msg.guild.members.fetch(user.id).catch(() => { });
 							if (member) {
 								if (+msg.member.roles.highest.rawPosition > +member.roles.highest.rawPosition) {
 									if (+msg.member.roles.highest.rawPosition !== +member.roles.highest.rawPosition) {
