@@ -3,8 +3,8 @@ const Discord = require('discord.js');
 module.exports = {
 	async execute(executor, target, reason, msg) {
 		const language = await msg.client.ch.languageSelector(msg.guild);
-		const lan = language.mod.banAdd;
-		const con = msg.client.constants.mod.banAdd;
+		const lan = language.mod.banRemove;
+		const con = msg.client.constants.mod.banRemove;
 		const em = new Discord.MessageEmbed()
 			.setColor(con.color)
 			.setDescription(msg.client.constants.emotes.loading + ' ' +lan.loading);
@@ -19,7 +19,7 @@ module.exports = {
 		const ban = await msg.guild.bans.fetch(target).catch(() => {});
 		if (ban) {
 			let err;
-			const unban = await msg.guild.unban(target, reason).catch((e) => {err = e;});
+			const unban = await msg.guild.bans.remove(target, reason).catch((e) => {err = e;});
 			if (unban) {
 				const res = await msg.client.ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [msg.guild.id]);
 				let logchannel;
