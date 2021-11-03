@@ -1292,9 +1292,10 @@
             "author": "Warnings of {{target.tag}}",
             "banLoad": "Fetching Bans",
             "banned": "{{target.username}} is banned",
-            "notbanned": "{{taget.username}} is not banned",
-            "warns": "Amount of Warns: {{warns}}",
-            "mutes": "Amount of Mutes: {{mutes}}"
+            "notbanned": "{{target.username}} is not banned",
+            "text": "Amount of Warns: **{{warns}}**\nAmount of Mutes: **{{mutes}}**",
+            "warns": "View Warns",
+            "mutes": "View Mutes"
         },
         "restart": {
             "category": "Owner",
