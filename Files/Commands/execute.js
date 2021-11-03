@@ -1,7 +1,5 @@
 // eslint-disable-next-line no-unused-vars
 const Discord = require('discord.js');
-const SA = require('superagent');
-const fs = require('fs');
 const request = require('request');
 
 module.exports = {
