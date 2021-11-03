@@ -35,15 +35,11 @@ module.exports = {
 			let err;
 			const Mute = await msg.guild.members.cache.get(target.id).roles.add(role).catch(() => {});
 			if (Mute) {
-				let warnnr;
-				const resW = await msg.client.ch.query('SELECT * FROM warns WHERE guildid = $1 AND userid = $2;', [msg.guild.id, target.id]);
-				if (resW && resW.rowCount > 0) warnnr = resW.rowCount+1;
-				else warnnr = 1;
 				msg.client.ch.query(`
 				INSERT INTO warns 
-				(guildid, userid, reason, type, duration, closed, warnnr, dateofwarn, warnedinchannelid, warnedbyuserid, warnedinchannelname, warnedbyusername) VALUES 
+				(guildid, userid, reason, type, duration, closed, dateofwarn, warnedinchannelid, warnedbyuserid, warnedinchannelname, warnedbyusername) VALUES 
 				($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12);`, 
-				[msg.guild.id, target.id, reason, 'Mute', Date.now() + +duration, false, warnnr, Date.now(), msg.channel.id, executor.id, msg.channel.name, msg.author.username]);
+				[msg.guild.id, target.id, reason, 'Mute', Date.now() + +duration, false, Date.now(), msg.channel.id, executor.id, msg.channel.name, msg.author.username]);
 				const dmChannel = await target.createDM().catch(() => {});
 				const DMembed = new Discord.MessageEmbed()
 					.setDescription(`${language.reason}: \`\`\`${reason}\`\`\``)
