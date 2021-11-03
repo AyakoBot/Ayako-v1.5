@@ -426,6 +426,12 @@
                 "color": "ff0000"
             }
         },
+        "check": {
+            "author": {
+                "image": "https://ayakobot.com/cdn/Ayako_Assets/Warning.png",
+                "url": ""
+            }
+        },
         "settings": {
             "color": "ffffff",
             "log": {

@@ -1288,6 +1288,14 @@
                 "desc": "{{amount}} Users have been banned"
             }
         },
+        "check": {
+            "author": "Warnings of {{target.tag}}",
+            "banLoad": "Fetching Bans",
+            "banned": "{{target.username}} is banned",
+            "notbanned": "{{taget.username}} is not banned",
+            "warns": "Amount of Warns: {{warns}}",
+            "mutes": "Amount of Mutes: {{mutes}}"
+        },
         "restart": {
             "category": "Owner",
             "description": "Restart Ayako",
