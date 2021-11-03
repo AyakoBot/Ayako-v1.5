@@ -20,15 +20,7 @@ module.exports = {
 		const res = await msg.client.ch.query('SELECT * FROM warns WHERE guildid = $1 AND userid = $2;', [msg.guild.id, target.id]);
 		if (res && res.rowCount > 0) warnnr = res.rowCount+1;
 		else warnnr = 1;
-		const warnrnredo = await msg.client.ch.query('SELECT * FROM warns WHERE guildid = $1 AND userid = $2;', [msg.guild.id, target.id]);
-		if (warnrnredo && warnrnredo.rowCount > 0) {
-			for (let i = 0; i < warnrnredo.rowCount; i++) {
-				let l = i;
-				l++;
-				await msg.client.ch.query('UPDATE warns SET warnnr = $1 WHERE guildid = $2 AND userid = $3 AND dateofwarn = $4;', [l, msg.guild.id, target.id, warnrnredo.rows[i].dateofwarn]);
-			}
-		}
-		msg.client.ch.query('INSERT INTO warns (guildid, userid, reason, type, warnnr, dateofwarn, warnedinchannelid, warnedbyuserid, warnedinchannelname, warnedbyusername, msgurl) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);', [msg.guild.id, target.id, reason, 'Warn', warnnr, Date.now(), msg.channel.id, executor.id, msg.channel.name, executor.username, msg.url]);
+		msg.client.ch.query('INSERT INTO warns (guildid, userid, reason, type, dateofwarn, warnedinchannelid, warnedbyuserid, warnedinchannelname, warnedbyusername, msgurl) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);', [msg.guild.id, target.id, reason, 'Warn', warnnr, Date.now(), msg.channel.id, executor.id, msg.channel.name, executor.username, msg.url]);
 		const warnEmbed = new Discord.MessageEmbed()
 			.setTitle(msg.client.ch.stp(lan.DMtitle, {guild: msg.guild}))
 			.setColor(con.color)
