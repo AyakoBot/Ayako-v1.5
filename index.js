@@ -1,7 +1,12 @@
 const client = require('./Files/BaseClient/DiscordClient.js');
+const readline = require('readline');
 client.ch = require('./Files/BaseClient/ClientHelper.js');
 client.ch.pathCheck();
 //const { AP } = require('./Files/BaseClient/DBL');
+
+// eslint-disable-next-line no-undef
+const rl = readline.createInterface({input: process.stdin, output: process.stdout});
+rl.on('line', async (msg) => console.log(await eval(`(async () => {${msg}})()`)));
 
 // eslint-disable-next-line no-undef
 process.setMaxListeners(2);
