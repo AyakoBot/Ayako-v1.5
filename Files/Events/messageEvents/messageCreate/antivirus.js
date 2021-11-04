@@ -1,6 +1,7 @@
 const client = require('../../../BaseClient/DiscordClient');
 const urlCheck = require('valid-url');
 const SA = require('superagent');
+const request = require('request');
 const linkLists = require('../../../sources').antivirus;
 const auth = require('../../../BaseClient/auth.json');
 const fs = require('fs');
@@ -40,11 +41,14 @@ module.exports = {
 			const FullLinks = new Array;
 			for (let i = 0; i < links.length; i++) {
 				const url = new URL(links[i]);
-				const body = (await SA.get(url).catch(() => { }));
-				if (body && body.request && body.request.response && body.request.response.redirecs && body.request.response.redirecs.length > 0) {
-					console.log(1);
-					const redirects = body.request.response.redirects;
-					for (let j = 0; j < redirects.length; j++) FullLinks.push(new URL(redirects[j]));
+				const res = await new Promise((resolve) => {
+					request({ method: 'HEAD', url: url, followAllRedirects: true },
+						function (_, response) {
+							resolve(response.request.href);
+						});
+				});
+				if (res) {
+					FullLinks.push(res);
 				} else FullLinks.push(url);
 			}
 

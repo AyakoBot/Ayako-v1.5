@@ -1,5 +1,5 @@
-// eslint-disable-next-line no-unused-vars
-const Discord = require('discord.js');
+['https://bit.ly/3we2sYy', 'https://dis.gd'];
+
 
 module.exports = {
 	name: 'execute',
@@ -9,6 +9,16 @@ module.exports = {
 	takesFirstArg: false,
 	// eslint-disable-next-line no-unused-vars
 	async execute(msg) {
+
+		const request = require('request');
+		const res = await new Promise((resolve) => {
+			request({ method: 'HEAD', url: 'https://bit.ly', followAllRedirects: true },
+				function (error, response) {
+					resolve(response.request.href);
+				});
+		});
+
+		console.log(res);
 
 	}
 };
