@@ -23,7 +23,7 @@ module.exports = {
 		const next = new Discord.MessageButton()
 			.setCustomId('next')
 			.setLabel(msg.language.next)
-			.setDisabled(options.length < 26 ? true : false)
+			.setDisabled(options.length < 25 ? true : false)
 			.setStyle('SUCCESS');
 		const prev = new Discord.MessageButton()
 			.setCustomId('prev')
