@@ -13,7 +13,7 @@ module.exports = {
 			} else  if (msg.compatibilityType == 'roles') options.push({label: r.name.length > 25 ? `${r.name.slice(0, 24)}\u2026` : r.name, value: r.id});
 		});
 		const take = [];
-		for(let j = 0; j < 25 && j < options.length; j++) {take.push(options[j]);}
+		for(let j = 0; j < 25 && j < options.length; j++) take.push(options[j]);
 		const menu = new Discord.MessageSelectMenu()
 			.setCustomId(msg.property)
 			.addOptions(take)
@@ -23,7 +23,7 @@ module.exports = {
 		const next = new Discord.MessageButton()
 			.setCustomId('next')
 			.setLabel(msg.language.next)
-			.setDisabled(options.length < 26 ? true : false)
+			.setDisabled(options.length < 25 ? true : false)
 			.setStyle('SUCCESS');
 		const prev = new Discord.MessageButton()
 			.setCustomId('prev')
