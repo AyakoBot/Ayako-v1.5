@@ -37,66 +37,76 @@ module.exports = {
 			blacklistRes = blacklistRes ? blacklistRes.text.split(/\n+/) : null;
 			blacklistRes.forEach((entry, index) => blacklistRes[index] = entry.replace(/\r/g, ''));
 
+			const FullLinks = new Array;
+			console.log(links);
+			for (let i = 0; i < links.length; i++) {
+				const url = new URL(links[i]);
+				const body = (await SA.get(url).catch(() => { }));
+				if (body && body.request && body.request.response && body.request.response.redirecs && body.request.response.redirecs.length > 0) {
+					console.log(1);
+					const redirects = body.request.response.redirects;
+					for (let j = 0; j < redirects.length; j++) FullLinks.push(new URL(redirects[j]));
+				} else FullLinks.push(url);
+			}
+			console.log(FullLinks);
+
 			let included = false;
-			links.forEach(async (link) => {
-				const url = new URL(link);
-				if (url.hostname) {
-					console.log('Link Detected: ' + link);
-					if (blacklistRes.includes(`${url.hostname}`)) {
-						console.log('Blacklist included Link');
-						end({ text: 'BLACKLISTED_LINK', link: url.hostname, msg: msg, row: r });
-						end({ text: 'DB_INSERT', url: url.hostname, severity: null });
-						included = true;
-					} else if (!whitelistRes.includes(`${url.hostname}`)) {
-						console.log('Link is not Whitelisted');
-						if (included == false) {
-							console.log('Message did not contain any Links yet');
-							if (blacklist.includes(url.hostname)) {
-								console.log('Blacklist included Link');
-								end({ text: 'BLACKLISTED_LINK', link: url.hostname, msg: msg, row: r });
+			FullLinks.forEach(async (url) => {
+				console.log('Link Detected: ' + url);
+				if (blacklistRes.includes(`${url.hostname}`)) {
+					console.log('Blacklist included Link');
+					end({ text: 'BLACKLISTED_LINK', link: url.hostname, msg: msg, row: r });
+					end({ text: 'DB_INSERT', url: url.hostname, severity: null });
+					included = true;
+				} else if (!whitelistRes.includes(`${url.hostname}`)) {
+					console.log('Link is not Whitelisted');
+					if (included == false) {
+						console.log('Message did not contain any Links yet');
+						if (blacklist.includes(url.hostname)) {
+							console.log('Blacklist included Link');
+							end({ text: 'BLACKLISTED_LINK', link: url.hostname, msg: msg, row: r });
+							end({ text: 'DB_INSERT', url: url.hostname, severity: null });
+							included = true;
+						} else {
+							console.log('Blacklist did not include Link');
+							const spamHausRes = await SA
+								.get(`https://apibl.spamhaus.net/lookup/v1/dbl/${url.hostname}`)
+								.set('Authorization', `Bearer ${auth.spamhausToken}`)
+								.set('Content-Type', 'application/json').catch(() => { });
+							if (spamHausRes && spamHausRes.status == 200) {
+								console.log('SpamHaus included Link');
 								end({ text: 'DB_INSERT', url: url.hostname, severity: null });
-								included = true;
+								end({ text: 'BLACKLISTED_LINK', link: url.hostname, msg: msg, row: r });
 							} else {
-								console.log('Blacklist did not include Link');
-								const spamHausRes = await SA
-									.get(`https://apibl.spamhaus.net/lookup/v1/dbl/${url.hostname}`)
-									.set('Authorization', `Bearer ${auth.spamhausToken}`)
-									.set('Content-Type', 'application/json').catch(() => { });
-								if (spamHausRes && spamHausRes.status == 200) {
-									console.log('SpamHaus included Link');
-									end({ text: 'DB_INSERT', url: url.hostname, severity: null });
-									end({ text: 'BLACKLISTED_LINK', link: url.hostname, msg: msg, row: r });
-								} else {
-									console.log('SpamHaus did not include Link');
-									let res;
-									const VTget = await SA
-										.get(`https://www.virustotal.com/api/v3/domains/${url.hostname}`)
-										.set('x-apikey', auth.VTtoken).catch(() => { });
-									if (VTget) res = JSON.parse(VTget.text).error ? JSON.parse(VTget.text).error.code : JSON.parse(VTget.text).data.attributes.last_analysis_stats;
-									if (JSON.parse(VTget.text).data.attributes.last_analysis_stats) console.log('VT knows Link');
-									else console.log('VT does not know Link');
-									if (res == 'NotFoundError') {
-										console.log('VT has to analyze Link');
-										const VTpost = await SA
-											.post('https://www.virustotal.com/api/v3/urls')
-											.set('x-apikey', auth.VTtoken)
-											.set('Content-Type', 'multipart/form-data')
-											.field('url', url.hostname).catch(() => { });
-										if (VTpost) res = JSON.parse(VTpost.text).data.id;
-										setTimeout(async () => {
-											console.log('VT analyze done');
-											const VTsecondGet = await SA
-												.get(`https://www.virustotal.com/api/v3/analyses/${res}`)
-												.set('x-apikey', auth.VTtoken).catch(() => { });
-											if (VTsecondGet) res = JSON.parse(VTsecondGet.text).error ? JSON.parse(VTsecondGet.text).error.code : JSON.parse(VTsecondGet.text).data.attributes.stats;
-											evaluation(msg, res, link, r, JSON.parse(VTsecondGet?.text)?.data?.attributes);
-										}, 60000);
-									} else evaluation(msg, res, link, r, JSON.parse(VTget?.text)?.data?.attributes);
-								}
+								console.log('SpamHaus did not include Link');
+								let res;
+								const VTget = await SA
+									.get(`https://www.virustotal.com/api/v3/domains/${url.hostname}`)
+									.set('x-apikey', auth.VTtoken).catch(() => { });
+								if (VTget) res = JSON.parse(VTget.text).error ? JSON.parse(VTget.text).error.code : JSON.parse(VTget.text).data.attributes.last_analysis_stats;
+								if (JSON.parse(VTget.text).data.attributes.last_analysis_stats) console.log('VT knows Link');
+								else console.log('VT does not know Link');
+								if (res == 'NotFoundError') {
+									console.log('VT has to analyze Link');
+									const VTpost = await SA
+										.post('https://www.virustotal.com/api/v3/urls')
+										.set('x-apikey', auth.VTtoken)
+										.set('Content-Type', 'multipart/form-data')
+										.field('url', url.hostname).catch(() => { });
+									if (VTpost) res = JSON.parse(VTpost.text).data.id;
+									setTimeout(async () => {
+										console.log('VT analyze done');
+										const VTsecondGet = await SA
+											.get(`https://www.virustotal.com/api/v3/analyses/${res}`)
+											.set('x-apikey', auth.VTtoken).catch(() => { });
+										if (VTsecondGet) res = JSON.parse(VTsecondGet.text).error ? JSON.parse(VTsecondGet.text).error.code : JSON.parse(VTsecondGet.text).data.attributes.stats;
+										evaluation(msg, res, url, r, JSON.parse(VTsecondGet?.text)?.data?.attributes);
+									}, 60000);
+								} else evaluation(msg, res, url, r, JSON.parse(VTget?.text)?.data?.attributes);
 							}
 						}
-					} else end({ text: 'DB_INSERT', url: url.hostname, severity: 0 });
-				}
+					}
+				} else end({ text: 'DB_INSERT', url: url.hostname, severity: 0 });
 			});
 		}
 	}
