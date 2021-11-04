@@ -38,7 +38,6 @@ module.exports = {
 			blacklistRes.forEach((entry, index) => blacklistRes[index] = entry.replace(/\r/g, ''));
 
 			const FullLinks = new Array;
-			console.log(links);
 			for (let i = 0; i < links.length; i++) {
 				const url = new URL(links[i]);
 				const body = (await SA.get(url).catch(() => { }));
@@ -48,7 +47,6 @@ module.exports = {
 					for (let j = 0; j < redirects.length; j++) FullLinks.push(new URL(redirects[j]));
 				} else FullLinks.push(url);
 			}
-			console.log(FullLinks);
 
 			let included = false;
 			FullLinks.forEach(async (url) => {
