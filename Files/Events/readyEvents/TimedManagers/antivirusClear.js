@@ -7,7 +7,7 @@ module.exports = {
 			if (res && res.rowCount > 0) {
 				for (let i = 0; i < res.rowCount; i++) {
 					const r = res.rows[i];
-					const user = client.users.cache.get(r.userid);
+					const user = await client.users.fetch(r.userid);
 					if (r.dateofwarn < +Date.now() - 3600000) guild.client.ch.query('DELETE FROM antiviruslog WHERE dateofwarn = $1 AND userid = $2 AND guildid = $3;', [r.dateofwarn, user.id, guild.id]);
 				}
 			}
