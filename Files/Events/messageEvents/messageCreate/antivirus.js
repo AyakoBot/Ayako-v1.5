@@ -44,7 +44,8 @@ module.exports = {
 				const res = await new Promise((resolve) => {
 					request({ method: 'HEAD', url: url, followAllRedirects: true },
 						function (_, response) {
-							resolve(response.request.href);
+							if (response) resolve(response.request.href);
+							else resolve(null);
 						});
 				});
 				if (res) {
@@ -54,6 +55,7 @@ module.exports = {
 
 			let included = false;
 			FullLinks.forEach(async (url) => {
+				if (!url.hostname) url = new URL(url);
 				if (url.hostname) {
 					console.log('Link Detected: ' + url);
 					if (blacklistRes.includes(`${url.hostname}`)) {
