@@ -35,7 +35,7 @@ module.exports = {
 			}
 			const banned = await msg.guild.bans.fetch(target).catch(() => { });
 			if (banned) {
-				em.setDescription(msg.client.constants.emotes.cross+' '+lan.alreadyBanned);
+				em.setDescription(msg.client.constants.emotes.cross + ' ' + msg.client.ch.stp(lan.alreadyBanned, { target: target}));
 				emMsg?.edit({embeds: [em]});
 				return false;
 			}

@@ -986,7 +986,7 @@
             "exeNoPerms": "You can't ban this User",
             "permissionError": "I don't have enough permissions to ban this User",
             "error": "I wasn't able to ban this User!",
-            "alreadyBanned": "This User is already banned",
+            "alreadyBanned": "User {{target}} is already banned",
             "success": "User {{target}} was banned",
             "loading": "Banning User...",
             "selfBan": "You can't ban yourself",
