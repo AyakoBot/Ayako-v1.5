@@ -32,10 +32,10 @@ module.exports = {
 			});
 
 			let whitelistRes = await SA.get('https://ayakobot.com/cdn/whitelisted.txt').catch(() => { });
-			whitelistRes = whitelistRes ? whitelistRes.text.split(/\n+/) : null;
+			whitelistRes = whitelistRes ? whitelistRes.text.split(/\n+/) : [];
 			whitelistRes.forEach((entry, index) => whitelistRes[index] = entry.replace(/\r/g, ''));
 			let blacklistRes = await SA.get('https://ayakobot.com/cdn/blacklisted.txt').catch(() => { });
-			blacklistRes = blacklistRes ? blacklistRes.text.split(/\n+/) : null;
+			blacklistRes = blacklistRes ? blacklistRes.text.split(/\n+/) : [];
 			blacklistRes.forEach((entry, index) => blacklistRes[index] = entry.replace(/\r/g, ''));
 
 			const FullLinks = new Array;
