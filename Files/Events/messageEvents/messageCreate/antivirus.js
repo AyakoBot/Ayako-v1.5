@@ -44,7 +44,7 @@ module.exports = {
 				const res = await new Promise((resolve) => {
 					request({ method: 'HEAD', url: url, followAllRedirects: true },
 						function (_, response) {
-							if (response) resolve(response.request.href);
+							if (response && response.request && response.request.href) resolve(response.request.href);
 							else resolve(null);
 						});
 				});
