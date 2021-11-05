@@ -1306,8 +1306,8 @@
             "text": "Amount of Warns: **{{warns}}**\nAmount of Mutes: **{{mutes}}**",
             "warns": "View Warns",
             "mutes": "View Mutes",
-            "selWarns": "Select up to 10 Warns",
-            "selMutes": "Select up to 10 Mutes"
+            "selWarns": "Select up to 9 Warns (and Mutes)",
+            "selMutes": "Select up to 9 Mutes (and Warns)"
         },
         "restart": {
             "category": "Owner",

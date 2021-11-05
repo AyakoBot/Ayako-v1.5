@@ -74,6 +74,13 @@ module.exports = {
 				.setStyle('DANGER');
 			rawRows.push([warnMenu], [warnNext, warnPrev]);
 		}
+		if (take.warns.length > 0 || take.mutes.length > 0) {
+			const done = new Discord.MessageButton()
+				.setCustomId('done')
+				.setLabel(msg.language.done)
+				.setStyle('DEFAULT');
+			rawRows.push([done]);
+		}
 		const row = msg.client.ch.buttonRower(rawRows);
 
 		embed.setDescription(`${msg.client.ch.stp(lan.text, { warns: `${warns}`, mutes: `${mutes}` })}`);
