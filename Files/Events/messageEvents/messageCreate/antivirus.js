@@ -180,21 +180,21 @@ function end(data) {
 	if (data.text == 'BLACKLISTED_LINK') {
 		const embed = new Discord.MessageEmbed()
 			.setDescription(data.msg.client.ch.stp(data.msg.lan.blacklisted, { warning: data.msg.client.constants.emotes.warning }))
-			.setColor('#ffff00');
+			.setColor('#ff0000');
 		data.msg.m.edit({ embeds: [embed] }).catch(() => { });
 		client.emit('antivirusHandler', data.msg, data.link, 'blacklist');
 	}
 	if (data.text == 'SEVERE_LINK') {
 		const embed = new Discord.MessageEmbed()
 			.setDescription(data.msg.client.ch.stp(data.msg.lan.VTmalicious, { cross: data.msg.client.constants.emotes.cross, severity: data.severity }))
-			.setColor('#ffff00');
+			.setColor('#ff0000');
 		data.msg.m.edit({ embeds: [embed] }).catch(() => { });
 		client.emit('antivirusHandler', data.msg, data.link, 'virustotal');
 	}
 	if (data.text == 'NEW_URL') {
 		const embed = new Discord.MessageEmbed()
 			.setDescription(data.msg.client.ch.stp(data.msg.lan.newLink, { cross: data.msg.client.constants.emotes.cross }))
-			.setColor('#ffff00');
+			.setColor('#ff0000');
 		data.msg.m.edit({ embeds: [embed] }).catch(() => { });
 		client.emit('antivirusHandler', data.msg, data.link, 'newurl');
 	}
