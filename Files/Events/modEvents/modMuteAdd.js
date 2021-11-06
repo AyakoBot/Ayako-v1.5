@@ -8,7 +8,8 @@ module.exports = {
 		const em = new Discord.MessageEmbed()
 			.setColor(con.color)
 			.setDescription(msg.client.constants.emotes.loading + ' ' +lan.loading);
-		const emMsg = await msg.client.ch.reply(msg, em);
+		if (msg.m) await msg.m.edit({ embeds: [em] });
+		else msg.m = await msg.client.ch.reply(msg, em);
 		let role;
 		let logchannel;
 		const member = await msg.guild.members.fetch(target.id).catch(() => { });
@@ -16,20 +17,20 @@ module.exports = {
 		const memberClient = msg.guild.me;
 		if (exec?.roles.highest.rawPosition < member?.roles.highest.rawPosition || exec?.roles.highest.rawPosition == member?.roles.highest.rawPosition) {
 			em.setDescription(msg.client.constants.emotes.cross + ' ' +lan.exeNoPerms);
-			emMsg?.edit({embeds: [em]});
+			msg.m?.edit({embeds: [em]});
 			return false;
 		}
 		const resM = await msg.client.ch.query('SELECT * FROM guildsettings WHERE guildid = $1;', [msg.guild.id]);
 		if (resM && resM.rowCount > 0) role = msg.guild.cache.get(resM.rows[0].muteroleid);
 		if ((memberClient.roles.highest.rawPosition < member.roles.highest.rawPosition || memberClient.roles.highest.rawPosition == member.roles.highest.rawPosition) || !memberClient.permissions.has(268435456)) {
 			em.setDescription(msg.client.constants.emotes.cross + ' ' +lan.meNoPerms);
-			emMsg?.edit({embeds: [em]});
+			msg.m?.edit({embeds: [em]});
 			return false;
 		}
 		if (role) {
 			if (member.roles.cache.has(role.id)) {
 				em.setDescription(msg.client.constants.emotes.cross + ' ' +lan.hasRole);
-				emMsg?.edit({embeds: [em]});
+				msg.m?.edit({embeds: [em]});
 				return false;
 			}
 			let err;
@@ -55,16 +56,16 @@ module.exports = {
 				if (logchannel) msg.client.ch.send(logchannel, embed);
 			} else {
 				em.setDescription(msg.client.constants.emotes.cross + ' ' +lan.error+` \`\`\`${err}\`\`\``);
-				emMsg?.edit({embeds: [em]});
+				msg.m?.edit({embeds: [em]});
 				return false;
 			}
 		} else {
 			em.setDescription(msg.client.constants.emotes.cross + ' ' +lan.noRole);
-			emMsg?.edit({embeds: [em]});
+			msg.m?.edit({embeds: [em]});
 			return false;
 		}
 		em.setDescription(msg.client.constants.emotes.tick + ' ' + msg.client.ch.stp(lan.success, { target: target }));
-		emMsg?.edit({embeds: [em]});
+		msg.m?.edit({embeds: [em]});
 		return true;
 	}
 };
