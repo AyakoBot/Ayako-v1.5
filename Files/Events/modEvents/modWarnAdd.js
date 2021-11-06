@@ -9,12 +9,13 @@ module.exports = {
 		const em = new Discord.MessageEmbed()
 			.setColor(con.color)
 			.setDescription(msg.client.constants.emotes.loading + ' ' +lan.loading);
-		const emMsg = await msg.client.ch.reply(msg, em);
+		if (msg.m) await msg.m.edit({embeds: [em]});
+		else msg.m = await msg.client.ch.reply(msg, em);
 		const member = await msg.guild.members.fetch(target.id).catch(() => { });
 		const exec = await msg.guild.members.fetch(executor.id).catch(() => { });
 		if (exec?.roles.highest.rawPosition < member?.roles.highest.rawPosition || exec?.roles.highest.rawPosition == member?.roles.highest.rawPosition) {
 			em.setDescription(msg.client.constants.emotes.cross + ' ' +lan.exeNoPerms);
-			emMsg?.edit({embeds: [em]});
+			msg.m?.edit({embeds: [em]});
 			return false;
 		}
 		const res = await msg.client.ch.query('SELECT * FROM warns WHERE guildid = $1 AND userid = $2;', [msg.guild.id, target.id]);
@@ -39,7 +40,7 @@ module.exports = {
 			if (logchannel) msg.client.ch.send(logchannel, WarnLogEmbed);
 		}
 		em.setDescription(msg.client.constants.emotes.tick + ' ' + msg.client.ch.stp(lan.reply, { user: target, nr: warnnr }));
-		emMsg?.edit({embeds: [em]});
+		msg.m?.edit({embeds: [em]});
 		return true;
 	}
 };

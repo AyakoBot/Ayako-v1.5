@@ -8,7 +8,8 @@ module.exports = {
 		const em = new Discord.MessageEmbed()
 			.setColor(con.color)
 			.setDescription(msg.client.constants.emotes.loading + ' ' +lan.loading);
-		const emMsg = await msg.client.ch.reply(msg, em);
+		if (msg.m) await msg.m.edit({ embeds: [em] });
+		else msg.m = await msg.client.ch.reply(msg, em);
 		const dmChannel = await target.createDM().catch(() => {});
 		const DMembed = new Discord.MessageEmbed()
 			.setDescription(`${language.reason}: \`\`\`${reason}\`\`\``)
@@ -36,17 +37,17 @@ module.exports = {
 			} else {
 				m?.delete().catch(()  => {});
 				em.setDescription(msg.client.constants.emotes.cross + ' ' +lan.error+` \`\`\`${err}\`\`\``);
-				emMsg?.edit({embeds: [em]});
+				msg.m?.edit({embeds: [em]});
 				return false;
 			}
 		} else {
 			m?.delete().catch(()  => {});
 			em.setDescription(msg.client.constants.emotes.cross + ' ' +lan.notBanned);
-			emMsg?.edit({embeds: [em]});
+			msg.m?.edit({embeds: [em]});
 			return false;
 		}
 		em.setDescription(msg.client.constants.emotes.tick + ' ' + msg.client.ch.stp(lan.success, { target: target }));
-		emMsg?.edit({embeds: [em]});
+		msg.m?.edit({embeds: [em]});
 		return true;
 	}
 };

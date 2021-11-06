@@ -8,7 +8,8 @@ module.exports = {
 		const em = new Discord.MessageEmbed()
 			.setColor(con.color)
 			.setDescription(msg.client.constants.emotes.loading + ' ' +lan.loading);
-		const emMsg = await msg.client.ch.reply(msg, em);
+		if (msg.m) await msg.m.edit({ embeds: [em] });
+		else msg.m = await msg.client.ch.reply(msg, em);
 		let logchannel;
 		let role;
 		const member = await msg.guild.members.fetch(target.id).catch(() => { });
@@ -16,7 +17,7 @@ module.exports = {
 		const memberClient = msg.guild.me;
 		if (exec?.roles.highest.rawPosition < member?.roles.highest.rawPosition || exec?.roles.highest.rawPosition == member?.roles.highest.rawPosition) {
 			em.setDescription(msg.client.constants.emotes.cross + ' ' +lan.exeNoPerms);
-			emMsg?.edit({embeds: [em]});
+			msg.m?.edit({embeds: [em]});
 			return false;
 		}
 		const resM = await msg.client.ch.query('SELECT * FROM guildsettings WHERE guildid = $1;', [msg.guild.id]);
@@ -24,7 +25,7 @@ module.exports = {
 		if (role) {
 			if (!member.roles.cache.has(role.id)) {
 				em.setDescription(msg.client.constants.emotes.cross + ' ' +lan.hasNoRole);
-				emMsg?.edit({embeds: [em]});
+				msg.m?.edit({embeds: [em]});
 				return false;
 			}
 			let err;
@@ -51,16 +52,16 @@ module.exports = {
 				msg.client.ch.send(dmChannel, DMembed);
 			} else {
 				em.setDescription(msg.client.constants.emotes.cross + ' ' +lan.error+` \`\`\`${err}\`\`\``);
-				emMsg?.edit({embeds: [em]});
+				msg.m?.edit({embeds: [em]});
 				return false;
 			}
 		} else {
 			em.setDescription(msg.client.constants.emotes.cross + ' ' +lan.noRole);
-			emMsg?.edit({embeds: [em]});
+			msg.m?.edit({embeds: [em]});
 			return false;
 		}
 		em.setDescription(msg.client.constants.emotes.tick + ' ' + msg.client.ch.stp(lan.success, { target: target }));
-		emMsg?.edit({embeds: [em]});
+		msg.m?.edit({embeds: [em]});
 		return true;
 	}
 };
