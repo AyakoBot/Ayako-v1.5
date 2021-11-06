@@ -568,6 +568,17 @@
         "VIP_REGIONS": "```VIP Voice Channel Regions```\n`(Server has access to VIP Voice Channels (384kbps))`",
         "WELCOME_SCREEN_ENBALED": "```Welcome Screen enabled```\n`(Server has welcome Screen enabled)`"
     },
+    "antivirus": {
+        "notWhitelisted": "{{warning}} Message contains a not Whitelisted Link\nChecking... {{loading}}",
+        "blacklisted": "{{cross}} Message contains a Blacklisted Link",
+        "notBlacklisted": "{{warning}} Link is not Blacklisted\nChecking... {{loading}}",
+        "spamHausIncluded": "{{warning}} Message contains a Link listed as Malicious by SpamHaus.org",
+        "VTanalyze": "{{warning}} Analyzing Link\nChecking... {{loading}}",
+        "VTfail": "{{cross}} Failed to analyze Link",
+        "VTharmless": "{{tick}} Found Link to be Harmless",
+        "VTmalicious": "{{cross}} Found Link to be Malicious\nSeverity Score: {{severity}}",
+        "newLink": "{{cross}} Link is most likely malicious"
+    },
     "featuresName": "Features",
     "none": "None",
     "before": "Before",

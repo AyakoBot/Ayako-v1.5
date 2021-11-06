@@ -5,10 +5,13 @@ const request = require('request');
 const linkLists = require('../../../sources').antivirus;
 const auth = require('../../../BaseClient/auth.json');
 const fs = require('fs');
+const Discord = require('discord.js');
 
 module.exports = {
 	async execute(msg) {
 		if (!msg.guild || !msg.content) return;
+		msg.language = await msg.client.ch.languageSelector(msg.guild);
+		msg.lan = msg.language.antivirus;
 		const res = await msg.client.ch.query('SELECT * FROM antivirus WHERE guildid = $1;', [msg.guild.id]);
 		if (res && res.rowCount > 0) {
 			const r = res.rows[0];
@@ -58,6 +61,7 @@ module.exports = {
 				if (!url.hostname) url = new URL(url);
 				if (url.hostname) {
 					console.log('Link Detected: ' + url);
+					const embed = new Discord.MessageEmbed();
 					if (blacklistRes.includes(`${url.hostname}`)) {
 						console.log('Blacklist included Link');
 						end({ text: 'BLACKLISTED_LINK', link: url.hostname, msg: msg, row: r });
@@ -66,6 +70,10 @@ module.exports = {
 					} else if (!whitelistRes.includes(`${url.hostname}`)) {
 						console.log('Link is not Whitelisted');
 						if (included == false) {
+							embed
+								.setDescription(msg.client.ch.stp(msg.lan.notWhitelisted, { warning: msg.client.constants.emotes.warning, loading: msg.client.constants.emotes.loading }))
+								.setColor('#ffff00');
+							msg.m = await msg.client.ch.reply(msg, embed);
 							console.log('Message did not contain any Links yet');
 							if (blacklist.includes(url.hostname)) {
 								console.log('Blacklist included Link');
@@ -74,6 +82,10 @@ module.exports = {
 								included = true;
 							} else {
 								console.log('Blacklist did not include Link');
+								embed
+									.setDescription(msg.client.ch.stp(msg.lan.notBlacklisted, { warning: msg.client.constants.emotes.warning, loading: msg.client.constants.emotes.loading }))
+									.setColor('#ffff00');
+								msg.m.edit({ embeds: [embed] }).catch(() => { });
 								const spamHausRes = await SA
 									.get(`https://apibl.spamhaus.net/lookup/v1/dbl/${url.hostname}`)
 									.set('Authorization', `Bearer ${auth.spamhausToken}`)
@@ -93,6 +105,10 @@ module.exports = {
 									else console.log('VT does not know Link');
 									if (res == 'NotFoundError') {
 										console.log('VT has to analyze Link');
+										embed
+											.setDescription(msg.client.ch.stp(msg.lan.VTanalyze, { warning: msg.client.constants.emotes.warning }))
+											.setColor('#ffff00');
+										msg.m.edit({ embeds: [embed] }).catch(() => { });
 										const VTpost = await SA
 											.post('https://www.virustotal.com/api/v3/urls')
 											.set('x-apikey', auth.VTtoken)
@@ -120,9 +136,14 @@ module.exports = {
 
 async function evaluation(msg, VTresponse, url, r, attributes) {
 	console.log('Evaluation called');
-	if (VTresponse == 'QuotaExceededError' || (VTresponse.suspicious == undefined || VTresponse.suspicious == null)) return end({ text: 'DB_INSERT', url: new URL(url).hostname, severity: severity });
+	if (VTresponse == 'QuotaExceededError' || (VTresponse.suspicious == undefined || VTresponse.suspicious == null)) {
+		const embed = new Discord.MessageEmbed()
+			.setDescription(msg.client.ch.stp(msg.lan.VTfail, { cross: msg.client.constants.emotes.cross }))
+			.setColor('#ffff00');
+		msg.m.edit({ embeds: [embed] }).catch(() => { });
+		return end({ text: 'DB_INSERT', url: new URL(url).hostname, severity: severity });
+	}
 	let severity = 0;
-
 
 	if (VTresponse.suspicious > 10) severity = 1;
 	if (VTresponse.suspicious > 20) severity = 2;
@@ -145,14 +166,38 @@ async function evaluation(msg, VTresponse, url, r, attributes) {
 
 	if (severity > 2) end({ text: 'SEVERE_LINK', msg: msg, res: VTresponse, severity: severity, row: r, link: url });
 	else if (attributes && +attributes.creation_date + '000' > Date.now() - 604800000) end({ text: 'NEW_URL', msg: msg, res: VTresponse, severity: severity, row: r, link: url});
-	else if (attributes) fs.appendFile('S:/Bots/ws/CDN/whitelisted.txt', `\n${new URL(url).hostname}`, () => {});
-	else client.ch.send(client.channels.cache.get('726252103302905907'), `${url}\n\`\`\`${VTresponse}\`\`\``); 
+	else if (attributes) {
+		const embed = new Discord.MessageEmbed()
+			.setDescription(msg.client.ch.stp(msg.lan.VTharmless, { tick: msg.client.constants.emotes.tick }))
+			.setColor('#ffff00');
+		msg.m.edit({ embeds: [embed] }).catch(() => { });
+		fs.appendFile('S:/Bots/ws/CDN/whitelisted.txt', `\n${new URL(url).hostname}`, () => {});
+	}
+	else client.ch.send(client.channels.cache.get('726252103302905907'), `${url}\n\`\`\`${JSON.stringify(VTresponse)}\`\`\``); 
 }
 
 function end(data) {
-	if (data.text == 'BLACKLISTED_LINK') client.emit('antivirusHandler', data.msg, data.link, 'blacklist');
-	if (data.text == 'SEVERE_LINK') client.emit('antivirusHandler', data.msg, data.link, 'virustotal');
-	if (data.text == 'NEW_URL') client.emit('antivirusHandler', data.msg, data.link, 'newurl');
+	if (data.text == 'BLACKLISTED_LINK') {
+		const embed = new Discord.MessageEmbed()
+			.setDescription(data.msg.client.ch.stp(data.msg.lan.blacklisted, { warning: data.msg.client.constants.emotes.warning }))
+			.setColor('#ffff00');
+		data.msg.m.edit({ embeds: [embed] }).catch(() => { });
+		client.emit('antivirusHandler', data.msg, data.link, 'blacklist');
+	}
+	if (data.text == 'SEVERE_LINK') {
+		const embed = new Discord.MessageEmbed()
+			.setDescription(data.msg.client.ch.stp(data.msg.lan.VTmalicious, { cross: data.msg.client.constants.emotes.cross, severity: data.severity }))
+			.setColor('#ffff00');
+		data.msg.m.edit({ embeds: [embed] }).catch(() => { });
+		client.emit('antivirusHandler', data.msg, data.link, 'virustotal');
+	}
+	if (data.text == 'NEW_URL') {
+		const embed = new Discord.MessageEmbed()
+			.setDescription(data.msg.client.ch.stp(data.msg.lan.newLink, { cross: data.msg.client.constants.emotes.cross }))
+			.setColor('#ffff00');
+		data.msg.m.edit({ embeds: [embed] }).catch(() => { });
+		client.emit('antivirusHandler', data.msg, data.link, 'newurl');
+	}
 	if (data.text == 'DB_INSERT') {
 		client.ch.query(`
 		INSERT INTO antiviruslinks
