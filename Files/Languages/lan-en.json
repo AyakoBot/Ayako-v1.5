@@ -569,15 +569,28 @@
         "WELCOME_SCREEN_ENBALED": "```Welcome Screen enabled```\n`(Server has welcome Screen enabled)`"
     },
     "antivirus": {
-        "notWhitelisted": "{{warning}} Message contains a not Whitelisted Link\nChecking... {{loading}}",
-        "blacklisted": "{{cross}} Message contains a Blacklisted Link",
-        "notBlacklisted": "{{warning}} Link is not Blacklisted\nChecking... {{loading}}",
-        "spamHausIncluded": "{{warning}} Message contains a Link listed as Malicious by SpamHaus.org",
-        "VTanalyze": "{{warning}} Analyzing Link\nChecking... {{loading}}",
-        "VTfail": "{{cross}} Failed to analyze Link",
-        "VTharmless": "{{tick}} Found Link to be Harmless",
-        "VTmalicious": "{{cross}} Found Link to be Malicious\nSeverity Score: {{severity}}",
-        "newLink": "{{cross}} Link is most likely malicious"
+        "dm": {
+            "notWhitelisted": "{{warning}} This Link is not Whitelisted\nChecking... {{loading}}",
+            "blacklisted": "{{cross}} This Link is Blacklisted\nTherefore Malicious",
+            "notBlacklisted": "{{warning}} This Link is not Blacklisted\nChecking... {{loading}}",
+            "VTanalyze": "{{warning}} Analyzing Link\nChecking... {{loading}}",
+            "VTfail": "{{cross}} Failed to analyze Link",
+            "VTharmless": "{{tick}} Found Link to be Harmless",
+            "VTmalicious": "{{cross}} Found Link to be Malicious\nSeverity Score: {{severity}}",
+            "newLink": "{{cross}} Link is most likely Malicious",
+            "whitelisted": "{{tick}} This Link is not Malicious",
+            "checking": "Link:"
+        }, 
+        "guild": {
+            "notWhitelisted": "{{warning}} Message contains a not Whitelisted Link\nChecking... {{loading}}",
+            "blacklisted": "{{cross}} The not Whitelisted Link is Blacklisted\nTherefore Malicious",
+            "notBlacklisted": "{{warning}} The not Whitelisted Link is also not Blacklisted\nChecking... {{loading}}",
+            "VTanalyze": "{{warning}} Analyzing Link\nChecking... {{loading}}",
+            "VTfail": "{{cross}} Failed to analyze Link",
+            "VTharmless": "{{tick}} Found Link to be Harmless",
+            "VTmalicious": "{{cross}} Found Link to be Malicious\nSeverity Score: {{severity}}",
+            "newLink": "{{cross}} Link is most likely malicious"
+        }
     },
     "featuresName": "Features",
     "none": "None",
@@ -774,6 +787,7 @@
     "requestToSpeak": "Request To Speak",
     "moved": "Moved",
     "disconnected": "Disconnected",
+    "result": "Result",
     "connected": "Connected",
     "channelFollower": "Channel Follower",
     "incoming": "Incoming",
@@ -1103,7 +1117,8 @@
             "creatorOnly": "Only my Creator can use this Command (`Lars_und_so#0666`)",
             "ownerOnly": "Only the Owner of this Server can use this Command",
             "missingPermissions": "You don't have enough Permissions to use this Command",
-            "verifyMessage": "You just issued a **moderation command** by **editing your message**. \nDo you want to **proceed or abort**."
+            "verifyMessage": "You just issued a **moderation command** by **editing your message**. \nDo you want to **proceed or abort**.",
+            "DMonly": "This Command is not made for Servers, please try again in DMs"
         },
         "antispamHandler": {
             "banErrorMessage": "I was unable to ban {{user}}. `Insufficient Permissions`",

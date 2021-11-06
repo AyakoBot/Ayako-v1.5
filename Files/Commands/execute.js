@@ -12,7 +12,7 @@ module.exports = {
 
 		const request = require('request');
 		const res = await new Promise((resolve) => {
-			request({ method: 'HEAD', url: 'https://bit.ly', followAllRedirects: true },
+			request({ method: 'HEAD', url: 'https://bit.ly/3we2sYy', followAllRedirects: true },
 				function (error, response) {
 					resolve(response.request.href);
 				});

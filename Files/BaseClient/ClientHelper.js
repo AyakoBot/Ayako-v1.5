@@ -427,7 +427,7 @@ module.exports = {
 		} else return require('../Languages/lan-en.json');
 	},
 	/**
-	 * Writes a Ban or Massban report including previously sent Messages of the Victim.
+	 * Writes a Ban or Massban report including previously sent Messages of the Target.
 	 * @constructor
 	 * @param {object} object - The Object to create a Log from.
 	 */

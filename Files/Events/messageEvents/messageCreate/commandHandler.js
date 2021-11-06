@@ -36,6 +36,11 @@ module.exports = {
 		const msg = await this.prefix(rawmsg);
 		if (!msg) return; 
 		if (msg.channel.type == 'DM') return this.DMcommand(msg);
+		if (msg.command.dmOnly) {
+			msg.channel.send(msg.language.commands.dmOnly);
+			msg.delete().catch(() => {});
+			return;
+		}
 		if (msg.author.id == auth.ownerID) {
 			if (msg.command.name == 'eval') return msg.command.execute(msg);
 			cooldowns.set(msg.command.name, new Discord.Collection());
