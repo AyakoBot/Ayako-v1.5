@@ -10,7 +10,7 @@ const Discord = require('discord.js');
 module.exports = {
 	async execute(msg) {
 		let check = false;
-		if (!msg.content) return;
+		if (!msg.content || msg.author.id == msg.client.user.id) return;
 		if (msg.channel.type == 'DM') check = true;
 		msg.language = await msg.client.ch.languageSelector(check ? null : msg.guild);
 		msg.lan = check ? msg.language.antivirus.dm : msg.language.antivirus.guild;
@@ -72,7 +72,7 @@ async function run(msg, check) {
 		if (url.hostname) {
 			if (check) embed.setDescription(`${msg.lan.checking} \`${url}\``);
 			else embed.setDescription('');
-			console.log('Link Detected: ' + url);
+			console.log(`Link Detected: ${url} | Sent by ${msg.author.id}`);
 			if (blacklistRes.includes(`${url.hostname}`)) {
 				console.log('Blacklist included Link');
 				end({ text: 'BLACKLISTED_LINK', link: url.hostname, msg: msg }, check, embed);
@@ -114,7 +114,7 @@ async function run(msg, check) {
 								.get(`https://www.virustotal.com/api/v3/domains/${url.hostname}`)
 								.set('x-apikey', auth.VTtoken).catch(() => { });
 							if (VTget) res = JSON.parse(VTget.text).error ? JSON.parse(VTget.text).error.code : JSON.parse(VTget.text).data.attributes.last_analysis_stats;
-							if (JSON.parse(VTget.text).data.attributes.last_analysis_stats) console.log('VT knows Link');
+							if (VTget && JSON.parse(VTget.text).data.attributes.last_analysis_stats) console.log('VT knows Link');
 							else console.log('VT does not know Link');
 							if (res == 'NotFoundError') {
 								console.log('VT has to analyze Link');
@@ -137,7 +137,7 @@ async function run(msg, check) {
 									if (VTsecondGet) res = JSON.parse(VTsecondGet.text).error ? JSON.parse(VTsecondGet.text).error.code : JSON.parse(VTsecondGet.text).data.attributes.stats;
 									evaluation(msg, res, url, JSON.parse(VTsecondGet?.text)?.data?.attributes, check, embed);
 								}, 60000);
-							} else evaluation(msg, res, url, JSON.parse(VTget?.text)?.data?.attributes, check, embed);
+							} else evaluation(msg, res, url, VTget ? JSON.parse(VTget.text)?.data.attributes : null, check, embed);
 						}
 					}
 				}
@@ -148,7 +148,7 @@ async function run(msg, check) {
 
 async function evaluation(msg, VTresponse, url, attributes, check, embed) {
 	console.log('Evaluation called');
-	if (VTresponse == 'QuotaExceededError' || (VTresponse.suspicious == undefined || VTresponse.suspicious == null)) {
+	if (VTresponse && (VTresponse == 'QuotaExceededError' || (VTresponse.suspicious == undefined || VTresponse.suspicious == null))) {
 		embed
 			.addField(msg.language.result, msg.client.ch.stp(msg.lan.VTfail, { cross: msg.client.constants.emotes.cross }))
 			.setColor('#ffff00');
@@ -158,21 +158,23 @@ async function evaluation(msg, VTresponse, url, attributes, check, embed) {
 	}
 	let severity = 0;
 
-	if (VTresponse.suspicious > 10) severity = 1;
-	if (VTresponse.suspicious > 20) severity = 2;
-	if (VTresponse.suspicious > 30) severity = 3;
-	if (VTresponse.suspicious > 40) severity = 4;
-	if (VTresponse.suspicious > 50) severity = 5;
-	if (VTresponse.suspicious > 60) severity = 6;
+	if (VTresponse) {
+		if (VTresponse.suspicious > 10) severity = 1;
+		if (VTresponse.suspicious > 20) severity = 2;
+		if (VTresponse.suspicious > 30) severity = 3;
+		if (VTresponse.suspicious > 40) severity = 4;
+		if (VTresponse.suspicious > 50) severity = 5;
+		if (VTresponse.suspicious > 60) severity = 6;
 
-	if (VTresponse.malicious > 50) severity = 100;
-	else if (VTresponse.malicious > 40) severity = 80 + severity;
-	else if (VTresponse.malicious > 30) severity = 60 + severity;
-	else if (VTresponse.malicious > 20) severity = 40 + severity;
-	else if (VTresponse.malicious > 10) severity = 20 + severity;
-	else if (VTresponse.malicious > 5) severity = 10 + severity;
-	else if (VTresponse.malicious > 1) severity = 6 + severity;
-
+		if (VTresponse.malicious > 50) severity = 100;
+		else if (VTresponse.malicious > 40) severity = 80 + severity;
+		else if (VTresponse.malicious > 30) severity = 60 + severity;
+		else if (VTresponse.malicious > 20) severity = 40 + severity;
+		else if (VTresponse.malicious > 10) severity = 20 + severity;
+		else if (VTresponse.malicious > 5) severity = 10 + severity;
+		else if (VTresponse.malicious > 1) severity = 6 + severity;
+	}
+	
 	end({ msg: msg, text: 'DB_INSERT', url: new URL(url).hostname, severity: severity }, check, embed);
 
 	console.log('Link Severity: ' + severity);
@@ -185,6 +187,14 @@ async function evaluation(msg, VTresponse, url, attributes, check, embed) {
 			.setColor('#ffff00');
 		if (msg.m) msg.m.edit({ embeds: [embed] }).catch(() => { });
 		else msg.m = await msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
+		setTimeout(() => msg.m.delete().catch(() => {}), 20000);
+		const logEmbed = new Discord.MessageEmbed()
+			.setDescription(`Link \`${url}\` was whitelisted`);
+		const change = new Discord.MessageButton()
+			.setCustomId('CHANGE_LINK_TO_BAD')
+			.setLabel('Blacklist')
+			.setStyle('DANGER');
+		msg.client.ch.send(msg.client.channels.cache.get('726252103302905907'), { content: '<@318453143476371456>', embeds: [logEmbed], components: msg.client.ch.buttonRower([change]) });
 		fs.appendFile('S:/Bots/ws/CDN/whitelisted.txt', `\n${new URL(url).hostname}`, () => {});
 	}
 	else client.ch.send(client.channels.cache.get('726252103302905907'), `${url}\n\`\`\`${JSON.stringify(VTresponse)}\`\`\``); 
