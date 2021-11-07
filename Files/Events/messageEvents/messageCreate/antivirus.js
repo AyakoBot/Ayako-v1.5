@@ -182,7 +182,7 @@ async function evaluation(msg, VTresponse, url, attributes, check, embed) {
 	console.log('Link Severity: ' + severity);
 
 	if (severity > 2) end({ msg: msg, text: 'SEVERE_LINK', res: VTresponse, severity: severity, link: url }, check, embed);
-	else if (attributes && +attributes.creation_date + '000' > Date.now() - 604800000) end({ msg: msg, text: 'NEW_URL', res: VTresponse, severity: severity, link: url }, check, embed);
+	else if (attributes && +attributes.creation_date + '000' > Date.now() - 604800000) return end({ msg: msg, text: 'NEW_URL', res: VTresponse, severity: severity, link: url }, check, embed);
 
 	if (!attributes || !attributes.creation_date) {
 		let ageInDays;
