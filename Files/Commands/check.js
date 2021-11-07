@@ -60,7 +60,7 @@ module.exports = {
 				clickButton.customId == 'muteNext' ? msg.pages.mute++ : msg.pages.mute--;
 				const embed = new Discord.MessageEmbed()
 					.setAuthor(msg.client.ch.stp(msg.lan.author, { target: user }), msg.con.author.image, msg.con.author.url)
-					.setDescription(`${msg.language.select.id.desc}\n\n${msg.lan.warnsPage}: \`${msg.pages.warn}/${msg.pages.warnMax}\`\n${msg.lan.mutesPage}: \`${msg.pages.mute}/${msg.pages.muteMax}\``)
+					.setDescription(`${msg.language.select.id.desc}\n\n${msg.lan.warnsPage}: \`${msg.pages.warn}/${msg.pages.warnMax}\`\n${msg.lan.mutesPage}: \`${msg.pages.mute}/${msg.pages.muteMax}\``);
 				if (answered.mutes.length > 0) embed.addField(msg.language.selected, `${msg.lan.mutes}: ${answered.mutes}`);
 				clickButton.update({ embeds: [embed], components: buttonOrder(take, msg, options, answered, msg.pages.mute, null) }).catch(() => { });
 			} else if (clickButton.customId == 'warnNext' || clickButton.customId == 'warnPrev') {
@@ -75,7 +75,7 @@ module.exports = {
 				clickButton.customId == 'warnNext' ? msg.pages.warn++ : msg.pages.warn--;
 				const embed = new Discord.MessageEmbed()
 					.setAuthor(msg.client.ch.stp(msg.lan.author, { target: user }), msg.con.author.image, msg.con.author.url)
-					.setDescription(`${msg.language.select.id.desc}\n\n${msg.lan.warnsPage}: \`${msg.pages.warn}/${msg.pages.warnMax}\`\n${msg.lan.mutesPage}: \`${msg.pages.mute}/${msg.pages.muteMax}\``)
+					.setDescription(`${msg.language.select.id.desc}\n\n${msg.lan.warnsPage}: \`${msg.pages.warn}/${msg.pages.warnMax}\`\n${msg.lan.mutesPage}: \`${msg.pages.mute}/${msg.pages.muteMax}\``);
 				if (answered.warns.length > 0) embed.addField(msg.language.selected, `${msg.lan.warns}: ${answered.warns}`);
 				clickButton.update({ embeds: [embed], components: buttonOrder(take, msg, options, answered) }).catch(() => { });
 			} else if (clickButton.customId == 'muteMenu') {
