@@ -149,11 +149,13 @@ async function run(msg, check) {
 async function evaluation(msg, VTresponse, url, attributes, check, embed) {
 	console.log('Evaluation called');
 	if (VTresponse && (VTresponse == 'QuotaExceededError' || (VTresponse.suspicious == undefined || VTresponse.suspicious == null))) {
-		embed
-			.addField(msg.language.result, msg.client.ch.stp(msg.lan.VTfail, { cross: msg.client.constants.emotes.cross }))
-			.setColor('#ffff00');
-		if (msg.m) msg.m.edit({ embeds: [embed] }).catch(() => { });
-		else msg.m = await msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
+		if (embed.fields.length == 0) {
+			embed
+				.addField(msg.language.result, msg.client.ch.stp(msg.lan.VTfail, { cross: msg.client.constants.emotes.cross }))
+				.setColor('#ffff00');
+			if (msg.m) msg.m.edit({ embeds: [embed] }).catch(() => { });
+			else msg.m = await msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
+		}
 		return end({ msg: msg, text: 'DB_INSERT', url: new URL(url).hostname, severity: severity }, check, embed);
 	}
 	let severity = 0;
@@ -182,12 +184,14 @@ async function evaluation(msg, VTresponse, url, attributes, check, embed) {
 	if (severity > 2) end({ msg: msg, text: 'SEVERE_LINK', res: VTresponse, severity: severity, link: url }, check, embed);
 	else if (attributes && +attributes.creation_date + '000' > Date.now() - 604800000) end({ msg: msg, text: 'NEW_URL', res: VTresponse, severity: severity, link: url }, check, embed);
 	else if (attributes) {
-		embed
-			.addField(msg.language.result, msg.client.ch.stp(msg.lan.VTharmless, { tick: msg.client.constants.emotes.tick }))
-			.setColor('#ffff00');
-		if (msg.m) msg.m.edit({ embeds: [embed] }).catch(() => { });
-		else msg.m = await msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
-		setTimeout(() => msg.m.delete().catch(() => {}), 20000);
+		if (embed.fields.length == 0) {
+			embed
+				.addField(msg.language.result, msg.client.ch.stp(msg.lan.VTharmless, { tick: msg.client.constants.emotes.tick }))
+				.setColor('#ff0000');
+			if (msg.m) msg.m.edit({ embeds: [embed] }).catch(() => { });
+			else msg.m = await msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
+		}
+		if (!check) setTimeout(() => msg.m.delete().catch(() => {}), 20000);
 		const logEmbed = new Discord.MessageEmbed()
 			.setDescription(`Link \`${url}\` was whitelisted`);
 		const change = new Discord.MessageButton()
@@ -202,32 +206,38 @@ async function evaluation(msg, VTresponse, url, attributes, check, embed) {
 
 async function end(data, check, embed) {
 	if (data.text == 'BLACKLISTED_LINK') {
-		embed
-			.addField(data.msg.language.result, data.msg.client.ch.stp(data.msg.lan.blacklisted, { cross: data.msg.client.constants.emotes.cross }))
-			.setColor('#ff0000');
-		if (data.msg.m) data.msg.m.edit({ embeds: [embed] }).catch(() => { });
-		else data.msg.m = await data.msg.client.ch.reply(data.msg, { embeds: [embed] }).catch(() => { });
+		if (embed.fields.length == 0) {
+			embed
+				.addField(data.msg.language.result, data.msg.client.ch.stp(data.msg.lan.blacklisted, { cross: data.msg.client.constants.emotes.cross }))
+				.setColor('#ff0000');
+			if (data.msg.m) data.msg.m.edit({ embeds: [embed] }).catch(() => { });
+			else data.msg.m = await data.msg.client.ch.reply(data.msg, { embeds: [embed] }).catch(() => { });
+		}
 		if (!check) client.emit('antivirusHandler', data.msg, data.link, 'blacklist');
 	}
 	if (data.text == 'SEVERE_LINK') {
-		embed
-			.addField(data.msg.language.result, data.msg.client.ch.stp(data.msg.lan.VTmalicious, { cross: data.msg.client.constants.emotes.cross, severity: data.severity }))
-			.setColor('#ff0000');
-		if (data.msg.m) data.msg.m.edit({ embeds: [embed] }).catch(() => { });
-		else data.msg.m = await data.msg.client.ch.reply(data.msg, { embeds: [embed] }).catch(() => { });
+		if (embed.fields.length == 0) {
+			embed
+				.addField(data.msg.language.result, data.msg.client.ch.stp(data.msg.lan.VTmalicious, { cross: data.msg.client.constants.emotes.cross, severity: data.severity }))
+				.setColor('#ff0000');
+			if (data.msg.m) data.msg.m.edit({ embeds: [embed] }).catch(() => { });
+			else data.msg.m = await data.msg.client.ch.reply(data.msg, { embeds: [embed] }).catch(() => { });
+		}
 		if (!check) client.emit('antivirusHandler', data.msg, data.link, 'virustotal');
 	}
 	if (data.text == 'NEW_URL') {
 		console.log('Link is too new');
-		embed
-			.addField(data.msg.language.result, data.msg.client.ch.stp(data.msg.lan.newLink, { cross: data.msg.client.constants.emotes.cross }))
-			.setColor('#ff0000');
-		if (data.msg.m) data.msg.m.edit({ embeds: [embed] }).catch(() => { });
-		else data.msg.m = await data.msg.client.ch.reply(data.msg, { embeds: [embed] }).catch(() => { });
+		if (embed.fields.length == 0) {
+			embed
+				.addField(data.msg.language.result, data.msg.client.ch.stp(data.msg.lan.newLink, { cross: data.msg.client.constants.emotes.cross }))
+				.setColor('#ff0000');
+			if (data.msg.m) data.msg.m.edit({ embeds: [embed] }).catch(() => { });
+			else data.msg.m = await data.msg.client.ch.reply(data.msg, { embeds: [embed] }).catch(() => { });
+		}
 		if (!check) client.emit('antivirusHandler', data.msg, data.link, 'newurl');
 	}
 	if (data.text == 'DB_INSERT') {
-		if (check && (data.severity !== null && data.severity < 2)) {
+		if (check && (data.severity !== null && data.severity < 2) && embed.fields.length == 0) {
 			embed
 				.addField(data.msg.language.result, data.msg.client.ch.stp(data.msg.lan.whitelisted, { tick: data.msg.client.constants.emotes.tick }))
 				.setColor('#00ff00');
