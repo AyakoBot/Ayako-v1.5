@@ -183,7 +183,22 @@ async function evaluation(msg, VTresponse, url, attributes, check, embed) {
 
 	if (severity > 2) end({ msg: msg, text: 'SEVERE_LINK', res: VTresponse, severity: severity, link: url }, check, embed);
 	else if (attributes && +attributes.creation_date + '000' > Date.now() - 604800000) end({ msg: msg, text: 'NEW_URL', res: VTresponse, severity: severity, link: url }, check, embed);
-	else if (attributes) {
+
+	if (!attributes || !attributes.creation_date) {
+		let ageInDays;
+		const ip2whoisRes = await SA.get(`https://api.ip2whois.com/v2?key=${auth.ip2whoisToken}&domain=${url}&format=json`).catch(() => {});
+		if (ip2whoisRes && ip2whoisRes.text && JSON.parse(ip2whoisRes.text).domain_age) ageInDays = JSON.parse(ip2whoisRes.text).domain_age;
+		if (!ageInDays) {
+			const promptapiRes = await SA.get(`https://api.promptapi.com/whois/query?domain=${url}`)
+				.set('apikey', auth.promptAPIToken)
+				.catch(() => {});
+			if (promptapiRes && promptapiRes.text && 
+				JSON.parse(promptapiRes.text).result && 
+				JSON.parse(promptapiRes.text).result.creation_date
+			) ageInDays = Math.ceil(Math.abs(new Date(JSON.parse(promptapiRes.text).result.creation_date).getTime() - new Date().getTime()) / (1000 * 3600 * 24));
+		}
+		if (ageInDays !== undefined && ageInDays !== null && +ageInDays < 7) return end({ msg: msg, text: 'NEW_URL', res: VTresponse, severity: severity, link: url }, check, embed);
+	} else if (attributes) {
 		if (embed.fields.length == 0) {
 			embed
 				.addField(msg.language.result, msg.client.ch.stp(msg.lan.VTharmless, { tick: msg.client.constants.emotes.tick }))
