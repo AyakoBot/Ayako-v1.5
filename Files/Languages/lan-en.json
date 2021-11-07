@@ -1333,7 +1333,9 @@
             "selWarns": "Select up to 9 Warns (and Mutes)",
             "selMutes": "Select up to 9 Mutes (and Warns)",
             "mutes": "Mutes",
-            "warns": "Warns"
+            "warns": "Warns",
+            "warnsPage": "Warns Page",
+            "mutesPage": "Mutes Page"
         },
         "restart": {
             "category": "Owner",
