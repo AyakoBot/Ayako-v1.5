@@ -15,5 +15,3 @@ module.exports = {
 		msg.client.ch.reply(msg, embed);
 	}
 };
-
-
