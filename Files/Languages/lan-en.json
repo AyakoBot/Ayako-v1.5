@@ -957,7 +957,7 @@
             "abort": "Abort"
         },
         "muteAdd": {
-            "author": "Member was muted",
+            "author": "Member was muted\nWarn Number {{nr}}",
             "description": "{{user}} has muted {{target}}",
             "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
             "activeMute": "Joined with an active Mute",
@@ -975,7 +975,7 @@
             "error": "I wasn't able to mute this User!"
         },
         "tempmuteAdd": {
-            "author": "Member was tempmuted",
+            "author": "Member was tempmuted\nWarn Number {{nr}}",
             "description": "{{user}} has tempmuted {{target}}",
             "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
             "activeMute": "Joined with an active Mute",
