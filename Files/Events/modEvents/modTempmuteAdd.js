@@ -44,7 +44,7 @@ module.exports = {
 				msg.client.ch.query(`
 				INSERT INTO warns 
 				(guildid, userid, reason, type, duration, closed, dateofwarn, warnedinchannelid, warnedbyuserid, warnedinchannelname, warnedbyusername) VALUES 
-				($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12);`, 
+				($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);`, 
 				[msg.guild.id, target.id, reason, 'Mute', Date.now() + +duration, false, Date.now(), msg.channel.id, executor.id, msg.channel.name, msg.author.username]);
 				const dmChannel = await target.createDM().catch(() => {});
 				const DMembed = new Discord.MessageEmbed()
