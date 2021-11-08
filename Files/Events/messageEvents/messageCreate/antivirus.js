@@ -71,7 +71,7 @@ async function run(msg, check) {
 		if (!url.hostname) url = new URL(url);
 		if (url.hostname) {
 			const website = await SA.head(url).catch(() => {});
-			if (!website) return;			
+			if (!website || website.text == 'Domain not found') return end({ msg: msg, text: 'NOT_EXISTENT', res: null, severity: null, link: url }, check, embed);
 			if (check) embed.setDescription(`${msg.lan.checking} \`${url}\``);
 			else embed.setDescription('');
 			console.log(`Link Detected: ${url} | Sent by ${msg.author.id}`);
@@ -81,8 +81,7 @@ async function run(msg, check) {
 			});
 			if (blacklistRes.includes(`${url.hostname}`) || include !== false) {
 				console.log('Blacklist included Link');
-				end({ text: 'BLACKLISTED_LINK', link: url.hostname, msg: msg }, check, embed, blacklistRes[include]);
-				end({ msg: msg, text: 'DB_INSERT', url: url.hostname, severity: null }, check, embed, blacklistRes[include]);
+				await end({ text: 'BLACKLISTED_LINK', link: url.hostname, msg: msg }, check, embed, blacklistRes[include]);
 				if (!check) included = true;
 			} else if (!whitelistRes.includes(`${url.hostname}`)) {
 				console.log('Link is not Whitelisted');
@@ -90,20 +89,19 @@ async function run(msg, check) {
 					embed
 						.setDescription(embed.description + '\n\n' + msg.client.ch.stp(msg.lan.notWhitelisted, { warning: msg.client.constants.emotes.warning, loading: msg.client.constants.emotes.loading }))
 						.setColor('#ffff00');
-					if (msg.m) msg.m.edit({ embeds: [embed] }).catch(() => { });
+					if (msg.m) await msg.m.edit({ embeds: [embed] }).catch(() => { });
 					else msg.m = await msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
 					console.log('Message did not contain any Links yet');
 					if (blacklist.includes(url.hostname)) {
 						console.log('Blacklist included Link');
-						end({ text: 'BLACKLISTED_LINK', link: url.hostname, msg: msg }, check, embed);
-						end({ msg: msg, text: 'DB_INSERT', url: url.hostname, severity: null }, check, embed);
+						await end({ text: 'BLACKLISTED_LINK', link: url.hostname, msg: msg }, check, embed);
 						if (!check) included = true;
 					} else {
 						console.log('Blacklist did not include Link');
 						embed
 							.setDescription(embed.description + '\n\n' + msg.client.ch.stp(msg.lan.notBlacklisted, { warning: msg.client.constants.emotes.warning, loading: msg.client.constants.emotes.loading }))
 							.setColor('#ffff00');
-						if (msg.m) msg.m.edit({ embeds: [embed] }).catch(() => { });
+						if (msg.m) await msg.m.edit({ embeds: [embed] }).catch(() => { });
 						else msg.m = await msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
 						const spamHausRes = await SA
 							.get(`https://apibl.spamhaus.net/lookup/v1/dbl/${url.hostname}`)
@@ -111,10 +109,23 @@ async function run(msg, check) {
 							.set('Content-Type', 'application/json').catch(() => { });
 						if (spamHausRes && spamHausRes.status == 200) {
 							console.log('SpamHaus included Link');
-							end({ msg: msg, text: 'DB_INSERT', url: url.hostname, severity: null }, check, embed);
-							end({ text: 'BLACKLISTED_LINK', link: url.hostname, msg: msg }, check, embed);
+							await end({ text: 'BLACKLISTED_LINK', link: url.hostname, msg: msg }, check, embed);
 						} else {
 							console.log('SpamHaus did not include Link');
+							let ageInDays;
+							const ip2whoisRes = await SA.get(`https://api.ip2whois.com/v2?key=${auth.ip2whoisToken}&domain=${url.hostname}&format=json`).catch(() => {});
+							if (ip2whoisRes && ip2whoisRes.text && JSON.parse(ip2whoisRes.text).domain_age) ageInDays = JSON.parse(ip2whoisRes.text).domain_age;
+							if (!ageInDays) {
+								const promptapiRes = await SA.get(`https://api.promptapi.com/whois/query?domain=${url.hostname}`)
+									.set('apikey', auth.promptAPIToken)
+									.catch(() => { });
+								if (promptapiRes && promptapiRes.text &&
+									JSON.parse(promptapiRes.text).result &&
+									JSON.parse(promptapiRes.text).result.creation_date
+								) ageInDays = Math.ceil(Math.abs(new Date(JSON.parse(promptapiRes.text).result.creation_date).getTime() - new Date().getTime()) / (1000 * 3600 * 24));
+							}
+							console.log(ageInDays);
+							if (ageInDays !== undefined && ageInDays !== null && +ageInDays < 7) return await end({ msg: msg, text: 'NEW_URL', res: null, severity: null, link: url }, check, embed);
 							let res;
 							const VTget = await SA
 								.get(`https://www.virustotal.com/api/v3/domains/${url.hostname}`)
@@ -127,7 +138,7 @@ async function run(msg, check) {
 								embed
 									.setDescription(embed.description + '\n\n' + msg.client.ch.stp(msg.lan.VTanalyze, { warning: msg.client.constants.emotes.warning }))
 									.setColor('#ffff00');
-								if (msg.m) msg.m.edit({ embeds: [embed] }).catch(() => { });
+								if (msg.m) await msg.m.edit({ embeds: [embed] }).catch(() => { });
 								else msg.m = await msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
 								const VTpost = await SA
 									.post('https://www.virustotal.com/api/v3/urls')
@@ -160,7 +171,7 @@ async function evaluation(msg, VTresponse, url, attributes, check, embed) {
 			embed
 				.addField(msg.language.result, msg.client.ch.stp(msg.lan.VTfail, { cross: msg.client.constants.emotes.cross }))
 				.setColor('#ffff00');
-			if (msg.m) msg.m.edit({ embeds: [embed] }).catch(() => { });
+			if (msg.m) await msg.m.edit({ embeds: [embed] }).catch(() => { });
 			else msg.m = await msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
 		}
 		return end({ msg: msg, text: 'DB_INSERT', url: new URL(url).hostname, severity: severity }, check, embed);
@@ -183,37 +194,20 @@ async function evaluation(msg, VTresponse, url, attributes, check, embed) {
 		else if (VTresponse.malicious > 5) severity = 10 + severity;
 		else if (VTresponse.malicious > 1) severity = 6 + severity;
 	}
-	
-	end({ msg: msg, text: 'DB_INSERT', url: new URL(url).hostname, severity: severity }, check, embed);
 
 	console.log('Link Severity: ' + severity);
 
-	if (severity > 2) return end({ msg: msg, text: 'SEVERE_LINK', res: VTresponse, severity: severity, link: url }, check, embed);
-	else if (attributes && +attributes.creation_date + '000' > Date.now() - 604800000) return end({ msg: msg, text: 'NEW_URL', res: VTresponse, severity: severity, link: url }, check, embed);
-
-	if (!attributes || !attributes.creation_date) {
-		let ageInDays;
-		const ip2whoisRes = await SA.get(`https://api.ip2whois.com/v2?key=${auth.ip2whoisToken}&domain=${url}&format=json`).catch(() => {});
-		if (ip2whoisRes && ip2whoisRes.text && JSON.parse(ip2whoisRes.text).domain_age) ageInDays = JSON.parse(ip2whoisRes.text).domain_age;
-		if (!ageInDays) {
-			const promptapiRes = await SA.get(`https://api.promptapi.com/whois/query?domain=${url}`)
-				.set('apikey', auth.promptAPIToken)
-				.catch(() => {});
-			if (promptapiRes && promptapiRes.text && 
-				JSON.parse(promptapiRes.text).result && 
-				JSON.parse(promptapiRes.text).result.creation_date
-			) ageInDays = Math.ceil(Math.abs(new Date(JSON.parse(promptapiRes.text).result.creation_date).getTime() - new Date().getTime()) / (1000 * 3600 * 24));
-		}
-		if (ageInDays !== undefined && ageInDays !== null && +ageInDays < 7) return end({ msg: msg, text: 'NEW_URL', res: VTresponse, severity: severity, link: url }, check, embed);
-	} else if (attributes) {
+	if (severity > 2) return await end({ msg: msg, text: 'SEVERE_LINK', res: VTresponse, severity: severity, link: url }, check, embed);
+	else if (attributes && +attributes.creation_date + '000' > Date.now() - 604800000) return await end({ msg: msg, text: 'NEW_URL', res: VTresponse, severity: severity, link: url }, check, embed);
+	if (!check) setTimeout(() => msg.m.delete().catch(() => { }), 10000);
+	if (attributes) {
 		if (embed.fields.length == 0) {
 			embed
 				.addField(msg.language.result, msg.client.ch.stp(msg.lan.VTharmless, { tick: msg.client.constants.emotes.tick }))
 				.setColor('#00ff00');
-			if (msg.m) msg.m.edit({ embeds: [embed] }).catch(() => { });
+			if (msg.m) await msg.m.edit({ embeds: [embed] }).catch(() => { });
 			else msg.m = await msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
 		}
-		if (!check) setTimeout(() => msg.m.delete().catch(() => {}), 10000);
 		const logEmbed = new Discord.MessageEmbed()
 			.setDescription(`Link \`${url}\` was whitelisted`);
 		const change = new Discord.MessageButton()
@@ -227,6 +221,18 @@ async function evaluation(msg, VTresponse, url, attributes, check, embed) {
 
 async function end(data, check, embed, note) {
 	if (data.msg.m && !data.msg.m.logged) data.msg.client.ch.send(data.msg.client.channels.cache.get(data.msg.client.constants.standard.trashLogChannel), { content: data.msg.m.url }), data.msg.m.logged = true;
+	if (data.text == 'NOT_EXISTENT') {
+		if (embed.fields.length == 0) {
+			embed
+				.addField(data.msg.language.result, data.msg.client.ch.stp(data.msg.lan.notexistent, { url: data.link.hostname }))
+				.setColor('#00ff00');
+			if (data.msg.m) await data.msg.m.edit({ embeds: [embed] }).catch(() => { });
+			else data.msg.m = await data.msg.client.ch.reply(data.msg, { embeds: [embed] }).catch(() => { });
+			if (!check) setTimeout(() => data.msg.m.delete().catch(() => { }), 10000);
+		}
+		end({ msg: data.msg, text: 'DB_INSERT', url: data.link, severity: data.severity }, check, embed);
+		return true;
+	}
 	if (data.text == 'BLACKLISTED_LINK') {
 		if (note && note !== false) {
 			if (embed.fields.length == 0) {
@@ -234,7 +240,7 @@ async function end(data, check, embed, note) {
 					.addField(data.msg.language.result, data.msg.client.ch.stp(data.msg.lan.blacklisted, { cross: data.msg.client.constants.emotes.cross }))
 					.addField(data.msg.language.attention, note.split(/\|+/)[1])
 					.setColor('#ff0000');
-				if (data.msg.m) data.msg.m.edit({ embeds: [embed] }).catch(() => { });
+				if (data.msg.m) await data.msg.m.edit({ embeds: [embed] }).catch(() => { });
 				else data.msg.m = await data.msg.client.ch.reply(data.msg, { embeds: [embed] }).catch(() => { });
 			}
 		} else {
@@ -242,21 +248,25 @@ async function end(data, check, embed, note) {
 				embed
 					.addField(data.msg.language.result, data.msg.client.ch.stp(data.msg.lan.blacklisted, { cross: data.msg.client.constants.emotes.cross }))
 					.setColor('#ff0000');
-				if (data.msg.m) data.msg.m.edit({ embeds: [embed] }).catch(() => { });
+				if (data.msg.m) await data.msg.m.edit({ embeds: [embed] }).catch(() => { });
 				else data.msg.m = await data.msg.client.ch.reply(data.msg, { embeds: [embed] }).catch(() => { });
 			}
 			if (!check) client.emit('antivirusHandler', data.msg, data.link, 'blacklist');
 		}
+		end({ msg: data.msg, text: 'DB_INSERT', url: data.link, severity: data.severity }, check, embed);
+		return true;
 	}
 	if (data.text == 'SEVERE_LINK') {
 		if (embed.fields.length == 0) {
 			embed
 				.addField(data.msg.language.result, data.msg.client.ch.stp(data.msg.lan.VTmalicious, { cross: data.msg.client.constants.emotes.cross, severity: data.severity }))
 				.setColor('#ff0000');
-			if (data.msg.m) data.msg.m.edit({ embeds: [embed] }).catch(() => { });
+			if (data.msg.m) await data.msg.m.edit({ embeds: [embed] }).catch(() => { });
 			else data.msg.m = await data.msg.client.ch.reply(data.msg, { embeds: [embed] }).catch(() => { });
 		}
 		if (!check) client.emit('antivirusHandler', data.msg, data.link, 'virustotal');
+		end({ msg: data.msg, text: 'DB_INSERT', url: data.link, severity: data.severity }, check, embed);
+		return true;
 	}
 	if (data.text == 'NEW_URL') {
 		console.log('Link is too new');
@@ -264,18 +274,21 @@ async function end(data, check, embed, note) {
 			embed
 				.addField(data.msg.language.result, data.msg.client.ch.stp(data.msg.lan.newLink, { cross: data.msg.client.constants.emotes.cross }))
 				.setColor('#ff0000');
-			if (data.msg.m) data.msg.m.edit({ embeds: [embed] }).catch(() => { });
+			if (data.msg.m) await data.msg.m.edit({ embeds: [embed] }).catch(() => { });
 			else data.msg.m = await data.msg.client.ch.reply(data.msg, { embeds: [embed] }).catch(() => { });
 		}
 		if (!check) client.emit('antivirusHandler', data.msg, data.link, 'newurl');
+		end({ msg: data.msg, text: 'DB_INSERT', url: data.link, severity: data.severity }, check, embed);
+		return true;
 	}
 	if (data.text == 'DB_INSERT') {
 		if (check && (data.severity !== null && data.severity < 2) && embed.fields.length == 0) {
 			embed
 				.addField(data.msg.language.result, data.msg.client.ch.stp(data.msg.lan.whitelisted, { tick: data.msg.client.constants.emotes.tick }))
 				.setColor('#00ff00');
-			if (data.msg.m) data.msg.m.edit({ embeds: [embed] }).catch(() => { });
+			if (data.msg.m) await data.msg.m.edit({ embeds: [embed] }).catch(() => { });
 			else data.msg.m = await data.msg.client.ch.reply(data.msg, { embeds: [embed] }).catch(() => { });
+			if (!check) setTimeout(() => data.msg.m.delete().catch(() => { }), 10000);
 		}
 		client.ch.query(`
 		INSERT INTO antiviruslinks

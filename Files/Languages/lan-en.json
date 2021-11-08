@@ -579,7 +579,8 @@
             "VTmalicious": "{{cross}} Found Link to be Malicious\nSeverity Score: {{severity}}",
             "newLink": "{{cross}} Link is most likely Malicious",
             "whitelisted": "{{tick}} This Link is not Malicious",
-            "checking": "Link:"
+            "checking": "Link:",
+            "notexistent": "The Domain `{{url}}` does not exist (anymore)"
         }, 
         "guild": {
             "notWhitelisted": "{{warning}} Message contains a not Whitelisted Link\nChecking... {{loading}}",
