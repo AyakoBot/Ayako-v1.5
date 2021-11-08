@@ -181,7 +181,7 @@ async function evaluation(msg, VTresponse, url, attributes, check, embed) {
 
 	console.log('Link Severity: ' + severity);
 
-	if (severity > 2) end({ msg: msg, text: 'SEVERE_LINK', res: VTresponse, severity: severity, link: url }, check, embed);
+	if (severity > 2) return end({ msg: msg, text: 'SEVERE_LINK', res: VTresponse, severity: severity, link: url }, check, embed);
 	else if (attributes && +attributes.creation_date + '000' > Date.now() - 604800000) return end({ msg: msg, text: 'NEW_URL', res: VTresponse, severity: severity, link: url }, check, embed);
 
 	if (!attributes || !attributes.creation_date) {
@@ -202,7 +202,7 @@ async function evaluation(msg, VTresponse, url, attributes, check, embed) {
 		if (embed.fields.length == 0) {
 			embed
 				.addField(msg.language.result, msg.client.ch.stp(msg.lan.VTharmless, { tick: msg.client.constants.emotes.tick }))
-				.setColor('#ff0000');
+				.setColor('#00ff00');
 			if (msg.m) msg.m.edit({ embeds: [embed] }).catch(() => { });
 			else msg.m = await msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
 		}
@@ -215,8 +215,7 @@ async function evaluation(msg, VTresponse, url, attributes, check, embed) {
 			.setStyle('DANGER');
 		msg.client.ch.send(msg.client.channels.cache.get('726252103302905907'), { content: '<@318453143476371456>', embeds: [logEmbed], components: msg.client.ch.buttonRower([change]) });
 		fs.appendFile('S:/Bots/ws/CDN/whitelisted.txt', `\n${new URL(url).hostname}`, () => {});
-	}
-	else client.ch.send(client.channels.cache.get('726252103302905907'), `${url}\n\`\`\`${JSON.stringify(VTresponse)}\`\`\``); 
+	} else client.ch.send(client.channels.cache.get('726252103302905907'), `${url}\n\`\`\`${JSON.stringify(VTresponse)}\`\`\``); 
 }
 
 async function end(data, check, embed) {
