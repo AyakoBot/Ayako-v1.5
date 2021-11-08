@@ -12,6 +12,7 @@ module.exports = {
 	async execute(msg) {
 		const user = msg.args[0] ? await msg.client.users.fetch(msg.args[0].replace(/\D+/g, '')) : msg.author;
 		if (!user) return msg.client.ch.reply(msg, msg.language.noUser);
+		const member = await msg.guild.members.fetch(user.id).catch(() => {});
 		const lan = msg.lan;
 		const con = msg.client.constants.commands[this.name];
 		msg.con = con;
@@ -48,7 +49,7 @@ module.exports = {
 
 		const collector = msg.m.createMessageComponentCollector({ time: 60000 });
 		const answered = { mutes: [], warns: [] };
-		collector.on('collect', (clickButton) => {
+		collector.on('collect', async (clickButton) => {
 			if (clickButton.user.id !== msg.author.id) return msg.client.ch.notYours(msg, clickButton);
 			if (clickButton.customId == 'muteNext' || clickButton.customId == 'mutePrev') {
 				let indexLast; let indexFirst;
@@ -119,6 +120,9 @@ module.exports = {
 							embeds.push(warnEmbed);
 						});
 					}
+					let muterole;
+					const resM = await msg.client.ch.query('SELECT * FROM guildsettings WHERE guildid = $1;', [msg.guild.id]);
+					if (resM && resM > 0) muterole = msg.guild.roles.cache.find(r => r.id == resM.rows[0].muteroleid);
 					if (answered.mutes.length > 0) {
 						const MuteTitleEmbed = new Discord.MessageEmbed()
 							.setTitle(msg.lan.mutes)
@@ -126,6 +130,8 @@ module.exports = {
 						embeds.push(MuteTitleEmbed);
 						answered.mutes.forEach((number) => {
 							const mute = res.rows.filter(r => r.row_number == number)[0];
+							let notClosed = msg.client.ch.stp(msg.lan.notClosed, { time: `<t:${mute.duration.slice(0, -3)}:F> (<t:${mute.duration.slice(0, -3)}:R>)` });
+							if (muterole && member && member.roles.cache.get(muterole.id)) notClosed = msg.client.ch.stp(msg.lan.abortedMute, { time: `<t:${mute.duration.slice(0, -3)}:F> (<t:${mute.duration.slice(0, -3)}:R>)`});
 							const muteEmbed = new Discord.MessageEmbed()
 								.setDescription(`**${msg.language.reason}:**\n${mute.reason}`)
 								.setAuthor(msg.lan.muteOf + user.tag, msg.con.author.image, mute.msgurl)
@@ -143,20 +149,20 @@ module.exports = {
 											mute.closed == true ? 
 												msg.client.ch.stp(msg.lan.closed, { time: `<t:${mute.duration.slice(0, -3)}:F> (<t:${mute.duration.slice(0, -3)}:R>)`}) :  
 												mute.closed == false ? 
-													msg.client.ch.stp(msg.lan.notClosed, {time: `<t:${mute.duration.slice(0, -3)}:F> (<t:${mute.duration.slice(0, -3)}:R>)`}) :
+													notClosed :
 													msg.language.never
 										}`, inline: false },
 								);
 							embeds.push(muteEmbed);
 						});
 					}
-					msg.client.ch.reply(msg.m, {embeds: embeds});
+					clickButton.update({embeds: embeds});
 				}
 				collector.stop('finished');
 			}
 		});
-		collector.on('end', (collected, reason) => {
-			if (reason == 'time') msg.m.edit({ embeds: msg.m.embeds, components: [] });
+		collector.on('end', () => {
+			msg.m.edit({ embeds: msg.m.embeds, components: [] });
 		});
 
 		const ban = await msg.guild.bans.fetch(user.id).catch(() => { });
