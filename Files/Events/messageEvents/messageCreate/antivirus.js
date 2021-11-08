@@ -73,10 +73,14 @@ async function run(msg, check) {
 			if (check) embed.setDescription(`${msg.lan.checking} \`${url}\``);
 			else embed.setDescription('');
 			console.log(`Link Detected: ${url} | Sent by ${msg.author.id}`);
-			if (blacklistRes.includes(`${url.hostname}`)) {
+			let includ = false;
+			blacklistRes.forEach((entry, index) => { 
+				if (entry.includes(url.hostname)) includ = index;
+			});
+			if (blacklistRes.includes(`${url.hostname}`) || includ !== false) {
 				console.log('Blacklist included Link');
-				end({ text: 'BLACKLISTED_LINK', link: url.hostname, msg: msg }, check, embed);
-				end({ msg: msg, text: 'DB_INSERT', url: url.hostname, severity: null }, check, embed);
+				end({ text: 'BLACKLISTED_LINK', link: url.hostname, msg: msg }, check, embed, blacklistRes[includ]);
+				end({ msg: msg, text: 'DB_INSERT', url: url.hostname, severity: null }, check, embed, blacklistRes[includ]);
 				if (!check) included = true;
 			} else if (!whitelistRes.includes(`${url.hostname}`)) {
 				console.log('Link is not Whitelisted');
@@ -219,17 +223,28 @@ async function evaluation(msg, VTresponse, url, attributes, check, embed) {
 	} else client.ch.send(client.channels.cache.get('726252103302905907'), `${url}\n\`\`\`${JSON.stringify(VTresponse)}\`\`\``); 
 }
 
-async function end(data, check, embed) {
+async function end(data, check, embed, note) {
 	if (data.msg.m && !data.msg.m.logged) data.msg.client.ch.send(data.msg.client.channels.cache.get(data.msg.client.constants.standard.trashLogChannel), { content: data.msg.m.url }), data.msg.m.logged = true;
 	if (data.text == 'BLACKLISTED_LINK') {
-		if (embed.fields.length == 0) {
-			embed
-				.addField(data.msg.language.result, data.msg.client.ch.stp(data.msg.lan.blacklisted, { cross: data.msg.client.constants.emotes.cross }))
-				.setColor('#ff0000');
-			if (data.msg.m) data.msg.m.edit({ embeds: [embed] }).catch(() => { });
-			else data.msg.m = await data.msg.client.ch.reply(data.msg, { embeds: [embed] }).catch(() => { });
+		if (note && note !== false) {
+			if (embed.fields.length == 0) {
+				embed
+					.addField(data.msg.language.result, data.msg.client.ch.stp(data.msg.lan.blacklisted, { cross: data.msg.client.constants.emotes.cross }))
+					.addField(data.msg.language.attention, note.split(/\|+/)[1])
+					.setColor('#ff0000');
+				if (data.msg.m) data.msg.m.edit({ embeds: [embed] }).catch(() => { });
+				else data.msg.m = await data.msg.client.ch.reply(data.msg, { embeds: [embed] }).catch(() => { });
+			}
+		} else {
+			if (embed.fields.length == 0) {
+				embed
+					.addField(data.msg.language.result, data.msg.client.ch.stp(data.msg.lan.blacklisted, { cross: data.msg.client.constants.emotes.cross }))
+					.setColor('#ff0000');
+				if (data.msg.m) data.msg.m.edit({ embeds: [embed] }).catch(() => { });
+				else data.msg.m = await data.msg.client.ch.reply(data.msg, { embeds: [embed] }).catch(() => { });
+			}
+			if (!check) client.emit('antivirusHandler', data.msg, data.link, 'blacklist');
 		}
-		if (!check) client.emit('antivirusHandler', data.msg, data.link, 'blacklist');
 	}
 	if (data.text == 'SEVERE_LINK') {
 		if (embed.fields.length == 0) {
