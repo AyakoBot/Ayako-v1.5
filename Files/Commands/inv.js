@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 module.exports = {
 	name: 'inv',
 	perm: 134217728n,
-	dm: true,
+	dm: false,
 	takesFirstArg: true,
 	aliases: [],
 	type: 'info',
