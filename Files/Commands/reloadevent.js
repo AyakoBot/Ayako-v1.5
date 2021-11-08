@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 module.exports = {
 	name: 'reloadevent',
 	perm: 0,
@@ -37,24 +39,58 @@ module.exports = {
 				ch.reply(msg, `There was an error while reloading the ClientHelper:\n\`\`\`${e.stack}\`\`\``);
 			}
 		} else {
-			const eventArr = [];
-			for (const rawevent of [...client.events.entries()]) {
-				if (name == rawevent[0].toLowerCase()) {
-					const event = client.events.get(rawevent[0]);
-					eventArr.push(rawevent[0]);
-					delete require.cache[require.resolve(event.path)];
-					try {
-						const newEvent = require(event.path);
-						newEvent.path = event.path;
-						client.events.set(rawevent[0], newEvent);
-						ch.reply(msg, `The Event \`${rawevent[0]}\` in path \`${newEvent.path}\` was reloaded!`);
-					} catch(e) {
-						ch.reply(msg, `There was an error while reloading Event \`${rawevent[0]}\` in path \`${event.path}\`\n\`\`\`${e.stack}\`\`\``);
+			if (msg.args[0] && msg.args[1]) {
+				let mainFolder = msg.args[0].toLowerCase();
+				let file, mainSubFolder;
+				if (msg.args[2]) {
+					mainSubFolder = msg.args[1].toLowerCase();
+					file = msg.args[2].toLowerCase();
+				} else file = msg.args[1].toLowerCase();
+				const mainFolderFS = fs.readdirSync('./Files/Events/');
+				mainFolderFS.forEach((folderName, index) => {
+					if (folderName.toLowerCase() == mainFolder+'events') mainFolder = mainFolderFS[index];
+				});
+				let PathToReload;
+				if (mainSubFolder) {
+					const mainSubFolderFS = fs.readdirSync(`./Files/Events/${mainFolder}`);
+					mainSubFolderFS.forEach((folderName, index) => { if (folderName.toLowerCase() == msg.args[0].toLowerCase()+mainSubFolder) mainSubFolder = mainSubFolderFS[index];});
+					const fileFolderFS = fs.readdirSync(`./Files/Events/${mainFolder}/${mainSubFolder}`);
+					fileFolderFS.forEach((fileName, index) => {if (fileName.toLowerCase() == file+'.js') file = fileFolderFS[index];});
+					PathToReload = `./Files/Events/${mainFolder}/${mainSubFolder}/${file}`;
+				} else {
+					const fileFolderFS = fs.readdirSync(`./Files/Events/${mainFolder}`);
+					fileFolderFS.forEach((fileName, index) => { if (fileName.toLowerCase() == msg.args[0].toLowerCase() + file + '.js') file = fileFolderFS[index]; });
+					PathToReload = `./Files/Events/${mainFolder}/${file}`;
+				}
+				PathToReload = PathToReload.replace('/Files', '.');
+				const name = PathToReload.split(/\/+/)[PathToReload.split(/\/+/).length - 1].replace('.js', '');
+				try {
+					delete require.cache[require.resolve(PathToReload)];
+					require(PathToReload);
+					ch.reply(msg, `The Event \`${name}\` in path \`${PathToReload}\` was reloaded!`);
+				} catch (e) {
+					ch.reply(msg, `There was an error while reloading Event \`${name}\` in path \`${PathToReload}\`\n\`\`\`${e.stack}\`\`\``);
+				}
+
+			} else {
+				const eventArr = [];
+				for (const rawevent of [...client.events.entries()]) {
+					if (name == rawevent[0].toLowerCase()) {
+						const event = client.events.get(rawevent[0]);
+						eventArr.push(rawevent[0]);
+						delete require.cache[require.resolve(event.path)];
+						try {
+							const newEvent = require(event.path);
+							newEvent.path = event.path;
+							client.events.set(rawevent[0], newEvent);
+							ch.reply(msg, `The Event \`${rawevent[0]}\` in path \`${newEvent.path}\` was reloaded!`);
+						} catch(e) {
+							ch.reply(msg, `There was an error while reloading Event \`${rawevent[0]}\` in path \`${event.path}\`\n\`\`\`${e.stack}\`\`\``);
+						}
 					}
 				}
+				if (!eventArr[0]) ch.reply(msg, `Event \`${name}\` not found.`);
 			}
-			if (!eventArr[0]) ch.reply(msg, `Event \`${name}\` not found.`);
-
 		}
 	}
 };
