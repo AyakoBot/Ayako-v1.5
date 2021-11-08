@@ -148,6 +148,7 @@ async function run(msg, check) {
 
 async function evaluation(msg, VTresponse, url, attributes, check, embed) {
 	console.log('Evaluation called');
+	if (msg.m && !msg.m.logged) msg.client.ch.send(msg.client.channels.cache.get(msg.client.constants.standard.trashLogChannel), { content: msg.m.url }), msg.m.logged = true;
 	if (VTresponse && (VTresponse == 'QuotaExceededError' || (VTresponse.suspicious == undefined || VTresponse.suspicious == null))) {
 		if (embed.fields.length == 0) {
 			embed
@@ -213,12 +214,13 @@ async function evaluation(msg, VTresponse, url, attributes, check, embed) {
 			.setCustomId('CHANGE_LINK_TO_BAD')
 			.setLabel('Blacklist')
 			.setStyle('DANGER');
-		msg.client.ch.send(msg.client.channels.cache.get('726252103302905907'), { content: '<@318453143476371456>', embeds: [logEmbed], components: msg.client.ch.buttonRower([change]) });
+		msg.client.ch.send(msg.client.channels.cache.get(msg.client.constants.standard.trashLogChannel), { content: '<@318453143476371456>', embeds: [logEmbed], components: msg.client.ch.buttonRower([change]) });
 		fs.appendFile('S:/Bots/ws/CDN/whitelisted.txt', `\n${new URL(url).hostname}`, () => {});
 	} else client.ch.send(client.channels.cache.get('726252103302905907'), `${url}\n\`\`\`${JSON.stringify(VTresponse)}\`\`\``); 
 }
 
 async function end(data, check, embed) {
+	if (data.msg.m && !data.msg.m.logged) data.msg.client.ch.send(data.msg.client.channels.cache.get(data.msg.client.constants.standard.trashLogChannel), { content: data.msg.m.url }), data.msg.m.logged = true;
 	if (data.text == 'BLACKLISTED_LINK') {
 		if (embed.fields.length == 0) {
 			embed
