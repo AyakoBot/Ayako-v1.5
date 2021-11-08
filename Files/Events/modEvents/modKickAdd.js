@@ -52,6 +52,10 @@ module.exports = {
 					.addField(language.reason, `\`\`\`${reason}\`\`\``)
 					.setFooter(msg.client.ch.stp(lan.footer, {user: executor, target: target}));
 				if (logchannel) msg.client.ch.send(logchannel, embed);
+			} else if (!member) {
+				em.setDescription(msg.client.constants.emotes.cross + ' ' + msg.client.ch.stp(lan.noMember, { target: target }));
+				msg.m?.edit({ embeds: [em] });
+				return false;
 			} else {
 				m?.delete().catch(()  => {});
 				em.setDescription(msg.client.constants.emotes.cross + ' ' +lan.error+` \`\`\`${err}\`\`\``);

@@ -15,6 +15,11 @@ module.exports = {
 		const member = await msg.guild.members.fetch(target.id).catch(() => { });
 		const exec = await msg.guild.members.fetch(executor.id).catch(() => { });
 		const memberClient = msg.guild.me;
+		if (!member) {
+			em.setDescription(msg.client.constants.emotes.cross + ' ' + lan.noMember);
+			msg.m?.edit({ embeds: [em] });
+			return false;
+		}
 		if (exec?.roles.highest.rawPosition < member?.roles.highest.rawPosition || exec?.roles.highest.rawPosition == member?.roles.highest.rawPosition) {
 			em.setDescription(msg.client.constants.emotes.cross + ' ' +lan.exeNoPerms);
 			msg.m?.edit({embeds: [em]});
@@ -22,13 +27,13 @@ module.exports = {
 		}
 		const resM = await msg.client.ch.query('SELECT * FROM guildsettings WHERE guildid = $1;', [msg.guild.id]);
 		if (resM && resM.rowCount > 0) role = msg.guild.roles.cache.get(resM.rows[0].muteroleid);
-		if ((memberClient.roles.highest.rawPosition < member.roles.highest.rawPosition || memberClient.roles.highest.rawPosition == member.roles.highest.rawPosition) || !memberClient.permissions.has(268435456)) {
+		if ((memberClient.roles.highest.rawPosition < member?.roles.highest.rawPosition || memberClient.roles.highest.rawPosition == member?.roles.highest.rawPosition) || !memberClient.permissions.has(268435456)) {
 			em.setDescription(msg.client.constants.emotes.cross + ' ' +lan.meNoPerms);
 			msg.m?.edit({embeds: [em]});
 			return false;
 		}
 		if (role) {
-			if (member.roles.cache.has(role.id)) {
+			if (member?.roles.cache.has(role.id)) {
 				em.setDescription(msg.client.constants.emotes.cross + ' ' +lan.hasRole);
 				msg.m?.edit({embeds: [em]});
 				return false;
