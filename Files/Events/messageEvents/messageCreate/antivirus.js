@@ -124,7 +124,6 @@ async function run(msg, check) {
 									JSON.parse(promptapiRes.text).result.creation_date
 								) ageInDays = Math.ceil(Math.abs(new Date(JSON.parse(promptapiRes.text).result.creation_date).getTime() - new Date().getTime()) / (1000 * 3600 * 24));
 							}
-							console.log(ageInDays);
 							if (ageInDays !== undefined && ageInDays !== null && +ageInDays < 7) return await end({ msg: msg, text: 'NEW_URL', res: null, severity: null, link: url }, check, embed);
 							let res;
 							const VTget = await SA
