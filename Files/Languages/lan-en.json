@@ -1355,6 +1355,9 @@
             "closed": "Mute ended {{time}}",
             "notClosed": "Mute will end {{time}}"
         },
+        "uptime": {
+            "text": "I am online since"
+        },
         "restart": {
             "category": "Owner",
             "description": "Restart Ayako",
