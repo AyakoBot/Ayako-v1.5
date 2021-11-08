@@ -287,7 +287,7 @@ async function end(data, check, embed, note) {
 				.setColor('#00ff00');
 			if (data.msg.m) await data.msg.m.edit({ embeds: [embed] }).catch(() => { });
 			else data.msg.m = await data.msg.client.ch.reply(data.msg, { embeds: [embed] }).catch(() => { });
-			if (!check) setTimeout(() => data.msg.m.delete().catch(() => { }), 10000);
+			if (!check) setTimeout(() => data.msg.m?.delete().catch(() => { }), 10000);
 		}
 		client.ch.query(`
 		INSERT INTO antiviruslinks
