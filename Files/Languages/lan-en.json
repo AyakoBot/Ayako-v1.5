@@ -810,6 +810,7 @@
     "cooldown": "Cooldown",
     "add": "Add",
     "remove": "Remove",
+    "attention": "Attention",
     "months": {
         "0": "January",
         "1": "February",
@@ -1216,6 +1217,16 @@
             "usage": ["ban [user ID or mention] (reason)"],
             "category": "Moderation",
             "reason": "No Reason given"
+        },
+        "tempmute": {
+            "description": "Temporarily Mutes a User",
+            "usage": ["tempmute [user ID or mention] (time) (reason)"],
+            "category": "Moderation",
+            "reason": "No Reason given",
+            "time": "No Time given",
+            "timeError": "Please provide a valid Time",
+            "timeError2": "Please provide a valid Time in the format `[number] [unit]`",
+            "timeError3": "Please provide a valid Time in the format `[number] [unit]`\nValid Units are `s` for Seconds, `m` for Minutes, `h` for Hours and `d` for Days"
         },
         "kick": {
             "description": "Bans a User from the Server",
