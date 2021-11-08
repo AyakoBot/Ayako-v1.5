@@ -1366,7 +1366,8 @@
             "duration": "Mute Duration",
             "muteclosed": "Mute Closed",
             "closed": "Mute ended {{time}}",
-            "notClosed": "Mute will end {{time}}"
+            "notClosed": "Mute will end {{time}}",
+            "abortedMute": "Mute would have ended {{time}}\nBut it was manually aborted"
         },
         "uptime": {
             "text": "I am online since"
