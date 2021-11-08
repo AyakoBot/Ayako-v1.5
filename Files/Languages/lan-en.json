@@ -1363,6 +1363,12 @@
             "description": "Restart Ayako",
             "usage": ["restart"]
         },
+        "invite": {
+            "description": "Displays Ayako's Invite and Support Server Invite",
+            "usage": ["invite"],
+            "author": "Ayakos Invites",
+            "desc": "Invite me: [Click]({{invite}})\nSupport Server: [Click]({{help}})"
+        },
         "settings": {
             "valid": "Valid Answers",
             "notValid": "This Answer was not valid",

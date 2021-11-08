@@ -289,6 +289,7 @@
         "invite": "https://discord.com/api/oauth2/authorize?client_id=650691698409734151&permissions=4261276919&scope=bot%20applications.commands",
         "image": "https://ayakobot.com/DefaultEmbedImage",
         "errorImage": "https://ayakobot.com/DefaultErrorImage",
+        "support": "https://discord.gg/animekos",
         "webhook": {
             "name": "Ayako Logging",
             "avatar": "https://cdn.discordapp.com/attachments/760152457799401532/839644223074336789/6E81E655-B92C-4EC6-8015-20679059B454.png"
@@ -430,6 +431,11 @@
             "author": {
                 "image": "https://ayakobot.com/cdn/Ayako_Assets/Warning.png",
                 "url": ""
+            }
+        },
+        "invite": {
+            "author":{
+                "image": "https://ayakobot.com/cdn/Ayako_Assets/help.png"
             }
         },
         "settings": {
