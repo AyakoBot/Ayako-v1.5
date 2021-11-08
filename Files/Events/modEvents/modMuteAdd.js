@@ -11,30 +11,35 @@ module.exports = {
 		if (msg.m) await msg.m.edit({ embeds: [em] });
 		else msg.m = await msg.client.ch.reply(msg, em);
 		let role;
+		const resM = await msg.client.ch.query('SELECT * FROM guildsettings WHERE guildid = $1;', [msg.guild.id]);
+		if (resM && resM.rowCount > 0) role = msg.guild.roles.cache.get(resM.rows[0].muteroleid);
 		let logchannel;
 		const member = await msg.guild.members.fetch(target.id).catch(() => { });
 		const exec = await msg.guild.members.fetch(executor.id).catch(() => { });
 		const memberClient = msg.guild.me;
+		if (!member) {
+			em.setDescription(msg.client.constants.emotes.cross + ' ' + lan.noMember);
+			msg.m?.edit({ embeds: [em] });
+			return false;
+		}
 		if (exec?.roles.highest.rawPosition < member?.roles.highest.rawPosition || exec?.roles.highest.rawPosition == member?.roles.highest.rawPosition) {
 			em.setDescription(msg.client.constants.emotes.cross + ' ' +lan.exeNoPerms);
 			msg.m?.edit({embeds: [em]});
 			return false;
 		}
-		const resM = await msg.client.ch.query('SELECT * FROM guildsettings WHERE guildid = $1;', [msg.guild.id]);
-		if (resM && resM.rowCount > 0) role = msg.guild.cache.get(resM.rows[0].muteroleid);
-		if ((memberClient.roles.highest.rawPosition < member.roles.highest.rawPosition || memberClient.roles.highest.rawPosition == member.roles.highest.rawPosition) || !memberClient.permissions.has(268435456)) {
+		if ((memberClient.roles.highest.rawPosition < member?.roles.highest.rawPosition || memberClient.roles.highest.rawPosition == member?.roles.highest.rawPosition) || !memberClient.permissions.has(268435456)) {
 			em.setDescription(msg.client.constants.emotes.cross + ' ' +lan.meNoPerms);
 			msg.m?.edit({embeds: [em]});
 			return false;
 		}
 		if (role) {
-			if (member.roles.cache.has(role.id)) {
+			if (member?.roles.cache.has(role.id)) {
 				em.setDescription(msg.client.constants.emotes.cross + ' ' +lan.hasRole);
 				msg.m?.edit({embeds: [em]});
 				return false;
 			}
 			let err;
-			const Mute = await msg.guild.members.cache.get(target.id).roles.add(role).catch(() => {});
+			const Mute = await msg.guild.members.cache.get(target.id)?.roles.add(role).catch(() => {});
 			if (Mute) {
 				const dmChannel = await target.createDM().catch(() => {});
 				const DMembed = new Discord.MessageEmbed()
