@@ -70,17 +70,19 @@ async function run(msg, check) {
 		const embed = new Discord.MessageEmbed();
 		if (!url.hostname) url = new URL(url);
 		if (url.hostname) {
+			const website = await SA.head(url).catch(() => {});
+			if (!website) return;			
 			if (check) embed.setDescription(`${msg.lan.checking} \`${url}\``);
 			else embed.setDescription('');
 			console.log(`Link Detected: ${url} | Sent by ${msg.author.id}`);
-			let includ = false;
+			let include = false;
 			blacklistRes.forEach((entry, index) => { 
-				if (entry.includes(url.hostname)) includ = index;
+				if (entry.split(new RegExp(' | ', 'g'))[0] == url.hostname) include = index;
 			});
-			if (blacklistRes.includes(`${url.hostname}`) || includ !== false) {
+			if (blacklistRes.includes(`${url.hostname}`) || include !== false) {
 				console.log('Blacklist included Link');
-				end({ text: 'BLACKLISTED_LINK', link: url.hostname, msg: msg }, check, embed, blacklistRes[includ]);
-				end({ msg: msg, text: 'DB_INSERT', url: url.hostname, severity: null }, check, embed, blacklistRes[includ]);
+				end({ text: 'BLACKLISTED_LINK', link: url.hostname, msg: msg }, check, embed, blacklistRes[include]);
+				end({ msg: msg, text: 'DB_INSERT', url: url.hostname, severity: null }, check, embed, blacklistRes[include]);
 				if (!check) included = true;
 			} else if (!whitelistRes.includes(`${url.hostname}`)) {
 				console.log('Link is not Whitelisted');
@@ -211,7 +213,7 @@ async function evaluation(msg, VTresponse, url, attributes, check, embed) {
 			if (msg.m) msg.m.edit({ embeds: [embed] }).catch(() => { });
 			else msg.m = await msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
 		}
-		if (!check) setTimeout(() => msg.m.delete().catch(() => {}), 20000);
+		if (!check) setTimeout(() => msg.m.delete().catch(() => {}), 10000);
 		const logEmbed = new Discord.MessageEmbed()
 			.setDescription(`Link \`${url}\` was whitelisted`);
 		const change = new Discord.MessageButton()
