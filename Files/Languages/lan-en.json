@@ -590,7 +590,8 @@
             "VTfail": "{{cross}} Failed to analyze Link",
             "VTharmless": "{{tick}} Found Link to be Harmless\nLink is now Whitelisted",
             "VTmalicious": "{{cross}} Found Link to be Malicious\nSeverity Score: {{severity}}",
-            "newLink": "{{cross}} Link is most likely malicious"
+            "newLink": "{{cross}} Link is most likely malicious",
+            "notexistent": "The Domain `{{url}}` does not exist (anymore)"
         }
     },
     "featuresName": "Features",
