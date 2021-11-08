@@ -970,7 +970,9 @@
             "meNoPerms": "I can't mute this Member `Missing Permissions`",
             "success": "Member {{target}} was muted",
             "noRole": "I wasn't able to find a Mute Role\nVisit `h!settings overview` to set or create one",
-            "loading": "Muting User..."
+            "loading": "Muting User...",
+            "noMember": "This User is not a Member of this Server",
+            "error": "I wasn't able to mute this User!"
         },
         "tempmuteAdd": {
             "author": "Member was tempmuted",
@@ -982,11 +984,13 @@
                 "author": "You have been tempmuted on {{guild.name}}"
             },
             "hasRole": "This Member is already tempmuted",
-            "exeNoPerms": "You can't tempmuted this Member",
-            "meNoPerms": "I can't tempmuted this Member `Missing Permissions`",
+            "exeNoPerms": "You can't tempmute this Member",
+            "meNoPerms": "I can't tempmute this Member `Missing Permissions`",
             "success": "Member {{target}} was tempmuted",
             "noRole": "I wasn't able to find a Mute Role\nVisit `h!settings overview` to set or create one",
-            "loading": "Temp-Muting User..."
+            "loading": "Temp-Muting User...",
+            "error": "I wasn't able to tempmute this User!",
+            "noMember": "This User is not a Member of this Server"
         },
         "muteRemove": {
             "author": "Member was unmuted",
@@ -999,7 +1003,9 @@
             "hasNoRole": "This Member isn't muted",
             "success": "Member {{target}} was unmuted",
             "noRole": "I wasn't able to find a Mute Role\nVisit `h!settings overview` to set or create one",
-            "loading": "Un-Muting User..."
+            "loading": "Un-Muting User...",
+            "error": "I wasn't able to unmute this User!",
+            "noMember": "This User is not a Member of this Server"
         },
         "banAdd": {
             "author": "User was banned",
