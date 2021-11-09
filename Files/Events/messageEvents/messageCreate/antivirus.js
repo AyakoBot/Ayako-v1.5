@@ -78,17 +78,17 @@ async function run(msg, check) {
 			blacklistRes.forEach((entry, index) => { 
 				if (entry.split(new RegExp(' | ', 'g'))[0] == url.hostname) include = index;
 			});
-			if (blacklistRes.includes(`${url.hostname}`) || include !== false) {
-				await end({ text: 'BLACKLISTED_LINK', link: url.hostname, msg: msg }, check, embed, blacklistRes[include]);
-				if (!check) included = true;
-			} else if (!whitelistRes.includes(`${url.hostname}`)) {
+			if (!whitelistRes.includes(`${url.hostname}`)) {
 				if (included == false) {
 					embed
 						.setDescription(embed.description + '\n\n' + msg.client.ch.stp(msg.lan.notWhitelisted, { warning: msg.client.constants.emotes.warning, loading: msg.client.constants.emotes.loading }))
 						.setColor('#ffff00');
 					if (msg.m) await msg.m.edit({ embeds: [embed] }).catch(() => { });
 					else msg.m = await msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
-					if (blacklist.includes(url.hostname)) {
+					if (blacklistRes.includes(`${url.hostname}`) || include !== false) {
+						await end({ text: 'BLACKLISTED_LINK', link: url.hostname, msg: msg }, check, embed, blacklistRes[include]);
+						if (!check) included = true;
+					} else if (blacklist.includes(url.hostname)) {
 						await end({ text: 'BLACKLISTED_LINK', link: url.hostname, msg: msg }, check, embed);
 						if (!check) included = true;
 					} else {
