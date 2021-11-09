@@ -74,30 +74,24 @@ async function run(msg, check) {
 			if (!website || website.text == 'Domain not found') return end({ msg: msg, text: 'NOT_EXISTENT', res: null, severity: null, link: url }, check, embed);
 			if (check) embed.setDescription(`${msg.lan.checking} \`${url}\``);
 			else embed.setDescription('');
-			console.log(`Link Detected: ${url} | Sent by ${msg.author.id}`);
 			let include = false;
 			blacklistRes.forEach((entry, index) => { 
 				if (entry.split(new RegExp(' | ', 'g'))[0] == url.hostname) include = index;
 			});
 			if (blacklistRes.includes(`${url.hostname}`) || include !== false) {
-				console.log('Blacklist included Link');
 				await end({ text: 'BLACKLISTED_LINK', link: url.hostname, msg: msg }, check, embed, blacklistRes[include]);
 				if (!check) included = true;
 			} else if (!whitelistRes.includes(`${url.hostname}`)) {
-				console.log('Link is not Whitelisted');
 				if (included == false) {
 					embed
 						.setDescription(embed.description + '\n\n' + msg.client.ch.stp(msg.lan.notWhitelisted, { warning: msg.client.constants.emotes.warning, loading: msg.client.constants.emotes.loading }))
 						.setColor('#ffff00');
 					if (msg.m) await msg.m.edit({ embeds: [embed] }).catch(() => { });
 					else msg.m = await msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
-					console.log('Message did not contain any Links yet');
 					if (blacklist.includes(url.hostname)) {
-						console.log('Blacklist included Link');
 						await end({ text: 'BLACKLISTED_LINK', link: url.hostname, msg: msg }, check, embed);
 						if (!check) included = true;
 					} else {
-						console.log('Blacklist did not include Link');
 						embed
 							.setDescription(embed.description + '\n\n' + msg.client.ch.stp(msg.lan.notBlacklisted, { warning: msg.client.constants.emotes.warning, loading: msg.client.constants.emotes.loading }))
 							.setColor('#ffff00');
@@ -107,11 +101,8 @@ async function run(msg, check) {
 							.get(`https://apibl.spamhaus.net/lookup/v1/dbl/${url.hostname}`)
 							.set('Authorization', `Bearer ${auth.spamhausToken}`)
 							.set('Content-Type', 'application/json').catch(() => { });
-						if (spamHausRes && spamHausRes.status == 200) {
-							console.log('SpamHaus included Link');
-							await end({ text: 'BLACKLISTED_LINK', link: url.hostname, msg: msg }, check, embed);
-						} else {
-							console.log('SpamHaus did not include Link');
+						if (spamHausRes && spamHausRes.status == 200) await end({ text: 'BLACKLISTED_LINK', link: url.hostname, msg: msg }, check, embed);
+						else {
 							let ageInDays;
 							const ip2whoisRes = await SA.get(`https://api.ip2whois.com/v2?key=${auth.ip2whoisToken}&domain=${url.hostname}&format=json`).catch(() => {});
 							if (ip2whoisRes && ip2whoisRes.text && JSON.parse(ip2whoisRes.text).domain_age) ageInDays = JSON.parse(ip2whoisRes.text).domain_age;
@@ -130,10 +121,7 @@ async function run(msg, check) {
 								.get(`https://www.virustotal.com/api/v3/domains/${url.hostname}`)
 								.set('x-apikey', auth.VTtoken).catch(() => { });
 							if (VTget) res = JSON.parse(VTget.text).error ? JSON.parse(VTget.text).error.code : JSON.parse(VTget.text).data.attributes.last_analysis_stats;
-							if (VTget && JSON.parse(VTget.text).data.attributes.last_analysis_stats) console.log('VT knows Link');
-							else console.log('VT does not know Link');
 							if (res == 'NotFoundError') {
-								console.log('VT has to analyze Link');
 								embed
 									.setDescription(embed.description + '\n\n' + msg.client.ch.stp(msg.lan.VTanalyze, { warning: msg.client.constants.emotes.warning }))
 									.setColor('#ffff00');
@@ -146,7 +134,6 @@ async function run(msg, check) {
 									.field('url', url.hostname).catch(() => { });
 								if (VTpost) res = JSON.parse(VTpost.text).data.id;
 								setTimeout(async () => {
-									console.log('VT analyze done');
 									const VTsecondGet = await SA
 										.get(`https://www.virustotal.com/api/v3/analyses/${res}`)
 										.set('x-apikey', auth.VTtoken).catch(() => { });
@@ -163,7 +150,6 @@ async function run(msg, check) {
 }
 
 async function evaluation(msg, VTresponse, url, attributes, check, embed) {
-	console.log('Evaluation called');
 	if (msg.m && !msg.m.logged) msg.client.ch.send(msg.client.channels.cache.get(msg.client.constants.standard.trashLogChannel), { content: msg.m.url }), msg.m.logged = true;
 	if (VTresponse && (VTresponse == 'QuotaExceededError' || (VTresponse.suspicious == undefined || VTresponse.suspicious == null))) {
 		if (embed.fields.length == 0) {
@@ -193,8 +179,6 @@ async function evaluation(msg, VTresponse, url, attributes, check, embed) {
 		else if (VTresponse.malicious > 5) severity = 10 + severity;
 		else if (VTresponse.malicious > 1) severity = 6 + severity;
 	}
-
-	console.log('Link Severity: ' + severity);
 
 	if (severity > 2) return await end({ msg: msg, text: 'SEVERE_LINK', res: VTresponse, severity: severity, link: url }, check, embed);
 	else if (attributes && +attributes.creation_date + '000' > Date.now() - 604800000) return await end({ msg: msg, text: 'NEW_URL', res: VTresponse, severity: severity, link: url }, check, embed);
@@ -268,7 +252,6 @@ async function end(data, check, embed, note) {
 		return true;
 	}
 	if (data.text == 'NEW_URL') {
-		console.log('Link is too new');
 		if (embed.fields.length == 0) {
 			embed
 				.addField(data.msg.language.result, data.msg.client.ch.stp(data.msg.lan.newLink, { cross: data.msg.client.constants.emotes.cross }))
