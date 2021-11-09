@@ -26,7 +26,7 @@ module.exports = {
 
 async function run(msg, check) {
 	const content = msg.content;
-	const args = content.replace(new RegExp('\\n', 'g'), ' ').split(/ +/);
+	const args = content.replace(new RegExp('\\n', 'g'), ' ').replace(new RegExp('https://', 'g'), ' https://').replace(new RegExp('http://', 'g'), ' http://').split(/ +/);
 	const links = new Array;
 	args.forEach((arg) => {
 		if (urlCheck.isUri(arg)) links.push(arg);
