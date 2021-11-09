@@ -37,7 +37,6 @@ module.exports = {
 		const res2 = await msg.client.ch.query('SELECT * FROM warns WHERE guildid = $1 AND userid = $2;', [msg.guild.id, msg.author.id]);
 		if (res2 && res2.rowCount > 0) warnnr = res2.rowCount;
 		else warnnr = 1;
-		msg.member = await msg.guild.members.fetch(msg.author.id);
 		if (!msg.member) return;
 		if (msg.member.permissions.has(8n)) return;
 		if (guildSettings.bpchannelid) {if (guildSettings.bpchannelid.includes(msg.channel.id)) return;}

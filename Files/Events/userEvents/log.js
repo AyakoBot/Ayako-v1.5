@@ -11,7 +11,7 @@ module.exports = {
 				const r = res.rows[0];
 				const logchannel = client.channels.cache.get(r.userEvents);
 				if (logchannel && logchannel.id) {
-					const member = await guild.members.fetch(newUser.id).catch(() => {});
+					const member = await guild.members.cache.get(newUser.id);
 					if (member) {
 						const language = await ch.languageSelector(guild);
 						const lan = language.userUpdate;
