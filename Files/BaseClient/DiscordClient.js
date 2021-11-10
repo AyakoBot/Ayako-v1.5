@@ -69,9 +69,10 @@ client.login(auth.token).then(() => {
 });
 
 client.invites = new Map();
+client.mutes = new Discord.Collection();
 client.channelWebhooks = new Map();
 client.constants = require('../Constants.json');
-client.setMaxListeners(61);
+client.setMaxListeners(63);
 
 client.eris = Eris;
 
