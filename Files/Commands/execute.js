@@ -5,10 +5,8 @@ module.exports = {
 	dm: true,
 	takesFirstArg: false,
 	// eslint-disable-next-line no-unused-vars
-	async execute(msg) {
-
-		msg.channel.send({content: 'yes'});
-		msg.channel.send('no');
-		
+	execute(msg) {
+		msg.client.eris.createMessage(msg.channel.id, 'no').then((m) => console.log(m));
+		msg.channel.send({ content: 'yes' }).then((m) => console.log(m));
 	}
 };
