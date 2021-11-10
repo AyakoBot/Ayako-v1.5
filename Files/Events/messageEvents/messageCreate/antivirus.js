@@ -34,8 +34,7 @@ async function run(msg, check) {
 	let list = new Array, url;
 	for (let i = 0; i < linkLists.length; i++) {
 		url = await SA.get(linkLists[i]).catch(() => { });
-		url = url ? url.text.split(/\n+/) : null;
-		list = [...list, ...url];
+		url = url ? list = [...list, ...url.text.split(/\n+/)] : null;
 	}
 	const blacklist = [...new Set(list)];
 	blacklist.forEach((entry, index) => {
