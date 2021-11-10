@@ -13,7 +13,7 @@ module.exports = {
 		let logchannel;
 		let role;
 		const resM = await msg.client.ch.query('SELECT * FROM guildsettings WHERE guildid = $1;', [msg.guild.id]);
-		if (resM && resM.rowCount > 0) role = msg.guild.cache.get(resM.rows[0].muteroleid);
+		if (resM && resM.rowCount > 0) role = msg.guild.roles.cache.get(resM.rows[0].muteroleid);
 		const member = await msg.guild.members.fetch(target.id).catch(() => { });
 		const exec = await msg.guild.members.fetch(executor.id).catch(() => { });
 		const memberClient = msg.guild.me;
@@ -41,7 +41,7 @@ module.exports = {
 				if (res && res.rowCount > 0) logchannel = msg.client.channels.cache.get(res.rows[0].guildEvents);
 				const embed = new Discord.MessageEmbed()
 					.setColor(con.color)
-					.setAuthor(lan.author, msg.client.ch.displayAvatarURL(executor), msg.constants.standard.invite)
+					.setAuthor(lan.author, msg.client.ch.displayAvatarURL(executor), msg.client.constants.standard.invite)
 					.setDescription(msg.client.ch.stp(lan.description, {user: executor, target: target}))
 					.setTimestamp()
 					.setThumbnail(msg.client.ch.displayAvatarURL(target))

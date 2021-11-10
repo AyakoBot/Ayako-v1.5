@@ -66,7 +66,7 @@ module.exports = {
 		let banreason = '';
 		if (reason.length == 0) banreason = msg.lan.reason;
 		else reason.forEach((word) => banreason += ` ${word}`);
-		const con = msg.constants.commands.massban;
+		const con = msg.client.constants.commands.massban;
 		const uniqueUsers = users.filter((item, pos ,self) => self.indexOf(item) == pos);
 		const uniqueFails = failed.filter((item, pos ,self) => self.indexOf(item) == pos);
 		const descS = []; const descF = [];
