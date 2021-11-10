@@ -112,7 +112,7 @@ module.exports = {
 							const warn = res.rows.filter(r => r.row_number == number)[0];
 							const warnEmbed = new Discord.MessageEmbed()
 								.setDescription(`**${msg.language.reason}:**\n${warn.reason}`)
-								.setAuthor(msg.lan.warnOf + user.tag, msg.con.author.image, msg.client.ch.stp(msg.client.constants.standard.discordUrl, {msg: msg}))
+								.setAuthor(msg.lan.warnOf + user.tag, msg.con.author.image, msg.client.ch.stp(msg.client.constants.standard.discordUrlDB, {guildid: msg.guild.id, channelid: msg.channel.id, msgid: warn.msgid}))
 								.addFields(
 									{ name: msg.lan.date, value: `<t:${warn.dateofwarn.slice(0, -3)}:F> (<t:${warn.dateofwarn.slice(0, -3)}:R>)`, inline: false },
 									{ name: msg.lan.warnedIn, value: `<#${warn.warnedinchannelid}>\n\`${warn.warnedinchannelname}\``, inline: false },
@@ -135,7 +135,7 @@ module.exports = {
 							if (muterole && member && member.roles.cache.get(muterole.id)) notClosed = msg.client.ch.stp(msg.lan.abortedMute, { time: `<t:${mute.duration.slice(0, -3)}:F> (<t:${mute.duration.slice(0, -3)}:R>)`});
 							const muteEmbed = new Discord.MessageEmbed()
 								.setDescription(`**${msg.language.reason}:**\n${mute.reason}`)
-								.setAuthor(msg.lan.muteOf + user.tag, msg.con.author.image, msg.client.ch.stp(msg.client.constants.standard.discordUrl, { msg: msg }))
+								.setAuthor(msg.lan.muteOf + user.tag, msg.con.author.image, msg.client.ch.stp(msg.client.constants.standard.discordUrlDB, { guildid: msg.guild.id, channelid: msg.channel.id, msgid: mute.msgid }))
 								.addFields(
 									{ name: msg.lan.date, value: `<t:${mute.dateofwarn.slice(0, -3)}:F> (<t:${mute.dateofwarn.slice(0, -3)}:R>)`, inline: false },
 									{ name: msg.lan.mutedIn, value: `<#${mute.warnedinchannelid}>\n\`${mute.warnedinchannelname}\``, inline: false },

@@ -295,7 +295,8 @@
             "name": "Ayako Logging",
             "avatar": "https://cdn.discordapp.com/attachments/760152457799401532/839644223074336789/6E81E655-B92C-4EC6-8015-20679059B454.png"
         },
-        "discordUrl": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
+        "discordUrl": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}",
+        "discordUrlDB": "https://discord.com/channels/{{guildid}}/{{hannelid}}/{{msgid}}"
     },
     "emotes": {
         "cross": "<:Cross:902269073805701211>",
