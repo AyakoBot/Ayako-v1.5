@@ -26,12 +26,13 @@ module.exports = {
 		const count = {warns: 0, mutes: 0};
 		const options = {warns: new Array, mutes: new Array};
 
-		const res = await msg.client.ch.query('SELECT *, ROW_NUMBER() OVER () FROM warns WHERE userid = $1;', [user.id]);
+		const res = await msg.client.ch.query('SELECT * FROM warns WHERE userid = $1 ORDER BY dateofwarn ASC;', [user.id]);
 		if (res && res.rowCount > 0) {
-			res.rows.forEach(r => {
+			res.rows.forEach((r, i) => res.rows[i].row_number = i);
+			res.rows.forEach((r) => {
 				const dateOfWarn = new Date(new Number(r.dateofwarn));
-				if (r.type == 'Warn') options.warns.push({ label: `${msg.language.number}: ${r.row_number} | ${dateOfWarn.getDate()} ${msg.language.months[dateOfWarn.getMonth()]} ${dateOfWarn.getFullYear()}`, value: r.row_number });
-				if (r.type == 'Mute') options.mutes.push({ label: `${msg.language.number}: ${r.row_number} | ${dateOfWarn.getDate()} ${msg.language.months[dateOfWarn.getMonth()]} ${dateOfWarn.getFullYear()}`, value: r.row_number });
+				if (r.type == 'Warn') options.warns.push({ label: `${msg.language.number}: ${r.row_number} | ${dateOfWarn.getDate()} ${msg.language.months[dateOfWarn.getMonth()]} ${dateOfWarn.getFullYear()}`, value: `${r.row_number}` });
+				if (r.type == 'Mute') options.mutes.push({ label: `${msg.language.number}: ${r.row_number} | ${dateOfWarn.getDate()} ${msg.language.months[dateOfWarn.getMonth()]} ${dateOfWarn.getFullYear()}`, value: `${r.row_number}` });
 			});
 			if (res.rows.filter(row => row.type == 'Warn').length > 0) count.warns = res.rows.filter(row => row.type == 'Warn').length, msg.pages.warn = 1, msg.pages.warnMax = Math.ceil(options.warns.length / 25);
 			if (res.rows.filter(row => row.type == 'Mute').length > 0) count.mutes = res.rows.filter(row => row.type == 'Mute').length, msg.pages.mute = 1, msg.pages.muteMax = Math.ceil(options.mutes.length / 25);
