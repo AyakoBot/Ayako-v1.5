@@ -1,6 +1,6 @@
 module.exports = {
 	async execute(msg) {
-		if (msg.guild) msg.member = await msg.guild.members.fetch(msg.author.id);
+		if (msg.guild && msg.author.discriminator !== '0000') msg.member = await msg.guild.members.fetch(msg.author.id);
 		require('./commandHandler').execute(msg);
 		require('./afk').execute(msg);
 		require('./disboard').execute(msg);
