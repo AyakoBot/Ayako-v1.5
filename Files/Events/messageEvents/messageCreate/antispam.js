@@ -27,9 +27,7 @@ let data = {
 
 module.exports = {
 	async execute(msg) {
-		if (msg.channel.type == 'DM') return;
-		if (msg.author.id === msg.client.user.id) return;
-		if (msg.author.bot) return;
+		if (msg.channel.type == 'DM' || msg.author.id === msg.client.user.id || msg.author.bot) return;
 		let warnnr, guildSettings;
 		const res = await msg.client.ch.query('SELECT * FROM antispamsettings WHERE guildid = $1 AND active = $2;', [msg.guild.id, true]);
 		if (res && res.rowCount > 0) guildSettings = res.rows[0];
@@ -39,9 +37,9 @@ module.exports = {
 		else warnnr = 1;
 		if (!msg.member) return;
 		if (msg.member.permissions.has(8n)) return;
-		if (guildSettings.bpchannelid) {if (guildSettings.bpchannelid.includes(msg.channel.id)) return;}
-		if (guildSettings.bpuserid) {if (guildSettings.bpuserid.includes(msg.author.id)) return;}
-		if (guildSettings.bproleid) {if (msg.member.roles.cache.some(role => guildSettings.bproleid.includes(role.id))) return;}
+		if (guildSettings.bpchannelid && guildSettings.bpchannelid.includes(msg.channel.id)) return;
+		if (guildSettings.bpuserid && guildSettings.bpuserid.includes(msg.author.id)) return;
+		if (guildSettings.bproleid && msg.member.roles.cache.some(role => guildSettings.bproleid.includes(role.id))) return;
 		msg.language = await msg.client.ch.languageSelector(msg.guild);
 		const banUser = async () => {
 			data.messageCache = data.messageCache.filter(m => m.author !== msg.author.id);
