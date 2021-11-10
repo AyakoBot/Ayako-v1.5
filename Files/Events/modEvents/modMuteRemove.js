@@ -27,6 +27,11 @@ module.exports = {
 			msg.m?.edit({embeds: [em]});
 			return false;
 		}
+		if ((memberClient.roles.highest.rawPosition < member?.roles.highest.rawPosition || memberClient.roles.highest.rawPosition == member?.roles.highest.rawPosition) || !memberClient.permissions.has(268435456)) {
+			em.setDescription(msg.client.constants.emotes.cross + ' ' + lan.meNoPerms);
+			msg.m?.edit({ embeds: [em] });
+			return false;
+		}
 		if (role) {
 			if (!member?.roles.cache.has(role.id)) {
 				em.setDescription(msg.client.constants.emotes.cross + ' ' +lan.hasNoRole);
@@ -34,9 +39,9 @@ module.exports = {
 				return false;
 			}
 			let err;
+
 			const unmute = await msg.guild.members.cache.get(target.id).roles.remove(role).catch(() => {});
 			if (unmute) {
-				if ((memberClient.roles.highest.rawPosition < member?.roles.highest.rawPosition || memberClient.roles.highest.rawPosition == member?.roles.highest.rawPosition) || !memberClient.permissions.has(268435456)) return msg.client.ch.reply(msg, lan.meNoPerms);
 				const res = await msg.client.ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [msg.guild.id]);
 				if (res && res.rowCount > 0) logchannel = msg.client.channels.cache.get(res.rows[0].guildEvents);
 				const embed = new Discord.MessageEmbed()
@@ -67,6 +72,7 @@ module.exports = {
 		}
 		em.setDescription(msg.client.constants.emotes.tick + ' ' + msg.client.ch.stp(lan.success, { target: target }));
 		msg.m?.edit({embeds: [em]});
+		msg.client.ch.query(`UPDATE warns SET `)
 		return true;
 	}
 };

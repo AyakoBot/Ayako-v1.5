@@ -8,8 +8,10 @@ module.exports = {
 		const em = new Discord.MessageEmbed()
 			.setColor(con.color)
 			.setDescription(msg.client.constants.emotes.loading + ' ' +lan.loading);
+		console.log(1, msg.m);
 		if (msg.m) await msg.m.edit({ embeds: [em] });
 		else msg.m = await msg.client.ch.reply(msg, em);
+		console.log(2, msg.m);
 		let role;
 		let logchannel;
 		const member = await msg.guild.members.fetch(target.id).catch(() => { });
@@ -41,11 +43,13 @@ module.exports = {
 			let err;
 			const Mute = await msg.guild.members.cache.get(target.id).roles.add(role).catch(() => {});
 			if (Mute) {
-				msg.client.ch.query(`
+				const insert = await msg.client.ch.query(`
 				INSERT INTO warns 
 				(guildid, userid, reason, type, duration, closed, dateofwarn, warnedinchannelid, warnedbyuserid, warnedinchannelname, warnedbyusername) VALUES 
 				($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);`, 
 				[msg.guild.id, target.id, reason, 'Mute', Date.now() + +duration, false, Date.now(), msg.channel.id, executor.id, msg.channel.name, msg.author.username]);
+				if (insert && insert.rowCount > 0) msg.row_number = insert.rows[0].row_number;
+				console.log(insert);
 				const dmChannel = await target.createDM().catch(() => {});
 				const DMembed = new Discord.MessageEmbed()
 					.setDescription(`${language.reason}: \`\`\`${reason}\`\`\``)
@@ -78,9 +82,9 @@ module.exports = {
 		const res = await msg.client.ch.query('SELECT * FROM warns WHERE guildid = $1 AND userid = $2;', [msg.guild.id, target.id]);
 		if (res && res.rowCount > 0) warnnr = res.rowCount + 1;
 		else warnnr = 1;
-		msg.client.ch.query('INSERT INTO warns (guildid, userid, reason, type, dateofwarn, warnedinchannelid, warnedbyuserid, warnedinchannelname, warnedbyusername, msgurl) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);', [msg.guild.id, target.id, reason, 'Warn', Date.now(), msg.channel.id, executor.id, msg.channel.name, executor.username, msg.url]);
 		em.setDescription(msg.client.constants.emotes.tick + ' ' + msg.client.ch.stp(lan.success, { target: target, nr: warnnr }));
 		msg.m?.edit({embeds: [em]});
+		msg.client.mutes.set(`${msg.guild.id}-${target.id}`, setTimeout(() => msg.client.emit('modMuteRemove', msg.client.user, target, language.ready.unmute.reason, msg), duration));
 		return true;
 	}
 };
