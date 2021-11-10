@@ -11,6 +11,7 @@ module.exports = {
 				let msg = await client.channels.cache.get(row.warnedinchannelid)?.messages.fetch(row.msgid).catch(() => {});
 				if (!msg) msg = { author: client.users.cache.get(row.warnedbyuserid), client: client };
 				msg.language = language, msg.client = client, msg.guild = guild;
+				msg.r = row;
 				if (timeLeft <= 0) timeLeft = 100;
 				client.mutes.set(`${row.guildid}-${row.userid}`, setTimeout(() => client.emit('modMuteRemove', client.user, client.users.cache.get(row.userid), language.ready.unmute.reason, msg), timeLeft));
 			}
