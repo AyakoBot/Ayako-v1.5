@@ -8,10 +8,8 @@ module.exports = {
 		const em = new Discord.MessageEmbed()
 			.setColor(con.color)
 			.setDescription(msg.client.constants.emotes.loading + ' ' +lan.loading);
-		console.log(1, msg.m);
 		if (msg.m) await msg.m.edit({ embeds: [em] });
 		else msg.m = await msg.client.ch.reply(msg, em);
-		console.log(2, msg.m);
 		let role;
 		let logchannel;
 		const member = await msg.guild.members.fetch(target.id).catch(() => { });
