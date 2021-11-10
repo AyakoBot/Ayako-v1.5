@@ -72,7 +72,7 @@ module.exports = {
 		}
 		em.setDescription(msg.client.constants.emotes.tick + ' ' + msg.client.ch.stp(lan.success, { target: target }));
 		msg.m?.edit({embeds: [em]});
-		msg.client.ch.query(`UPDATE warns SET `)
+		msg.client.ch.query('UPDATE warns SET closed = true WHERE dateofwarn = $1 AND guildid = $2 AND userid = $3;', [msg.r.dateofwarn, msg.guild.id, target.id]);
 		return true;
 	}
 };
