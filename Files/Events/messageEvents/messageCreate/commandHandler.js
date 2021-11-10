@@ -117,8 +117,8 @@ module.exports = {
 	},
 	async editVerifier(msg) {
 		const m = await msg.client.ch.reply(msg, msg.client.language.commands.commandHandler.verifyMessgae);
-		m.react(msg.constants.emotes.tickID).catch(() => {});
-		m.react(msg.constants.emotes.crossID).catch(() => {});
+		m.react(msg.client.constants.emotes.tickID).catch(() => {});
+		m.react(msg.client.constants.emotes.crossID).catch(() => {});
 		msg.channel.awaitMessages(m => m.author.id == msg.author.id,
 			{max: 1, time: 30000}).then(rawcollected => {
 			if (!rawcollected.first()) return;
@@ -130,10 +130,10 @@ module.exports = {
 				}
 			} else return m.delete().catch(() => {});
 		}).catch(() => {m.delete().catch(() => {});});
-		m.awaitReactions((reaction, user) => (reaction.emoji.id === msg.constants.emotes.tickID || reaction.emoji.id === msg.constants.emotes.crossID) && user.id === msg.author.id,
+		m.awaitReactions((reaction, user) => (reaction.emoji.id === msg.client.constants.emotes.tickID || reaction.emoji.id === msg.client.constants.emotes.crossID) && user.id === msg.author.id,
 			{max: 1, time: 60000}).then(rawcollected => {
 			if (!rawcollected.first()) return;
-			if (rawcollected.first()._emoji.id == msg.constants.emotes.tickID) {
+			if (rawcollected.first()._emoji.id == msg.client.constants.emotes.tickID) {
 				m.delete().catch(() => {});
 				this.commandExe(msg);
 			} else return m.delete().catch(() => {});
