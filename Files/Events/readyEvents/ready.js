@@ -13,6 +13,7 @@ module.exports = {
 		require('./reminder.js').execute();
 		client.guilds.cache.forEach(async guild => client.invites.set(guild.id, await guild.invites.fetch().catch(() => {})));
 		require('./webhooks.js').execute();
+		require('./disboard.js').execute();
 		setInterval(() => {
 			require('./colorReminder').execute();
 			//require('./websiteFetcher').execute();
@@ -24,12 +25,12 @@ module.exports = {
 				require('../guildEvents/guildMemberAdd/antiraid').resetData();
 			}
 		}, 3600000);
-		setInterval(() => {require('./TimedManagers/timedManagerSplitter').execute();}, 2000);
-		setInterval(() => {require('./giveaway.js').execute();}, 11000);
-		setInterval(() => {require('./antiraidBanAdd.js').execute();}, 10000);
-		setInterval(() => {require('./prunelog.js').execute();}, 120000);
-		setInterval(() => {require('./presence.js').execute();}, 60000);
+		setInterval(() => require('./TimedManagers/timedManagerSplitter').execute(), 2000);
+		setInterval(() => require('./giveaway.js').execute(), 11000);
+		setInterval(() => require('./antiraidBanAdd.js').execute(), 10000);
+		setInterval(() => require('./prunelog.js').execute(), 120000);
+		setInterval(() => require('./presence.js').execute(), 60000);
 		require('./separators.js').execute();
-		setInterval(() => {console.log(new Date().toUTCString());}, 600000);
+		setInterval(() => console.log(new Date().toLocaleString()), 600000);
 	}
 };
