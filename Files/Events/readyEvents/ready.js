@@ -10,6 +10,7 @@ module.exports = {
 		// statcord.autopost();
 		require('./slashcommands.js').execute();
 		require('./muteManager.js').execute();
+		require('./reminder.js').execute();
 		client.guilds.cache.forEach(async guild => client.invites.set(guild.id, await guild.invites.fetch().catch(() => {})));
 		require('./webhooks.js').execute();
 		setInterval(() => {
