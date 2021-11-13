@@ -69,8 +69,10 @@ async function run(msg, check) {
 		const embed = new Discord.MessageEmbed();
 		if (!url.hostname) url = new URL(url);
 		if (url.hostname) {
-			const website = await SA.head(url).catch(() => {});
-			if (!website || website.text == 'Domain not found') return end({ msg: msg, text: 'NOT_EXISTENT', res: null, severity: null, link: url }, check, embed);
+			let enteredWebsite, baseWebsite;
+			enteredWebsite = await SA.head(url).catch((e) => enteredWebsite = e);
+			baseWebsite = await SA.head(url.hostname).catch((e) => baseWebsite = e);
+			if ((!enteredWebsite || enteredWebsite.text == 'Domain not found') && (!baseWebsite || baseWebsite.text == 'Domain not found')) return end({ msg: msg, text: 'NOT_EXISTENT', res: null, severity: null, link: url }, check, embed);
 			if (check) embed.setDescription(`${msg.lan.checking} \`${url}\``);
 			else embed.setDescription('');
 			let include = false;
