@@ -414,17 +414,7 @@ async function repeater(msg, i, embed, values, answer, AddRemoveEditView, fail, 
 				} else if (valName) vals.push(assign);
 			}
 			msg.client.ch.query(`INSERT INTO ${msg.client.constants.commands.settings.tablenames[msg.file.name][0]} (${msg.client.constants.commands.settings.setupQueries[msg.file.name].cols[0]}) VALUES (${valDeclaration});`, vals);
-			const embed = new Discord.MessageEmbed()
-				.setAuthor(
-					msg.client.ch.stp(msg.lanSettings.authorEdit, {type: msg.lan.type}), 
-					msg.client.constants.standard.image, msg.client.constants.standard.invite
-				)
-				.setColor(msg.client.constants.commands.settings.color)
-				.setDescription(msg.client.ch.stp(msg.lanSettings.done, {loading: msg.client.constants.emotes.loading}));
-			if (answer) answer.update({embeds: [embed], components: []}).catch(() => {});
-			else if (msg.m) msg.m.edit({embeds: [embed], components: []}).catch(() => {});
-			else msg.m = await msg.client.ch.reply(msg, {embeds: [embed], components: []});
-			setTimeout(() => {module.exports.edit(msg, null, {});}, 1000);
+			module.exports.edit(msg, null, {});
 			misc.log(null, msg, newSettings);
 		} else if (AddRemoveEditView == 'remove') {
 			let oldRow, oldSettings;
@@ -449,17 +439,7 @@ async function repeater(msg, i, embed, values, answer, AddRemoveEditView, fail, 
 				else nameText += `${names[j]} = $${j+1}`;
 			}
 			msg.client.ch.query(`DELETE FROM ${msg.client.constants.commands.settings.tablenames[msg.file.name][0]} WHERE ${nameText};`, vals);
-			const embed = new Discord.MessageEmbed()
-				.setAuthor(
-					msg.client.ch.stp(msg.lanSettings.authorEdit, {type: msg.lan.type}), 
-					msg.client.constants.standard.image, msg.client.constants.standard.invite
-				)
-				.setColor(msg.client.constants.commands.settings.color)
-				.setDescription(msg.client.ch.stp(msg.lanSettings.done, {loading: msg.client.constants.emotes.loading}));
-			if (answer) answer.update({embeds: [embed], components: []}).catch(() => {});
-			else if (msg.m) msg.m.edit({embeds: [embed], components: []}).catch(() => {});
-			else msg.m = await msg.client.ch.reply(msg, {embeds: [embed], components: []});
-			setTimeout(() => {module.exports.edit(msg, null, {});}, 1000);
+			module.exports.edit(msg, null, {});
 			misc.log(oldSettings, msg, null);
 		} else if (AddRemoveEditView == 'edit') {
 			let oldRow, oldSettings;
@@ -482,19 +462,9 @@ async function repeater(msg, i, embed, values, answer, AddRemoveEditView, fail, 
 			}
 			msg.client.constants.commands.settings.editReq.splice(2, 1);
 			msg.client.ch.query(`UPDATE ${msg.client.constants.commands.settings.tablenames[msg.file.name][0]} SET ${msg.assigner} = $1 WHERE id = $2;`, [values[msg.assigner], values.id]);
-			const embed = new Discord.MessageEmbed()
-				.setAuthor(
-					msg.client.ch.stp(msg.lanSettings.authorEdit, {type: msg.lan.type}), 
-					msg.client.constants.standard.image, msg.client.constants.standard.invite
-				)
-				.setColor(msg.client.constants.commands.settings.color)
-				.setDescription(msg.client.ch.stp(msg.lanSettings.done, {loading: msg.client.constants.emotes.loading}));
-			if (answer) answer.update({embeds: [embed], components: []}).catch(() => {});
-			else if (msg.m) msg.m.edit({embeds: [embed], components: []}).catch(() => {});
-			else msg.m = await msg.client.ch.reply(msg, {embeds: [embed], components: []});
 			msg.r[msg.assigner] = values[msg.assigner];
-			if (!comesFromSRM) setTimeout(() => {module.exports.edit(msg, null, {});}, 1000);
-			else setTimeout(() => {require('./singleRowManager').redirecter(msg, null, AddRemoveEditView, fail, values, values.id ? 'redirecter' : null);}, 1000);
+			if (!comesFromSRM) module.exports.edit(msg, null, {});
+			else require('./singleRowManager').redirecter(msg, null, AddRemoveEditView, fail, values, values.id ? 'redirecter' : null);
 			misc.log(oldSettings, msg, newSettings);
 		} else editer(msg, values, fail, answer, AddRemoveEditView, comesFromSRM);
 	} else if (srmEditing && comesFromSRM) editer(msg, values, fail, answer, AddRemoveEditView, comesFromSRM);
@@ -526,25 +496,6 @@ async function editer(msg, values, fail, answer, AddRemoveEditView, comesFromSRM
 			else values[msg.assigner].push(id);
 		}));
 	}
-	const embed = new Discord.MessageEmbed()
-		.setAuthor(
-			msg.client.ch.stp(msg.lanSettings.authorEdit, {type: msg.lan.type}), 
-			msg.client.constants.standard.image, msg.client.constants.standard.invite
-		)
-		.setColor(msg.client.constants.commands.settings.color)
-		.setDescription(msg.client.ch.stp(msg.lanSettings.done, {loading: msg.client.constants.emotes.loading}));
-	if (Array.isArray(oldSettings) && oldSettings.length > 0) embed.addField(msg.lanSettings.oldValue, `${oldSettings.map(f => msg.compatibilityType == 'channels' ? ` <#${f}>` : msg.compatibilityType == 'roles' ? ` <@&${f}>` : msg.compatibilityType == 'users' ? ` <@${f}>` : ` ${f}`)}`);
-	else if (oldSettings !== null && oldSettings !== undefined) embed.addField(msg.lanSettings.oldValue, `${oldSettings}`);
-	else embed.addField(msg.lanSettings.oldValue, msg.language.none);
-	if (Array.isArray(values[msg.assigner]) && values[msg.assigner].length > 0) embed.addField(msg.lanSettings.newValue, `${values[msg.assigner].map(f => msg.compatibilityType == 'channels' ? ` <#${f}>` : msg.compatibilityType == 'roles' ? ` <@&${f}>` : msg.compatibilityType == 'users' ? ` <@${f}>` : ` ${f}`)}`);
-	else if (values[msg.assigner] !== null && values[msg.assigner] !== undefined) embed.addField(msg.lanSettings.newValue, `${Array.isArray(values[msg.assigner]) ? msg.language.none : values[msg.assigner]}`);
-	else embed.addField(msg.lanSettings.newValue, msg.language.none);		
-	if (fail && fail.length > 0) {
-		if (Array.isArray(fail)) embed.addField(msg.language.error, `${fail.map(f => ` ${f}`)}`);
-		else embed.addField(msg.language.error, fail);
-	}
-	if (answer) answer.update({embeds: [embed], components: []}).catch(() => {});
-	else msg.m.edit({embeds: [embed], components: []}).catch(() => {});
 	if (values[msg.assigner] !== undefined && values[msg.assigner] !== null) {
 		if (comesFromSRM) {
 			if (Array.isArray(values[msg.assigner])) {
@@ -557,7 +508,7 @@ async function editer(msg, values, fail, answer, AddRemoveEditView, comesFromSRM
 				else await msg.client.ch.query(`UPDATE ${msg.client.constants.commands.settings.tablenames[msg.file.name][0]} SET ${msg.assigner} = $1 WHERE id = $2;`, [null, values.id]); 
 			} else await msg.client.ch.query(`UPDATE ${msg.client.constants.commands.settings.tablenames[msg.file.name][0]} SET ${msg.assigner} = $1 WHERE id = $2;`, [values[msg.assigner], values.id]); 
 		}
-		setTimeout(() => {require('./singleRowManager').redirecter(msg, null, AddRemoveEditView, fail, values.id ? {id: values.id} : null, values.id ? 'redirecter' : null);}, 1000);
+		require('./singleRowManager').redirecter(msg, null, AddRemoveEditView, fail, values.id ? {id: values.id} : null, values.id ? 'redirecter' : null);
 	}
 	misc.log(oldRow, msg, newRow);
 }
