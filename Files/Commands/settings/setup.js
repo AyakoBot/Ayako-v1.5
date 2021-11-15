@@ -49,16 +49,7 @@ module.exports = {
 			} else msg.client.ch.notYours(clickButton, msg);
 		});
 		buttonsCollector.on('end', (collected, reason) => {
-			if (reason == 'time') {
-				const embed = new Discord.MessageEmbed()
-					.setAuthor(
-						msg.client.ch.stp(msg.lanSettings.author, {type: msg.lan.type}), 
-						msg.client.constants.emotes.settingsLink, 
-						msg.client.constants.standard.invite
-					)
-					.setDescription(msg.language.timeError);
-				msg.m.edit({embeds: [embed], components: []}).catch(() => {});
-			}
+			if (reason == 'time') msg.client.ch.collectorEnd(msg);
 		});
 		async function yesFunc(message, clickButton) {
 			msg.client.constants.commands.settings.setupQueries[msg.file.name].cols.forEach((names, index) => {
@@ -73,16 +64,7 @@ module.exports = {
 				msg.client.ch.query(`INSERT INTO ${msg.client.constants.commands.settings.tablenames[msg.file.name][index]} (${cols}) VALUES (${valDeclaration});`, values);
 			});
 			if (message) message.delete().catch(() => {});
-			const endEmbed = new Discord.MessageEmbed()
-				.setAuthor(
-					msg.lanSettings.setup.author, 
-					msg.client.constants.emotes.settingsLink, 
-					msg.client.constants.standard.invite
-				)
-				.setDescription(msg.client.ch.stp(msg.lanSettings.setup.done, {loading: msg.client.constants.emotes.loading}));
-			if (clickButton) clickButton.update({embeds: [endEmbed], components: []}).catch(() => {});
-			else msg.m.edit({embeds: [endEmbed], components: []}).catch(() => {});
-			setTimeout(() => {Settings.edit(msg, msg.file);}, 1000);
+			Settings.edit(msg, msg.file, clickButton);
 		}
 		async function noFunc(message, clickButton) {
 			if (message) message.delete().catch(() => {});
