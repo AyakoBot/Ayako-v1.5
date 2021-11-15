@@ -735,6 +735,13 @@
         "ALL": "```All Messages```\n`(Members will receive Notifications for all Messages by Default)`",
         "MENTIONS": "```Only Mentions```\n`(Members will receive Notifications only for @mentions by Default)`"
     },
+    "autopunish": {
+        "1": "Temp-Mute",
+        "2": "Mute",
+        "3": "Kick",
+        "4": "Temp-Ban",
+        "5": "Ban"
+    },
     "defaultMessageNotificationsName": "Default Message Notification",
     "vanityURLCode": "Vanity URL Code",
     "rulesChannelID": "Rules Channel",
@@ -839,7 +846,8 @@
         "antivirus": "Ayako Anti-Virus",
         "blacklist": "Ayako Blacklist",
         "statschannel": "Ayako StatsChannel",
-        "separators": "Ayako Separators"
+        "separators": "Ayako Separators",
+        "autopunish": "Ayako Auto-Punish | Exceeded Warn Limit"
     },
     "statschanneltypes": {
         "member": {
@@ -1551,6 +1559,88 @@
                         "name": "Active",
                         "answers": "`True` or `False`",
                         "recommended": "Recommended: `True`"
+                    }
+                }
+            },
+            "autopunish": {
+                "category": ["Auto Moderation"],
+                "type": "Auto-Punish",
+                "punishment": "Punishment",
+                "duration": "Duration",
+                "warnamount": "Apply this Punishment after {{warns}} Warns",
+                "ban": "Ban",
+                "kick": "Kick",
+                "mute": "Mute",
+                "tempmute": "Temp-Mute",
+                "tempban": "Temp-Ban",
+                "edit": { 
+                    "ban": {
+                        "name": "Ban",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "kick": {
+                        "name": "Kick",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `False`"
+                    },
+                    "mute": {
+                        "name": "Mute",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "tempmute": {
+                        "name": "Mute",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "tempban": {
+                        "name": "Mute",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "duration": {
+                        "name": "Duration",
+                        "answers": "Duration of Punishment",
+                        "recommended": "Examples: `2 hours 15 min`, `2h 15m`"
+                    },
+                    "active": {
+                        "name": "Active",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "warnamount": {
+                        "name": "Apply this Punishment after {{warns}} Warns",
+                        "answers": "`Number`"
+                    }
+                },
+                "otherEdits": {
+                    "add": {
+                        "name": "Add a Punishment Measure",
+                        "process": {
+                            "0": "Select a Punishment"
+                        }
+                    },
+                    "remove": {
+                        "name": "Remove a Punishment Measure",
+                        "process": {
+                            "0": "Respond with the ID of the Separator you want to delete"
+                        }
+                    },
+                    "edit": {
+                        "active": "Whether these Punishment Measure is enabled or not",
+                        "duration": "The Duration this Punishment Measure should last for",
+                        "punishment": "The Punishment applied",
+                        "warnamount": "The Amount of warns required for this Punishment to be applied",
+                        "process": {
+                            "0": "What would you like to edit?\nClick on one of the Buttons"
+                        },
+                        "note": {
+                            "active": "Select `True` or `False`",
+                            "duration": "Respond with a Time",
+                            "punishment": "Select the Punishment itself",
+                            "warnamount": "Select a Number"
+                        }
                     }
                 }
             },
@@ -2388,7 +2478,7 @@
                         }
                     },
                     "edit": {
-                        "active": "Whether these Separator are enabled or not",
+                        "active": "Whether these Separator is enabled or not",
                         "separator": "The Separator Role, it will be applied to Members if they fulfill following conditions:\n**Self-Adapting `True`**: \nLooking at the Role list of the Server, The Separator Role will be applied if a Member gains any Role between the Seaprator and the Stop Role, if no Stop Role is defined it stops at the top of the Role List. Any Role moved between these 2 Roles or above the Separator Role will instantly start triggering the Separator Role\n\n**Self-Adapting `False`**:\nThe Separator Role will be assinged to Members with at least one of the defined Roles",
                         "stoprole": "The Role which marks the end to the Separator Roles trigger.\nIf none is defined the Separator Role will work till the very top of the Role List",
                         "isvarying": "The \"Self-Adapt\" Mode. Wether the Separator should follow defined Roles or Self-Adjust to Support every Role between it and the Stop Role (if no Stop Role is defined the Separator Role will stop at the top of the Role List)",

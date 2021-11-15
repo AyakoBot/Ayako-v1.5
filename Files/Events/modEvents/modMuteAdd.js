@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 
 module.exports = {
 	async execute(executor, target, reason, msg) {
+		console.log(2);
 		msg.m ? msg.m = await msg.m.fetch() : null;
 		let mexisted = msg.m ? true : false;
 		const language = await msg.client.ch.languageSelector(msg.guild);
