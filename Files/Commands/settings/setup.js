@@ -52,7 +52,7 @@ module.exports = {
 			if (reason == 'time') msg.client.ch.collectorEnd(msg);
 		});
 		async function yesFunc(message, clickButton) {
-			msg.client.constants.commands.settings.setupQueries[msg.file.name].cols.forEach((names, index) => {
+			msg.client.constants.commands.settings.setupQueries[msg.file.name].cols.forEach(async (names, index) => {
 				const values = [], cols = names, vals = msg.client.constants.commands.settings.setupQueries[msg.file.name].vals[index];
 				vals.forEach(val => {
 					if (typeof(val) == 'string') values.push(msg.client.ch.stp(val, {msg: msg}));
@@ -61,7 +61,7 @@ module.exports = {
 				let valDeclaration = '';
 				for (let i = 0; i < values.length; i++) valDeclaration += `$${i+1}, `;
 				valDeclaration = valDeclaration.slice(0, valDeclaration.length-2);
-				msg.client.ch.query(`INSERT INTO ${msg.client.constants.commands.settings.tablenames[msg.file.name][index]} (${cols}) VALUES (${valDeclaration});`, values);
+				await msg.client.ch.query(`INSERT INTO ${msg.client.constants.commands.settings.tablenames[msg.file.name][index]} (${cols}) VALUES (${valDeclaration});`, values);
 			});
 			if (message) message.delete().catch(() => {});
 			Settings.edit(msg, msg.file, clickButton);

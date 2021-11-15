@@ -103,8 +103,8 @@ module.exports = {
 			.setLabel(msg.language.List)
 			.setDisabled(embed.fields.length > 0 ? false : true);
 		const row = msg.client.ch.buttonRower([[add, remove, list]]);
-		if (answer) answer.update({embeds: [embed], components: row}).catch(() => {});
-		else if (msg.m) msg.m.edit({embeds: [embed], components: row}).catch(() => {});
+		if (answer) await answer.update({embeds: [embed], components: row}).catch(() => {});
+		else if (msg.m) await msg.m.edit({embeds: [embed], components: row}).catch(() => {});
 		else msg.m = await msg.client.ch.reply(msg, {embeds: [embed], components: row});
 		if (!msg.m) return;
 		const buttonsCollector = msg.m.createMessageComponentCollector({time: 60000});
@@ -413,8 +413,8 @@ async function repeater(msg, i, embed, values, answer, AddRemoveEditView, fail, 
 					else vals.push(assign);
 				} else if (valName) vals.push(assign);
 			}
-			msg.client.ch.query(`INSERT INTO ${msg.client.constants.commands.settings.tablenames[msg.file.name][0]} (${msg.client.constants.commands.settings.setupQueries[msg.file.name].cols[0]}) VALUES (${valDeclaration});`, vals);
-			module.exports.edit(msg, null, {});
+			await msg.client.ch.query(`INSERT INTO ${msg.client.constants.commands.settings.tablenames[msg.file.name][0]} (${msg.client.constants.commands.settings.setupQueries[msg.file.name].cols[0]}) VALUES (${valDeclaration});`, vals);
+			module.exports.edit(msg, answer, {});
 			misc.log(null, msg, newSettings);
 		} else if (AddRemoveEditView == 'remove') {
 			let oldRow, oldSettings;
@@ -438,8 +438,8 @@ async function repeater(msg, i, embed, values, answer, AddRemoveEditView, fail, 
 				if (nameText !== '') nameText += ` AND ${names[j]} = $${j+1}`;
 				else nameText += `${names[j]} = $${j+1}`;
 			}
-			msg.client.ch.query(`DELETE FROM ${msg.client.constants.commands.settings.tablenames[msg.file.name][0]} WHERE ${nameText};`, vals);
-			module.exports.edit(msg, null, {});
+			await msg.client.ch.query(`DELETE FROM ${msg.client.constants.commands.settings.tablenames[msg.file.name][0]} WHERE ${nameText};`, vals);
+			module.exports.edit(msg, answer, {});
 			misc.log(oldSettings, msg, null);
 		} else if (AddRemoveEditView == 'edit') {
 			let oldRow, oldSettings;
@@ -461,10 +461,10 @@ async function repeater(msg, i, embed, values, answer, AddRemoveEditView, fail, 
 				}));
 			}
 			msg.client.constants.commands.settings.editReq.splice(2, 1);
-			msg.client.ch.query(`UPDATE ${msg.client.constants.commands.settings.tablenames[msg.file.name][0]} SET ${msg.assigner} = $1 WHERE id = $2;`, [values[msg.assigner], values.id]);
+			await msg.client.ch.query(`UPDATE ${msg.client.constants.commands.settings.tablenames[msg.file.name][0]} SET ${msg.assigner} = $1 WHERE id = $2;`, [values[msg.assigner], values.id]);
 			msg.r[msg.assigner] = values[msg.assigner];
-			if (!comesFromSRM) module.exports.edit(msg, null, {});
-			else require('./singleRowManager').redirecter(msg, null, AddRemoveEditView, fail, values, values.id ? 'redirecter' : null);
+			if (!comesFromSRM) module.exports.edit(msg, answer, {});
+			else require('./singleRowManager').redirecter(msg, answer, AddRemoveEditView, fail, values, values.id ? 'redirecter' : null);
 			misc.log(oldSettings, msg, newSettings);
 		} else editer(msg, values, fail, answer, AddRemoveEditView, comesFromSRM);
 	} else if (srmEditing && comesFromSRM) editer(msg, values, fail, answer, AddRemoveEditView, comesFromSRM);
@@ -520,7 +520,7 @@ async function rower(msg) {
 	res.rows = res.rows.sort((a,b) => a.uniquetimestamp - b.uniquetimestamp);
 	for (let i = 0; i < res.rowCount; i++) {
 		res.rows[i].id = i+1;
-		msg.client.ch.query(`UPDATE ${msg.client.constants.commands.settings.tablenames[msg.file.name][0]} SET id = $1 WHERE uniquetimestamp = $2;`, [res.rows[i].id, res.rows[i].uniquetimestamp]);
+		await msg.client.ch.query(`UPDATE ${msg.client.constants.commands.settings.tablenames[msg.file.name][0]} SET id = $1 WHERE uniquetimestamp = $2;`, [res.rows[i].id, res.rows[i].uniquetimestamp]);
 	}
 	return;
 }
