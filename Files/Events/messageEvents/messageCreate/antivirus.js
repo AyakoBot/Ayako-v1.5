@@ -77,7 +77,7 @@ async function run(msg, check) {
 			else embed.setDescription('');
 			let include = false;
 			blacklistRes.forEach((entry, index) => { 
-				if (entry.split(new RegExp(' | ', 'g'))[0] == url.hostname) include = index;
+				if (entry.includes('|') && entry.split(new RegExp(' | ', 'g'))[0] == url.hostname) include = index;
 			});
 			if (!whitelistRes.includes(`${url.hostname}`)) {
 				if (included == false) {
