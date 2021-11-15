@@ -14,7 +14,7 @@ module.exports = {
 			embed.addFields(
 				{
 					name: `${msg.language.number}: \`${r.id}\` | ${r.active ? `${msg.client.constants.emotes.tick} ${msg.language.enabled}` : `${msg.client.constants.emotes.cross} ${msg.language.disabled}`}`,
-					value: `${msg.lan.punishment}: ${punishment}\n${msg.lan.requiredWarns} ${r.warnamount}`,
+					value: `${msg.lan.punishment}: ${punishment}\n${msg.lan.requiredWarns} ${r.warnamount ? r.warnamount : msg.language.none}`,
 					inline: true
 				}
 			);
@@ -31,7 +31,7 @@ module.exports = {
 			},
 			{
 				name: '\u200b',
-				value: msg.client.ch.stp(msg.lan.warnamount, {warns: r.warnamount}),
+				value: msg.client.ch.stp(msg.lan.warnamount, { warns: r.warnamount ? r.warnamount : '--'}),
 				inline: false
 			},
 			{
@@ -41,7 +41,7 @@ module.exports = {
 			},
 			{
 				name: msg.lan.duration,
-				value: moment.duration(+r.duration).format(`d [${msg.language.time.days}], h [${msg.language.time.hours}], m [${msg.language.time.minutes}], s [${msg.language.time.seconds}]`),
+				value: moment.duration(+r.duration).format(`Y [${msg.language.time.years}], M [${msg.language.time.months}], W [${msg.language.time.weeks}], d [${msg.language.time.days}], h [${msg.language.time.hours}], m [${msg.language.time.minutes}], s [${msg.language.time.seconds}]`, { trim: 'all' }) ? moment.duration(+r.duration).format(`Y [${msg.language.time.years}], M [${msg.language.time.months}], W [${msg.language.time.weeks}], d [${msg.language.time.days}], h [${msg.language.time.hours}], m [${msg.language.time.minutes}], s [${msg.language.time.seconds}]`, { trim: 'all' }) : msg.language.none,
 				inline: false
 			}
 		);
@@ -53,16 +53,16 @@ module.exports = {
 			.setLabel(msg.lanSettings.active)
 			.setStyle(r.active ? 'SUCCESS' : 'DANGER');
 		const warnamount = new Discord.MessageButton()
-			.setCustomId(msg.client.ch.stp(msg.lan.edit.warnamount.name, {warns: r.warnamount}))
-			.setLabel(msg.lan.warnamount)
-			.isvarying('SECONDARY');
+			.setCustomId(msg.lan.edit.warnamount.name)
+			.setLabel(msg.client.ch.stp(msg.lan.edit.warnamount.name, { warns: r.warnamount ? r.warnamount : '--' }).replace(/\**/g ,''))
+			.setStyle('SECONDARY');
 		const punishment = new Discord.MessageButton()
 			.setCustomId(msg.lan.edit.punishment.name)
 			.setLabel(msg.lan.punishment)
 			.setStyle(r.isvarying ? 'SUCCESS' : 'SECONDARY');
 		const duration = new Discord.MessageButton()
 			.setCustomId(msg.lan.edit.duration.name)
-			.setLabel(msg.lan.duration)
+			.setLabel(msg.lan.edit.duration.name)
 			.setStyle('PRIMARY');
 		return [[active], [warnamount, punishment, duration]];
 	}
