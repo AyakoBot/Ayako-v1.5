@@ -548,7 +548,8 @@
                     "muteafterwarnsamount": "number",
                     "kickafterwarnsamount": "number",
                     "banafterwarnsamount": "number",
-                    "warnafterwarnsamount": "number"
+                    "warnafterwarnsamount": "number",
+                    "delete": "time"
                 },
                 "disboard": {
                     "active": "boolean",
