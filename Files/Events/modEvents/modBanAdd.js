@@ -2,16 +2,23 @@ const Discord = require('discord.js');
 
 module.exports = {
 	async execute(executor, target, reason, msg) {
+		msg.m ? msg.m = await msg.m.fetch() : null;
 		let mexisted = msg.m ? true : false;
 		const language = await msg.client.ch.languageSelector(msg.guild);
 		const lan = language.mod.banAdd;
 		const con = msg.client.constants.mod.banAdd;
-		const em = new Discord.MessageEmbed()
-			.setColor(con.color);
-		if (mexisted) em.addField('\u200b', msg.client.constants.emotes.loading + ' ' + lan.loading);
-		else em.setDescription(msg.client.constants.emotes.loading + ' ' + lan.loading);
+		let em;
+		if (mexisted) {
+			em = new Discord.MessageEmbed(msg.m.embeds[0])
+				.setColor(con.color)
+				.addField('\u200b', msg.client.constants.emotes.loading + ' ' + lan.loading);
+		} else {
+			em = new Discord.MessageEmbed()
+				.setColor(con.color)
+				.setDescription(msg.client.constants.emotes.loading + ' ' + lan.loading);
+		}
 		if (msg.id) {
-			if (msg.m) await msg.m.edit({ embeds: [em] });
+			if (mexisted) await msg.m.edit({ embeds: [em] });
 			else msg.m = await msg.client.ch.reply(msg, em);
 			const member = await msg.guild.members.fetch(target.id).catch(() => {});
 			const exec = await msg.guild.members.fetch(executor.id).catch(() => { });
