@@ -2,41 +2,53 @@ const Discord = require('discord.js');
 
 module.exports = {
 	async execute(executor, target, reason, msg) {
+		let mexisted = msg.m ? true : false;
 		const language = await msg.client.ch.languageSelector(msg.guild);
 		const lan = language.mod.banAdd;
 		const con = msg.client.constants.mod.banAdd;
 		const em = new Discord.MessageEmbed()
-			.setColor(con.color)
-			.setDescription(msg.client.constants.emotes.loading+' '+lan.loading);
+			.setColor(con.color);
+		if (mexisted) em.addField('\u200b', msg.client.constants.emotes.loading + ' ' + lan.loading);
+		else em.setDescription(msg.client.constants.emotes.loading + ' ' + lan.loading);
 		if (msg.id) {
 			if (msg.m) await msg.m.edit({ embeds: [em] });
 			else msg.m = await msg.client.ch.reply(msg, em);
 			const member = await msg.guild.members.fetch(target.id).catch(() => {});
 			const exec = await msg.guild.members.fetch(executor.id).catch(() => { });
 			if (exec?.roles.highest.rawPosition <= member?.roles.highest.rawPosition) {
-				em.setDescription(msg.client.constants.emotes.cross+' '+lan.exeNoPerms);
+				if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.cross + ' ' + lan.exeNoPerms);
+				else em.setDescription(msg.client.constants.emotes.cross + ' ' + lan.exeNoPerms);
 				msg.m?.edit({embeds: [em]});
+				if (mexisted) setTimeout(() => msg.m?.delete().catch(() => { }), 10000);
 				return false;
 			}
 			if (executor.id == target.id) {
-				em.setDescription(msg.client.constants.emotes.cross+' '+lan.selfBan);
+				if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.cross + ' ' + lan.selfBan);
+				else em.setDescription(msg.client.constants.emotes.cross + ' ' + lan.selfBan);
 				msg.m?.edit({embeds: [em]});
+				if (mexisted) setTimeout(() => msg.m?.delete().catch(() => { }), 10000);
 				return false;
 			}
 			if (target.id == msg.client.user.id) {
-				em.setDescription(msg.client.constants.emotes.cross+' '+lan.meBan);
+				if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.cross + ' ' + lan.meBan);
+				else em.setDescription(msg.client.constants.emotes.cross + ' ' + lan.meBan);
 				msg.m?.edit({embeds: [em]});
+				if (mexisted) setTimeout(() => msg.m?.delete().catch(() => { }), 10000);
 				return false;
 			}
 			if (member?.bannable == false) {
-				em.setDescription(msg.client.constants.emotes.cross+' '+lan.permissionError);
+				if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.cross + ' ' + lan.permissionError);
+				else em.setDescription(msg.client.constants.emotes.cross + ' ' + lan.permissionError);
 				msg.m?.edit({embeds: [em]});
+				if (mexisted) setTimeout(() => msg.m?.delete().catch(() => { }), 10000);
 				return false;
 			}
 			const banned = await msg.guild.bans.fetch(target).catch(() => { });
 			if (banned) {
-				em.setDescription(msg.client.constants.emotes.cross + ' ' + msg.client.ch.stp(lan.alreadyBanned, { target: target}));
+				if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.cross + ' ' + msg.client.ch.stp(lan.alreadyBanned, { target: target }));
+				else em.setDescription(msg.client.constants.emotes.cross + ' ' + msg.client.ch.stp(lan.alreadyBanned, { target: target }));
 				msg.m?.edit({embeds: [em]});
+				if (mexisted) setTimeout(() => msg.m?.delete().catch(() => { }), 10000);
 				return false;
 			}
 		}
@@ -64,11 +76,14 @@ module.exports = {
 			if (logchannel) msg.client.ch.send(logchannel, embed);
 		} else {
 			m?.delete().catch(()  => {});
-			em.setDescription(msg.client.constants.emotes.cross+lan.error+` \`\`\`${err}\`\`\``);
+			if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.cross + lan.error + ` \`\`\`${err}\`\`\``);
+			else em.setDescription(msg.client.constants.emotes.cross + lan.error + ` \`\`\`${err}\`\`\``);
 			msg.m?.edit({embeds: [em]});
+			if (mexisted) setTimeout(() => msg.m?.delete().catch(() => { }), 10000);
 			return false;
 		}
-		em.setDescription(msg.client.constants.emotes.tick+' '+msg.client.ch.stp(lan.success, {target: target}));
+		if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.tick + ' ' + msg.client.ch.stp(lan.success, { target: target }));
+		else em.setDescription(msg.client.constants.emotes.tick + ' ' + msg.client.ch.stp(lan.success, { target: target }));
 		msg.m?.edit({embeds: [em]});
 		return true;
 	}

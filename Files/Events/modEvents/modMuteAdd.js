@@ -2,12 +2,14 @@ const Discord = require('discord.js');
 
 module.exports = {
 	async execute(executor, target, reason, msg) {
+		let mexisted = msg.m ? true : false;
 		const language = await msg.client.ch.languageSelector(msg.guild);
 		const lan = language.mod.muteAdd;
 		const con = msg.client.constants.mod.muteAdd;
 		const em = new Discord.MessageEmbed()
-			.setColor(con.color)
-			.setDescription(msg.client.constants.emotes.loading + ' ' +lan.loading);
+			.setColor(con.color);
+		if (mexisted) em.addField('\u200b', msg.client.constants.emotes.loading + ' ' + lan.loading);
+		else em.setDescription(msg.client.constants.emotes.loading + ' ' + lan.loading);
 		if (msg.m) await msg.m.edit({ embeds: [em] });
 		else msg.m = await msg.client.ch.reply(msg, em);
 		let role;
@@ -18,24 +20,32 @@ module.exports = {
 		const exec = await msg.guild.members.fetch(executor.id).catch(() => { });
 		const memberClient = msg.guild.me;
 		if (!member) {
-			em.setDescription(msg.client.constants.emotes.cross + ' ' + lan.noMember);
+			if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.cross + ' ' + lan.noMember);
+			else em.setDescription(msg.client.constants.emotes.cross + ' ' + lan.noMember);
 			msg.m?.edit({ embeds: [em] });
+			if (mexisted) setTimeout(() => msg.m?.delete().catch(() => { }), 10000);
 			return false;
 		}
 		if (exec?.roles.highest.rawPosition < member?.roles.highest.rawPosition || exec?.roles.highest.rawPosition == member?.roles.highest.rawPosition) {
-			em.setDescription(msg.client.constants.emotes.cross + ' ' +lan.exeNoPerms);
-			msg.m?.edit({embeds: [em]});
+			if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.cross + ' ' + lan.exeNoPerms);
+			else em.setDescription(msg.client.constants.emotes.cross + ' ' + lan.exeNoPerms);
+			msg.m?.edit({ embeds: [em] });
+			if (mexisted) setTimeout(() => msg.m?.delete().catch(() => { }), 10000);
 			return false;
 		}
 		if ((memberClient.roles.highest.rawPosition < member?.roles.highest.rawPosition || memberClient.roles.highest.rawPosition == member?.roles.highest.rawPosition) || !memberClient.permissions.has(268435456)) {
-			em.setDescription(msg.client.constants.emotes.cross + ' ' +lan.meNoPerms);
-			msg.m?.edit({embeds: [em]});
+			if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.cross + ' ' + lan.meNoPerms);
+			else em.setDescription(msg.client.constants.emotes.cross + ' ' + lan.meNoPerms);
+			msg.m?.edit({ embeds: [em] });
+			if (mexisted) setTimeout(() => msg.m?.delete().catch(() => { }), 10000);
 			return false;
 		}
 		if (role) {
 			if (member?.roles.cache.has(role.id)) {
-				em.setDescription(msg.client.constants.emotes.cross + ' ' +lan.hasRole);
-				msg.m?.edit({embeds: [em]});
+				if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.cross + ' ' + lan.hasRole);
+				else em.setDescription(msg.client.constants.emotes.cross + ' ' + lan.hasRole);
+				msg.m?.edit({ embeds: [em] });
+				if (mexisted) setTimeout(() => msg.m?.delete().catch(() => { }), 10000);
 				return false;
 			}
 			let err;
@@ -60,13 +70,17 @@ module.exports = {
 					.setFooter(msg.client.ch.stp(lan.footer, {user: executor, target: target}));
 				if (logchannel) msg.client.ch.send(logchannel, embed);
 			} else {
-				em.setDescription(msg.client.constants.emotes.cross + ' ' +lan.error+` \`\`\`${err}\`\`\``);
-				msg.m?.edit({embeds: [em]});
+				if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.cross + lan.error + ` \`\`\`${err}\`\`\``);
+				else em.setDescription(msg.client.constants.emotes.cross + lan.error + ` \`\`\`${err}\`\`\``);
+				msg.m?.edit({ embeds: [em] });
+				if (mexisted) setTimeout(() => msg.m?.delete().catch(() => { }), 10000);
 				return false;
 			}
 		} else {
-			em.setDescription(msg.client.constants.emotes.cross + ' ' +lan.noRole);
-			msg.m?.edit({embeds: [em]});
+			if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.cross + ' ' + lan.noRole);
+			else em.setDescription(msg.client.constants.emotes.cross + ' ' + lan.noRole);
+			msg.m?.edit({ embeds: [em] });
+			if (mexisted) setTimeout(() => msg.m?.delete().catch(() => { }), 10000);
 			return false;
 		}
 		let warnnr;
@@ -74,8 +88,9 @@ module.exports = {
 		if (res && res.rowCount > 0) warnnr = res.rowCount + 1;
 		else warnnr = 1;
 		msg.client.ch.query('INSERT INTO warns (guildid, userid, reason, type, dateofwarn, warnedinchannelid, warnedbyuserid, warnedinchannelname, warnedbyusername, msgid) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);', [msg.guild.id, target.id, reason, 'Mute', Date.now(), msg.channel.id, executor.id, msg.channel.name, executor.username, msg.id]);
-		em.setDescription(msg.client.constants.emotes.tick + ' ' + msg.client.ch.stp(lan.success, { target: target, nr: warnnr }));
-		msg.m?.edit({embeds: [em]});
+		if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.tick + ' ' + msg.client.ch.stp(lan.success, { target: target, nr: warnnr }));
+		else em.setDescription(msg.client.constants.emotes.tick + ' ' + msg.client.ch.stp(lan.success, { target: target, nr: warnnr }));
+		msg.m?.edit({ embeds: [em] });
 		return true;
 	}
 };

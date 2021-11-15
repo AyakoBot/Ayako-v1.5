@@ -2,12 +2,14 @@ const Discord = require('discord.js');
 
 module.exports = {
 	async execute(executor, target, reason, msg) {
+		let mexisted = msg.m ? true : false;
 		const language = await msg.client.ch.languageSelector(msg.guild);
 		const lan = language.mod.banRemove;
 		const con = msg.client.constants.mod.banRemove;
 		const em = new Discord.MessageEmbed()
-			.setColor(con.color)
-			.setDescription(msg.client.constants.emotes.loading + ' ' +lan.loading);
+			.setColor(con.color);
+		if (mexisted) em.addField('\u200b', msg.client.constants.emotes.loading + ' ' + lan.loading);
+		else em.setDescription(msg.client.constants.emotes.loading + ' ' + lan.loading);
 		if (msg.m) await msg.m.edit({ embeds: [em] });
 		else msg.m = await msg.client.ch.reply(msg, em);
 		const dmChannel = await target.createDM().catch(() => {});
@@ -36,18 +38,22 @@ module.exports = {
 				if (logchannel) msg.client.ch.send(logchannel, embed);
 			} else {
 				m?.delete().catch(()  => {});
-				em.setDescription(msg.client.constants.emotes.cross + ' ' +lan.error+` \`\`\`${err}\`\`\``);
-				msg.m?.edit({embeds: [em]});
+				if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.cross + lan.error + ` \`\`\`${err}\`\`\``);
+				else em.setDescription(msg.client.constants.emotes.cross + lan.error + ` \`\`\`${err}\`\`\``);
+				msg.m?.edit({ embeds: [em] });
+				if (mexisted) setTimeout(() => msg.m?.delete().catch(() => { }), 10000);
 				return false;
 			}
 		} else {
-			m?.delete().catch(()  => {});
-			em.setDescription(msg.client.constants.emotes.cross + ' ' +lan.notBanned);
-			msg.m?.edit({embeds: [em]});
+			if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.cross + ' ' + lan.notBanned);
+			else em.setDescription(msg.client.constants.emotes.cross + ' ' + lan.notBanned);
+			msg.m?.edit({ embeds: [em] });
+			if (mexisted) setTimeout(() => msg.m?.delete().catch(() => { }), 10000);
 			return false;
 		}
-		em.setDescription(msg.client.constants.emotes.tick + ' ' + msg.client.ch.stp(lan.success, { target: target }));
-		msg.m?.edit({embeds: [em]});
+		if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.tick + ' ' + msg.client.ch.stp(lan.success, { target: target }));
+		else em.setDescription(msg.client.constants.emotes.tick + ' ' + msg.client.ch.stp(lan.success, { target: target }));
+		msg.m?.edit({ embeds: [em] });
 		return true;
 	}
 };
