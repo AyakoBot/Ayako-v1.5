@@ -960,6 +960,10 @@
         "onetimerunner": {
             "select": "Are you sure you want to run this Function?\nThis can only be run if the previous Process is finished",
             "desc": "Click `Yes` or `No`"
+        },
+        "punishment": {
+            "select": "Select the Punishment",
+            "desc": "Select the Punishment you want this Auto-Punishment to have below"
         }
     },
     "mod": {

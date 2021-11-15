@@ -594,6 +594,7 @@
                 "reactionroles": ["reactionroles"],
                 "selfroles": ["selfroles"],
                 "separators": ["roleseparator", "roleseparatorsettings"],
+                "autopunish": ["autopunish"],
                 "suggestions": ["suggestionsettings"],
                 "ticketing": [null],
                 "vc": [null],
@@ -697,6 +698,14 @@
                     "remove": ["id"],
                     "removeIdent": "",
                     "removeReq": ["id", "roles"]
+                },
+                "autopunish": {
+                    "cols": ["guildid, active, id, uniquetimestamp"],
+                    "vals": [["{{values.guildid}}", false, "{{values.id}}", "{{values.uniquetimestamp}}"]],
+                    "add": ["punishment"],
+                    "remove": ["id"],
+                    "removeIdent": "",
+                    "removeReq": ["id", "warnamount"]
                 },
                 "suggestions": {
                     "cols": ["guildid, active, anon"],
