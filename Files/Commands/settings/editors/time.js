@@ -34,7 +34,7 @@ module.exports = {
 					let duration = 0;
 					args.forEach((n, i) => {
 						if (!isNaN(ms(n))) {
-							if (isNaN(ms(args[i + 1]))) n = n + ' ' + args[i + 1];
+							if (args[i + 1] && isNaN(ms(args[i + 1]))) n = n + ' ' + args[i + 1];
 							duration = +duration + +ms(n);
 						}
 					});
