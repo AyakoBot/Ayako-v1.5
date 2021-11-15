@@ -2,12 +2,14 @@ const Discord = require('discord.js');
 
 module.exports = {
 	async execute(executor, target, reason, msg) {
+		let mexisted = msg.m ? true : false;
 		const language = await msg.client.ch.languageSelector(msg.guild);
 		const lan = language.mod.muteRemove;
 		const con = msg.client.constants.mod.muteRemove;
 		const em = new Discord.MessageEmbed()
-			.setColor(con.color)
-			.setDescription(msg.client.constants.emotes.loading + ' ' +lan.loading);
+			.setColor(con.color);
+		if (mexisted) em.addField('\u200b', msg.client.constants.emotes.loading + ' ' + lan.loading);
+		else em.setDescription(msg.client.constants.emotes.loading + ' ' + lan.loading);
 		if (msg.m) await msg.m.edit({ embeds: [em] });
 		else msg.m = await msg.client.ch.reply(msg, em);
 		let logchannel;
@@ -18,24 +20,32 @@ module.exports = {
 		const exec = await msg.guild.members.fetch(executor.id).catch(() => { });
 		const memberClient = msg.guild.me;
 		if (!member) {
-			em.setDescription(msg.client.constants.emotes.cross + ' ' + lan.noMember);
+			if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.cross + ' ' + lan.noMember);
+			else em.setDescription(msg.client.constants.emotes.cross + ' ' + lan.noMember);
 			msg.m?.edit({ embeds: [em] });
+			if (mexisted) setTimeout(() => msg.m?.delete().catch(() => { }), 10000);
 			return false;
 		}
 		if (exec?.roles.highest.rawPosition < member?.roles.highest.rawPosition || exec?.roles.highest.rawPosition == member?.roles.highest.rawPosition) {
-			em.setDescription(msg.client.constants.emotes.cross + ' ' +lan.exeNoPerms);
-			msg.m?.edit({embeds: [em]});
+			if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.cross + ' ' + lan.exeNoPerms);
+			else em.setDescription(msg.client.constants.emotes.cross + ' ' + lan.exeNoPerms);
+			msg.m?.edit({ embeds: [em] });
+			if (mexisted) setTimeout(() => msg.m?.delete().catch(() => { }), 10000);
 			return false;
 		}
 		if ((memberClient.roles.highest.rawPosition < member?.roles.highest.rawPosition || memberClient.roles.highest.rawPosition == member?.roles.highest.rawPosition) || !memberClient.permissions.has(268435456)) {
-			em.setDescription(msg.client.constants.emotes.cross + ' ' + lan.meNoPerms);
+			if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.cross + ' ' + lan.meNoPerms);
+			else em.setDescription(msg.client.constants.emotes.cross + ' ' + lan.meNoPerms);
 			msg.m?.edit({ embeds: [em] });
+			if (mexisted) setTimeout(() => msg.m?.delete().catch(() => { }), 10000);
 			return false;
 		}
 		if (role) {
 			if (!member?.roles.cache.has(role.id)) {
-				em.setDescription(msg.client.constants.emotes.cross + ' ' +lan.hasNoRole);
-				msg.m?.edit({embeds: [em]});
+				if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.cross + ' ' + lan.hasNoRole);
+				else em.setDescription(msg.client.constants.emotes.cross + ' ' + lan.hasNoRole);
+				msg.m?.edit({ embeds: [em] });
+				if (mexisted) setTimeout(() => msg.m?.delete().catch(() => { }), 10000);
 				return false;
 			}
 			let err;
@@ -61,16 +71,21 @@ module.exports = {
 					.setAuthor(msg.client.ch.stp(lan.dm.author, { guild: msg.guild }), lan.author.image, msg.client.ch.stp(con.author.link, { guild: msg.guild }));
 				msg.client.ch.send(dmChannel, DMembed);
 			} else {
-				em.setDescription(msg.client.constants.emotes.cross + ' ' +lan.error+` \`\`\`${err}\`\`\``);
-				msg.m?.edit({embeds: [em]});
+				if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.cross + lan.error + ` \`\`\`${err}\`\`\``);
+				else em.setDescription(msg.client.constants.emotes.cross + lan.error + ` \`\`\`${err}\`\`\``);
+				msg.m?.edit({ embeds: [em] });
+				if (mexisted) setTimeout(() => msg.m?.delete().catch(() => { }), 10000);
 				return false;
 			}
 		} else {
-			em.setDescription(msg.client.constants.emotes.cross + ' ' +lan.noRole);
-			msg.m?.edit({embeds: [em]});
+			if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.cross + ' ' + lan.noRole);
+			else em.setDescription(msg.client.constants.emotes.cross + ' ' + lan.noRole);
+			msg.m?.edit({ embeds: [em] });
+			if (mexisted) setTimeout(() => msg.m?.delete().catch(() => { }), 10000);
 			return false;
 		}
-		em.setDescription(msg.client.constants.emotes.tick + ' ' + msg.client.ch.stp(lan.success, { target: target }));
+		if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.tick + ' ' + msg.client.ch.stp(lan.success, { target: target }));
+		else em.setDescription(msg.client.constants.emotes.tick + ' ' + msg.client.ch.stp(lan.success, { target: target }));
 		msg.m?.edit({embeds: [em]});
 		msg.client.ch.query('UPDATE warns SET closed = true WHERE dateofwarn = $1 AND guildid = $2 AND userid = $3;', [msg.r.dateofwarn, msg.guild.id, target.id]);
 		return true;
