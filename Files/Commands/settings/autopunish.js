@@ -1,4 +1,6 @@
 const Discord = require('discord.js');
+const moment = require('moment');
+require('moment-duration-format');
 
 module.exports = {
 	perm: 8n,
@@ -12,7 +14,7 @@ module.exports = {
 			embed.addFields(
 				{
 					name: `${msg.language.number}: \`${r.id}\` | ${r.active ? `${msg.client.constants.emotes.tick} ${msg.language.enabled}` : `${msg.client.constants.emotes.cross} ${msg.language.disabled}`}`,
-					value: `${msg.lan.punishment}: ${punishment}\n${msg.lan.stoprole}: ${r.stoprole ? stop : msg.language.none}\n${msg.language.affected}: ${affected} ${msg.language.roles}${msg.guild.members.cache.get(msg.client.user.id).roles.highest.rawPosition <= sep.rawPosition ? `\n${msg.client.constants.emotes.warning} ${msg.language.permissions.error.role}` : ''}`,
+					value: `${msg.lan.punishment}: ${punishment}\n${msg.lan.requiredWarns} ${r.warnamount}`,
 					inline: true
 				}
 			);
@@ -28,100 +30,40 @@ module.exports = {
 				inline: false
 			},
 			{
-				name: msg.guild.members.cache.get(msg.client.user.id).roles.highest.rawPosition <= sep.rawPosition ? `${msg.client.constants.emotes.warning} ${msg.language.permissions.error.role}` : '\u200b',
-				value: '\u200b',
-				inline: false
-			},
-			{
-				name: msg.lan.isvarying,
-				value: r.isvarying ? msg.client.constants.emotes.tick + ' ' + msg.language.enabled : msg.client.constants.emotes.cross + ' ' + msg.language.disabled,
-				inline: false
-			},
-			{
 				name: '\u200b',
-				value: '\u200b',
+				value: msg.client.ch.stp(msg.lan.warnamount, {warns: r.warnamount}),
 				inline: false
 			},
 			{
-				name: msg.lan.separator,
-				value: r.separator ? `${sep}` : msg.language.none,
+				name: msg.lan.punishment,
+				value: msg.language.autopunish[r.punishment],
 				inline: false
 			},
 			{
-				name: msg.lan.stoprole,
-				value: r.stoprole ? `${stop}` : msg.language.none,
-				inline: false
-			},
-			{
-				name: msg.language.number,
-				value: r.id ? `\`${r.id}\`` : msg.language.none,
-				inline: false
-			},
-			{
-				name: '\u200b',
-				value: '\u200b',
-				inline: false
-			},
-			{
-				name: '\u200b',
-				value: '\u200b',
-				inline: false
-			},
-			{
-				name: `${msg.language.affected} ${affected} ${msg.language.roles}`,
-				value: `${`${affectedRoles.map(r => ` ${r}`)}`.length > 1020 ? msg.language.tooManyRoles : `${affectedRoles.map(r => ` ${r}`)}`.length > 0 ? affectedRoles.map(r => ` ${r}`) : `${msg.language.none}`}`,
+				name: msg.lan.duration,
+				value: moment.duration(+r.duration).format(`d [${msg.language.time.days}], h [${msg.language.time.hours}], m [${msg.language.time.minutes}], s [${msg.language.time.seconds}]`),
 				inline: false
 			}
 		);
 		return embed;
 	},
 	buttons(msg, r) {
-		if (r.isvarying == true) {
-			const active = new Discord.MessageButton()
-				.setCustomId(msg.lan.edit.active.name)
-				.setLabel(msg.lanSettings.active)
-				.setStyle(r.active ? 'SUCCESS' : 'DANGER');
-			const separator = new Discord.MessageButton()
-				.setCustomId(msg.lan.edit.separator.name)
-				.setLabel(msg.lan.separator)
-				.setStyle('SECONDARY');
-			const stoprole = new Discord.MessageButton()
-				.setCustomId(msg.lan.edit.stoprole.name)
-				.setLabel(msg.lan.stoprole)
-				.setStyle('SECONDARY');
-			const isvarying = new Discord.MessageButton()
-				.setCustomId(msg.lan.edit.isvarying.name)
-				.setLabel(msg.lan.isvarying)
-				.setStyle(r.isvarying ? 'SUCCESS' : 'SECONDARY');
-			const oneTimeRunner = new Discord.MessageButton()
-				.setCustomId(msg.lan.edit.oneTimeRunner.name)
-				.setLabel(msg.lan.oneTimeRunner)
-				.setEmoji(msg.client.constants.emotes.warning)
-				.setStyle('DANGER');
-			return [[active], [separator, stoprole], [isvarying], [oneTimeRunner]];
-		} else {
-			const active = new Discord.MessageButton()
-				.setCustomId(msg.lan.edit.active.name)
-				.setLabel(msg.lanSettings.active)
-				.setStyle(r.active ? 'SUCCESS' : 'DANGER');
-			const separator = new Discord.MessageButton()
-				.setCustomId(msg.lan.edit.separator.name)
-				.setLabel(msg.lan.separator)
-				.isvarying('SECONDARY');
-			const isvarying = new Discord.MessageButton()
-				.setCustomId(msg.lan.edit.isvarying.name)
-				.setLabel(msg.lan.isvarying)
-				.setStyle(r.isvarying ? 'SUCCESS' : 'SECONDARY');
-			const roles = new Discord.MessageButton()
-				.setCustomId(msg.lan.edit.roles.name)
-				.setLabel(msg.lan.roles)
-				.setStyle('PRIMARY');
-			const oneTimeRunner = new Discord.MessageButton()
-				.setCustomId(msg.lan.edit.oneTimeRunner.name)
-				.setLabel(msg.lan.oneTimeRunner)
-				.setEmoji(msg.client.constants.emotes.warning)
-				.setStyle('DANGER');
-			return [[active], [separator, roles], [isvarying], [oneTimeRunner]];
-		}
+		const active = new Discord.MessageButton()
+			.setCustomId(msg.lan.edit.active.name)
+			.setLabel(msg.lanSettings.active)
+			.setStyle(r.active ? 'SUCCESS' : 'DANGER');
+		const warnamount = new Discord.MessageButton()
+			.setCustomId(msg.client.ch.stp(msg.lan.edit.warnamount.name, {warns: r.warnamount}))
+			.setLabel(msg.lan.warnamount)
+			.isvarying('SECONDARY');
+		const punishment = new Discord.MessageButton()
+			.setCustomId(msg.lan.edit.punishment.name)
+			.setLabel(msg.lan.punishment)
+			.setStyle(r.isvarying ? 'SUCCESS' : 'SECONDARY');
+		const duration = new Discord.MessageButton()
+			.setCustomId(msg.lan.edit.duration.name)
+			.setLabel(msg.lan.duration)
+			.setStyle('PRIMARY');
+		return [[active], [warnamount, punishment, duration]];
 	}
 };

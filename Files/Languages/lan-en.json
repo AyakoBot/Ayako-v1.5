@@ -1568,36 +1568,16 @@
                 "punishment": "Punishment",
                 "duration": "Duration",
                 "warnamount": "Apply this Punishment after {{warns}} Warns",
+                "requiredWarns": "Required Warns:",
                 "ban": "Ban",
                 "kick": "Kick",
                 "mute": "Mute",
                 "tempmute": "Temp-Mute",
                 "tempban": "Temp-Ban",
                 "edit": { 
-                    "ban": {
-                        "name": "Ban",
-                        "answers": "`True` or `False`",
-                        "recommended": "Recommended: `True`"
-                    },
-                    "kick": {
-                        "name": "Kick",
-                        "answers": "`True` or `False`",
-                        "recommended": "Recommended: `False`"
-                    },
-                    "mute": {
-                        "name": "Mute",
-                        "answers": "`True` or `False`",
-                        "recommended": "Recommended: `True`"
-                    },
-                    "tempmute": {
-                        "name": "Mute",
-                        "answers": "`True` or `False`",
-                        "recommended": "Recommended: `True`"
-                    },
-                    "tempban": {
-                        "name": "Mute",
-                        "answers": "`True` or `False`",
-                        "recommended": "Recommended: `True`"
+                    "punishment" : {
+                        "name": "Punishment",
+                        "answers": "`Ban`, `Kick`, `Mute`, `Temp-Mute`, `Temp-Ban`"
                     },
                     "duration": {
                         "name": "Duration",
