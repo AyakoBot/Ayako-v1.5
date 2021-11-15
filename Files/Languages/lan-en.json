@@ -1570,8 +1570,8 @@
                 "category": ["Auto Moderation"],
                 "type": "Auto-Punish",
                 "punishment": "Punishment",
-                "duration": "Duration",
-                "warnamount": "Apply this Punishment after {{warns}} Warns",
+                "duration": "Duration (Only applies to Punishments prefixed with `Temp-`)",
+                "warnamount": "Apply this Punishment after **{{warns}}** Warns",
                 "requiredWarns": "Required Warns:",
                 "ban": "Ban",
                 "kick": "Kick",
@@ -1594,7 +1594,7 @@
                         "recommended": "Recommended: `True`"
                     },
                     "warnamount": {
-                        "name": "Apply this Punishment after {{warns}} Warns",
+                        "name": "Apply this Punishment after **{{warns}}** Warns",
                         "answers": "`Number`"
                     }
                 },

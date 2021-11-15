@@ -700,8 +700,8 @@
                     "removeReq": ["id", "roles"]
                 },
                 "autopunish": {
-                    "cols": ["guildid, active, id, uniquetimestamp"],
-                    "vals": [["{{values.guildid}}", false, "{{values.id}}", "{{values.uniquetimestamp}}"]],
+                    "cols": ["guildid, active, id, uniquetimestamp, punishment"],
+                    "vals": [["{{values.guildid}}", false, "{{values.id}}", "{{values.uniquetimestamp}}", "{{values.punishment}}"]],
                     "add": ["punishment"],
                     "remove": ["id"],
                     "removeIdent": "",
