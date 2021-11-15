@@ -102,11 +102,12 @@ module.exports = {
 		else warnnr = 1;
 		if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.tick + ' ' + msg.client.ch.stp(lan.success, { target: target, nr: warnnr }));
 		else em.setDescription(msg.client.constants.emotes.tick + ' ' + msg.client.ch.stp(lan.success, { target: target, nr: warnnr }));
-		msg.m?.edit({ embeds: [em] });
+		await msg.m?.edit({ embeds: [em] });
 		const res2 = await msg.client.ch.query('SELECT * FROM warns WHERE guildid = $1 AND userid = $2 AND dateofwarn = $3;', [msg.guild.id, target.id, now]);
 		if (res2 && res2.rowCount > 0) {
 			msg.r = res2.rows[0];
 			msg.client.mutes.set(`${msg.guild.id}-${target.id}`, setTimeout(() => msg.client.emit('modMuteRemove', msg.client.user, target, language.ready.unmute.reason, msg), duration));
+			if (msg.source) msg.client.emit('modSourceHandler', msg);
 			return true;
 		} else return false;
 	}

@@ -1,4 +1,6 @@
 const Discord = require('discord.js');
+const moment = require('moment');
+require('moment-duration-format');
 
 module.exports = {
 	perm: 32n,
@@ -49,6 +51,16 @@ module.exports = {
 					name: msg.lan.bantof, 
 					value: r.bantof ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled, 
 					inline: true
+				},
+				{
+					name: '\u200b',
+					value: '\u200b',
+					inline: false
+				},
+				{
+					name: msg.lan.delete,
+					value: moment.duration(+r.delete).format(`Y [${msg.language.time.years}], M [${msg.language.time.months}], W [${msg.language.time.weeks}], d [${msg.language.time.days}], h [${msg.language.time.hours}], m [${msg.language.time.minutes}], s [${msg.language.time.seconds}]`, { trim: 'all' }) ? moment.duration(+r.delete).format(`Y [${msg.language.time.years}], M [${msg.language.time.months}], W [${msg.language.time.weeks}], d [${msg.language.time.days}], h [${msg.language.time.hours}], m [${msg.language.time.minutes}], s [${msg.language.time.seconds}]`, { trim: 'all' }) : msg.language.none,
+					inline: false
 				}
 			);
 		return embed;
@@ -94,6 +106,10 @@ module.exports = {
 			.setCustomId(msg.lan.edit.banafterwarnsamount.name)
 			.setLabel(msg.client.ch.stp(msg.lan.banafterwarnsamount.replace(/\*/g, ''), {amount: r.banafterwarnsamount ? r.banafterwarnsamount : '--'}))
 			.setStyle(!r.readofwarnstof ? 'DANGER' : 'SECONDARY');
-		return [[active], [verbal, warn, mute, kick, ban], [waw,maw,kaw,baw]];
+		const deleteB = new Discord.MessageButton()
+			.setCustomId(msg.lan.edit.delete.name)
+			.setLabel(msg.lan.delete)
+			.setStyle('SECONDARY');
+		return [[active], [verbal, warn, mute, kick, ban], [waw, maw, kaw, baw], [deleteB]];
 	}
 };
