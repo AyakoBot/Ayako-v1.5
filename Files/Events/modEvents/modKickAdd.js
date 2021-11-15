@@ -84,7 +84,8 @@ module.exports = {
 		}
 		if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.tick + ' ' + msg.client.ch.stp(lan.success, { target: target }));
 		else em.setDescription(msg.client.constants.emotes.tick + ' ' + msg.client.ch.stp(lan.success, { target: target }));
-		msg.m?.edit({embeds: [em]});
+		await msg.m?.edit({embeds: [em]});
+		if (msg.source) msg.client.emit('modSourceHandler', msg);
 		return true;
 	}
 };
