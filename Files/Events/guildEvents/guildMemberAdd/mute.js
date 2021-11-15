@@ -36,8 +36,9 @@ module.exports = {
 		if (wasMuted !== null) {
 			const language = await ch.languageSelector(guild);
 			const lan = language.mod.muteAdd;
-			if (wasMuted == true) client.emit('modMuteAdd', client.user, user, lan.activeMute, member);
-			else if (wasMuted == false) client.emit('modMuteRemove', client.user, user, lan.activeMuteError, member);
+			const msg = { author: client.user, client: client, language: language, guild: guild, source: 'guildMemberAdd' };
+			if (wasMuted == true) client.emit('modMuteAdd', client.user, user, lan.activeMute, msg);
+			else if (wasMuted == false) client.emit('modMuteRemove', client.user, user, lan.activeMuteError, msg);
 		}
 	}
 };
