@@ -521,6 +521,12 @@
                     "roles": "roles",
                     "isvarying": "boolean"
                 },
+                "autopunish": {
+                    "active": "boolean",
+                    "punishment": "punishment",
+                    "duration": "time",
+                    "warnamount": "number"
+                },
                 "snipe": {
                     "active": "boolean",
                     "blchannelid": "channels",

@@ -9,6 +9,6 @@ module.exports = {
 			console.log(link.hostname);
 			fs.appendFile('S:/Bots/ws/CDN/blacklisted.txt', `\n${link.hostname}`, () => { });
 			interaction.reply({content: 'Done'});
-		} else interaction.reply({content: 'test', ephemeral: true});
+		}
 	}
 };
