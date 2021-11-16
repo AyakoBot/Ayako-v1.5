@@ -1640,7 +1640,7 @@
                 "muteafterwarnsamount": "Mute after **{{amount}}** malicious Links",
                 "kickafterwarnsamount": "Kick after **{{amount}}** malicious Links",
                 "banafterwarnsamount": "Ban after **{{amount}}** malicious Links",
-                "delete": "Delete Timeout for Mod Action Messages",
+                "delete": "Minimize Timeout for Mod Action Messages",
                 "edit": {
                     "active": {
                         "name": "Active",
@@ -1693,7 +1693,7 @@
                         "recommended": "Recommended: `4`"
                     },
                     "delete": {
-                        "name": "Delete Timeout for Mod Action Messages",
+                        "name": "Minimize Timeout for Mod Action Messages",
                         "answers": "Examples: `2 hours 15 min`, `2h 15m`",
                         "recommended": "Recommended: `10 - 20 seconds`"
                     }
