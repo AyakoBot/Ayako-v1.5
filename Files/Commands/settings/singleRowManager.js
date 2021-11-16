@@ -13,7 +13,7 @@ module.exports = {
 
 async function edit(msg, answer, file, AddRemoveEditView, fail, values, origin) {
 	msg.lanSettings = msg.language.commands.settings; let r;
-	if (!msg.file) {file.name = msg.args[0].toLowerCase(); msg.file = file;}
+	if (!msg.file) file.name = msg.args[0].toLowerCase(), msg.file = file;
 	if (!origin) {
 		const res = await msg.client.ch.query(`SELECT * FROM ${msg.client.constants.commands.settings.tablenames[msg.file.name][0]} WHERE guildid = $1;`, [msg.guild.id]);
 		if (msg.file.setupRequired == false) return require('./multiRowManager').execute(msg, answer);

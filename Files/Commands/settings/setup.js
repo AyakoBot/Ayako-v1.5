@@ -52,17 +52,18 @@ module.exports = {
 			if (reason == 'time') msg.client.ch.collectorEnd(msg);
 		});
 		async function yesFunc(message, clickButton) {
-			msg.client.constants.commands.settings.setupQueries[msg.file.name].cols.forEach(async (names, index) => {
+			for (let index = 0; index < msg.client.constants.commands.settings.setupQueries[msg.file.name].cols.length; index++) {
+				const names = msg.client.constants.commands.settings.setupQueries[msg.file.name].cols[index];
 				const values = [], cols = names, vals = msg.client.constants.commands.settings.setupQueries[msg.file.name].vals[index];
 				vals.forEach(val => {
-					if (typeof(val) == 'string') values.push(msg.client.ch.stp(val, {msg: msg}));
+					if (typeof (val) == 'string') values.push(msg.client.ch.stp(val, { msg: msg }));
 					else values.push(val);
 				});
 				let valDeclaration = '';
-				for (let i = 0; i < values.length; i++) valDeclaration += `$${i+1}, `;
-				valDeclaration = valDeclaration.slice(0, valDeclaration.length-2);
+				for (let i = 0; i < values.length; i++) valDeclaration += `$${i + 1}, `;
+				valDeclaration = valDeclaration.slice(0, valDeclaration.length - 2);
 				await msg.client.ch.query(`INSERT INTO ${msg.client.constants.commands.settings.tablenames[msg.file.name][index]} (${cols}) VALUES (${valDeclaration});`, values);
-			});
+			}
 			if (message) message.delete().catch(() => {});
 			Settings.edit(msg, msg.file, clickButton);
 		}
