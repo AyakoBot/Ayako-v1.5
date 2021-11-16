@@ -72,7 +72,7 @@ async function run(msg, check) {
 			let enteredWebsite, baseWebsite;
 			enteredWebsite = await SA.head(url).catch((e) => enteredWebsite = e);
 			baseWebsite = await SA.head(url.hostname).catch((e) => baseWebsite = e);
-			if ((!enteredWebsite || enteredWebsite.text == 'Domain not found') && (!baseWebsite || baseWebsite.text == 'Domain not found')) return end({ msg: msg, text: 'NOT_EXISTENT', res: null, severity: null, link: url }, check, embed);
+			if ((!enteredWebsite || enteredWebsite.text == 'Domain not found') && (!baseWebsite || baseWebsite.text == 'Domain not found') || (`${enteredWebsite}`.includes('ENOTFOUND') || `${baseWebsite}`.includes('ENOTFOUND'))) return end({ msg: msg, text: 'NOT_EXISTENT', res: null, severity: null, link: url }, check, embed);
 			if (check) embed.setDescription(`${msg.lan.checking} \`${url}\``);
 			else embed.setDescription('');
 			let include = false;
