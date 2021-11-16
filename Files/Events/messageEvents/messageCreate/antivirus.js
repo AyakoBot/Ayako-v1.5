@@ -82,7 +82,7 @@ async function run(msg, check) {
 			if (!whitelistRes.includes(`${url.hostname}`)) {
 				if (included == false) {
 					embed
-						.setDescription(embed.description + '\n\n' + msg.client.ch.stp(msg.lan.notWhitelisted, { warning: msg.client.constants.emotes.warning, loading: msg.client.constants.emotes.loading }))
+						.setDescription(embed.description.replace(msg.client.ch.stp(msg.lan.check, { loading: msg.client.constants.emotes.loading }), msg.client.ch.stp(msg.lan.done, { tick: msg.client.constants.emotes.tick })) + '\n\n' + msg.client.ch.stp(msg.lan.notWhitelisted, { warning: msg.client.constants.emotes.warning }) + msg.client.ch.stp(msg.lan.check, { loading: msg.client.constants.emotes.loading }))
 						.setColor('#ffff00');
 					if (msg.m) await msg.m.edit({ embeds: [embed] }).catch(() => { });
 					else msg.m = await msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
@@ -94,7 +94,7 @@ async function run(msg, check) {
 						if (!check) included = true;
 					} else {
 						embed
-							.setDescription(embed.description + '\n\n' + msg.client.ch.stp(msg.lan.notBlacklisted, { warning: msg.client.constants.emotes.warning, loading: msg.client.constants.emotes.loading }))
+							.setDescription(embed.description.replace(msg.client.ch.stp(msg.lan.check, { loading: msg.client.constants.emotes.loading }), msg.client.ch.stp(msg.lan.done, { tick: msg.client.constants.emotes.tick })) + '\n\n' + msg.client.ch.stp(msg.lan.notBlacklisted, { warning: msg.client.constants.emotes.warning }) + msg.client.ch.stp(msg.lan.check, { loading: msg.client.constants.emotes.loading }))
 							.setColor('#ffff00');
 						if (msg.m) await msg.m.edit({ embeds: [embed] }).catch(() => { });
 						else msg.m = await msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
@@ -124,7 +124,7 @@ async function run(msg, check) {
 							if (VTget) res = JSON.parse(VTget.text).error ? JSON.parse(VTget.text).error.code : JSON.parse(VTget.text).data.attributes.last_analysis_stats;
 							if (res == 'NotFoundError') {
 								embed
-									.setDescription(embed.description + '\n\n' + msg.client.ch.stp(msg.lan.VTanalyze, { warning: msg.client.constants.emotes.warning }))
+									.setDescription(embed.description.replace(msg.client.ch.stp(msg.lan.check, { loading: msg.client.constants.emotes.loading }), msg.client.ch.stp(msg.lan.done, { tick: msg.client.constants.emotes.tick })) + '\n\n' + msg.client.ch.stp(msg.lan.VTanalyze, { warning: msg.client.constants.emotes.warning }) + msg.client.ch.stp(msg.lan.check, { loading: msg.client.constants.emotes.loading }))
 									.setColor('#ffff00');
 								if (msg.m) await msg.m.edit({ embeds: [embed] }).catch(() => { });
 								else msg.m = await msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
@@ -156,6 +156,7 @@ async function evaluation(msg, VTresponse, url, attributes, check, embed) {
 		if (embed.fields.length == 0) {
 			embed
 				.addField(msg.language.result, msg.client.ch.stp(msg.lan.VTfail, { cross: msg.client.constants.emotes.cross }))
+				.setDescription(embed.description.replace(msg.client.ch.stp(msg.lan.check, { loading: msg.client.constants.emotes.loading })))
 				.setColor('#ffff00');
 			if (msg.m) await msg.m.edit({ embeds: [embed] }).catch(() => { });
 			else msg.m = await msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
@@ -188,6 +189,7 @@ async function evaluation(msg, VTresponse, url, attributes, check, embed) {
 		if (embed.fields.length == 0) {
 			embed
 				.addField(msg.language.result, msg.client.ch.stp(msg.lan.VTharmless, { tick: msg.client.constants.emotes.tick }))
+				.setDescription(embed.description.replace(msg.client.ch.stp(msg.lan.check, { loading: msg.client.constants.emotes.loading }), msg.client.ch.stp(msg.lan.done, { tick: msg.client.constants.emotes.tick })))
 				.setColor('#00ff00');
 			if (msg.m) await msg.m.edit({ embeds: [embed] }).catch(() => { });
 			else msg.m = await msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
@@ -209,6 +211,7 @@ async function end(data, check, embed, note) {
 		if (embed.fields.length == 0) {
 			embed
 				.addField(data.msg.language.result, data.msg.client.ch.stp(data.msg.lan.notexistent, { url: data.link.hostname }))
+				.setDescription(embed.description.replace(data.msg.client.ch.stp(data.msg.lan.check, { loading: data.msg.client.constants.emotes.loading }), data.msg.client.ch.stp(data.msg.lan.done, { tick: data.msg.client.constants.emotes.tick })))
 				.setColor('#00ff00');
 			if (data.msg.m) await data.msg.m.edit({ embeds: [embed] }).catch(() => { });
 			else data.msg.m = await data.msg.client.ch.reply(data.msg, { embeds: [embed] }).catch(() => { });
@@ -223,6 +226,7 @@ async function end(data, check, embed, note) {
 				embed
 					.addField(data.msg.language.result, data.msg.client.ch.stp(data.msg.lan.blacklisted, { cross: data.msg.client.constants.emotes.cross }))
 					.addField(data.msg.language.attention, note.split(/\|+/)[1])
+					.setDescription(embed.description.replace(data.msg.client.ch.stp(data.msg.lan.check, { loading: data.msg.client.constants.emotes.loading }), data.msg.client.ch.stp(data.msg.lan.done, { tick: data.msg.client.constants.emotes.tick })))
 					.setColor('#ff0000');
 				if (data.msg.m) await data.msg.m.edit({ embeds: [embed] }).catch(() => { });
 				else data.msg.m = await data.msg.client.ch.reply(data.msg, { embeds: [embed] }).catch(() => { });
@@ -231,6 +235,7 @@ async function end(data, check, embed, note) {
 			if (embed.fields.length == 0) {
 				embed
 					.addField(data.msg.language.result, data.msg.client.ch.stp(data.msg.lan.blacklisted, { cross: data.msg.client.constants.emotes.cross }))
+					.setDescription(embed.description.replace(data.msg.client.ch.stp(data.msg.lan.check, { loading: data.msg.client.constants.emotes.loading }), data.msg.client.ch.stp(data.msg.lan.done, { tick: data.msg.client.constants.emotes.tick })))
 					.setColor('#ff0000');
 				if (data.msg.m) await data.msg.m.edit({ embeds: [embed] }).catch(() => { });
 				else data.msg.m = await data.msg.client.ch.reply(data.msg, { embeds: [embed] }).catch(() => { });
@@ -244,6 +249,7 @@ async function end(data, check, embed, note) {
 		if (embed.fields.length == 0) {
 			embed
 				.addField(data.msg.language.result, data.msg.client.ch.stp(data.msg.lan.VTmalicious, { cross: data.msg.client.constants.emotes.cross, severity: data.severity }))
+				.setDescription(embed.description.replace(data.msg.client.ch.stp(data.msg.lan.check, { loading: data.msg.client.constants.emotes.loading }), data.msg.client.ch.stp(data.msg.lan.done, { tick: data.msg.client.constants.emotes.tick })))
 				.setColor('#ff0000');
 			if (data.msg.m) await data.msg.m.edit({ embeds: [embed] }).catch(() => { });
 			else data.msg.m = await data.msg.client.ch.reply(data.msg, { embeds: [embed] }).catch(() => { });
@@ -256,6 +262,7 @@ async function end(data, check, embed, note) {
 		if (embed.fields.length == 0) {
 			embed
 				.addField(data.msg.language.result, data.msg.client.ch.stp(data.msg.lan.newLink, { cross: data.msg.client.constants.emotes.cross }))
+				.setDescription(embed.description.replace(data.msg.client.ch.stp(data.msg.lan.check, { loading: data.msg.client.constants.emotes.loading }), data.msg.client.ch.stp(data.msg.lan.done, { tick: data.msg.client.constants.emotes.tick })))
 				.setColor('#ff0000');
 			if (data.msg.m) await data.msg.m.edit({ embeds: [embed] }).catch(() => { });
 			else data.msg.m = await data.msg.client.ch.reply(data.msg, { embeds: [embed] }).catch(() => { });
@@ -268,6 +275,7 @@ async function end(data, check, embed, note) {
 		if (check && (data.severity !== null && data.severity < 2) && embed.fields.length == 0) {
 			embed
 				.addField(data.msg.language.result, data.msg.client.ch.stp(data.msg.lan.whitelisted, { tick: data.msg.client.constants.emotes.tick }))
+				.setDescription(embed.description.replace(data.msg.client.ch.stp(data.msg.lan.check, { loading: data.msg.client.constants.emotes.loading }), data.msg.client.ch.stp(data.msg.lan.done, { tick: data.msg.client.constants.emotes.tick })))
 				.setColor('#00ff00');
 			if (data.msg.m) await data.msg.m.edit({ embeds: [embed] }).catch(() => { });
 			else data.msg.m = await data.msg.client.ch.reply(data.msg, { embeds: [embed] }).catch(() => { });
