@@ -13,7 +13,7 @@ module.exports = {
 				msg.language = language, msg.client = client, msg.guild = guild;
 				msg.r = row;
 				if (timeLeft <= 0) timeLeft = 100;
-				client.bans.set(`${row.guildid}-${row.userid}`, setTimeout(() => client.emit('modBanRemove', client.user, client.users.cache.get(row.userid), language.ready.unmute.reason, msg), timeLeft));
+				client.bans.set(`${row.guildid}-${row.userid}`, setTimeout(() => client.emit('modBanRemove', client.user, client.users.cache.get(row.userid), language.ready.unban.reason, msg), timeLeft));
 			}
 		}
 	}
