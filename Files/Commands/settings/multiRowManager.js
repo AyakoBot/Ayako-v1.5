@@ -508,7 +508,7 @@ async function editer(msg, values, fail, answer, AddRemoveEditView, comesFromSRM
 				else await msg.client.ch.query(`UPDATE ${msg.client.constants.commands.settings.tablenames[msg.file.name][0]} SET ${msg.assigner} = $1 WHERE id = $2;`, [null, values.id]); 
 			} else await msg.client.ch.query(`UPDATE ${msg.client.constants.commands.settings.tablenames[msg.file.name][0]} SET ${msg.assigner} = $1 WHERE id = $2;`, [values[msg.assigner], values.id]); 
 		}
-		require('./singleRowManager').redirecter(msg, null, AddRemoveEditView, fail, values.id ? {id: values.id} : null, values.id ? 'redirecter' : null);
+		require('./singleRowManager').redirecter(msg, answer, AddRemoveEditView, fail, values.id ? {id: values.id} : null, values.id ? 'redirecter' : null);
 	}
 	misc.log(oldRow, msg, newRow);
 }
