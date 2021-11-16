@@ -995,21 +995,21 @@
             "error": "I wasn't able to mute this User!"
         },
         "tempmuteAdd": {
-            "author": "Member was tempmuted\nWarn Number {{nr}}",
-            "description": "{{user}} has tempmuted {{target}}",
+            "author": "Member was Temp-Muted\nWarn Number {{nr}}",
+            "description": "{{user}} has Temp-Muted {{target}}",
             "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
             "activeMute": "Joined with an active Mute",
             "activeMuteError": "This User joined with an active Mute.\nHowever I wasn't able to Mute them.\nMissing Permissions",
             "dm": {
-                "author": "You have been tempmuted on {{guild.name}}"
+                "author": "You have been Temp-Muted on {{guild.name}}"
             },
-            "hasRole": "This Member is already tempmuted",
-            "exeNoPerms": "You can't tempmute this Member",
-            "meNoPerms": "I can't tempmute this Member `Missing Permissions`",
-            "success": "Member {{target}} was tempmuted",
+            "hasRole": "This Member is already muted",
+            "exeNoPerms": "You can't mute this Member",
+            "meNoPerms": "I can't mute this Member `Missing Permissions`",
+            "success": "Member {{target}} was Temp-Muted",
             "noRole": "I wasn't able to find a Mute Role\nVisit `h!settings overview` to set or create one",
             "loading": "Temp-Muting User...",
-            "error": "I wasn't able to tempmute this User!",
+            "error": "I wasn't able to mute this User!",
             "noMember": "This User is not a Member of this Server"
         },
         "muteRemove": {
@@ -1042,7 +1042,23 @@
             "loading": "Banning User...",
             "selfBan": "You can't ban yourself",
             "meBan": "I won't ban myself"
-        },        
+        },     
+        "tempbanAdd": {
+            "author": "User was Tamp-Banned",
+            "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas Temp-Banned by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
+            "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
+            "dm": {
+                "author": "You have been Temp-Banned from {{guild.name}}"
+            },
+            "exeNoPerms": "You can't ban this User",
+            "permissionError": "I don't have enough permissions to ban this User",
+            "error": "I wasn't able to ban this User!",
+            "alreadyBanned": "User {{target}} is already banned",
+            "success": "User {{target}} was banned",
+            "loading": "Banning User...",
+            "selfBan": "You can't ban yourself",
+            "meBan": "I won't ban myself"
+        },   
         "banRemove": {
             "author": "User was unbanned",
             "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas unbanned by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",

@@ -388,6 +388,13 @@
                 "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
             }
         },
+        "tempbanAdd": {
+            "color": "ff0000",
+            "author": {
+                "image": "",
+                "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
+            }
+        },
         "muteRemove": {
             "color": "00ff00",
             "author": {
