@@ -406,7 +406,10 @@
     },
     "ready": {
         "unmute": {
-            "reason": "Automatically Unmuted "
+            "reason": "Automatically Un-Muted"
+        },
+        "unban": {
+            "reason": "Automatically Un-Banned"
         },
         "disboard": {
             "bumpMsg": "You can now Bump this server again!\n\n`!d bump`",
