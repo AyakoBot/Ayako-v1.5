@@ -32,7 +32,7 @@ module.exports = {
 					const mres = await member.roles.add(Muterole).catch(() => {});
 					if (mres) {
 						wasMuted = true;
-						timeLeft = +res.rows[0].duration - Date.now();
+						timeLeft = +res2.rows[0].duration - Date.now();
 					}
 				} else wasMuted = false;
 			}
