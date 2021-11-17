@@ -997,6 +997,7 @@
             "success": "Member {{target}} was muted",
             "noRole": "I wasn't able to find a Mute Role\nVisit `h!settings overview` to set or create one",
             "loading": "Muting User...",
+            "noMemberHint": "This User is not a Member of this Server\n\n**Do you want to Mute them anyways?**\nThey will be automatically Muted if they Re-Join",
             "noMember": "This User is not a Member of this Server",
             "error": "I wasn't able to mute this User!"
         },
@@ -1016,6 +1017,7 @@
             "noRole": "I wasn't able to find a Mute Role\nVisit `h!settings overview` to set or create one",
             "loading": "Temp-Muting User...",
             "error": "I wasn't able to mute this User!",
+            "noMemberHint": "This User is not a Member of this Server\n\n**Do you want to Temp-Mute them anyways?**\nThey will be automatically Muted if they Re-Join before their Mute ends",
             "noMember": "This User is not a Member of this Server"
         },
         "muteRemove": {
@@ -1031,6 +1033,7 @@
             "noRole": "I wasn't able to find a Mute Role\nVisit `h!settings overview` to set or create one",
             "loading": "Un-Muting User...",
             "error": "I wasn't able to unmute this User!",
+            "noMemberHint": "This User is not a Member of this Server\n\n**Do you want to Remove their Mute anyways?**\nOtherwise they will be Re-Muted if they Re-Join before their Mute ends",
             "noMember": "This User is not a Member of this Server"
         },
         "banAdd": {
