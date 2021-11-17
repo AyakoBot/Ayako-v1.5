@@ -7,7 +7,8 @@ module.exports = {
 	type: 2,
 	setupRequired: false,
 	async mmrEmbed(msg, res) {
-		const embed = new Discord.MessageEmbed();
+		const embed = new Discord.MessageEmbed()
+			.setDescription(msg.client.ch.stp(msg.lan.description, {prefix: msg.client.constants.standard.prefix}));
 		for (let i = 0; i < res.length; i++) {
 			const r = res[i];
 			const punishment = msg.language.autopunish[r.punishment];
