@@ -3,11 +3,11 @@ const Discord = require('discord.js');
 
 module.exports = {
 	async execute(oldMsg, newMsg) {
-		if (oldMsg.channel.type !== 'GUILD_NEWS' || newMsg.channel.type !== 'GUILD_NEWS') return;
-		if (oldMsg.crosspostable == newMsg.crosspostable) return;
+		if (oldMsg?.channel?.type !== 'GUILD_NEWS' || newMsg.channel.type !== 'GUILD_NEWS') return;
+		if (oldMsg?.crosspostable == newMsg.crosspostable) return;
 		const ch = client.ch;
 		const Constants = client.constants;
-		const guild = oldMsg.guild;
+		const guild = newMsg.guild;
 		const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);
 		if (res && res.rowCount > 0) {
 			const r = res.rows[0];
