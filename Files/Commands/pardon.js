@@ -67,7 +67,6 @@ module.exports = {
 				)
 				.setFooter(msg.lan.warnID + warn.row_number);
 		}
-		const logRes = await msg.client.ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [msg.guild.id]);
-		if (logRes && logRes.rowCount > 0) msg.client.ch.send(msg.client.channels.cache.get(logRes.rows[0].modEvents), { embeds: [logEmbed] });
+		if (msg.logchannel) msg.client.ch.send(msg.logchannel, { embeds: [logEmbed] });
 	}
 };

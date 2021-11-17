@@ -49,8 +49,8 @@ module.exports = {
 					);
 				});
 				const res = await msg.client.ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [msg.guild.id]);
-				if (res && res.rowCount > 0 && res.rows[0].verbositylog) {
-					const channel = msg.client.channels.cache.get(res.rows[0].verbositylog);
+				if (res && res.rowCount > 0 && res.rows[0].settingsLog) {
+					const channel = msg.client.channels.cache.get(res.rows[0].settingsLog);
 					if (channel) msg.client.ch.send(channel, {embeds: [embed]});
 				}
 			}
@@ -81,8 +81,8 @@ module.exports = {
 					);
 				});
 				const res = await msg.client.ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [msg.guild.id]);
-				if (res && res.rowCount > 0 && res.rows[0].verbositylog) {
-					const channel = msg.client.channels.cache.get(res.rows[0].verbositylog);
+				if (res && res.rowCount > 0 && res.rows[0].settingsLog) {
+					const channel = msg.client.channels.cache.get(res.rows[0].settingsLog);
 					if (channel) msg.client.ch.send(channel, {embeds: [embed]});
 				}
 			}
@@ -102,8 +102,8 @@ module.exports = {
 					}
 				);
 			const res = await msg.client.ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [msg.guild.id]);
-			if (res && res.rowCount > 0 && res.rows[0].verbositylog) {
-				const channel = msg.client.channels.cache.get(res.rows[0].verbositylog);
+			if (res && res.rowCount > 0 && res.rows[0].settingsLog) {
+				const channel = msg.client.channels.cache.get(res.rows[0].settingsLog);
 				if (channel) msg.client.ch.send(channel, {embeds: [embed]});
 			}
 		}
