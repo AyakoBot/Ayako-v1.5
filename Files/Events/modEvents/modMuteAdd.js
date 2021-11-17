@@ -141,7 +141,7 @@ async function ask(executor, msg) {
 			});
 			buttonsCollector.on('end', (col, reason) => {
 				if (reason == 'time') {
-					msg.client.ch.collectorEnd(msg.m);
+					msg.client.ch.collectorEnd(msg);
 					resolve([true]);
 				}
 			});
