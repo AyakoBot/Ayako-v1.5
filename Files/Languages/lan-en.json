@@ -979,6 +979,9 @@
             "proceed": "Proceed",
             "abort": "Abort"
         },
+        "strike": {
+            "notEnabled": "The strike System is not enabled\nuse `{{prefix}}settings autopunish` to enable it"
+        },
         "muteAdd": {
             "author": "Member was muted\nWarn Number {{nr}}",
             "description": "{{user}} has muted {{target}}",
@@ -1223,6 +1226,12 @@
             "reason": "addRole Command executed by {{user.tag}}",
             "created": "{{role}} was created",
             "noName": "You have to at least provide a Name for the Role"
+        },
+        "strike": {
+            "description": "Use Ayakos Auto-Punish system to consistently punish misbehaviour",
+            "usage": ["strike [user ID or mention] (reason)"],
+            "category": "Moderation",
+            "reason": "Ayako Auto-Punish System | No Reason Provided"
         },
         "delrole": {
             "description": "Delete a Role from your Server.",
