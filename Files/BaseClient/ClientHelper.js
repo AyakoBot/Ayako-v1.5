@@ -82,7 +82,7 @@ module.exports = {
 		if (content && content.type == 'rich') options.embeds ? options.embeds.push(content) : options.embeds = [content];
 		else if (typeof(content) !== 'string') options = content;
 		else options.content = content;
-		return await msg.reply(options).catch((e) => {this.logger('Reply Error', e);});
+		return await msg.reply(options).catch(() => {});
 	},
 	/**
 	 * Places Objects or Strings of the Objects Option into the Expressions option, replacing same named variables marked by "{{variable Name}}".
