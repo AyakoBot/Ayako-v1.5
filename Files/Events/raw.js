@@ -45,5 +45,6 @@ module.exports = {
 			const res = await ch.query('SELECT * FROM giveawaysettings WHERE messageid = $1;', [event.d.id]);
 			if (res && res.rowCount > 0) ch.query('DELETE FROM giveawaysettings WHERE messageid = $1;', [event.d.id]);
 		}
+		if (event.t == 'MESSAGE_EDIT') console.log(event);
 	}
 };
