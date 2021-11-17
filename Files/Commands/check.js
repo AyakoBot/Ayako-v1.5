@@ -117,7 +117,8 @@ module.exports = {
 									{ name: msg.lan.date, value: `<t:${warn.dateofwarn.slice(0, -3)}:F> (<t:${warn.dateofwarn.slice(0, -3)}:R>)`, inline: false },
 									{ name: msg.lan.warnedIn, value: `<#${warn.warnedinchannelid}>\n\`${warn.warnedinchannelname}\``, inline: false },
 									{ name: msg.lan.warnedBy, value: `<@${warn.warnedbyuserid}>\n\`${warn.warnedbyusername}\` (\`${warn.warnedbyuserid}\`)`, inline: false },
-								);
+								)
+								.setFooter(msg.lan.warnID + warn.row_number);
 							embeds.push(warnEmbed);
 						});
 					}
@@ -153,11 +154,12 @@ module.exports = {
 													notClosed :
 													msg.language.never
 										}`, inline: false },
-								);
+								)
+								.setFooter(msg.lan.warnID + mute.row_number);
 							embeds.push(muteEmbed);
 						});
 					}
-					clickButton.update({embeds: embeds});
+					clickButton.update({embeds: embeds, components: []});
 				}
 				collector.stop('finished');
 			}

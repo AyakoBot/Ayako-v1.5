@@ -1391,7 +1391,18 @@
                 "desc": "{{amount}} Users have been banned"
             }
         },
+        "pardon" : {
+            "duration": "Mute Duration",
+            "muteclosed": "Mute Closed",
+            "closed": "Mute ended {{time}}",
+            "notClosed": "Mute will end {{time}}",
+            "abortedMute": "Mute would have ended {{time}}\nBut it was manually aborted",
+            "warnID": "Warn ID: "
+        },
         "check": {
+            "categoy": "Moderation",
+            "description": "Check a Users Warns and Mutes",
+            "usage": ["check [user ID or mention]"],
             "author": "Warnings of {{target.tag}}",
             "banLoad": "Fetching Bans",
             "banned": "{{target.username}} is banned",
@@ -1414,7 +1425,8 @@
             "muteclosed": "Mute Closed",
             "closed": "Mute ended {{time}}",
             "notClosed": "Mute will end {{time}}",
-            "abortedMute": "Mute would have ended {{time}}\nBut it was manually aborted"
+            "abortedMute": "Mute would have ended {{time}}\nBut it was manually aborted",
+            "warnID": "Warn ID: "
         },
         "uptime": {
             "text": "I am online since"
