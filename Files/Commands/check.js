@@ -26,7 +26,7 @@ module.exports = {
 		const count = {warns: 0, mutes: 0};
 		const options = {warns: new Array, mutes: new Array};
 
-		const res = await msg.client.ch.query('SELECT * FROM warns WHERE userid = $1 ORDER BY dateofwarn ASC;', [user.id]);
+		const res = await msg.client.ch.query('SELECT * FROM warns WHERE userid = $1 AND guildid = $2 ORDER BY dateofwarn ASC;', [user.id, msg.guild.id]);
 		if (res && res.rowCount > 0) {
 			res.rows.forEach((r, i) => res.rows[i].row_number = i);
 			res.rows.forEach((r) => {
