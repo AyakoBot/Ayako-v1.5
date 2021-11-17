@@ -14,8 +14,8 @@ module.exports = {
 		for (const file of settingsFiles) {
 			const settingsfile = require(`./settings/${file}`);
 			settingsfile.name = file.replace('.js', '');
-			if (!msg.lan[settingsfile.name]) throw new Error(`Couldn't find ${settingsfile.name} in msg.language.commands.settings`);
-			settingsfile.category = msg.lan[settingsfile.name].category;
+			if (!msg.language.commands.settings[settingsfile.name]) throw new Error(`Couldn't find ${settingsfile.name} in msg.language.commands.settings`);
+			settingsfile.category = msg.language.commands.settings[settingsfile.name].category;
 			settings.set(file.replace('.js', ''), settingsfile);
 		}
 		if (!msg.args[0]) {
