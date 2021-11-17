@@ -1600,6 +1600,7 @@
             },
             "autopunish": {
                 "category": ["Auto Moderation"],
+                "description": "**How to use**\nTo use the Auto-Punishment System, **use** `{{prefix}}strike [user] (reason)`\ninstead of regular Moderation Commands\n\nThe Auto-Punish System does not take your ability to use regular Moderation Commands, it just guarantees consisten Punishments\n\n\u200b",
                 "type": "Auto-Punish",
                 "punishment": "Punishment",
                 "duration": "Duration (Only applies to Punishments prefixed with `Temp-`)",
