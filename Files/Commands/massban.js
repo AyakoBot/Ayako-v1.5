@@ -142,16 +142,15 @@ module.exports = {
 				const res = await msg.client.ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [msg.guild.id]);
 				if (res && res.rowCount > 0) {
 					const path = await msg.client.ch.txtFileWriter(uniqueUsers);
-					const logchannel = msg.client.channels.cache.get(res.rows[0].logchannel);
-					if (logchannel && uniqueUsers.length !== 0) {
+					if (msg.logchannel && uniqueUsers.length !== 0) {
 						if (path) {
-							msg.client.ch.send(logchannel, {
+							msg.client.ch.send(msg.logchannel, {
 								embed: logembed,
 								files: [{
 									attachment: path,
 								}]
 							});
-						} else msg.client.ch.send(logchannel, {embed: logembed});
+						} else msg.client.ch.send(msg.logchannel, {embed: logembed});
 					}
 				}
 				clearInterval(interval);
