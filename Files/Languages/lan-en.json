@@ -789,6 +789,7 @@
     "never": "Never",
     "id": "ID",
     "number": "Number",
+    "noNumber": "The Argument `{{arg}}` is not a Number",
     "list": "list",
     "List": "List",
     "mute": "Muted",
@@ -1367,7 +1368,7 @@
             }
         },
         "massban": {
-            "categoy": "Moderation",
+            "category": "Moderation",
             "description": "Ban as many users from the server as the Discord Character limit lets you",
             "usage": ["massban [user IDs or mentions] (reason)"],
             "already": "(already banned)",
@@ -1392,15 +1393,15 @@
             }
         },
         "pardon" : {
-            "duration": "Mute Duration",
-            "muteclosed": "Mute Closed",
-            "closed": "Mute ended {{time}}",
-            "notClosed": "Mute will end {{time}}",
-            "abortedMute": "Mute would have ended {{time}}\nBut it was manually aborted",
-            "warnID": "Warn ID: "
+            "category": "Moderation",
+            "description": "Pardon a Warn from a User",
+            "usage": ["pardon [user ID or mention] [warn ID] (reason)"],
+            "done": "Pardoned Warn with ID {{number}} from {{target}}", 
+            "warnIssue": "Warn was issued at",
+            "noWarn": "There is no Warn with ID `{{number}}`"
         },
         "check": {
-            "categoy": "Moderation",
+            "category": "Moderation",
             "description": "Check a Users Warns and Mutes",
             "usage": ["check [user ID or mention]"],
             "author": "Warnings of {{target.tag}}",
@@ -1450,7 +1451,7 @@
             "valid": "Valid Answers",
             "notValid": "This Answer was not valid",
             "howToEdit3": "Click:\n`add` to create a new Entry\n`remove` to remove an existing Entry\n`edit` to edit an existing Entry\n`list` to list an existing Entry",
-            "categoy": "Info",
+            "category": "Info",
             "description": "Display the Ayako Server Settings",
             "pleaseRestart": "Please try again or type |cancel|",
             "edited": "Successfully edited\n```{{edited}}```",
