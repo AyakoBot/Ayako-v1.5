@@ -10,9 +10,8 @@ module.exports = {
 		const guild = newMsg.guild;
 		const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);
 		if (res && res.rowCount > 0) {
-			const r = res.rows[0];
-			const logchannel = client.channels.cache.get(r.channelevents);
-			if (logchannel && logchannel.id) {
+			const channels = res.rows[0].messageevents?.map((id) => typeof client.channels.cache.get(id)?.send == 'function' ? client.channels.cache.get(id) : null).filter(c => c !== null);
+			if (channels && channels.length > 0) {
 				const language = await ch.languageSelector(guild);
 				const con = Constants.messageUpdateLogPublish;
 				const lan = language.messageUpdateLogPublish;
@@ -30,9 +29,7 @@ module.exports = {
 						chunks.last = '\u2026'+newMsg.content.substr(maxFieldSize-1, maxFieldSize * 2);
 						embed.addField(language.content, chunks.first);
 						embed.addField('\u200b', chunks.last);
-					} else {
-						embed.addField(language.content, newMsg.content);
-					}
+					} else embed.addField(language.content, newMsg.content);
 				}
 				if (newMsg.embeds) {
 					for (const embeds of newMsg.embeds) {
@@ -49,7 +46,7 @@ module.exports = {
 						embed.setImage(`attachment://${name}`);
 					}
 				}
-				ch.send(logchannel, embed);
+				ch.send(channels, embed);
 			}
 		}
 	}

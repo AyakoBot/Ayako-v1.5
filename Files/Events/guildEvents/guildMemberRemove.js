@@ -5,25 +5,24 @@ require('moment-duration-format');
 module.exports = {
 	async execute(member) {
 		const client = member.client;
-		const user = await client.users.fetch(member.id);
+		const user = member.user;
 		const guild = member.guild;
 		const ch = client.ch;
 		const Constants = client.constants;
-		const language = await ch.languageSelector(guild);
-		const lan = language.guildMemberRemove;
-		const con = Constants.guildMemberRemove;
 		const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);
 		if (res && res.rowCount > 0) {
-			const r = res.rows[0];
-			let audit = await guild.fetchAuditLogs({limit: 5, type: 20}).catch(() => {});	
-			let entry;
-			if (audit && audit.entries) {
-				audit = audit.entries.filter((e) => e.target.id == user.id);
-				entry = audit.sort((a,b) => b.id - a.id);
-				entry = entry.first();
-			}
-			const logchannel = client.channels.cache.get(r.guildmemberevents);
-			if (logchannel && logchannel.id) {
+			const channels = res.rows[0].guildmemberevents?.map((id) => typeof client.channels.cache.get(id)?.send == 'function' ? client.channels.cache.get(id) : null).filter(c => c !== null);
+			if (channels && channels.length > 0) {
+				const language = await ch.languageSelector(guild);
+				const lan = language.guildMemberRemove;
+				const con = Constants.guildMemberRemove;
+				let audit = await guild.fetchAuditLogs({limit: 5, type: 20}).catch(() => {});	
+				let entry;
+				if (audit && audit.entries) {
+					audit = audit.entries.filter((e) => e.target.id == user.id);
+					entry = audit.sort((a,b) => b.id - a.id);
+					entry = entry.first();
+				}
 				const embed = new Discord.MessageEmbed()
 					.setColor(con.color)
 					.setThumbnail(ch.displayAvatarURL(user))
@@ -38,10 +37,7 @@ module.exports = {
 							if (i == 0) embed.addField(language.roles, chunks[i]);
 							else embed.addField('\u200b', chunks[i]);
 						}
-					} else {
-						const rolemap = roles.map(r => `${r}`).join(' | ');
-						embed.addField(language.roles, rolemap);
-					}
+					} else embed.addField(language.roles, roles.map(r => `${r}`).join(' | '));
 				}
 				if (entry && entry.id && (+ch.getUnix(entry.id) > (Date.now() - 1000))) {
 					embed
@@ -53,7 +49,7 @@ module.exports = {
 						.setAuthor(lan.author.nameLeave, con.author.leaveImage, ch.stp(con.author.link, {user: user}));
 				}
 				embed.addField(language.joinedAt, `\`${new Date(member.joinedTimestamp).toUTCString()}\`\n(\`${ch.stp(language.time.timeAgo, {time: moment.duration(Date.now() - member.joinedTimestamp).format(`Y [${language.time.years}], M [${language.time.months}], W [${language.time.weeks}], D [${language.time.days}], H [${language.time.hours}], m [${language.time.minutes}], s [${language.time.seconds}]`)})}\`)`);
-				ch.send(logchannel, embed);
+				ch.send(channels, embed);
 			}
 		}
 	}
@@ -62,9 +58,7 @@ module.exports = {
 function chunker(arr, len) {
 	let chunks = [];
 	let i = 0;
-	while (i < arr.length) {
-		chunks.push(arr.slice(i, i += len));
-	}
+	while (i < arr.length) chunks.push(arr.slice(i, i += len));
 	chunks = chunks.map(o => o);
 	return chunks;
 }

@@ -5,14 +5,13 @@ module.exports = {
 		const client = ban.client;
 		const ch = client.ch;
 		const Constants = client.constants;
-		const language = await ch.languageSelector(ban.guild);
-		const lan = language.guildBanAdd;
-		const con = Constants.guildBanAdd;
 		const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [ban.guild.id]);
 		if (res && res.rowCount > 0) {
-			const r = res.rows[0];
-			const logchannel = client.channels.cache.get(r.guildevents);
-			if (logchannel && logchannel.id) {
+			const channels = res.rows[0].guildevents?.map((id) => typeof client.channels.cache.get(id)?.send == 'function' ? client.channels.cache.get(id) : null).filter(c => c !== null);
+			if (channels && channels.length > 0) {
+				const language = await ch.languageSelector(ban.guild);
+				const lan = language.guildBanAdd;
+				const con = Constants.guildBanAdd;				
 				const audits = await ban.guild.fetchAuditLogs({limit: 3, type: 22});
 				let entry;
 				if (audits && audits.entries) {
@@ -31,7 +30,7 @@ module.exports = {
 					embed.setDescription(ch.stp(lan.description.withoutUser, {target: ban.guild}));
 					embed.addField(language.reason, ban.reason ? ban.reason : language.unknown);
 				}
-				ch.send(logchannel, embed);
+				ch.send(channels, embed);
 			}
 		}
 	}

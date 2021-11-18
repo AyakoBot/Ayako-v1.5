@@ -7,14 +7,13 @@ module.exports = {
 		const ch = client.ch;
 		const Constants = client.constants;
 		const guild = oldState.guild;
-		const language = await ch.languageSelector(guild);
-		const lan = language.voiceUpdate;
-		const con = Constants.voiceUpdate;
 		const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);
 		if (res && res.rowCount > 0) {
-			const r = res.rows[0];
-			const logchannel = client.channels.cache.get(r.roleevents);
-			if (logchannel && logchannel.id) {
+			const channels = res.rows[0].roleevents?.map((id) => typeof client.channels.cache.get(id)?.send == 'function' ? client.channels.cache.get(id) : null).filter(c => c !== null);
+			if (channels && channels.length > 0) {
+				const language = await ch.languageSelector(guild);
+				const lan = language.voiceUpdate;
+				const con = Constants.voiceUpdate;
 				const embed  = new Discord.MessageEmbed()
 					.setTimestamp()
 					.setColor(con.color)
@@ -87,7 +86,7 @@ module.exports = {
 				if (changedKey.length < 1) return;
 				embed.setDescription(ch.stp(lan.description, {user: newState ? newState.member.user : oldState.member.user}));
 				embed.description = embed.description ? embed.description+'\n\n'+language.changes+': '+changedKey.map(o => ` \`${o}\``) : language.changes+': '+changedKey.map(o => ` \`${o}\``);
-				if (embed.description) ch.send(logchannel, embed);
+				if (embed.description) ch.send(channels, embed);
 			}
 		}
 		async function getAudit(type) {

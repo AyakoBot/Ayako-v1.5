@@ -6,14 +6,13 @@ module.exports = {
 		const guild = role.guild;
 		const ch = client.ch;
 		const Constants = client.constants;
-		const language = await ch.languageSelector(guild);
-		const lan = language.roleCreate;
-		const con = Constants.roleCreate;
 		const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);
 		if (res && res.rowCount > 0) {
-			const r = res.rows[0];
-			const logchannel = client.channels.cache.get(r.roleevents);
-			if (logchannel && logchannel.id) {
+			const channels = res.rows[0].roleevents?.map((id) => typeof client.channels.cache.get(id)?.send == 'function' ? client.channels.cache.get(id) : null).filter(c => c !== null);
+			if (channels && channels.length > 0) {
+				const language = await ch.languageSelector(guild);
+				const lan = language.roleCreate;
+				const con = Constants.roleCreate;
 				const audits = await guild.fetchAuditLogs({limit: 3, type: 30});
 				let entry;
 				if (audits && audits.entries) {
@@ -28,7 +27,7 @@ module.exports = {
 				if (entry) embed.setDescription(ch.stp(lan.descriptionWithAudit, {user: entry.executor, role: role}));
 				else if (guild.members.cache.find(m => m.user.bot && (m.user.username == role.name)) && role.managed) embed.setDescription(ch.stp(lan.descriptionAutorole, {user: guild.members.cache.find(m => m.user.bot && (m.user.username == role.name)).user, role: role}));
 				else embed.setDescription(ch.stp(lan.descriptionWithoutAudit, {role: role}));
-				ch.send(logchannel, embed);
+				ch.send(channels, embed);
 			}
 		}
 	}

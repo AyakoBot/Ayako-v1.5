@@ -2,17 +2,16 @@ const Discord = require('discord.js');
 
 module.exports = {
 	async execute(data) {
-		if (!data.guild) return; //we only want to process channels here since webhook events should always be hooked to a channel
+		if (!data.guild) return;
 		const client = data.client;
 		const ch = client.ch;
 		const Constants = client.constants;
 		const guild = data.guild;
-		const language = await ch.languageSelector(guild);
 		const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);
 		if (res && res.rowCount > 0) {
-			const r = res.rows[0];
-			const logchannel = client.channels.cache.get(r.webhookevents);
-			if (logchannel && logchannel.id) {
+			const channels = res.rows[0].webhookevents?.map((id) => typeof client.channels.cache.get(id)?.send == 'function' ? client.channels.cache.get(id) : null).filter(c => c !== null);
+			if (channels && channels.length > 0) {
+				const language = await ch.languageSelector(guild);
 				const webhooks = await data.fetchWebhooks().catch(() => {});
 				const audits = [];
 				const auditsCreate = await guild.fetchAuditLogs({limit: 3, type: 50});
@@ -95,7 +94,7 @@ module.exports = {
 						if (entry.reason) embed.addField(language.reason, entry.reason);
 						embed.setDescription(ch.stp(lan.description, {user: entry.executor, channel: data}));
 					}
-					if (embed.description) ch.send(logchannel, embed);
+					if (embed.description) ch.send(channels, embed);
 				}
 			}
 		}

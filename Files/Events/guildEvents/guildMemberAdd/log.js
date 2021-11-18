@@ -8,14 +8,13 @@ module.exports = {
 		const guild = member.guild;
 		const ch = client.ch;
 		const Constants = client.constants;
-		const language = await ch.languageSelector(guild);
-		const lan = language.guildMemberAddLog;
-		const con = Constants.guildMemberAddLog;
 		const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);
 		if (res && res.rowCount > 0) {
-			const r = res.rows[0];
-			const logchannel = client.channels.cache.get(r.guildmemberevents);
-			if (logchannel && logchannel.id) {
+			const channels = res.rows[0].guildmemberevents?.map((id) => typeof client.channels.cache.get(id)?.send == 'function' ? client.channels.cache.get(id) : null).filter(c => c !== null);
+			if (channels && channels.length > 0) {
+				const language = await ch.languageSelector(guild);
+				const lan = language.guildMemberAddLog;
+				const con = Constants.guildMemberAddLog;				
 				const embed = new Discord.MessageEmbed()
 					.setTimestamp()
 					.addField(language.createdAt, `\`${new Date(user.createdTimestamp).toUTCString()}\`\n(\`${ch.stp(language.time.timeAgo, {time: moment.duration(Date.now() - user.createdTimestamp).format(`Y [${language.time.years}], M [${language.time.months}], W [${language.time.weeks}], D [${language.time.days}], H [${language.time.hours}], m [${language.time.minutes}], s [${language.time.seconds}]`)})}\`)`)
@@ -31,11 +30,8 @@ module.exports = {
 					}
 					embed.setAuthor(lan.author.titleBot, con.author.image, ch.stp(con.author.link, {user: user}));
 					embed.setThumbnail(ch.displayAvatarURL(user));
-					if (entry) {
-						embed.setDescription(ch.stp(lan.descriptionBot, {user: entry.executor, bot: user}));
-					} else {
-						embed.setDescription(ch.stp(lan.descriptionBotNoAudit, {bot: user}));
-					}
+					if (entry) embed.setDescription(ch.stp(lan.descriptionBot, {user: entry.executor, bot: user}));
+					else embed.setDescription(ch.stp(lan.descriptionBotNoAudit, {bot: user}));
 				} else {
 					const newInvites = await guild.invites.fetch();
 					client.invites.set(guild.id, newInvites);
@@ -49,7 +45,7 @@ module.exports = {
 						else embed.addField(lan.inviteInfoTitle, ch.stp(lan.inviteInfo, {invite: usedInvite}));
 					}
 				}
-				ch.send(logchannel, embed);
+				ch.send(channels, embed);
 			}
 		}
 	}

@@ -118,11 +118,8 @@ module.exports = {
 			const editintervalF = setInterval(async () => {if (descF.length !== uniqueFails.length) await m.edit(replyEmbed);}, 5000);
 			const intervalF = setInterval(async () => {
 				if (descF.length == uniqueFails.length) {
-					if (`${descF}`.length > 2048) {
-						replyEmbed.setDescription(msg.client.ch.stp(msg.lan.fBannedUsers, {amount: descF.length}));
-					} else {
-						replyEmbed.setDescription(`\u200b${descF}`);
-					}
+					if (`${descF}`.length > 2048) replyEmbed.setDescription(msg.client.ch.stp(msg.lan.fBannedUsers, {amount: descF.length}));
+					else replyEmbed.setDescription(`\u200b${descF}`);
 					replyEmbed.setAuthor(msg.lan.failed, msg.client.constants.crossLink, msg.client.constants.standard.invite);
 					clearInterval(intervalF);
 					setTimeout(() => {clearInterval(interval);}, 3600000);
@@ -139,19 +136,18 @@ module.exports = {
 					.setField(msg.language.reason, msg.client.ch.makeCodeBlock(banreason))
 					.setColor(con.log.color)
 					.setTimestamp();
-				const res = await msg.client.ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [msg.guild.id]);
-				if (res && res.rowCount > 0) {
-					const path = await msg.client.ch.txtFileWriter(uniqueUsers);
-					if (msg.logchannel && uniqueUsers.length !== 0) {
-						if (path) {
-							msg.client.ch.send(msg.logchannel, {
-								embed: logembed,
+				const path = await msg.client.ch.txtFileWriter(uniqueUsers);
+				if (msg.logchannels.length !== 0 && uniqueUsers.length !== 0) {
+					if (path) {
+						msg.logchannels.forEach((c) => {
+							msg.client.ch.send(c, {
+								embeds: [logembed],
 								files: [{
 									attachment: path,
 								}]
 							});
-						} else msg.client.ch.send(msg.logchannel, {embed: logembed});
-					}
+						});
+					} else msg.logchannels.forEach((c) => msg.client.ch.send(c, {embeds: [logembed]}));
 				}
 				clearInterval(interval);
 			}

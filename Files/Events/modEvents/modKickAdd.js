@@ -55,9 +55,6 @@ module.exports = {
 			let err;
 			const kick = await member.kick(reason).catch((e) => {err = e;});
 			if (kick) {
-				const res = await msg.client.ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [msg.guild.id]);
-				let logchannel;
-				if (res && res.rowCount > 0) logchannel = msg.client.channels.cache.get(res.rows[0].guildevents);
 				const embed = new Discord.MessageEmbed()
 					.setColor(con.color)
 					.setAuthor(lan.author, msg.client.ch.displayAvatarURL(executor), msg.client.constants.standard.invite)
@@ -66,7 +63,7 @@ module.exports = {
 					.setThumbnail(msg.client.ch.displayAvatarURL(target))
 					.addField(language.reason, `\`\`\`${reason}\`\`\``)
 					.setFooter(msg.client.ch.stp(lan.footer, {user: executor, target: target}));
-				if (logchannel) msg.client.ch.send(logchannel, embed);
+				if (msg.logchannels.length > 0) msg.client.ch.send(msg.logchannels, embed);
 			} else if (!member) {
 				if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.cross + ' ' + lan.noMember);
 				else em.setDescription(msg.client.constants.emotes.cross + ' ' + lan.noMember);

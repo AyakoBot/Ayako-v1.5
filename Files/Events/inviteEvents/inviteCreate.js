@@ -9,14 +9,13 @@ module.exports = {
 		const Constants = client.constants;
 		const guild = invite.guild;
 		client.invites.set(guild.id, invite);
-		const language = await ch.languageSelector(guild);
-		const lan = language.inviteCreate;
-		const con = Constants.inviteCreate;
 		const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);
 		if (res && res.rowCount > 0) {
-			const r = res.rows[0];
-			const logchannel = client.channels.cache.get(r.inviteevents);
-			if (logchannel && logchannel.id) {
+			const channels = res.rows[0].inviteevents?.map((id) => typeof client.channels.cache.get(id)?.send == 'function' ? client.channels.cache.get(id) : null).filter(c => c !== null);
+			if (channels && channels.length > 0) {
+				const language = await ch.languageSelector(guild);		
+				const lan = language.inviteCreate;
+				const con = Constants.inviteCreate;		
 				const audits = await invite.guild.fetchAuditLogs({limit: 10, type: 40});
 				let entry;
 				if (audits && audits.entries) {
@@ -43,7 +42,7 @@ module.exports = {
 				if (invite.maxUses) embed.addField(lan.uses, invite.maxUses, true);
 				if (invite.targetUser) embed.addField(lan.targetedUser, `${invite.targetUser} / \`${invite.targetUser.username}\` / \`${invite.targetUser.id}\``, true);
 				if (invite.url) embed.addField(lan.url, `${invite.url}`, true);
-				ch.send(logchannel, embed);
+				ch.send(channels, embed);
 			}
 		}
 	}

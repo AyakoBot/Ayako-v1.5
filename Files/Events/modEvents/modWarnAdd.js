@@ -34,17 +34,13 @@ module.exports = {
 			.setDescription(`${msg.language.reason}: \n${reason}`)
 			.setTimestamp();
 		msg.client.ch.send(target, warnEmbed);
-		const res2 = await msg.client.ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [msg.guild.id]);
-		if (res2 && res2.rowCount > 0) {
-			const logchannel = msg.client.channels.cache.get(res2.rows[0].modlogs);
-			const WarnLogEmbed = new Discord.MessageEmbed()
-				.setAuthor(msg.client.ch.stp(lan.log.author, {target: target}), msg.client.ch.displayAvatarURL(target), msg.url)
-				.setDescription(msg.client.ch.stp(lan.log.description, {target: target, user: executor}))
-				.addField(language.reason, `\`\`\`${reason}\`\`\``)
-				.setColor(con.color)
-				.setTimestamp();
-			if (logchannel) msg.client.ch.send(logchannel, WarnLogEmbed);
-		}
+		const WarnLogEmbed = new Discord.MessageEmbed()
+			.setAuthor(msg.client.ch.stp(lan.log.author, {target: target}), msg.client.ch.displayAvatarURL(target), msg.url)
+			.setDescription(msg.client.ch.stp(lan.log.description, {target: target, user: executor}))
+			.addField(language.reason, `\`\`\`${reason}\`\`\``)
+			.setColor(con.color)
+			.setTimestamp();
+		if (msg.logchannels) msg.client.ch.send(msg.logchannels, WarnLogEmbed);
 		let warnnr;
 		const res = await msg.client.ch.query('SELECT * FROM warns WHERE guildid = $1 AND userid = $2;', [msg.guild.id, target.id]);
 		if (res && res.rowCount > 0) warnnr = res.rowCount + 1;

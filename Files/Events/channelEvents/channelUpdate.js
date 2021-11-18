@@ -4,16 +4,15 @@ module.exports = {
 	async execute(oldChannel, newChannel) {
 		const client = oldChannel ? oldChannel.client : newChannel.client;
 		if (oldChannel.type === 'dm') return;
-		if (newChannel.position !== oldChannel.position) return; // flawed logic
-		if (newChannel.children !== oldChannel.children) return; // unnecessary since we already handle parents
+		if (newChannel.position !== oldChannel.position) return;
+		if (newChannel.children !== oldChannel.children) return;
 		const ch = require('../../BaseClient/ClientHelper'); 
 		const Constants = require('../../Constants.json');
 		const guild = newChannel.guild;
 		const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);
 		if (res && res.rowCount > 0) {
-			const r = res.rows[0];
-			const logchannel = client.channels.cache.get(r.channelevents);
-			if (logchannel && logchannel.id) {
+			const channels = res.rows[0].channelevents?.map((id) => typeof client.channels.cache.get(id)?.send == 'function' ? client.channels.cache.get(id) : null).filter(c => c !== null);
+			if (channels && channels.length > 0) {
 				const language = await ch.languageSelector(guild);
 				const lan = language.channelUpdate;
 				const con = Constants.channelUpdate;
@@ -177,12 +176,9 @@ module.exports = {
 						}
 					}
 					if (embed.fields.length == 0) return;
-					if (entry) {
-						embed.setDescription(ch.stp(lan.description.withAudit, {user: entry.executor, channel: newChannel, type: language.channels[newChannel.type]})+`\n\n${language.changes}:`+changedKey.map(o => ` \`${o}\``));
-					} else {
-						embed.setDescription(ch.stp(lan.description.withoutAudit, {channel: newChannel, type: language.channels[newChannel.type]})+`\n\n${language.changes}:`+changedKey.map(o => ` \`${o}\``));
-					}
-					send(logchannel, embed, language);
+					if (entry) embed.setDescription(ch.stp(lan.description.withAudit, {user: entry.executor, channel: newChannel, type: language.channels[newChannel.type]})+`\n\n${language.changes}:`+changedKey.map(o => ` \`${o}\``));
+					else embed.setDescription(ch.stp(lan.description.withoutAudit, {channel: newChannel, type: language.channels[newChannel.type]})+`\n\n${language.changes}:`+changedKey.map(o => ` \`${o}\``));
+					send(channels, embed, language);
 				}
 			}
 		}

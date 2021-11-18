@@ -8,10 +8,9 @@ module.exports = {
 		client.guilds.cache.forEach(async (guild) => {
 			const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);
 			if (res && res.rowCount > 0) {
-				const r = res.rows[0];
-				const logchannel = client.channels.cache.get(r.userevents);
-				if (logchannel && logchannel.id) {
-					const member = await guild.members.cache.get(newUser.id);
+				const channels = res.rows[0].userevents?.map((id) => typeof client.channels.cache.get(id)?.send == 'function' ? client.channels.cache.get(id) : null).filter(c => c !== null);
+				if (channels && channels.length > 0) {
+					const member = guild.members.cache.get(newUser.id);
 					if (member) {
 						const language = await ch.languageSelector(guild);
 						const lan = language.userUpdate;
@@ -43,9 +42,8 @@ module.exports = {
 						}
 						embed.setDescription(ch.stp(lan.description, {user: newUser})+changedKey.map(o => ` \`${o}\``));
 						if (embed.fields.length > 0) {
-							if (file) {
-								ch.send(logchannel, {embeds: [embed], files: [file.path]});
-							} else ch.send(logchannel, {embeds: [embed]});
+							if (file) ch.send(channels, {embeds: [embed], files: [file.path]});
+							else ch.send(channels, {embeds: [embed]});
 						}
 					}
 				}

@@ -6,14 +6,13 @@ module.exports = {
 		const guild = msg.guild;
 		const ch = client.ch;
 		const Constants = client.constants;
-		const language = await ch.languageSelector(guild);
-		const lan = language.messageDelete;
-		const con = Constants.messageDelete;
 		const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);
 		if (res && res.rowCount > 0) {
-			const r = res.rows[0];
-			const logchannel = client.channels.cache.get(r.messageevents);
-			if (logchannel && logchannel.id) {
+			const channels = res.rows[0].messageevents?.map((id) => typeof client.channels.cache.get(id)?.send == 'function' ? client.channels.cache.get(id) : null).filter(c => c !== null);
+			if (channels && channels.length > 0) {
+				const language = await ch.languageSelector(guild);
+				const lan = language.messageDelete;
+				const con = Constants.messageDelete;
 				const audits = await guild.fetchAuditLogs({limit: 5, type: 72});
 				let entry;
 				if (audits && audits.entries) {
@@ -41,14 +40,10 @@ module.exports = {
 						chunks.last = '\u2026'+msg.content.substr(maxFieldSize-1, maxFieldSize * 2);
 						embed.addField(language.content, chunks.first);
 						embed.addField('\u200b', chunks.last);
-					} else {
-						embed.addField(language.content, msg.content);
-					}
+					} else embed.addField(language.content, msg.content);
 				}
 				let path;
-				if (msg.attachments.size > 0) {
-					path = await ch.downloader(msg);
-				}
+				if (msg.attachments.size > 0) path = await ch.downloader(msg);
 				if (path) {
 					const name = await ch.getName(path);
 					embed.setImage(`attachment://${name}`);
@@ -59,8 +54,8 @@ module.exports = {
 						if (msg.embeds[i].description) embed.addField(language.embedDescription, msg.embeds[i].description);
 					}
 				}
-				if (path) ch.send(logchannel, {embeds: [embed], files: [path]});
-				else ch.send(logchannel, {embeds: [embed]});
+				if (path) ch.send(channels, {embeds: [embed], files: [path]});
+				else ch.send(channels, {embeds: [embed]});
 			}
 		}
 	}

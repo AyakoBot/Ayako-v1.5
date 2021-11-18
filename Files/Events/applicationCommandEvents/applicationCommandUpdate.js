@@ -6,14 +6,13 @@ module.exports = {
 		const guild = oldCommand ? oldCommand.guild : newCommand.guild;
 		const ch = client.ch;
 		const Constants = client.constants;
-		const language = await ch.languageSelector(guild);
-		const lan = language.commandUpdate;
-		const con = Constants.commandUpdate;
 		const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);
 		if (res && res.rowCount > 0) {
-			const r = res.rows[0];
-			const logchannel = client.channels.cache.get(r.commandEvents);
-			if (logchannel && logchannel.id) {
+			const channels = res.rows[0].applicationevents?.map((id) => typeof client.channels.cache.get(id)?.send == 'function' ? client.channels.cache.get(id) : null).filter(c => c !== null);
+			if (channels && channels.length > 0) {
+				const language = await ch.languageSelector(guild);
+				const lan = language.commandUpdate;
+				const con = Constants.commandUpdate;				
 				const embed = new Discord.MessageEmbed()
 					.setTimestamp()
 					.setAuthor(lan.author.name, con.author.image)
@@ -39,7 +38,7 @@ module.exports = {
 					newCommand.options.forEach(o => {embed.addField(language.newOptions, `${Discord.Util.escapeBold(language.type)}: ${Discord.Util.escapeInlineCode(language.command[o.type])}\n${language.name}: ${Discord.Util.escapeInlineCode(o.name)}\n${Discord.Util.escapeBold(language.description)}: ${Discord.Util.escapeInlineCode(o.description)}\n${o.required ? `${Discord.Util.escapeBold(language.required)}: ${Discord.Util.escapeInlineCode(o.required)}\n` : '', o.choices ? `${Discord.Util.escapeBold(language.choices)}: ${o.choices.map(e => `${Discord.Util.escapeInlineCode(e)}`)}` : ''}`);});
 				}
 				embed.setDescription(ch.stp(lan.description, {command: oldCommand ? oldCommand : newCommand})+ChangedKey.map(o => ` \`${o}\``));
-				if (embed.fields.length > 0) ch.send(logchannel, embed);
+				if (embed.fields.length > 0) ch.send(channels, embed);
 			}
 		}
 	}

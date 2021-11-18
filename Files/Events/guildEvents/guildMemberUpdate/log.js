@@ -6,15 +6,14 @@ module.exports = {
 		const ch = client.ch;
 		const Constants = client.constants;
 		const member = newMember;
-		const user = await client.users.fetch(member.user.id);
+		const user = member.user;
 		const guild = member.guild;
-		const language = await ch.languageSelector(guild);
-		const con = Constants.guildMemberUpdate;
 		const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);
 		if (res && res.rowCount > 0) {
-			const r = res.rows[0];
-			const logchannel = client.channels.cache.get(r.guildmemberevents);
-			if (logchannel && logchannel.id) {
+			const channels = res.rows[0].guildmemberevents?.map((id) => typeof client.channels.cache.get(id)?.send == 'function' ? client.channels.cache.get(id) : null).filter(c => c !== null);
+			if (channels && channels.length > 0) {
+				const language = await ch.languageSelector(guild);
+				const con = Constants.guildMemberUpdate;	
 				const embed = new Discord.MessageEmbed()
 					.setTimestamp()
 					.setColor(con.color);
@@ -29,22 +28,17 @@ module.exports = {
 						entry = entry.first();
 					}
 					if (entry) {
-						if (entry.executor.id == user.id) {
-							embed.setDescription(ch.stp(lan.descriptionNoUser, {user: entry.executor}));
-						} else {
-							embed.setDescription(ch.stp(lan.descriptionUser, {user: entry.executor, target: entry.target}));
-						}
-					} else {
-						embed.setDescription(ch.stp(lan.descriptionNoAudit, {user: user}));
-					}
+						if (entry.executor.id == user.id) embed.setDescription(ch.stp(lan.descriptionNoUser, {user: entry.executor}));
+						else embed.setDescription(ch.stp(lan.descriptionUser, {user: entry.executor, target: entry.target}));
+					} else embed.setDescription(ch.stp(lan.descriptionNoAudit, {user: user}));
 					embed.addField(language.nickname, `${language.before}: \`${oldMember.nickname ? oldMember.nickname : user.username}\`\n${language.after}: \`${member.nickname ? member.nickname : user.username}\``);
-					ch.send(logchannel, embed);
+					ch.send(channels, embed);
 					return;
 				} else if (oldMember && (oldMember.pending && !member.pending && guild.features.includes('COMMUNITY'))) {
 					const lan = language.guildMemberUpdateVerify;
 					embed.setAuthor(lan.author.name, con.author.image, ch.stp(con.author.link, {user: user}));
 					embed.setDescription(ch.stp(lan.description, {user: user}));
-					ch.send(logchannel, embed);
+					ch.send(channels, embed);
 					return;
 				}
 				if (oldMember.roles.cache == newMember.roles.cache) return;
@@ -69,7 +63,7 @@ module.exports = {
 						else embed.setDescription(ch.stp(lan.descriptionUser, {user: entry.executor, target: entry.target}));
 						embed.addField(language.changes, `${added.map(role => `<:Add:834262756013113354>  <@&${role.id}>`).join('\n')}\n${removed.map((role, i) => `${i === 0 && added.length !== 0 ? '\n' : ''}\n<:Remove:834262790180306964>  <@&${role.id}>`).join('\n')}`);
 						embed.setAuthor(lan.author.name, con.author.image, ch.stp(con.author.link, {user: user}));
-						ch.send(logchannel, embed);
+						ch.send(channels, embed);
 					}
 				}
 			}

@@ -50,8 +50,8 @@ module.exports = {
 				});
 				const res = await msg.client.ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [msg.guild.id]);
 				if (res && res.rowCount > 0 && res.rows[0].settingslog) {
-					const channel = msg.client.channels.cache.get(res.rows[0].settingslog);
-					if (channel) msg.client.ch.send(channel, {embeds: [embed]});
+					const channels = res.rows[0].settingslog?.map((id) => typeof msg.client.channels.cache.get(id)?.send == 'function' ? msg.client.channels.cache.get(id) : null).filter(c => c !== null);
+					msg.client.ch.send(channels, embed);
 				}
 			}
 		} else if (type == 'created') {
@@ -82,9 +82,8 @@ module.exports = {
 				});
 				const res = await msg.client.ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [msg.guild.id]);
 				if (res && res.rowCount > 0 && res.rows[0].settingslog) {
-					const channel = msg.client.channels.cache.get(res.rows[0].settingslog);
-					if (channel) msg.client.ch.send(channel, {embeds: [embed]});
-				}
+					const channels = res.rows[0].settingslog?.map((id) => typeof msg.client.channels.cache.get(id)?.send == 'function' ? msg.client.channels.cache.get(id) : null).filter(c => c !== null);
+					msg.client.ch.send(channels, embed);				}
 			}
 		} else if (type == 'deleted') {
 			const settings = new Object;
@@ -103,8 +102,8 @@ module.exports = {
 				);
 			const res = await msg.client.ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [msg.guild.id]);
 			if (res && res.rowCount > 0 && res.rows[0].settingslog) {
-				const channel = msg.client.channels.cache.get(res.rows[0].settingslog);
-				if (channel) msg.client.ch.send(channel, {embeds: [embed]});
+				const channels = res.rows[0].settingslog?.map((id) => typeof msg.client.channels.cache.get(id)?.send == 'function' ? msg.client.channels.cache.get(id) : null).filter(c => c !== null);
+				msg.client.ch.send(channels, embed);
 			}
 		}
 
