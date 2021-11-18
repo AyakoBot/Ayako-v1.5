@@ -1011,7 +1011,7 @@
                 "footer": "Cleared by {{author.tag}} / {{author.id}}",
                 "details": "[Message Link]({{link}}, \"Click to get to Trigger Message\")",
                 "title": "Warn Type: `{{type}}` | Given by: `{{user}}` in `{{channel}}`",
-                "value": "Given at: {{time}}\nWarn Reason: ```${}```"
+                "value": "Given at: {{time}}\nWarn Reason: ```{{reason}}```"
             }
         },
         "commandHandler": {
