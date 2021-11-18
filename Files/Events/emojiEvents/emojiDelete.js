@@ -12,7 +12,7 @@ module.exports = {
 		const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);
 		if (res && res.rowCount > 0) {
 			const r = res.rows[0];
-			const logchannel = client.channels.cache.get(r.emojiEvents);
+			const logchannel = client.channels.cache.get(r.emojievents);
 			if (logchannel && logchannel.id) {
 				const audits = await emoji.guild.fetchAuditLogs({limit: 10, type: 62});
 				let entry;

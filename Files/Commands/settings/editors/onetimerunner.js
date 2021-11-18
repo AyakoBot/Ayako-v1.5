@@ -37,7 +37,7 @@ module.exports = {
 						await clickButton.deferReply();
 						messageCollector.stop();
 						buttonsCollector.stop();
-						require('../../../Events/guildEvents/guildMemberUpdate/separator').oneTimeRunner(msg, embed, clickButton);
+						require('../../../Events/guildevents/guildMemberUpdate/separator').oneTimeRunner(msg, embed, clickButton);
 					} else if (clickButton.customId == 'back' || clickButton.customId == 'no') {
 						msg.property = undefined;
 						messageCollector.stop();

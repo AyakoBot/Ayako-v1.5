@@ -11,7 +11,7 @@ module.exports = {
 				const msg = new Object;
 				const language = await client.ch.languageSelector(guild);
 				msg.client = client, msg.author = client.user, msg.guild = guild, msg.lanSettings = language.commands.settings, msg.lan = msg.lanSettings.separators, msg.m = message, msg.language = language, msg.channel = client.channels.cache.get(row.channelid);
-				require('../guildEvents/guildMemberUpdate/separator').oneTimeRunner(msg, new Discord.MessageEmbed());
+				require('../guildevents/guildMemberUpdate/separator').oneTimeRunner(msg, new Discord.MessageEmbed());
 			}
 		});
 	}

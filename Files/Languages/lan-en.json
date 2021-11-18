@@ -1319,6 +1319,195 @@
                 "author": "Ayako Settings",
                 "desc": "No Settings available for the selected Setting"
             },
+            "logs": {
+                "category": ["Automation"],
+                "type": "Logs",
+                "eventName": "Discord Events",
+                "guildevents": "Guild Events",
+                "emojievents": "Emoji Events",
+                "inviteevents": "Invite Events",
+                "messageevents": "Message Events",
+                "roleevents": "Role Events",
+                "userevents": "User Events",
+                "voiceevents": "Voice Events",
+                "webhookevents": "Webhook Events",
+                "channelevents": "Channel Events",
+                "applicationevents": "Application Events",
+                "stageinstanceevents": "Stage Instance Events",
+                "stickerevents": "Sticker Events",
+                "threadevents": "Thread Events",
+                "guildmemberevents": "Guild Member Events",
+                "logName": "Ayako Logs",
+                "modlogs": "Moderation Logs",
+                "settingslog": "Settings Logs",
+                "edit": {
+                    "active": {
+                        "name": "Active",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "guildevents": {
+                        "name": "Guild Events",
+                        "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
+                        "select": "Select 1 or more Channels",
+                        "desc": "Select the Channel(s) you want to Log this in Event below",
+                        "fail": {
+                            "no": "I couldn't find this Channel\n",
+                            "wrongGuild": "This Channel is not Part of this Server\n"
+                        }
+                    },
+                    "emojievents": {
+                        "name": "Emoji Events",
+                        "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
+                        "select": "Select 1 or more Channels",
+                        "desc": "Select the Channel(s) you want to Log this in Event below",
+                        "fail": {
+                            "no": "I couldn't find this Channel\n",
+                            "wrongGuild": "This Channel is not Part of this Server\n"
+                        }
+                    },
+                    "inviteevents": {
+                        "name": "Invite Events",
+                        "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
+                        "select": "Select 1 or more Channels",
+                        "desc": "Select the Channel(s) you want to Log this in Event below",
+                        "fail": {
+                            "no": "I couldn't find this Channel\n",
+                            "wrongGuild": "This Channel is not Part of this Server\n"
+                        }
+                    },
+                    "messageevents": {
+                        "name": "Message Events",
+                        "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
+                        "select": "Select 1 or more Channels",
+                        "desc": "Select the Channel(s) you want to Log this in Event below",
+                        "fail": {
+                            "no": "I couldn't find this Channel\n",
+                            "wrongGuild": "This Channel is not Part of this Server\n"
+                        }
+                    },
+                    "roleevents": {
+                        "name": "Role Events",
+                        "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
+                        "select": "Select 1 or more Channels",
+                        "desc": "Select the Channel(s) you want to Log this in Event below",
+                        "fail": {
+                            "no": "I couldn't find this Channel\n",
+                            "wrongGuild": "This Channel is not Part of this Server\n"
+                        }
+                    },
+                    "userevents": {
+                        "name": "User Events",
+                        "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
+                        "select": "Select 1 or more Channels",
+                        "desc": "Select the Channel(s) you want to Log this in Event below",
+                        "fail": {
+                            "no": "I couldn't find this Channel\n",
+                            "wrongGuild": "This Channel is not Part of this Server\n"
+                        }
+                    },
+                    "voiceevents": {
+                        "name": "Voice Events",
+                        "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
+                        "select": "Select 1 or more Channels",
+                        "desc": "Select the Channel(s) you want to Log this in Event below",
+                        "fail": {
+                            "no": "I couldn't find this Channel\n",
+                            "wrongGuild": "This Channel is not Part of this Server\n"
+                        }
+                    },
+                    "webhookevents": {
+                        "name": "Webhook Events",
+                        "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
+                        "select": "Select 1 or more Channels",
+                        "desc": "Select the Channel(s) you want to Log this in Event below",
+                        "fail": {
+                            "no": "I couldn't find this Channel\n",
+                            "wrongGuild": "This Channel is not Part of this Server\n"
+                        }
+                    },
+                    "channelevents": {
+                        "name": "Channel Events",
+                        "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
+                        "select": "Select 1 or more Channels",
+                        "desc": "Select the Channel(s) you want to Log this in Event below",
+                        "fail": {
+                            "no": "I couldn't find this Channel\n",
+                            "wrongGuild": "This Channel is not Part of this Server\n"
+                        }
+                    },
+                    "applicationevents": {
+                        "name": "Application Events",
+                        "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
+                        "select": "Select 1 or more Channels",
+                        "desc": "Select the Channel(s) you want to Log this in Event below",
+                        "fail": {
+                            "no": "I couldn't find this Channel\n",
+                            "wrongGuild": "This Channel is not Part of this Server\n"
+                        }
+                    },
+                    "stageinstanceevents": {
+                        "name": "Stage Instance Events",
+                        "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
+                        "select": "Select 1 or more Channels",
+                        "desc": "Select the Channel(s) you want to Log this in Event below",
+                        "fail": {
+                            "no": "I couldn't find this Channel\n",
+                            "wrongGuild": "This Channel is not Part of this Server\n"
+                        }
+                    },
+                    "stickerevents": {
+                        "name": "Sticker Events",
+                        "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
+                        "select": "Select 1 or more Channels",
+                        "desc": "Select the Channel(s) you want to Log this in Event below",
+                        "fail": {
+                            "no": "I couldn't find this Channel\n",
+                            "wrongGuild": "This Channel is not Part of this Server\n"
+                        }
+                    },
+                    "threadevents": {
+                        "name": "Thread Events",
+                        "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
+                        "select": "Select 1 or more Channels",
+                        "desc": "Select the Channel(s) you want to Log this in Event below",
+                        "fail": {
+                            "no": "I couldn't find this Channel\n",
+                            "wrongGuild": "This Channel is not Part of this Server\n"
+                        }
+                    },
+                    "guildmemberevents": {
+                        "name": "Guild Member Events",
+                        "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
+                        "select": "Select 1 or more Channels",
+                        "desc": "Select the Channel(s) you want to Log this in Event below",
+                        "fail": {
+                            "no": "I couldn't find this Channel\n",
+                            "wrongGuild": "This Channel is not Part of this Server\n"
+                        }
+                    },
+                    "modlogs": {
+                        "name": "Moderation Logs",
+                        "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
+                        "select": "Select 1 or more Channels",
+                        "desc": "Select the Channel(s) you want to Log this in Event below",
+                        "fail": {
+                            "no": "I couldn't find this Channel\n",
+                            "wrongGuild": "This Channel is not Part of this Server\n"
+                        }
+                    },
+                    "settingslog": {
+                        "name": "Settings Logs",
+                        "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
+                        "select": "Select 1 or more Channels",
+                        "desc": "Select the Channel(s) you want to Log this in Event below",
+                        "fail": {
+                            "no": "I couldn't find this Channel\n",
+                            "wrongGuild": "This Channel is not Part of this Server\n"
+                        }
+                    }
+                }
+            },
             "setup": {
                 "author": "Ayako Settings Set-Up",
                 "question": "Would you like to set-up Ayako {{type}}?",
@@ -2043,9 +2232,6 @@
                 "category": ["None"]
             },
             "leveling": {
-                "category": ["Automation"]
-            },
-            "logs": {
                 "category": ["Automation"]
             },
             "modroles": {

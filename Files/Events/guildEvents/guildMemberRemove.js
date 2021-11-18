@@ -22,7 +22,7 @@ module.exports = {
 				entry = audit.sort((a,b) => b.id - a.id);
 				entry = entry.first();
 			}
-			const logchannel = client.channels.cache.get(r.guildMemberEvents);
+			const logchannel = client.channels.cache.get(r.guildmemberevents);
 			if (logchannel && logchannel.id) {
 				const embed = new Discord.MessageEmbed()
 					.setColor(con.color)

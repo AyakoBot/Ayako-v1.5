@@ -19,7 +19,7 @@ module.exports = {
 				entry = audit.sort((a,b) => b.id - a.id);
 				entry = entry.first();
 			}
-			const logchannel = client.channels.cache.get(r.emojiEvents);
+			const logchannel = client.channels.cache.get(r.emojievents);
 			if (logchannel && logchannel.id) {
 				const embed = new Discord.MessageEmbed()
 					.setAuthor(lan.author.title, con.author.image, ch.stp(con.author.link, {emoji: newEmoji, ending: newEmoji.animated ? 'gif' : 'png'}))

@@ -77,7 +77,7 @@ module.exports = {
 			[msg.guild.id, target.id, reason, 'Ban', now + +duration, false, now, msg.channel.id, executor.id, msg.channel.name, msg.author.username]);
 			const res = await msg.client.ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [msg.guild.id]);
 			let logchannel;
-			if (res && res.rowCount > 0) logchannel = msg.client.channels.cache.get(res.rows[0].guildEvents);
+			if (res && res.rowCount > 0) logchannel = msg.client.channels.cache.get(res.rows[0].guildevents);
 			const embed = new Discord.MessageEmbed()
 				.setColor(con.color)
 				.setAuthor(lan.author, msg.client.ch.displayAvatarURL(executor), msg.client.constants.standard.invite)
