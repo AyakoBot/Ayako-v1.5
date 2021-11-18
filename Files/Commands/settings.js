@@ -28,7 +28,7 @@ module.exports = {
 					t[i] = `${settingsFile.type ? settingsFile.type == 1 ? msg.client.constants.emotes.yellow : settingsFile.type == 2 ? msg.client.constants.emotes.red : settingsFile.type == 3 ? msg.client.constants.emotes.blue : settingsFile.type == 4 ? msg.client.constants.emotes.green : msg.client.constants.emotes.blue : msg.client.constants.emotes.blue}${t[i]}⠀`;
 					t[i] = t[i]+new Array(22 - t[i].length).join(' ');
 				}
-				categoryText += `__${category}__:\n\`\`\`${`${t.map(s => `${s}`)}`.replace(/,/g, '')}\`\`\`\n`;
+				categoryText += `__${category}__:\n${msg.client.ch.makeCodeBlock(`${t.map(s => `${s}`)}`.replace(/,/g, ''))}\n`;
 			}
 			const embed = new Discord.MessageEmbed()
 				.setAuthor(

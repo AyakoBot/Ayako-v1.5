@@ -11,7 +11,7 @@ module.exports = {
 			msg.client.commands.set(newCommand.name, newCommand);
 			msg.client.ch.reply(msg, `Command \`${newCommand.name}\` was added!`);
 		} catch (error) {
-			msg.client.ch.reply(msg, `There was an error while adding a command \`${args[0]}\`:\n\`\`\`${error.stack}\`\`\``);
+			msg.client.ch.reply(msg, `There was an error while adding a command \`${args[0]}\`:\n${msg.client.ch.makeCodeBlock(error.stack)}`);
 		}
 	}
 };

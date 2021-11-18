@@ -1005,6 +1005,7 @@
             "sure": "Are you sure you want to delete __ALL__ Warns from {{user}}",
             "cleared": "All Warns from {{user}} were cleared",
             "canceled": "Clear Aborted",
+            "noWarns": "This User has no Warns",
             "log": {
                 "author": "All Warns of {{user.tag}} / {{user.id}} were cleared",
                 "footer": "Cleared by {{author.tag}} / {{author.id}}",

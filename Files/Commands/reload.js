@@ -20,7 +20,7 @@ module.exports = {
 					const newCommand = require(`./${file}`);
 					msg.client.commands.set(newCommand.name, newCommand);
 				} catch (error) {
-					msg.channel.send(`There was an error while reloading a command \`${file.replace('.js', '')}\`:\n\`\`\`${error.stack}\`\`\``);
+					msg.channel.send(`There was an error while reloading a command \`${file.replace('.js', '')}\`:\n${msg.client.ch.makeCodeBlock(error.stack)}`);
 					i--;
 					o++;
 				}
@@ -37,7 +37,7 @@ module.exports = {
 				msg.client.commands.set(newCommand.name, newCommand);
 				msg.channel.send(`Command \`${command.name}\` was reloaded!`);
 			} catch (error) {
-				msg.channel.send(`There was an error while reloading a command \`${command.name}\`:\n\`\`\`${error.stack}\`\`\``);
+				msg.channel.send(`There was an error while reloading a command \`${command.name}\`:\n${msg.client.ch.makeCodeBlock(error.stack)}`);
 			}
 		}
 	}

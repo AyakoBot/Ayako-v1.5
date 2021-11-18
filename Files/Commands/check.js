@@ -170,7 +170,7 @@ module.exports = {
 
 		const ban = await msg.guild.bans.fetch(user.id).catch(() => { });
 		embed.fields = [];
-		if (ban && ban.guild) embed.addField(msg.client.ch.stp(lan.banned, { target: user }), `${msg.language.reason}: \`\`\`${ban.reason}\`\`\``);
+		if (ban && ban.guild) embed.addField(msg.client.ch.stp(lan.banned, { target: user }), `${msg.language.reason}:\n${ban.reason}`);
 		else embed.addField('\u200b', `**${msg.client.ch.stp(lan.notbanned, { target: user })}**`);
 		msg.m.edit({embeds: [embed]});
 	}
