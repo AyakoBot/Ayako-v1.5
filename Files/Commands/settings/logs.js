@@ -7,11 +7,6 @@ module.exports = {
 		const embed = new Discord.MessageEmbed()
 			.addFields(
 				{
-					name: msg.lanSettings.active,
-					value: r.active ? msg.client.constants.emotes.tick + ' ' + msg.language.enabled : msg.client.constants.emotes.cross + ' ' + msg.language.disabled,
-					inline: false
-				},
-				{
 					name: '\u200b',
 					value: `**${msg.lan.logName}**`,
 					inline: false
@@ -104,11 +99,7 @@ module.exports = {
 			);
 		return embed;
 	},
-	buttons(msg, r) {
-		const active = new Discord.MessageButton()
-			.setCustomId(msg.lan.edit.active.name)
-			.setLabel(msg.lanSettings.active)
-			.setStyle(r.active ? 'SUCCESS' : 'DANGER');
+	buttons(msg) {
 
 		const guildevents = new Discord.MessageButton()
 			.setCustomId(msg.lan.edit.guildevents.name)
@@ -176,7 +167,6 @@ module.exports = {
 			.setStyle('PRIMARY');
 
 		return [
-			[active], 
 			[guildevents, emojievents, inviteevents, messageevents, roleevents],
 			[userevents, voiceevents, webhookevents, channelevents, applicationevents],
 			[stageinstanceevents, stickerevents, threadevents, guildmemberevents],
