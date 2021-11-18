@@ -40,7 +40,7 @@ module.exports = {
 
 		const collector = msg.channel.createMessageComponentCollector({time: 60000});
 		collector.on('collect', async (button) => {
-			if (button.user.id === msg.author.id) {
+			if (button.user.id == msg.author.id) {
 				if (button.customId == 'yes') {
 					await msg.client.ch.query('DELETE FROM warns WHERE userid = $1 AND guildid = $2;', [user.id, msg.guild.id]);
 					embed.setDescription(msg.client.ch.stp(lan.cleared, { user: user }));
@@ -64,17 +64,20 @@ module.exports = {
 
 function log(msg, res, user, lan, con) {
 	const logEmbed = new Discord.MessageEmbed()
-		.setAuthor(msg.client.ch.stp(lan.author, {user: user}), con.log.image, msg.client.constants.standard.invite)
+		.setAuthor(msg.client.ch.stp(lan.log.author, {user: user}), con.log.image, msg.client.constants.standard.invite)
 		.setColor(con.log.color)
-		.setFooter(msg.client.ch.stp(lan.log.footer, {user: msg.author}));
+		.setFooter(msg.client.ch.stp(lan.log.footer, { author: msg.author}));
 	
 	let description = null;
 	for (let i = 0; i < res.rowCount; i++) {
 		const r = res.rows[i];
-		const msgLink = msg.client.ch.stp(msg.lan.log.details, { link: msg.client.ch.stp(msg.client.constants.standard.discordUrlDB, { guildid: r.guildid, channelid: r.warnecinchannelid, msgid: r.msgid }) });
-		logEmbed.addField(msg.client.ch.stp(lan.log.title, { type: res.rows[i].type, user: res.rows[i].warnedbyusername, channel: res.rows[i].warnedinchannelname }), msg.client.ch.stp(lan.log.value, { time: `<t:${res.rows[i].dateofwarn.slice(0, -3)}:F>`, reason: res.rows[i].reason}));
-		description == null ? description += ` | ${msgLink}` : description = `${msgLink}`;
+		const msgLink = msg.client.ch.stp(lan.log.details, { link: msg.client.ch.stp(msg.client.constants.standard.discordUrlDB, { guildid: r.guildid, channelid: r.warnedinchannelid, msgid: r.msgid }) });
+		logEmbed.addField(
+			msg.client.ch.stp(lan.log.title, { type: res.rows[i].type, user: res.rows[i].warnedbyusername, channel: res.rows[i].warnedinchannelname }), 
+			msg.client.ch.stp(lan.log.value, { time: `<t:${res.rows[i].dateofwarn.slice(0, -3)}:F> (<t:${res.rows[i].dateofwarn.slice(0, -3)}:R>)`, reason: res.rows[i].reason})
+		);
+		description !== null ? description += ` | ${msgLink}` : description = `${msgLink}`;
 	}
 	logEmbed.setDescription(description);
-	msg.logchannels.forEach((c) => msg.client.ch.send(c, logEmbed));
+	msg.client.ch.send(msg.logchannels, logEmbed);
 }
