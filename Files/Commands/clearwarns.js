@@ -17,13 +17,13 @@ module.exports = {
 		
 		if (!user) {
 			embed.setDescription(lan.noUser);
-			embed.setColor(con.cancelled);
+			embed.setColor(con.fail);
 			return msg.client.ch.reply(msg, embed);
 		}
 		const res = await msg.client.ch.query('SELECT * FROM warns WHERE userid = $1 AND guildid = $2;', [user.id, msg.guild.id]);
 		if (!res || res.rowCount == 0) {
 			embed.setDescription(lan.noWarns);
-			embed.setColor(con.cancelled);
+			embed.setColor(con.fail);
 			return msg.client.ch.reply(msg, embed);
 		}
         
@@ -49,8 +49,8 @@ module.exports = {
 					log(msg, res, user, lan, con);
 					collector.stop();
 				} else if (button.customId == 'no') {
-					embed.setDescription(lan.cancelled);
-					embed.setColor(con.cancelled);
+					embed.setDescription(lan.fail);
+					embed.setColor(con.fail);
 					msg.m.edit({ embeds: [embed], components: [] }).catch(() => { });
 					collector.stop();
 				}

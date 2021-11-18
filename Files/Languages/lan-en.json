@@ -821,7 +821,7 @@
             "notEnabled": "The strike System is not enabled\nuse `{{prefix}}settings autopunish` to enable it"
         },
         "muteAdd": {
-            "author": "Member was muted\nWarn Number {{nr}}",
+            "author": "{{user}} was Muted",
             "description": "{{user}} has muted {{target}}",
             "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
             "activeMute": "Joined with an active Mute",
@@ -840,7 +840,7 @@
             "error": "I wasn't able to mute this User!"
         },
         "tempmuteAdd": {
-            "author": "Member was Temp-Muted\nWarn Number {{nr}}",
+            "author": "{{user}} was Temp-Muted",
             "description": "{{user}} has Temp-Muted {{target}}",
             "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
             "activeMute": "Joined with an active Mute",
@@ -859,7 +859,7 @@
             "noMember": "This User is not a Member of this Server"
         },
         "muteRemove": {
-            "author": "Member was unmuted",
+            "author": "{{user}} was Un-Muted",
             "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas unmuted by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
             "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
             "dm": {
@@ -875,7 +875,7 @@
             "noMember": "This User is not a Member of this Server"
         },
         "banAdd": {
-            "author": "User was banned",
+            "author": "{{user}} was Banned",
             "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas banned by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
             "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
             "dm": {
@@ -891,7 +891,7 @@
             "meBan": "I won't ban myself"
         },     
         "tempbanAdd": {
-            "author": "User was Tamp-Banned",
+            "author": "{{user}} was Temp-Banned",
             "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas Temp-Banned by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
             "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
             "dm": {
@@ -907,7 +907,7 @@
             "meBan": "I won't ban myself"
         },   
         "banRemove": {
-            "author": "User was unbanned",
+            "author": "{{user}} was Un-Banned",
             "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas unbanned by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
             "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
             "dm": {
@@ -921,7 +921,7 @@
             "loading": "Un-Banning User..."
         },
         "kickAdd": {
-            "author": "Member was kicked",
+            "author": "{{user}} was Kicked",
             "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas kicked by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
             "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
             "dm": {
@@ -935,7 +935,7 @@
             "loading": "Kicking User..."
         },
         "warnAdd": {
-            "reply": "{{user}} was warned\nWarn Number {{nr}}",
+            "reply": "{{user}} was Warned",
             "DMtitle": "You have been warned on the Server __{{guild.name}}__",
             "log": {
                 "author": "{{target.username}} has been warned",

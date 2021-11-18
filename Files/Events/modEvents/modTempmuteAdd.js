@@ -68,6 +68,10 @@ module.exports = {
 			if (mexisted) setTimeout(() => msg.m?.delete().catch(() => { }), 10000);
 			return false;
 		}
+		let warnnr;
+		const res = await msg.client.ch.query('SELECT * FROM warns WHERE guildid = $1 AND userid = $2;', [msg.guild.id, target.id]);
+		if (res && res.rowCount > 0) warnnr = res.rowCount + 1;
+		else warnnr = 1;
 		if (role) {
 			if (member?.roles.cache.has(role.id)) {
 				if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.cross + ' ' + lan.hasRole);
@@ -91,11 +95,11 @@ module.exports = {
 					.setDescription(`${language.reason}: \n${reason}`)
 					.setColor(con.color)
 					.setTimestamp()
-					.setAuthor(msg.client.ch.stp(lan.dm.author, { guild: msg.guild }), lan.author.image, msg.client.ch.stp(con.author.link, { guild: msg.guild }));
+					.setAuthor(msg.client.ch.stp(lan.dm.author, { guild: msg.guild }), con.author.image, msg.client.ch.stp(con.author.link, { guild: msg.guild }));
 				msg.client.ch.send(dmChannel, DMembed);
 				const embed = new Discord.MessageEmbed()
 					.setColor(con.color)
-					.setAuthor(lan.author, msg.client.ch.displayAvatarURL(executor), msg.client.constants.standard.invite)
+					.setAuthor(msg.client.ch.stp(lan.author, {user: target}), msg.client.ch.displayAvatarURL(executor), msg.client.constants.standard.invite)
 					.setDescription(msg.client.ch.stp(lan.description, {user: executor, target: target}))
 					.setTimestamp()
 					.setThumbnail(msg.client.ch.displayAvatarURL(target))
@@ -116,10 +120,6 @@ module.exports = {
 			if (mexisted) setTimeout(() => msg.m?.delete().catch(() => { }), 10000);
 			return false;
 		}
-		let warnnr;
-		const res = await msg.client.ch.query('SELECT * FROM warns WHERE guildid = $1 AND userid = $2;', [msg.guild.id, target.id]);
-		if (res && res.rowCount > 0) warnnr = res.rowCount + 1;
-		else warnnr = 1;
 		if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.tick + ' ' + msg.client.ch.stp(lan.success, { target: target, nr: warnnr }));
 		else em.setDescription(msg.client.constants.emotes.tick + ' ' + msg.client.ch.stp(lan.success, { target: target, nr: warnnr }));
 		await msg.m?.edit({ embeds: [em] });
@@ -170,7 +170,7 @@ async function assingWarn(executor, target, reason, msg, answer, em, language, c
 	msg.client.ch.send(dmChannel, DMembed);
 	const embed = new Discord.MessageEmbed()
 		.setColor(con.color)
-		.setAuthor(lan.author, msg.client.ch.displayAvatarURL(executor), msg.client.constants.standard.invite)
+		.setAuthor(msg.client.ch.stp(lan.author, { user: target }), msg.client.ch.displayAvatarURL(executor), msg.client.constants.standard.invite)
 		.setDescription(msg.client.ch.stp(lan.description, { user: executor, target: target }))
 		.setTimestamp()
 		.setThumbnail(msg.client.ch.displayAvatarURL(target))
