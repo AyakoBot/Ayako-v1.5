@@ -43,6 +43,7 @@ module.exports = {
 	 * @param {object} options - The Options of this Message, if any.
 	 */
 	async send(channel, content, options) {
+		if (Array.isArray(channel)) return channel.forEach(c => typeof c.send == 'function' ? this.send(c, content, options) : null);
 		if (typeof channel.send !== 'function') return;
 		let webhook;
 		if (client.channelWebhooks.get(channel.id)) webhook = client.channelWebhooks.get(channel.id);
