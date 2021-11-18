@@ -13,7 +13,8 @@ module.exports = {
 		const user = await msg.client.users.fetch(msg.args[0].replace(/\D+/g, '')).catch(() => { });
 		if (!user) return msg.client.ch.reply(msg, msg.language.noUser);
 		const warnNr = msg.args[1];
-		if (isNaN(new Number(warnNr))) return msg.client.ch.reply(msg, msg.client.ch.stp(msg.language.noNumber, {arg: msg.args[1]}));
+		if (warnNr.toLowerCase() == msg.language.all) return msg.client.commands.get('clearwarns').execute(msg);
+		if (isNaN(new Number(warnNr))) return msg.client.ch.reply(msg, msg.client.ch.stp(msg.language.noNumber, { arg: msg.args[1] ? msg.args[1] : '-' }));
 		const res = await msg.client.ch.query('SELECT * FROM warns WHERE userid = $1 AND guildid = $2 ORDER BY dateofwarn ASC;', [user.id, msg.guild.id]);
 		if (!res || res.rowCount == 0) return msg.client.ch.reply(msg, msg.client.ch.stp(msg.lan.noWarn, { number: warnNr }));
 		const warn = res.rows[warnNr];
@@ -45,7 +46,7 @@ module.exports = {
 			if (muterole && member && member.roles.cache.get(muterole.id)) notClosed = msg.client.ch.stp(msg.lan.abortedMute, { time: `<t:${warn.duration.slice(0, -3)}:F> (<t:${warn.duration.slice(0, -3)}:R>)` });
 			logEmbed
 				.setDescription(`**${msg.language.reason}:**\n${warn.reason}`)
-				.setAuthor(msg.lan.warnOf + user.tag, msg.con.author.image, msg.client.ch.stp(msg.client.constants.standard.discordUrlDB, { guildid: msg.guild.id, channelid: msg.channel.id, msgid: warn.msgid }))
+				.setAuthor(msg.lan.warnOf + user.tag, msg.con.log.author.image, msg.client.ch.stp(msg.client.constants.standard.discordUrlDB, { guildid: msg.guild.id, channelid: msg.channel.id, msgid: warn.msgid }))
 				.addFields(
 					{ name: msg.lan.date, value: `<t:${warn.dateofwarn.slice(0, -3)}:F> (<t:${warn.dateofwarn.slice(0, -3)}:R>)`, inline: false },
 					{ name: msg.lan.warndIn, value: `<#${warn.warnedinchannelid}>\n\`${warn.warnedinchannelname}\``, inline: false },
