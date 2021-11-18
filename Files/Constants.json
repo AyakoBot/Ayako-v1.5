@@ -554,7 +554,6 @@
                     "active": "boolean"
                 },
                 "logs": {
-                    "active": "boolean",
                     "guildevents": "channels",
                     "emojievents": "channels",
                     "channelevents": "channels",

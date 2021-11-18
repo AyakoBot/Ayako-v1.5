@@ -1341,11 +1341,6 @@
                 "modlogs": "Moderation Logs",
                 "settingslog": "Settings Logs",
                 "edit": {
-                    "active": {
-                        "name": "Active",
-                        "answers": "`True` or `False`",
-                        "recommended": "Recommended: `True`"
-                    },
                     "guildevents": {
                         "name": "Guild Events",
                         "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
