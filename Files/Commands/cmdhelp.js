@@ -41,7 +41,7 @@ module.exports = {
 				{name: '|'+language.aliases, value: `\u200b${aliases}`, inline: true},
 				{name: '|'+language.category, value: `\u200b${category}`, inline: true},
 				{name: '|'+language.description, value: `\u200b${commandLan.description}`, inline: false},
-				{name: '|'+language.usage, value: `\u200b\`\`\`${msg.client.constants.standard.prefix}${commandLan.usage.join(`\n${msg.client.constants.standard.prefix}`)}\`\`\`\n\`[ ] = ${language.required}\`\n\`( ) = ${language.optional}\``, inline: false},
+				{ name: '|' + language.usage, value: `\u200b${msg.client.ch.makeCodeBlock(msg.client.constants.standard.prefix)}${commandLan.usage.join(`\n${msg.client.constants.standard.prefix}`)}\n\`[ ] = ${language.required}\`\n\`( ) = ${language.optional}\``, inline: false},
 				{name: '|'+language.requiredPermissions, value: `\u200b${Array.isArray(reqperms) ? reqperms.map(p => `\`${language.permissions[p]}\``) : reqperms}`, inline: false},
 				{name: '|'+language.thisGuildOnly, value: `\u200b${`${ThisGuildOnly.map(r => `${r}`).join(', ')}` !== '' ? ThisGuildOnly.map(r => `${r}`).join(', ') : language.freeToAccess}`, inline: false},
 				{name: '|'+language.dms, value: `\u200b${reqcommand.dm ? lan.dmsTrue : lan.dmsFalse}`, inline: false},

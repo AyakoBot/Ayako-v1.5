@@ -18,7 +18,7 @@ module.exports = {
 				client.constants = require('../Constants.json');
 				ch.reply(msg, 'File `Constants.json` was reloaded!');
 			} catch(e) {
-				ch.reply(msg, `There was an error while reloading the \`Constants.json\`\n\`\`\`${e.stack}\`\`\``);
+				ch.reply(msg, `There was an error while reloading the \`Constants.json\`\n${msg.client.ch.makeCodeBlock(e.stack)}`);
 			}
 		} else if (name.toLowerCase() == 'lan') {
 			try {
@@ -28,7 +28,7 @@ module.exports = {
 				ch.reply(msg, `Language File \`lan-${args[1]}.json\` was reloaded!`);
 			} catch(e) {
 				if (`${e}`.startsWith('Error: Cannot find module')) ch.reply(msg, `There is no Language File called \`lan-${args[1]}.json\``);
-				else ch.reply(msg, `There was an error while reloading that Language File \`${name}\`:\n\`\`\`${e.stack}\`\`\``);
+				else ch.reply(msg, `There was an error while reloading that Language File \`${name}\`:\n${msg.client.ch.makeCodeBlock(e.stack)}`);
 			}
 		} else if (name.toLowerCase() == 'ch') {
 			delete require.cache[require.resolve('../BaseClient/ClientHelper')];
@@ -36,7 +36,7 @@ module.exports = {
 				client.ch = require('../BaseClient/ClientHelper');
 				ch.reply(msg, 'The Client Helper was reloaded!');
 			} catch(e) {
-				ch.reply(msg, `There was an error while reloading the ClientHelper:\n\`\`\`${e.stack}\`\`\``);
+				ch.reply(msg, `There was an error while reloading the ClientHelper:\n${msg.client.ch.makeCodeBlock(e.stack)}`);
 			}
 		} else {
 			if (msg.args[0] && msg.args[1]) {
@@ -69,7 +69,7 @@ module.exports = {
 					require(PathToReload);
 					ch.reply(msg, `The Event \`${name}\` in path \`${PathToReload}\` was reloaded!`);
 				} catch (e) {
-					ch.reply(msg, `There was an error while reloading Event \`${name}\` in path \`${PathToReload}\`\n\`\`\`${e.stack}\`\`\``);
+					ch.reply(msg, `There was an error while reloading Event \`${name}\` in path \`${PathToReload}\`\n${msg.client.ch.makeCodeBlock(e.stack)}`);
 				}
 
 			} else {
@@ -85,7 +85,7 @@ module.exports = {
 							client.events.set(rawevent[0], newEvent);
 							ch.reply(msg, `The Event \`${rawevent[0]}\` in path \`${newEvent.path}\` was reloaded!`);
 						} catch(e) {
-							ch.reply(msg, `There was an error while reloading Event \`${rawevent[0]}\` in path \`${event.path}\`\n\`\`\`${e.stack}\`\`\``);
+							ch.reply(msg, `There was an error while reloading Event \`${rawevent[0]}\` in path \`${event.path}\`\n${msg.client.ch.makeCodeBlock(e.stack)}`);
 						}
 					}
 				}

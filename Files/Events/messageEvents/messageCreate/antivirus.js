@@ -201,7 +201,7 @@ async function evaluation(msg, VTresponse, url, attributes, check, embed, lan) {
 			.setStyle('DANGER');
 		msg.client.ch.send(msg.client.channels.cache.get(msg.client.constants.standard.trashLogChannel), { content: '<@318453143476371456>', embeds: [logEmbed], components: msg.client.ch.buttonRower([change]) });
 		fs.appendFile('S:/Bots/ws/CDN/whitelisted.txt', `\n${new URL(url).hostname}`, () => {});
-	} else client.ch.send(client.channels.cache.get('726252103302905907'), `${url}\n\`\`\`${JSON.stringify(VTresponse)}\`\`\``); 
+	}
 }
 
 async function end(data, check, embed, note, lan) {

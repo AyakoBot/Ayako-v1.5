@@ -80,7 +80,7 @@ module.exports = {
 			if (Mute) {
 				const dmChannel = await target.createDM().catch(() => {});
 				const DMembed = new Discord.MessageEmbed()
-					.setDescription(`${language.reason}: \`\`\`${reason}\`\`\``)
+					.setDescription(`${language.reason}: \n${reason}`)
 					.setColor(con.color)
 					.setTimestamp()
 					.setAuthor(msg.client.ch.stp(lan.dm.author, { guild: msg.guild }), lan.author.image, msg.client.ch.stp(con.author.link, { guild: msg.guild }));
@@ -91,12 +91,12 @@ module.exports = {
 					.setDescription(msg.client.ch.stp(lan.description, {user: executor, target: target}))
 					.setTimestamp()
 					.setThumbnail(msg.client.ch.displayAvatarURL(target))
-					.addField(language.reason, `\`\`\`${reason}\`\`\``)
+					.addField(language.reason, `${reason}`)
 					.setFooter(msg.client.ch.stp(lan.footer, {user: executor, target: target}));
 				if (msg.logchannels.length > 0) msg.client.ch.send(msg.logchannels, embed);
 			} else {
-				if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.cross + lan.error + ` \`\`\`${err}\`\`\``);
-				else em.setDescription(msg.client.constants.emotes.cross + lan.error + ` \`\`\`${err}\`\`\``);
+				if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.cross + lan.error + ` ${msg.client.ch.makeCodeBlock(err)}`);
+				else em.setDescription(msg.client.constants.emotes.cross + lan.error + ` ${msg.client.ch.makeCodeBlock(err)}`);
 				msg.m?.edit({ embeds: [em] }).catch(() => { });
 				if (mexisted) setTimeout(() => msg.m?.delete().catch(() => { }), 10000);
 				return false;
@@ -150,7 +150,7 @@ async function ask(executor, msg) {
 async function assingWarn(executor, target, reason, msg, answer, em, language, con, lan) {
 	const dmChannel = await target.createDM().catch(() => { });
 	const DMembed = new Discord.MessageEmbed()
-		.setDescription(`${language.reason}: \`\`\`${reason}\`\`\``)
+		.setDescription(`${language.reason}: \n${reason}`)
 		.setColor(con.color)
 		.setTimestamp()
 		.setAuthor(msg.client.ch.stp(lan.dm.author, { guild: msg.guild }), lan.author.image, msg.client.ch.stp(con.author.link, { guild: msg.guild }));
@@ -161,7 +161,7 @@ async function assingWarn(executor, target, reason, msg, answer, em, language, c
 		.setDescription(msg.client.ch.stp(lan.description, { user: executor, target: target }))
 		.setTimestamp()
 		.setThumbnail(msg.client.ch.displayAvatarURL(target))
-		.addField(language.reason, `\`\`\`${reason}\`\`\``)
+		.addField(language.reason, `${reason}`)
 		.setFooter(msg.client.ch.stp(lan.footer, { user: executor, target: target }));
 	if (msg.logchannels.length > 0) msg.client.ch.send(msg.logchannels, embed);	
 	msg.client.ch.query('INSERT INTO warns (guildid, userid, reason, type, dateofwarn, warnedinchannelid, warnedbyuserid, warnedinchannelname, warnedbyusername, msgid) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);', [msg.guild.id, target.id, reason, 'Mute', Date.now(), msg.channel.id, executor.id, msg.channel.name, executor.username, msg.id]);

@@ -37,7 +37,7 @@ module.exports = {
 		const WarnLogEmbed = new Discord.MessageEmbed()
 			.setAuthor(msg.client.ch.stp(lan.log.author, {target: target}), msg.client.ch.displayAvatarURL(target), msg.url)
 			.setDescription(msg.client.ch.stp(lan.log.description, {target: target, user: executor}))
-			.addField(language.reason, `\`\`\`${reason}\`\`\``)
+			.addField(language.reason, `${reason}`)
 			.setColor(con.color)
 			.setTimestamp();
 		if (msg.logchannels) msg.client.ch.send(msg.logchannels, WarnLogEmbed);

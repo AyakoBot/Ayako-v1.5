@@ -27,7 +27,7 @@ module.exports = {
 				if (member) {
 					const language = await ch.languageSelector(guild);
 					const embed = new Discord.MessageEmbed()
-						.setDescription(`${language.ready.reminder.description}\`\`\`${text}\`\`\``)
+						.setDescription(`${language.ready.reminder.description}\n${text}`)
 						.setColor(guild.me.displayHexColor)
 						.setTimestamp();
 					const m = await ch.send(channel, `${user}`, embed);
@@ -36,7 +36,7 @@ module.exports = {
 				} else {
 					const language = await ch.languageSelector('en');
 					const embed = new Discord.MessageEmbed()
-						.setDescription(`${language.ready.reminder.description}\`\`\`${text}\`\`\``)
+						.setDescription(`${language.ready.reminder.description}\n${text}`)
 						.setColor(guild.me.displayHexColor)
 						.setTimestamp();
 					ch.send(user, embed);

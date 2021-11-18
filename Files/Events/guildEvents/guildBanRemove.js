@@ -25,7 +25,7 @@ module.exports = {
 					.setTimestamp();
 				if (entry && entry.id) {
 					embed.setDescription(ch.stp(lan.description.withUser, {user: entry.executor, target: ban.guild}));
-					embed.addField(language.reason, entry.reason ? '```'+entry.reason+'```' : language.none);
+					embed.addField(language.reason, entry.reason ? '\n'+entry.reason : language.none);
 				} else {
 					embed.setDescription(ch.stp(lan.description.withoutUser, {target: ban.guild}));
 					embed.addField(language.reason, ban.reason ? ban.reason : language.unknown);

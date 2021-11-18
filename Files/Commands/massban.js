@@ -133,7 +133,7 @@ module.exports = {
 				const logembed = new Discord.MessageEmbed()
 					.setAuthor(msg.client.ch.stp(msg.lan.log.author, {user: msg.author, amount: uniqueUsers.length}))
 					.setDescription(msg.client.ch.stp(msg.lan.log.desc, {amount: uniqueUsers.length}))
-					.setField(msg.language.reason, msg.client.ch.makeCodeBlock(banreason))
+					.setField(msg.language.reason, banreason)
 					.setColor(con.log.color)
 					.setTimestamp();
 				const path = await msg.client.ch.txtFileWriter(uniqueUsers);

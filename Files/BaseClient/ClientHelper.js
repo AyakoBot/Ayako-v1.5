@@ -161,8 +161,8 @@ module.exports = {
 			const channel = await client.channels.fetch(Constants.standard.errorLogChannel).catch(() => {});
 			if (channel && channel.id) {
 				if (log) {
-					if (log.stack) channel.send(`${type}\`\`\`${log.stack}\`\`\``).catch(() => {});
-					else channel.send(`${type}\`\`\`${log}\`\`\``).catch(() => {});
+					if (log.stack) channel.send(`${type}${this.makeCodeBlock(log.stack)}`).catch(() => {});
+					else channel.send(`${type}${this.makeCodeBlock(log)}`).catch(() => {});
 					console.error(type, log);
 				}
 				else {

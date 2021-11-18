@@ -61,7 +61,7 @@ module.exports = {
 		}
 		const dmChannel = await target.createDM().catch(() => {});
 		const DMembed = new Discord.MessageEmbed()
-			.setDescription(`${language.reason}: \`\`\`${reason}\`\`\``)
+			.setDescription(`${language.reason}: \n${reason}`)
 			.setColor(con.color)
 			.setTimestamp()
 			.setAuthor(msg.client.ch.stp(lan.dm.author, {guild: msg.guild}), lan.author.image, msg.client.ch.stp(con.author.link, {guild: msg.guild}));
@@ -75,13 +75,13 @@ module.exports = {
 				.setDescription(msg.client.ch.stp(lan.description, {user: executor, target: target}))
 				.setTimestamp()
 				.setThumbnail(msg.client.ch.displayAvatarURL(target))
-				.addField(language.reason, `\`\`\`${reason}\`\`\``)
+				.addField(language.reason, `${reason}`)
 				.setFooter(msg.client.ch.stp(lan.footer, {user: executor, target: target}));
 			if (msg.logchannels.length > 0) msg.client.ch.send(msg.logchannels, embed);
 		} else {
 			m?.delete().catch(()  => {});
-			if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.cross + lan.error + ` \`\`\`${err}\`\`\``);
-			else em.setDescription(msg.client.constants.emotes.cross + lan.error + ` \`\`\`${err}\`\`\``);
+			if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.cross + lan.error + ` ${msg.client.ch.makeCodeBlock(err)}`);
+			else em.setDescription(msg.client.constants.emotes.cross + lan.error + ` ${msg.client.ch.makeCodeBlock(err)}`);
 			msg.m?.edit({embeds: [em]});
 			if (mexisted) setTimeout(() => msg.m?.delete().catch(() => { }), 10000);
 			return false;
