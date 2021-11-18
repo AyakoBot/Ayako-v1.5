@@ -9,7 +9,7 @@ module.exports = {
 			const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);
 			if (res && res.rowCount > 0) {
 				const r = res.rows[0];
-				const logchannel = client.channels.cache.get(r.userEvents);
+				const logchannel = client.channels.cache.get(r.userevents);
 				if (logchannel && logchannel.id) {
 					const member = await guild.members.cache.get(newUser.id);
 					if (member) {

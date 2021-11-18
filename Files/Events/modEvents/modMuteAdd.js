@@ -87,7 +87,7 @@ module.exports = {
 					.setAuthor(msg.client.ch.stp(lan.dm.author, { guild: msg.guild }), lan.author.image, msg.client.ch.stp(con.author.link, { guild: msg.guild }));
 				msg.client.ch.send(dmChannel, DMembed);
 				const res = await msg.client.ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [msg.guild.id]);
-				if (res && res.rowCount > 0) logchannel = msg.client.channels.cache.get(res.rows[0].guildEvents);
+				if (res && res.rowCount > 0) logchannel = msg.client.channels.cache.get(res.rows[0].guildevents);
 				const embed = new Discord.MessageEmbed()
 					.setColor(con.color)
 					.setAuthor(lan.author, msg.client.ch.displayAvatarURL(executor), msg.client.constants.standard.invite)
@@ -159,7 +159,7 @@ async function assingWarn(executor, target, reason, msg, answer, em, language, c
 		.setAuthor(msg.client.ch.stp(lan.dm.author, { guild: msg.guild }), lan.author.image, msg.client.ch.stp(con.author.link, { guild: msg.guild }));
 	msg.client.ch.send(dmChannel, DMembed);
 	const res = await msg.client.ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [msg.guild.id]);
-	if (res && res.rowCount > 0) logchannel = msg.client.channels.cache.get(res.rows[0].guildEvents);
+	if (res && res.rowCount > 0) logchannel = msg.client.channels.cache.get(res.rows[0].guildevents);
 	const embed = new Discord.MessageEmbed()
 		.setColor(con.color)
 		.setAuthor(lan.author, msg.client.ch.displayAvatarURL(executor), msg.client.constants.standard.invite)

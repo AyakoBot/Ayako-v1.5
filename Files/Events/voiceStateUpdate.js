@@ -13,7 +13,7 @@ module.exports = {
 		const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);
 		if (res && res.rowCount > 0) {
 			const r = res.rows[0];
-			const logchannel = client.channels.cache.get(r.roleEvents);
+			const logchannel = client.channels.cache.get(r.roleevents);
 			if (logchannel && logchannel.id) {
 				const embed  = new Discord.MessageEmbed()
 					.setTimestamp()

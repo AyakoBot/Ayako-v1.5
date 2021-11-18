@@ -57,7 +57,7 @@ module.exports = {
 			if (kick) {
 				const res = await msg.client.ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [msg.guild.id]);
 				let logchannel;
-				if (res && res.rowCount > 0) logchannel = msg.client.channels.cache.get(res.rows[0].guildEvents);
+				if (res && res.rowCount > 0) logchannel = msg.client.channels.cache.get(res.rows[0].guildevents);
 				const embed = new Discord.MessageEmbed()
 					.setColor(con.color)
 					.setAuthor(lan.author, msg.client.ch.displayAvatarURL(executor), msg.client.constants.standard.invite)

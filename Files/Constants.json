@@ -553,6 +553,25 @@
                     "bluserid": "users",
                     "active": "boolean"
                 },
+                "logs": {
+                    "active": "boolean",
+                    "guildevents": "channels",
+                    "emojievents": "channels",
+                    "channelevents": "channels",
+                    "inviteevents": "channels",
+                    "messageevents": "channels",
+                    "roleevents": "channels",
+                    "userevents": "channels",
+                    "voiceevents": "channels",
+                    "webhookevents": "channels",
+                    "applicationevents": "channels",
+                    "stageinstanceevents": "channels",
+                    "stickerevents": "channels",
+                    "threadevents": "channels",
+                    "guildmemberevents": "channels",
+                    "modlogs": "channels",
+                    "settingslog": "channels"
+                },
                 "interactions": {
                     "size": "boolean",
                     "block": "string"

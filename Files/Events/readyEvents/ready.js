@@ -21,11 +21,11 @@ module.exports = {
 			require('./colorReminder').execute();
 			//require('./websiteFetcher').execute();
 			if (new Date().getHours() == 0) {
-				client.guilds.cache.forEach(g => {require('../guildEvents/guildCreate/nitro').execute(g);});
+				client.guilds.cache.forEach(g => {require('../guildevents/guildCreate/nitro').execute(g);});
 				require('./nitro').execute();
 				client.ch.query('DELETE FROM toxicitycheck;');
-				require('../messageEvents/messageCreate/antispam').resetData();
-				require('../guildEvents/guildMemberAdd/antiraid').resetData();
+				require('../messageevents/messageCreate/antispam').resetData();
+				require('../guildevents/guildMemberAdd/antiraid').resetData();
 			}
 		}, 3600000);
 

@@ -9,7 +9,7 @@ module.exports = {
 		const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);
 		if (res && res.rowCount > 0) {
 			const r = res.rows[0];
-			const logchannel = client.channels.cache.get(r.channelEvents);
+			const logchannel = client.channels.cache.get(r.channelevents);
 			if (logchannel && logchannel.id) {
 				const language = await ch.languageSelector(guild);
 				let auditsPin = await guild.fetchAuditLogs({limit: 5, type: 74}).catch(() => {});	

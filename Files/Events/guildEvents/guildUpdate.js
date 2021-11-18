@@ -13,7 +13,7 @@ module.exports = {
 		const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [newGuild.id]);
 		if (res && res.rowCount > 0) {
 			const r = res.rows[0];
-			const logchannel = client.channels.cache.get(r.channelEvents);
+			const logchannel = client.channels.cache.get(r.channelevents);
 			if (logchannel && logchannel.id) {
 				const embed = new Discord.MessageEmbed()
 					.setAuthor(lan.author.name, con.author.image)

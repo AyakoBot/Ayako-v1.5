@@ -1,7 +1,7 @@
 const { Worker } = require('worker_threads');
 const ch = require('../../../BaseClient/ClientHelper');
 
-const UpdateWorker = new Worker('./Files/Events/guildEvents/guildMemberUpdate/separatorUpdater.js');
+const UpdateWorker = new Worker('./Files/Events/guildevents/guildMemberUpdate/separatorUpdater.js');
 
 UpdateWorker.on('message', (msg, data) => {
 	if (msg == 'NO_SEP') ch.query('UPDATE roleseparator SET active = false WHERE separator = $1;', [data.sep]);
@@ -121,7 +121,7 @@ module.exports = {
 				obj.rowroles.push({id: role.id, rawPosition: role.rawPosition});
 			});
 		});
-		const worker = new Worker('./Files/Events/guildEvents/guildMemberUpdate/separatorWorker.js', {workerData: {res: res.rows, obj: obj}});
+		const worker = new Worker('./Files/Events/guildevents/guildMemberUpdate/separatorWorker.js', {workerData: {res: res.rows, obj: obj}});
 		let output;
 		await new Promise((resolve, reject) => {
 			worker.once('message', result => {
