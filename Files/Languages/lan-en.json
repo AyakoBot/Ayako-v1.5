@@ -1250,8 +1250,8 @@
             "usage": ["pardon [user ID or mention] [warn ID] (reason)", "pardon [user ID or mention] all (reason)"],
             "done": "Pardoned Warn with ID {{number}} from {{target}}", 
             "warnIssue": "Warn was issued at",
-            "warnOf": "Warn of: ",
-            "muteOf": "Mute of: ",
+            "warnOf": "Warn of {{target.tag}} was pardoned",
+            "muteOf": "Mute of {{target.tag}} was pardoned",
             "date": "Date of Warn",
             "noWarn": "There is no Warn with ID `{{number}}`",
             "warnedIn": "Warned in",
@@ -1264,6 +1264,7 @@
             "closed": "Mute ended {{time}}",            
             "muteclosed": "Mute Closed",
             "warnclosed": "Warn Closed",
+            "pardonedBy": "Pardoned by",
             "warnID": "Warn ID: "
         },
         "check": {
