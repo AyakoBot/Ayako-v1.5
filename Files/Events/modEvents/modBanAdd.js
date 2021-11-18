@@ -71,7 +71,7 @@ module.exports = {
 		if (ban) {
 			const embed = new Discord.MessageEmbed()
 				.setColor(con.color)
-				.setAuthor(lan.author, msg.client.ch.displayAvatarURL(executor), msg.client.constants.standard.invite)
+				.setAuthor(msg.client.ch.stp(lan.author, { user: target }), msg.client.ch.displayAvatarURL(executor), msg.client.constants.standard.invite)
 				.setDescription(msg.client.ch.stp(lan.description, {user: executor, target: target}))
 				.setTimestamp()
 				.setThumbnail(msg.client.ch.displayAvatarURL(target))

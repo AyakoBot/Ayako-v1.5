@@ -44,14 +44,14 @@ module.exports = {
 				if (result.rows[0].warntof == true) {
 					if (amount == +result.rows[0].warnafteramount) { 
 						const reason = language.commands.toxicityCheck.warnReason;
-						msg.client.emit('warnAdd', msg.client.user, msg.author, reason, msg);
+						msg.client.emit('modWarnAdd', msg.client.user, msg.author, reason, msg);
 					}
 				}
 				if (result.rows[0].mutetof == true) {
 					if (amount % +result.rows[0].muteafteramount == 0) {
 						if (amount == +result.rows[0].warnafteramount) return;
 						const reason = language.commands.toxicityCheck.warnReason;
-						msg.client.emit('tempmuteAdd', msg.client.user, msg.author, reason, msg, 3600000);
+						msg.client.emit('modTempmuteAdd', msg.client.user, msg.author, reason, msg, 3600000);
 					}
 				}
 			}
