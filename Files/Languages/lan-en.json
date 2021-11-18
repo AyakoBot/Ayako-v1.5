@@ -998,6 +998,21 @@
         }
     },
     "commands": {
+        "clearwarns": {
+            "description": "Clears all Warns from a User",
+            "usage": ["clearwarns [user] (reason)", "pardon [user] all (reason)"],
+            "category": "Moderation",
+            "sure": "Are you sure you want to delete __ALL__ Warns from {{user}}",
+            "cleared": "All Warns from {{user}} were cleared",
+            "canceled": "Clear Aborted",
+            "log": {
+                "author": "All Warns of {{user.tag}} / {{user.id}} were cleared",
+                "footer": "Cleared by {{author.tag}} / {{author.id}}",
+                "details": "[Message Link]({{link}}, \"Click to get to Trigger Message\")",
+                "title": "Warn Type: `{{type}}` | Given by: `{{user}}` in `{{channel}}`",
+                "value": "Given at: {{time}}\nWarn Reason: ```${}```"
+            }
+        },
         "commandHandler": {
             "GuildOnly": "This Command is not made for DMs, please try again in a Server",
             "PleaseWait": "Please wait `{{time}}` more Second(s)",

@@ -296,7 +296,7 @@
             "avatar": "https://cdn.discordapp.com/attachments/760152457799401532/839644223074336789/6E81E655-B92C-4EC6-8015-20679059B454.png"
         },
         "discordUrl": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}",
-        "discordUrlDB": "https://discord.com/channels/{{guildid}}/{{hannelid}}/{{msgid}}"
+        "discordUrlDB": "https://discord.com/channels/{{guildid}}/{{channelid}}/{{msgid}}"
     },
     "emotes": {
         "cross": "<:Cross:902269073805701211>",
@@ -454,7 +454,17 @@
         "pardon": {
             "success": "1aff00",
             "log": {
-                "color": "ff0000"
+                "color": "1aff00",
+                "image": "https://ayakobot.com/cdn/Ayako_Assets/Warning.png"
+            }
+        },
+        "clearwarns": {
+            "success": "1aff00",
+            "fail": "ff0000",
+            "loading": "ffff00",
+            "log": {
+                "color": "1aff00",
+                "image": "https://ayakobot.com/cdn/Ayako_Assets/Warning.png"
             }
         },
         "massban": {
