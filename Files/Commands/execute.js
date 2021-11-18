@@ -6,7 +6,6 @@ module.exports = {
 	takesFirstArg: false,
 	// eslint-disable-next-line no-unused-vars
 	execute(msg) {
-		msg.client.eris.createMessage(msg.channel.id, 'no').then((m) => console.log(m));
-		msg.channel.send({ content: 'yes' }).then((m) => console.log(m));
+
 	}
 };
