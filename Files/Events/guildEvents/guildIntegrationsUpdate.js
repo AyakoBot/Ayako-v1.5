@@ -5,12 +5,11 @@ module.exports = {
 		const client = guild.client;
 		const ch = client.ch;
 		const Constants = client.constants;
-		const language = await ch.languageSelector(guild);
 		const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);
 		if (res && res.rowCount > 0) {
-			const r = res.rows[0];
-			const logchannel = client.channels.cache.get(r.guildevents);
-			if (logchannel && logchannel.id) {
+			const channels = res.rows[0].guildevents?.map((id) => typeof client.channels.cache.get(id)?.send == 'function' ? client.channels.cache.get(id) : null).filter(c => c !== null);
+			if (channels && channels.length > 0) {
+				const language = await ch.languageSelector(guild);
 				const auditsCreate = await guild.fetchAuditLogs({limit: 3, type: 80});
 				const auditsUpdate = await guild.fetchAuditLogs({limit: 3, type: 81});
 				const auditsDelete = await guild.fetchAuditLogs({limit: 3, type: 82});
@@ -42,13 +41,16 @@ module.exports = {
 				} else if (haveAmount == 2) {
 					if (entryCreate) {
 						if (entryDelete) {
-							if (entryCreate.timestamp > entryDelete.timestamp) { entry = entryCreate; } else {entry = entryDelete; }
+							if (entryCreate.timestamp > entryDelete.timestamp) entry = entryCreate;
+							else entry = entryDelete;
 						} else if (entryUpdate) {
-							if (entryCreate.timestamp > entryUpdate.timestamp) { entry = entryCreate; } else {entry = entryUpdate; }
+							if (entryCreate.timestamp > entryUpdate.timestamp) entry = entryCreate; 
+							else entry = entryUpdate;
 						}
 					} else if (entryDelete) {
 						if (entryUpdate) {
-							if (entryDelete.timestamp > entryUpdate.timestamp) { entry = entryDelete; } else {entry = entryUpdate; }
+							if (entryDelete.timestamp > entryUpdate.timestamp) entry = entryDelete;
+							else entry = entryUpdate;
 						}
 					}
 				} else if (haveAmount == 1) {
@@ -142,7 +144,7 @@ module.exports = {
 					}
 					ch.logger('Integration Update Check console at '+ new Date().toUTCString());
 				}
-				ch.send(logchannel, embed);
+				ch.send(channels, embed);
 			}
 		}
 	}

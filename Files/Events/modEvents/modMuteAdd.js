@@ -22,7 +22,6 @@ module.exports = {
 		let role;
 		const resM = await msg.client.ch.query('SELECT * FROM guildsettings WHERE guildid = $1;', [msg.guild.id]);
 		if (resM && resM.rowCount > 0) role = msg.guild.roles.cache.get(resM.rows[0].muteroleid);
-		let logchannel;
 		const member = await msg.guild.members.fetch(target.id).catch(() => { });
 		const exec = await msg.guild.members.fetch(executor.id).catch(() => { });
 		const memberClient = msg.guild.me;
@@ -51,7 +50,7 @@ module.exports = {
 					em.setDescription(msg.client.constants.emotes.cross + ' ' + lan.noMember);
 					answer ? answer.update({ embeds: [em], components: [] }) : msg.m?.edit({ embeds: [em], components: [] });
 					return false;
-				} else return assingWarn(executor, target, reason, msg, answer, em, language, con, lan, logchannel);
+				} else return assingWarn(executor, target, reason, msg, answer, em, language, con, lan);
 			}
 		}
 		if (exec?.roles.highest.rawPosition < member?.roles.highest.rawPosition || exec?.roles.highest.rawPosition == member?.roles.highest.rawPosition) {
@@ -86,8 +85,6 @@ module.exports = {
 					.setTimestamp()
 					.setAuthor(msg.client.ch.stp(lan.dm.author, { guild: msg.guild }), lan.author.image, msg.client.ch.stp(con.author.link, { guild: msg.guild }));
 				msg.client.ch.send(dmChannel, DMembed);
-				const res = await msg.client.ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [msg.guild.id]);
-				if (res && res.rowCount > 0) logchannel = msg.client.channels.cache.get(res.rows[0].guildevents);
 				const embed = new Discord.MessageEmbed()
 					.setColor(con.color)
 					.setAuthor(lan.author, msg.client.ch.displayAvatarURL(executor), msg.client.constants.standard.invite)
@@ -96,7 +93,7 @@ module.exports = {
 					.setThumbnail(msg.client.ch.displayAvatarURL(target))
 					.addField(language.reason, `\`\`\`${reason}\`\`\``)
 					.setFooter(msg.client.ch.stp(lan.footer, {user: executor, target: target}));
-				if (logchannel) msg.client.ch.send(logchannel, embed);
+				if (msg.logchannels.length > 0) msg.client.ch.send(msg.logchannels, embed);
 			} else {
 				if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.cross + lan.error + ` \`\`\`${err}\`\`\``);
 				else em.setDescription(msg.client.constants.emotes.cross + lan.error + ` \`\`\`${err}\`\`\``);
@@ -150,7 +147,7 @@ async function ask(executor, msg) {
 	}
 }
 
-async function assingWarn(executor, target, reason, msg, answer, em, language, con, lan, logchannel) {
+async function assingWarn(executor, target, reason, msg, answer, em, language, con, lan) {
 	const dmChannel = await target.createDM().catch(() => { });
 	const DMembed = new Discord.MessageEmbed()
 		.setDescription(`${language.reason}: \`\`\`${reason}\`\`\``)
@@ -158,8 +155,6 @@ async function assingWarn(executor, target, reason, msg, answer, em, language, c
 		.setTimestamp()
 		.setAuthor(msg.client.ch.stp(lan.dm.author, { guild: msg.guild }), lan.author.image, msg.client.ch.stp(con.author.link, { guild: msg.guild }));
 	msg.client.ch.send(dmChannel, DMembed);
-	const res = await msg.client.ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [msg.guild.id]);
-	if (res && res.rowCount > 0) logchannel = msg.client.channels.cache.get(res.rows[0].guildevents);
 	const embed = new Discord.MessageEmbed()
 		.setColor(con.color)
 		.setAuthor(lan.author, msg.client.ch.displayAvatarURL(executor), msg.client.constants.standard.invite)
@@ -168,7 +163,7 @@ async function assingWarn(executor, target, reason, msg, answer, em, language, c
 		.setThumbnail(msg.client.ch.displayAvatarURL(target))
 		.addField(language.reason, `\`\`\`${reason}\`\`\``)
 		.setFooter(msg.client.ch.stp(lan.footer, { user: executor, target: target }));
-	if (logchannel) msg.client.ch.send(logchannel, embed);
+	if (msg.logchannels.length > 0) msg.client.ch.send(msg.logchannels, embed);	
 	msg.client.ch.query('INSERT INTO warns (guildid, userid, reason, type, dateofwarn, warnedinchannelid, warnedbyuserid, warnedinchannelname, warnedbyusername, msgid) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);', [msg.guild.id, target.id, reason, 'Mute', Date.now(), msg.channel.id, executor.id, msg.channel.name, executor.username, msg.id]);
 	em.setDescription(msg.client.constants.emotes.tick + ' ' + msg.client.ch.stp(lan.success, { target: target }));
 	await answer.update({ embeds: [em], components: [] }).catch(() => { });

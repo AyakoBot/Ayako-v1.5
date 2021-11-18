@@ -26,10 +26,11 @@ module.exports = {
 			.setTimestamp(new Number(warn.dateofwarn));
 		msg.client.ch.reply(msg, embed);
 		const logEmbed = new Discord.MessageEmbed();
+		const con = msg.client.constants.commands.pardon;
 		if (warn.type == 'Warn') {
 			logEmbed
 				.setDescription(`**${msg.language.reason}:**\n${warn.reason}`)
-				.setAuthor(msg.lan.warnOf + user.tag, msg.con.author.image, msg.client.ch.stp(msg.client.constants.standard.discordUrlDB, { guildid: msg.guild.id, channelid: msg.channel.id, msgid: warn.msgid }))
+				.setAuthor(msg.lan.warnOf + user.tag, con.log.image, msg.client.ch.stp(msg.client.constants.standard.discordUrlDB, { guildid: msg.guild.id, channelid: msg.channel.id, msgid: warn.msgid }))
 				.addFields(
 					{ name: msg.lan.date, value: `<t:${warn.dateofwarn.slice(0, -3)}:F> (<t:${warn.dateofwarn.slice(0, -3)}:R>)`, inline: false },
 					{ name: msg.lan.warnedIn, value: `<#${warn.warnedinchannelid}>\n\`${warn.warnedinchannelname}\``, inline: false },
@@ -46,11 +47,11 @@ module.exports = {
 			if (muterole && member && member.roles.cache.get(muterole.id)) notClosed = msg.client.ch.stp(msg.lan.abortedMute, { time: `<t:${warn.duration.slice(0, -3)}:F> (<t:${warn.duration.slice(0, -3)}:R>)` });
 			logEmbed
 				.setDescription(`**${msg.language.reason}:**\n${warn.reason}`)
-				.setAuthor(msg.lan.warnOf + user.tag, msg.con.log.author.image, msg.client.ch.stp(msg.client.constants.standard.discordUrlDB, { guildid: msg.guild.id, channelid: msg.channel.id, msgid: warn.msgid }))
+				.setAuthor(msg.lan.warnOf + user.tag, con.log.image, msg.client.ch.stp(msg.client.constants.standard.discordUrlDB, { guildid: msg.guild.id, channelid: msg.channel.id, msgid: warn.msgid }))
 				.addFields(
 					{ name: msg.lan.date, value: `<t:${warn.dateofwarn.slice(0, -3)}:F> (<t:${warn.dateofwarn.slice(0, -3)}:R>)`, inline: false },
-					{ name: msg.lan.warndIn, value: `<#${warn.warnedinchannelid}>\n\`${warn.warnedinchannelname}\``, inline: false },
-					{ name: msg.lan.warndBy, value: `<@${warn.warnedbyuserid}>\n\`${warn.warnedbyusername}\` (\`${warn.warnedbyuserid}\`)`, inline: false },
+					{ name: msg.lan.mutedIn, value: `<#${warn.warnedinchannelid}>\n\`${warn.warnedinchannelname}\``, inline: false },
+					{ name: msg.lan.mutedBy, value: `<@${warn.warnedbyuserid}>\n\`${warn.warnedbyusername}\` (\`${warn.warnedbyuserid}\`)`, inline: false },
 					{
 						name: msg.lan.duration, value: `${warn.duration ?
 							moment.duration(+warn.duration - +warn.dateofwarn).format(`d [${msg.language.time.days}], h [${msg.language.time.hours}], m [${msg.language.time.minutes}], s [${msg.language.time.seconds}]`) :
@@ -68,6 +69,6 @@ module.exports = {
 				)
 				.setFooter(msg.lan.warnID + warn.row_number);
 		}
-		if (msg.logchannel) msg.client.ch.send(msg.logchannel, { embeds: [logEmbed] });
+		msg.logchannels.forEach((c) => msg.client.ch.send(c, { embeds: [logEmbed] }));
 	}
 };

@@ -11,14 +11,13 @@ module.exports = {
 			revoke: new RegExp(Constants.disabled, 'g'),
 		};
 		const guild = newRole.guild;
-		const language = await ch.languageSelector(guild);
-		const lan = language.roleUpdate;
-		const con = Constants.roleUpdate;
 		const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);
 		if (res && res.rowCount > 0) {
-			const r = res.rows[0];
-			const logchannel = client.channels.cache.get(r.roleevents);
-			if (logchannel && logchannel.id) {
+			const channels = res.rows[0].roleevents?.map((id) => typeof client.channels.cache.get(id)?.send == 'function' ? client.channels.cache.get(id) : null).filter(c => c !== null);
+			if (channels && channels.length > 0) {
+				const language = await ch.languageSelector(guild);
+				const lan = language.roleUpdate;
+				const con = Constants.roleUpdate;
 				const embed  = new Discord.MessageEmbed()
 					.setTimestamp()
 					.setColor(con.color)
@@ -75,13 +74,13 @@ module.exports = {
 				}
 				if (entry) embed.setDescription(ch.stp(lan.descriptionWithAudit, {user: entry.executor, role: newRole})+ChangedKey.map(o => ` \`${o}\``));
 				else embed.setDescription(ch.stp(lan.descriptionWithoutAudit, {role: newRole})+ChangedKey.map(o => ` \`${o}\``));
-				if (embed.fields.length > 0) ch.send(logchannel, embed);
+				if (embed.fields.length > 0) ch.send(channels, embed);
 			}
 		} 
 	}
 };
       
-function int2RGB2Hex(num) { // source of this function: https://github.com/curtisf/logger
+function int2RGB2Hex(num) {
 	num >>>= 0;
 	const b = num & 0xFF;
 	const g = (num & 0xFF00) >>> 8;

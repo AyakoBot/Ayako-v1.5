@@ -7,14 +7,13 @@ module.exports = {
 		const client = oldGuild ? oldGuild.client : newGuild.client;
 		const ch = client.ch;
 		const Constants = client.constants;
-		const language = await ch.languageSelector(newGuild);
-		const lan = language.guildUpdate;
-		const con = Constants.guildUpdate;
 		const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [newGuild.id]);
 		if (res && res.rowCount > 0) {
-			const r = res.rows[0];
-			const logchannel = client.channels.cache.get(r.channelevents);
-			if (logchannel && logchannel.id) {
+			const channels = res.rows[0].guildevents?.map((id) => typeof client.channels.cache.get(id)?.send == 'function' ? client.channels.cache.get(id) : null).filter(c => c !== null);
+			if (channels && channels.length > 0) {
+				const language = await ch.languageSelector(newGuild);
+				const lan = language.guildUpdate;
+				const con = Constants.guildUpdate;
 				const embed = new Discord.MessageEmbed()
 					.setAuthor(lan.author.name, con.author.image)
 					.setTimestamp()
@@ -25,10 +24,7 @@ module.exports = {
 					oldGuild.change.push('available');
 					ch.query(`UPDATE antispamsettings SET forceDisabled = false WHERE guildid = '${newGuild.id}';`);
 					embed.setDescription(lan.antispam);
-				} else if (oldGuild.available == true && newGuild.available == false) {
-					ch.query(`UPDATE antispamsettings SET forceDisabled = true WHERE guildid = '${newGuild.id}';`);
-					return;
-				}
+				} else if (oldGuild.available == true && newGuild.available == false) return ch.query(`UPDATE antispamsettings SET forceDisabled = true WHERE guildid = '${newGuild.id}';`);
 				if (oldGuild.name !== newGuild.name) {
 					oldGuild.change.push('name');
 					entry = await getAudits(newGuild);
@@ -175,24 +171,16 @@ module.exports = {
 					entry = await getAudits(newGuild);
 					embed.addField(language.nsfw, `${language.before}: \`${oldGuild.nsfw}\`\n${language.after}: \`${newGuild.nsfw}\``);
 				}
-				if (oldGuild.ownerID !== newGuild.ownerID) {
-					embed.setDescription(ch.stp(lan.ownerSwitch, {user: await client.users.fetch(oldGuild.ownerID), target: await client.users.fetch(newGuild.ownerID)}));
-				}
+				if (oldGuild.ownerID !== newGuild.ownerID) embed.setDescription(ch.stp(lan.ownerSwitch, {user: await client.users.fetch(oldGuild.ownerID), target: await client.users.fetch(newGuild.ownerID)}));
 				if (oldGuild.change) {
 					if (!embed.description) {
-						if (entry) {
-							let text = oldGuild.change.map(change => ` \`${language[change]}\``);
-							embed.setDescription(ch.stp(lan.standardWithAudit, {user: entry.executor})+text);
-						}
-						else {
-							let text = oldGuild.change.map(change => ` \`${language[change]}\``);
-							embed.setDescription(ch.stp(lan.standardWithoutAudit, {change: text}));
-						}
+						if (entry) embed.setDescription(ch.stp(lan.standardWithAudit, { user: entry.executor }) + oldGuild.change.map(change => ` \`${language[change]}\``));
+						else embed.setDescription(ch.stp(lan.standardWithoutAudit, { change: oldGuild.change.map(change => ` \`${language[change]}\``)}));
 					}
 				}
 				if (embed.description) {
-					if (path) ch.send(logchannel, {embeds: [embed], files: [path]});
-					else ch.send(logchannel, {embeds: [embed]});
+					if (path) ch.send(channels, {embeds: [embed], files: [path]});
+					else ch.send(channels, {embeds: [embed]});
 				}
 			}
 		}

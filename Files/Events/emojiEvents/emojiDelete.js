@@ -6,14 +6,13 @@ module.exports = {
 		const ch = client.ch;
 		const Constants = client.constants;
 		const guild = emoji.guild;
-		const language = await ch.languageSelector(guild);
-		const lan = language.emojiDelete;
-		const con = Constants.emojiDelete;
 		const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);
 		if (res && res.rowCount > 0) {
-			const r = res.rows[0];
-			const logchannel = client.channels.cache.get(r.emojievents);
-			if (logchannel && logchannel.id) {
+			const channels = res.rows[0].emojievents?.map((id) => typeof client.channels.cache.get(id)?.send == 'function' ? client.channels.cache.get(id) : null).filter(c => c !== null);
+			if (channels && channels.length > 0) {
+				const language = await ch.languageSelector(guild);
+				const lan = language.emojiDelete;
+				const con = Constants.emojiDelete;
 				const audits = await emoji.guild.fetchAuditLogs({limit: 10, type: 62});
 				let entry;
 				if (audits && audits.entries) {
@@ -31,13 +30,10 @@ module.exports = {
 					const name = await ch.getName(path);
 					embed.setThumbnail(`attachment://${name}`);
 				}
-				if (entry && entry.id) {
-					embed.setDescription(ch.stp(lan.description.withUser, {user: entry.executor, emoji: emoji}));
-				} else {
-					embed.setDescription(ch.stp(lan.description.withoutUser, {emoji: emoji}));
-				}
-				if (path) ch.send(logchannel, {embeds: [embed], files: [path]});
-				else ch.send(logchannel, embed);
+				if (entry && entry.id) embed.setDescription(ch.stp(lan.description.withUser, {user: entry.executor, emoji: emoji}));
+				else embed.setDescription(ch.stp(lan.description.withoutUser, {emoji: emoji}));
+				if (path) ch.send(channels, {embeds: [embed], files: [path]});
+				else ch.send(channels, embed);
 			}
 		}
 	}

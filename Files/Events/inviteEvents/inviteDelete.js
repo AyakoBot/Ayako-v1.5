@@ -9,14 +9,13 @@ module.exports = {
 		const Constants = client.constants;
 		const guild = invite.guild;
 		client.invites.set(guild.id, await guild.invites.fetch());
-		const language = await ch.languageSelector(guild);
-		const lan = language.inviteDelete;
-		const con = Constants.inviteDelete;
 		const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);
 		if (res && res.rowCount > 0) {
-			const r = res.rows[0];
-			const logchannel = client.channels.cache.get(r.inviteevents);
-			if (logchannel && logchannel.id) {
+			const channels = res.rows[0].inviteevents?.map((id) => typeof client.channels.cache.get(id)?.send == 'function' ? client.channels.cache.get(id) : null).filter(c => c !== null);
+			if (channels && channels.length > 0) {
+				const language = await ch.languageSelector(guild);
+				const lan = language.inviteDelete;
+				const con = Constants.inviteDelete;		
 				const audits = await invite.guild.fetchAuditLogs({limit: 10, type: 42});
 				let entry;
 				if (audits && audits.entries) {
@@ -44,7 +43,7 @@ module.exports = {
 				if (invite.url) embed.addField(lan.url, `${invite.url}`, true);
 				if (invite.uses) embed.addField(lan.used, invite.uses, true);
 				if (invite.createdTimestamp) embed.addField(lan.expires, `\`${new Date(invite.createdTimestamp).toUTCString()}\`\n(\`${ch.stp(language.time.timeIn, {time: moment.duration(invite.createdTimestamp - Date.now()).format(`Y [${language.time.years}], M [${language.time.months}], W [${language.time.weeks}], D [${language.time.days}], H [${language.time.hours}], m [${language.time.minutes}], s [${language.time.seconds}]`)})}\`)`, false);
-				ch.send(logchannel, embed);
+				ch.send(channels, embed);
 			}
 		}
 	}

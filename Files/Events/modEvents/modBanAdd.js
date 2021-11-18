@@ -69,9 +69,6 @@ module.exports = {
 		let err;
 		const ban = await msg.guild.members.ban(target, {reason: reason, days: 1}).catch((e) => {err = e;});
 		if (ban) {
-			const res = await msg.client.ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [msg.guild.id]);
-			let logchannel;
-			if (res && res.rowCount > 0) logchannel = msg.client.channels.cache.get(res.rows[0].guildevents);
 			const embed = new Discord.MessageEmbed()
 				.setColor(con.color)
 				.setAuthor(lan.author, msg.client.ch.displayAvatarURL(executor), msg.client.constants.standard.invite)
@@ -80,7 +77,7 @@ module.exports = {
 				.setThumbnail(msg.client.ch.displayAvatarURL(target))
 				.addField(language.reason, `\`\`\`${reason}\`\`\``)
 				.setFooter(msg.client.ch.stp(lan.footer, {user: executor, target: target}));
-			if (logchannel) msg.client.ch.send(logchannel, embed);
+			if (msg.logchannels.length > 0) msg.client.ch.send(msg.logchannels, embed);
 		} else {
 			m?.delete().catch(()  => {});
 			if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.cross + lan.error + ` \`\`\`${err}\`\`\``);

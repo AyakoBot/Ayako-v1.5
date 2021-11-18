@@ -17,28 +17,29 @@ module.exports = {
 		const res = await msg.client.ch.query('SELECT * FROM verification WHERE guildid = $1 AND active = $2;', [msg.guild.id, true]);
 		if (res && res.rowCount > 0) {
 			const r = res.rows[0];
+			let logchannel;
 			if (r.startchannel !== msg.channel.id) return;
 			if (r.pendingrole && !msg.member.roles.cache.has(r.pendingrole)) return;
-			if (r.logchannel) msg.logchannel = msg.guild.channels.cache.get(r.logchannel);
-			if (msg.logchannel) {
+			if (r.logchannel) logchannel = msg.guild.channels.cache.get(r.logchannel);
+			if (logchannel) {
 				const log = new Discord.MessageEmbed()
 					.setDescription(msg.client.ch.stp(msg.lan.log.start, {user: msg.author}))
 					.setAuthor(msg.author.tag, msg.client.ch.displayAvatarURL(msg.author))
 					.setTimestamp()
 					.setColor();
-				msg.client.ch.send(msg.logchannel, {embeds: [log]});
+				msg.client.ch.send(logchannel, {embeds: [log]});
 			}
 			msg.delete().catch(() => {});
 			if (!msg.member.roles.cache.has(r.finishedrole)) {
 				const DM = await msg.author.createDM().catch(() => {});
 				if (DM && DM.id) {
 					msg.DM = DM, msg.r = r;
-					this.startProcess(msg);
+					this.startProcess(msg, null, logchannel);
 				}
 			} else return msg.client.ch.reply(msg, msg.lan.alreadyVerified);
 		}
 	},
-	async startProcess(msg, answer) {
+	async startProcess(msg, answer, logchannel) {
 		if (msg.m) await msg.m.removeAttachments();
 		const file = await this.generateImage(), lan = msg.lan, r = msg.r;
 		const embed = new Discord.MessageEmbed()
@@ -62,7 +63,7 @@ module.exports = {
 			if (clickButton.customId == 'regenerate') {
 				buttonsCollector.stop();
 				messageCollector.stop();
-				return this.startProcess(msg, clickButton);
+				return this.startProcess(msg, clickButton, logchannel);
 			}
 		});
 		messageCollector.on('collect', async (message) => {
@@ -81,13 +82,13 @@ module.exports = {
 			if (message.content.toLowerCase() == file.captcha.text.toLowerCase()) {
 				buttonsCollector.stop();
 				messageCollector.stop();
-				return this.finished(msg);
+				return this.finished(msg, logchannel);
 			} else {
 				buttonsCollector.stop();
 				messageCollector.stop();
 				const ms = await msg.client.ch.send(msg.DM, {content: msg.client.ch.stp(msg.lan.wrongInput, {solution: file.captcha.text})});
 				setTimeout(() => {ms.delete().catch(() => {});}, 10000);
-				return this.startProcess(msg);
+				return this.startProcess(msg, null, logchannel);
 			}
 		});
 		buttonsCollector.on('end', async (collected, reason) => {
@@ -112,15 +113,15 @@ module.exports = {
 		file.path = path, file.now = now, file.captcha = captcha;
 		return file;
 	},
-	async finished(msg) {
+	async finished(msg, logchannel) {
 		msg.language = await msg.client.ch.languageSelector(msg.guild);
-		if (msg.logchannel) {
+		if (logchannel) {
 			const log = new Discord.MessageEmbed()
 				.setDescription(msg.client.ch.stp(msg.language.verification?.log?.end, {user: msg.author}))
 				.setAuthor(msg.author.tag, msg.client.ch.displayAvatarURL(msg.author))
 				.setTimestamp()
 				.setColor();
-			msg.client.ch.send(msg.logchannel, {embeds: [log]});
+			msg.client.ch.send(logchannel, {embeds: [log]});
 		}
 		const embed = new Discord.MessageEmbed()
 			.setTitle(msg.lan.author.name, msg.client.constants.standard.image, msg.client.constants.standard.invite)

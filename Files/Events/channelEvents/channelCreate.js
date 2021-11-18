@@ -7,14 +7,13 @@ module.exports = {
 		const ch = client.ch;
 		const Constants = client.constants;
 		const guild = channel.guild;
-		const language = await ch.languageSelector(guild);
-		const lan = language.channelCreate;
-		const con = Constants.channelCreate;
 		const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);
 		if (res && res.rowCount > 0) {
-			const r = res.rows[0];
-			const logchannel = client.channels.cache.get(r.channelevents);
-			if (logchannel && logchannel.id) {
+			const channels = res.rows[0].channelevents?.map((id) => typeof client.channels.cache.get(id)?.send == 'function' ? client.channels.cache.get(id) : null).filter(c => c !== null);
+			if (channels && channels.length > 0) {
+				const language = await ch.languageSelector(guild);
+				const lan = language.channelCreate;
+				const con = Constants.channelCreate;				
 				let audit = await guild.fetchAuditLogs({limit: 5, type: 10}).catch(() => {});	
 				let entry;
 				if (audit && audit.entries) {
@@ -57,14 +56,14 @@ module.exports = {
 						if (Array.isArray(after)) {after = after.map((e) => {`${e}\n`;});}
 						if (entry.changes[i].key !== 'permission_overwrites') embed.addField(`${language[entry.changes[i].key.toLowerCase()]}\u200b`, `${language.before}: \`${before}\`\n${language.after}: \`${after}\``);
 					}
-					ch.send(logchannel, {embed});
+					ch.send(channels, {embed});
 				} else {
 					const embed = new Discord.MessageEmbed()
 						.setAuthor(con.author.title, con.author.image, ch.stp(con.author.link, {channel: channel}))
 						.setDescription(lan.description.withoutUser, {channel: channel, type: language.channels[channel.type]})
 						.setColor(con.color)
 						.setTimestamp();
-					ch.send(logchannel, {embed});
+					ch.send(channels, {embed});
 				}
 			}
 		}

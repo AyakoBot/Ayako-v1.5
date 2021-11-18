@@ -38,7 +38,7 @@ module.exports = {
 	/**
 	 * Sends a Message to a channel.
 	 * @constructor
-	 * @param {object} channel - The Channel the Messages will be sent in.
+	 * @param {object} channel - The Channel the Messages will be sent in (supports Array of Channels).
 	 * @param {string} content - The Content of the Message or the Message Options if no content is provided.
 	 * @param {object} options - The Options of this Message, if any.
 	 */

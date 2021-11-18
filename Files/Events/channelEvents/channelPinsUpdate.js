@@ -8,9 +8,8 @@ module.exports = {
 		const Constants = require('../../Constants.json');
 		const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);
 		if (res && res.rowCount > 0) {
-			const r = res.rows[0];
-			const logchannel = client.channels.cache.get(r.channelevents);
-			if (logchannel && logchannel.id) {
+			const channels = res.rows[0].channelevents?.map((id) => typeof client.channels.cache.get(id)?.send == 'function' ? client.channels.cache.get(id) : null).filter(c => c !== null);
+			if (channels && channels.length > 0) {
 				const language = await ch.languageSelector(guild);
 				let auditsPin = await guild.fetchAuditLogs({limit: 5, type: 74}).catch(() => {});	
 				let auditsUnPin = await guild.fetchAuditLogs({limit: 5, type: 75}).catch(() => {});	
@@ -29,19 +28,15 @@ module.exports = {
 					.setTimestamp();
 				if (entryPin && entryUnPin) {
 					if (ch.getUnix(entryPin.id) > ch.getUnix(entryUnPin.id)) {
-						casePin(entryPin, embed, language, logchannel);
+						casePin(entryPin, embed, language, channels);
 					} else if (ch.getUnix(entryPin.id) < ch.getUnix(entryUnPin.id)) {
-						caseUnPin(entryUnPin, embed, language, logchannel);
+						caseUnPin(entryUnPin, embed, language, channels);
 					} else {
-						caseUnknown(embed, language, logchannel);
+						caseUnknown(embed, language, channels);
 					}
-				} else if (entryPin) {
-					casePin(entryPin, embed, language, logchannel);
-				} else if (entryUnPin) {
-					caseUnPin(entryUnPin, embed, language, logchannel);
-				} else {
-					caseUnknown(embed, language, logchannel);
-				}
+				} else if (entryPin) casePin(entryPin, embed, language, channels);
+				else if (entryUnPin) caseUnPin(entryUnPin, embed, language, channels);
+				else caseUnknown(embed, language, channels);
 			}
 		}
 		async function casePin(entryPin, embed, language, logchannel) {
