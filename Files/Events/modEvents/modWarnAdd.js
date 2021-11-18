@@ -31,7 +31,7 @@ module.exports = {
 		const warnEmbed = new Discord.MessageEmbed()
 			.setTitle(msg.client.ch.stp(lan.DMtitle, {guild: msg.guild}))
 			.setColor(con.color)
-			.setDescription('```'+reason+'```')
+			.setDescription(`${msg.language.reason}: \n${reason}`)
 			.setTimestamp();
 		msg.client.ch.send(target, warnEmbed);
 		const res2 = await msg.client.ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [msg.guild.id]);
