@@ -77,10 +77,9 @@ module.exports = {
 			[msg.guild.id, target.id, reason, 'Ban', now + +duration, false, now, msg.channel.id, executor.id, msg.channel.name, msg.author.username]);
 			const embed = new Discord.MessageEmbed()
 				.setColor(con.color)
-				.setAuthor(msg.client.ch.stp(lan.author, { user: target }), msg.client.ch.displayAvatarURL(executor), msg.client.constants.standard.invite)
+				.setAuthor(msg.client.ch.stp(lan.author, { user: target }), msg.client.ch.displayAvatarURL(target), msg.client.constants.standard.invite)
 				.setDescription(msg.client.ch.stp(lan.description, { user: executor, target: target }))
 				.setTimestamp()
-				.setThumbnail(msg.client.ch.displayAvatarURL(target))
 				.addField(language.reason, `${reason}`)
 				.setFooter(msg.client.ch.stp(lan.footer, { user: executor, target: target }));
 			if (msg.logchannels) msg.client.ch.send(msg.logchannels, embed);
