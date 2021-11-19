@@ -1032,6 +1032,9 @@
         "afkHandler": {
             "deletedAfk": "I've deleted your AFK\nYou have been AFK for {{time}}"
         },
+        "unmute": {
+            "vcReason": "User is Un-Muted" 
+        },
         "leveling": {
             "levelUp": {
                 "author": "{{user.tag}} just advanced to level {{level}}",
@@ -1129,7 +1132,8 @@
             "time": "No Time given",
             "timeError": "Please provide a valid Time",
             "timeError2": "Please provide a valid Time in the format `[number] [unit]`",
-            "timeError3": "Please provide a valid Time in the format `[number] [unit]`\nValid Units are `s` for Seconds, `m` for Minutes, `h` for Hours and `d` for Days"
+            "timeError3": "Please provide a valid Time in the format `[number] [unit]`\nValid Units are `s` for Seconds, `m` for Minutes, `h` for Hours and `d` for Days",
+            "vcReason": "User is Temp-Muted" 
         },
         "kick": {
             "description": "Bans a User from the Server",
@@ -1147,7 +1151,8 @@
             "description": "Assigns the Mute Role to a User",
             "usage": ["mute [user ID or mention] (reason)"],
             "category": "Moderation",
-            "reason": "No Reason given"
+            "reason": "No Reason given",
+            "vcReason": "User is Muted" 
         },
         "warn": {
             "description": "Warns a User in the Server",
