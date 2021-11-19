@@ -840,7 +840,7 @@
             "error": "I wasn't able to mute this User!"
         },
         "tempmuteAdd": {
-            "author": "{{user}} was Temp-Muted",
+            "author": "{{user.tag}} was Temp-Muted",
             "description": "{{user}} has Temp-Muted {{target}}",
             "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
             "activeMute": "Joined with an active Mute",
