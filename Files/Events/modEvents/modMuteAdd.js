@@ -149,6 +149,7 @@ async function ask(executor, msg) {
 
 async function assingWarn(executor, target, reason, msg, answer, em, language, con, lan) {
 	const dmChannel = await target.createDM().catch(() => { });
+	if (!msg.source || msg.source !== 'guildMemberAdd') msg.client.ch.query('INSERT INTO warns (guildid, userid, reason, type, dateofwarn, warnedinchannelid, warnedbyuserid, warnedinchannelname, warnedbyusername, msgid) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);', [msg.guild.id, target.id, reason, 'Mute', Date.now(), msg.channel.id, executor.id, msg.channel.name, executor.username, msg.id]);
 	const DMembed = new Discord.MessageEmbed()
 		.setDescription(`${language.reason}: \n${reason}`)
 		.setColor(con.color)

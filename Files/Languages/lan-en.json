@@ -1033,6 +1033,10 @@
             "deletedAfk": "I've deleted your AFK\nYou have been AFK for {{time}}"
         },
         "unmute": {
+            "description": "Un-Mutes a User",
+            "usage": ["unmute [user ID or mention] (reason)"],
+            "category": "Moderation",
+            "reason": "No Reason given",
             "vcReason": "User is Un-Muted" 
         },
         "leveling": {

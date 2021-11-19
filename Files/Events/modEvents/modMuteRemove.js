@@ -112,7 +112,8 @@ module.exports = {
 		if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.tick + ' ' + msg.client.ch.stp(lan.success, { target: target }));
 		else em.setDescription(msg.client.constants.emotes.tick + ' ' + msg.client.ch.stp(lan.success, { target: target }));
 		await msg.m?.edit({embeds: [em]});
-		await msg.client.ch.query('UPDATE warns SET closed = true WHERE dateofwarn = $1 AND guildid = $2 AND userid = $3;', [msg.r.dateofwarn, msg.guild.id, target.id]);
+		const res = await msg.client.ch.query('SELECT * FROM warns WHERE userid = $1 AND guildid = $2 AND closed = false OR closed IS NULL AND userid = $1 AND guildid = $2;', [target.id, msg.guild.id]);
+		res?.rows?.forEach(async (r) => await msg.client.ch.query('UPDATE warns SET closed = true WHERE dateofwarn = $1 AND guildid = $2 AND userid = $3;', [r.dateofwarn, msg.guild.id, target.id]));
 		if (msg.source) msg.client.emit('modSourceHandler', msg);
 		return true;
 	}
@@ -146,6 +147,8 @@ async function ask(executor, msg) {
 
 async function assingWarn(executor, target, reason, msg, answer, em, language, con, lan) {
 	const dmChannel = await target.createDM().catch(() => { });
+	const res = await msg.client.ch.query('SELECT * FROM warns WHERE userid = $1 AND guildid = $2 AND closed = false OR closed IS NULL AND userid = $1 AND guildid = $2;', [target.id, msg.guild.id]);
+	res?.rows?.forEach(async (r) => await msg.client.ch.query('UPDATE warns SET closed = true WHERE dateofwarn = $1 AND guildid = $2 AND userid = $3;', [r.dateofwarn, msg.guild.id, target.id]));
 	const DMembed = new Discord.MessageEmbed()
 		.setDescription(`${language.reason}: \n${reason}`)
 		.setColor(con.color)
