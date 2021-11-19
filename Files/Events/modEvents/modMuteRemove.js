@@ -79,6 +79,7 @@ module.exports = {
 
 			const unmute = await msg.guild.members.cache.get(target.id).roles.remove(role).catch(() => {});
 			if (unmute) {
+				if (member && member.voice.channelId !== null && member.voice.serverMute) member.voice.setMute(false, lan.vcReason).catch(() => { });
 				const embed = new Discord.MessageEmbed()
 					.setColor(con.color)
 					.setAuthor(msg.client.ch.stp(lan.author, { user: target }), msg.client.ch.displayAvatarURL(target), msg.client.constants.standard.invite)

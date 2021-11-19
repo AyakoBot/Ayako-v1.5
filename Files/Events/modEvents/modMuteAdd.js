@@ -78,6 +78,7 @@ module.exports = {
 			let err;
 			const Mute = await msg.guild.members.cache.get(target.id)?.roles.add(role).catch(() => {});
 			if (Mute) {
+				if (member && member.voice.channelId !== null && !member.voice.serverMute) member.voice.setMute(true, lan.vcReason).catch(() => { });
 				const dmChannel = await target.createDM().catch(() => {});
 				const DMembed = new Discord.MessageEmbed()
 					.setDescription(`${language.reason}: \n${reason}`)
