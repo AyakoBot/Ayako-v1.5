@@ -89,7 +89,7 @@ async function run(msg, check, lan) {
 						await end({ text: 'BLACKLISTED_LINK', link: url.hostname, msg: msg }, check, embed, blacklistRes[include], lan);
 						if (!check) included = true;
 					} else if (blacklist.includes(url.hostname)) {
-						await end({ text: 'BLACKLISTED_LINK', link: url.hostname, msg: msg }, check, embed), null, lan;
+						await end({ text: 'BLACKLISTED_LINK', link: url.hostname, msg: msg }, check, embed, null, lan);
 						if (!check) included = true;
 					} else {
 						embed
@@ -115,7 +115,7 @@ async function run(msg, check, lan) {
 									JSON.parse(promptapiRes.text).result.creation_date
 								) ageInDays = Math.ceil(Math.abs(new Date(JSON.parse(promptapiRes.text).result.creation_date).getTime() - new Date().getTime()) / (1000 * 3600 * 24));
 							}
-							if (ageInDays !== undefined && ageInDays !== null && +ageInDays < 7) return await end({ msg: msg, text: 'NEW_URL', res: null, severity: null, link: url }, check, embed);
+							if (ageInDays !== undefined && ageInDays !== null && +ageInDays < 7) return await end({ msg: msg, text: 'NEW_URL', res: null, severity: null, link: url }, check, embed, null, lan);
 							let res;
 							const VTget = await SA
 								.get(`https://www.virustotal.com/api/v3/domains/${url.hostname}`)
