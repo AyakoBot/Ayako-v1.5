@@ -29,7 +29,6 @@ module.exports = {
 		}, 3600000);
 
 		setInterval(() => require('./TimedManagers/timedManagerSplitter').execute(), 2000);
-		setInterval(() => require('./antiraidBanAdd.js').execute(), 10000);
 		setInterval(() => require('./prunelog.js').execute(), 120000);
 		setInterval(() => require('./presence.js').execute(), 60000);
 		setInterval(() => console.log(new Date().toLocaleString()), 600000);
