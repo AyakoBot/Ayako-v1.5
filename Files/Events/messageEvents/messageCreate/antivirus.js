@@ -71,7 +71,7 @@ async function run(msg, check, lan) {
 			let enteredWebsite, baseWebsite;
 			enteredWebsite = await SA.head(url).catch((e) => enteredWebsite = e);
 			baseWebsite = await SA.head(url.hostname).catch((e) => baseWebsite = e);
-			if ((!enteredWebsite || enteredWebsite.text == 'Domain not found') && (!baseWebsite || baseWebsite.text == 'Domain not found') || (`${enteredWebsite}`.includes('ENOTFOUND') || `${baseWebsite}`.includes('ENOTFOUND'))) return end({ msg: msg, text: 'NOT_EXISTENT', res: null, severity: null, link: url }, check, embed);
+			if ((!enteredWebsite || enteredWebsite.text == 'Domain not found') && (!baseWebsite || baseWebsite.text == 'Domain not found') || (`${enteredWebsite}`.includes('ENOTFOUND') || `${baseWebsite}`.includes('ENOTFOUND'))) return end({ msg: msg, text: 'NOT_EXISTENT', res: null, severity: null, link: url }, check, embed, null, lan);
 			if (check) embed.setDescription(`${lan.checking} \`${url}\``);
 			else embed.setDescription('');
 			let include = false;
@@ -101,7 +101,7 @@ async function run(msg, check, lan) {
 							.get(`https://apibl.spamhaus.net/lookup/v1/dbl/${url.hostname}`)
 							.set('Authorization', `Bearer ${auth.spamhausToken}`)
 							.set('Content-Type', 'application/json').catch(() => { });
-						if (spamHausRes && spamHausRes.status == 200) await end({ text: 'BLACKLISTED_LINK', link: url.hostname, msg: msg }, check, embed);
+						if (spamHausRes && spamHausRes.status == 200) await end({ text: 'BLACKLISTED_LINK', link: url.hostname, msg: msg }, check, embed, null, lan);
 						else {
 							let ageInDays;
 							const ip2whoisRes = await SA.get(`https://api.ip2whois.com/v2?key=${auth.ip2whoisToken}&domain=${url.hostname}&format=json`).catch(() => {});
@@ -182,7 +182,7 @@ async function evaluation(msg, VTresponse, url, attributes, check, embed, lan) {
 	}
 
 	if (severity > 2) return await end({ msg: msg, text: 'SEVERE_LINK', res: VTresponse, severity: severity, link: url }, check, embed, null, lan);
-	else if (attributes && +attributes.creation_date + '000' > Date.now() - 604800000) return await end({ msg: msg, text: 'NEW_URL', res: VTresponse, severity: severity, link: url }, check, embed);
+	else if (attributes && +attributes.creation_date + '000' > Date.now() - 604800000) return await end({ msg: msg, text: 'NEW_URL', res: VTresponse, severity: severity, link: url }, check, embed, null, lan);
 	if (!check) setTimeout(() => msg.m.delete().catch(() => { }), 10000);
 	if (attributes) {
 		if (embed.fields.length == 0) {
