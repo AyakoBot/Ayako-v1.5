@@ -505,9 +505,6 @@
                     "bpuserid": "users",
                     "readofwarnstof": "boolean"
                 },
-                "antiraid": {
-                    "active": "boolean"
-                },
                 "autorole": {
                     "active": "boolean",
                     "botroleid": "roles",
@@ -638,6 +635,19 @@
                     "selfstart": "boolean",
                     "kickafter": "minutes",
                     "kicktof": "boolean"
+                },
+                "antiraid": {
+                    "active": "boolean",
+                    "bantof": "boolean",
+                    "kicktof": "boolean",
+                    "posttof": "boolean",
+                    "postchannel": "channel",
+                    "pingroles": "roles",
+                    "pingusers": "users",
+                    "time": "seconds",
+                    "jointhreshold": "number",
+                    "similaridthreshold": "number",
+                    "debugmode": "boolean"
                 }
             },
             "tablenames": {
@@ -679,8 +689,8 @@
                     "vals": [[true, true, 3, 5, 6, true, true, false, true, "{{msg.guild.id}}"]]
                 },
                 "antiraid": {
-                    "cols": ["guildid, active"],
-                    "vals": [["{{msg.guild.id}}", true]]
+                    "cols": ["guildid, active, kicktof, time, jointhreshold, similaridthreshold, debugmode"],
+                    "vals": [["{{msg.guild.id}}", false, true, 15000, 15, 5, false]]
                 },
                 "blacklist": {
                     "cols": ["guildid, active, warntof, mutetof, kicktof, bantof, warnafter, muteafter, kickafter, banafter"],

@@ -74,6 +74,7 @@ client.bans = new Discord.Collection();
 client.channelWebhooks = new Map();
 client.constants = require('../Constants.json');
 client.setMaxListeners(63);
+client.antiraidCache = new Discord.Collection();
 
 client.eris = Eris;
 
