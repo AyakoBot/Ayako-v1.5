@@ -79,5 +79,5 @@ function log(msg, res, user, lan, con) {
 		description !== null ? description += ` | ${msgLink}` : description = `${msgLink}`;
 	}
 	logEmbed.setDescription(description);
-	msg.client.ch.send(msg.logchannels, logEmbed);
+	if (msg.logchannels) msg.client.ch.send(msg.logchannels, logEmbed);
 }

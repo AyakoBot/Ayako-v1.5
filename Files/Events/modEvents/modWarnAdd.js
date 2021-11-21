@@ -40,7 +40,7 @@ module.exports = {
 			.addField(language.reason, `${reason}`)
 			.setColor(con.color)
 			.setTimestamp();
-		if (msg.logchannels) msg.client.ch.send(msg.logchannels, WarnLogEmbed);
+		if (msg.logchannels && msg.logchannels.length) msg.client.ch.send(msg.logchannels, WarnLogEmbed);
 		let warnnr;
 		const res = await msg.client.ch.query('SELECT * FROM warns WHERE guildid = $1 AND userid = $2;', [msg.guild.id, target.id]);
 		if (res && res.rowCount > 0) warnnr = res.rowCount + 1;

@@ -209,7 +209,7 @@ async function end(data, check, embed, note, lan) {
 	if (data.text == 'NOT_EXISTENT') {
 		if (embed.fields.length == 0) {
 			embed
-				.addField(data.msg.language.result, data.msg.client.ch.stp(data.lan.notexistent, { url: data.link.hostname }))
+				.addField(data.msg.language.result, data.msg.client.ch.stp(lan.notexistent, { url: data.link.hostname }))
 				.setDescription(embed.description.replace(data.msg.client.ch.stp(lan.check, { loading: data.msg.client.constants.emotes.loading }), data.msg.client.ch.stp(lan.done, { tick: data.msg.client.constants.emotes.tick })))
 				.setColor('#00ff00');
 			if (data.msg.m) await data.msg.m.edit({ embeds: [embed] }).catch(() => { });

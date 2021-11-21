@@ -24,7 +24,6 @@ module.exports = {
 				client.guilds.cache.forEach(g => {require('../guildevents/guildCreate/nitro').execute(g);});
 				require('./nitro').execute();
 				client.ch.query('DELETE FROM toxicitycheck;');
-				require('../guildevents/guildMemberAdd/antiraid').resetData();
 			}
 		}, 3600000);
 
