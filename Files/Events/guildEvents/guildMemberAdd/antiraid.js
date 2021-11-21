@@ -1,7 +1,7 @@
 module.exports = {
 	async execute(member) {
 		if (!member || !member.guild) return;
-		const res = await member.member.client.ch.query('SELECT * FROM antiraidsettings WHERE guildid = $1 AND active = true;', [member.guild.id]);
+		const res = await member.client.ch.query('SELECT * FROM antiraidsettings WHERE guildid = $1 AND active = true;', [member.guild.id]);
 		if (!res || res.rowCount == 0) return;
 		this.addMember(member, res.rows[0]);
 		const caches = this.check(member, res.rows[0]);

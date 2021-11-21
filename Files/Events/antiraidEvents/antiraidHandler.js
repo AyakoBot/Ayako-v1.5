@@ -17,7 +17,7 @@ module.exports = {
 				const user = client.users.cache.get(u);
 				const msg = new Object;
 				msg.client = client, msg.author = client.user, msg.guild = guild, msg.lanSettings = language.commands.settings, msg.lan = msg.lanSettings.separators, msg.language = language;
-                client.emit('antiraidKickAdd', client.user, user, language.autotypes.antiraid, msg);
+				client.emit('antiraidKickAdd', client.user, user, language.autotypes.antiraid, msg);
 			});
 		}
 
