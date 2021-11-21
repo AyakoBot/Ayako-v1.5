@@ -273,6 +273,13 @@
             "link": ""
         }
     },
+    "antiraidMessage": {
+        "color": "RED",
+        "author": {
+            "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673209342263296/Warning.png",
+            "link": ""
+        }
+    },
     "enabled": "<:enabled:831360855018962944>",
     "disabled": "<:disabled:831360826048774176>",
     "switch": {

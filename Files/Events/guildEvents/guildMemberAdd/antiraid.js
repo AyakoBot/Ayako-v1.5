@@ -5,7 +5,7 @@ module.exports = {
 		if (!res || res.rowCount == 0) return;
 		this.addMember(member, res.rows[0]);
 		const caches = this.check(member, res.rows[0]);
-		if (caches) member.client.emit('antiraidHandler', caches, member.guild, res.rows[0]);
+		if (caches) member.client.emit('antiraidHandler', caches, member.guild, res.rows[0], member);
 	},
 	addMember(member, r) {
 		if (!member.client.antiraidCache.get(member.guild.id)) member.client.antiraidCache.set(member.guild.id, []);

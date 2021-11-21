@@ -1029,6 +1029,13 @@
             "banErrorMessage": "I was unable to ban {{user}}. `Insufficient Permissions`",
             "kickErrorMessage": "I was unable to kick {{user}}. `Insufficient Permissions`"
         },
+        "antiraidHandler": {
+            "debugMessage": {
+                "author": "Join Threshold Breached!",
+                "description": "The join of {{user}} breached the Join Threshold\nEvery join within the 15 Seconds prior:",
+                "question": "**Is this a Raid ?**"
+            }
+        },
         "afkHandler": {
             "deletedAfk": "I've deleted your AFK\nYou have been AFK for {{time}}"
         },
