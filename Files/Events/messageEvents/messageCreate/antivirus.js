@@ -63,6 +63,14 @@ async function run(msg, check, lan) {
 		else FullLinks.push(url);
 	}
 
+	FullLinks.forEach((link, i) => {
+		const urlParts = new URL(link).hostname.split('.');
+		FullLinks[i] = new URL(link).protocol + '//' + urlParts
+			.slice(0)
+			.slice(-(urlParts.length == 4 ? 3 : 2))
+			.join('.');
+	});
+
 	let included = false;
 	FullLinks.forEach(async (url) => {
 		const embed = new Discord.MessageEmbed();
