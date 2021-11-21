@@ -137,7 +137,7 @@ module.exports = {
 					.setColor(con.log.color)
 					.setTimestamp();
 				const path = await msg.client.ch.txtFileWriter(uniqueUsers);
-				if (msg.logchannels.length !== 0 && uniqueUsers.length !== 0) {
+				if (msg.logchannels && msg.logchannels.length !== 0 && uniqueUsers.length !== 0) {
 					if (path) {
 						msg.logchannels.forEach((c) => {
 							msg.client.ch.send(c, {

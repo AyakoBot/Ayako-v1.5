@@ -74,6 +74,6 @@ module.exports = {
 				.setFooter(msg.lan.warnID + warn.row_number);
 		}
 		msg.client.ch.query('DELETE FROM warns WHERE userid = $1 AND guildid = $2 AND dateofwarn = $3;', [user.id, msg.guild.id, warn.dateofwarn]);
-		msg.logchannels.forEach((c) => msg.client.ch.send(c, { embeds: [logEmbed] }));
+		if (msg.logchannels) msg.logchannels.forEach((c) => msg.client.ch.send(c, { embeds: [logEmbed] }));
 	}
 };
