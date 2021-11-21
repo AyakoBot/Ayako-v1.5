@@ -7,72 +7,71 @@ module.exports = {
 	type: 0,
 	displayEmbed(msg, r) {
 		const embed = new Discord.MessageEmbed()
-			.addFields(
-				{
-					name: msg.lanSettings.active, 
-					value: r.active ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled, 
-					inline: false
-				},
-				{
-					name: msg.lan.bantof,
-					value: r.bantof ? msg.client.constants.emotes.tick + ' ' + msg.language.enabled : msg.client.constants.emotes.cross + ' ' + msg.language.disabled,
-					inline: true
-				},
-				{
-					name: msg.lan.kicktof,
-					value: r.kicktof ? msg.client.constants.emotes.tick + ' ' + msg.language.enabled : msg.client.constants.emotes.cross + ' ' + msg.language.disabled,
-					inline: true
-				},
-				{
-					name: '\u200b',
-					value: msg.lan.debugSettings,
-					inline: false
-				},
-				{
-					name: msg.lan.posttof,
-					value: r.posttof ? r.posttof : msg.language.none,
-					inline: true
-				},
-				{
-					name: msg.lan.postchannel,
-					value: `${r.postchannel ? `<#${r.postchannel}>` : msg.language.none}`,
-					inline: false
-				},
-				{
-					name: msg.lan.pingusers,
-					value: `${r.pingusers && r.pingusers.length > 0 ? r.pingusers.map(id => ` <@${id}>`) : msg.language.none}`,
-					inline: false
-				},
-				{
-					name: msg.lan.pingroles,
-					value: `${r.pingroles && r.pingroles.length > 0 ? r.pingroles.map(id => ` <@&${id}>`) : msg.language.none}`,
-					inline: false
-				},
-				{
-					name: msg.lan.debugmode,
-					value: r.debugmode ? r.debugmode : msg.language.none,
-					inline: true
-				},
-				{
-					name: '\u200b',
-					value: msg.lan.thresholdSettings,
-					inline: false
-				},
-				{
-					name: msg.lan.time,
-					value: r.time ? moment.duration(+r.time).format(`m [${msg.language.time.minutes}], s [${msg.language.time.seconds}]`) : msg.language.none,
-					inline: true
-				},
-				{
-					name: msg.lan.jointhreshold,
-					value: r.jointhreshold ? r.jointhreshold : msg.language.none,
-					inline: true
-				},
-				{
-					name: msg.lan.similaridthreshold,
-					value: r.similaridthreshold ? r.similaridthreshold : msg.language.none,
-					inline: true
-				},
+			.addField(
+				msg.lanSettings.active, 
+				`${r.active ? msg.client.constants.emotes.tick+' '+msg.language.enabled : msg.client.constants.emotes.cross+' '+msg.language.disabled}`, 
+				false
+			)
+			.addField(
+
+				msg.lan.bantof,
+				`${r.bantof ? msg.client.constants.emotes.tick + ' ' + msg.language.enabled : msg.client.constants.emotes.cross + ' ' + msg.language.disabled}`,
+				true
+			)
+			.addField(
+				msg.lan.kicktof,
+				`${r.kicktof ? msg.client.constants.emotes.tick + ' ' + msg.language.enabled : msg.client.constants.emotes.cross + ' ' + msg.language.disabled}`,
+				true
+			)
+			.addField(
+				'\u200b',
+				`${msg.lan.debugSettings}`,
+				false
+			)
+			.addField(
+				msg.lan.posttof,
+				`${r.posttof ? msg.client.constants.emotes.tick + ' ' + msg.language.enabled : msg.client.constants.emotes.cross + ' ' + msg.language.disabled}`, 
+				true
+			)
+			.addField(
+				msg.lan.postchannel,
+				`${r.postchannel ? `<#${r.postchannel}>` : msg.language.none}`,
+				false
+			)
+			.addField(
+				msg.lan.pingusers,
+				`${r.pingusers && r.pingusers.length > 0 ? r.pingusers.map(id => ` <@${id}>`) : msg.language.none}`,
+				false
+			)
+			.addField(
+				msg.lan.pingroles,
+				`${r.pingroles && r.pingroles.length > 0 ? r.pingroles.map(id => ` <@&${id}>`) : msg.language.none}`,
+				false
+			)
+			.addField(
+				msg.lan.debugmode,
+				`${r.debugmode ? msg.client.constants.emotes.tick + ' ' + msg.language.enabled : msg.client.constants.emotes.cross + ' ' + msg.language.disabled}`, 
+				true
+			)
+			.addField(
+				'\u200b',
+				msg.lan.thresholdSettings,
+				false
+			)
+			.addField(
+				msg.lan.time,
+				r.time ? moment.duration(+r.time).format(`m [${msg.language.time.minutes}], s [${msg.language.time.seconds}]`) : msg.language.none,
+				true
+			)
+			.addField(
+				msg.lan.jointhreshold,
+				r.jointhreshold ? r.jointhreshold : msg.language.none,
+				true
+			)
+			.addField(
+				msg.lan.similaridthreshold,
+				r.similaridthreshold ? r.similaridthreshold : msg.language.none,
+				true
 			);
 		return embed;
 	},
