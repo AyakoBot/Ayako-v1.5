@@ -6,7 +6,7 @@ module.exports = {
 		const con = msg.client.constants.mod.strike;
 		if (!msg.res) {
 			const em = new Discord.MessageEmbed()
-				.setColor(con.embed.color)
+				.setColor(con.color)
 				.setDescription(msg.client.ch.stp(lan.notEnabled, {prefix: msg.client.constants.standard.prefix}));
 			return msg.client.ch.reply(msg, { embeds: [em] });
 		} else {
