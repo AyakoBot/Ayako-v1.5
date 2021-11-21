@@ -1668,11 +1668,85 @@
             "antiraid": {
                 "category": ["Auto Moderation"],
                 "type": "Anti-Raid",
+                "bantof": "Ban Members",
+                "kicktof": "Kick Members",
+                "posttof": "Post Threshold Breach (TB)",
+                "postchannel": "TB post Channel",
+                "pingroles": "TB Roles to Ping",
+                "pingusers": "TB Users to Ping",
+                "time": "Join Remember-Time",
+                "jointhreshold": "Join Threshold",
+                "similaridthreshold": "Similar ID Join Threshold",
+                "debugmode": "Debug Mode",
                 "edit": {
                     "active": {
                         "name": "Active",
                         "answers": "`True` or `False`",
                         "recommended": "Recommended: `True`"
+                    },
+                    "bantof": {
+                        "name": "Ban Members",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "kicktof": {
+                        "name": "Kick Members",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `False`"
+                    },
+                    "posttof": {
+                        "name": "Mute Members",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "postchannel": {
+                        "name": "TB post Channel",
+                        "recommended": "When the Join Threshold is breached, I will post a Message in this Channel",
+                        "select": "Select a Channel",
+                        "desc": "Select the Channel you want me to use below",
+                        "fail": {
+                            "no": "I couldn't find this Channel\n",
+                            "wrongGuild": "This Channel is not Part of this Server\n"
+                        }
+                    },
+                    "time": {
+                        "name": "Join Remember-Time",
+                        "answers": "Time in Seconds",
+                        "recommended": "Recommended: `15s`\n"
+                    },
+                     "jointhreshold": {
+                        "name": "Join Threshold",
+                        "answers": "Any Number",
+                        "recommended": "Recommended: `15`"
+                    },
+                    "similaridthreshold": {
+                        "name": "Similar ID Join Threshold",
+                        "answers": "Any Number",
+                        "recommended": "Recommended: `5`"
+                    },
+                    "pingroles": {
+                        "name": "TB Roles to Ping",
+                        "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.\nWhen the Join Threshold is breached, I will Mention these Roles in a Message",
+                        "select": "Select 1 or more Roles",
+                        "desc": "Select the Role(s) you want to bypass below",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
+                    },
+                    "pingusers": {
+                        "name": "TB Users to Ping",
+                        "answers": "`Mention(s) or ID(s)`",
+                        "recommended": "This is a Switch.\nIf the entered User is already added they will be removed.\nWhen the Join Threshold is breached, I will Mention these Users in a Message",
+                        "fail": {
+                            "no": "I couldn't find this User\n",
+                            "wrongGuild": "This User is not Part of this Server\n"
+                        }
+                    },
+                    "debugmode": {
+                        "name": "Debug Mode",
+                        "answers": "`True` or `False`",
+                        "recommended": "Used to find out wether a Threshold Setting applies to your Server\nWhen enabled the TB Post Channel Message will ask if you are being raided or not, and adjust its Settings accordingly"
                     }
                 }
             },
