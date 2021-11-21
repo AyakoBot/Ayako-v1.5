@@ -1685,6 +1685,8 @@
                 "jointhreshold": "Join Threshold",
                 "similaridthreshold": "Similar ID Join Threshold",
                 "debugmode": "Debug Mode",
+                "debugSettings": "Debug and Notification Settings",
+                "thresholdSettings": "Threshold Settings",
                 "edit": {
                     "active": {
                         "name": "Active",
