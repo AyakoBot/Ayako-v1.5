@@ -1841,7 +1841,7 @@
                         "warnamount": "The Amount of warns required for this Punishment to be applied",
                         "removeroles": "The Roles removed from a Striked User",
                         "addroles": "Roles Added to a Striked User",
-                        "confirmationreq": "Wether a Human Confirmation is required to execute the Punishment",
+                        "confirmationreq": "Whether a Human Confirmation is required to execute the Punishment",
                         "process": {
                             "0": "What would you like to edit?\nClick on one of the Buttons"
                         },
@@ -2396,8 +2396,119 @@
                 "category": ["Automation"]
             },
             "selfroles": {
-                "category": ["Automation"]
+                "category": ["Automation"],
+                "type": "Self-Roles",
+                "roles": "Self-Roles",
+                "onlyone": "Only one of these Roles",
+                "blacklistedroles": "Blacklisted Roles",
+                "blacklistedusers": "Blacklisted Users",
+                "whitelistedroles": "Whitelisted Roles",
+                "whitelistedusers": "Whitelisted Users",
+                "name": "Name",
+                "edit": { 
+                    "active": {
+                        "name": "Active",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "onlyone": {
+                        "name": "Only one of these Roles can be taken",
+                        "answers": "`True` or `False`"
+                    },
+                    "roles": {
+                        "name": "Self-Roles",
+                        "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.",
+                        "select": "Select 1 or more Roles",
+                        "desc": "Select the Role(s) you want to added below",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
+                    },
+                    "blacklistedroles": {
+                        "name": "Blacklisted Roles",
+                        "recommended": "This is a Switch.\nIf the entered Role is already blacklisted it will be removed.",
+                        "select": "Select 1 or more Roles",
+                        "desc": "Select the Role(s) you want to blacklist below",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
+                    },
+                    "blacklistedusers": {
+                        "name": "Blacklisted Users",
+                        "answers": "`Mention(s) or ID(s)`",
+                        "recommended": "This is a Switch.\nIf the entered User is already blacklisted they will be removed.",
+                        "fail": {
+                            "no": "I couldn't find this User\n",
+                            "wrongGuild": "This User is not Part of this Server\n"
+                        }
+                    },
+                    "whitelistedroles": {
+                        "name": "Whitelisted Roles",
+                        "recommended": "This is a Switch.\nIf the entered Role is already whitelisted it will be removed.",
+                        "select": "Select 1 or more Roles",
+                        "desc": "Select the Role(s) you want to whitelist below",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
+                    },
+                    "whitelistedusers": {
+                        "name": "Whitelisted Users",
+                        "answers": "`Mention(s) or ID(s)`",
+                        "recommended": "This is a Switch.\nIf the entered User is already whitelisted they will be removed.",
+                        "fail": {
+                            "no": "I couldn't find this User\n",
+                            "wrongGuild": "This User is not Part of this Server\n"
+                        }
+                    },
+                    "name": {
+                        "name": "Name",
+                        "answers": "Any Text",
+                        "recommended": "Custom Name for this Self-Role Category"
+                    }
+                },
+                "otherEdits": {
+                    "add": {
+                        "name": "Add a Self-Role Category",
+                        "process": {
+                            "0": "Select Roles that will be in this Self-Role Category",
+                            "1": "Enter a custom Name for this Self-Role Category"
+                        }
+                    },
+                    "remove": {
+                        "name": "Remove a Self-Role Category",
+                        "process": {
+                            "0": "Respond with the ID of the Self-Role Category you want to delete"
+                        }
+                    },
+                    "edit": {
+                        "active": "Whether these Separator is enabled or not",
+                        "onlyone": "Whether only one Self-Role in this Category can be assigned",
+                        "blacklistedroles": "Members with this Role cannot take any of these Self-Roles",
+                        "blacklistedusers": "Users listed here cannot take any of these Self-Roles",
+                        "whitelistedroles": "Only Members with this Role can take these Self-Roles",
+                        "whitelistedusers": "Only Users listed here can take these Self-Roles",
+                        "roles": "The Self-Roles of this Category",
+                        "name": "Custom Name for this Self-Role Category",
+                        "process": {
+                            "0": "What would you like to edit?\nClick on one of the Buttons"
+                        },
+                        "note": {
+                            "active": "Select `True` or `False`",
+                            "roles": "Respond with or Select 1 or more Role IDs or Mentions",
+                            "onlyone": "Select `True` or `False`",
+                            "blacklistedroles": "Respond with or Select 1 or more Role IDs or Mentions",
+                            "blacklistedusers": "Respond with 1 or more User IDs or Mentions",
+                            "whitelistedroles": "Respond with or Select 1 or more Role IDs or Mentions",
+                            "whitelistedusers": "Respond with 1 or more User IDs or Mentions",
+                            "name": "Enter a custom Name for this Self-Role Category"
+                        }
+                    }
+                }
             },
+
             "snipe": {
                 "category": ["Fun"],
                 "type": "Snipe",
@@ -2697,7 +2808,7 @@
                         "active": "Whether these Separator is enabled or not",
                         "separator": "The Separator Role, it will be applied to Members if they fulfill following conditions:\n**Self-Adapting `True`**: \nLooking at the Role list of the Server, The Separator Role will be applied if a Member gains any Role between the Seaprator and the Stop Role, if no Stop Role is defined it stops at the top of the Role List. Any Role moved between these 2 Roles or above the Separator Role will instantly start triggering the Separator Role\n\n**Self-Adapting `False`**:\nThe Separator Role will be assinged to Members with at least one of the defined Roles",
                         "stoprole": "The Role which marks the end to the Separator Roles trigger.\nIf none is defined the Separator Role will work till the very top of the Role List",
-                        "isvarying": "The \"Self-Adapt\" Mode. Wether the Separator should follow defined Roles or Self-Adjust to Support every Role between it and the Stop Role (if no Stop Role is defined the Separator Role will stop at the top of the Role List)",
+                        "isvarying": "The \"Self-Adapt\" Mode. Whether the Separator should follow defined Roles or Self-Adjust to Support every Role between it and the Stop Role (if no Stop Role is defined the Separator Role will stop at the top of the Role List)",
                         "roles": "Roles entered here will trigger the Separator Role",
                         "process": {
                             "0": "What would you like to edit?\nClick on one of the Buttons"
