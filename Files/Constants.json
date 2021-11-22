@@ -393,6 +393,12 @@
             "author": {
                 "image": "",
                 "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
+            },
+            "confirmEmbed": {
+                "color": "ff0000",
+                "author": {
+                    "image": ""
+                }
             }
         },
         "tempmuteAdd": {
@@ -591,7 +597,10 @@
                     "active": "boolean",
                     "punishment": "punishment",
                     "duration": "time",
-                    "warnamount": "number"
+                    "warnamount": "number",
+                    "removeroles": "roles",
+                    "addroles": "roles",
+                    "confirmationreq": "boolean"
                 },
                 "snipe": {
                     "active": "boolean",
@@ -779,8 +788,8 @@
                     "removeReq": ["id", "roles"]
                 },
                 "autopunish": {
-                    "cols": ["guildid, active, id, uniquetimestamp, punishment"],
-                    "vals": [["{{values.guildid}}", false, "{{values.id}}", "{{values.uniquetimestamp}}", "{{values.punishment}}"]],
+                    "cols": ["guildid, active, id, uniquetimestamp, punishment, confirmationreq"],
+                    "vals": [["{{values.guildid}}", false, "{{values.id}}", "{{values.uniquetimestamp}}", "{{values.punishment}}", false]],
                     "add": ["punishment"],
                     "remove": ["id"],
                     "removeIdent": "",
