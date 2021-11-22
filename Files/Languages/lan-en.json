@@ -663,7 +663,8 @@
         "2": "Mute",
         "3": "Kick",
         "4": "Temp-Ban",
-        "5": "Ban"
+        "5": "Ban",
+        "6": "Warn"
     },
     "months": {
         "0": "January",
@@ -690,9 +691,9 @@
         "antiraid": "Ayako Anti-Raid",
         "antivirus": "Ayako Anti-Virus",
         "blacklist": "Ayako Blacklist",
-        "statschannel": "Ayako StatsChannel",
+        "statschannel": "Ayako Stats-Channel",
         "separators": "Ayako Separators",
-        "autopunish": "Ayako Auto-Punish | Exceeded Warn Limit"
+        "autopunish": "Ayako Auto-Punish"
     },
     "statschanneltypes": {
         "member": {
@@ -818,7 +819,11 @@
             "abort": "Abort"
         },
         "strike": {
-            "notEnabled": "The strike System is not enabled\nuse `{{prefix}}settings autopunish` to enable it"
+            "notEnabled": "The strike System is not enabled\nuse `{{prefix}}settings autopunish` to enable it",
+            "confirmEmbed": {
+                "author": "Confirm Strike",
+                "description": "You are about to strike **{{user}}**\nDue to their Amount of Warns, this will {{punishment}} them\n**Do you want to proceed?**"
+            }
         },
         "muteAdd": {
             "author": "{{user}} was Muted",
@@ -1736,7 +1741,7 @@
                         "name": "TB Roles to Ping",
                         "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.\nWhen the Join Threshold is breached, I will Mention these Roles in a Message",
                         "select": "Select 1 or more Roles",
-                        "desc": "Select the Role(s) you want to bypass below",
+                        "desc": "Select the Role(s) you want to add below",
                         "fail": {
                             "no": "I couldn't find this Role\n",
                             "wrongGuild": "This Role is not Part of this Server\n"
@@ -1766,6 +1771,12 @@
                 "mute": "Mute",
                 "tempmute": "Temp-Mute",
                 "tempban": "Temp-Ban",
+                "removeroles": "Roles to Remove from Striked User",
+                "addroles": "Roles to Add to Striked User",
+                "confirmationreq": "Human Confirmation required",
+                "punishmentSettings": "__**Punishment Settings**__",
+                "roleSettings": "__**Role Settings**__",
+                "confirmationSettings": "__**Confirmation Settings**__",
                 "edit": { 
                     "punishment" : {
                         "name": "Punishment",
@@ -1784,6 +1795,30 @@
                     "warnamount": {
                         "name": "Apply this Punishment after **{{warns}}** Warns",
                         "answers": "`Number`"
+                    },
+                    "removeroles": {
+                        "name": "Roles to Remove from Striked User",
+                        "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.",
+                        "select": "Select 1 or more Roles",
+                        "desc": "Select the Role(s) you want to add below",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
+                    },
+                    "addroles": {
+                        "name": "Roles to Add to Striked User",
+                        "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.",
+                        "select": "Select 1 or more Roles",
+                        "desc": "Select the Role(s) you want to add below",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
+                    },
+                    "confirmationreq": {
+                        "name": "Human Confirmation required",
+                        "answers": "`True` or `False`"
                     }
                 },
                 "otherEdits": {
@@ -1804,6 +1839,9 @@
                         "duration": "The Duration this Punishment Measure should last for",
                         "punishment": "The Punishment applied",
                         "warnamount": "The Amount of warns required for this Punishment to be applied",
+                        "removeroles": "The Roles removed from a Striked User",
+                        "addroles": "Roles Added to a Striked User",
+                        "confirmationreq": "Wether a Human Confirmation is required to execute the Punishment",
                         "process": {
                             "0": "What would you like to edit?\nClick on one of the Buttons"
                         },
@@ -1811,7 +1849,10 @@
                             "active": "Select `True` or `False`",
                             "duration": "Respond with a Time",
                             "punishment": "Select the Punishment itself",
-                            "warnamount": "Select a Number"
+                            "warnamount": "Select a Number",
+                            "removeroles": "Select the Roles removed",
+                            "addroles": "Select the Roles added",
+                            "confirmationreq": "Select `True` or `False`"
                         }
                     }
                 }
