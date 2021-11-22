@@ -4,6 +4,7 @@ const misc = require('../misc.js');
 module.exports = {
 	key: ['channel', 'channels', 'role', 'roles'],
 	async execute(msg, i, embed, values, answer, AddRemoveEditView, fail, srmEditing, comesFromSRM, answered) {
+		answered = msg.rows[msg.assigner];
 		const req = msg.guild[msg.compatibilityType].cache;
 		req.sort((a,b) => a.rawPosition - b.rawPosition);
 		const options = [];
@@ -47,6 +48,7 @@ module.exports = {
 				msg.client.constants.standard.invite
 			)
 			.setDescription(`${msg.language.select[msg.property].desc}\n${msg.language.page}: \`1/${Math.ceil(options.length / 25)}\``);
+		if (answered.length > 0) embed.addField(msg.language.selected, `${msg.property.includes('s') ? answered.map(c => msg.compatibilityType == 'channels' ? `<#${c}>` : msg.compatibilityType == 'roles' ? `<@&${c}>` : ` ${c}`) : msg.compatibilityType == 'channels' ? `<#${answered}>` : msg.compatibilityType == 'roles' ? `<@&${answered}>` : `${answered}`} `);
 		const rows = msg.client.ch.buttonRower([[menu], [prev, next], [back, done]]);
 		if (answer) answer.update({embeds: [embed], components: rows}).catch(() => {});
 		else msg.m.edit({embeds: [embed], components: rows}).catch(() => {});
@@ -224,9 +226,7 @@ module.exports = {
 							} else values[msg.assigner] = answered;							
 						}
 						answered = values[msg.assigner];
-					} else {
-						return misc.notValid(msg);
-					}
+					} else return misc.notValid(msg);
 					buttonsCollector.stop();
 					messageCollector.stop();
 					resolve(true);
