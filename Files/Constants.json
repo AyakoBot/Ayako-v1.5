@@ -663,6 +663,16 @@
                     "time": "seconds",
                     "jointhreshold": "number",
                     "similaridthreshold": "number"
+                },
+                "selfroles": {
+                    "active": "boolean",
+                    "roles": "roles",
+                    "onlyone": "boolean",
+                    "blacklistedroles": "roles",
+                    "blacklistedusers": "users",
+                    "whitelistedroles": "roles",
+                    "whitelistedusers": "users",
+                    "name": "string"
                 }
             },
             "tablenames": {
@@ -768,8 +778,12 @@
                     "vals": [["{{msg.guild.id}}"]]
                 },
                 "selfroles": {
-                    "cols": ["guildid"],
-                    "vals": [["{{msg.guild.id}}"]]
+                    "cols": ["guildid, active, id, uniquetimestamp, roles, name"],
+                    "vals": [["{{values.guildid}}", false, "{{values.id}}", "{{values.uniquetimestamp}}", "{{values.roles}}", "{{values.name}}"]],
+                    "add": ["roles", "name"],
+                    "remove": ["id"],
+                    "removeIdent": "",
+                    "removeReq": ["id", "roles"]
                 },
                 "statschannel": {
                     "cols": ["guildid, channel, type, id"],
@@ -790,7 +804,7 @@
                 "autopunish": {
                     "cols": ["guildid, active, id, uniquetimestamp, punishment, confirmationreq"],
                     "vals": [["{{values.guildid}}", false, "{{values.id}}", "{{values.uniquetimestamp}}", "{{values.punishment}}", false]],
-                    "add": ["punishment"],
+                    "add": ["warnamount"],
                     "remove": ["id"],
                     "removeIdent": "",
                     "removeReq": ["id", "warnamount"]
