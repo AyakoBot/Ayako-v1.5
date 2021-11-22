@@ -29,7 +29,7 @@ module.exports = {
 					messageCollector.stop();
 					buttonsCollector.stop();
 					message.delete().catch(() => {});
-					if (srmEditing[0] == 'words') {
+					if (srmEditing && srmEditing[0] == 'words') {
 						const answered = message.content.toLowerCase().split(/#+/);
 						if (answered.length > 0) {
 							if (Array.isArray(answered)) {
