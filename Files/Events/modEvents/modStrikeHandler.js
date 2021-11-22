@@ -15,20 +15,20 @@ module.exports = {
 			if (res && res.rowCount > 0) existingWarns = res.rowCount;
 			const r = msg.res.rows.find(r => r.warnamount == existingWarns);
 			if (r && r.punishment == 5) msg.client.emit('modBanAdd', executor, target, reason, msg);
-			else if (r && r.punishment == 4) msg.client.emit('modTempbanAdd', executor, target, reason, msg, r.duration);
+			else if (r && r.punishment == 4) msg.client.emit('modTempbanAdd', executor, target, reason, msg, r.duration ? r.duration : 3600000);
 			else if (r && r.punishment == 3) msg.client.emit('modKickAdd', executor, target, reason, msg);
 			else if (r && r.punishment == 2) msg.client.emit('modMuteAdd', executor, target, reason, msg);
-			else if (r && r.punishment == 1) msg.client.emit('modTempmuteAdd', executor, target, reason, msg, r.duration);
+			else if (r && r.punishment == 1) msg.client.emit('modTempmuteAdd', executor, target, reason, msg, r.duration ? r.duration : 3600000);
 			else {
 				const higher = isHigher(existingWarns, msg.res.rows.map(r => +r.warnamount));
 				if (higher) {
 					const neededPunishmentWarnNr = getClosest(existingWarns, msg.res.rows.map(r => +r.warnamount));
 					const r = msg.res.rows.find(r => r.warnamount == neededPunishmentWarnNr);
 					if (r.punishment == 5) msg.client.emit('modBanAdd', executor, target, reason, msg);
-					else if (r.punishment == 4) msg.client.emit('modTempbanAdd', executor, target, reason, msg, r.duration);
+					else if (r.punishment == 4) msg.client.emit('modTempbanAdd', executor, target, reason, msg, r.duration ? r.duration : 3600000);
 					else if (r.punishment == 3) msg.client.emit('modKickAdd', executor, target, reason, msg);
 					else if (r.punishment == 2) msg.client.emit('modMuteAdd', executor, target, reason, msg);
-					else if (r.punishment == 1) msg.client.emit('modTempmuteAdd', executor, target, reason, msg, r.duration);
+					else if (r.punishment == 1) msg.client.emit('modTempmuteAdd', executor, target, reason, msg, r.duration ? r.duration : 3600000);
 					else msg.client.emit('modWarnAdd', executor, target, reason, msg);
 				} else msg.client.emit('modWarnAdd', executor, target, reason, msg);
 			}
