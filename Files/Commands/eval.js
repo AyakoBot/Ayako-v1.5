@@ -22,11 +22,11 @@ module.exports = {
 			if (typeof evaled !== 'string') evaled = require('util').inspect(evaled); 
 			
 			if (evaled.length > 2000) msg.client.ch.reply(msg, 'Too long, check console'), console.log(evaled); 
-			else if (clean(evaled) !== 'undefined') msg.client.ch.reply(msg, `q\n${msg.client.ch.makeCodeBlock(clean(evaled))}`); 
+			else if (clean(evaled) !== 'undefined') msg.client.ch.reply(msg, `\n${msg.client.ch.makeCodeBlock('q\n' +clean(evaled))}`); 
 			else msg.react(msg.client.constants.emotes.crossID);
 		} catch (err) { 
 			if (err.length > 2000) msg.client.ch.reply(msg, 'Too long, check console'), console.log(err); 
-			else if (clean(err) !== 'undefined') msg.client.ch.reply(msg, `\`ERROR\` q\n${msg.client.ch.makeCodeBlock(clean(err))}\n`); 
+			else if (clean(err) !== 'undefined') msg.client.ch.reply(msg, `\`ERROR\` \n${msg.client.ch.makeCodeBlock('q\n' +clean(err))}\n`); 
 			else msg.react(msg.client.constants.emotes.crossID);
 		}
 		// eslint-disable-next-line no-unused-vars
