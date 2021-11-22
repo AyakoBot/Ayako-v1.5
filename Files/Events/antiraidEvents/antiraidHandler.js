@@ -8,7 +8,7 @@ module.exports = {
 		const con = guild.client.constants.antiraidMessage;
 		const client = guild.client;
         
-		if (r.posttof) sendDebugMessage();
+		if (r.posttof) sendMessage();
 		if (r.bantof) return ban();
 		if (r.kicktof) return kick();
 		
@@ -30,33 +30,18 @@ module.exports = {
 			});
 		}
 
-		function sendDebugMessage() {
+		function sendMessage() {
 
 			const embed = new Discord.MessageEmbed()
 				.setAuthor(lan.debugMessage.author, con.author.image, con.author.link)
 				.setColor(con.color)
 				.setDescription(guild.client.ch.stp(lan.debugMessage.description, {user: member.user}) + '\n' + guild.ch.makeCodeBlock(users.map(u => u.id)));
 
-			let content = '';
-			let buttons = null;
-			if (r.debugmode) {
-				content += `\n${lan.debugMessage.question}`;
-				const yes = new Discord.MessageButton()
-					.setStyle('success')
-					.setLabel(language.Yes)
-					.setCustomId('antiraidHandler-YES');
-				const no = new Discord.MessageButton()
-					.setStyle('danger')
-					.setLabel(language.No)
-					.setCustomId('antiraidHandler-NO');
-				buttons = client.ch.buttonRower([[yes, no]]);
-			}
-
 			const channel = client.channels.cache.get(r.postchannel);
 			if (channel) {
 				const roles = r.pingroles.map(role => `<@&${role}>`);
 				const users = r.pingroles.map(user => `<@&${user}>`);
-				client.ch.send({embed: [embed], content: `${roles}\n${users}${content}`, components: buttons});
+				client.ch.send({embed: [embed], content: `${roles}\n${users}`});
 			}
 		}
 	}

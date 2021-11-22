@@ -1684,8 +1684,7 @@
                 "time": "Join Remember-Time",
                 "jointhreshold": "Join Threshold",
                 "similaridthreshold": "Similar ID Join Threshold",
-                "debugmode": "Debug Mode",
-                "debugSettings": "**__Debug and Notification Settings__**",
+                "debugSettings": "**__Notification Settings__**",
                 "thresholdSettings": "**__Threshold Settings__**",
                 "edit": {
                     "active": {
@@ -1751,11 +1750,6 @@
                             "no": "I couldn't find this User\n",
                             "wrongGuild": "This User is not Part of this Server\n"
                         }
-                    },
-                    "debugmode": {
-                        "name": "Debug Mode",
-                        "answers": "`True` or `False`",
-                        "recommended": "Used to find out wether a Threshold Setting applies to your Server\nWhen enabled the TB Post Channel Message will ask if you are being raided or not, and adjust its Settings accordingly"
                     }
                 }
             },
