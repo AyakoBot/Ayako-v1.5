@@ -37,10 +37,11 @@ async function edit(msg, answer, file, AddRemoveEditView, fail, values, origin) 
 		.setEmoji(msg.client.constants.emotes.back)
 		.setCustomId('back')
 		.setStyle('DANGER');
-	if (origin) buttons.push(back);
+	if (origin && buttons.length == 5) buttons[0].unshift(back);
+	else if (origin) buttons.push(back);
 	const actionRows = msg.client.ch.buttonRower(buttons);
 	if (answer) answer.deleteReply().catch(() => {});
-	if (msg.m) msg.m.edit({embeds: [displayEmbed], components: actionRows}).catch(() => {});
+	if (msg.m) msg.m.edit({embeds: [displayEmbed], components: actionRows}).catch((e) => {console.log(e);});
 	else msg.m = await msg.client.ch.reply(msg, {embeds: [displayEmbed], components: actionRows});
 	const buttonsCollector = msg.m.createMessageComponentCollector({time: 60000});
 	const messageCollector = msg.channel.createMessageCollector({time: 60000});
