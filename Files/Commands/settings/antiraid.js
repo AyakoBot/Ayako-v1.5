@@ -49,11 +49,6 @@ module.exports = {
 				false
 			)
 			.addField(
-				msg.lan.debugmode,
-				`${r.debugmode ? msg.client.constants.emotes.tick + ' ' + msg.language.enabled : msg.client.constants.emotes.cross + ' ' + msg.language.disabled}`, 
-				true
-			)
-			.addField(
 				'\u200b',
 				msg.lan.thresholdSettings,
 				false
@@ -92,10 +87,6 @@ module.exports = {
 			.setCustomId(msg.lan.edit.posttof.name)
 			.setLabel(msg.lan.posttof)
 			.setStyle(r.posttof ? 'SUCCESS' : 'SECONDARY');
-		const debug = new Discord.MessageButton()
-			.setCustomId(msg.lan.edit.debugmode.name)
-			.setLabel(msg.lan.debugmode)
-			.setStyle(r.debugmode ? 'SUCCESS' : 'SECONDARY');
 		const postchannel = new Discord.MessageButton()
 			.setCustomId(msg.lan.edit.postchannel.name)
 			.setLabel(msg.lan.postchannel)
@@ -120,6 +111,6 @@ module.exports = {
 			.setCustomId(msg.lan.edit.similaridthreshold.name)
 			.setLabel(msg.lan.similaridthreshold)
 			.setStyle('PRIMARY');
-		return [[active], [ban, kick], [post, postchannel, pingusers, pingroles, debug], [time, jointhreshold, similaridthreshold]];
+		return [[active], [ban, kick], [post, postchannel, pingusers, pingroles], [time, jointhreshold, similaridthreshold]];
 	}
 };

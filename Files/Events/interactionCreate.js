@@ -6,7 +6,6 @@ module.exports = {
 			const link = new URL((await interaction.message.fetch()).embeds[0].description.split(/`+/)[1]);
 			const whitelist = fs.readFileSync('S:/Bots/ws/CDN/whitelisted.txt', 'utf8').toString();
 			if (whitelist.includes(link.hostname)) fs.writeFileSync('S:/Bots/ws/CDN/whitelisted.txt', whitelist.replace(`\n${link.hostname}`, ''));
-			console.log(link.hostname);
 			fs.appendFile('S:/Bots/ws/CDN/blacklisted.txt', `\n${link.hostname}`, () => { });
 			interaction.reply({content: 'Done'});
 		}

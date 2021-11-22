@@ -653,8 +653,7 @@
                     "pingusers": "users",
                     "time": "seconds",
                     "jointhreshold": "number",
-                    "similaridthreshold": "number",
-                    "debugmode": "boolean"
+                    "similaridthreshold": "number"
                 }
             },
             "tablenames": {
@@ -696,8 +695,8 @@
                     "vals": [[true, true, 3, 5, 6, true, true, false, true, "{{msg.guild.id}}"]]
                 },
                 "antiraid": {
-                    "cols": ["guildid, active, kicktof, time, jointhreshold, similaridthreshold, debugmode"],
-                    "vals": [["{{msg.guild.id}}", false, true, 15000, 15, 5, false]]
+                    "cols": ["guildid, active, kicktof, time, jointhreshold, similaridthreshold"],
+                    "vals": [["{{msg.guild.id}}", false, true, 15000, 15, 5]]
                 },
                 "blacklist": {
                     "cols": ["guildid, active, warntof, mutetof, kicktof, bantof, warnafter, muteafter, kickafter, banafter"],
