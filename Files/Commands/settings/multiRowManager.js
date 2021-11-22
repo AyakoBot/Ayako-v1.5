@@ -408,7 +408,7 @@ async function repeater(msg, i, embed, values, answer, AddRemoveEditView, fail, 
 				const valObj = values[msg.client.constants.commands.settings.setupQueries[msg.file.name].cols[0].split(/, +/)[j]];
 				const valName = msg.client.constants.commands.settings.setupQueries[msg.file.name].cols[0].split(/, +/)[j];
 				if (valObj) {
-					if (Array.isArray(assign)) vals.push(valObj);
+					if (Array.isArray(valObj)) vals.push(valObj);
 					else if (typeof assign == 'string') vals.push(msg.client.ch.stp(assign, {values: values}));
 					else vals.push(assign);
 				} else if (valName) vals.push(assign);
