@@ -2,7 +2,7 @@ const client = require('../../../BaseClient/DiscordClient');
 const urlCheck = require('valid-url');
 const SA = require('superagent');
 const request = require('request');
-const linkLists = require('../../../sources').antivirus;
+const blocklist = require('../../../blocklist.json');
 const auth = require('../../../BaseClient/auth.json');
 const fs = require('fs');
 const Discord = require('discord.js');
@@ -31,12 +31,8 @@ async function run(msg, check, lan) {
 	args.forEach((arg) => {
 		if (urlCheck.isUri(arg)) links.push(arg);
 	});
-	let list = new Array, url;
-	for (let i = 0; i < linkLists.length; i++) {
-		url = await SA.get(linkLists[i]).catch(() => { });
-		url = url ? list = [...list, ...url.text.split(/\n+/)] : null;
-	}
-	const blacklist = [...new Set(list)];
+
+	const blacklist = [...new Set(blocklist)];
 	blacklist.forEach((entry, index) => {
 		blacklist[index] = entry.replace(/#{2}-{1}/g, '');
 		if (blacklist[index].startsWith('#')) blacklist.splice(index, 1);
