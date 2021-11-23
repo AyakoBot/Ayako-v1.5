@@ -34,6 +34,8 @@
         "no-console": "off",
         "no-bitwise": "off",
         "import/prefer-default-export": "off",
-        "camelcase": "off"
+        "camelcase": "off",
+        "no-param-reassign": "off",
+        "no-tabs": "off"
 }
 }
