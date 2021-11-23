@@ -1869,7 +1869,7 @@
                 "muteafterwarnsamount": "Mute after **{{amount}}** malicious Links",
                 "kickafterwarnsamount": "Kick after **{{amount}}** malicious Links",
                 "banafterwarnsamount": "Ban after **{{amount}}** malicious Links",
-                "delete": "Minimize Timeout for Mod Action Messages",
+                "delete": "Minimize Response Embed Timeout for Mod Action Messages",
                 "edit": {
                     "active": {
                         "name": "Active",

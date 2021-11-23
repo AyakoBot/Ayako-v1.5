@@ -60,7 +60,7 @@ module.exports = {
 			if (mexisted) setTimeout(() => msg.m?.delete().catch(() => { }), 10000);
 			return false;
 		}
-		if ((memberClient.roles.highest.rawPosition < member?.roles.highest.rawPosition || memberClient.roles.highest.rawPosition == member?.roles.highest.rawPosition) || !memberClient.permissions.has(268435456)) {
+		if ((memberClient.roles.highest.rawPosition < member?.roles.highest.rawPosition || memberClient.roles.highest.rawPosition == member?.roles.highest.rawPosition) || !memberClient.permissions.has(268435456n)) {
 			if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.cross + ' ' + lan.meNoPerms);
 			else em.setDescription(msg.client.constants.emotes.cross + ' ' + lan.meNoPerms);
 			msg.m?.edit({ embeds: [em] });
