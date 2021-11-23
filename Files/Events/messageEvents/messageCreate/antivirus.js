@@ -48,28 +48,42 @@ async function run(msg, check, lan) {
 	let blacklistRes = await SA.get('https://ayakobot.com/cdn/blacklisted.txt').catch(() => { });
 	blacklistRes = blacklistRes ? blacklistRes.text.split(/\n+/) : [];
 	blacklistRes.forEach((entry, index) => blacklistRes[index] = entry.replace(/\r/g, ''));
+	let whitelistCDNRes = await SA.get('https://ayakobot.com/cdn/whitelistedCDN.txt').catch(() => { });
+	whitelistCDNRes = whitelistCDNRes ? whitelistCDNRes.text.split(/\n+/) : [];
+	whitelistCDNRes.forEach((entry, index) => whitelistCDNRes[index] = entry.replace(/\r/g, ''));
 
-	const FullLinks = new Array;
+	let FullLinks = new Array;
 	for (let i = 0; i < links.length; i++) {
 		const url = new URL(links[i]);
 		const res = await new Promise((resolve) => {
 			request({ method: 'HEAD', url: url, followAllRedirects: true },
 				function (_, response) {
-					if (response && response.request && response.request.href) resolve(response.request.href);
-					else resolve(null);
+					if (response && response.request && response.request.href) resolve([response.request.href, response.headers['content-type']]);
+					else resolve([null]);
 				});
 		});
-		if (res) FullLinks.push(res);
-		else FullLinks.push(url);
+		if (res[0] !== null) {
+			if (res[1].includes('audio') || res[1].includes('video') || res[1].includes('image')) FullLinks.push('CheckThis-'+res[0]);
+			else FullLinks.push(res[0]);
+		} else FullLinks.push(url.href);
 	}
 
 	FullLinks.forEach((link, i) => {
-		const urlParts = new URL(link).hostname.split('.');
-		FullLinks[i] = new URL(link).protocol + '//' + urlParts
-			.slice(0)
-			.slice(-(urlParts.length == 4 ? 3 : 2))
-			.join('.');
+		if (!link.startsWith('CheckThis-')) {
+			const urlParts = new URL(link).hostname.split('.');
+			const newUrl = new URL(link).protocol + '//' + urlParts
+				.slice(0)
+				.slice(-(urlParts.length == 4 ? 3 : 2))
+				.join('.');
+			if (!FullLinks.includes(newUrl)) FullLinks.push(newUrl);
+		} else FullLinks[i] = link;
 	});
+
+	FullLinks.forEach((link, i) => {
+		if (link.hostname) FullLinks[i] = link.protocol + '//' +link.hostname; 
+		if (FullLinks[i].endsWith('/')) FullLinks[i] = FullLinks[i].slice(0, -1);
+	});
+	FullLinks = [...new Set(FullLinks)];
 
 	let included = false;
 	FullLinks.forEach(async (url) => {
@@ -77,7 +91,9 @@ async function run(msg, check, lan) {
 		if (!url.hostname) url = new URL(url);
 		if (url.hostname) {
 			let enteredWebsite, baseWebsite;
-			enteredWebsite = await SA.head(url).catch((e) => enteredWebsite = e);
+			let checkthis = url.protocol.includes('checkthis-') ? true : false;
+			if (checkthis) url = new URL(url.href.replace('checkthis-', ''));
+			enteredWebsite = await SA.head(url.href).catch((e) => enteredWebsite = e);
 			baseWebsite = await SA.head(url.hostname).catch((e) => baseWebsite = e);
 			if ((!enteredWebsite || enteredWebsite.text == 'Domain not found') && (!baseWebsite || baseWebsite.text == 'Domain not found') || (`${enteredWebsite}`.includes('ENOTFOUND') || `${baseWebsite}`.includes('ENOTFOUND'))) return end({ msg: msg, text: 'NOT_EXISTENT', res: null, severity: null, link: url }, check, embed, null, lan);
 			if (check) embed.setDescription(`${lan.checking} \`${url}\``);
@@ -86,7 +102,8 @@ async function run(msg, check, lan) {
 			blacklistRes.forEach((entry, index) => { 
 				if (entry.includes('|') && entry.split(new RegExp(' | ', 'g'))[0] == url.hostname) include = index;
 			});
-			if (!whitelistRes.includes(`${url.hostname}`)) {
+			if (!whitelistRes.includes(`${url.hostname}`) || checkthis) {
+				if (checkthis && whitelistCDNRes.includes(`${url.hostname}`)) return end({ msg: msg, text: 'WHITELISTED', res: null, severity: null, link: url }, check, embed, null, lan);
 				if (included == false) {
 					embed
 						.setDescription(embed.description.replace(msg.client.ch.stp(lan.check, { loading: msg.client.constants.emotes.loading }), msg.client.ch.stp(lan.done, { tick: msg.client.constants.emotes.tick })) + '\n\n' + msg.client.ch.stp(lan.notWhitelisted, { warning: msg.client.constants.emotes.warning }) + msg.client.ch.stp(lan.check, { loading: msg.client.constants.emotes.loading }))
@@ -124,12 +141,16 @@ async function run(msg, check, lan) {
 								) ageInDays = Math.ceil(Math.abs(new Date(JSON.parse(promptapiRes.text).result.creation_date).getTime() - new Date().getTime()) / (1000 * 3600 * 24));
 							}
 							if (ageInDays !== undefined && ageInDays !== null && +ageInDays < 7) return await end({ msg: msg, text: 'NEW_URL', res: null, severity: null, link: url }, check, embed, null, lan);
-							let res;
+							let res1, res2, res;
 							const VTget = await SA
 								.get(`https://www.virustotal.com/api/v3/domains/${url.hostname}`)
 								.set('x-apikey', auth.VTtoken).catch(() => { });
-							if (VTget) res = JSON.parse(VTget.text).error ? JSON.parse(VTget.text).error.code : JSON.parse(VTget.text).data.attributes.last_analysis_stats;
-							if (res == 'NotFoundError') {
+							if (VTget) res1 = JSON.parse(VTget.text).error ? JSON.parse(VTget.text).error.code : JSON.parse(VTget.text).data.attributes.last_analysis_stats;
+							const VTdomainGet = await SA
+								.get(`https://www.virustotal.com/api/v3/urls/${btoa(url.href).replace(/={1,2}$/, '')}`)
+								.set('x-apikey', auth.VTtoken).catch(() => { });
+							if (VTdomainGet) res2 = JSON.parse(VTdomainGet.text).error ? JSON.parse(VTdomainGet.text).error.code : JSON.parse(VTdomainGet.text).data.attributes.last_analysis_stats;
+							if (res2 == 'NotFoundError' && res1 == 'NotFoundError') {
 								embed
 									.setDescription(embed.description.replace(msg.client.ch.stp(lan.check, { loading: msg.client.constants.emotes.loading }), msg.client.ch.stp(lan.done, { tick: msg.client.constants.emotes.tick })) + '\n\n' + msg.client.ch.stp(lan.VTanalyze, { warning: msg.client.constants.emotes.warning }) + msg.client.ch.stp(lan.check, { loading: msg.client.constants.emotes.loading }))
 									.setColor('#ffff00');
@@ -148,7 +169,7 @@ async function run(msg, check, lan) {
 									if (VTsecondGet) res = JSON.parse(VTsecondGet.text).error ? JSON.parse(VTsecondGet.text).error.code : JSON.parse(VTsecondGet.text).data.attributes.stats;
 									evaluation(msg, res, url, JSON.parse(VTsecondGet?.text)?.data?.attributes, check, embed, lan);
 								}, 60000);
-							} else evaluation(msg, res, url, VTget ? JSON.parse(VTget.text)?.data.attributes : null, check, embed, lan);
+							} else evaluation(msg, [res1, res2], url, VTget ? JSON.parse(VTget.text)?.data.attributes : null, check, embed, lan);
 						}
 					}
 				}
@@ -158,6 +179,8 @@ async function run(msg, check, lan) {
 }
 
 async function evaluation(msg, VTresponse, url, attributes, check, embed, lan) {
+	if (Array.isArray(VTresponse)) VTresponse = VTresponse[0].suspicious > 0 || VTresponse[0].malicious > 0 ? VTresponse[0] : VTresponse[1];
+	
 	if (msg.m && !msg.m.logged) msg.client.ch.send(msg.client.channels.cache.get(msg.client.constants.standard.trashLogChannel), { content: msg.m.url }), msg.m.logged = true;
 	if (VTresponse && (VTresponse == 'QuotaExceededError' || (VTresponse.suspicious == undefined || VTresponse.suspicious == null))) {
 		if (embed.fields.length == 0) {
@@ -191,7 +214,7 @@ async function evaluation(msg, VTresponse, url, attributes, check, embed, lan) {
 
 	if (severity > 2) return await end({ msg: msg, text: 'SEVERE_LINK', res: VTresponse, severity: severity, link: url }, check, embed, null, lan);
 	else if (attributes && +attributes.creation_date + '000' > Date.now() - 604800000) return await end({ msg: msg, text: 'NEW_URL', res: VTresponse, severity: severity, link: url }, check, embed, null, lan);
-	if (!check) setTimeout(() => msg.m.delete().catch(() => { }), 10000);
+	if (!check) setTimeout(() => msg.m?.delete().catch(() => { }), 10000);
 	if (attributes) {
 		if (embed.fields.length == 0) {
 			embed
