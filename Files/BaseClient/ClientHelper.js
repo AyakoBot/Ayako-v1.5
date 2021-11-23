@@ -1,26 +1,29 @@
-const client = require('./DiscordClient.js');
-const { pool } = require('./DataBase.js');
+const URL = require('url');
+const https = require('https');
+const http = require('http');
 const Discord = require('discord.js');
 const fs = require('fs');
-const http = require('http');
-const https = require('https');
+const client = require('./DiscordClient');
+const { pool } = require('./DataBase');
+
 const DiscordEpoch = 1420070400000;
-const Constants = require('../Constants.json');
 const { imgur } = require('./ImgurClient');
-const URL = require('url');
+const Constants = require('../Constants.json');
+
 const regexes = {
 	templateMatcher: /{{\s?([^{}\s]*)\s?}}/g,
 	strReplacer1: /_/g,
 	strReplacer2: /\w\S*/g,
 	auditLogTransform: /~/g,
 	// eslint-disable-next-line no-control-regex
-	tester: /[^\u0000-\u00ff]/
+	tester: /[^\u0000-\u00ff]/,
 };
-Array.prototype.equals = function(arr2) {
+// eslint-disable-next-line no-extend-native
+Array.prototype.equals = function (arr2) {
 	return (this.length === arr2.length && this.every((value, index) => value === arr2[index]));
 };
 
-module.exports = { 
+module.exports = {
 	/**
 	 * Checks if needed Paths exist on startup and if not creates them.
 	 * @constructor
@@ -38,27 +41,30 @@ module.exports = {
 	/**
 	 * Sends a Message to a channel.
 	 * @constructor
-	 * @param {object} channel - The Channel the Messages will be sent in (supports Array of Channels).
-	 * @param {string} content - The Content of the Message or the Message Options if no content is provided.
-	 * @param {object} options - The Options of this Message, if any.
+	 * @param {object} channel
+	 * - The Channel the Messages will be sent in (supports Array of Channels).
+	 * @param {string} content
+	 * - The Content of the Message or the Message Options if no content is provided.
+	 * @param {object} options
+	 * - The Options of this Message, if any.
 	 */
 	async send(channel, content, options) {
-		if (Array.isArray(channel)) return channel.forEach(c => typeof c.send == 'function' ? this.send(c, content, options) : null);
-		if (typeof channel.send !== 'function') return;
+		if (Array.isArray(channel)) return channel.forEach((c) => (typeof c.send === 'function' ? this.send(c, content, options) : null));
+		if (typeof channel.send !== 'function') return null;
 		let webhook;
 		if (client.channelWebhooks.get(channel.id)) webhook = client.channelWebhooks.get(channel.id);
 		let m;
-		if (options && options.type == 'rich') {
+		if (options && options.type === 'rich') {
 			const oldOptions = options;
-			options = {}; 
+			options = {};
 			options.embeds = [oldOptions];
 		} else options = {};
 		options.failIfNotExists = false;
 		if (content && content.type == 'rich') options.embeds ? options.embeds.push(content) : options.embeds = [content];
-		else if (typeof(content) !== 'string') options = content;
+		else if (typeof (content) !== 'string') options = content;
 		else options.content = content;
 		if (webhook && !channel.force) {
-			m = await webhook.send(options).catch(() => {channel.force = true; this.send(channel, options);});
+			m = await webhook.send(options).catch(() => { channel.force = true; this.send(channel, options); });
 			if (m) m.sentAs = webhook;
 		} else {
 			m = await channel.send(options).catch(() => {});
@@ -77,11 +83,11 @@ module.exports = {
 		if (typeof msg.reply !== 'function') return this.send(msg, content, options);
 		if (options && options.type == 'rich') {
 			const oldOptions = options;
-			options = {}; 
+			options = {};
 			options.embeds = [oldOptions];
 		} else options = {};
 		if (content && content.type == 'rich') options.embeds ? options.embeds.push(content) : options.embeds = [content];
-		else if (typeof(content) !== 'string') options = content;
+		else if (typeof (content) !== 'string') options = content;
 		else options.content = content;
 		return await msg.reply(options).catch(() => {});
 	},
@@ -94,7 +100,7 @@ module.exports = {
 	stp(expression, Object) {
 		if (Array.isArray(expression)) {
 			const returned = [];
-			expression.forEach(e => {
+			expression.forEach((e) => {
 				e = `${e}`;
 				let text = e.replace(regexes.templateMatcher, (substring, value) => {
 					const newValue = value.split('.');
@@ -107,7 +113,7 @@ module.exports = {
 								if (i > 1) decided = decided[newValue[i]];
 							}
 							return decided;
-						} else return Result;
+						} return Result;
 					}
 				});
 				if (text == 'true') text = true;
@@ -116,23 +122,22 @@ module.exports = {
 				returned.push(text);
 			});
 			return returned;
-		} else {
-			let text = expression.replace(regexes.templateMatcher, (substring, value) => {
-				const newValue = value.split('.');
-				let decided;
-				const Result = Object[newValue[0]];
-				if (Result) {
-					if (newValue.length > 1) {
-						for (let i = 1; i < newValue.length; i++) {
-							if (i == 1) decided = Result[newValue[i]];
-							if (i > 1) decided = decided[newValue[i]];
-						}
-						return decided;
-					} else return Result;
-				}
-			});
-			return text;
 		}
+		const text = expression.replace(regexes.templateMatcher, (substring, value) => {
+			const newValue = value.split('.');
+			let decided;
+			const Result = Object[newValue[0]];
+			if (Result) {
+				if (newValue.length > 1) {
+					for (let i = 1; i < newValue.length; i++) {
+						if (i == 1) decided = Result[newValue[i]];
+						if (i > 1) decided = decided[newValue[i]];
+					}
+					return decided;
+				} return Result;
+			}
+		});
+		return text;
 	},
 	/**
 	 * Sends a query to the DataBase.
@@ -143,12 +148,12 @@ module.exports = {
 	 */
 	async query(query, arr, debug) {
 		if (debug == true) console.log(query, arr);
-		const res = await pool.query(query, arr).catch((err) =>{
+		const res = await pool.query(query, arr).catch((err) => {
 			console.log(query, arr);
 			this.logger('Pool Query Error', err);
 		});
 		if (res) return res;
-		else return null;
+		return null;
 	},
 	/**
 	 * Logs any incoming Messages to the Console and the Discord Error Channel.
@@ -164,9 +169,8 @@ module.exports = {
 					if (log.stack) channel.send(`${type}${this.makeCodeBlock(log.stack)}`).catch(() => {});
 					else channel.send(`${type}${this.makeCodeBlock(log)}`).catch(() => {});
 					console.error(type, log);
-				}
-				else {
-					channel.send(`${type}`).catch(() => {}); 
+				} else {
+					channel.send(`${type}`).catch(() => {});
 					console.error(type);
 				}
 			}
@@ -182,7 +186,7 @@ module.exports = {
 		let path;
 		const pathers = url ? url.split('.') : null;
 		let pathend;
-		if (pathers) pathend = `${pathers[pathers.length-1]}`.replace(URL.parse(url).search, '');
+		if (pathers) pathend = `${pathers[pathers.length - 1]}`.replace(URL.parse(url).search, '');
 		if (ident.channel) {
 			path = `.\\Files\\Downloads\\Guilds\\Guild - ${ident.guild.id}\\Channel - ${ident.channel.id}\\${ident.id}`;
 			const guilddir = `.\\Files\\Downloads\\Guilds\\Guild - ${ident.guild.id}`;
@@ -210,7 +214,7 @@ module.exports = {
 			const now = Date.now();
 			if (ident.wanted) {
 				path = `.\\Files\\Downloads\\Users\\User - ${ident.id}\\${now}`;
-				let userdir = `.\\Files\\Downloads\\Users\\User - ${ident.id}`;
+				const userdir = `.\\Files\\Downloads\\Users\\User - ${ident.id}`;
 				if (!fs.existsSync(userdir)) {
 					fs.mkdirSync(userdir);
 				}
@@ -218,20 +222,20 @@ module.exports = {
 		}
 		if (!url) {
 			url = [];
-			ident.attachments = ident.attachments.map(o => o);
+			ident.attachments = ident.attachments.map((o) => o);
 			for (let i = 0; i < ident.attachments.length; i++) {
 				path = `${path}-${i}`;
-				let pather = ident.attachments[i].url.split('.');
-				pathend = `${pather[pather.length-1]}`;
+				const pather = ident.attachments[i].url.split('.');
+				pathend = `${pather[pather.length - 1]}`;
 				const urlArray = {
 					url: ident.attachments[i].url,
-					path: `${path}.${pathend}`
+					path: `${path}.${pathend}`,
 				};
 				url[i] = urlArray;
 			}
 		} else (ident.animated !== undefined && ident.animated !== null) ? pathend = ident.animated ? 'gif' : 'png' : '';
 		if (Array.isArray(url)) {
-			for (let i = 0; i < url.length; i++) {await this.download(url[i].url, url[i].path);}
+			for (let i = 0; i < url.length; i++) { await this.download(url[i].url, url[i].path); }
 		} else await this.download(url, `${path}.${pathend}`);
 		return `${path}.${pathend}`;
 	},
@@ -242,7 +246,7 @@ module.exports = {
 	 */
 	async getName(path) {
 		let name = path.split('\\');
-		name = name[name.length-1];
+		name = name[name.length - 1];
 		return name;
 	},
 	/**
@@ -256,7 +260,7 @@ module.exports = {
 		return new Promise((resolve, reject) => {
 			const file = fs.createWriteStream(filePath);
 			let fileInfo = null;
-			const request = proto.get(url, response => {
+			const request = proto.get(url, (response) => {
 				if (response.statusCode !== 200) return;
 				fileInfo = {
 					mime: response.headers['content-type'],
@@ -265,10 +269,10 @@ module.exports = {
 				response.pipe(file);
 			});
 			file.on('finish', () => resolve(fileInfo));
-			request.on('error', err => {
+			request.on('error', (err) => {
 				fs.unlink(filePath, () => reject(err));
 			});
-			file.on('error', err => {
+			file.on('error', (err) => {
 				fs.unlink(filePath, () => reject(err));
 			});
 			request.end();
@@ -338,8 +342,8 @@ module.exports = {
 	 * @param {array} array1 - The first Array.
 	 * @param {array} array2 - The second Array.
 	 */
-	getDifference (array1, array2) {
-		return array1.filter(i => {return array2.indexOf(i) < 0;});
+	getDifference(array1, array2) {
+		return array1.filter((i) => array2.indexOf(i) < 0);
 	},
 	/**
 	 * Extracts a Dynamic Avatar URL from a Discord User.
@@ -351,7 +355,7 @@ module.exports = {
 		return user.displayAvatarURL({
 			dynamic: true,
 			size: 2048,
-			format: 'png'
+			format: 'png',
 		});
 	},
 	/**
@@ -363,7 +367,7 @@ module.exports = {
 		return guild.iconURL({
 			dynamic: true,
 			size: 2048,
-			format: 'png'
+			format: 'png',
 		});
 	},
 	/**
@@ -375,7 +379,7 @@ module.exports = {
 		return guild.bannerURL({
 			dynamic: true,
 			size: 2048,
-			format: 'png'
+			format: 'png',
 		});
 	},
 	/**
@@ -387,9 +391,9 @@ module.exports = {
 		return guild.splashURL({
 			dynamic: true,
 			size: 2048,
-			format: 'png'
+			format: 'png',
 		});
-	}, 
+	},
 	/**
 	 * Extracts a Dynamic discovery Splash URL from a Discord Guild.
 	 * @constructor
@@ -399,7 +403,7 @@ module.exports = {
 		return guild.discoverySplashURL({
 			dynamic: true,
 			size: 2048,
-			format: 'png'
+			format: 'png',
 		});
 	},
 	/**
@@ -411,7 +415,7 @@ module.exports = {
 		return webhook.avatarURL({
 			dynamic: true,
 			size: 2048,
-			format: 'png'
+			format: 'png',
 		});
 	},
 	/**
@@ -426,7 +430,7 @@ module.exports = {
 			let lang = 'en';
 			if (resLan && resLan.rowCount > 0) lang = resLan.rows[0].lan;
 			return require(`../Languages/lan-${lang}.json`);
-		} else return require('../Languages/lan-en.json');
+		} return require('../Languages/lan-en.json');
 	},
 	/**
 	 * Writes a Ban or Massban report including previously sent Messages of the Target.
@@ -434,13 +438,13 @@ module.exports = {
 	 * @param {object} object - The Object to create a Log from.
 	 */
 	async txtFileWriter(object) {
-		object = object.map(o => o);
+		object = object.map((o) => o);
 		let content = '';
 		if (object[0].source == 'debug') {
 			for (let i = 0; i < object.length; i++) {
-				content += `${object[i][object.toBeLogged?object.toBeLogged[0]:'']} - ${object[i][object.toBeLogged?object.toBeLogged[1]:'']} - ${object[i][object.toBeLogged?object.toBeLogged[2]:'']}\n`;
+				content += `${object[i][object.toBeLogged ? object.toBeLogged[0] : '']} - ${object[i][object.toBeLogged ? object.toBeLogged[1] : '']} - ${object[i][object.toBeLogged ? object.toBeLogged[2] : '']}\n`;
 				const path = `.\\Files\\Downloads\\Debug\\${Date.now()}.txt`;
-				fs.writeFile(path, content, (err) => {if (err) throw err;});
+				fs.writeFile(path, content, (err) => { if (err) throw err; });
 			}
 		} if (object[0].source == 'massban') {
 			for (let i = 0; i < object.length; i++) {
@@ -450,9 +454,9 @@ module.exports = {
 			const path = `.\\Files\\Downloads\\Massbans\\Guild - ${object[0].guild.id}\\${now}.txt`;
 			const guilddir = `.\\Files\\Downloads\\Massbans\\Guild - ${object[0].guild.id}`;
 			if (!fs.existsSync(guilddir)) fs.mkdirSync(guilddir);
-			fs.writeFile(path, content, (err) => {if (err) throw err;});
+			fs.writeFile(path, content, (err) => { if (err) throw err; });
 			return path;
-		} else if (!object[0].source) {
+		} if (!object[0].source) {
 			for (let i = 0; i < object.length; i++) {
 				let urls = '';
 				const msg = []; const o = object[i];
@@ -460,7 +464,7 @@ module.exports = {
 				msg.timestamp = this.getUnix(o.id);
 				msg.content = o.content;
 				if (o.attachments) {
-					o.attachments = o.attachments.map(o => o);
+					o.attachments = o.attachments.map((o) => o);
 					for (let j = 0; j < o.attachments.length; j++) {
 						const json = await imgur.uploadUrl(o.attachments[j].url).catch(() => {});
 						if (json) urls += ` ${json.link} `;
@@ -474,7 +478,7 @@ module.exports = {
 			if (!fs.existsSync(guilddir)) fs.mkdirSync(guilddir);
 			const channeldir = `.\\Files\\Downloads\\Messages\\Bulk Deletes\\Guild - ${object[0].guild.id}\\Channel - ${object[0].channel.id}`;
 			if (!fs.existsSync(channeldir)) fs.mkdirSync(channeldir);
-			fs.writeFile(path, content, (err) => {if (err) throw err;});
+			fs.writeFile(path, content, (err) => { if (err) throw err; });
 			return path;
 		}
 	},
@@ -483,7 +487,7 @@ module.exports = {
 	 * @constructor
 	 * @param {string} text - The String to Test.
 	 */
-	containsNonLatinCodepoints(text) {return regexes.tester.test(text);},
+	containsNonLatinCodepoints(text) { return regexes.tester.test(text); },
 	/**
 	 * Checks and returns Uniques of 2 Bitfields.
 	 * @constructor
@@ -501,25 +505,25 @@ module.exports = {
 	 * @constructor
 	 * @param {string} text - The Text to turn into a Codeblock.
 	 */
-	makeCodeBlock(text) {return '```'+text+'```';},
+	makeCodeBlock(text) { return `\`\`\`${text}\`\`\``; },
 	/**
 	 * Converts a String into a Discord One-Line-Code.
 	 * @constructor
 	 * @param {string} text - The Text to turn into a One-Line-Code.
 	 */
-	makeInlineCode(text) {return '`'+text+'`';},
+	makeInlineCode(text) { return `\`${text}\``; },
 	/**
 	 * Converts a String to a Bold String.
 	 * @constructor
 	 * @param {string} text - The Text to turn Bold.
 	 */
-	makeBold(text) {return '**'+text+'**';},
+	makeBold(text) { return `**${text}**`; },
 	/**
 	 * Converts a String to a underlined String.
 	 * @constructor
 	 * @param {string} text - The Text to turn Underlined.
 	 */
-	makeUnderlined(text) {return '__'+text+'__';},
+	makeUnderlined(text) { return `__${text}__`; },
 	/**
 	 * Awaits a reply of the Executor of a Moderation Command when the Command is used on another Moderator.
 	 * @constructor
@@ -536,19 +540,17 @@ module.exports = {
 			.setLabel(msg.language.mod.warning.abort)
 			.setEmoji(client.constants.emotes.crossBGID)
 			.setStyle('DANGER');
-		const m = await this.reply(msg, {content: msg.language.mod.warning.text, components: this.buttonRower([SUCCESS,DANGER]), allowedMentions: {repliedUser: true}});
+		const m = await this.reply(msg, { content: msg.language.mod.warning.text, components: this.buttonRower([SUCCESS, DANGER]), allowedMentions: { repliedUser: true } });
 		const collector = m.createMessageComponentCollector({ time: 30000 });
-		return await new Promise((resolve,) => {
-			collector.on('collect', answer => {
+		return await new Promise((resolve) => {
+			collector.on('collect', (answer) => {
 				if (answer.user.id !== msg.author.id) this.notYours(answer, msg);
-				else {
-					if (answer.customId == 'modProceedAction') {
-						m.delete().catch(() => {});
-						resolve(true);
-					} else if (answer.customId == 'modAbortAction') {
-						m.delete().catch(() => {});
-						resolve();
-					}
+				else if (answer.customId == 'modProceedAction') {
+					m.delete().catch(() => {});
+					resolve(true);
+				} else if (answer.customId == 'modAbortAction') {
+					m.delete().catch(() => {});
+					resolve();
 				}
 			});
 			collector.on('end', (collected, reason) => {
@@ -567,7 +569,7 @@ module.exports = {
 			.setAuthor(msg.language.error, client.constants.standard.image, client.constants.standard.invite)
 			.setColor(client.constants.error)
 			.setDescription(msg.language.notYours);
-		interaction.reply({embeds: [embed], ephemeral: true}).catch(() => {});
+		interaction.reply({ embeds: [embed], ephemeral: true }).catch(() => {});
 	},
 	/**
 	 * Edits a Message to display a "time has run out" Error.
@@ -578,7 +580,7 @@ module.exports = {
 		const embed = new Discord.MessageEmbed()
 			.setDescription(msg.language.timeError)
 			.setColor(msg.client.constants.error);
-		msg.m.edit({embeds: [embed], components: []}).catch(() => {});
+		msg.m.edit({ embeds: [embed], components: [] }).catch(() => {});
 	},
 	/**
 	 * Converts Button Arrays into Action Rows usable by Discord.js. Multiple Action Rows are separated by nested Arrays.
@@ -587,7 +589,7 @@ module.exports = {
 	 */
 	buttonRower(buttonArrays) {
 		const actionRows = [];
-		buttonArrays.forEach(buttonRow => {
+		buttonArrays.forEach((buttonRow) => {
 			const row = new Discord.MessageActionRow();
 			if (Array.isArray(buttonRow)) for (const button of buttonRow) row.addComponents(button);
 			else row.addComponents(buttonRow);
@@ -606,15 +608,15 @@ module.exports = {
 		return FinishedEmbed;
 	},
 	/**
-	 * Aborts a Collector. 
+	 * Aborts a Collector.
 	 * @constructor
 	 * @param {object} msg - The Message that initiates this.
 	 * @param {array} collectors - The Collectors to stop.
 	 */
 	async aborted(msg, collectors) {
-		collectors?.forEach(collector => collector.stop());
+		collectors?.forEach((collector) => collector.stop());
 		msg.m?.delete().catch(() => {});
-		this.reply(msg, {content: msg.language.aborted});
+		this.reply(msg, { content: msg.language.aborted });
 	},
 	/**
 	 * Returns the Client Users Color to use in Embeds.
@@ -644,7 +646,6 @@ module.exports = {
 			.setColor(this.colorGetter(guild?.me))
 			.setDescription(`${client.constants.emotes.loading} ${lan.loading ? lan.loading : (await this.languageSelector(guild)).loading}`);
 		return embed;
-	}
-		
+	},
 
 };
