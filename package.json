@@ -13,7 +13,6 @@
     "@cloudcomponents/cdk-s3-antivirus": "^1.2.0",
     "@top-gg/sdk": "^3.1.1",
     "ansi-regex": "^6.0.1",
-    "axios": "^0.24.0",
     "canvas": "^2.8.0",
     "captcha-canvas": "^2.3.1",
     "discord.js": "^13.3.1",
