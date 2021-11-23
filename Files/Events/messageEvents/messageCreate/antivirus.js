@@ -259,8 +259,8 @@ async function end(data, check, embed, note, lan) {
 				.addField(data.msg.language.result, data.msg.client.ch.stp(lan.notexistent, { url: data.link.hostname }))
 				.setDescription(data.msg.client.ch.stp(lan.done, { tick: data.msg.client.constants.emotes.tick }))
 				.setColor('#00ff00');
-			data.msg.m = await data.msg.client.ch.reply(data.msg, { embeds: [embed] }).catch(() => { });
-			if (!check) setTimeout(() => data.msg.m.delete().catch(() => { }), 10000);
+			const m = await data.msg.client.ch.reply(data.msg, { embeds: [embed] }).catch(() => { });
+			if (!check) setTimeout(() => m.delete().catch(() => { }), 10000);
 		}
 		end({
 			msg: data.msg, text: 'DB_INSERT', url: data.link, severity: data.severity,
