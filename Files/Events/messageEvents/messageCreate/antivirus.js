@@ -19,7 +19,7 @@ module.exports = {
 		if (res && res.rowCount > 0) {
 			const r = res.rows[0];
 			if (r.active !== true) return;
-			run(msg, check, lan);
+			run(msg, check, lan, r);
 		}
 	}
 };
@@ -108,8 +108,6 @@ async function run(msg, check, lan) {
 					embed
 						.setDescription(embed.description.replace(msg.client.ch.stp(lan.check, { loading: msg.client.constants.emotes.loading }), msg.client.ch.stp(lan.done, { tick: msg.client.constants.emotes.tick })) + '\n\n' + msg.client.ch.stp(lan.notWhitelisted, { warning: msg.client.constants.emotes.warning }) + msg.client.ch.stp(lan.check, { loading: msg.client.constants.emotes.loading }))
 						.setColor('#ffff00');
-					if (msg.m) await msg.m.edit({ embeds: [embed] }).catch(() => { });
-					else msg.m = await msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
 					if (blacklistRes.includes(`${url.hostname}`) || include !== false) {
 						await end({ text: 'BLACKLISTED_LINK', link: url.hostname, msg: msg }, check, embed, blacklistRes[include], lan);
 						if (!check) included = true;
@@ -120,8 +118,6 @@ async function run(msg, check, lan) {
 						embed
 							.setDescription(embed.description.replace(msg.client.ch.stp(lan.check, { loading: msg.client.constants.emotes.loading }), msg.client.ch.stp(lan.done, { tick: msg.client.constants.emotes.tick })) + '\n\n' + msg.client.ch.stp(lan.notBlacklisted, { warning: msg.client.constants.emotes.warning }) + msg.client.ch.stp(lan.check, { loading: msg.client.constants.emotes.loading }))
 							.setColor('#ffff00');
-						if (msg.m) await msg.m.edit({ embeds: [embed] }).catch(() => { });
-						else msg.m = await msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
 						const spamHausRes = await SA
 							.get(`https://apibl.spamhaus.net/lookup/v1/dbl/${url.hostname}`)
 							.set('Authorization', `Bearer ${auth.spamhausToken}`)
@@ -154,8 +150,6 @@ async function run(msg, check, lan) {
 								embed
 									.setDescription(embed.description.replace(msg.client.ch.stp(lan.check, { loading: msg.client.constants.emotes.loading }), msg.client.ch.stp(lan.done, { tick: msg.client.constants.emotes.tick })) + '\n\n' + msg.client.ch.stp(lan.VTanalyze, { warning: msg.client.constants.emotes.warning }) + msg.client.ch.stp(lan.check, { loading: msg.client.constants.emotes.loading }))
 									.setColor('#ffff00');
-								if (msg.m) await msg.m.edit({ embeds: [embed] }).catch(() => { });
-								else msg.m = await msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
 								const VTpost = await SA
 									.post('https://www.virustotal.com/api/v3/urls')
 									.set('x-apikey', auth.VTtoken)
@@ -188,8 +182,6 @@ async function evaluation(msg, VTresponse, url, attributes, check, embed, lan) {
 				.addField(msg.language.result, msg.client.ch.stp(lan.VTfail, { cross: msg.client.constants.emotes.cross }))
 				.setDescription(embed.description.replace(msg.client.ch.stp(lan.check, { loading: msg.client.constants.emotes.loading })))
 				.setColor('#ffff00');
-			if (msg.m) await msg.m.edit({ embeds: [embed] }).catch(() => { });
-			else msg.m = await msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
 		}
 		return end({ msg: msg, text: 'DB_INSERT', url: new URL(url).hostname, severity: severity }, check, embed, null, lan);
 	}
@@ -221,16 +213,7 @@ async function evaluation(msg, VTresponse, url, attributes, check, embed, lan) {
 				.addField(msg.language.result, msg.client.ch.stp(lan.VTharmless, { tick: msg.client.constants.emotes.tick }))
 				.setDescription(embed.description.replace(msg.client.ch.stp(lan.check, { loading: msg.client.constants.emotes.loading }), msg.client.ch.stp(lan.done, { tick: msg.client.constants.emotes.tick })))
 				.setColor('#00ff00');
-			if (msg.m) await msg.m.edit({ embeds: [embed] }).catch(() => { });
-			else msg.m = await msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
 		}
-		const logEmbed = new Discord.MessageEmbed()
-			.setDescription(`Link \`${url}\` was whitelisted`);
-		const change = new Discord.MessageButton()
-			.setCustomId('CHANGE_LINK_TO_BAD')
-			.setLabel('Blacklist')
-			.setStyle('DANGER');
-		msg.client.ch.send(msg.client.channels.cache.get(msg.client.constants.standard.trashLogChannel), { content: '<@318453143476371456>', embeds: [logEmbed], components: msg.client.ch.buttonRower([change]) });
 		fs.appendFile('S:/Bots/ws/CDN/whitelisted.txt', `\n${new URL(url).hostname}`, () => {});
 	}
 }
@@ -243,8 +226,7 @@ async function end(data, check, embed, note, lan) {
 				.addField(data.msg.language.result, data.msg.client.ch.stp(lan.notexistent, { url: data.link.hostname }))
 				.setDescription( data.msg.client.ch.stp(lan.done, { tick: data.msg.client.constants.emotes.tick }))
 				.setColor('#00ff00');
-			if (data.msg.m) await data.msg.m.edit({ embeds: [embed] }).catch(() => { });
-			else data.msg.m = await data.msg.client.ch.reply(data.msg, { embeds: [embed] }).catch(() => { });
+			data.msg.m = await data.msg.client.ch.reply(data.msg, { embeds: [embed] }).catch(() => { });
 			if (!check) setTimeout(() => data.msg.m.delete().catch(() => { }), 10000);
 		}
 		end({ msg: data.msg, text: 'DB_INSERT', url: data.link, severity: data.severity }, check, embed, null, lan);
@@ -258,8 +240,7 @@ async function end(data, check, embed, note, lan) {
 					.addField(data.msg.language.attention, note.split(/\|+/)[1])
 					.setDescription(embed.description.replace(data.msg.client.ch.stp(lan.check, { loading: data.msg.client.constants.emotes.loading }), data.msg.client.ch.stp(lan.done, { tick: data.msg.client.constants.emotes.tick })))
 					.setColor('#ff0000');
-				if (data.msg.m) await data.msg.m.edit({ embeds: [embed] }).catch(() => { });
-				else data.msg.m = await data.msg.client.ch.reply(data.msg, { embeds: [embed] }).catch(() => { });
+				data.msg.m = await data.msg.client.ch.reply(data.msg, { embeds: [embed] }).catch(() => { });
 			}
 		} else {
 			if (embed.fields.length == 0) {
@@ -267,8 +248,7 @@ async function end(data, check, embed, note, lan) {
 					.addField(data.msg.language.result, data.msg.client.ch.stp(lan.blacklisted, { cross: data.msg.client.constants.emotes.cross }))
 					.setDescription(embed.description.replace(data.msg.client.ch.stp(lan.check, { loading: data.msg.client.constants.emotes.loading }), data.msg.client.ch.stp(lan.done, { tick: data.msg.client.constants.emotes.tick })))
 					.setColor('#ff0000');
-				if (data.msg.m) await data.msg.m.edit({ embeds: [embed] }).catch(() => { });
-				else data.msg.m = await data.msg.client.ch.reply(data.msg, { embeds: [embed] }).catch(() => { });
+				data.msg.m = await data.msg.client.ch.reply(data.msg, { embeds: [embed] }).catch(() => { });
 			}
 			if (!check) client.emit('antivirusHandler', data.msg, data.link, 'blacklist');
 		}
@@ -281,8 +261,7 @@ async function end(data, check, embed, note, lan) {
 				.addField(data.msg.language.result, data.msg.client.ch.stp(lan.VTmalicious, { cross: data.msg.client.constants.emotes.cross, severity: data.severity }))
 				.setDescription(embed.description.replace(data.msg.client.ch.stp(lan.check, { loading: data.msg.client.constants.emotes.loading }), data.msg.client.ch.stp(lan.done, { tick: data.msg.client.constants.emotes.tick })))
 				.setColor('#ff0000');
-			if (data.msg.m) await data.msg.m.edit({ embeds: [embed] }).catch(() => { });
-			else data.msg.m = await data.msg.client.ch.reply(data.msg, { embeds: [embed] }).catch(() => { });
+			data.msg.m = await data.msg.client.ch.reply(data.msg, { embeds: [embed] }).catch(() => { });
 		}
 		if (!check) client.emit('antivirusHandler', data.msg, data.link, 'virustotal');
 		end({ msg: data.msg, text: 'DB_INSERT', url: data.link, severity: data.severity }, check, embed, null, lan);
@@ -294,8 +273,7 @@ async function end(data, check, embed, note, lan) {
 				.addField(data.msg.language.result, data.msg.client.ch.stp(lan.newLink, { cross: data.msg.client.constants.emotes.cross }))
 				.setDescription(embed.description.replace(data.msg.client.ch.stp(lan.check, { loading: data.msg.client.constants.emotes.loading }), data.msg.client.ch.stp(lan.done, { tick: data.msg.client.constants.emotes.tick })))
 				.setColor('#ff0000');
-			if (data.msg.m) await data.msg.m.edit({ embeds: [embed] }).catch(() => { });
-			else data.msg.m = await data.msg.client.ch.reply(data.msg, { embeds: [embed] }).catch(() => { });
+			data.msg.m = await data.msg.client.ch.reply(data.msg, { embeds: [embed] }).catch(() => { });
 		}
 		if (!check) client.emit('antivirusHandler', data.msg, data.link, 'newurl');
 		end({ msg: data.msg, text: 'DB_INSERT', url: data.link, severity: data.severity }, check, embed, null, lan);
@@ -307,8 +285,7 @@ async function end(data, check, embed, note, lan) {
 				.addField(data.msg.language.result, data.msg.client.ch.stp(lan.whitelisted, { tick: data.msg.client.constants.emotes.tick }))
 				.setDescription(embed.description.replace(data.msg.client.ch.stp(lan.check, { loading: data.msg.client.constants.emotes.loading }), data.msg.client.ch.stp(lan.done, { tick: data.msg.client.constants.emotes.tick })))
 				.setColor('#00ff00');
-			if (data.msg.m) await data.msg.m.edit({ embeds: [embed] }).catch(() => { });
-			else data.msg.m = await data.msg.client.ch.reply(data.msg, { embeds: [embed] }).catch(() => { });
+			data.msg.m = await data.msg.client.ch.reply(data.msg, { embeds: [embed] }).catch(() => { });
 			if (!check) setTimeout(() => data.msg.m?.delete().catch(() => { }), 10000);
 		}
 		client.ch.query(`
