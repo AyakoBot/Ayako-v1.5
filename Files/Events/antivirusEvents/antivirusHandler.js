@@ -1,5 +1,6 @@
 module.exports = {
 	async execute(msg, link, type) {
+		link = new URL(link);
 		const client = msg.client;
 		const user = client.users.cache.get(msg.author.id);
 		const guild = msg.guild;
