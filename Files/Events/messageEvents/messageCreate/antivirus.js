@@ -253,6 +253,7 @@ async function getWhitelistCDN() {
 	whitelistCDNRes.map((entry, i) => {
 		whitelistCDNRes[i] = entry.replace(/\r/g, '');
 	});
+	return whitelistCDNRes;
 }
 
 async function makeFullLinks(links) {
