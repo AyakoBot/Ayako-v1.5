@@ -4,7 +4,8 @@ const Discord = require('discord.js');
 module.exports = {
 	async execute(oldMsg, newMsg) {
 		if (oldMsg?.channel?.type !== 'GUILD_NEWS' || newMsg.channel.type !== 'GUILD_NEWS') return;
-		if (oldMsg?.crosspostable == newMsg.crosspostable) return;
+		if (!oldMsg.author || newMsg.author) return;
+		if (oldMsg?.crosspostable == newMsg?.crosspostable) return;
 		const ch = client.ch;
 		const Constants = client.constants;
 		const guild = newMsg.guild;
