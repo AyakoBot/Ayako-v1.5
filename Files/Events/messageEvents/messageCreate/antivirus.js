@@ -43,29 +43,26 @@ module.exports = {
 			args.forEach((arg) => {
 				if (urlCheck.isUri(arg) && new URL(arg)?.hostname) links.push(arg);
 			});
-
 			const blocklist = getBlocklist();
 			const whitelist = await getWhitelist();
 			const blacklist = await getBlacklist();
 			const whitelistCDN = await getWhitelistCDN();
 
 			const fullLinks = await makeFullLinks(links);
-
+			
 			let includedBadLink = false;
-
-
 
 			for (const linkObject of fullLinks) {
 				const embed = new Discord.MessageEmbed();
-
+				console.time(linkObject.href);
 				if (includedBadLink) continue;
-
+				console.timeLog(linkObject.href);
 				const websiteExists = await checkIfWebsiteExists(linkObject);
 				if (!websiteExists) {
 					doesntExist(embed, linkObject);
 					continue;
 				}
-
+				console.timeLog(linkObject.href);
 				if (check) embed.setDescription(`${lan.checking} \`${linkObject.href}\``);
 				else embed.setDescription('');
 
@@ -75,13 +72,13 @@ module.exports = {
 					blacklisted(embed, linkObject, note);
 					continue;
 				}
-
+				console.timeLog(linkObject.href);
 				const isFile = linkObject.contentType?.includes('video') 
 				|| linkObject.contentType?.includes('image') 
 				|| linkObject.contentType?.includes('audio') 
 					? true 
 					: false;
-
+				console.timeLog(linkObject.href);
 				if (
 					whitelist.includes(linkObject.baseURLhostname) 
 					&& (
@@ -93,43 +90,41 @@ module.exports = {
 					if (check) whitelisted(embed, linkObject);
 					continue;
 				}
-
+				console.timeLog(linkObject.href);
 				if (isFile && whitelistCDN.includes(linkObject.baseURLhostname)) {
 					if (check) whitelisted(embed, linkObject);
 					continue;
 				}
-
+				console.timeLog(linkObject.href);
 				if (blocklist.includes(linkObject.baseURLhostname)) {
 					if (!check) includedBadLink = true;
 					blacklisted(embed, linkObject);
 					continue;
 				}
-
+				console.timeLog(linkObject.href);
 				if (blacklist.includes(linkObject.baseURLhostname)) {
 					if (!check) includedBadLink = true;
 					blacklisted(embed, linkObject);
 					continue;
 				}
-
+				console.timeLog(linkObject.href);
 				const spamHausIncluded = await getSpamHaus(linkObject);
 				if (spamHausIncluded) {
 					if (!check) includedBadLink = true;
 					blacklisted(embed, linkObject);
 					continue;
 				}
-
+				console.timeLog(linkObject.href);
 				const urlIsNew = await getURLage(linkObject);
-				if (urlIsNew < 7) {
+				if (typeof urlIsNew == 'number' && urlIsNew < 7) {
 					if (!check) includedBadLink = true;
 					newUrl(embed, linkObject);
 					continue;
 				}
-
+				console.timeLog(linkObject.href);
 				const postVTurlsRes = await postVTUrls(linkObject);
-				console.log('got Res');
 				const VTurls = postVTurlsRes?.stats, urlsAttributes = postVTurlsRes;
 				const urlSeverity = getSeverity(VTurls);
-				console.log(urlSeverity);
 				if (typeof urlSeverity !== 'number' && embed.fields.length == 0) {
 					embed
 						.addField(msg.language.result, msg.client.ch.stp(lan.VTfail, { cross: msg.client.constants.emotes.cross }))
@@ -138,25 +133,31 @@ module.exports = {
 					msg.client.ch.reply(msg, embed);
 					continue;
 				}
-
+				console.timeLog(linkObject.href);
 				if (urlSeverity > 2) {
 					severeLink(embed, linkObject, urlSeverity);
 					if (!check) includedBadLink = true;
 					continue;
 				}
-
+				console.timeLog(linkObject.href);
 				const attributes = urlsAttributes;
 				if (attributes && `${+attributes.creation_date}000` > Date.now() - 604800000) {
 					if (!check) includedBadLink = true;
 					newUrl(embed, linkObject);
 					continue;
 				}
-				if (attributes) fs.appendFile('S:/Bots/ws/CDN/whitelisted.txt', `\n${linkObject.baseURLhostname}`, () => { });
+				console.timeLog(linkObject.href);
+				if (attributes && !whitelist.includes(linkObject.baseURLhostname)) {
+					fs.appendFile('S:/Bots/ws/CDN/whitelisted.txt', `\n${linkObject.baseURLhostname}`, () => { });
+					msg.client.ch.send(msg.client.channels.cache.get(msg.client.constants.standard.trashLogChannel), { content: msg.client.ch.makeCodeBlock(linkObject.baseURLhostname) });
+				}
+				console.timeEnd(linkObject.href);
 				continue;
 			}
 		}
 
 		async function doesntExist(embed, linkObject) {
+			console.timeEnd(linkObject.href);
 			if (embed.fields.length == 0) {
 				embed
 					.addField(msg.language.result, msg.client.ch.stp(lan.notexistent, { url: linkObject.baseURLhostname }))
@@ -168,6 +169,7 @@ module.exports = {
 		}
 
 		async function blacklisted(embed, linkObject, note) {
+			console.timeEnd(linkObject.href);
 			if (note && note !== false) {
 				if (embed.fields.length == 0) {
 					embed
@@ -191,6 +193,7 @@ module.exports = {
 		}
 
 		async function severeLink(embed, linkObject, urlSeverity) {
+			console.timeEnd(linkObject.href);
 			const severity = urlSeverity ? urlSeverity : null;
 			if (embed.fields.length == 0) {
 				embed
@@ -204,6 +207,7 @@ module.exports = {
 		}
 
 		async function newUrl(embed, linkObject) {
+			console.timeEnd(linkObject.href);
 			if (embed.fields.length == 0) {
 				embed
 					.addField(msg.language.result, msg.client.ch.stp(lan.newLink, { cross: msg.client.constants.emotes.cross }))
@@ -216,7 +220,8 @@ module.exports = {
 			return true;
 		}
 
-		async function whitelisted(embed) {
+		async function whitelisted(embed, linkObject) {
+			console.timeEnd(linkObject.href);
 			if (embed.fields.length == 0) {
 				embed
 					.addField(msg.language.result, msg.client.ch.stp(lan.whitelisted, { tick: msg.client.constants.emotes.tick }))
@@ -401,7 +406,7 @@ async function postVTUrls(linkObject) {
 }
 
 async function getNewVTUrls(id, i) {
-	console.log('getting new res');
+	console.log('getting res');
 	if (i > 5) throw new Error('Too many requests');
 	// eslint-disable-next-line no-async-promise-executor
 	const res = await new Promise(async (resolve,) => {
