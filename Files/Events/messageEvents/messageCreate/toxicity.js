@@ -6,7 +6,7 @@ module.exports = {
 		if (!msg.channel) return;
 		if (!msg.channel.type || msg.channel.type == 'DM') return;
 		if (!msg.author || msg.author.bot) return;
-		if (msg.member.permissions.has(8n)) return;
+		if (msg.member?.permissions.has(8n)) return;
 		const result = await msg.client.ch.query('SELECT * FROM blacklists WHERE guildid = $1;', [msg.guild.id]);
 		if (result && result.rowCount > 0) {
 			if (result.rows[0].active == false) return;
