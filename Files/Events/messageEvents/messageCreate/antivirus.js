@@ -54,15 +54,15 @@ module.exports = {
 
 			for (const linkObject of fullLinks) {
 				const embed = new Discord.MessageEmbed();
-				console.time(linkObject.href);
+
 				if (includedBadLink) continue;
-				console.timeLog(linkObject.href);
+
 				const websiteExists = await checkIfWebsiteExists(linkObject);
 				if (!websiteExists) {
 					doesntExist(embed, linkObject);
 					continue;
 				}
-				console.timeLog(linkObject.href);
+
 				if (check) embed.setDescription(`${lan.checking} \`${linkObject.href}\``);
 				else embed.setDescription('');
 
@@ -72,13 +72,13 @@ module.exports = {
 					blacklisted(embed, linkObject, note);
 					continue;
 				}
-				console.timeLog(linkObject.href);
+
 				const isFile = linkObject.contentType?.includes('video') 
 				|| linkObject.contentType?.includes('image') 
 				|| linkObject.contentType?.includes('audio') 
 					? true 
 					: false;
-				console.timeLog(linkObject.href);
+
 				if (
 					whitelist.includes(linkObject.baseURLhostname) 
 					&& (
@@ -90,38 +90,38 @@ module.exports = {
 					if (check) whitelisted(embed, linkObject);
 					continue;
 				}
-				console.timeLog(linkObject.href);
+
 				if (isFile && whitelistCDN.includes(linkObject.baseURLhostname)) {
 					if (check) whitelisted(embed, linkObject);
 					continue;
 				}
-				console.timeLog(linkObject.href);
+
 				if (blocklist.includes(linkObject.baseURLhostname)) {
 					if (!check) includedBadLink = true;
 					blacklisted(embed, linkObject);
 					continue;
 				}
-				console.timeLog(linkObject.href);
+
 				if (blacklist.includes(linkObject.baseURLhostname)) {
 					if (!check) includedBadLink = true;
 					blacklisted(embed, linkObject);
 					continue;
 				}
-				console.timeLog(linkObject.href);
+
 				const spamHausIncluded = await getSpamHaus(linkObject);
 				if (spamHausIncluded) {
 					if (!check) includedBadLink = true;
 					blacklisted(embed, linkObject);
 					continue;
 				}
-				console.timeLog(linkObject.href);
+
 				const urlIsNew = await getURLage(linkObject);
 				if (typeof urlIsNew == 'number' && urlIsNew < 7) {
 					if (!check) includedBadLink = true;
 					newUrl(embed, linkObject);
 					continue;
 				}
-				console.timeLog(linkObject.href);
+
 				const postVTurlsRes = await postVTUrls(linkObject);
 				const VTurls = postVTurlsRes?.stats, urlsAttributes = postVTurlsRes;
 				const urlSeverity = getSeverity(VTurls);
@@ -133,31 +133,37 @@ module.exports = {
 					msg.client.ch.reply(msg, embed);
 					continue;
 				}
-				console.timeLog(linkObject.href);
+
 				if (urlSeverity > 2) {
 					severeLink(embed, linkObject, urlSeverity);
 					if (!check) includedBadLink = true;
 					continue;
 				}
-				console.timeLog(linkObject.href);
+
 				const attributes = urlsAttributes;
 				if (attributes && `${+attributes.creation_date}000` > Date.now() - 604800000) {
 					if (!check) includedBadLink = true;
 					newUrl(embed, linkObject);
 					continue;
 				}
-				console.timeLog(linkObject.href);
+
 				if (attributes && !whitelist.includes(linkObject.baseURLhostname)) {
 					fs.appendFile('S:/Bots/ws/CDN/whitelisted.txt', `\n${linkObject.baseURLhostname}`, () => { });
 					msg.client.ch.send(msg.client.channels.cache.get(msg.client.constants.standard.trashLogChannel), { content: msg.client.ch.makeCodeBlock(linkObject.baseURLhostname) });
+					if (check) whitelisted(embed, linkObject);
 				}
-				console.timeEnd(linkObject.href);
+
+				if (attributes && !whitelist.includes(linkObject.hostname)) {
+					fs.appendFile('S:/Bots/ws/CDN/whitelisted.txt', `\n${linkObject.hostname}`, () => { });
+					msg.client.ch.send(msg.client.channels.cache.get(msg.client.constants.standard.trashLogChannel), { content: msg.client.ch.makeCodeBlock(linkObject.hostname) });
+					if (check) whitelisted(embed, linkObject);
+				}
+
 				continue;
 			}
 		}
 
 		async function doesntExist(embed, linkObject) {
-			console.timeEnd(linkObject.href);
 			if (embed.fields.length == 0) {
 				embed
 					.addField(msg.language.result, msg.client.ch.stp(lan.notexistent, { url: linkObject.baseURLhostname }))
@@ -169,7 +175,6 @@ module.exports = {
 		}
 
 		async function blacklisted(embed, linkObject, note) {
-			console.timeEnd(linkObject.href);
 			if (note && note !== false) {
 				if (embed.fields.length == 0) {
 					embed
@@ -193,7 +198,6 @@ module.exports = {
 		}
 
 		async function severeLink(embed, linkObject, urlSeverity) {
-			console.timeEnd(linkObject.href);
 			const severity = urlSeverity ? urlSeverity : null;
 			if (embed.fields.length == 0) {
 				embed
@@ -207,7 +211,6 @@ module.exports = {
 		}
 
 		async function newUrl(embed, linkObject) {
-			console.timeEnd(linkObject.href);
 			if (embed.fields.length == 0) {
 				embed
 					.addField(msg.language.result, msg.client.ch.stp(lan.newLink, { cross: msg.client.constants.emotes.cross }))
@@ -220,14 +223,13 @@ module.exports = {
 			return true;
 		}
 
-		async function whitelisted(embed, linkObject) {
-			console.timeEnd(linkObject.href);
+		async function whitelisted(embed) {
 			if (embed.fields.length == 0) {
 				embed
 					.addField(msg.language.result, msg.client.ch.stp(lan.whitelisted, { tick: msg.client.constants.emotes.tick }))
 					.setDescription(embed.description.replace(msg.client.ch.stp(lan.check, { loading: msg.client.constants.emotes.loading }), msg.client.ch.stp(lan.done, { tick: msg.client.constants.emotes.tick })))
 					.setColor('#00ff00');
-				msg.m = await msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
+				msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
 			}
 			return true;
 		}
@@ -306,20 +308,21 @@ async function checkIfWebsiteExists(linkObject) {
 
 	const hostname = new URL(linkObject.url).protocol + '//' + linkObject.hostname;
 
-	let hrefRes, urlRes, baseUrlRes, hostnameRes;
-	if (linkObject.href) hrefRes = await axios.get(linkObject.href).catch((err) => hrefRes = err);
-	if (linkObject.url) urlRes = await axios.get(linkObject.url).catch((err) => urlRes = err);
-	if (linkObject.baseUrl) baseUrlRes = await axios.get(linkObject.baseUrl).catch((err) => baseUrlRes = err);
-	if (hostname) hostnameRes = await axios.get(hostname).catch((err) => hostnameRes = err);
+	const [hrefRes, urlRes, baseUrlRes, hostnameRes] = await Promise.all([
+		axios.get(linkObject.href).catch(() => { }),
+		axios.get(linkObject.url).catch(() => { }),
+		axios.get(linkObject.baseURL).catch(() => { }),
+		axios.get(hostname).catch(() => { })
+	]);
 
-	const exists = !hrefRes 
-	|| hrefRes.code == 'ENOTFOUND' 
-		? !urlRes 
-		|| urlRes.code == 'ENOTFOUND'
-			? !baseUrlRes 
-			|| baseUrlRes.code == 'ENOTFOUND'
-				? !hostnameRes 
-				|| hostnameRes.code == 'ENOTFOUND' 
+	const exists = !hrefRes
+		|| hrefRes.code == 'ENOTFOUND'
+		? !urlRes
+			|| urlRes.code == 'ENOTFOUND'
+			? !baseUrlRes
+				|| baseUrlRes.code == 'ENOTFOUND'
+				? !hostnameRes
+					|| hostnameRes.code == 'ENOTFOUND'
 					? false
 					: true
 				: true
@@ -392,7 +395,6 @@ async function promptapi(linkObject) {
 }
 
 async function postVTUrls(linkObject) {
-	console.log('posted');
 	const res = await new Promise((resolve,) => {
 		SA
 			.post('https://www.virustotal.com/api/v3/urls')
@@ -406,7 +408,6 @@ async function postVTUrls(linkObject) {
 }
 
 async function getNewVTUrls(id, i) {
-	console.log('getting res');
 	if (i > 5) throw new Error('Too many requests');
 	// eslint-disable-next-line no-async-promise-executor
 	const res = await new Promise(async (resolve,) => {
@@ -416,7 +417,6 @@ async function getNewVTUrls(id, i) {
 			.then((r) => { resolve(r.body); })
 			.catch((e) => { resolve(e.body); });
 	});
-	console.log('sending res');
 	if (res.data.attributes.status == 'completed') return res.data.attributes;
 	else if (res.data.attributes.status == 'queued' || res.data.attributes.status == 'in-progress') {
 		return await getNewVTUrlsTimeouted(id, 1);
@@ -424,7 +424,6 @@ async function getNewVTUrls(id, i) {
 }
 
 async function getNewVTUrlsTimeouted(id, i) {
-	console.log('getting new res');
 	i++;
 	let timeout = 5000 * i;
 	if (i > 5) throw new Error('Too many requests');
@@ -444,7 +443,6 @@ async function getNewVTUrlsTimeouted(id, i) {
 			}
 		}, timeout * i);
 	});
-	console.log('sending res');
 	if (timeoutRes) return timeoutRes;
 }
 
