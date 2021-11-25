@@ -36,7 +36,7 @@ module.exports = {
 			prepare();
 		}
 
-		async function prepare() {
+		const prepare = async () => {
 			const { content } = msg;
 			const args = content.replace(/\n/g, ' ').replace(/https:\/\//g, ' https://').replace(/http:\/\//, ' http://').split(/ +/);
 			const links = [];
@@ -161,9 +161,8 @@ module.exports = {
 
 				continue;
 			}
-		}
-
-		async function doesntExist(embed, linkObject) {
+		};
+		const doesntExist = async (embed, linkObject) => {
 			if (embed.fields.length == 0) {
 				embed
 					.addField(msg.language.result, msg.client.ch.stp(lan.notexistent, { url: linkObject.baseURLhostname }))
@@ -172,9 +171,9 @@ module.exports = {
 				msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
 			}
 			msg.client.ch.send(msg.client.channels.cache.get(msg.client.constants.standard.trashLogChannel), { content: msg.url });
-		}
+		};
 
-		async function blacklisted(embed, linkObject, note) {
+		const blacklisted = async (embed, linkObject, note) => {
 			if (note && note !== false) {
 				if (embed.fields.length == 0) {
 					embed
@@ -195,9 +194,9 @@ module.exports = {
 				msg.client.ch.send(msg.client.channels.cache.get(msg.client.constants.standard.trashLogChannel), { content: msg.url });
 				if (!check) client.emit('antivirusHandler', msg, linkObject.baseURL, 'blacklist');
 			}
-		}
+		};
 
-		async function severeLink(embed, linkObject, urlSeverity) {
+		const severeLink = async (embed, linkObject, urlSeverity) => {
 			const severity = urlSeverity ? urlSeverity : null;
 			if (embed.fields.length == 0) {
 				embed
@@ -208,9 +207,9 @@ module.exports = {
 			}
 			msg.client.ch.send(msg.client.channels.cache.get(msg.client.constants.standard.trashLogChannel), { content: msg.url });
 			if (!check) client.emit('antivirusHandler', msg, linkObject.baseURL, 'virustotal');
-		}
+		};
 
-		async function newUrl(embed, linkObject) {
+		const newUrl = async (embed, linkObject) => {
 			if (embed.fields.length == 0) {
 				embed
 					.addField(msg.language.result, msg.client.ch.stp(lan.newLink, { cross: msg.client.constants.emotes.cross }))
@@ -221,9 +220,9 @@ module.exports = {
 			msg.client.ch.send(msg.client.channels.cache.get(msg.client.constants.standard.trashLogChannel), { content: msg.url });
 			if (!check) client.emit('antivirusHandler', msg, linkObject.baseURL, 'newurl');
 			return true;
-		}
+		};
 
-		async function whitelisted(embed) {
+		const whitelisted = async (embed) => {
 			if (embed.fields.length == 0) {
 				embed
 					.addField(msg.language.result, msg.client.ch.stp(lan.whitelisted, { tick: msg.client.constants.emotes.tick }))
@@ -232,47 +231,47 @@ module.exports = {
 				msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
 			}
 			return true;
-		}
+		};
 	},
 };
 
-function getBlocklist() {  
+const getBlocklist = () => {
 	const blacklist = [...new Set(blocklist)];
 	blacklist.forEach((entry, index) => {
 		entry = entry.replace(/#{2}-{1}/g, '');
 		if (entry.startsWith('#')) blacklist.splice(index, 1);
 	});
 	return blacklist;
-}
+};
 
-async function getWhitelist() {  
+const getWhitelist = async () => {
 	const res = await SA.get('https://ayakobot.com/cdn/whitelisted.txt').catch(() => { });
 	const whitelistRes = res ? res.text.split(/\n+/) : [];
 	whitelistRes.map((entry, i) => {
 		whitelistRes[i] = entry.replace(/\r/g, '');
 	});
 	return whitelistRes;
-}
+};
 
-async function getBlacklist() {
+const getBlacklist = async () => {
 	const res = await SA.get('https://ayakobot.com/cdn/blacklisted.txt').catch(() => { });
 	const blacklistRes = res ? res.text.split(/\n+/) : [];
 	blacklistRes.map((entry, i) => {
 		blacklistRes[i] = entry.replace(/\r/g, '');
 	});
 	return blacklistRes;
-}
+};
 
-async function getWhitelistCDN() {
+const getWhitelistCDN = async () => {
 	const res = await SA.get('https://ayakobot.com/cdn/whitelistedCDN.txt').catch(() => { });
 	const whitelistCDNRes = res ? res.text.split(/\n+/) : [];
 	whitelistCDNRes.map((entry, i) => {
 		whitelistCDNRes[i] = entry.replace(/\r/g, '');
 	});
 	return whitelistCDNRes;
-}
+};
 
-async function makeFullLinks(links) {
+const makeFullLinks = async (links) => {
 	const fullLinks = [];
 	for (let i = 0; i < links.length; i++) {
 		const url = new URL(links[i]);
@@ -300,11 +299,10 @@ async function makeFullLinks(links) {
 	});
 
 	return fullLinks;
-}
+};
 
 
-
-async function checkIfWebsiteExists(linkObject) {
+const checkIfWebsiteExists = async (linkObject) => {
 
 	const hostname = new URL(linkObject.url).protocol + '//' + linkObject.hostname;
 
@@ -329,34 +327,34 @@ async function checkIfWebsiteExists(linkObject) {
 			: true
 		: true;
 	return exists;
-}
+};
 
-function getNote(blacklist, url) {
+const getNote = (blacklist, url) => {
 	const include = blacklist.map((entry) => {
 		if (entry.includes('|') && entry.split(new RegExp(' | ', 'g'))[0] == url.baseUrl) entry;
 	});
 	
 	return include.find((entry) => entry !== undefined);
-}
+};
 
-async function getSpamHaus(linkObject) {
+const getSpamHaus = async (linkObject) => {
 	const res = await SA
 		.get(`https://apibl.spamhaus.net/lookup/v1/dbl/${linkObject.baseURLhostname}`)
 		.set('Authorization', `Bearer ${auth.spamhausToken}`)
 		.set('Content-Type', 'application/json').catch(() => { });
 
 	return res && res.status == 200 ? true : false;
-}
+};
 
-async function getURLage(linkObject) {
+const getURLage = async (linkObject) => {
 	let ageInDays = await ip2whois(linkObject);
 	if (ageInDays && +ageInDays < 7) return ageInDays;
 	else if (!ageInDays) ageInDays = await promptapi(linkObject);
 	if (ageInDays && +ageInDays > 7) return ageInDays;
 	else return false;
-}
+};
 
-async function ip2whois(linkObject) {
+const ip2whois = async (linkObject) => {
 	const res = await SA.get(`https://api.ip2whois.com/v2?key=${auth.ip2whoisToken}&domain=${linkObject.baseURLhostname}&format=json`).catch(() => { });
 
 	if (res 
@@ -367,9 +365,9 @@ async function ip2whois(linkObject) {
 	} else {
 		return undefined;
 	}
-}
+};
 
-async function promptapi(linkObject) { 
+const promptapi = async (linkObject) => {
 	const promptapiRes = await SA.get(`https://api.promptapi.com/whois/query?domain=${linkObject.baseURLhostname}`)
 		.set('apikey', auth.promptAPIToken)
 		.catch(() => { });
@@ -392,9 +390,9 @@ async function promptapi(linkObject) {
 	} else {
 		return undefined;
 	}
-}
+};
 
-async function postVTUrls(linkObject) {
+const postVTUrls = async (linkObject) => {
 	const res = await new Promise((resolve,) => {
 		SA
 			.post('https://www.virustotal.com/api/v3/urls')
@@ -405,9 +403,9 @@ async function postVTUrls(linkObject) {
 	});
 	if (res.data?.id) return await getNewVTUrls(res.data.id, 0);
 	else return null;
-}
+};
 
-async function getNewVTUrls(id, i) {
+const getNewVTUrls = async (id, i) => {
 	if (i > 5) throw new Error('Too many requests');
 	// eslint-disable-next-line no-async-promise-executor
 	const res = await new Promise(async (resolve,) => {
@@ -421,9 +419,9 @@ async function getNewVTUrls(id, i) {
 	else if (res.data.attributes.status == 'queued' || res.data.attributes.status == 'in-progress') {
 		return await getNewVTUrlsTimeouted(id, 1);
 	}
-}
+};
 
-async function getNewVTUrlsTimeouted(id, i) {
+const getNewVTUrlsTimeouted = async (id, i) => {
 	i++;
 	let timeout = 5000 * i;
 	if (i > 5) throw new Error('Too many requests');
@@ -444,9 +442,9 @@ async function getNewVTUrlsTimeouted(id, i) {
 		}, timeout * i);
 	});
 	if (timeoutRes) return timeoutRes;
-}
+};
 
-function getSeverity(VTresponse) {
+const getSeverity = (VTresponse) => {
 	if (
 		!VTresponse 
 		|| VTresponse == 'QuotaExceededError' 
@@ -469,4 +467,4 @@ function getSeverity(VTresponse) {
 		severity += VTresponse.malicious * 2;
 	}
 	return severity;
-}
+};
