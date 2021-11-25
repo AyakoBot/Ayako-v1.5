@@ -38,7 +38,7 @@ module.exports = {
 
 		async function prepare() {
 			const { content } = msg;
-			const args = content.replace(/\n/g, ' ').replace(/^https:\/\//g, ' https://').replace(/^http:\/\//, ' http://').split(/ +/);
+			const args = content.replace(/\n/g, ' ').replace(/https:\/\//g, ' https://').replace(/http:\/\//, ' http://').split(/ +/);
 			const links = [];
 			args.forEach((arg) => {
 				if (urlCheck.isUri(arg) && new URL(arg)?.hostname) links.push(arg);
@@ -82,7 +82,14 @@ module.exports = {
 					? true 
 					: false;
 
-				if (whitelist.includes(linkObject.baseURLhostname) && whitelist.includes(linkObject.hostname) && !isFile) {
+				if (
+					whitelist.includes(linkObject.baseURLhostname) 
+					&& (
+						linkObject.hostname.endsWith(linkObject.baseURLhostname) 
+						|| whitelist.includes(linkObject.hostname)
+					) 
+				&& !isFile
+				) {
 					if (check) whitelisted(embed, linkObject);
 					continue;
 				}
@@ -118,10 +125,12 @@ module.exports = {
 					continue;
 				}
 
-				const getVTurlsRes = await getVTUrls(linkObject);
-				const VTurls = getVTurlsRes?.VTurls, urlsAttributes = getVTurlsRes?.urlsAttributes;
+				const postVTurlsRes = await postVTUrls(linkObject);
+				console.log('got Res');
+				const VTurls = postVTurlsRes?.stats, urlsAttributes = postVTurlsRes;
 				const urlSeverity = getSeverity(VTurls);
-				if (!urlSeverity && embed.fields.length == 0) {
+				console.log(urlSeverity);
+				if (typeof urlSeverity !== 'number' && embed.fields.length == 0) {
 					embed
 						.addField(msg.language.result, msg.client.ch.stp(lan.VTfail, { cross: msg.client.constants.emotes.cross }))
 						.setDescription(embed.description.replace(msg.client.ch.stp(lan.check, { loading: msg.client.constants.emotes.loading })))
@@ -377,33 +386,13 @@ async function promptapi(linkObject) {
 	}
 }
 
-async function getVTUrls(linkObject) {
-	// eslint-disable-next-line no-undef
-	const base64URL = Buffer.from(linkObject.href, 'utf8').toString('base64').replace(/={1,2}$/, '');
-
-	const res = await new Promise((resolve,) => {
-		SA
-			.get(`https://www.virustotal.com/api/v3/urls/${base64URL}`)
-			.set('x-apikey', auth.VTtoken)
-			.then((r) => { resolve(r.body); })
-			.catch((e) => { resolve(e.body); });
-	});
-	if (res.error.code == 'NotFoundError') {
-		return await postVTUrls(linkObject.href);
-	} else if (res.error.code == 'QuotaExceededError') {
-		return res.error.code;
-	} else {
-		const responseObject = { VTurls: res.data.attributes.last_analysis_stats, urlsAttributes: res.data.attributes };
-		return responseObject.VTurls ? responseObject : res;
-	}
-}
-
-async function postVTUrls(link) {
+async function postVTUrls(linkObject) {
+	console.log('posted');
 	const res = await new Promise((resolve,) => {
 		SA
 			.post('https://www.virustotal.com/api/v3/urls')
 			.set('x-apikey', auth.VTtoken)
-			.field('url', link)
+			.field('url', linkObject.href)
 			.then((r) => { resolve(r.body); })
 			.catch((e) => { resolve(e.body); });
 	});
@@ -412,6 +401,25 @@ async function postVTUrls(link) {
 }
 
 async function getNewVTUrls(id, i) {
+	console.log('getting new res');
+	if (i > 5) throw new Error('Too many requests');
+	// eslint-disable-next-line no-async-promise-executor
+	const res = await new Promise(async (resolve,) => {
+		await SA
+			.get(`https://www.virustotal.com/api/v3/analyses/${id}`)
+			.set('x-apikey', auth.VTtoken)
+			.then((r) => { resolve(r.body); })
+			.catch((e) => { resolve(e.body); });
+	});
+	console.log('sending res');
+	if (res.data.attributes.status == 'completed') return res.data.attributes;
+	else if (res.data.attributes.status == 'queued' || res.data.attributes.status == 'in-progress') {
+		return await getNewVTUrlsTimeouted(id, 1);
+	}
+}
+
+async function getNewVTUrlsTimeouted(id, i) {
+	console.log('getting new res');
 	i++;
 	let timeout = 5000 * i;
 	if (i > 5) throw new Error('Too many requests');
@@ -427,10 +435,11 @@ async function getNewVTUrls(id, i) {
 			if (res.data.attributes.status == 'completed') timeoutResolve(res.data.attributes);
 			else if (res.data.attributes.status == 'queued' || res.data.attributes.status == 'in-progress') {
 				timeoutResolve(null);
-				getNewVTUrls(id, i);
+				timeoutResolve(await getNewVTUrlsTimeouted(id, i));
 			}
 		}, timeout * i);
 	});
+	console.log('sending res');
 	if (timeoutRes) return timeoutRes;
 }
 
