@@ -104,3 +104,17 @@ module.exports = {
 		}
 	}
 };
+
+
+
+/*
+todo: switch to cron when lag starts
+
+const cron = require('node-cron');
+const task = cron.job('1-59 * * * * * *', () => {
+	console.log('running a task every second');
+	console.log(task);
+	console.log(task.start());
+	console.log(task.stop());
+});
+*/
