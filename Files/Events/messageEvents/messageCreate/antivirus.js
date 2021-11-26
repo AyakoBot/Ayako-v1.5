@@ -8,33 +8,8 @@ const axios = require('axios');
 const auth = require('../../../BaseClient/auth.json');
 const client = require('../../../BaseClient/DiscordClient');
 
-/**
- * Full Links Object
- * @constructor
- * @param {string} contentType - The content Type returned by the URL.
- * @param {string} href - The redirect the URL leads to OR the Link if no redirect exists.
- * @param {string} url - The URL entered, even if a redirect exists.
- * @param {string} baseUrl - The Base URL, without any sub URLs (e.g. invite.ayakobot.com => ayakobot.com).
- * 
- */
-
 module.exports = {
 	async execute(msg) {
-		let check = false;
-		if (!msg.content || msg.author.id === msg.client.user.id) return;
-		if (msg.channel.type === 'DM') check = true;
-		msg.language = await msg.client.ch.languageSelector(check ? null : msg.guild);
-		const lan = check ? msg.language.antivirus.dm : msg.language.antivirus.guild;
-		if (check) {
-			prepare();
-			return;
-		}
-		const res = await msg.client.ch.query('SELECT * FROM antivirus WHERE guildid = $1;', [msg.guild.id]);
-		if (res && res.rowCount > 0) {
-			const r = res.rows[0];
-			if (r.active !== true) return;
-			prepare();
-		}
 
 		const prepare = async () => {
 			const { content } = msg;
@@ -49,7 +24,7 @@ module.exports = {
 			const whitelistCDN = await getWhitelistCDN();
 
 			const fullLinks = await makeFullLinks(links);
-			
+
 			let includedBadLink = false;
 
 			for (const linkObject of fullLinks) {
@@ -73,19 +48,19 @@ module.exports = {
 					continue;
 				}
 
-				const isFile = linkObject.contentType?.includes('video') 
-				|| linkObject.contentType?.includes('image') 
-				|| linkObject.contentType?.includes('audio') 
-					? true 
+				const isFile = linkObject.contentType?.includes('video')
+					|| linkObject.contentType?.includes('image')
+					|| linkObject.contentType?.includes('audio')
+					? true
 					: false;
 
 				if (
-					whitelist.includes(linkObject.baseURLhostname) 
+					whitelist.includes(linkObject.baseURLhostname)
 					&& (
-						linkObject.hostname.endsWith(linkObject.baseURLhostname) 
+						linkObject.hostname.endsWith(linkObject.baseURLhostname)
 						|| whitelist.includes(linkObject.hostname)
-					) 
-				&& !isFile
+					)
+					&& !isFile
 				) {
 					if (check) whitelisted(embed, linkObject);
 					continue;
@@ -232,6 +207,23 @@ module.exports = {
 			}
 			return true;
 		};
+
+
+		let check = false;
+		if (!msg.content || msg.author.id === msg.client.user.id) return;
+		if (msg.channel.type === 'DM') check = true;
+		msg.language = await msg.client.ch.languageSelector(check ? null : msg.guild);
+		const lan = check ? msg.language.antivirus.dm : msg.language.antivirus.guild;
+		if (check) {
+			prepare();
+			return;
+		}
+		const res = await msg.client.ch.query('SELECT * FROM antivirus WHERE guildid = $1;', [msg.guild.id]);
+		if (res && res.rowCount > 0) {
+			const r = res.rows[0];
+			if (r.active !== true) return;
+			prepare();
+		}
 	},
 };
 
