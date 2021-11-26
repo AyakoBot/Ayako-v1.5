@@ -24,6 +24,9 @@ module.exports = {
 			'warn',
 			'always'
 		],
+		'no-func-assign': [
+			'warn',
+		]
 	}
 };
 
