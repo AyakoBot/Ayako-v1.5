@@ -3,232 +3,259 @@ const SA = require('superagent');
 const request = require('request');
 const fs = require('fs');
 const Discord = require('discord.js');
-const blocklist = require('../../../blocklist.json');
+const blocklists = require('../../../blocklist.json');
 const axios = require('axios');
 const auth = require('../../../BaseClient/auth.json');
 const client = require('../../../BaseClient/DiscordClient');
 
 module.exports = {
 	async execute(msg) {
-
-		const prepare = async () => {
-			const { content } = msg;
-			const args = content.replace(/\n/g, ' ').replace(/https:\/\//g, ' https://').replace(/http:\/\//, ' http://').split(/ +/);
-			const links = [];
-			args.forEach((arg) => {
-				if (urlCheck.isUri(arg) && new URL(arg)?.hostname) links.push(arg);
-			});
-			const blocklist = getBlocklist();
-			const whitelist = await getWhitelist();
-			const blacklist = await getBlacklist();
-			const whitelistCDN = await getWhitelistCDN();
-
-			const fullLinks = await makeFullLinks(links);
-
-			let includedBadLink = false;
-
-			for (const linkObject of fullLinks) {
-				const embed = new Discord.MessageEmbed();
-
-				if (includedBadLink) continue;
-
-				const websiteExists = await checkIfWebsiteExists(linkObject);
-				if (!websiteExists) {
-					doesntExist(embed, linkObject);
-					continue;
-				}
-
-				if (check) embed.setDescription(`${lan.checking} \`${linkObject.href}\``);
-				else embed.setDescription('');
-
-				const note = getNote(blacklist, linkObject);
-				if (note) {
-					if (!check) includedBadLink = true;
-					blacklisted(embed, linkObject, note);
-					continue;
-				}
-
-				const isFile = linkObject.contentType?.includes('video')
-					|| linkObject.contentType?.includes('image')
-					|| linkObject.contentType?.includes('audio')
-					? true
-					: false;
-
-				if (
-					whitelist.includes(linkObject.baseURLhostname)
-					&& (
-						linkObject.hostname.endsWith(linkObject.baseURLhostname)
-						|| whitelist.includes(linkObject.hostname)
-					)
-					&& !isFile
-				) {
-					if (check) whitelisted(embed, linkObject);
-					continue;
-				}
-
-				if (isFile && whitelistCDN.includes(linkObject.baseURLhostname)) {
-					if (check) whitelisted(embed, linkObject);
-					continue;
-				}
-
-				if (blocklist.includes(linkObject.baseURLhostname)) {
-					if (!check) includedBadLink = true;
-					blacklisted(embed, linkObject);
-					continue;
-				}
-
-				if (blacklist.includes(linkObject.baseURLhostname)) {
-					if (!check) includedBadLink = true;
-					blacklisted(embed, linkObject);
-					continue;
-				}
-
-				const spamHausIncluded = await getSpamHaus(linkObject);
-				if (spamHausIncluded) {
-					if (!check) includedBadLink = true;
-					blacklisted(embed, linkObject);
-					continue;
-				}
-
-				const urlIsNew = await getURLage(linkObject);
-				if (typeof urlIsNew == 'number' && urlIsNew < 7) {
-					if (!check) includedBadLink = true;
-					newUrl(embed, linkObject);
-					continue;
-				}
-
-				const postVTurlsRes = await postVTUrls(linkObject);
-				const VTurls = postVTurlsRes?.stats, urlsAttributes = postVTurlsRes;
-				const urlSeverity = getSeverity(VTurls);
-				if (typeof urlSeverity !== 'number' && embed.fields.length == 0) {
-					embed
-						.addField(msg.language.result, msg.client.ch.stp(lan.VTfail, { cross: msg.client.constants.emotes.cross }))
-						.setDescription(embed.description.replace(msg.client.ch.stp(lan.check, { loading: msg.client.constants.emotes.loading })))
-						.setColor('#ffff00');
-					msg.client.ch.reply(msg, embed);
-					continue;
-				}
-
-				if (urlSeverity > 2) {
-					severeLink(embed, linkObject, urlSeverity);
-					if (!check) includedBadLink = true;
-					continue;
-				}
-
-				const attributes = urlsAttributes;
-				if (attributes && `${+attributes.creation_date}000` > Date.now() - 604800000) {
-					if (!check) includedBadLink = true;
-					newUrl(embed, linkObject);
-					continue;
-				}
-
-				if (attributes && !whitelist.includes(linkObject.baseURLhostname)) {
-					fs.appendFile('S:/Bots/ws/CDN/whitelisted.txt', `\n${linkObject.baseURLhostname}`, () => { });
-					msg.client.ch.send(msg.client.channels.cache.get(msg.client.constants.standard.trashLogChannel), { content: msg.client.ch.makeCodeBlock(linkObject.baseURLhostname) });
-					if (check) whitelisted(embed, linkObject);
-				}
-
-				if (attributes && !whitelist.includes(linkObject.hostname)) {
-					fs.appendFile('S:/Bots/ws/CDN/whitelisted.txt', `\n${linkObject.hostname}`, () => { });
-					msg.client.ch.send(msg.client.channels.cache.get(msg.client.constants.standard.trashLogChannel), { content: msg.client.ch.makeCodeBlock(linkObject.hostname) });
-					if (check) whitelisted(embed, linkObject);
-				}
-
-				continue;
-			}
-		};
-		const doesntExist = async (embed, linkObject) => {
-			if (embed.fields.length == 0) {
-				embed
-					.addField(msg.language.result, msg.client.ch.stp(lan.notexistent, { url: linkObject.baseURLhostname }))
-					.setDescription(msg.client.ch.stp(lan.done, { tick: msg.client.constants.emotes.tick }))
-					.setColor('#00ff00');
-				msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
-			}
-			msg.client.ch.send(msg.client.channels.cache.get(msg.client.constants.standard.trashLogChannel), { content: msg.url });
-		};
-
-		const blacklisted = async (embed, linkObject, note) => {
-			if (note && note !== false) {
-				if (embed.fields.length == 0) {
-					embed
-						.addField(msg.language.result, msg.client.ch.stp(lan.blacklisted, { cross: msg.client.constants.emotes.cross }))
-						.addField(msg.language.attention, note.split(/\|+/)[1])
-						.setDescription(embed.description.replace(msg.client.ch.stp(lan.check, { loading: msg.client.constants.emotes.loading }), msg.client.ch.stp(lan.done, { tick: msg.client.constants.emotes.tick })))
-						.setColor('#ff0000');
-					msg.m = await msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
-				}
-			} else {
-				if (embed.fields.length == 0) {
-					embed
-						.addField(msg.language.result, msg.client.ch.stp(lan.blacklisted, { cross: msg.client.constants.emotes.cross }))
-						.setDescription(embed.description.replace(msg.client.ch.stp(lan.check, { loading: msg.client.constants.emotes.loading }), msg.client.ch.stp(lan.done, { tick: msg.client.constants.emotes.tick })))
-						.setColor('#ff0000');
-					msg.m = await msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
-				}
-				msg.client.ch.send(msg.client.channels.cache.get(msg.client.constants.standard.trashLogChannel), { content: msg.url });
-				if (!check) client.emit('antivirusHandler', msg, linkObject.baseURL, 'blacklist');
-			}
-		};
-
-		const severeLink = async (embed, linkObject, urlSeverity) => {
-			const severity = urlSeverity ? urlSeverity : null;
-			if (embed.fields.length == 0) {
-				embed
-					.addField(msg.language.result, msg.client.ch.stp(lan.VTmalicious, { cross: msg.client.constants.emotes.cross, severity: severity }))
-					.setDescription(embed.description.replace(msg.client.ch.stp(lan.check, { loading: msg.client.constants.emotes.loading }), msg.client.ch.stp(lan.done, { tick: msg.client.constants.emotes.tick })))
-					.setColor('#ff0000');
-				msg.m = await msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
-			}
-			msg.client.ch.send(msg.client.channels.cache.get(msg.client.constants.standard.trashLogChannel), { content: msg.url });
-			if (!check) client.emit('antivirusHandler', msg, linkObject.baseURL, 'virustotal');
-		};
-
-		const newUrl = async (embed, linkObject) => {
-			if (embed.fields.length == 0) {
-				embed
-					.addField(msg.language.result, msg.client.ch.stp(lan.newLink, { cross: msg.client.constants.emotes.cross }))
-					.setDescription(embed.description.replace(msg.client.ch.stp(lan.check, { loading: msg.client.constants.emotes.loading }), msg.client.ch.stp(lan.done, { tick: msg.client.constants.emotes.tick })))
-					.setColor('#ff0000');
-				msg.m = await msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
-			}
-			msg.client.ch.send(msg.client.channels.cache.get(msg.client.constants.standard.trashLogChannel), { content: msg.url });
-			if (!check) client.emit('antivirusHandler', msg, linkObject.baseURL, 'newurl');
-			return true;
-		};
-
-		const whitelisted = async (embed) => {
-			if (embed.fields.length == 0) {
-				embed
-					.addField(msg.language.result, msg.client.ch.stp(lan.whitelisted, { tick: msg.client.constants.emotes.tick }))
-					.setDescription(embed.description.replace(msg.client.ch.stp(lan.check, { loading: msg.client.constants.emotes.loading }), msg.client.ch.stp(lan.done, { tick: msg.client.constants.emotes.tick })))
-					.setColor('#00ff00');
-				msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
-			}
-			return true;
-		};
-
-
 		let check = false;
 		if (!msg.content || msg.author.id === msg.client.user.id) return;
 		if (msg.channel.type === 'DM') check = true;
 		msg.language = await msg.client.ch.languageSelector(check ? null : msg.guild);
 		const lan = check ? msg.language.antivirus.dm : msg.language.antivirus.guild;
 		if (check) {
-			prepare();
+			prepare(msg, lan, check);
 			return;
 		}
 		const res = await msg.client.ch.query('SELECT * FROM antivirus WHERE guildid = $1;', [msg.guild.id]);
 		if (res && res.rowCount > 0) {
 			const r = res.rows[0];
 			if (r.active !== true) return;
-			prepare();
+			prepare(msg, lan, check);
 		}
 	},
+	async manualExecute(msg, enteredLinks) { 
+		const check = true;
+		const args = enteredLinks.replace(/\n/g, ' ').replace(/https:\/\//g, ' https://').replace(/http:\/\//, ' http://').split(/ +/);
+		const links = [];
+		args.forEach((arg) => {
+			if (urlCheck.isUri(arg) && new URL(arg)?.hostname) links.push(arg);
+		});
+		const blocklist = [];
+		const whitelist = [];
+		const blacklist = [];
+		const whitelistCDN = [];
+
+		const fullLinks = await makeFullLinks(links);
+
+		msg.language = await msg.client.ch.languageSelector(check ? null : msg.guild);
+		const lan = check ? msg.language.antivirus.dm : msg.language.antivirus.guild;
+
+		let includedBadLink = false;
+
+		for (const linkObject of fullLinks) {
+			await module.exports.run(msg, linkObject, lan, includedBadLink, check, blacklist, whitelist, whitelistCDN, blocklist);
+			continue;
+		}
+	},
+	async run(msg, linkObject, lan, includedBadLink, check, blacklist, whitelist, whitelistCDN, blocklist) {  
+		const embed = new Discord.MessageEmbed();
+
+		if (includedBadLink) return;
+
+		const websiteExists = await checkIfWebsiteExists(linkObject);
+		if (!websiteExists) {
+			doesntExist(msg, lan, embed, linkObject);
+			return;
+		}
+
+		if (check) embed.setDescription(`${lan.checking} \`${linkObject.href}\``);
+		else embed.setDescription('');
+
+		const note = getNote(blacklist, linkObject);
+		if (note) {
+			if (!check) includedBadLink = true;
+			blacklisted(msg, lan, embed, linkObject, note, check);
+			return;
+		}
+
+		const isFile = linkObject.contentType?.includes('video')
+			|| linkObject.contentType?.includes('image')
+			|| linkObject.contentType?.includes('audio')
+			? true
+			: false;
+
+		if (
+			whitelist.includes(linkObject.baseURLhostname)
+			&& (
+				linkObject.hostname.endsWith(linkObject.baseURLhostname)
+				|| whitelist.includes(linkObject.hostname)
+			)
+			&& !isFile
+		) {
+			if (check) whitelisted(msg, lan, embed);
+			return;
+		}
+
+		if (isFile && whitelistCDN.includes(linkObject.baseURLhostname)) {
+			if (check) whitelisted(msg, lan, embed);
+			return;
+		}
+
+		if (blocklist.includes(linkObject.baseURLhostname)) {
+			if (!check) includedBadLink = true;
+			blacklisted(msg, lan, embed, linkObject, note, check);
+			return;
+		}
+
+		if (blacklist.includes(linkObject.baseURLhostname)) {
+			if (!check) includedBadLink = true;
+			blacklisted(msg, lan, embed, linkObject, note, check);
+			return;
+		}
+
+		const spamHausIncluded = await getSpamHaus(linkObject);
+		if (spamHausIncluded) {
+			if (!check) includedBadLink = true;
+			blacklisted(msg, lan, embed, linkObject, note, check);
+			return;
+		}
+
+		const urlIsNew = await getURLage(linkObject);
+		if (typeof urlIsNew == 'number' && urlIsNew < 7) {
+			if (!check) includedBadLink = true;
+			newUrl(msg, lan, embed, linkObject, check);
+			return;
+		}
+
+		const postVTurlsRes = await postVTUrls(linkObject);
+		const VTurls = postVTurlsRes?.stats, urlsAttributes = postVTurlsRes;
+		const urlSeverity = getSeverity(VTurls);
+		if (typeof urlSeverity !== 'number' && embed.fields.length == 0) {
+			embed
+				.addField(msg.language.result, msg.client.ch.stp(lan.VTfail, { cross: msg.client.constants.emotes.cross }))
+				.setDescription(embed.description.replace(msg.client.ch.stp(lan.check, { loading: msg.client.constants.emotes.loading })))
+				.setColor('#ffff00');
+			msg.client.ch.reply(msg, embed);
+			return;
+		}
+
+		if (urlSeverity > 2) {
+			severeLink(msg, lan, embed, linkObject, urlSeverity, check);
+			if (!check) includedBadLink = true;
+			return;
+		}
+
+		const attributes = urlsAttributes;
+		if (attributes && `${+attributes.creation_date}000` > Date.now() - 604800000) {
+			if (!check) includedBadLink = true;
+			newUrl(msg, lan, embed, linkObject, check);
+			return;
+		}
+
+		if (attributes && !whitelist.includes(linkObject.baseURLhostname)) {
+			fs.appendFile('S:/Bots/ws/CDN/whitelisted.txt', `\n${linkObject.baseURLhostname}`, () => { });
+			msg.client.ch.send(msg.client.channels.cache.get(msg.client.constants.standard.trashLogChannel), { content: msg.client.ch.makeCodeBlock(linkObject.baseURLhostname) });
+			if (check) whitelisted(msg, lan, embed);
+		}
+
+		if (attributes && !whitelist.includes(linkObject.hostname)) {
+			fs.appendFile('S:/Bots/ws/CDN/whitelisted.txt', `\n${linkObject.hostname}`, () => { });
+			msg.client.ch.send(msg.client.channels.cache.get(msg.client.constants.standard.trashLogChannel), { content: msg.client.ch.makeCodeBlock(linkObject.hostname) });
+			if (check) whitelisted(msg, lan, embed);
+		}
+		return;
+	}
+};
+
+
+const prepare = async (msg, lan, check) => {
+	const { content } = msg;
+	const args = content.replace(/\n/g, ' ').replace(/https:\/\//g, ' https://').replace(/http:\/\//, ' http://').split(/ +/);
+	const links = [];
+	args.forEach((arg) => {
+		if (urlCheck.isUri(arg) && new URL(arg)?.hostname) links.push(arg);
+	});
+	const blocklist = getBlocklist();
+	const whitelist = await getWhitelist();
+	const blacklist = await getBlacklist();
+	const whitelistCDN = await getWhitelistCDN();
+
+	const fullLinks = await makeFullLinks(links);
+
+	let includedBadLink = false;
+
+	for (const linkObject of fullLinks) {
+		await module.exports.run(msg, linkObject, lan, includedBadLink, check, blacklist, whitelist, whitelistCDN, blocklist);
+		continue;
+	}
+};
+const doesntExist = async (msg, lan, embed, linkObject) => {
+	if (embed.fields.length == 0) {
+		embed
+			.addField(msg.language.result, msg.client.ch.stp(lan.notexistent, { url: linkObject.baseURLhostname }))
+			.setDescription(msg.client.ch.stp(lan.done, { tick: msg.client.constants.emotes.tick }))
+			.setColor('#00ff00');
+		msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
+	}
+	msg.client.ch.send(msg.client.channels.cache.get(msg.client.constants.standard.trashLogChannel), { content: msg.url });
+};
+
+const blacklisted = async (msg, lan, embed, linkObject, note, check) => {
+	if (note && note !== false) {
+		if (embed.fields.length == 0) {
+			embed
+				.addField(msg.language.result, msg.client.ch.stp(lan.blacklisted, { cross: msg.client.constants.emotes.cross }))
+				.addField(msg.language.attention, note.split(/\|+/)[1])
+				.setDescription(embed.description.replace(msg.client.ch.stp(lan.check, { loading: msg.client.constants.emotes.loading }), msg.client.ch.stp(lan.done, { tick: msg.client.constants.emotes.tick })))
+				.setColor('#ff0000');
+			msg.m = await msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
+		}
+	} else {
+		if (embed.fields.length == 0) {
+			embed
+				.addField(msg.language.result, msg.client.ch.stp(lan.blacklisted, { cross: msg.client.constants.emotes.cross }))
+				.setDescription(embed.description.replace(msg.client.ch.stp(lan.check, { loading: msg.client.constants.emotes.loading }), msg.client.ch.stp(lan.done, { tick: msg.client.constants.emotes.tick })))
+				.setColor('#ff0000');
+			msg.m = await msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
+		}
+		msg.client.ch.send(msg.client.channels.cache.get(msg.client.constants.standard.trashLogChannel), { content: msg.url });
+		if (!check) client.emit('antivirusHandler', msg, linkObject.baseURL, 'blacklist');
+	}
+};
+
+const severeLink = async (msg, lan, embed, linkObject, urlSeverity, check) => {
+	const severity = urlSeverity ? urlSeverity : null;
+	if (embed.fields.length == 0) {
+		embed
+			.addField(msg.language.result, msg.client.ch.stp(lan.VTmalicious, { cross: msg.client.constants.emotes.cross, severity: severity }))
+			.setDescription(embed.description.replace(msg.client.ch.stp(lan.check, { loading: msg.client.constants.emotes.loading }), msg.client.ch.stp(lan.done, { tick: msg.client.constants.emotes.tick })))
+			.setColor('#ff0000');
+		msg.m = await msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
+	}
+	msg.client.ch.send(msg.client.channels.cache.get(msg.client.constants.standard.trashLogChannel), { content: msg.url });
+	if (!check) client.emit('antivirusHandler', msg, linkObject.baseURL, 'virustotal');
+};
+
+const newUrl = async (msg, lan, embed, linkObject, check) => {
+	if (embed.fields.length == 0) {
+		embed
+			.addField(msg.language.result, msg.client.ch.stp(lan.newLink, { cross: msg.client.constants.emotes.cross }))
+			.setDescription(embed.description.replace(msg.client.ch.stp(lan.check, { loading: msg.client.constants.emotes.loading }), msg.client.ch.stp(lan.done, { tick: msg.client.constants.emotes.tick })))
+			.setColor('#ff0000');
+		msg.m = await msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
+	}
+	msg.client.ch.send(msg.client.channels.cache.get(msg.client.constants.standard.trashLogChannel), { content: msg.url });
+	if (!check) client.emit('antivirusHandler', msg, linkObject.baseURL, 'newurl');
+	return true;
+};
+
+const whitelisted = async (msg, lan, embed) => {
+	if (embed.fields.length == 0) {
+		embed
+			.addField(msg.language.result, msg.client.ch.stp(lan.whitelisted, { tick: msg.client.constants.emotes.tick }))
+			.setDescription(embed.description.replace(msg.client.ch.stp(lan.check, { loading: msg.client.constants.emotes.loading }), msg.client.ch.stp(lan.done, { tick: msg.client.constants.emotes.tick })))
+			.setColor('#00ff00');
+		msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => { });
+	}
+	msg.client.ch.send(msg.client.channels.cache.get(msg.client.constants.standard.trashLogChannel), { content: msg.url });
+	return true;
 };
 
 const getBlocklist = () => {
-	const blacklist = [...new Set(blocklist)];
+	const blacklist = [...new Set(blocklists)];
 	blacklist.forEach((entry, index) => {
 		entry = entry.replace(/#{2}-{1}/g, '');
 		if (entry.startsWith('#')) blacklist.splice(index, 1);
