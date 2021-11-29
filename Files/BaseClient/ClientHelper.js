@@ -623,7 +623,7 @@ module.exports = {
 	 * @constructor
 	 * @param {object} member - The Client User Member of this Guild.
 	 */
-	colorGetter(member) {
+	colorSelector(member) {
 		return member && member.displayHexColor !== 0 ? member.displayHexColor : 'b0ff00';
 	},
 	/**
@@ -643,7 +643,7 @@ module.exports = {
 	async loadingEmbed(lan, guild) {
 		const embed = new Discord.MessageEmbed()
 			.setAuthor(lan.author, client.constants.emotes.loadingLink, client.constants.standard.invite)
-			.setColor(this.colorGetter(guild?.me))
+			.setColor(this.colorSelector(guild?.me))
 			.setDescription(`${client.constants.emotes.loading} ${lan.loading ? lan.loading : (await this.languageSelector(guild)).loading}`);
 		return embed;
 	},
