@@ -114,7 +114,7 @@ module.exports = {
 		}
 
 		const urlIsNew = await getURLage(linkObject);
-		if (typeof urlIsNew == 'number' && urlIsNew < 7) {
+		if (typeof urlIsNew == 'number') {
 			if (!check) includedBadLink = true;
 			newUrl(msg, lan, embed, linkObject, check);
 			return;
@@ -362,24 +362,9 @@ const getSpamHaus = async (linkObject) => {
 };
 
 const getURLage = async (linkObject) => {
-	let ageInDays = await ip2whois(linkObject);
+	let ageInDays = await promptapi(linkObject);
 	if (ageInDays && +ageInDays < 7) return ageInDays;
-	else if (!ageInDays) ageInDays = await promptapi(linkObject);
-	if (ageInDays && +ageInDays > 7) return ageInDays;
 	else return false;
-};
-
-const ip2whois = async (linkObject) => {
-	const res = await SA.get(`https://api.ip2whois.com/v2?key=${auth.ip2whoisToken}&domain=${linkObject.baseURLhostname}&format=json`).catch(() => { });
-
-	if (res 
-		&& res.text 
-		&& JSON.parse(res.text).domain_age
-	) {
-		return JSON.parse(res.text).domain_age;
-	} else {
-		return undefined;
-	}
 };
 
 const promptapi = async (linkObject) => {
