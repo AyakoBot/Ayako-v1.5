@@ -46,7 +46,7 @@ module.exports = {
 				{name: '|'+language.thisGuildOnly, value: `\u200b${`${ThisGuildOnly.map(r => `${r}`).join(', ')}` !== '' ? ThisGuildOnly.map(r => `${r}`).join(', ') : language.freeToAccess}`, inline: false},
 				{name: '|'+language.dms, value: `\u200b${reqcommand.dm ? lan.dmsTrue : lan.dmsFalse}`, inline: false},
 			)
-			.setColor(msg.client.ch.colorGetter(msg.guild ? msg.guild.me : null))
+			.setColor(msg.client.ch.colorSelector(msg.guild ? msg.guild.me : null))
 			.setTimestamp();
 		msg.client.ch.reply(msg, embed);
 	}

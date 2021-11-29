@@ -14,7 +14,7 @@ module.exports = {
 		msg.delete().catch(() => { });
 		const embed = new Discord.MessageEmbed()
 			.setDescription(msg.args.slice(0).join(' '))
-			.setColor(msg.client.ch.colorGetter(msg.guild.me));
+			.setColor(msg.client.ch.colorSelector(msg.guild.me));
 		msg.react('670163913370894346').catch(() => {});
 		const m = await msg.client.ch.send(msg.client.channels.cache.get('746665867567300679'), embed);
 		m.react('✅').catch(() => { });
