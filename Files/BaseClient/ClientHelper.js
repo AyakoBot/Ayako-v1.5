@@ -80,7 +80,7 @@ module.exports = {
 	 * @param {object} options - The Options of this Reply, if any.
 	 */
 	async reply(msg, content, options) {
-		if (typeof msg.reply !== 'function') return this.send(msg, content, options);
+		if (typeof msg.reply !== 'function') return await this.send(msg, content, options);
 		if (options && options.type == 'rich') {
 			const oldOptions = options;
 			options = {};
@@ -89,7 +89,7 @@ module.exports = {
 		if (content && content.type == 'rich') options.embeds ? options.embeds.push(content) : options.embeds = [content];
 		else if (typeof (content) !== 'string') options = content;
 		else options.content = content;
-		return await msg.reply(options).catch(() => {});
+		return await msg.reply(options).catch((e) => {console.log(e);});
 	},
 	/**
 	 * Places Objects or Strings of the Objects Option into the Expressions option, replacing same named variables marked by "{{variable Name}}".
