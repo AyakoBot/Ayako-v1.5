@@ -325,7 +325,6 @@ const makeFullLinks = async (links) => {
 
 
 const checkIfWebsiteExists = async (linkObject) => {
-
 	const hostname = new URL(linkObject.url).protocol + '//' + linkObject.hostname;
 
 	const [hrefRes, urlRes, baseUrlRes, hostnameRes] = await Promise.all([
@@ -335,19 +334,13 @@ const checkIfWebsiteExists = async (linkObject) => {
 		axios.get(hostname).catch(() => { })
 	]);
 
-	const exists = !hrefRes
-		|| hrefRes.code == 'ENOTFOUND'
-		? !urlRes
-			|| urlRes.code == 'ENOTFOUND'
-			? !baseUrlRes
-				|| baseUrlRes.code == 'ENOTFOUND'
-				? !hostnameRes
-					|| hostnameRes.code == 'ENOTFOUND'
-					? false
-					: true
-				: true
-			: true
-		: true;
+	let exists = false;
+
+	if (hrefRes && hrefRes.code !== 'ENOTFOUND') exists = true;
+	if (urlRes && urlRes.code !== 'ENOTFOUND') exists = true;
+	if (baseUrlRes && baseUrlRes.code !== 'ENOTFOUND') exists = true;
+	if (hostnameRes && hostnameRes.code !== 'ENOTFOUND') exists = true;
+
 	return exists;
 };
 
