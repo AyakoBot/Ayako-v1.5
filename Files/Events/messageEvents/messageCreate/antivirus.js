@@ -264,8 +264,9 @@ const getBlocklist = () => {
 };
 
 const getWhitelist = async () => {
-	const res = await SA.get('https://ayakobot.com/cdn/whitelisted.txt').catch(() => { });
-	const whitelistRes = res ? res.text.split(/\n+/) : [];
+	//const res = await SA.get('https://ayakobot.com/cdn/whitelisted.txt').catch(() => { });
+	const file = fs.readFileSync('S:/Bots/ws/CDN/whitelisted.txt', { encoding: 'utf8' });
+	const whitelistRes = file ? file.split(/\n+/) : [];
 	whitelistRes.map((entry, i) => {
 		whitelistRes[i] = entry.replace(/\r/g, '');
 	});
@@ -273,8 +274,9 @@ const getWhitelist = async () => {
 };
 
 const getBlacklist = async () => {
-	const res = await SA.get('https://ayakobot.com/cdn/blacklisted.txt').catch(() => { });
-	const blacklistRes = res ? res.text.split(/\n+/) : [];
+	//const res = await SA.get('https://ayakobot.com/cdn/blacklisted.txt').catch(() => { });
+	const file = fs.readFileSync('S:/Bots/ws/CDN/blacklisted.txt', { encoding: 'utf8' });
+	const blacklistRes = file ? file.split(/\n+/) : [];
 	blacklistRes.map((entry, i) => {
 		blacklistRes[i] = entry.replace(/\r/g, '');
 	});
@@ -282,8 +284,9 @@ const getBlacklist = async () => {
 };
 
 const getWhitelistCDN = async () => {
-	const res = await SA.get('https://ayakobot.com/cdn/whitelistedCDN.txt').catch(() => { });
-	const whitelistCDNRes = res ? res.text.split(/\n+/) : [];
+	//const res = await SA.get('https://ayakobot.com/cdn/whitelistedCDN.txt').catch(() => { });
+	const file = fs.readFileSync('S:/Bots/ws/CDN/whitelistedCDN.txt', { encoding: 'utf8' });
+	const whitelistCDNRes = file ? file.split(/\n+/) : [];
 	whitelistCDNRes.map((entry, i) => {
 		whitelistCDNRes[i] = entry.replace(/\r/g, '');
 	});
