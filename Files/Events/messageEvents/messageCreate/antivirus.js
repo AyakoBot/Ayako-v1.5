@@ -151,7 +151,7 @@ module.exports = {
 			if (check) whitelisted(msg, lan, embed);
 		}
 
-		if (attributes && !whitelist.includes(linkObject.hostname)) {
+		if (attributes && !whitelist.includes(linkObject.hostname) && linkObject.hostname !== linkObject.baseURLhostname) {
 			fs.appendFile('S:/Bots/ws/CDN/whitelisted.txt', `\n${linkObject.hostname}`, () => { });
 			msg.client.ch.send(msg.client.channels.cache.get(msg.client.constants.standard.trashLogChannel), { content: msg.client.ch.makeCodeBlock(linkObject.hostname) });
 			if (check) whitelisted(msg, lan, embed);
