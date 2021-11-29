@@ -782,7 +782,7 @@
                     "vals": [["{{values.guildid}}", false, "{{values.id}}", "{{values.uniquetimestamp}}", "{{values.roles}}", "{{values.name}}"]],
                     "add": ["roles", "name"],
                     "remove": ["id"],
-                    "removeIdent": "",
+                    "removeIdent": "name",
                     "removeReq": ["id", "roles"]
                 },
                 "statschannel": {
