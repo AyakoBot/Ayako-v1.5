@@ -27,6 +27,11 @@ module.exports = {
 					inline: false
 				},
 				{
+					name: msg.lan.name,
+					value: `${r.name ? `\`${r.name}\`` : '\u200b'}`,
+					inline: false,
+				},
+				{
 					name: msg.lan.onlyone,
 					value: r.onlyone ? msg.client.constants.emotes.tick + ' ' + msg.language.enabled : msg.client.constants.emotes.cross + ' ' + msg.language.disabled,
 					inline: false
@@ -64,6 +69,10 @@ module.exports = {
 			.setCustomId(msg.lan.edit.active.name)
 			.setLabel(msg.lanSettings.active)
 			.setStyle(r.active ? 'SUCCESS' : 'DANGER');
+		const name = new Discord.MessageButton()
+			.setCustomId(msg.lan.edit.name.name)
+			.setLabel(msg.lan.name)
+			.setStyle('SUCCESS');
 		const onlyone = new Discord.MessageButton()
 			.setCustomId(msg.lan.edit.onlyone.name)
 			.setLabel(msg.lan.onlyone)
@@ -88,6 +97,6 @@ module.exports = {
 			.setCustomId(msg.lan.edit.roles.name)
 			.setLabel(msg.lan.roles)
 			.setStyle('PRIMARY');
-		return [[active], [onlyone, roles], [blacklistedusers, blacklistedroles], [whitelistedusers, whitelistedroles]];
+		return [[active], [onlyone, name, roles], [blacklistedusers, blacklistedroles], [whitelistedusers, whitelistedroles]];
 	}
 };
