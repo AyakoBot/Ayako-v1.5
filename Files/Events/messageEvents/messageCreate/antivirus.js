@@ -353,9 +353,9 @@ const checkIfWebsiteExists = async (linkObject) => {
 
 const getNote = (blacklist, url) => {
 	const include = blacklist.map((entry) => {
-		if (entry.includes('|') && entry.split(new RegExp(' | ', 'g'))[0] == url.baseUrl) entry;
+		if (entry.includes('|') && entry.split(new RegExp(' | ', 'g'))[0] == url.baseURLhostname) return entry;
 	});
-	
+
 	return include.find((entry) => entry !== undefined);
 };
 
@@ -415,6 +415,7 @@ const promptapi = async (linkObject) => {
 };
 
 const postVTUrls = async (linkObject) => {
+	if (!linkObject.href) console.log(linkObject);
 	const res = await new Promise((resolve,) => {
 		SA
 			.post('https://www.virustotal.com/api/v3/urls')
