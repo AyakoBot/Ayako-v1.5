@@ -810,6 +810,10 @@
         "punishment": {
             "select": "Select the Punishment",
             "desc": "Select the Punishment you want this Auto-Punishment to have below"
+        },
+        "selfroles": {
+            "select": "Select the Role Category you want to look at",
+            "desc": "Select the Role Category you want look at below"
         }
     },
     "mod": {
@@ -1003,6 +1007,13 @@
         }
     },
     "commands": {
+        "selfroles": {
+            "description": "Get Self-Assingable Roles",
+            "usage": ["im", "iam", "iamn", "iamnot", "lsar", "imn"],
+            "category": "Roles",
+            "disabled": "You can only Remove Roles of this Category from yourself",
+            "author": "Ayako Self-Roles"
+        },
         "clearwarns": {
             "description": "Clears all Warns from a User",
             "usage": ["clearwarns [user] (reason)", "pardon [user] all (reason)"],
