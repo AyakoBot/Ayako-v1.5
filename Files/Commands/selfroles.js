@@ -28,16 +28,23 @@ module.exports = {
 					embed.addField(`${thisrow.name}`, `${roles.length} ${msg.language.roles}`, true);
 					
 					let disabled = false;
+					let isBlacklisted = false;
 
 					!disabled ? 
 						thisrow.blacklistedroles?.forEach((id) => {
-							msg.member.roles.cache.find(r => r.id == id) ? disabled = true : null;
+							if (msg.member.roles.cache.get(id)) {
+								disabled = true,
+								isBlacklisted = true;
+							}
 						})
 						: null;
 
 					!disabled ? 
 						thisrow.blacklistedusers?.forEach((id) => {
-							msg.author.id == id ? disabled = true : null;
+							if (msg.author.id == id) {
+								disabled = true;
+								isBlacklisted = true;
+							}
 						})
 						: null;
 
@@ -50,13 +57,19 @@ module.exports = {
 
 					disabled ? 
 						thisrow.whitelistedroles?.forEach((id) => {
-							msg.member.roles.cache.find(r => r.id == id) ? disabled = false : null;
+							if (msg.member.roles.cache.find(r => r.id == id)) {
+								disabled = false;
+								isBlacklisted = false;
+							}
 						})
 						: null;
 
 					disabled ? 
 						thisrow.whitelistedusers?.forEach((id) => {
-							msg.author.id == id ? disabled = false : null;
+							if (msg.author.id == id) {
+								disabled = false;
+								isBlacklisted = false;
+							}
 						})
 						: null;
 
@@ -66,7 +79,10 @@ module.exports = {
 						emoji: disabled ? msg.client.constants.emotes.lock : null, 
 						description: disabled ? msg.lan.disabled : null
 					});
+
+					thisrow.isBlacklisted = isBlacklisted;
 				}
+				console.log(res.rows);
 			}
 		}
 
@@ -180,6 +196,7 @@ module.exports = {
 					msg.m.lastUnique = undefined;
 					this.execute(msg, clickButton);
 				} else if (clickButton.customId == 'roleMenu') {
+
 					const add = [], remove = [];
 					clickButton.values.forEach((id) => {
 						if (msg.member.roles.cache.has(id)) remove.push(id);
@@ -345,7 +362,8 @@ module.exports = {
 				.addOptions(takeRoles)
 				.setMinValues(1)
 				.setMaxValues(row.onlyone ? 1 : takeRoles.length)
-				.setPlaceholder(row.onlyone ? msg.language.select.role.select : msg.language.select.roles.select);
+				.setPlaceholder(row.onlyone ? msg.language.select.role.select : msg.language.select.roles.select)
+				.setDisabled(row.isBlacklisted);
 
 			return [categoryMenu, roleMenu, allRoles, row];
 		};
