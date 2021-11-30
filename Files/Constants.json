@@ -361,6 +361,18 @@
         "trash": "<:Trash:834326440761229363>",
         "trashID": "834326440761229363",
         "trashLink": "https://cdn.discordapp.com/emojis/834326440761229363.png?v=1",
+        "plus": "<:Plus:915237851799650354>",
+        "plusID": "915237851799650354",
+        "plusLink": "https://cdn.discordapp.com/emojis/915237851799650354.png?size=96",
+        "minus": "<:Minus:915237851883528243>",
+        "minusID": "915237851883528243",
+        "minusLink": "https://cdn.discordapp.com/emojis/915237851883528243.png?size=96",
+        "plusBG": "<:PlusWithBackground:915237851795451924>",
+        "plusBGID": "915237851795451924",
+        "plusBGLink": "https://cdn.discordapp.com/emojis/915237851795451924.png?size=96",
+        "minusBG": "<:MinusWithBackground:915237851803840613>",
+        "minusBGID": "915237851803840613",
+        "minusBGLink": "https://cdn.discordapp.com/emojis/915237851803840613.png?size=96",
         "flags": {
             "en": "🇺🇸 🇬🇧"
         },
