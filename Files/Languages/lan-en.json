@@ -693,7 +693,8 @@
         "blacklist": "Ayako Blacklist",
         "statschannel": "Ayako Stats-Channel",
         "separators": "Ayako Separators",
-        "autopunish": "Ayako Auto-Punish"
+        "autopunish": "Ayako Auto-Punish",
+        "selfroles": "Ayako Self-Roles"
     },
     "statschanneltypes": {
         "member": {
@@ -1011,8 +1012,17 @@
             "description": "Get Self-Assingable Roles",
             "usage": ["im", "iam", "iamn", "iamnot", "lsar", "imn"],
             "category": "Roles",
-            "disabled": "You can only Remove Roles of this Category from yourself",
-            "author": "Ayako Self-Roles"
+            "disabled": "You can only remove Roles of this Category from yourself",
+            "author": "Ayako Self-Roles",
+            "prevCategory": "Previous Category",
+            "prevRoles": "Previous Roles",
+            "nextCategory": "Next Category",
+            "nextRoles": "Next Roles",
+            "categoryPage": "Category Page",
+            "rolePage": "Role Page",
+            "rolesUpdated": "Roles updated",
+            "addedRoles": "Added Roles",
+            "removedRoles": "Removed Roles"
         },
         "clearwarns": {
             "description": "Clears all Warns from a User",

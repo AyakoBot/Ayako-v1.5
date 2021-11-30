@@ -8,7 +8,7 @@ module.exports = {
 	aliases: ['im', 'iam', 'iamn', 'iamnot', 'lsar', 'imn'],
 	type: 'roles',
 	async execute(msg, answer) {
-		const res = await msg.client.ch.query('SELECT * FROM selfroles WHERE guildid = $1 AND active = true;', [msg.guild.id]);
+		const res = await msg.client.ch.query('SELECT * FROM selfroles WHERE guildid = $1 AND active = true ORDER BY id ASC;', [msg.guild.id]);
 		
 		const embed = new Discord.MessageEmbed();
 		embed
@@ -72,12 +72,12 @@ module.exports = {
 
 
 		const next = new Discord.MessageButton()
-			.setCustomId('next')
+			.setCustomId('nextCategory')
 			.setLabel(msg.language.next)
 			.setDisabled(options.length < 25 ? true : false)
 			.setStyle('SUCCESS');
 		const prev = new Discord.MessageButton()
-			.setCustomId('prev')
+			.setCustomId('prevCategory')
 			.setLabel(msg.language.prev)
 			.setDisabled(true)
 			.setStyle('DANGER');
@@ -95,107 +95,151 @@ module.exports = {
 			.setPlaceholder(msg.language.select.selfroles.select);
 
 		const rows = msg.client.ch.buttonRower([[menu], [prev, next]]);
-		if (answer) answer.reply({ embeds: [embed], components: rows });
-		else if (msg.m) msg.m = await msg.client.ch.reply(msg, { embeds: [embed], components: rows });
+		if (answer) {
+			await answer.update({ embeds: [embed], components: rows });
+			msg.m = answer.message;
+		}
+		else if (msg.m) msg.m = await msg.m.edit({ embeds: [embed], components: rows });
 		else msg.m = await msg.client.ch.reply(msg, { embeds: [embed], components: rows });
 
 		const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
-		buttonsCollector.on('collect', (clickButton) => {
-			let answered = [];
+		buttonsCollector.on('collect', async (clickButton) => {
 			if (clickButton.user.id == msg.author.id) {
-				if (clickButton.customId == 'next' || clickButton.customId == 'prev') {
+				if (clickButton.customId == 'nextCategory' || clickButton.customId == 'prevCategory') {
 					let indexLast, indexFirst;
 					for (let j = 0; options.length > j; j++) {
 						if (options[j] && options[j].value == clickButton.message.components[0].components[0].options[(clickButton.message.components[0].components[0].options.length - 1)].value) indexLast = j;
 						if (options[j] && options[j].value == clickButton.message.components[0].components[0].options[0].value) indexFirst = j;
 					}
 					take.splice(0, take.length);
-					if (clickButton.customId == 'next') for (let j = indexLast + 1; j < indexLast + 26; j++) if (options[j]) take.push(options[j]);
-					if (clickButton.customId == 'prev') for (let j = indexFirst - 25; j < indexFirst; j++) if (options[j]) take.push(options[j]);
-					let page = clickButton.message.embeds[0].description ? clickButton.message.embeds[0].description.split(/`+/)[1].split(/\/+/)[0] : 0;
-					clickButton.customId == 'next' ? page++ : page--;
-					const categoryMenu = new Discord.MessageSelectMenu()
-						.setCustomId('categoryMenu')
-						.addOptions(take)
-						.setMinValues(1)
-						.setMaxValues(1)
-						.setPlaceholder(msg.language.select.selfroles.select);
-					const next = new Discord.MessageButton()
-						.setCustomId('next')
-						.setLabel(msg.language.next)
-						.setDisabled(options.length < page * 25 + 26 ? true : false)
-						.setStyle('SUCCESS');
-					const prev = new Discord.MessageButton()
-						.setCustomId('prev')
-						.setLabel(msg.language.prev)
-						.setDisabled(page == 1 ? true : false)
-						.setStyle('DANGER');
-					const back = new Discord.MessageButton()
-						.setCustomId('back')
-						.setLabel(msg.language.back)
-						.setEmoji(msg.client.constants.emotes.back)
-						.setStyle('DANGER');
+					if (clickButton.customId == 'nextCategory') for (let j = indexLast + 1; j < indexLast + 26; j++) if (options[j]) take.push(options[j]);
+					if (clickButton.customId == 'prevCategory') for (let j = indexFirst - 25; j < indexFirst; j++) if (options[j]) take.push(options[j]);
+
+					let categoryPage = clickButton.message.embeds[0].description
+						&& clickButton.message.embeds[0].description.split(/`+/)[1]
+						? clickButton.message.embeds[0].description.split(/`+/)[1].split(/\/+/)[0]
+						: 1;
+					let rolePage = clickButton.message.embeds[0].description
+						&& clickButton.message.embeds[0].description.split(/`+/)[3]
+						? clickButton.message.embeds[0].description.split(/`+/)[3].split(/\/+/)[0]
+						: 1;
+
+					clickButton.customId == 'nextCategory' ? categoryPage++ : categoryPage--;
+
+					const takenIndex = take.findIndex((took) => took.value == clickButton.values[0]);
+					if (takenIndex !== -1) take[takenIndex].default = true;
+
+
+					const [prevRoles, nextRoles, prevCategory, nextCategory, back] = defaultButtonGetter(categoryPage, rolePage);
+					const [categoryMenu, roleMenu, roles, row] = getMenues(clickButton);
+
 					const embed = new Discord.MessageEmbed()
+						.setColor(msg.client.ch.colorSelector(msg.guild.me))
 						.setAuthor(
-							msg.lan.author,
+							row.name,
 							null,
 							msg.client.constants.standard.invite
 						)
-						.setDescription(`${msg.language.select.selfroles.desc}\n${msg.language.page}: \`${page}/${Math.ceil(+options.length / 25)}\``);
-					if (answered.length > 0) embed.addField(msg.language.selected, `${answered}`);
-					if (page >= Math.ceil(+options.length / 25)) next.setDisabled(true);
-					else next.setDisabled(false);
-					if (page > 1) prev.setDisabled(false);
-					else prev.setDisabled(true);
-					const rows = msg.client.ch.buttonRower([[categoryMenu], [prev, next], [back]]);
-					clickButton.update({ embeds: [embed], components: rows }).catch(() => { });
+						.setDescription(`${roles.map(r => `${r.role}`).join(', ')}\n\n${msg.lan.categoryPage}: \`${categoryPage}/${Math.ceil(+options.length / 25)}\`\n${msg.lan.rolePage}: \`${rolePage}/${Math.ceil(+roles.length / 25)}\``);
+
+					const rows = msg.client.ch.buttonRower([[categoryMenu], [prevCategory, nextCategory], [roleMenu], [prevRoles, nextRoles], [back]]);
+
+					await clickButton.update({ embeds: [embed], components: rows }).catch(() => { });
+					msg.m.lastUnique = row.uniquetimestamp;
+
 				} else if (clickButton.customId == 'categoryMenu') {
-					let page = clickButton.message.embeds[0].description ? clickButton.message.embeds[0].description.split(/`+/)[1].split(/\/+/)[0] : 0;
-					answered = clickButton.values[0];
 
-					const row = res.rows[res.rows.findIndex((r) => r.uniquetimestamp == clickButton.values[0])];
-					const roles = roleGetter(row);
+					let categoryPage = clickButton.message.embeds[0].description 
+						&& clickButton.message.embeds[0].description.split(/`+/)[1]
+						? clickButton.message.embeds[0].description.split(/`+/)[1].split(/\/+/)[0] 
+						: 1;
+					let rolePage = clickButton.message.embeds[0].description 
+					&& clickButton.message.embeds[0].description.split(/`+/)[3] 
+						? clickButton.message.embeds[0].description.split(/`+/)[3].split(/\/+/)[0] 
+						: 1;
 
-					const categoryMenu = new Discord.MessageSelectMenu()
-						.setCustomId('categoryMenu')
-						.addOptions(take)
-						.setMinValues(1)
-						.setMaxValues(1)
-						.setPlaceholder(msg.language.select.selfroles.select);
-					const roleMenu = new Discord.MessageSelectMenu()
-						.setCustomId('roleMenu')
-						.addOptions(roles.map(r => `${r}`).join(', '))
-						.setMinValues(1)
-						.setMaxValues(row.onlyone ? 1 : roles.length)
-						.setPlaceholder(msg.language.select.selfroles.select);
-					const next = new Discord.MessageButton()
-						.setCustomId('next')
-						.setLabel(msg.language.next)
-						.setDisabled(options.length < page * 25 + 26 ? true : false)
-						.setStyle('SUCCESS');
-					const prev = new Discord.MessageButton()
-						.setCustomId('prev')
-						.setLabel(msg.language.prev)
-						.setDisabled(page == 1 ? true : false)
-						.setStyle('DANGER');
-					const back = new Discord.MessageButton()
-						.setCustomId('back')
-						.setLabel(msg.language.back)
-						.setEmoji(msg.client.constants.emotes.back)
-						.setStyle('DANGER');
-					page = clickButton.message.embeds[0].description ? clickButton.message.embeds[0].description.split(/`+/)[1].split(/\/+/)[0] : 0;
+					const [prevRoles, nextRoles, prevCategory, nextCategory, back] = defaultButtonGetter(categoryPage, rolePage);
+					const [categoryMenu, roleMenu, roles, row] = getMenues(clickButton);
+
 					const embed = new Discord.MessageEmbed()
+						.setColor(msg.client.ch.colorSelector(msg.guild.me))
 						.setAuthor(
-							msg.lan.author,
+							row.name,
 							null,
 							msg.client.constants.standard.invite
 						)
-						.setDescription(`${msg.language.select.selfroles.desc}\n${msg.language.page}: \`${page}/${Math.ceil(+options.length / 25)}\``);
-					const rows = msg.client.ch.buttonRower([[categoryMenu], [roleMenu], [prev, next], [back]]);
-					clickButton.update({ embeds: [embed], components: rows }).catch(() => { });
+						.setDescription(`${roles.map(r => `${r.role}`).join(', ')}\n\n${msg.lan.categoryPage}: \`${categoryPage}/${Math.ceil(+options.length / 25)}\`\n${msg.lan.rolePage}: \`${rolePage}/${Math.ceil(+roles.length / 25)}\``);
+
+					const rows = msg.client.ch.buttonRower([[categoryMenu], [prevCategory, nextCategory], [roleMenu], [prevRoles, nextRoles], [back]]);
+
+					await clickButton.update({ embeds: [embed], components: rows }).catch(() => {});
+					msg.m.lastUnique = row.uniquetimestamp;
+
 				} else if (clickButton.customId == 'back') {
 					buttonsCollector.stop();
+					msg.m.lastUnique = undefined;
 					this.execute(msg, clickButton);
+				} else if (clickButton.customId == 'roleMenu') {
+					const add = [], remove = [];
+					clickButton.values.forEach((id) => {
+						if (msg.member.roles.cache.has(id)) remove.push(id);
+						else add.push(id);
+					});
+
+					if (add.length > 0) await msg.member.roles.add(add, msg.language.autotypes.selfroles);
+					if (remove.length > 0) await msg.member.roles.remove(remove, msg.language.autotypes.selfroles);
+
+					const replyEmbed = new Discord.MessageEmbed()
+						.setAuthor(
+							msg.lan.rolesUpdated,
+							null,
+							msg.client.constants.standard.invite
+						)
+						.setColor(msg.client.ch.colorSelector(msg.guild.me));
+
+					if (add.length) {
+						replyEmbed.addField(
+							msg.lan.addedRoles, 
+							add.map(r => `<@&${r}>`).join(', '),
+							false
+						);
+					}
+					if (remove.length) {
+						replyEmbed.addField(
+							msg.lan.removedRoles,
+							remove.map(r => `<@&${r}>`).join(', '),
+							false
+						);
+					}
+
+					await clickButton.reply({ embeds: [replyEmbed], ephemeral: true}).catch(() => { });
+
+					let categoryPage = clickButton.message.embeds[0].description
+						&& clickButton.message.embeds[0].description.split(/`+/)[1]
+						? clickButton.message.embeds[0].description.split(/`+/)[1].split(/\/+/)[0]
+						: 1;
+					let rolePage = clickButton.message.embeds[0].description
+						&& clickButton.message.embeds[0].description.split(/`+/)[3]
+						? clickButton.message.embeds[0].description.split(/`+/)[3].split(/\/+/)[0]
+						: 1;
+
+					const [prevRoles, nextRoles, prevCategory, nextCategory, back] = defaultButtonGetter(categoryPage, rolePage);
+					const row = res.rows[res.rows.findIndex((r) => r.uniquetimestamp == msg.m.lastUnique)];
+					const [categoryMenu, roleMenu, roles] = getMenues(clickButton, row);
+
+					const embed = new Discord.MessageEmbed()
+						.setColor(msg.client.ch.colorSelector(msg.guild.me))
+						.setAuthor(
+							row.name,
+							null,
+							msg.client.constants.standard.invite
+						)
+						.setDescription(`${roles.map(r => `${r.role}`).join(', ')}\n\n${msg.lan.categoryPage}: \`${categoryPage}/${Math.ceil(+options.length / 25)}\`\n${msg.lan.rolePage}: \`${rolePage}/${Math.ceil(+roles.length / 25)}\``);
+
+					const rows = msg.client.ch.buttonRower([[categoryMenu], [prevCategory, nextCategory], [roleMenu], [prevRoles, nextRoles], [back]]);
+
+					await msg.m.edit({ embeds: [embed], components: rows }).catch(() => { });
+					msg.m.lastUnique = row.uniquetimestamp;
 				}
 			} else msg.client.ch.notYours(clickButton, msg);
 		});
@@ -210,11 +254,100 @@ module.exports = {
 				.forEach((r) => { 
 					const obj = {
 						has: msg.member.roles.cache.has(r.id) ? true : false,
-						role: r
+						role: r,
+						row: row
 					};
 					roles.push(obj);
 				});
+
+			roles.sort((a, b) => a.role.rawPosition - b.role.rawPosition);
+			
 			return roles;
+		};
+
+		const defaultButtonGetter = (categoryPage, rolePage) => {
+
+			const nextCategory = new Discord.MessageButton()
+				.setCustomId('nextCategory')
+				.setLabel(msg.lan.nextCategory)
+				.setDisabled(options.length < categoryPage * 25 + 26 ? true : false)
+				.setStyle('SUCCESS');
+
+			const prevCategory = new Discord.MessageButton()
+				.setCustomId('prevCategory')
+				.setLabel(msg.lan.prevCategory)
+				.setDisabled(categoryPage == 1 ? true : false)
+				.setStyle('DANGER');
+
+			const nextRoles = new Discord.MessageButton()
+				.setCustomId('nextRoles')
+				.setLabel(msg.lan.nextRoles)
+				.setDisabled(options.length < rolePage * 25 + 26 ? true : false)
+				.setStyle('SUCCESS');
+
+			const prevRoles = new Discord.MessageButton()
+				.setCustomId('prevRoles')
+				.setLabel(msg.lan.prevRoles)
+				.setDisabled(rolePage == 1 ? true : false)
+				.setStyle('DANGER');
+
+			const back = new Discord.MessageButton()
+				.setCustomId('back')
+				.setLabel(msg.language.back)
+				.setEmoji(msg.client.constants.emotes.back)
+				.setStyle('DANGER');
+
+			return [prevRoles, nextRoles, prevCategory, nextCategory, back];
+		};
+
+		const getMenues = (clickButton, row) => {
+
+			const takeRoles = [];
+
+			if (!row) row = res.rows[res.rows.findIndex((r) => r.uniquetimestamp == clickButton.values[0])];
+			const allRoles = roleGetter(row);
+			const hasOne = msg.member.roles.cache.some((r) => row.roles.includes(r.id));
+
+			const roles = allRoles.filter((r) => {
+				if (row.onlyone && hasOne && r.has) return r;
+				if (row.onlyone && hasOne && !r.has) return null;
+				if (row.onlyone && !hasOne) return r;
+				return allRoles;
+			});
+
+			for (let j = 0; j < 25 && j < roles.length; j++) {
+				const roleObj = roles[j];
+				const obj = {
+					label: roleObj.role.name,
+					value: roleObj.role.id,
+					emoji: roleObj.has ? msg.client.constants.emotes.minusBGID : msg.client.constants.emotes.plusBGID
+				};
+				takeRoles.push(obj);
+			}
+
+			const takenIndex = take.findIndex((took) => took.value == clickButton.values[0]);
+			if (takenIndex !== -1) {
+				take.forEach((r, i) => {
+					if (i == takenIndex) take[takenIndex].default = true;
+					else take[i].default = false;
+				});
+			}
+
+			const categoryMenu = new Discord.MessageSelectMenu()
+				.setCustomId('categoryMenu')
+				.addOptions(take)
+				.setMinValues(1)
+				.setMaxValues(1)
+				.setPlaceholder(msg.language.select.selfroles.select);
+
+			const roleMenu = new Discord.MessageSelectMenu()
+				.setCustomId('roleMenu')
+				.addOptions(takeRoles)
+				.setMinValues(1)
+				.setMaxValues(row.onlyone ? 1 : takeRoles.length)
+				.setPlaceholder(row.onlyone ? msg.language.select.role.select : msg.language.select.roles.select);
+
+			return [categoryMenu, roleMenu, allRoles, row];
 		};
 
 	}
