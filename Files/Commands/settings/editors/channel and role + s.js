@@ -48,7 +48,7 @@ module.exports = {
 				msg.client.constants.standard.invite
 			)
 			.setDescription(`${msg.language.select[msg.property].desc}\n${msg.language.page}: \`1/${Math.ceil(options.length / 25)}\``);
-		if (answered.length) embed.addField(msg.language.selected, `${msg.property.includes('s') ? answered.map(c => msg.compatibilityType == 'channels' ? `<#${c}>` : msg.compatibilityType == 'roles' ? `<@&${c}>` : ` ${c}`) : msg.compatibilityType == 'channels' ? `<#${answered}>` : msg.compatibilityType == 'roles' ? `<@&${answered}>` : `${answered}`} `);
+		if (answered?.length) embed.addField(msg.language.selected, `${msg.property.includes('s') ? answered.map(c => msg.compatibilityType == 'channels' ? `<#${c}>` : msg.compatibilityType == 'roles' ? `<@&${c}>` : ` ${c}`) : msg.compatibilityType == 'channels' ? `<#${answered}>` : msg.compatibilityType == 'roles' ? `<@&${answered}>` : `${answered}`} `);
 		const rows = msg.client.ch.buttonRower([[menu], [prev, next], [back, done]]);
 		if (answer) answer.update({embeds: [embed], components: rows}).catch(() => {});
 		else msg.m.edit({embeds: [embed], components: rows}).catch(() => {});
@@ -103,7 +103,7 @@ module.exports = {
 								msg.client.constants.standard.invite
 							)
 							.setDescription(`${msg.language.select[msg.property].desc}\n${msg.language.page}: \`${page}/${Math.ceil(+options.length / 25)}\``);
-						if (answered.length) embed.addField(msg.language.selected, `${msg.property.includes('s') ? answered.map(c => msg.compatibilityType == 'channels' ? `<#${c}>` : msg.compatibilityType == 'roles' ? `<@&${c}>` : ` ${c}`) : msg.compatibilityType == 'channels' ? `<#${answered}>` : msg.compatibilityType == 'roles' ? `<@&${answered}>` : `${answered}`} `);
+						if (answered?.length) embed.addField(msg.language.selected, `${msg.property.includes('s') ? answered.map(c => msg.compatibilityType == 'channels' ? `<#${c}>` : msg.compatibilityType == 'roles' ? `<@&${c}>` : ` ${c}`) : msg.compatibilityType == 'channels' ? `<#${answered}>` : msg.compatibilityType == 'roles' ? `<@&${answered}>` : `${answered}`} `);
 						if (page >= Math.ceil(+options.length / 25)) next.setDisabled(true);
 						else next.setDisabled(false);
 						if (page > 1) prev.setDisabled(false);

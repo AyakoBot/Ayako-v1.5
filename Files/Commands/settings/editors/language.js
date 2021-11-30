@@ -98,7 +98,7 @@ module.exports = {
 								msg.client.constants.standard.invite
 							)
 							.setDescription(`${msg.language.select[msg.property].desc}\n${msg.language.page}: \`${page}/${Math.ceil(+options.length / 25)}\``);
-						if (answered.length) embed.addField(msg.language.selected, `${answered} `);
+						if (answered?.length) embed.addField(msg.language.selected, `${answered} `);
 						if (page >= Math.ceil(+options.length / 25)) next.setDisabled(true);
 						else next.setDisabled(false);
 						if (page > 1) prev.setDisabled(false);
