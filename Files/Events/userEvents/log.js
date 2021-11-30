@@ -9,7 +9,7 @@ module.exports = {
 			const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);
 			if (res && res.rowCount > 0) {
 				const channels = res.rows[0].userevents?.map((id) => typeof client.channels.cache.get(id)?.send == 'function' ? client.channels.cache.get(id) : null).filter(c => c !== null);
-				if (channels && channels.length > 0) {
+				if (channels && channels.length) {
 					const member = guild.members.cache.get(newUser.id);
 					if (member) {
 						const language = await ch.languageSelector(guild);
@@ -41,7 +41,7 @@ module.exports = {
 							embed.addField(language.discriminator, `${language.before}: \`${oldUser.discriminator}\`\n${language.after}: \`${newUser.discriminator}\``);
 						}
 						embed.setDescription(ch.stp(lan.description, {user: newUser})+changedKey.map(o => ` \`${o}\``));
-						if (embed.fields.length > 0) {
+						if (embed.fields.length) {
 							if (file) ch.send(channels, {embeds: [embed], files: [file.path]});
 							else ch.send(channels, {embeds: [embed]});
 						}

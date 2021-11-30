@@ -9,7 +9,7 @@ parentPort.on('message', (data) => {
 async function start(data) {
 	const roles = data.roles, userid = data.userid, guildid = data.guildid, guildroles = new Discord.Collection(data.guildroles), highestRole = data.highest, rows = data.res, language = data.language;
 	const giveThese = new Array, takeThese = new Array;
-	if (rows && rows.length > 0) {
+	if (rows && rows.length) {
 		rows.forEach(async (row) => {
 			const sep = guildroles.get(row.separator);
 			if (sep) {
@@ -43,5 +43,5 @@ async function start(data) {
 	}
 	const newRoles = [...roles, ...giveThese];
 	takeThese.forEach((r) => newRoles.splice(newRoles.indexOf(r), 1));
-	if ((giveThese && giveThese.length > 0) || (takeThese && takeThese.length > 0)) await eris.editGuildMember(guildid, userid, { roles: newRoles }, language.autotypes.separators).catch(() => { });
+	if ((giveThese && giveThese.length) || (takeThese && takeThese.length)) await eris.editGuildMember(guildid, userid, { roles: newRoles }, language.autotypes.separators).catch(() => { });
 }

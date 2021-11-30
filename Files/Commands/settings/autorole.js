@@ -13,17 +13,17 @@ module.exports = {
 				},
 				{
 					name: `${msg.lan.botRole}`, 
-					value: `${r.botroleid && r.botroleid.length > 0 ? r.botroleid.map(id => ` <@&${id}>`) : msg.language.none}`, 
+					value: `${r.botroleid && r.botroleid.length ? r.botroleid.map(id => ` <@&${id}>`) : msg.language.none}`, 
 					inline: false
 				},
 				{
 					name: `${msg.lan.userRole}`, 
-					value: `${r.userroleid && r.userroleid.length > 0 ? r.userroleid.map(id => ` <@&${id}>`) : msg.language.none}`, 
+					value: `${r.userroleid && r.userroleid.length ? r.userroleid.map(id => ` <@&${id}>`) : msg.language.none}`, 
 					inline: false
 				},
 				{
 					name: `${msg.lan.allRole}`, 
-					value: `${r.allroleid && r.allroleid.length > 0 ? r.allroleid.map(id => ` <@&${id}>`) : msg.language.none}`, 
+					value: `${r.allroleid && r.allroleid.length ? r.allroleid.map(id => ` <@&${id}>`) : msg.language.none}`, 
 					inline: false
 				},
 			);

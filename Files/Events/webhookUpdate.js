@@ -10,7 +10,7 @@ module.exports = {
 		const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);
 		if (res && res.rowCount > 0) {
 			const channels = res.rows[0].webhookevents?.map((id) => typeof client.channels.cache.get(id)?.send == 'function' ? client.channels.cache.get(id) : null).filter(c => c !== null);
-			if (channels && channels.length > 0) {
+			if (channels && channels.length) {
 				const language = await ch.languageSelector(guild);
 				const webhooks = await data.fetchWebhooks().catch(() => {});
 				const audits = [];
@@ -20,7 +20,7 @@ module.exports = {
 				if (auditsCreate && auditsCreate.entries) auditsCreate.entries.forEach(a => audits.push(a)); 
 				if (auditsUpdate && auditsUpdate.entries) auditsUpdate.entries.forEach(a => audits.push(a)); 
 				let entry; let webhook;
-				if (audits.length > 0) {
+				if (audits.length) {
 					audits.sort((a, b) => a.id - b.id);
 					webhooks.forEach(w => audits.forEach(a => {if (w.id == a.target.id) {entry = a; webhook = w;}}));
 					if (auditsDelete) auditsDelete.entries.sort((a, b) => b.id - a.id);

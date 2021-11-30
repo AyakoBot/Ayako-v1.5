@@ -13,72 +13,72 @@ module.exports = {
 				},
 				{
 					name: msg.lan.emojievents,
-					value: `${r.emojievents && r.emojievents.length > 0 ? r.emojievents.map(id => ` <#${id}>`) : msg.language.none}`,
+					value: `${r.emojievents && r.emojievents.length ? r.emojievents.map(id => ` <#${id}>`) : msg.language.none}`,
 					inline: true
 				},
 				{
 					name: msg.lan.guildevents,
-					value: `${r.guildevents && r.guildevents.length > 0 ? r.guildevents.map(id => ` <#${id}>`) : msg.language.none}`,
+					value: `${r.guildevents && r.guildevents.length ? r.guildevents.map(id => ` <#${id}>`) : msg.language.none}`,
 					inline: true
 				},
 				{
 					name: msg.lan.inviteevents,
-					value: `${r.inviteevents && r.inviteevents.length > 0 ? r.inviteevents.map(id => ` <#${id}>`) : msg.language.none}`,
+					value: `${r.inviteevents && r.inviteevents.length ? r.inviteevents.map(id => ` <#${id}>`) : msg.language.none}`,
 					inline: true
 				},
 				{
 					name: msg.lan.messageevents,
-					value: `${r.messageevents && r.messageevents.length > 0 ? r.messageevents.map(id => ` <#${id}>`) : msg.language.none}`,
+					value: `${r.messageevents && r.messageevents.length ? r.messageevents.map(id => ` <#${id}>`) : msg.language.none}`,
 					inline: true
 				},
 				{
 					name: msg.lan.roleevents,
-					value: `${r.roleevents && r.roleevents.length > 0 ? r.roleevents.map(id => ` <#${id}>`) : msg.language.none}`,
+					value: `${r.roleevents && r.roleevents.length ? r.roleevents.map(id => ` <#${id}>`) : msg.language.none}`,
 					inline: true
 				},
 				{
 					name: msg.lan.userevents,
-					value: `${r.userevents && r.userevents.length > 0 ? r.userevents.map(id => ` <#${id}>`) : msg.language.none}`,
+					value: `${r.userevents && r.userevents.length ? r.userevents.map(id => ` <#${id}>`) : msg.language.none}`,
 					inline: true
 				},
 				{
 					name: msg.lan.voiceevents,
-					value: `${r.voiceevents && r.voiceevents.length > 0 ? r.voiceevents.map(id => ` <#${id}>`) : msg.language.none}`,
+					value: `${r.voiceevents && r.voiceevents.length ? r.voiceevents.map(id => ` <#${id}>`) : msg.language.none}`,
 					inline: true
 				},
 				{
 					name: msg.lan.webhookevents,
-					value: `${r.webhookevents && r.webhookevents.length > 0 ? r.webhookevents.map(id => ` <#${id}>`) : msg.language.none}`,
+					value: `${r.webhookevents && r.webhookevents.length ? r.webhookevents.map(id => ` <#${id}>`) : msg.language.none}`,
 					inline: true
 				},
 				{
 					name: msg.lan.channelevents,
-					value: `${r.channelevents && r.channelevents.length > 0 ? r.channelevents.map(id => ` <#${id}>`) : msg.language.none}`,
+					value: `${r.channelevents && r.channelevents.length ? r.channelevents.map(id => ` <#${id}>`) : msg.language.none}`,
 					inline: true
 				},
 				{
 					name: msg.lan.applicationevents,
-					value: `${r.applicationevents && r.applicationevents.length > 0 ? r.applicationevents.map(id => ` <#${id}>`) : msg.language.none}`,
+					value: `${r.applicationevents && r.applicationevents.length ? r.applicationevents.map(id => ` <#${id}>`) : msg.language.none}`,
 					inline: true
 				},
 				{
 					name: msg.lan.stageinstanceevents,
-					value: `${r.stageinstanceevents && r.stageinstanceevents.length > 0 ? r.stageinstanceevents.map(id => ` <#${id}>`) : msg.language.none}`,
+					value: `${r.stageinstanceevents && r.stageinstanceevents.length ? r.stageinstanceevents.map(id => ` <#${id}>`) : msg.language.none}`,
 					inline: true
 				},
 				{
 					name: msg.lan.stickerevents,
-					value: `${r.stickerevents && r.stickerevents.length > 0 ? r.stickerevents.map(id => ` <#${id}>`) : msg.language.none}`,
+					value: `${r.stickerevents && r.stickerevents.length ? r.stickerevents.map(id => ` <#${id}>`) : msg.language.none}`,
 					inline: true
 				},
 				{
 					name: msg.lan.threadevents,
-					value: `${r.threadevents && r.threadevents.length > 0 ? r.threadevents.map(id => ` <#${id}>`) : msg.language.none}`,
+					value: `${r.threadevents && r.threadevents.length ? r.threadevents.map(id => ` <#${id}>`) : msg.language.none}`,
 					inline: true
 				},
 				{
 					name: msg.lan.guildmemberevents,
-					value: `${r.guildmemberevents && r.guildmemberevents.length > 0 ? r.guildmemberevents.map(id => ` <#${id}>`) : msg.language.none}`,
+					value: `${r.guildmemberevents && r.guildmemberevents.length ? r.guildmemberevents.map(id => ` <#${id}>`) : msg.language.none}`,
 					inline: true
 				},
 				{
@@ -88,12 +88,12 @@ module.exports = {
 				},
 				{
 					name: msg.lan.modlogs,
-					value: `${r.modlogs && r.modlogs.length > 0 ? r.modlogs.map(id => ` <#${id}>`) : msg.language.none}`,
+					value: `${r.modlogs && r.modlogs.length ? r.modlogs.map(id => ` <#${id}>`) : msg.language.none}`,
 					inline: true
 				},
 				{
 					name: msg.lan.settingslog,
-					value: `${r.settingslog && r.settingslog.length > 0 ? r.settingslog.map(id => ` <#${id}>`) : msg.language.none}`,
+					value: `${r.settingslog && r.settingslog.length ? r.settingslog.map(id => ` <#${id}>`) : msg.language.none}`,
 					inline: true
 				},
 			);

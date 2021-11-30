@@ -9,7 +9,7 @@ module.exports = {
 		const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);
 		if (res && res.rowCount > 0) {
 			const channels = res.rows[0].channelevents?.map((id) => typeof client.channels.cache.get(id)?.send == 'function' ? client.channels.cache.get(id) : null).filter(c => c !== null);
-			if (channels && channels.length > 0) {
+			if (channels && channels.length) {
 				const language = await ch.languageSelector(guild);
 				const lan = language.channelDelete;
 				const con = Constants.channelDelete;

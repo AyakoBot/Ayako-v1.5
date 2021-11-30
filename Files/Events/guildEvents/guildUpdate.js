@@ -10,7 +10,7 @@ module.exports = {
 		const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [newGuild.id]);
 		if (res && res.rowCount > 0) {
 			const channels = res.rows[0].guildevents?.map((id) => typeof client.channels.cache.get(id)?.send == 'function' ? client.channels.cache.get(id) : null).filter(c => c !== null);
-			if (channels && channels.length > 0) {
+			if (channels && channels.length) {
 				const language = await ch.languageSelector(newGuild);
 				const lan = language.guildUpdate;
 				const con = Constants.guildUpdate;
@@ -91,7 +91,7 @@ module.exports = {
 				if (oldGuild.features !== newGuild.features) {
 					entry = await getAudits(newGuild);
 					const uniques = ch.getDifference(oldGuild.features, newGuild.features);
-					if (uniques.length > 0) {
+					if (uniques.length) {
 						embed.addField(language.enabled, `${uniques.map(f => `${language.features[f]}\n`)}`);
 						oldGuild.change.push('featuresName');
 					}

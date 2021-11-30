@@ -24,7 +24,7 @@ module.exports = {
 		if (res && res.rowCount > 0) {
 			for (const thisrow of res.rows) {
 				const roles = thisrow.roles.map((role) => msg.guild.roles.cache.get(role) ? msg.guild.roles.cache.get(role) : null).filter((role) => !!role);
-				if (roles.length > 0) {
+				if (roles.length) {
 					embed.addField(`${thisrow.name}`, `${roles.length} ${msg.language.roles}`, true);
 					
 					let disabled = false;
@@ -186,8 +186,8 @@ module.exports = {
 						else add.push(id);
 					});
 
-					if (add.length > 0) await msg.member.roles.add(add, msg.language.autotypes.selfroles);
-					if (remove.length > 0) await msg.member.roles.remove(remove, msg.language.autotypes.selfroles);
+					if (add.length) await msg.member.roles.add(add, msg.language.autotypes.selfroles);
+					if (remove.length) await msg.member.roles.remove(remove, msg.language.autotypes.selfroles);
 
 					const replyEmbed = new Discord.MessageEmbed()
 						.setAuthor(

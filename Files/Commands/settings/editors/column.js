@@ -89,7 +89,7 @@ module.exports = {
 							.setLabel(msg.language.back)
 							.setEmoji(msg.client.constants.emotes.back)
 							.setStyle('DANGER');
-						if (answered.length > 0) done.setDisabled(false);
+						if (answered.length) done.setDisabled(false);
 						else done.setDisabled(true);
 						const embed = new Discord.MessageEmbed()
 							.setAuthor(
@@ -98,7 +98,7 @@ module.exports = {
 								msg.client.constants.standard.invite
 							)
 							.setDescription(`${msg.language.select[msg.property].desc}\n${msg.language.page}: \`${page}/${Math.ceil(+options.length / 25)}\``);
-						if (answered.length > 0) embed.addField(msg.language.selected, `${answered}`);
+						if (answered.length) embed.addField(msg.language.selected, `${answered}`);
 						if (page >= Math.ceil(+options.length / 25)) next.setDisabled(true);
 						else next.setDisabled(false);
 						if (page > 1) prev.setDisabled(false);
@@ -106,7 +106,7 @@ module.exports = {
 						const rows = msg.client.ch.buttonRower([[menu], [prev, next], [back, done]]);
 						clickButton.update({embeds: [embed], components: rows}).catch(() => {});
 					} else if (clickButton.customId == 'done') {
-						if (answered.length > 0) values[msg.assigner] = answered;
+						if (answered.length) values[msg.assigner] = answered;
 						msg.client.constants.commands.settings.editReq.push(answered);
 						messageCollector.stop('finished');
 						buttonsCollector.stop('finished');
@@ -140,7 +140,7 @@ module.exports = {
 							.setLabel(msg.language.back)
 							.setEmoji(msg.client.constants.emotes.back)
 							.setStyle('DANGER');
-						if (answered.length > 0) done.setDisabled(false);
+						if (answered.length) done.setDisabled(false);
 						else done.setDisabled(true);
 						const embed = new Discord.MessageEmbed()
 							.setAuthor(

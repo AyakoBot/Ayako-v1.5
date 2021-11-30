@@ -21,7 +21,7 @@ module.exports = {
 						const embed = new Discord.MessageEmbed()
 							.setColor(msg.client.ch.colorSelector(msg.guild ? msg.guild.me : null))
 							.setAuthor(msg.author.tag, msg.client.ch.displayAvatarURL(msg.author), msg.client.constants.standard.invite);
-						if (msg.content.length > 0) embed.setDescription(msg.content);
+						if (msg.content.length) embed.setDescription(msg.content);
 						if (isImageUrl(gif)) {
 							if (r.size == 'big') embed.setImage(gif);
 							else embed.setThumbnail(gif);

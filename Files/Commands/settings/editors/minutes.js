@@ -90,7 +90,7 @@ module.exports = {
 							.setLabel(msg.language.back)
 							.setEmoji(msg.client.constants.emotes.back)
 							.setStyle('DANGER');
-						if (answered.length > 0) done.setDisabled(false);
+						if (answered.length) done.setDisabled(false);
 						else done.setDisabled(true);
 						const embed = new Discord.MessageEmbed()
 							.setAuthor(
@@ -99,7 +99,7 @@ module.exports = {
 								msg.client.constants.standard.invite
 							)
 							.setDescription(`${msg.language.select[msg.property].desc}\n${msg.language.page}: \`${page}/${Math.ceil(+options.length / 25)}\``);
-						if (answered.length > 0) embed.addField(msg.language.selected, `${answered} `);
+						if (answered.length) embed.addField(msg.language.selected, `${answered} `);
 						if (page >= Math.ceil(+options.length / 25)) next.setDisabled(true);
 						else next.setDisabled(false);
 						if (page > 1) prev.setDisabled(false);
@@ -140,7 +140,7 @@ module.exports = {
 							.setLabel(msg.language.back)
 							.setEmoji(msg.client.constants.emotes.back)
 							.setStyle('DANGER');
-						if (answered.length > 0) done.setDisabled(false);
+						if (answered.length) done.setDisabled(false);
 						else done.setDisabled(true);
 						page = clickButton.message.embeds[0].description ? clickButton.message.embeds[0].description.split(/`+/)[1].split(/\/+/)[0] : 0;
 						const embed = new Discord.MessageEmbed()

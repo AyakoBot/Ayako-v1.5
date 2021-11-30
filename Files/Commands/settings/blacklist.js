@@ -6,7 +6,7 @@ module.exports = {
 	displayEmbed(msg, r) {
 		let wordText = '';
 		const wordArr = [];
-		if (r.words && r.words.length > 0) {
+		if (r.words && r.words.length) {
 			for (let i = 0; i < r.words.length; i++) {
 				wordArr[i] = `${r.words[i]}⠀`;
 				wordText += wordArr[i]+new Array(22 - wordArr[i].length).join(' ');
@@ -21,7 +21,7 @@ module.exports = {
 				},
 				{
 					name: msg.lan.words, 
-					value: `${r.words && r.words.length > 0 ? msg.client.ch.makeCodeBlock(wordText) : msg.language.none}`, 
+					value: `${r.words && r.words.length ? msg.client.ch.makeCodeBlock(wordText) : msg.language.none}`, 
 					inline: false
 				},
 				{
@@ -31,17 +31,17 @@ module.exports = {
 				},
 				{
 					name: msg.lan.bpchannelid,
-					value: `${r.bpchannelid && r.bpchannelid.length > 0 ? r.bpchannelid.map(id => ` <#${id}>`) : msg.language.none}`, 
+					value: `${r.bpchannelid && r.bpchannelid.length ? r.bpchannelid.map(id => ` <#${id}>`) : msg.language.none}`, 
 					inline: false
 				},
 				{
 					name: msg.lan.bpuserid, 
-					value: `${r.bpuserid && r.bpuserid.length > 0 ? r.bpuserid.map(id => ` <@${id}>`) : msg.language.none}`, 
+					value: `${r.bpuserid && r.bpuserid.length ? r.bpuserid.map(id => ` <@${id}>`) : msg.language.none}`, 
 					inline: false
 				},
 				{
 					name: msg.lan.bproleid,
-					value: `${r.bproleid && r.bproleid.length > 0 ? r.bproleid.map(id => ` <@&${id}>`) : msg.language.none}`, 
+					value: `${r.bproleid && r.bproleid.length ? r.bproleid.map(id => ` <@&${id}>`) : msg.language.none}`, 
 					inline: false
 				},
 				{

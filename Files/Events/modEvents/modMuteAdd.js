@@ -93,7 +93,7 @@ module.exports = {
 					.setTimestamp()
 					.addField(language.reason, `${reason}`)
 					.setFooter(msg.client.ch.stp(lan.footer, {user: executor, target: target}));
-				if (msg.logchannels && msg.logchannels.length > 0) msg.client.ch.send(msg.logchannels, embed);
+				if (msg.logchannels && msg.logchannels.length) msg.client.ch.send(msg.logchannels, embed);
 			} else {
 				if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.cross + lan.error + ` ${msg.client.ch.makeCodeBlock(err)}`);
 				else em.setDescription(msg.client.constants.emotes.cross + lan.error + ` ${msg.client.ch.makeCodeBlock(err)}`);
@@ -163,7 +163,7 @@ async function assingWarn(executor, target, reason, msg, answer, em, language, c
 		.setTimestamp()
 		.addField(language.reason, `${reason}`)
 		.setFooter(msg.client.ch.stp(lan.footer, { user: executor, target: target }));
-	if (msg.logchannels.length > 0) msg.client.ch.send(msg.logchannels, embed);	
+	if (msg.logchannels.length) msg.client.ch.send(msg.logchannels, embed);	
 	msg.client.ch.query('INSERT INTO warns (guildid, userid, reason, type, dateofwarn, warnedinchannelid, warnedbyuserid, warnedinchannelname, warnedbyusername, msgid) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);', [msg.guild.id, target.id, reason, 'Mute', Date.now(), msg.channel.id, executor.id, msg.channel.name, executor.username, msg.id]);
 	em.setDescription(msg.client.constants.emotes.tick + ' ' + msg.client.ch.stp(lan.success, { target: target }));
 	await answer.update({ embeds: [em], components: [] }).catch(() => { });

@@ -87,7 +87,7 @@ module.exports = {
 						.setColor(guild.me.displayHexColor)
 						.setAuthor(language.ready.giveaway.name, Constants.standard.image, Constants.standard.link)
 						.setFooter(language.ready.giveaway.endedAt);
-					if (users && users.length > 0) {
+					if (users && users.length) {
 						embed.addField(language.ready.giveaway.winners, users.map(w => `<@${w.id}>`).join(', '));
 						const winnerembed = new Discord.MessageEmbed()
 							.setColor(guild.me.displayHexColor)

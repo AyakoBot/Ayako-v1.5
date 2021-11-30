@@ -77,11 +77,11 @@ module.exports = {
 		async function doRoles(r) {
 			const member = msg.guild.members.cache.get(member.id);
 			if (member) {
-				if (r.addroles && r.addroles.length > 0) {
+				if (r.addroles && r.addroles.length) {
 					const roles = checkRoles(r.addroles, msg.guild);
 					await member.roles.add(roles, msg.language.autotypes.autopunish);
 				}
-				if (r.removeroles && r.removeroles.length > 0) {
+				if (r.removeroles && r.removeroles.length) {
 					const roles = checkRoles(r.removeroles, msg.guild);
 					await member.roles.remove(roles, msg.language.autotypes.autopunish);
 				}

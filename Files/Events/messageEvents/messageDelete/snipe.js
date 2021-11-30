@@ -18,7 +18,7 @@ module.exports = {
 						}
 					}
 				}
-				if (words.length > 0) return;
+				if (words.length) return;
 			}
 		}
 		const res2 = await ch.query('SELECT * FROM snipe WHERE channelid = $1;', [msg.channel.id]);
