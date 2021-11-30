@@ -4,7 +4,7 @@ const misc = require('../misc.js');
 module.exports = {
 	key: ['channel', 'channels', 'role', 'roles'],
 	async execute(msg, i, embed, values, answer, AddRemoveEditView, fail, srmEditing, comesFromSRM, answered) {
-		answered = msg.rows[msg.assigner];
+		if (!Array.isArray(msg.rows)) answered = msg.rows[msg.assigner];
 		const req = msg.guild[msg.compatibilityType].cache;
 		req.sort((a,b) => a.rawPosition - b.rawPosition);
 		const options = [];
