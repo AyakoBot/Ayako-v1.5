@@ -147,13 +147,13 @@ module.exports = {
 
 		if (attributes && !whitelist.includes(linkObject.baseURLhostname)) {
 			fs.appendFile('S:/Bots/ws/CDN/whitelisted.txt', `\n${linkObject.baseURLhostname}`, () => { });
-			msg.client.ch.send(msg.client.channels.cache.get(msg.client.constants.standard.trashLogChannel), { content: msg.client.ch.makeCodeBlock(linkObject.baseURLhostname) });
+			msg.client.ch.send(msg.client.channels.cache.get(msg.client.constants.standard.trashLogChannel), { content: msg.client.ch.makeCodeBlock(linkObject.baseURLhostname) + '\n' + msg.url });
 			if (check) whitelisted(msg, lan, embed);
 		}
 
 		if (attributes && !whitelist.includes(linkObject.hostname) && linkObject.hostname !== linkObject.baseURLhostname) {
 			fs.appendFile('S:/Bots/ws/CDN/whitelisted.txt', `\n${linkObject.hostname}`, () => { });
-			msg.client.ch.send(msg.client.channels.cache.get(msg.client.constants.standard.trashLogChannel), { content: msg.client.ch.makeCodeBlock(linkObject.hostname) });
+			msg.client.ch.send(msg.client.channels.cache.get(msg.client.constants.standard.trashLogChannel), { content: msg.client.ch.makeCodeBlock(linkObject.hostname) + '\n' + msg.url });
 			if (check) whitelisted(msg, lan, embed);
 		}
 		return;
@@ -166,7 +166,12 @@ const prepare = async (msg, lan, check) => {
 	const args = content.replace(/\n/g, ' ').replace(/https:\/\//g, ' https://').replace(/http:\/\//, ' http://').split(/ +/);
 	const links = [];
 	args.forEach((arg) => {
-		if (urlCheck.isUri(arg) && new URL(arg)?.hostname) links.push(arg);
+		if (
+			urlCheck.isUri(arg) 
+			&& arg.toLowerCase() !== 'http://' 
+			&& arg.toLowerCase() !== 'https://' 
+			&& new URL(arg)?.hostname
+		) links.push(arg);
 	});
 	const blocklist = getBlocklist();
 	const whitelist = await getWhitelist();
