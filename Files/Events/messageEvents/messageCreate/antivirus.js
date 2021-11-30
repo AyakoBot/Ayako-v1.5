@@ -602,7 +602,10 @@ const getSpamHaus = async (linkObject) => {
 
 const getURLage = async (linkObject) => {
   const ageInDays = await promptapi(linkObject);
-  if (ageInDays && +ageInDays < 7) return ageInDays;
+  if (ageInDays && +ageInDays < 7) {
+    return ageInDays;
+  }
+
   return false;
 };
 
