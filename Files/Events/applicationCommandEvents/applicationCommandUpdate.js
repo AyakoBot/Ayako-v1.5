@@ -9,7 +9,7 @@ module.exports = {
 		const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);
 		if (res && res.rowCount > 0) {
 			const channels = res.rows[0].applicationevents?.map((id) => typeof client.channels.cache.get(id)?.send == 'function' ? client.channels.cache.get(id) : null).filter(c => c !== null);
-			if (channels && channels.length > 0) {
+			if (channels && channels.length) {
 				const language = await ch.languageSelector(guild);
 				const lan = language.commandUpdate;
 				const con = Constants.commandUpdate;				
@@ -38,7 +38,7 @@ module.exports = {
 					newCommand.options.forEach(o => {embed.addField(language.newOptions, `${Discord.Util.escapeBold(language.type)}: ${Discord.Util.escapeInlineCode(language.command[o.type])}\n${language.name}: ${Discord.Util.escapeInlineCode(o.name)}\n${Discord.Util.escapeBold(language.description)}: ${Discord.Util.escapeInlineCode(o.description)}\n${o.required ? `${Discord.Util.escapeBold(language.required)}: ${Discord.Util.escapeInlineCode(o.required)}\n` : '', o.choices ? `${Discord.Util.escapeBold(language.choices)}: ${o.choices.map(e => `${Discord.Util.escapeInlineCode(e)}`)}` : ''}`);});
 				}
 				embed.setDescription(ch.stp(lan.description, {command: oldCommand ? oldCommand : newCommand})+ChangedKey.map(o => ` \`${o}\``));
-				if (embed.fields.length > 0) ch.send(channels, embed);
+				if (embed.fields.length) ch.send(channels, embed);
 			}
 		}
 	}

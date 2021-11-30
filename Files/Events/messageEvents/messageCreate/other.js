@@ -59,7 +59,7 @@ module.exports = {
 						const args = msg.content.split(/ +/);
 						const killedUser = msg.mentions.users.first();
 						let link;
-						for (let i = 0; args.length > 0; i++) {
+						for (let i = 0; args.length; i++) {
 							if (args[i].includes('https://').endsWith('.gif')) {
 								link = args[i];
 							}

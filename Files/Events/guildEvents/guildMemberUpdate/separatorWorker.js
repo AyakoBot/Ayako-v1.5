@@ -38,9 +38,9 @@ async function start(wd) {
 					}
 				}
 			});
-			if (giveThese.length > 0) member.giveTheseRoles = giveThese;
-			if (takeThese.length > 0) member.takeTheseRoles = takeThese;
-			if (takeThese.length > 0 || giveThese.length > 0) membersWithRoles.push(member);
+			if (giveThese.length) member.giveTheseRoles = giveThese;
+			if (takeThese.length) member.takeTheseRoles = takeThese;
+			if (takeThese.length || giveThese.length) membersWithRoles.push(member);
 			if (indexMember == obj.members.length-1) resolve(true);
 		});
 	});

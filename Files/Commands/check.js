@@ -34,8 +34,8 @@ module.exports = {
 				if (r.type == 'Warn') options.warns.push({ label: `${msg.language.number}: ${r.row_number} | ${dateOfWarn.getDate()} ${msg.language.months[dateOfWarn.getMonth()]} ${dateOfWarn.getFullYear()}`, value: `${r.row_number}` });
 				if (r.type == 'Mute') options.mutes.push({ label: `${msg.language.number}: ${r.row_number} | ${dateOfWarn.getDate()} ${msg.language.months[dateOfWarn.getMonth()]} ${dateOfWarn.getFullYear()}`, value: `${r.row_number}` });
 			});
-			if (res.rows.filter(row => row.type == 'Warn').length > 0) count.warns = res.rows.filter(row => row.type == 'Warn').length, msg.pages.warn = 1, msg.pages.warnMax = Math.ceil(options.warns.length / 25);
-			if (res.rows.filter(row => row.type == 'Mute').length > 0) count.mutes = res.rows.filter(row => row.type == 'Mute').length, msg.pages.mute = 1, msg.pages.muteMax = Math.ceil(options.mutes.length / 25);
+			if (res.rows.filter(row => row.type == 'Warn').length) count.warns = res.rows.filter(row => row.type == 'Warn').length, msg.pages.warn = 1, msg.pages.warnMax = Math.ceil(options.warns.length / 25);
+			if (res.rows.filter(row => row.type == 'Mute').length) count.mutes = res.rows.filter(row => row.type == 'Mute').length, msg.pages.mute = 1, msg.pages.muteMax = Math.ceil(options.mutes.length / 25);
 		}
 		const take = {warns: new Array, mutes: new Array};
 		for (let j = 0; j < 25 && j < options.warns.length; j++) take.warns.push(options.warns[j]);
@@ -101,9 +101,9 @@ module.exports = {
 				if (answered.warns.length == 0) embed.fields = [];
 				clickButton.update({ embeds: [embed], components: buttonOrder(take, msg, options, answered) }).catch(() => { });
 			} else if (clickButton.customId == 'done') {
-				if (answered.mutes.length > 0 || answered.warns.length > 0) {
+				if (answered.mutes.length || answered.warns.length) {
 					const embeds = [];
-					if (answered.warns.length > 0) {
+					if (answered.warns.length) {
 						const WarnTitleEmbed = new Discord.MessageEmbed()
 							.setTitle(msg.lan.warns)
 							.setColor('#ffffff');
@@ -125,7 +125,7 @@ module.exports = {
 					let muterole;
 					const resM = await msg.client.ch.query('SELECT * FROM guildsettings WHERE guildid = $1;', [msg.guild.id]);
 					if (resM && resM > 0) muterole = msg.guild.roles.cache.find(r => r.id == resM.rows[0].muteroleid);
-					if (answered.mutes.length > 0) {
+					if (answered.mutes.length) {
 						const MuteTitleEmbed = new Discord.MessageEmbed()
 							.setTitle(msg.lan.mutes)
 							.setColor('#ffffff');
@@ -178,13 +178,13 @@ module.exports = {
 
 function buttonOrder(take, msg, options, answered) {
 	const rawRows = [];
-	if (take.warns.length > 0) {
+	if (take.warns.length) {
 		const warnMenu = new Discord.MessageSelectMenu()
 			.setCustomId('warnMenu')
 			.addOptions(take.warns)
 			.setMinValues(1)
 			.setMaxValues(take.warns.length < 8 ? take.warns.length : 8)
-			.setPlaceholder(`${answered.warns.length > 0 ? answered.warns.sort((a, b) => a - b) : msg.lan.selWarns}`);
+			.setPlaceholder(`${answered.warns.length ? answered.warns.sort((a, b) => a - b) : msg.lan.selWarns}`);
 		const warnNext = new Discord.MessageButton()
 			.setCustomId('warnNext')
 			.setLabel(msg.language.next)
@@ -201,13 +201,13 @@ function buttonOrder(take, msg, options, answered) {
 		if (msg.pages.warn > 1) warnPrev.setDisabled(false);
 		else warnPrev.setDisabled(true);
 	}
-	if (take.mutes.length > 0) {
+	if (take.mutes.length) {
 		const muteMenu = new Discord.MessageSelectMenu()
 			.setCustomId('muteMenu')
 			.addOptions(take.mutes)
 			.setMinValues(1)
 			.setMaxValues(take.mutes.length < 8 ? take.mutes.length : 8)
-			.setPlaceholder(`${answered.mutes.length > 0 ? answered.mutes.sort((a, b) => a - b) : msg.lan.selMutes}`);
+			.setPlaceholder(`${answered.mutes.length ? answered.mutes.sort((a, b) => a - b) : msg.lan.selMutes}`);
 		const muteNext = new Discord.MessageButton()
 			.setCustomId('muteNext')
 			.setLabel(msg.language.next)
@@ -224,12 +224,12 @@ function buttonOrder(take, msg, options, answered) {
 		if (msg.pages.mute > 1) mutePrev.setDisabled(false);
 		else mutePrev.setDisabled(true);
 	}
-	if (take.warns.length > 0 || take.mutes.length > 0) {
+	if (take.warns.length || take.mutes.length) {
 		const done = new Discord.MessageButton()
 			.setCustomId('done')
 			.setLabel(msg.language.done)
 			.setStyle('PRIMARY');
-		if (answered.warns.length > 0 || answered.mutes.length > 0) done.setDisabled(false);
+		if (answered.warns.length || answered.mutes.length) done.setDisabled(false);
 		else done.setDisabled(true);
 		rawRows.push([done]);
 	}

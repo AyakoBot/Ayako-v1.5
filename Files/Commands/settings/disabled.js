@@ -38,12 +38,12 @@ module.exports = {
 				},
 				{
 					name: msg.lan.commands, 
-					value: `${r.commands && r.commands.length > 0 ? r.commands.map(id => ` \`${id}\``) : msg.language.none}`, 
+					value: `${r.commands && r.commands.length ? r.commands.map(id => ` \`${id}\``) : msg.language.none}`, 
 					inline: false
 				},
 				{
 					name: msg.lan.channels, 
-					value: `${r.channels && r.channels.length > 0 ? r.channels.map(id => ` <#${id}>`) : msg.language.none}`, 
+					value: `${r.channels && r.channels.length ? r.channels.map(id => ` <#${id}>`) : msg.language.none}`, 
 					inline: false
 				},
 				{
@@ -53,22 +53,22 @@ module.exports = {
 				},
 				{
 					name: msg.lan.bpuserid, 
-					value: `${r.bpuserid && r.bpuserid.length > 0 ? r.bpuserid.map(id => ` <@${id}>`) : msg.language.none}`, 
+					value: `${r.bpuserid && r.bpuserid.length ? r.bpuserid.map(id => ` <@${id}>`) : msg.language.none}`, 
 					inline: false
 				},
 				{
 					name: msg.lan.bluserid, 
-					value: `${r.bluserid && r.bluserid.length > 0 ? r.bluserid.map(id => ` <@${id}>`) : msg.language.none}`, 
+					value: `${r.bluserid && r.bluserid.length ? r.bluserid.map(id => ` <@${id}>`) : msg.language.none}`, 
 					inline: false
 				},
 				{
 					name: msg.lan.bproleid, 
-					value: `${r.bproleid && r.bproleid.length > 0 ? r.bproleid.map(id => ` <@&${id}>`) : msg.language.none}`, 
+					value: `${r.bproleid && r.bproleid.length ? r.bproleid.map(id => ` <@&${id}>`) : msg.language.none}`, 
 					inline: false
 				},
 				{
 					name: msg.lan.blroleid, 
-					value: `${r.blroleid && r.blroleid.length > 0 ? r.blroleid.map(id => ` <@&${id}>`) : msg.language.none}`, 
+					value: `${r.blroleid && r.blroleid.length ? r.blroleid.map(id => ` <@&${id}>`) : msg.language.none}`, 
 					inline: false
 				},
 			);

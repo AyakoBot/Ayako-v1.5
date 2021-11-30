@@ -53,7 +53,7 @@ module.exports = {
 				}
 			}
 		}
-		if (caches?.length > 0) return caches;
+		if (caches?.length) return caches;
 		else return;
 	}
 };

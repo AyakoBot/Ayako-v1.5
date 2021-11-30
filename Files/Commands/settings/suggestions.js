@@ -18,7 +18,7 @@ module.exports = {
 				},
 				{
 					name: msg.lan.approverroleid, 
-					value: `${r.approverroleid && r.approverroleid.length > 0 ? r.approverroleid.map(id => ` <@&${id}>`) : msg.language.none}`, 
+					value: `${r.approverroleid && r.approverroleid.length ? r.approverroleid.map(id => ` <@&${id}>`) : msg.language.none}`, 
 					inline: false
 				},
 				{
@@ -33,12 +33,12 @@ module.exports = {
 				},
 				{
 					name: msg.lan.bluserid, 
-					value: `${r.bluserid && r.bluserid.length > 0 ? r.bluserid.map(id => ` <@${id}>`) : msg.language.none}`, 
+					value: `${r.bluserid && r.bluserid.length ? r.bluserid.map(id => ` <@${id}>`) : msg.language.none}`, 
 					inline: false
 				},
 				{
 					name: msg.lan.blroleid, 
-					value: `${r.blroleid && r.blroleid.length > 0 ? r.blroleid.map(id => ` <@&${id}>`) : msg.language.none}`, 
+					value: `${r.blroleid && r.blroleid.length ? r.blroleid.map(id => ` <@&${id}>`) : msg.language.none}`, 
 					inline: false
 				},
 

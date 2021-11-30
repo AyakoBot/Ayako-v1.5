@@ -18,17 +18,17 @@ module.exports = {
 				},
 				{
 					name: msg.lan.blchannelid, 
-					value: `${r.blchannelid && r.blchannelid.length > 0 ? r.blchannelid.map(id => ` <#${id}>`) : msg.language.none}`, 
+					value: `${r.blchannelid && r.blchannelid.length ? r.blchannelid.map(id => ` <#${id}>`) : msg.language.none}`, 
 					inline: false
 				},
 				{
 					name: msg.lan.blroleid, 
-					value: `${r.blroleid && r.blroleid.length > 0 ? r.blroleid.map(id => ` <#${id}>`) : msg.language.none}`, 
+					value: `${r.blroleid && r.blroleid.length ? r.blroleid.map(id => ` <#${id}>`) : msg.language.none}`, 
 					inline: false
 				},
 				{
 					name: msg.lan.bluserid, 
-					value: `${r.bluserid && r.bluserid.length > 0 ? r.bluserid.map(id => ` <#${id}>`) : msg.language.none}`, 
+					value: `${r.bluserid && r.bluserid.length ? r.bluserid.map(id => ` <#${id}>`) : msg.language.none}`, 
 					inline: false
 				},
 				{

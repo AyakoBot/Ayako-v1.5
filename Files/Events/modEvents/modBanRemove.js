@@ -38,7 +38,7 @@ module.exports = {
 					.setTimestamp()
 					.addField(language.reason, `${reason}`)
 					.setFooter(msg.client.ch.stp(lan.footer, {user: executor, target: target}));
-				if (msg.logchannels && msg.logchannels.length > 0) msg.client.ch.send(msg.logchannels, embed);
+				if (msg.logchannels && msg.logchannels.length) msg.client.ch.send(msg.logchannels, embed);
 			} else {
 				m?.delete().catch(()  => {});
 				if (mexisted) em.fields.pop(), em.addField('\u200b', msg.client.constants.emotes.cross + lan.error + ` ${msg.client.ch.makeCodeBlock(err)}`);

@@ -13,7 +13,7 @@ module.exports = {
 				},
 				{
 					name: msg.lan.channel,
-					value: `${r.channel && r.channel.length > 0 ? ` <#${r.channel}>` : msg.language.none}`,
+					value: `${r.channel && r.channel.length ? ` <#${r.channel}>` : msg.language.none}`,
 					inline: false
 				},
 				{

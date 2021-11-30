@@ -93,7 +93,7 @@ module.exports = {
 					msg.client.constants.emotes.settingsLink, 
 					msg.client.constants.standard.invite
 				)								
-				.setDescription(msg.client.ch.stp(msg.lan.edit.oneTimeRunner.stats, {members: membersWithRoles && membersWithRoles.length > 0 ? membersWithRoles.length : '0', roles: membersWithRoles && membersWithRoles.length > 0 ? (membersWithRoles.length * 3) : '0', finishTime: `<t:${Math.floor(Date.now()/1000) + (membersWithRoles ? membersWithRoles.length*3 : 0)}:F> (<t:${Math.floor(Date.now()/1000) + (membersWithRoles ? membersWithRoles.length*3 : 0)}:R>)`}));
+				.setDescription(msg.client.ch.stp(msg.lan.edit.oneTimeRunner.stats, {members: membersWithRoles && membersWithRoles.length ? membersWithRoles.length : '0', roles: membersWithRoles && membersWithRoles.length ? (membersWithRoles.length * 3) : '0', finishTime: `<t:${Math.floor(Date.now()/1000) + (membersWithRoles ? membersWithRoles.length*3 : 0)}:F> (<t:${Math.floor(Date.now()/1000) + (membersWithRoles ? membersWithRoles.length*3 : 0)}:R>)`}));
 			msg.m.edit({embeds: [embed], components: []}).catch(() => {});
 		}
 		msg.client.ch.query('UPDATE roleseparatorsettings SET stillrunning = $1, duration = $3, startat = $4, channelid = $5, messageid = $6 WHERE guildid = $2;', [true, msg.guild.id, Math.floor(Date.now()/1000) + (membersWithRoles ? membersWithRoles.length*3 : 0), Date.now(), msg.channel.id, msg.m.id]);
@@ -116,7 +116,7 @@ module.exports = {
 		res.rows.forEach(r => {
 			if (r.stoprole) obj.separators.push({separator: {id: r.separator, rawPosition: guild.roles.cache.get(r.separator)?.rawPosition}, stoprole: {id: r.stoprole, rawPosition: guild.roles.cache.get(r.stoprole)?.rawPosition}});
 			else obj.separators.push({separator: {id: r.separator, rawPosition: guild.roles.cache.get(r.separator)?.rawPosition}});
-			if (r.roles && r.roles.length > 0) obj.roles.forEach(roleid => {
+			if (r.roles && r.roles.length) obj.roles.forEach(roleid => {
 				const role = guild.roles.cache.get(roleid);
 				obj.rowroles.push({id: role.id, rawPosition: role.rawPosition});
 			});
@@ -137,7 +137,7 @@ module.exports = {
 		return output;
 	},
 	async assinger(msg, membersWithRoles, embed) {
-		if (membersWithRoles.length > 0) {
+		if (membersWithRoles.length) {
 			if (!msg.client.separatorAssigner) msg.client.separatorAssigner = new Object;
 			membersWithRoles.forEach((raw, index) => {
 				if (!msg.client.separatorAssigner[msg.guild.id]) msg.client.separatorAssigner[msg.guild.id] = new Object;
@@ -148,7 +148,7 @@ module.exports = {
 					if (member) {
 						const roles = giveRoles ? [...member._roles, ...giveRoles] : member._roles;
 						if (takeRoles) takeRoles.forEach((r) => roles.splice(roles.indexOf(r), 1));
-						if ((giveRoles && giveRoles.length > 0) || (takeRoles && takeRoles.length > 0)) await msg.client.eris.editGuildMember(msg.guild.id, member.user.id, { roles: roles }, msg.language.autotypes.separators).catch(() => {});
+						if ((giveRoles && giveRoles.length) || (takeRoles && takeRoles.length)) await msg.client.eris.editGuildMember(msg.guild.id, member.user.id, { roles: roles }, msg.language.autotypes.separators).catch(() => {});
 					}
 					if (index == (membersWithRoles.length-1) && msg.lastTime) {
 						embed

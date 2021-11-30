@@ -38,27 +38,27 @@ module.exports = {
 				},
 				{
 					name: msg.lan.roles,
-					value: `${r.roles && r.roles.length > 0 ? r.roles.map(id => ` <@&${id}>`) : msg.language.none}`,
+					value: `${r.roles && r.roles.length ? r.roles.map(id => ` <@&${id}>`) : msg.language.none}`,
 					inline: false
 				},
 				{
 					name: msg.lan.blacklistedusers,
-					value: `${r.blacklistedusers && r.blacklistedusers.length > 0 ? r.blacklistedusers.map(id => ` <@${id}>`) : msg.language.none}`,
+					value: `${r.blacklistedusers && r.blacklistedusers.length ? r.blacklistedusers.map(id => ` <@${id}>`) : msg.language.none}`,
 					inline: false
 				},
 				{
 					name: msg.lan.blacklistedroles,
-					value: `${r.blacklistedroles && r.blacklistedroles.length > 0 ? r.blacklistedroles.map(id => ` <@&${id}>`) : msg.language.none}`,
+					value: `${r.blacklistedroles && r.blacklistedroles.length ? r.blacklistedroles.map(id => ` <@&${id}>`) : msg.language.none}`,
 					inline: false
 				},
 				{
 					name: msg.lan.whitelistedusers,
-					value: `${r.whitelistedusers && r.whitelistedusers.length > 0 ? r.whitelistedusers.map(id => ` <@${id}>`) : msg.language.none}`,
+					value: `${r.whitelistedusers && r.whitelistedusers.length ? r.whitelistedusers.map(id => ` <@${id}>`) : msg.language.none}`,
 					inline: false
 				},
 				{
 					name: msg.lan.whitelistedroles,
-					value: `${r.whitelistedroles && r.whitelistedroles.length > 0 ? r.whitelistedroles.map(id => ` <@&${id}>`) : msg.language.none}`,
+					value: `${r.whitelistedroles && r.whitelistedroles.length ? r.whitelistedroles.map(id => ` <@&${id}>`) : msg.language.none}`,
 					inline: false
 				},
 			);

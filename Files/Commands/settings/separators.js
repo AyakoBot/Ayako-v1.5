@@ -89,7 +89,7 @@ module.exports = {
 				},
 				{
 					name: `${msg.language.affected} ${affected} ${msg.language.roles}`,
-					value: `${`${affectedRoles.map(r => ` ${r}`)}`.length > 1020 ? msg.language.tooManyRoles : `${affectedRoles.map(r => ` ${r}`)}`.length > 0 ? affectedRoles.map(r => ` ${r}`) : `${msg.language.none}`}`,
+					value: `${`${affectedRoles.map(r => ` ${r}`)}`.length > 1020 ? msg.language.tooManyRoles : `${affectedRoles.map(r => ` ${r}`)}`.length ? affectedRoles.map(r => ` ${r}`) : `${msg.language.none}`}`,
 					inline: false
 				}
 			);
@@ -122,7 +122,7 @@ module.exports = {
 				},
 				{
 					name: msg.lan.roles, 
-					value: `${r.roles && r.roles.length > 0 ? r.roles.map(id => ` <@&${id}>`) : msg.language.none}`, 
+					value: `${r.roles && r.roles.length ? r.roles.map(id => ` <@&${id}>`) : msg.language.none}`, 
 					inline: false
 				},
 				{
@@ -196,6 +196,6 @@ async function checker(msg, res) {
 	});
 	for (const s of sepend) {await msg.client.ch.query('DELETE FROM roleseparator WHERE guildid = $1 AND separator = $2;', [msg.guild.id, s]);}
 	for (const s of stopend) {await msg.client.ch.query('DELETE FROM roleseparator WHERE guildid = $1 AND stoprole = $2;', [msg.guild.id, s]);}
-	if (sepend.length > 0 || stopend.length > 0) return true;
+	if (sepend.length || stopend.length) return true;
 	else return false;
 }

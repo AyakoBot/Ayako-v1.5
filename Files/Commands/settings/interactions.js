@@ -10,13 +10,13 @@ module.exports = {
 			if (res && res.rowCount > 0) {
 				let r = res.rows[0];
 				const embed = new Discord.MessageEmbed()
-					.setDescription('**'+msg.lan.block+'**\n'+(r.block && r.block.length > 0 ? `${r.block.map(b => ` \`${b}\``)}`.length > 0 ? `${r.block.map(b => ` \`${b}\``)}` : msg.language.none : msg.language.none))
+					.setDescription('**'+msg.lan.block+'**\n'+(r.block && r.block.length ? `${r.block.map(b => ` \`${b}\``)}`.length ? `${r.block.map(b => ` \`${b}\``)}` : msg.language.none : msg.language.none))
 					.addFields(
 						{name: msg.lan.size, value: `${r.size ? msg.client.constants.emotes.small+' '+msg.lan.small : msg.client.constants.emotes.big+' '+msg.lan.big}`, inline: false},
 					)
 					.setColor(msg.client.constants.commands.settings.color)
 					.setAuthor(msg.lan.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite);
-				if (msg.member.permissions.has(new Discord.Permissions(this.perm))) embed.setDescription(msg.client.ch.stp(msg.lan.howToEdit, {prefix: msg.client.constants.standard.prefix})+'\n\n**'+msg.lan.block+'**\n'+(r.block && r.block.length > 0 ? `${r.block.map(b => ` \`${b}\``)}`.length > 0 ? `${r.block.map(b => ` \`${b}\``)}` : msg.language.none : msg.language.none));
+				if (msg.member.permissions.has(new Discord.Permissions(this.perm))) embed.setDescription(msg.client.ch.stp(msg.lan.howToEdit, {prefix: msg.client.constants.standard.prefix})+'\n\n**'+msg.lan.block+'**\n'+(r.block && r.block.length ? `${r.block.map(b => ` \`${b}\``)}`.length ? `${r.block.map(b => ` \`${b}\``)}` : msg.language.none : msg.language.none));
 				msg.m ? msg.m.edit({embeds: [embed]}) : msg.client.ch.reply(msg, embed);
 				if (msg.member.permissions.has(new Discord.Permissions(this.perm))) {
 					const collected = await msg.channel.awaitMessages({filter: m => m.author.id == msg.author.id, max: 1, time: 30000});
@@ -35,7 +35,7 @@ module.exports = {
 		if (res && res.rowCount > 0) {
 			let r = res.rows[0];
 			const embed = new Discord.MessageEmbed()
-				.setDescription('__'+msg.lan2.howToEdit+'__\n\n'+msg.client.ch.stp(msg.lan2.block.name, {trigger: msg.lan2.block.trigger.includes('`') ? msg.lan2.block.trigger : msg.lan2.block.trigger.map(f => `\`${f}\``)})+'\n'+(r.block && r.block.length > 0 ? `${r.block.map(b => ` \`${b}\``)}`.length > 0 ? `${r.block.map(b => ` \`${b}\``)}` : msg.language.none : msg.language.none))
+				.setDescription('__'+msg.lan2.howToEdit+'__\n\n'+msg.client.ch.stp(msg.lan2.block.name, {trigger: msg.lan2.block.trigger.includes('`') ? msg.lan2.block.trigger : msg.lan2.block.trigger.map(f => `\`${f}\``)})+'\n'+(r.block && r.block.length ? `${r.block.map(b => ` \`${b}\``)}`.length ? `${r.block.map(b => ` \`${b}\``)}` : msg.language.none : msg.language.none))
 				.addFields(
 					{name: msg.client.ch.stp(msg.lan2.size.name, {trigger: msg.lan2.size.trigger.includes('`') ? msg.lan2.size.trigger : msg.lan2.size.trigger.map(f => `\`${f}\``)}), value: `${r.size ? msg.client.constants.emotes.small+' '+msg.lan.small : msg.client.constants.emotes.big+' '+msg.lan.big}`, inline: false},
 				)
@@ -99,21 +99,21 @@ module.exports = {
 							if (!file) return this.notValid(msg, m, name[i]);
 							else {
 								files.push(file);
-								if (r.block && r.block.length > 0 && r.block.includes(arg)) r.block.splice(`'${r.block.indexOf(arg)}'`, 1);
+								if (r.block && r.block.length && r.block.includes(arg)) r.block.splice(`'${r.block.indexOf(arg)}'`, 1);
 								else newWords.push(`'${arg}'`);
 							}
 						});
 						if (files.length < 1) return this.notValid(msg, m, name[i]);
 						if (r.block) for (let i = 0; i < r.block.length; i++) {if (!r.block[i].startsWith('\'') && !r.block[i].endsWith('\'')) r.block[i] = `'${r.block[i]}'`;}
-						if (r.block && r.block.length > 0) r.block = r.block.concat(newWords);
+						if (r.block && r.block.length) r.block = r.block.concat(newWords);
 						else r.block = newWords;
-						if (r.block.length > 0) msg.client.ch.query(`UPDATE interactions SET ${name[i]} = ARRAY[${r.block}] WHERE guildid = '${msg.guild.id}';`);
+						if (r.block.length) msg.client.ch.query(`UPDATE interactions SET ${name[i]} = ARRAY[${r.block}] WHERE guildid = '${msg.guild.id}';`);
 						else msg.client.ch.query(`UPDATE interactions SET ${name[i]} = null WHERE guildid = '${msg.guild.id}';`);
 						collected.first().delete().catch(() => {});
 						const endEmbed = new Discord.MessageEmbed()
 							.setAuthor(msg.lan2.author, msg.client.constants.emotes.settingsLink, msg.client.constants.standard.invite)
 							.setDescription(msg.client.ch.stp(msg.lan.done, {loading: msg.client.constants.emotes.loading}))								
-							.addField(msg.lan.block, `${r[name[i]] && r[name[i]] !== [] ? `${r[name[i]].map(word => ` \`${word}\``)}`.length > 0 ? `${r[name[i]].map(word => `\`${word}\``)}`.replace(/\n/g, '') : msg.language.none : msg.language.none}`);
+							.addField(msg.lan.block, `${r[name[i]] && r[name[i]] !== [] ? `${r[name[i]].map(word => ` \`${word}\``)}`.length ? `${r[name[i]].map(word => `\`${word}\``)}`.replace(/\n/g, '') : msg.language.none : msg.language.none}`);
 						m.edit({embeds: [endEmbed]}).catch(() => {});
 						const index = msg.args.indexOf(msg.language.edit);
 						msg.args.splice(index, 1);

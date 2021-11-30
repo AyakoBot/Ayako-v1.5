@@ -39,13 +39,13 @@ module.exports = {
 						else answered.push(id);
 					}));
 					message.delete().catch(() => {});
-					if (answered.length > 0) {
+					if (answered.length) {
 						if (Array.isArray(answered)) {
 							answered.forEach(id => { 
 								if (values[msg.assigner] && values[msg.assigner].includes(id)) {
 									const index = values[msg.assigner].indexOf(id);
 									values[msg.assigner].splice(index, 1);
-								} else if (values[msg.assigner] && values[msg.assigner].length > 0) values[msg.assigner].push(id);
+								} else if (values[msg.assigner] && values[msg.assigner].length) values[msg.assigner].push(id);
 								else values[msg.assigner] = [id];
 							});
 						} else values[msg.assigner] = answered;	

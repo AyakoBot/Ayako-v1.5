@@ -40,12 +40,12 @@ module.exports = {
 			)
 			.addField(
 				msg.lan.pingusers,
-				`${r.pingusers && r.pingusers.length > 0 ? r.pingusers.map(id => ` <@${id}>`) : msg.language.none}`,
+				`${r.pingusers && r.pingusers.length ? r.pingusers.map(id => ` <@${id}>`) : msg.language.none}`,
 				false
 			)
 			.addField(
 				msg.lan.pingroles,
-				`${r.pingroles && r.pingroles.length > 0 ? r.pingroles.map(id => ` <@&${id}>`) : msg.language.none}`,
+				`${r.pingroles && r.pingroles.length ? r.pingroles.map(id => ` <@&${id}>`) : msg.language.none}`,
 				false
 			)
 			.addField(

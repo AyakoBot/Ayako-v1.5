@@ -36,7 +36,7 @@ module.exports = {
 			.setCustomId('list')
 			.setStyle('SECONDARY')
 			.setLabel(msg.language.List)
-			.setDisabled(embed.fields.length > 0 ? false : true);
+			.setDisabled(embed.fields.length ? false : true);
 		let rows;
 		if (msg.file.perm && !msg.member.permissions.has(new Discord.Permissions(msg.file.perm)) && msg.author.id !== '318453143476371456') rows = msg.client.ch.buttonRower([[list]]);
 		else rows = msg.client.ch.buttonRower([[edit, list]]);
@@ -96,12 +96,12 @@ module.exports = {
 			.setCustomId('remove')
 			.setStyle('DANGER')
 			.setLabel(msg.language.remove)
-			.setDisabled(embed.fields.length > 0 ? false : true);
+			.setDisabled(embed.fields.length ? false : true);
 		const list = new Discord.MessageButton()
 			.setCustomId('list')
 			.setStyle('SECONDARY')
 			.setLabel(msg.language.List)
-			.setDisabled(embed.fields.length > 0 ? false : true);
+			.setDisabled(embed.fields.length ? false : true);
 		const row = msg.client.ch.buttonRower([[add, remove, list]]);
 		if (answer) await answer.update({embeds: [embed], components: row}).catch(() => {});
 		else if (msg.m) await msg.m.edit({embeds: [embed], components: row}).catch(() => {});
@@ -215,7 +215,7 @@ module.exports = {
 						.setLabel(msg.language.back)
 						.setEmoji(msg.client.constants.emotes.back)
 						.setStyle('DANGER');
-					if (answered.length > 0) done.setDisabled(false);
+					if (answered.length) done.setDisabled(false);
 					else done.setDisabled(true);
 					const embed = new Discord.MessageEmbed()
 						.setAuthor(
@@ -224,7 +224,7 @@ module.exports = {
 							msg.client.constants.standard.invite
 						)
 						.setDescription(`${msg.language.select.id.desc}\n${msg.language.page}: \`${page}/${Math.ceil(+options.length / 25)}\``);
-					if (answered.length > 0) embed.addField(msg.language.selected, `${answered}`);
+					if (answered.length) embed.addField(msg.language.selected, `${answered}`);
 					if (page >= Math.ceil(+options.length / 25)) next.setDisabled(true);
 					else next.setDisabled(false);
 					if (page > 1) prev.setDisabled(false);
@@ -265,7 +265,7 @@ module.exports = {
 						.setLabel(msg.language.back)
 						.setEmoji(msg.client.constants.emotes.back)
 						.setStyle('DANGER');
-					if (answered.length > 0) done.setDisabled(false);
+					if (answered.length) done.setDisabled(false);
 					else done.setDisabled(true);
 					page = clickButton.message.embeds[0].description ? clickButton.message.embeds[0].description.split(/`+/)[1].split(/\/+/)[0] : 0;
 					const embed = new Discord.MessageEmbed()
@@ -454,7 +454,7 @@ async function repeater(msg, i, embed, values, answer, AddRemoveEditView, fail, 
 				newSettings[name] = value;
 			});
 			newSettings[msg.assigner] = values[msg.assigner];
-			if (Array.isArray(oldSettings) && oldSettings.length > 0) {
+			if (Array.isArray(oldSettings) && oldSettings.length) {
 				Promise.all(oldSettings.map(id => {
 					if (values[msg.assigner].includes(id)) values[msg.assigner].splice(values[msg.assigner].indexOf(id), 1);
 					else values[msg.assigner].push(id);
@@ -490,7 +490,7 @@ async function editer(msg, values, fail, answer, AddRemoveEditView, comesFromSRM
 		newRow[name] = value;
 	});
 	newRow[msg.assigner] = values[msg.assigner];
-	if (Array.isArray(oldSettings) && oldSettings.length > 0) {
+	if (Array.isArray(oldSettings) && oldSettings.length) {
 		Promise.all(oldSettings.map(id => {
 			if (values[msg.assigner].includes(id)) values[msg.assigner].splice(values[msg.assigner].indexOf(id), 1);
 			else values[msg.assigner].push(id);
@@ -499,12 +499,12 @@ async function editer(msg, values, fail, answer, AddRemoveEditView, comesFromSRM
 	if (values[msg.assigner] !== undefined && values[msg.assigner] !== null) {
 		if (comesFromSRM) {
 			if (Array.isArray(values[msg.assigner])) {
-				if (values[msg.assigner].length > 0) await msg.client.ch.query(`UPDATE ${msg.client.constants.commands.settings.tablenames[msg.file.name][0]} SET ${msg.assigner} = $1 WHERE guildid = $2;`, [values[msg.assigner], msg.guild.id]); 
+				if (values[msg.assigner].length) await msg.client.ch.query(`UPDATE ${msg.client.constants.commands.settings.tablenames[msg.file.name][0]} SET ${msg.assigner} = $1 WHERE guildid = $2;`, [values[msg.assigner], msg.guild.id]); 
 				else await msg.client.ch.query(`UPDATE ${msg.client.constants.commands.settings.tablenames[msg.file.name][0]} SET ${msg.assigner} = $1 WHERE guildid = $2;`, [null, msg.guild.id]); 
 			} else await msg.client.ch.query(`UPDATE ${msg.client.constants.commands.settings.tablenames[msg.file.name][0]} SET ${msg.assigner} = $1 WHERE guildid = $2;`, [values[msg.assigner], msg.guild.id]); 
 		} else {
 			if (Array.isArray(values[msg.assigner])) {
-				if (values[msg.assigner].length > 0) await msg.client.ch.query(`UPDATE ${msg.client.constants.commands.settings.tablenames[msg.file.name][0]} SET ${msg.assigner} = $1 WHERE id = $2;`, [values[msg.assigner], values.id]); 
+				if (values[msg.assigner].length) await msg.client.ch.query(`UPDATE ${msg.client.constants.commands.settings.tablenames[msg.file.name][0]} SET ${msg.assigner} = $1 WHERE id = $2;`, [values[msg.assigner], values.id]); 
 				else await msg.client.ch.query(`UPDATE ${msg.client.constants.commands.settings.tablenames[msg.file.name][0]} SET ${msg.assigner} = $1 WHERE id = $2;`, [null, values.id]); 
 			} else await msg.client.ch.query(`UPDATE ${msg.client.constants.commands.settings.tablenames[msg.file.name][0]} SET ${msg.assigner} = $1 WHERE id = $2;`, [values[msg.assigner], values.id]); 
 		}

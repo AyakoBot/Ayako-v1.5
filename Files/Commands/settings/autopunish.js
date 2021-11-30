@@ -57,12 +57,12 @@ module.exports = {
 			},
 			{
 				name: msg.lan.addroles,
-				value: `${r.addroles && r.addroles.length > 0 ? r.addroles.map(id => ` <@&${id}>`) : msg.language.none}`,
+				value: `${r.addroles && r.addroles.length ? r.addroles.map(id => ` <@&${id}>`) : msg.language.none}`,
 				inline: false
 			},
 			{
 				name: msg.lan.removeroles,
-				value: `${r.removeroles && r.removeroles.length > 0 ? r.removeroles.map(id => ` <@&${id}>`) : msg.language.none}`,
+				value: `${r.removeroles && r.removeroles.length ? r.removeroles.map(id => ` <@&${id}>`) : msg.language.none}`,
 				inline: false
 			},
 			{

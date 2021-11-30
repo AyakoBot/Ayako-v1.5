@@ -10,7 +10,7 @@ module.exports = {
 			res.rows.forEach((row) => {
 				if (guild.roles.cache.get(row.roleid)) roleArray.push(row.roleid);
 			});
-			if (roleArray.length > 0) member.roles.add(roleArray).catch(() => {});
+			if (roleArray.length) member.roles.add(roleArray).catch(() => {});
 		}   
 	}
 };

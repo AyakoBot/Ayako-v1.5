@@ -26,7 +26,7 @@ module.exports = {
 		if (!newSettings) type = 'deleted';
 		if (newSettings && oldSettings) type = 'edited';
 		if (type == 'edited') {
-			const lengthVar = Object.entries(oldSettings).length > 0 ? oldSettings : newSettings;
+			const lengthVar = Object.entries(oldSettings).length ? oldSettings : newSettings;
 			for (let i = 0; i < Object.entries(lengthVar).length; i++) {
 				if (Object.entries(oldSettings)[i][1] !== Object.entries(newSettings)[i][1]) changed.push([[Object.entries(oldSettings)[i][0], Object.entries(oldSettings)[i][1]], [Object.entries(newSettings)[i][0], Object.entries(newSettings)[i][1]]]);
 			}
@@ -35,7 +35,7 @@ module.exports = {
 				.setTimestamp()
 				.setAuthor(msg.client.ch.stp(msg.language.selfLog.author, {setting: msg.lan.type}))
 				.setDescription(!oldSettings.id ? msg.client.ch.stp(msg.language.selfLog.description, {msg: msg, setting: msg.file.name}) : msg.client.ch.stp(msg.language.selfLog.descriptionwithID, {msg: msg, setting: msg.file.name, id: newSettings.id}));
-			if (changed.length > 0) {
+			if (changed.length) {
 				changed.forEach(change => {
 					if ((Array.isArray(change[0][1]) && Array.isArray(change[1][1])) && change[0][1].equals(change[1][1])) return;
 					embed.addFields(
@@ -67,7 +67,7 @@ module.exports = {
 				.setTimestamp()
 				.setAuthor(msg.client.ch.stp(msg.language.selfLog.author, {setting: msg.lan.type}))
 				.setDescription(!oldSettings.id ? msg.client.ch.stp(msg.language.selfLog.description, {msg: msg, setting: msg.file.name}) : msg.client.ch.stp(msg.language.selfLog.descriptionwithID, {msg: msg, setting: msg.file.name, id: newSettings.id}));
-			if (changed.length > 0) {
+			if (changed.length) {
 				changed.forEach(change => {
 					if ((Array.isArray(change[0][1]) && Array.isArray(change[1][1])) && change[0][1].equals(change[1][1])) return;
 					embed.addFields(
