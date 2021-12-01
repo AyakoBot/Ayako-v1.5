@@ -1,0 +1,46 @@
+{
+    "settings": {
+    "import/resolver": {
+        "node": {
+            "extensions": [".js", ".jsx", ".ts", ".tsx"],
+                "paths": ["./"]
+        }
+    }
+},
+    "env": {
+    "browser": true,
+        "es2021": true
+},
+    "extends": [
+    "airbnb-base",
+    "plugin:prettier/recommended"
+],
+    "parserOptions": {
+    "ecmaVersion": 2021
+},
+    "rules": {
+        "linebreak-style": "off",
+        "import/extensions": [
+        "error",
+        "ignorePackages",
+        {
+            "js": "never",
+            "jsx": "never",
+            "ts": "never",
+            "tsx": "never"
+        }
+    ],
+        "no-use-before-define": "off",
+        "no-console": "off",
+        "no-bitwise": "off",
+        "import/prefer-default-export": "off",
+        "camelcase": "off",
+        "prettier/prettier": [
+            "warn",
+            {
+                "singleQuote": true,
+                "semi": true
+            }
+        ]
+    }
+}
