@@ -175,7 +175,7 @@ module.exports = {
         thisrow.isBlacklisted = isBlacklisted;
       });
 
-      for (let i = 0; i < res.rowCount && i < 25; i++) {
+      for (let i = 0; i < res.rowCount && i < 25; i += 1) {
         const r = res.rows[i];
         Objects.cOptions.push({
           label: r.name,
@@ -185,7 +185,7 @@ module.exports = {
         });
       }
 
-      for (let i = 0; i < Objects.cTake.length && i < 25; i++) {
+      for (let i = 0; i < Objects.cTake.length && i < 25; i += 1) {
         Objects.cTake.push(Objects.cOptions[i]);
       }
 
