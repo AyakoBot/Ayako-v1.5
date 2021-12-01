@@ -502,7 +502,7 @@ const makeFullLinks = async (links) => {
 
   const makeAndPushLinkObj = async (link) => {
     const url = new URL(link);
-    const [href, contentType] = new Promise((resolve) => {
+    const [href, contentType] = await new Promise((resolve) => {
       request(
         { method: "HEAD", url, followAllRedirects: true },
         (_, response) => {
