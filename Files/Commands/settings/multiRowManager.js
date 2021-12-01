@@ -56,7 +56,7 @@ module.exports = {
 					messageCollector.stop();
 					this.list(msg, clickButton, 'view', []);
 				}
-			} else msg.client.ch.notYours(clickButton);
+			} else msg.client.ch.notYours(clickButton, msg);
 		});
 		buttonsCollector.on('end', (collected, reason) => {if (reason == 'time') msg.m.edit({embeds: [embed], components: []});});
 		messageCollector.on('collect', (message) => {
@@ -338,7 +338,7 @@ async function listdisplay(msg, answer, id, AddRemoveEditView, fail, values) {
 				messageCollector.stop();
 				return require('./singleRowManager').redirecter(msg, clickButton, 'edit', fail, values, true);
 			}
-		} else msg.client.ch.notYours(clickButton);
+		} else msg.client.ch.notYours(clickButton, msg);
 	});
 	buttonsCollector.on('end', (collected, reason) => {if (reason == 'time') msg.m.edit({embeds: [embed], components: []});});
 	messageCollector.on('collect', (message) => {
