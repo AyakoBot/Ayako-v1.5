@@ -30,21 +30,16 @@ module.exports = {
 			: msg.language.antivirus.guild;
 
 		if (check) {
-			await prepare(msg, lan, check);
-			return;
+			return prepare(msg, lan, check);
 		}
 
 		const res = await msg.client.ch.query(
-			'SELECT * FROM antivirus WHERE guildid = $1;',
+			'SELECT * FROM antivirus WHERE guildid = $1 AND active = true;',
 			[msg.guild.id]
 		);
 
 		if (res && res.rowCount > 0) {
-			if (res.rows[0].active !== true) {
-				return;
-			}
-
-			await prepare(msg, lan, check);
+			return prepare(msg, lan, check);
 		}
 	},
 	async run(
@@ -88,16 +83,16 @@ module.exports = {
 		}
 
 		const isFile = !!(
-			linkObject.contentType.includes('video') ||
-      linkObject.contentType.includes('image') ||
-      linkObject.contentType.includes('audio')
+			linkObject.contentType?.includes('video') ||
+			linkObject.contentType?.includes('image') ||
+			linkObject.contentType?.includes('audio')
 		);
 
 		if (
 			(whitelist.includes(linkObject.baseURLhostname) &&
-        linkObject.hostname.endsWith(linkObject.baseURLhostname)) ||
-      (whitelist.includes(linkObject.hostname) && !isFile) ||
-      (isFile && whitelistCDN.includes(linkObject.baseURLhostname))
+			linkObject.hostname.endsWith(linkObject.baseURLhostname)) ||
+			(whitelist.includes(linkObject.hostname) && !isFile) ||
+			(isFile && whitelistCDN.includes(linkObject.baseURLhostname))
 		) {
 			if (check) {
 				await whitelisted(msg, lan, embed);
@@ -109,8 +104,8 @@ module.exports = {
 
 		if (
 			blocklist.includes(linkObject.baseURLhostname) ||
-      blacklist.includes(linkObject.baseURLhostname) ||
-      spamHausIncluded
+			blacklist.includes(linkObject.baseURLhostname) ||
+			spamHausIncluded
 		) {
 			if (!check) {
 				includedBadLink = true;
@@ -120,7 +115,7 @@ module.exports = {
 		}
 
 		const urlIsNew = await getURLage(linkObject);
-		if (!Number.isNaN(urlIsNew)) {
+		if (urlIsNew && !Number.isNaN(urlIsNew)) {
 			if (!check) {
 				includedBadLink = true;
 			}
@@ -165,7 +160,7 @@ module.exports = {
 		const attributes = urlsAttributes;
 		if (
 			attributes &&
-      `${+attributes.creation_date}000` > Date.now() - 604800000
+			`${+attributes.creation_date}000` > Date.now() - 604800000
 		) {
 			if (!check) {
 				includedBadLink = true;
@@ -502,50 +497,35 @@ const getWhitelistCDN = async () => {
 };
 
 const makeFullLinks = async (links) => {
+	console.log(links);
 	const fullLinks = [];
-
-	const promises = links.map((link) => () => {
-		const url = new URL(link);
-		const [href, contentType] = new Promise((resolve) => {
+	for (let i = 0; i < links.length; i++) {
+		const url = new URL(links[i]);
+		const [href, contentType] = await new Promise((resolve) => {
 			request(
 				{ method: 'HEAD', url, followAllRedirects: true },
 				(_, response) => {
-					resolve([
-						response.request.href,
-						response.headers ? response.headers['content-type'] : null,
-					]);
-				}
+					resolve([response?.request?.href, response?.headers ? response?.headers['content-type'] : null]);
+				},
 			);
 		});
-
-		const object = {
-			contentType,
-			href,
-			url: `${
-				href || (url.href ? url.href : `${url.protocol}//${url.hostname}`)
-			}`,
-			hostname: url.hostname,
-		};
-
+		const object = { contentType: contentType, href: href, url: `${href ? href : url.href ? url.href : `${url.protocol}//${url.hostname}`}`, hostname: url.hostname };
 		fullLinks.push(object);
-	});
+	}
 
-	await Promise.all(promises);
-
-	return fullLinks.map((linkObject) => {
+	fullLinks.forEach((linkObject) => {
 		const urlParts = new URL(linkObject.url).hostname.split('.');
 		const slicedURL = urlParts
 			.slice(0)
-			.slice(-(urlParts.length === 4 ? 3 : 2))
+			.slice(-(urlParts.length == 4 ? 3 : 2))
 			.join('.');
-		const newLink = `${new URL(linkObject.url).protocol}//${slicedURL}`;
-
-		return {
-			...linkObject,
-			baseURL: newLink,
-			baseURLhostname: new URL(newLink).hostname,
-		};
+		const newUrl = `${new URL(linkObject.url).protocol}//${slicedURL}`;
+		linkObject.baseURL = newUrl;
+		linkObject.baseURLhostname = new URL(newUrl).hostname;
 	});
+
+	console.log(fullLinks);
+	return fullLinks;
 };
 
 const checkIfWebsiteExists = async (linkObject) => {
@@ -554,19 +534,36 @@ const checkIfWebsiteExists = async (linkObject) => {
 	}`;
 
 	const [hrefRes, urlRes, baseUrlRes, hostnameRes] = await Promise.all([
-		axios.get(linkObject.href).catch((e) => { return e; }),
-		axios.get(linkObject.url).catch((e) => { return e; }),
-		axios.get(linkObject.baseURL).catch((e) => { return e; }),
-		axios.get(hostname).catch((e) => { return e; }),
+		linkObject.href ? 
+			axios
+				.get(linkObject.href)
+				.catch((e) => { return e; }) 
+			: null,
+		linkObject.url ? 
+			axios
+				.get(linkObject.url)
+				.catch((e) => { return e; })
+			: null,
+		linkObject.baseURL ? 
+			axios
+				.get(linkObject.baseURL)
+				.catch((e) => { return e; })
+			: null,
+		hostname ? 
+			axios
+				.get(hostname)
+				.catch((e) => { return e; })
+			: null
+
 	]);
 
 	let exists = false;
 
 	if (
 		(hrefRes && hrefRes.code !== 'ENOTFOUND') ||
-    (urlRes && urlRes.code !== 'ENOTFOUND') ||
-    (baseUrlRes && baseUrlRes.code !== 'ENOTFOUND') ||
-    (hostnameRes && hostnameRes.code !== 'ENOTFOUND')
+		(urlRes && urlRes.code !== 'ENOTFOUND') ||
+		(baseUrlRes && baseUrlRes.code !== 'ENOTFOUND') ||
+		(hostnameRes && hostnameRes.code !== 'ENOTFOUND')
 	) {
 		exists = true;
 	}
