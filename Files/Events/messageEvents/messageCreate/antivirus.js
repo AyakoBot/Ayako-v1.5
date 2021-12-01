@@ -333,10 +333,10 @@ const checkIfWebsiteExists = async (linkObject) => {
 	const hostname = new URL(linkObject.url).protocol + '//' + linkObject.hostname;
 
 	const [hrefRes, urlRes, baseUrlRes, hostnameRes] = await Promise.all([
-		axios.get(linkObject.href).catch(() => { }),
-		axios.get(linkObject.url).catch(() => { }),
-		axios.get(linkObject.baseURL).catch(() => { }),
-		axios.get(hostname).catch(() => { })
+		axios.get(linkObject.href).catch((e) => { return e; }),
+		axios.get(linkObject.url).catch((e) => { return e; }),
+		axios.get(linkObject.baseURL).catch((e) => { return e; }),
+		axios.get(hostname).catch((e) => { return e; })
 	]);
 
 	let exists = false;
