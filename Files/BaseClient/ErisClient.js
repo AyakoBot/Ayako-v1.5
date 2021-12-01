@@ -1,6 +1,6 @@
+const Eris = require('eris');
 const auth = require('./auth.json');
 
-const eris = require('eris');
-const Eris = new eris(`Bot ${auth.token}`);
+const eris = new Eris(`Bot ${auth.token}`);
 
-module.exports = Eris;
+module.exports = eris;
