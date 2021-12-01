@@ -497,7 +497,6 @@ const getWhitelistCDN = async () => {
 };
 
 const makeFullLinks = async (links) => {
-	console.log(links);
 	const fullLinks = [];
 	for (let i = 0; i < links.length; i++) {
 		const url = new URL(links[i]);
@@ -524,7 +523,6 @@ const makeFullLinks = async (links) => {
 		linkObject.baseURLhostname = new URL(newUrl).hostname;
 	});
 
-	console.log(fullLinks);
 	return fullLinks;
 };
 
