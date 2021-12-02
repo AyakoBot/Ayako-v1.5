@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 
 module.exports = {
-  perm: null,
+  perm: 32n,
   type: 2,
-  async execute(msg) {},
+  hasNoSettings: true,
 };
