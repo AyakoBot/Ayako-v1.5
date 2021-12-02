@@ -517,7 +517,6 @@
         "MANAGE_WEBHOOKS": "Manage Webhooks",
         "MANAGE_EMOJIS_AND_STICKERS": "Manage Emojis and Stickers",
         "USE_APPLICATION_COMMANDS": "Use Application Commands",
-        "REQUEST_SPEAK": "Request to Speak",
         "ALL_GUILD": "All Guild Permissions",
         "ALL_TEXT": "All Text Channel Permissions",
         "ALL_VOICE": "All Voice Channel Permissions",
