@@ -1,8 +1,9 @@
+/* eslint-disable global-require */
 module.exports = {
-	async execute(guild) {
-		require('./log.js').execute(guild);
-		require('./nitro.js').execute(guild);
-		require('./role.js').execute(guild);
-		require('./welcome.js').execute(guild);
-	}
+  async execute(guild) {
+    require('./log').execute(guild);
+    require('./nitro').execute(guild);
+    require('./role').execute(guild);
+    require('./welcome').execute(guild);
+  },
 };
