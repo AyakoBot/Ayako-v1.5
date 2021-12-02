@@ -1,11 +1,6 @@
-/* eslint-disable import/no-dynamic-require */
-/* eslint-disable no-nested-ternary */
-/* eslint-disable no-shadow */
-/* eslint-disable global-require */
-/* eslint-disable no-param-reassign */
-const fs = require('fs');
 const Discord = require('discord.js');
-const misc = require('./misc');
+const fs = require('fs');
+const misc = require('./misc.js');
 
 module.exports = {
   execute(msg, answer) {
@@ -29,7 +24,7 @@ module.exports = {
     if (res && res.rowCount > 0) {
       res.rows = res.rows.sort((a, b) => a.id - b.id);
       msg.rows = res.rows;
-      if (msg.file.mmrEmbed[Symbol.toStringTag] === 'AsyncFunction')
+      if (msg.file.mmrEmbed[Symbol.toStringTag] == 'AsyncFunction')
         embed = await msg.file.mmrEmbed(msg, res.rows);
       else
         embed =
@@ -67,12 +62,12 @@ module.exports = {
     const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
     const messageCollector = msg.channel.createMessageCollector({ time: 60000 });
     buttonsCollector.on('collect', (clickButton) => {
-      if (clickButton.user.id === msg.author.id) {
-        if (clickButton.customId === 'edit') {
+      if (clickButton.user.id == msg.author.id) {
+        if (clickButton.customId == 'edit') {
           buttonsCollector.stop();
           messageCollector.stop();
           this.edit(msg, clickButton, {});
-        } else if (clickButton.customId === 'list') {
+        } else if (clickButton.customId == 'list') {
           buttonsCollector.stop();
           messageCollector.stop();
           this.list(msg, clickButton, 'view', []);
@@ -80,16 +75,14 @@ module.exports = {
       } else msg.client.ch.notYours(clickButton, msg);
     });
     buttonsCollector.on('end', (collected, reason) => {
-      if (reason === 'time') msg.m.edit({ embeds: [embed], components: [] });
+      if (reason == 'time') msg.m.edit({ embeds: [embed], components: [] });
     });
     messageCollector.on('collect', (message) => {
       if (
-        message.author.id === msg.author.id &&
-        message.content.toLowerCase() === msg.language.cancel
-      ) {
+        message.author.id == msg.author.id &&
+        message.content.toLowerCase() == msg.language.cancel
+      )
         return misc.aborted(msg, [messageCollector, buttonsCollector]);
-      }
-      return null;
     });
   },
   async edit(msg, answer, values, AddRemoveEditView, fail) {
@@ -123,7 +116,7 @@ module.exports = {
     if (res && res.rowCount > 0) {
       res.rows = res.rows.sort((a, b) => a.id - b.id);
       msg.rows = res.rows;
-      if (msg.file.mmrEmbed[Symbol.toStringTag] === 'AsyncFunction')
+      if (msg.file.mmrEmbed[Symbol.toStringTag] == 'AsyncFunction')
         embed = await msg.file.mmrEmbed(msg, res.rows);
       else
         embed =
@@ -159,18 +152,18 @@ module.exports = {
     if (answer) await answer.update({ embeds: [embed], components: row }).catch(() => {});
     else if (msg.m) await msg.m.edit({ embeds: [embed], components: row }).catch(() => {});
     else msg.m = await msg.client.ch.reply(msg, { embeds: [embed], components: row });
-    if (!msg.m) return null;
+    if (!msg.m) return;
     const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
     const messageCollector = msg.channel.createMessageCollector({ time: 60000 });
     buttonsCollector.on('collect', (clickButton) => {
-      if (clickButton.user.id === msg.author.id) {
-        if (clickButton.customId === 'add') {
+      if (clickButton.user.id == msg.author.id) {
+        if (clickButton.customId == 'add') {
           CollectorEnder([buttonsCollector, messageCollector]);
           repeater(msg, 0, null, {}, clickButton, 'add');
-        } else if (clickButton.customId === 'remove') {
+        } else if (clickButton.customId == 'remove') {
           CollectorEnder([buttonsCollector, messageCollector]);
           repeater(msg, 0, null, {}, clickButton, 'remove');
-        } else if (clickButton.customId === 'list') {
+        } else if (clickButton.customId == 'list') {
           CollectorEnder([buttonsCollector, messageCollector]);
           this.list(msg, clickButton, 'edit', []);
         }
@@ -178,17 +171,14 @@ module.exports = {
     });
     messageCollector.on('collect', (message) => {
       if (
-        message.author.id === msg.author.id &&
-        message.content.toLowerCase() === msg.language.cancel
-      ) {
+        message.author.id == msg.author.id &&
+        message.content.toLowerCase() == msg.language.cancel
+      )
         return misc.aborted(msg, [messageCollector, buttonsCollector]);
-      }
-      return null;
     });
     buttonsCollector.on('end', (collected, reason) => {
-      if (reason === 'time') msg.client.ch.collectorEnd(msg);
+      if (reason == 'time') msg.client.ch.collectorEnd(msg);
     });
-    return null;
   },
   async list(msg, answer, AddRemoveEditView, fail) {
     let r = [];
@@ -203,7 +193,7 @@ module.exports = {
     if (res && res.rowCount > 0) r = res.rows;
     else return misc.aborted(msg);
     const options = [];
-    for (let j = 0; j < r.length; j += 1) {
+    for (let j = 0; j < r.length; j++) {
       options.push({
         label: `${msg.language.number}: ${r[j].id} | ${
           r[j][msg.client.constants.commands.settings.setupQueries[msg.file.name].removeIdent]
@@ -247,7 +237,7 @@ module.exports = {
       });
     }
     const take = [];
-    for (let j = 0; j < options.length; j += 1) {
+    for (let j = 0; j < options.length; j++) {
       take.push(options[j]);
     }
     const menu = new Discord.MessageSelectMenu()
@@ -293,14 +283,14 @@ module.exports = {
     const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
     const messageCollector = msg.channel.createMessageCollector({ time: 60000 });
     buttonsCollector.on('collect', (clickButton) => {
-      if (clickButton.user.id === msg.author.id) {
-        if (clickButton.customId === 'next' || clickButton.customId === 'prev') {
+      if (clickButton.user.id == msg.author.id) {
+        if (clickButton.customId == 'next' || clickButton.customId == 'prev') {
           let indexLast;
           let indexFirst;
-          for (let j = 0; options.length > j; j += 1) {
+          for (let j = 0; options.length > j; j++) {
             if (
               options[j] &&
-              options[j].value ===
+              options[j].value ==
                 clickButton.message.components[0].components[0].options[
                   clickButton.message.components[0].components[0].options.length - 1
                 ].value
@@ -308,19 +298,19 @@ module.exports = {
               indexLast = j;
             if (
               options[j] &&
-              options[j].value === clickButton.message.components[0].components[0].options[0].value
+              options[j].value == clickButton.message.components[0].components[0].options[0].value
             )
               indexFirst = j;
           }
           take.splice(0, take.length);
-          if (clickButton.customId === 'next')
-            for (let j = indexLast + 1; j < indexLast + 26; j += 1) {
+          if (clickButton.customId == 'next')
+            for (let j = indexLast + 1; j < indexLast + 26; j++) {
               if (options[j]) {
                 take.push(options[j]);
               }
             }
-          if (clickButton.customId === 'prev')
-            for (let j = indexFirst - 25; j < indexFirst; j += 1) {
+          if (clickButton.customId == 'prev')
+            for (let j = indexFirst - 25; j < indexFirst; j++) {
               if (options[j]) {
                 take.push(options[j]);
               }
@@ -328,8 +318,7 @@ module.exports = {
           let page = clickButton.message.embeds[0].description
             ? clickButton.message.embeds[0].description.split(/`+/)[1].split(/\/+/)[0]
             : 0;
-          if (clickButton.customId === 'next') page += 1;
-          else page -= 1;
+          clickButton.customId == 'next' ? page++ : page--;
           const menu = new Discord.MessageSelectMenu()
             .setCustomId('id')
             .addOptions(take)
@@ -344,7 +333,7 @@ module.exports = {
           const prev = new Discord.MessageButton()
             .setCustomId('prev')
             .setLabel(msg.language.prev)
-            .setDisabled(page === 1)
+            .setDisabled(page == 1)
             .setStyle('DANGER');
           const done = new Discord.MessageButton()
             .setCustomId('done')
@@ -375,17 +364,17 @@ module.exports = {
           else prev.setDisabled(true);
           const rows = msg.client.ch.buttonRower([[menu], [prev, next], [back, done]]);
           clickButton.update({ embeds: [embed], components: rows }).catch(() => {});
-        } else if (clickButton.customId === 'done') {
+        } else if (clickButton.customId == 'done') {
           messageCollector.stop();
           buttonsCollector.stop();
           values.id = answered;
-          msg.r = msg.rows.find((re) => re.id === values.id);
+          msg.r = msg.rows.find((r) => r.id == values.id);
           gotID(values.id, clickButton, AddRemoveEditView, fail);
-        } else if (clickButton.customId === 'id') {
+        } else if (clickButton.customId == 'id') {
           let page = clickButton.message.embeds[0].description
             ? clickButton.message.embeds[0].description.split(/`+/)[1].split(/\/+/)[0]
             : 0;
-          [answered] = clickButton.values;
+          answered = clickButton.values[0];
           const menu = new Discord.MessageSelectMenu()
             .setCustomId('id')
             .addOptions(take)
@@ -400,7 +389,7 @@ module.exports = {
           const prev = new Discord.MessageButton()
             .setCustomId('prev')
             .setLabel(msg.language.prev)
-            .setDisabled(page === 1)
+            .setDisabled(page == 1)
             .setStyle('DANGER');
           const done = new Discord.MessageButton()
             .setCustomId('done')
@@ -416,7 +405,7 @@ module.exports = {
           page = clickButton.message.embeds[0].description
             ? clickButton.message.embeds[0].description.split(/`+/)[1].split(/\/+/)[0]
             : 0;
-          const eembed = new Discord.MessageEmbed()
+          const embed = new Discord.MessageEmbed()
             .setAuthor(
               msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
               msg.client.constants.emotes.settingsLink,
@@ -428,38 +417,35 @@ module.exports = {
               )}\``,
             )
             .addField(msg.language.selected, `${answered}`);
-          const thisrows = msg.client.ch.buttonRower([[menu], [prev, next], [back, done]]);
-          clickButton.update({ embeds: [eembed], components: thisrows }).catch(() => {});
-        } else if (clickButton.customId === 'back') {
+          const rows = msg.client.ch.buttonRower([[menu], [prev, next], [back, done]]);
+          clickButton.update({ embeds: [embed], components: rows }).catch(() => {});
+        } else if (clickButton.customId == 'back') {
           messageCollector.stop();
           buttonsCollector.stop();
-          if (AddRemoveEditView === 'edit') return module.exports.edit(msg, clickButton, {});
+          if (AddRemoveEditView == 'edit') return module.exports.edit(msg, clickButton, {});
           return module.exports.display(msg, clickButton);
         }
       } else msg.client.ch.notYours(clickButton, msg);
-      return null;
     });
     messageCollector.on('collect', (message) => {
       if (
-        message.author.id === msg.author.id &&
-        message.content.toLowerCase() === msg.language.cancel
-      ) {
+        message.author.id == msg.author.id &&
+        message.content.toLowerCase() == msg.language.cancel
+      )
         return misc.aborted(msg, [messageCollector, buttonsCollector]);
-      }
-      return null;
     });
     buttonsCollector.on('end', (collected, reason) => {
-      if (reason === 'time') msg.m.edit({ embeds: [embed], components: [] });
+      if (reason == 'time') msg.m.edit({ embeds: [embed], components: [] });
     });
     async function gotID(id, answer, AddRemoveEditView, fail) {
-      const resss = await msg.client.ch.query(
+      const res = await msg.client.ch.query(
         `SELECT * FROM ${
           msg.client.constants.commands.settings.tablenames[msg.file.name][0]
         } WHERE id = $1 AND guildid = $2;`,
         [id, msg.guild.id],
       );
-      if (resss && resss.rowCount > 0) {
-        if (AddRemoveEditView === 'edit')
+      if (res && res.rowCount > 0) {
+        if (AddRemoveEditView == 'edit')
           require('./singleRowManager').redirecter(
             msg,
             answer,
@@ -468,11 +454,10 @@ module.exports = {
             values,
             values.id ? 'redirecter' : null,
           );
-        else if (AddRemoveEditView === 'view')
+        else if (AddRemoveEditView == 'view')
           listdisplay(msg, answer, id, AddRemoveEditView, fail, values);
       }
     }
-    return null;
   },
 };
 
@@ -484,7 +469,7 @@ async function listdisplay(msg, answer, id, AddRemoveEditView, fail, values) {
     } WHERE id = $1;`,
     [id],
   );
-  if (res && res.rowCount > 0) [r] = res.rows;
+  if (res && res.rowCount > 0) r = res.rows[0];
   const embed =
     typeof msg.file.displayEmbed === 'function' ? msg.file.displayEmbed(msg, r) : misc.noEmbed(msg);
   embed
@@ -516,13 +501,13 @@ async function listdisplay(msg, answer, id, AddRemoveEditView, fail, values) {
   const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
   const messageCollector = msg.channel.createMessageCollector({ time: 60000 });
   buttonsCollector.on('collect', (clickButton) => {
-    if (clickButton.user.id === msg.author.id) {
-      if (clickButton.customId === 'back') {
+    if (clickButton.user.id == msg.author.id) {
+      if (clickButton.customId == 'back') {
         buttonsCollector.stop();
         messageCollector.stop();
         return module.exports.display(msg, clickButton);
       }
-      if (clickButton.customId === 'edit') {
+      if (clickButton.customId == 'edit') {
         buttonsCollector.stop();
         messageCollector.stop();
         return require('./singleRowManager').redirecter(
@@ -535,18 +520,13 @@ async function listdisplay(msg, answer, id, AddRemoveEditView, fail, values) {
         );
       }
     } else msg.client.ch.notYours(clickButton, msg);
-    return null;
   });
   buttonsCollector.on('end', (collected, reason) => {
-    if (reason === 'time') msg.m.edit({ embeds: [embed], components: [] });
+    if (reason == 'time') msg.m.edit({ embeds: [embed], components: [] });
   });
   messageCollector.on('collect', (message) => {
-    if (
-      message.author.id === msg.author.id &&
-      message.content.toLowerCase() === msg.language.cancel
-    )
+    if (message.author.id == msg.author.id && message.content.toLowerCase() == msg.language.cancel)
       return misc.aborted(msg, [messageCollector, buttonsCollector]);
-    return null;
   });
 }
 
@@ -561,9 +541,9 @@ async function repeater(
   srmEditing,
   comesFromSRM,
 ) {
-  if (!Array.isArray(fail)) fail = [];
-  if (typeof values !== 'object' || !values || values.lenght === 0) values = {};
-  if (i === 0) {
+  if (!Array.isArray(fail)) fail = new Array();
+  if (typeof values !== 'object' || !values || values.lenght == 0) values = new Object();
+  if (i == 0) {
     embed = new Discord.MessageEmbed().setAuthor(
       msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
       msg.client.constants.emotes.settingsLink,
@@ -572,12 +552,12 @@ async function repeater(
   }
   msg.client.constants.commands.settings.edit[msg.file.name].id = 'id';
   if (srmEditing)
-    [, msg.property] = Object.entries(
-      msg.client.constants.commands.settings.edit[msg.file.name],
-    ).find((a) => [a[0]] === srmEditing);
+    msg.property = Object.entries(msg.client.constants.commands.settings.edit[msg.file.name]).find(
+      (a) => a[0] == srmEditing[0],
+    )[1];
   else
     msg.property =
-      AddRemoveEditView === 'edit'
+      AddRemoveEditView == 'edit'
         ? msg.client.constants.commands.settings.editReq[i]
         : msg.client.constants.commands.settings.edit[msg.file.name][
             msg.client.constants.commands.settings.setupQueries[msg.file.name][AddRemoveEditView][i]
@@ -592,7 +572,7 @@ async function repeater(
         ? `I'm searching for ${srmEditing[0]} in ${
             msg.client.constants.commands.settings.edit[msg.file.name]
           }`
-        : AddRemoveEditView === 'edit'
+        : AddRemoveEditView == 'edit'
         ? `I'm searching for ${
             msg.client.constants.commands.settings.editReq[i]
           } in ${JSON.stringify(msg.client.constants.commands.settings.edit[msg.file.name])}`
@@ -601,9 +581,9 @@ async function repeater(
           } in ${JSON.stringify(msg.client.constants.commands.settings.edit[msg.file.name])}`,
     );
   if (
-    (srmEditing && i === 0) ||
+    (srmEditing && i == 0) ||
     (!srmEditing &&
-      (AddRemoveEditView === 'edit'
+      (AddRemoveEditView == 'edit'
         ? i < msg.client.constants.commands.settings.editReq.length
         : i <
           msg.client.constants.commands.settings.setupQueries[msg.file.name][AddRemoveEditView]
@@ -613,36 +593,35 @@ async function repeater(
     msg.compatibilityType = msg.property.includes('s') ? msg.property : `${msg.property}s`;
     msg.assigner = comesFromSRM
       ? Object.entries(msg.client.constants.commands.settings.edit[msg.file.name]).find(
-          (a) => a[0] === srmEditing[0],
+          (a) => a[0] == srmEditing[0],
         )[0]
-      : AddRemoveEditView === 'edit'
+      : AddRemoveEditView == 'edit'
       ? Object.entries(msg.client.constants.commands.settings.edit[msg.file.name]).find(
           (a) =>
-            a[1] === msg.client.constants.commands.settings.editReq[i] ||
-            a[0] === msg.client.constants.commands.settings.editReq[i],
+            a[1] == msg.client.constants.commands.settings.editReq[i] ||
+            a[0] == msg.client.constants.commands.settings.editReq[i],
         )[0]
-      : AddRemoveEditView === 'add'
+      : AddRemoveEditView == 'add'
       ? Object.entries(msg.client.constants.commands.settings.edit[msg.file.name]).find(
           (a) =>
-            a[1] === msg.client.constants.commands.settings.setupQueries[msg.file.name].add[i] ||
-            a[0] === msg.client.constants.commands.settings.setupQueries[msg.file.name].add[i],
+            a[1] == msg.client.constants.commands.settings.setupQueries[msg.file.name].add[i] ||
+            a[0] == msg.client.constants.commands.settings.setupQueries[msg.file.name].add[i],
         )[0]
       : Object.entries(msg.client.constants.commands.settings.edit[msg.file.name]).find(
           (a) =>
-            a[1] ===
+            a[1] ==
               msg.client.constants.commands.settings.setupQueries[msg.file.name].removeReq[i] ||
-            a[0] ===
-              msg.client.constants.commands.settings.setupQueries[msg.file.name].removeReq[i],
+            a[0] == msg.client.constants.commands.settings.setupQueries[msg.file.name].removeReq[i],
         )[0];
     const answered = [];
     const files = fs
       .readdirSync('./Files/Commands/settings/editors')
       .filter((file) => file.endsWith('.js'));
     const editors = new Discord.Collection();
-    files.forEach((file) => {
+    for (const file of files) {
       const editorfile = require(`./editors/${file}`);
       editors.set(editorfile.key, editorfile);
-    });
+    }
     const editor = editors.find((f) => f.key.includes(msg.property));
     const returned = await editor.execute(
       msg,
@@ -656,7 +635,7 @@ async function repeater(
       comesFromSRM,
       answered,
     );
-    if (Array.isArray(returned) && returned[0] === 'repeater')
+    if (Array.isArray(returned) && returned[0] == 'repeater')
       repeater(
         returned[1],
         returned[2],
@@ -668,8 +647,9 @@ async function repeater(
         returned[8],
         returned[9],
       );
+    else return;
   } else if (['add', 'remove', 'edit'].includes(AddRemoveEditView)) {
-    if (AddRemoveEditView === 'add') {
+    if (AddRemoveEditView == 'add') {
       const newSettings = {};
       Object.entries(values).forEach((arr) => {
         const name = arr[0];
@@ -681,7 +661,7 @@ async function repeater(
       for (
         let j = 0;
         j < msg.client.constants.commands.settings.setupQueries[msg.file.name].vals[0].length;
-        j += 1
+        j++
       ) {
         valDeclaration += `$${j + 1}, `;
       }
@@ -694,13 +674,13 @@ async function repeater(
       );
       if (res && res.rowCount > 0) values.id = res.rowCount + 1;
       else values.id = 1;
-      const vals = [];
+      const vals = new Array();
       for (
         let j = 0;
         j <
         msg.client.constants.commands.settings.setupQueries[msg.file.name].cols[0].split(/, +/)
           .length;
-        j += 1
+        j++
       ) {
         const assign =
           msg.client.constants.commands.settings.setupQueries[msg.file.name].vals[0][j];
@@ -715,11 +695,22 @@ async function repeater(
             j
           ];
         if (valObj) {
-          if (Array.isArray(valObj)) vals.push(valObj);
-          else if (typeof assign === 'string') vals.push(msg.client.ch.stp(assign, { values }));
-          else vals.push(assign);
-        } else if (valName) vals.push(assign);
+          if (Array.isArray(valObj)) {
+            console.log(1, valObj);
+            vals.push(valObj);
+          } else if (typeof assign === 'string') {
+            console.log(2, assign);
+            vals.push(msg.client.ch.stp(assign, { values }));
+          } else {
+            console.log(3, assign);
+            vals.push(assign);
+          }
+        } else if (valName) {
+          console.log(4, assign);
+          vals.push(assign);
+        }
       }
+      console.log(vals);
       await msg.client.ch.query(
         `INSERT INTO ${msg.client.constants.commands.settings.tablenames[msg.file.name][0]} (${
           msg.client.constants.commands.settings.setupQueries[msg.file.name].cols[0]
@@ -728,7 +719,7 @@ async function repeater(
       );
       module.exports.edit(msg, answer, {});
       misc.log(null, msg, newSettings);
-    } else if (AddRemoveEditView === 'remove') {
+    } else if (AddRemoveEditView == 'remove') {
       let oldRow;
       let oldSettings;
       const oldRes = await msg.client.ch.query(
@@ -738,11 +729,11 @@ async function repeater(
         [values.id],
       );
       if (oldRes && oldRes.rowCount > 0) {
-        [oldRow] = oldRes.rows;
+        oldRow = oldRes.rows[0];
         oldSettings = oldRow;
       }
       const names = [];
-      const arr = fail.find((f) => f.id === values.id);
+      const arr = fail.find((f) => f.id == values.id);
       const entries = Object.entries(arr);
       const vals = [];
       entries.forEach((e) => {
@@ -752,7 +743,7 @@ async function repeater(
         }
       });
       let nameText = '';
-      for (let j = 0; j < names.length; j += 1) {
+      for (let j = 0; j < names.length; j++) {
         if (nameText !== '') nameText += ` AND ${names[j]} = $${j + 1}`;
         else nameText += `${names[j]} = $${j + 1}`;
       }
@@ -764,7 +755,7 @@ async function repeater(
       );
       module.exports.edit(msg, answer, {});
       misc.log(oldSettings, msg, null);
-    } else if (AddRemoveEditView === 'edit') {
+    } else if (AddRemoveEditView == 'edit') {
       let oldRow;
       let oldSettings;
       const oldRes = await msg.client.ch.query(
@@ -774,7 +765,7 @@ async function repeater(
         [values.id],
       );
       if (oldRes && oldRes.rowCount > 0) {
-        [oldRow] = oldRes.rows;
+        oldRow = oldRes.rows[0];
         oldSettings = oldRow;
       }
       const newSettings = {};
@@ -790,7 +781,6 @@ async function repeater(
             if (values[msg.assigner].includes(id))
               values[msg.assigner].splice(values[msg.assigner].indexOf(id), 1);
             else values[msg.assigner].push(id);
-            return null;
           }),
         );
       }
@@ -818,12 +808,11 @@ async function repeater(
     editer(msg, values, fail, answer, AddRemoveEditView, comesFromSRM);
   else if (!msg.property)
     throw new Error(
-      // eslint-disable-next-line no-constant-condition
       `No Message Property defined!${srmEditing}`
         ? `I'm searching for ${srmEditing[0]} in ${
             msg.client.constants.commands.settings.edit[msg.file.name]
           }`
-        : AddRemoveEditView === 'edit'
+        : AddRemoveEditView == 'edit'
         ? `I'm searching for ${msg.client.constants.commands.settings.editReq[i]} in ${
             msg.client.constants.commands.settings.edit[msg.file.name]
           }`
@@ -852,7 +841,7 @@ async function editer(msg, values, fail, answer, AddRemoveEditView, comesFromSRM
       [values.id],
     );
   if (oldRes && oldRes.rowCount > 0) {
-    [oldRow] = oldRes.rows;
+    oldRow = oldRes.rows[0];
     oldSettings = oldRow[msg.assigner];
   }
   const newRow = {};
@@ -868,7 +857,6 @@ async function editer(msg, values, fail, answer, AddRemoveEditView, comesFromSRM
         if (values[msg.assigner].includes(id))
           values[msg.assigner].splice(values[msg.assigner].indexOf(id), 1);
         else values[msg.assigner].push(id);
-        return null;
       }),
     );
   }
@@ -935,22 +923,18 @@ async function rower(msg) {
     `SELECT * FROM ${msg.client.constants.commands.settings.tablenames[msg.file.name][0]};`,
     null,
   );
-  if (!res || res.rowCount === 0) return;
+  if (!res || res.rowCount == 0) return;
   if (!res.rows[0].uniquetimestamp) return;
   res.rows = res.rows.sort((a, b) => a.uniquetimestamp - b.uniquetimestamp);
-  const promises = [];
-  for (let i = 0; i < res.rowCount; i += 1) {
+  for (let i = 0; i < res.rowCount; i++) {
     res.rows[i].id = i + 1;
-    promises.push(
-      msg.client.ch.query(
-        `UPDATE ${
-          msg.client.constants.commands.settings.tablenames[msg.file.name][0]
-        } SET id = $1 WHERE uniquetimestamp = $2;`,
-        [res.rows[i].id, res.rows[i].uniquetimestamp],
-      ),
+    await msg.client.ch.query(
+      `UPDATE ${
+        msg.client.constants.commands.settings.tablenames[msg.file.name][0]
+      } SET id = $1 WHERE uniquetimestamp = $2;`,
+      [res.rows[i].id, res.rows[i].uniquetimestamp],
     );
   }
-  await Promise.all(promises);
 }
 
 function CollectorEnder(collectors) {
