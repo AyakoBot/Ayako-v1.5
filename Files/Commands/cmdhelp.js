@@ -79,20 +79,11 @@ module.exports = {
           value: `\u200b${commandLan.name ? commandLan.name : reqcommand.name}`,
           inline: true,
         },
-        { name: `|${language.aliases}`, value: `\u200b${aliases}`, inline: true },
         { name: `|${language.category}`, value: `\u200b${category}`, inline: true },
+        { name: `|${language.aliases}`, value: `\u200b${aliases}`, inline: false },
         {
           name: `|${language.description}`,
           value: `\u200b${commandLan.description}`,
-          inline: false,
-        },
-        {
-          name: `|${language.usage}`,
-          value: `\u200b${msg.client.ch.makeCodeBlock(
-            msg.client.constants.standard.prefix,
-          )}${commandLan.usage.join(`\n${msg.client.constants.standard.prefix}`)}\n\`[ ] = ${
-            language.required
-          }\`\n\`( ) = ${language.optional}\``,
           inline: false,
         },
         {
@@ -121,6 +112,19 @@ module.exports = {
       )
       .setColor(msg.client.ch.colorSelector(msg.guild ? msg.guild.me : null))
       .setTimestamp();
+    if (commandLan.usage && commandLan.usage.length) {
+      embed.addField(
+        `|${language.usage}`,
+        `
+          \u200b${msg.client.ch.makeCodeBlock(
+            `${msg.client.constants.standard.prefix}${commandLan.usage.join(
+              `\n${msg.client.constants.standard.prefix}`,
+            )}`,
+          )}\n\`[ ] = ${language.required}\`\n\`( ) = ${language.optional}\`
+          `,
+        false,
+      );
+    }
     return msg.client.ch.reply(msg, embed);
   },
 };
