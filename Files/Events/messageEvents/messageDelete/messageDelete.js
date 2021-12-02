@@ -1,10 +1,11 @@
+/* eslint-disable global-require */
 module.exports = {
-	async execute(msg) {
-		if (msg.channel.type == 'DM') return;
-		require('./giveaway.js').execute(msg);
-		if (!msg.author) return;
-		require('./log.js').execute(msg);
-		if (msg.author.bot) return;
-		require('./snipe.js').execute(msg);
-	}
+  async execute(msg) {
+    if (msg.channel.type === 'DM') return;
+    require('./giveaway').execute(msg);
+    if (!msg.author) return;
+    require('./log').execute(msg);
+    if (msg.author.bot) return;
+    require('./snipe').execute(msg);
+  },
 };
