@@ -20,7 +20,7 @@ module.exports = {
     let category;
     if (reqcommand.category) {
       category = reqcommand.category;
-    } else if (commandLan.category) {
+    } else if (commandLan?.category) {
       category = commandLan.category;
     } else {
       category = language.none;
