@@ -2,8 +2,9 @@
 /* eslint-disable global-require */
 module.exports = {
   async execute(msg) {
-    if (msg.guild && msg.author.discriminator !== '0000')
-      msg.member = await msg.guild.members.fetch(msg.author.id);
+    if (msg.guild && msg.author.discriminator !== '0000') {
+      msg.member = await msg.guild.members.fetch(msg.author.id).catch(() => {});
+    }
     require('./commandHandler').execute(msg);
     require('./afk').execute(msg);
     require('./disboard').execute(msg);
