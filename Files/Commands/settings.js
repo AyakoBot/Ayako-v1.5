@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 const Discord = require('discord.js');
 const fs = require('fs');
 const misc = require('./settings/misc');
@@ -21,15 +20,14 @@ module.exports = {
           file !== 'multiRowManager.js' &&
           file !== 'misc.js',
       );
-    settingsFiles.forEach((file) => {
-      // eslint-disable-next-line import/no-dynamic-require,global-require
+    for (const file of settingsFiles) {
       const settingsfile = require(`./settings/${file}`);
       settingsfile.name = file.replace('.js', '');
       if (!msg.language.commands.settings[settingsfile.name])
         throw new Error(`Couldn't find ${settingsfile.name} in msg.language.commands.settings`);
       settingsfile.category = msg.language.commands.settings[settingsfile.name].category;
       settings.set(file.replace('.js', ''), settingsfile);
-    });
+    }
     if (!msg.args[0]) {
       let categoryText = '';
       const categories = [];
@@ -38,27 +36,32 @@ module.exports = {
           if (!categories.includes(category)) categories.push(category);
         });
       });
-      categories.forEach((category) => {
+      for (const category of categories) {
         const t = [];
         settings.forEach((s) => {
           if (s.category.includes(category)) t.push(s.name);
         });
-        t.forEach((s, i) => {
-          const settingsFile = settings.get(s);
-          let emote;
-          if (settingsFile.type)
-            if (settingsFile.type === 1) emote = msg.client.constants.emotes.yellow;
-            else if (settingsFile.type === 2) emote = msg.client.constants.emotes.red;
-            else if (settingsFile.type === 3) emote = msg.client.constants.emotes.blue;
-            else if (settingsFile.type === 4) emote = msg.client.constants.emotes.green;
-            else emote = msg.client.constants.emotes.blue;
-          else emote = msg.client.constants.emotes.blue;
-          t[i] = `${emote}${s}⠀${new Array(22 - `${emote}${s}`.length).join(' ')}`;
-        });
+        for (let i = 0; i < t.length; i++) {
+          const settingsFile = settings.get(t[i]);
+          t[i] = `${
+            settingsFile.type
+              ? settingsFile.type == 1
+                ? msg.client.constants.emotes.yellow
+                : settingsFile.type == 2
+                ? msg.client.constants.emotes.red
+                : settingsFile.type == 3
+                ? msg.client.constants.emotes.blue
+                : settingsFile.type == 4
+                ? msg.client.constants.emotes.green
+                : msg.client.constants.emotes.blue
+              : msg.client.constants.emotes.blue
+          }${t[i]}⠀`;
+          t[i] = t[i] + new Array(22 - t[i].length).join(' ');
+        }
         categoryText += `__${category}__:\n${msg.client.ch.makeCodeBlock(
           `${t.map((s) => `${s}`)}`.replace(/,/g, ''),
         )}\n`;
-      });
+      }
       const embed = new Discord.MessageEmbed()
         .setAuthor(
           msg.lan.settings.author,
@@ -77,7 +80,6 @@ module.exports = {
       let file = settings.get(msg.args[0].toLowerCase());
       if (!file) return msg.client.ch.reply(msg, msg.lan.invalSettings);
       if (file.hasNoSettings) {
-        // eslint-disable-next-line global-require
         file = require('./settings/overview');
         file.name = 'overview';
       }
@@ -94,7 +96,6 @@ module.exports = {
         return msg.client.ch.reply(msg, msg.language.commands.commandHandler.missingPermissions);
       else this.edit(msg, file);
     }
-    return null;
   },
   async display(msg, file) {
     const res = await msg.client.ch.query(
@@ -104,8 +105,7 @@ module.exports = {
       [msg.guild.id],
     );
     let embed;
-    // eslint-disable-next-line global-require
-    if (msg.file.setupRequired === false) return require('./settings/multiRowManager').display(msg);
+    if (msg.file.setupRequired == false) return require('./settings/multiRowManager').display(msg);
     if (res && res.rowCount > 0)
       embed =
         typeof file.displayEmbed === 'function'
@@ -136,8 +136,8 @@ module.exports = {
     const buttonsCollector = m.createMessageComponentCollector({ time: 60000 });
     const messageCollector = msg.channel.createMessageCollector({ time: 60000 });
     buttonsCollector.on('collect', (clickButton) => {
-      if (clickButton.user.id === msg.author.id) {
-        if (clickButton.customId === 'edit') {
+      if (clickButton.user.id == msg.author.id) {
+        if (clickButton.customId == 'edit') {
           buttonsCollector.stop();
           messageCollector.stop();
           this.edit(msg, file, clickButton);
@@ -145,12 +145,12 @@ module.exports = {
       } else msg.client.ch.notYours(clickButton, msg);
     });
     buttonsCollector.on('end', (collected, reason) => {
-      if (reason === 'time') m.edit({ embeds: [embed], components: [] });
+      if (reason == 'time') m.edit({ embeds: [embed], components: [] });
     });
     messageCollector.on('collect', (message) => {
       if (
-        message.author.id === msg.author.id &&
-        message.content.toLowerCase() === msg.language.edit
+        message.author.id == msg.author.id &&
+        message.content.toLowerCase() == msg.language.edit
       ) {
         buttonsCollector.stop();
         messageCollector.stop();
@@ -158,10 +158,8 @@ module.exports = {
         this.edit(msg, file);
       }
     });
-    return null;
   },
   async edit(msg, file, answer) {
-    // eslint-disable-next-line global-require
     require('./settings/singleRowManager').execute(msg, answer, file);
   },
 };

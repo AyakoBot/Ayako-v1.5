@@ -303,7 +303,8 @@
             "avatar": "https://cdn.discordapp.com/attachments/760152457799401532/839644223074336789/6E81E655-B92C-4EC6-8015-20679059B454.png"
         },
         "discordUrl": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}",
-        "discordUrlDB": "https://discord.com/channels/{{guildid}}/{{channelid}}/{{msgid}}"
+        "discordUrlDB": "https://discord.com/channels/{{guildid}}/{{channelid}}/{{msgid}}",
+        "permissionsViewer": "https://discordapi.com/permissions.html#{{permission}}"
     },
     "emotes": {
         "cross": "<:Cross:902269073805701211>",
@@ -616,17 +617,6 @@
                     "addroles": "roles",
                     "confirmationreq": "boolean"
                 },
-                "snipe": {
-                    "active": "boolean",
-                    "blchannelid": "channels",
-                    "blroleid": "roles",
-                    "links": "boolean",
-                    "invites": "boolean",
-                    "blwords": "boolean",
-                    "bots": "boolean",
-                    "deleteable": "boolean",
-                    "deletetime": "seconds"
-                },
                 "antivirus": {
                     "active": "boolean",
                     "bantof": "boolean",
@@ -687,6 +677,17 @@
                     "whitelistedroles": "roles",
                     "whitelistedusers": "users",
                     "name": "string"
+                },
+                "modroles": {
+                    "active": "boolean",
+                    "blacklistedroles": "roles",
+                    "blacklistedusers": "users",
+                    "whitelistedroles": "roles",
+                    "whitelistedusers": "users",
+                    "roleid": "role",
+                    "perms": "permissions",
+                    "whitelistedcommands": "commands",
+                    "blacklistedcommands": "commands"
                 }
             },
             "tablenames": {
@@ -717,8 +718,7 @@
                 "prefix": ["prefix"],
                 "user": ["usersettings"],
                 "interactions": ["interactions"],
-                "snipe": ["snipesettings"],
-                "modroles": ["modrolesnew"],
+                "modroles": ["modroles"],
                 "muterole": ["muterole"]
             },
             "editReq": ["id", "column"],
@@ -855,13 +855,13 @@
                     "cols": ["userid"],
                     "vals": [[ "{{msg.author.id}}"]]
                 },
-                "snipe": {
-                    "cols": ["guildid, links, invites, blwords, bots, active, deleteable, deletetime"],
-                    "vals": [["{{msg.guild.id}}", true, true, true, true, true, true, 3]]
-                },
                 "modroles": {
-                    "cols": ["guildid"],
-                    "vals": [["{{msg.guild.id}}"]]
+                    "cols": ["guildid, active, roleid, id, uniquetimestamp"],
+                    "vals": [["{{values.guildid}}", false, "{{values.roleid}}", "{{values.id}}", "{{values.uniquetimestamp}}"]],
+                    "add": ["roleid"],
+                    "remove": ["id"],
+                    "removeIdent": "",
+                    "removeReq": ["id", "roles"]
                 }
             }
         }

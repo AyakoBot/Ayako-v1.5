@@ -813,6 +813,14 @@
         "selfroles": {
             "select": "Select the Role Category you want to look at",
             "desc": "Select the Role Category you want look at below"
+        },
+        "permissions": {
+            "select": "Select the Permissions",
+            "desc": "Select the Permissions below"
+        },        
+        "permission": {
+            "select": "Select the Permission",
+            "desc": "Select the Permission below"
         }
     },
     "mod": {

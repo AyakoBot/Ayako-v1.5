@@ -1,8 +1,10 @@
+/* eslint-disable global-require */
+/* eslint-disable no-param-reassign */
 const Discord = require('discord.js');
-const misc = require('../misc.js');
+const misc = require('../misc');
 
 module.exports = {
-  key: ['number'],
+  key: ['permissions', 'permission'],
   async execute(
     msg,
     i,
@@ -15,18 +17,21 @@ module.exports = {
     comesFromSRM,
     answered,
   ) {
-    const req = [];
-    for (let i = 0; i < 9999; i++) {
-      req.push(i);
+    if (!Array.isArray(msg.rows) && msg.rows) {
+      answered = msg.rows[msg.assigner];
     }
     const options = [];
-    req.forEach((r) => {
-      options.push({ label: `${r}`, value: `${r}` });
-    });
-    const take = [];
-    for (let j = 0; j < 25 && j < options.length; j++) {
-      take.push(options[j]);
+    values[msg.assigner] = [];
+    const perms = msg.client.ch.permCalc(Discord.Permissions.ALL, msg.language);
+    for (let j = 0; j < perms.length; j += 1) {
+      const permArray = Object.entries(msg.language.permissions).find(
+        ([, value]) => value === perms[j],
+      );
+      const perm = new Discord.Permissions(permArray[0]).bitfield;
+      options.push({ label: perms[j], value: `${Number(perm)}` });
     }
+    const take = [];
+    for (let j = 0; j < 25 && j < options.length; j += 1) take.push(options[j]);
     const menu = new Discord.MessageSelectMenu()
       .setCustomId(msg.property)
       .addOptions(take)
@@ -63,6 +68,25 @@ module.exports = {
         `${msg.language.select[msg.property].desc}\n${msg.language.page}: \`1/${Math.ceil(
           options.length / 25,
         )}\``,
+      );
+    if (answered?.length)
+      embed.addField(
+        msg.language.selected,
+        `${
+          msg.property.includes('s')
+            ? answered.map((c) =>
+                msg.compatibilityType == 'channels'
+                  ? `<#${c}>`
+                  : msg.compatibilityType == 'roles'
+                  ? `<@&${c}>`
+                  : ` ${c}`,
+              )
+            : msg.compatibilityType == 'channels'
+            ? `<#${answered}>`
+            : msg.compatibilityType == 'roles'
+            ? `<@&${answered}>`
+            : `${answered}`
+        } `,
       );
     const rows = msg.client.ch.buttonRower([[menu], [prev, next], [back, done]]);
     if (answer) answer.update({ embeds: [embed], components: rows }).catch(() => {});
@@ -104,7 +128,9 @@ module.exports = {
                   take.push(options[j]);
                 }
               }
-            let page = clickButton.message.embeds[0].description.split(/`+/)[1].split(/\/+/)[0];
+            let page = clickButton.message.embeds[0].description
+              ? clickButton.message.embeds[0].description.split(/`+/)[1].split(/\/+/)[0]
+              : 0;
             clickButton.customId == 'next' ? page++ : page--;
             const menu = new Discord.MessageSelectMenu()
               .setCustomId(msg.property)
@@ -144,7 +170,25 @@ module.exports = {
                   msg.language.page
                 }: \`${page}/${Math.ceil(+options.length / 25)}\``,
               );
-            if (answered?.length) embed.addField(msg.language.selected, `${answered} `);
+            if (answered?.length)
+              embed.addField(
+                msg.language.selected,
+                `${
+                  msg.property.includes('s')
+                    ? answered.map((c) =>
+                        msg.compatibilityType == 'channels'
+                          ? `<#${c}>`
+                          : msg.compatibilityType == 'roles'
+                          ? `<@&${c}>`
+                          : ` ${c}`,
+                      )
+                    : msg.compatibilityType == 'channels'
+                    ? `<#${answered}>`
+                    : msg.compatibilityType == 'roles'
+                    ? `<@&${answered}>`
+                    : `${answered}`
+                } `,
+              );
             if (page >= Math.ceil(+options.length / 25)) next.setDisabled(true);
             else next.setDisabled(false);
             if (page > 1) prev.setDisabled(false);
@@ -152,14 +196,48 @@ module.exports = {
             const rows = msg.client.ch.buttonRower([[menu], [prev, next], [back, done]]);
             clickButton.update({ embeds: [embed], components: rows }).catch(() => {});
           } else if (clickButton.customId == 'done') {
-            if (answered.length) values[msg.assigner] = answered;
+            if (msg.compatibilityType == 'channels' || msg.compatibilityType == 'roles') {
+              if (answered.length) {
+                if (msg.property.includes('s')) {
+                  answered.forEach((id) => {
+                    if (values[msg.assigner] && values[msg.assigner].includes(id)) {
+                      const index = values[msg.assigner].indexOf(id);
+                      values[msg.assigner].splice(index, 1);
+                    } else if (values[msg.assigner] && values[msg.assigner].length)
+                      values[msg.assigner].push(id);
+                    else values[msg.assigner] = [id];
+                  });
+                } else values[msg.assigner] = answered[0];
+              }
+            } else if (msg.compatibilityType == 'number') {
+              if (answered.length) {
+                if (msg.property.includes('s')) {
+                  answered.forEach((id) => {
+                    if (values[msg.assigner] && values[msg.assigner].includes(id)) {
+                      const index = values[msg.assigner].indexOf(id);
+                      values[msg.assigner].splice(index, 1);
+                    } else if (values[msg.assigner] && values[msg.assigner].length)
+                      values[msg.assigner].push(id);
+                    else values[msg.assigner] = [id];
+                  });
+                } else values[msg.assigner] = answered[0];
+              }
+            }
             messageCollector.stop('finished');
             buttonsCollector.stop('finished');
             interaction = clickButton;
             resolve(true);
           } else if (clickButton.customId == msg.property) {
-            let page = clickButton.message.embeds[0].description.split(/`+/)[1].split(/\/+/)[0];
-            answered = clickButton.values[0];
+            clickButton.values.forEach((val) => {
+              if (!answered.includes(val))
+                msg.guild[msg.compatibilityType].cache.get(val)
+                  ? answered.push(msg.guild[msg.compatibilityType].cache.get(val).id)
+                  : '';
+              else answered.splice(answered.indexOf(val), 1);
+            });
+            const page = clickButton.message.embeds[0].description
+              ? clickButton.message.embeds[0].description.split(/`+/)[1].split(/\/+/)[0]
+              : 0;
             const menu = new Discord.MessageSelectMenu()
               .setCustomId(msg.property)
               .addOptions(take)
@@ -187,7 +265,6 @@ module.exports = {
               .setStyle('DANGER');
             if (answered.length) done.setDisabled(false);
             else done.setDisabled(true);
-            page = clickButton.message.embeds[0].description.split(/`+/)[1].split(/\/+/)[0];
             const embed = new Discord.MessageEmbed()
               .setAuthor(
                 msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
@@ -199,14 +276,29 @@ module.exports = {
                   msg.language.page
                 }: \`${page}/${Math.ceil(+options.length / 25)}\``,
               )
-              .addField(msg.language.selected, `${answered} `);
+              .addField(
+                msg.language.selected,
+                `${
+                  msg.property.includes('s')
+                    ? answered.map((c) =>
+                        msg.compatibilityType == 'channels'
+                          ? `<#${c}>`
+                          : msg.compatibilityType == 'roles'
+                          ? `<@&${c}>`
+                          : ` ${c}`,
+                      )
+                    : msg.compatibilityType == 'channels'
+                    ? `<#${answered}>`
+                    : msg.compatibilityType == 'roles'
+                    ? `<@&${answered}>`
+                    : `${answered}`
+                } `,
+              );
             const rows = msg.client.ch.buttonRower([[menu], [prev, next], [back, done]]);
             clickButton.update({ embeds: [embed], components: rows }).catch(() => {});
           } else if (clickButton.customId == 'back') {
-            msg.property = undefined;
             messageCollector.stop();
             buttonsCollector.stop();
-            interaction = clickButton;
             resolve(false);
             if (comesFromSRM)
               return require('../singleRowManager').redirecter(
@@ -228,33 +320,52 @@ module.exports = {
             return misc.aborted(msg, [messageCollector, buttonsCollector]);
           }
           message.delete().catch(() => {});
-          if (isNaN(parseInt(message.content))) {
-            resolve(false);
-            return misc.notValid(msg);
-          }
-          answered = message.content.replace(/\D+/g, '').split(/ +/);
-          if (answered.length) {
-            if (Array.isArray(answered)) {
-              answered.forEach((id) => {
-                if (values[msg.assigner] && values[msg.assigner].includes(id)) {
-                  const index = values[msg.assigner].indexOf(id);
-                  values[msg.assigner].splice(index, 1);
-                } else if (values[msg.assigner] && values[msg.assigner].length)
-                  values[msg.assigner].push(id);
-                else values[msg.assigner] = [id];
-              });
-            } else values[msg.assigner] = answered;
-          }
-          messageCollector.stop();
+          if (msg.property == 'role' || msg.property == 'channel') {
+            const answerContent = message.content.replace(/\D+/g, '');
+            const result = msg.guild[msg.compatibilityType].cache.get(answerContent);
+            if (result) {
+              values[msg.assigner] = answerContent;
+              answered = values[msg.assigner];
+            } else misc.notValid(msg);
+          } else if (msg.property == 'roles' || msg.property == 'channels') {
+            const args = message.content.split(/ +/);
+            Promise.all(
+              args.map(async (raw) => {
+                const id = raw.replace(/\D+/g, '');
+                const request = msg.guild[msg.compatibilityType].cache.get(id);
+                if (
+                  (!request || !request.id) &&
+                  (!values[msg.assigner] ||
+                    (values[msg.assigner] && !values[msg.assigner].includes(id)))
+                )
+                  fail.push(`\`${raw}\` ${msg.lan.edit[msg.property].fail.no}`);
+                else answered.push(id);
+              }),
+            );
+            if (answered.length) {
+              if (msg.property.includes('s')) {
+                answered.forEach((id) => {
+                  if (values[msg.assigner] && values[msg.assigner].includes(id)) {
+                    const index = values[msg.assigner].indexOf(id);
+                    values[msg.assigner].splice(index, 1);
+                  } else if (values[msg.assigner] && values[msg.assigner].length)
+                    values[msg.assigner].push(id);
+                  else values[msg.assigner] = [id];
+                });
+              } else values[msg.assigner] = answered;
+            }
+            answered = values[msg.assigner];
+          } else return misc.notValid(msg);
           buttonsCollector.stop();
+          messageCollector.stop();
           resolve(true);
         }
-      });
-      buttonsCollector.on('end', (collected, reason) => {
-        if (reason == 'time') {
-          msg.client.ch.collectorEnd(msg);
-          resolve(false);
-        }
+        buttonsCollector.on('end', (collected, reason) => {
+            if (reason === 'time') {
+            msg.client.ch.collectorEnd(msg);
+            resolve(false);
+          }
+        });
       });
     });
     if (resolved)

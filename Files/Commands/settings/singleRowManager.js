@@ -1,7 +1,5 @@
-/* eslint-disable no-param-reassign */
-/* eslint-disable global-require */
 const Discord = require('discord.js');
-const misc = require('./misc');
+const misc = require('./misc.js');
 const setuper = require('./setup');
 
 module.exports = {
@@ -24,8 +22,8 @@ async function edit(msg, answer, file, AddRemoveEditView, fail, values, origin) 
       } WHERE guildid = $1;`,
       [msg.guild.id],
     );
-    if (msg.file.setupRequired === false) return require('./multiRowManager').execute(msg, answer);
-    if (!res || res.rowCount === 0) return setuper.execute(msg, answer);
+    if (msg.file.setupRequired == false) return require('./multiRowManager').execute(msg, answer);
+    if (!res || res.rowCount == 0) return setuper.execute(msg, answer);
     r = res.rows[0];
   } else
     r = (
@@ -59,7 +57,7 @@ async function edit(msg, answer, file, AddRemoveEditView, fail, values, origin) 
     .setEmoji(msg.client.constants.emotes.back)
     .setCustomId('back')
     .setStyle('DANGER');
-  if (origin && buttons.length === 5) buttons[0].unshift(back);
+  if (origin && buttons.length == 5) buttons[0].unshift(back);
   else if (origin) buttons.push(back);
   const actionRows = msg.client.ch.buttonRower(buttons);
   if (answer) answer.deleteReply().catch(() => {});
@@ -71,8 +69,8 @@ async function edit(msg, answer, file, AddRemoveEditView, fail, values, origin) 
   const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
   const messageCollector = msg.channel.createMessageCollector({ time: 60000 });
   buttonsCollector.on('collect', (clickButton) => {
-    if (clickButton.user.id === msg.author.id) {
-      if (clickButton.customId === 'back') {
+    if (clickButton.user.id == msg.author.id) {
+      if (clickButton.customId == 'back') {
         buttonsCollector.stop();
         messageCollector.stop();
         require('./multiRowManager').edit(msg, clickButton, values, AddRemoveEditView, fail);
@@ -80,7 +78,7 @@ async function edit(msg, answer, file, AddRemoveEditView, fail, values, origin) 
       }
       let srmEditing;
       Object.entries(msg.lan.edit).forEach((e) => {
-        if (e[1].name === clickButton.customId) srmEditing = e;
+        if (e[1].name == clickButton.customId) srmEditing = e;
       });
       if (srmEditing) {
         require('./multiRowManager').redirect(
@@ -99,15 +97,12 @@ async function edit(msg, answer, file, AddRemoveEditView, fail, values, origin) 
     } else msg.client.ch.notYours(clickButton, msg);
   });
   buttonsCollector.on('end', (collected, reason) => {
-    if (reason === 'time') {
+    if (reason == 'time') {
       msg.client.ch.collectorEnd(msg);
     }
   });
   messageCollector.on('collect', (message) => {
-    if (
-      message.author.id === msg.author.id &&
-      message.content.toLowerCase() === msg.language.cancel
-    )
+    if (message.author.id == msg.author.id && message.content.toLowerCase() == msg.language.cancel)
       return misc.aborted(msg, [messageCollector, buttonsCollector]);
   });
 }

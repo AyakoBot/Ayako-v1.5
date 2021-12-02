@@ -27,33 +27,33 @@ module.exports = {
     const messageCollector = msg.channel.createMessageCollector({ time: 60000 });
     const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
     messageCollector.on('collect', (message) => {
-      if (message.author.id === msg.author.id) {
-        if (message.content === msg.language.cancel)
+      if (message.author.id == msg.author.id) {
+        if (message.content == msg.language.cancel)
           return misc.aborted(msg, [messageCollector, buttonsCollector]);
-        if (message.content === msg.language.yes) yesFunc(message, null);
-        else if (message.content === msg.language.no) noFunc(message, null);
+        if (message.content == msg.language.yes) yesFunc(message, null);
+        else if (message.content == msg.language.no) noFunc(message, null);
         else return misc.notValid(msg);
         buttonsCollector.stop();
         messageCollector.stop();
       }
     });
     buttonsCollector.on('collect', (clickButton) => {
-      if (clickButton.user.id === msg.author.id) {
-        if (clickButton.customId === 'yes') yesFunc(null, clickButton);
-        else if (clickButton.customId === 'no') noFunc(null, clickButton);
+      if (clickButton.user.id == msg.author.id) {
+        if (clickButton.customId == 'yes') yesFunc(null, clickButton);
+        else if (clickButton.customId == 'no') noFunc(null, clickButton);
         else return misc.notValid(msg);
         buttonsCollector.stop();
         messageCollector.stop();
       } else msg.client.ch.notYours(clickButton, msg);
     });
     buttonsCollector.on('end', (collected, reason) => {
-      if (reason === 'time') msg.client.ch.collectorEnd(msg);
+      if (reason == 'time') msg.client.ch.collectorEnd(msg);
     });
     async function yesFunc(message, clickButton) {
       for (
         let index = 0;
         index < msg.client.constants.commands.settings.setupQueries[msg.file.name].cols.length;
-        index += 1
+        index++
       ) {
         const names =
           msg.client.constants.commands.settings.setupQueries[msg.file.name].cols[index];
@@ -65,7 +65,7 @@ module.exports = {
           else values.push(val);
         });
         let valDeclaration = '';
-        for (let i = 0; i < values.length; i += 1) valDeclaration += `$${i + 1}, `;
+        for (let i = 0; i < values.length; i++) valDeclaration += `$${i + 1}, `;
         valDeclaration = valDeclaration.slice(0, valDeclaration.length - 2);
         await msg.client.ch.query(
           `INSERT INTO ${
