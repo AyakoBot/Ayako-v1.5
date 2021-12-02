@@ -343,7 +343,6 @@ module.exports = {
     if (BitField.has(256n)) Perms.push(lan.permissions.PRIORITY_SPEAKER);
     if (BitField.has(512n)) Perms.push(lan.permissions.STREAM);
     if (BitField.has(1024n)) Perms.push(lan.permissions.VIEW_CHANNEL);
-    if (BitField.has(1024n)) Perms.push(lan.permissions.READ_MESSAGES);
     if (BitField.has(2048n)) Perms.push(lan.permissions.SEND_MESSAGES);
     if (BitField.has(4096n)) Perms.push(lan.permissions.SEND_TTS_MESSAGES);
     if (BitField.has(8192n)) Perms.push(lan.permissions.MANAGE_MESSAGES);
@@ -351,7 +350,6 @@ module.exports = {
     if (BitField.has(32768n)) Perms.push(lan.permissions.ATTACH_FILES);
     if (BitField.has(65536n)) Perms.push(lan.permissions.READ_MESSAGE_HISTORY);
     if (BitField.has(131072n)) Perms.push(lan.permissions.MENTION_EVERYONE);
-    if (BitField.has(262144n)) Perms.push(lan.permissions.EXTERNAL_EMOJIS);
     if (BitField.has(262144n)) Perms.push(lan.permissions.USE_EXTERNAL_EMOJIS);
     if (BitField.has(1048576n)) Perms.push(lan.permissions.CONNECT);
     if (BitField.has(2097152n)) Perms.push(lan.permissions.SPEAK);
@@ -362,10 +360,9 @@ module.exports = {
     if (BitField.has(67108864n)) Perms.push(lan.permissions.CHANGE_NICKNAME);
     if (BitField.has(134217728n)) Perms.push(lan.permissions.MANAGE_NICKNAMES);
     if (BitField.has(268435456n)) Perms.push(lan.permissions.MANAGE_ROLES);
-    if (BitField.has(268435456n)) Perms.push(lan.permissions.MANAGE_ROLES_OR_PERMISSIONS);
     if (BitField.has(536870912n)) Perms.push(lan.permissions.MANAGE_WEBHOOKS);
-    if (BitField.has(1073741824n)) Perms.push(lan.permissions.MANAGE_EMOJIS);
-    if (BitField.has(2147483648n)) Perms.push(lan.permissions.USE_SLASH_COMMANDS);
+    if (BitField.has(1073741824n)) Perms.push(lan.permissions.MANAGE_EMOJIS_AND_STICKERS);
+    if (BitField.has(2147483648n)) Perms.push(lan.permissions.USE_APPLICATION_COMMANDS);
     if (BitField.has(4294967296n)) Perms.push(lan.permissions.REQUEST_TO_SPEAK);
     return Perms;
   },

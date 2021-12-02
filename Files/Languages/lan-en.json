@@ -515,9 +515,8 @@
         "MANAGE_ROLES": "Manage Roles",
         "MANAGE_ROLES_OR_PERMISSIONS": "Manage Roles or Permissions",
         "MANAGE_WEBHOOKS": "Manage Webhooks",
-        "MANAGE_EMOJIS": "Manage Emojis",
-        "USE_SLASH_COMMANDS": "Use slash Commands",
-        "USE_APPLICATION_COMMANDS": "Use application Commands",
+        "MANAGE_EMOJIS_AND_STICKERS": "Manage Emojis and Stickers",
+        "USE_APPLICATION_COMMANDS": "Use Application Commands",
         "REQUEST_SPEAK": "Request to Speak",
         "ALL_GUILD": "All Guild Permissions",
         "ALL_TEXT": "All Text Channel Permissions",
@@ -2394,9 +2393,6 @@
             "leveling": {
                 "category": ["Automation"]
             },
-            "modroles": {
-                "category": ["Moderation"]
-            },
             "muterole": {
                 "category": ["Moderation"]
             },
@@ -2526,84 +2522,6 @@
                             "whitelistedusers": "Respond with 1 or more User IDs or Mentions",
                             "name": "Enter a custom Name for this Self-Role Category"
                         }
-                    }
-                }
-            },
-
-            "snipe": {
-                "category": ["Fun"],
-                "type": "Snipe",
-                "blchannelid": "Blacklisted Channels",
-                "blroleid": "Blacklisted Roles",
-                "bluserid": "Blacklisted Users",
-                "links": "Links snipe-able",
-                "invites": "Invites snipe-able",
-                "blwords": "Words saved as Blacklisted snipe-able",
-                "bots": "Bot Messages snipe-able",
-                "deleteable": "Delete-able by Reaction",
-                "deletetime": "Delete Timeout",
-                "edit": {
-                    "active": {
-                        "name": "Active",
-                        "answers": "`True` or `False`",
-                        "recommended": "Recommended: `True`"
-                    },
-                    "blchannelid": {
-                        "name": "Blacklisted Channels",
-                        "answers": "`Mentions or IDs`",
-                        "recommended": "This is a Switch.\nIf the entered Channel is already blacklisted it will be removed.\nDeleted Messages of Members in these Channels won't be snipe-able",
-                        "fail": {
-                            "no": "I couldn't find this Channel\n",
-                            "wrongGuild": "This Channel is not Part of this Server\n"
-                        }
-                    },
-                    "blroleid": {
-                        "name": "Blacklisted Roles",
-                        "answers": "`Mentions or IDs`",
-                        "recommended": "This is a Switch.\nIf the entered Role is already blacklisted it will be removed.\nDeleted Messages of Members with these Roles won't be snipe-able",
-                        "fail": {
-                            "no": "I couldn't find this Role\n",
-                            "wrongGuild": "This Role is not Part of this Server\n"
-                        }
-                    },
-                    "bluserid": {
-                        "name": "Blacklisted Users",
-                        "answers": "`Mentions or IDs`",
-                        "recommended": "This is a Switch.\nIf the entered User is already blacklisted it will be removed.\nDeleted Messages of these Users won't be snipe-able",
-                        "fail": {
-                            "no": "I couldn't find this User\n",
-                            "wrongGuild": "This User is not Part of this Server\n"
-                        }
-                    },
-                    "links": {
-                        "name": "Links snipe-able",
-                        "answers": "`True` or `False`",
-                        "recommended": "Recommended: `False`"
-                    },
-                    "invites": {
-                        "name": "Invites snipe-able",
-                        "answers": "`True` or `False`",
-                        "recommended": "Recommended: `False`"
-                    },
-                    "blwords": {
-                        "name": "Words saved as Blacklisted snipe-able",
-                        "answers": "`True` or `False`",
-                        "recommended": "Recommended: `False`"
-                    },
-                    "bots": {
-                        "name": "Bot Messages snipe-able",
-                        "answers": "`True` or `False`",
-                        "recommended": "Recommended: `False`"
-                    },
-                    "deleteable": {
-                        "name": "Snipes delete-able",
-                        "answers": "`True` or `False`",
-                        "recommended": "Recommended: `True`"
-                    },
-                    "deletetime": {
-                        "name": "Time until Snipes are deleted",
-                        "answers": "Time in Seconds",
-                        "recommended": "Recommended: `3 Seconds`"
                     }
                 }
             },
@@ -2853,6 +2771,125 @@
                     "edit": "`{{prefix}}edit [message ID]` - Edit a Giveaway",
                     "delete": "`{{prefix}}delete [message ID]` - Delete a Giveaway",
                     "reroll": "`{{prefix}}reroll [message ID]` - Reroll a Giveaway"
+                }
+            },
+            "modroles": {
+                "category": ["Moderation"],
+                "type": "Mod-Roles",
+                "roleid": "Mod-Role",
+                "perms": "Permissions of this Mod-Role",
+                "blacklistedcommands": "Blacklisted Commands",
+                "whitelistedcommands": "Whitelisted Commands",
+                "whitelistedusers": "Whitelisted Users",
+                "blacklistedusers": "Blacklisted Users",
+                "whitelistedroles": "Whitelisted Roles",
+                "blacklistedroles": "Blacklisted Roles",
+                "clickview": "Click to view Permissions",
+                "edit": { 
+                    "roleid": {
+                        "name": "Mod-Role",
+                        "answers": "`Mention or ID`",
+                        "recommended": "The Role which these Permissions will be applied to (Ayako internal only)",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
+                    },
+                    "perms": {
+                        "name": "Permissions of this Mod-Role",
+                        "answers": "Respond with Discord Permission Bits or Select the Permissions in the Select Menu below",
+                        "recommended": "**Warning:**\nPermissions Specified here will __overwrite Discord Role Permissions__\nMeaning if the specified Mod-Role does not have the Permission to Ban Members on Discord, but does have this Permission here\nMembers with this Role __will be able to use Ayakos `ban` Command__ anyways"
+                    },
+                    "active": {
+                        "name": "Active",
+                        "answers": "`True` or `False`",
+                        "recommended": "Recommended: `True`"
+                    },
+                    "whitelistedroles": {
+                        "name": "Whitelisted Roles",
+                        "answers": "`Mentions or IDs`",
+                        "recommended": "This is a Switch.\nIf the entered Role is already whitelisted it will be removed.\nIf a Member has the Mod-Role, a Blacklisted Role __and__ a Whitelisted Role, they will be able to use the Mod-Roles Permissions",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
+                    },
+                    "blacklistedroles": {
+                        "name": "Blacklisted Roles",
+                        "answers": "`Mentions or IDs`",
+                        "recommended": "This is a Switch.\nIf the entered Role is already blacklisted it will be removed.\nIf a Member has the Mod-Role __and__ a Blacklisted Role, they will __not__ be able to use the Mod-Roles Permissions",
+                        "fail": {
+                            "no": "I couldn't find this Role\n",
+                            "wrongGuild": "This Role is not Part of this Server\n"
+                        }
+                    },
+                    "blacklistedusers": {
+                        "name": "Blacklisted Users",
+                        "answers": "`Mentions or IDs`",
+                        "recommended": "This is a Switch.\nIf the entered User is already blacklisted they will be removed.\nIf a User is blacklisted __and__ has the Mod-Role, they will __not__ be able to use the Mod-Roles Permissions",
+                        "fail": {
+                            "no": "I couldn't find this User\n",
+                            "wrongGuild": "This User is not Part of this Server\n"
+                        }
+                    },
+                    "whitelistedusers": {
+                        "name": "Whitelisted Users",
+                        "answers": "`Mentions or IDs`",
+                        "recommended": "This is a Switch.\nIf the entered User is already whitelisted they will be removed.\nIf a User is whitelisted, has the Mod-Role __and__ has a Blacklisted Role, they will be able to use the Mod-Roles Permissions",
+                        "fail": {
+                            "no": "I couldn't find this User\n",
+                            "wrongGuild": "This User is not Part of this Server\n"
+                        }
+                    },
+                    "blacklistedcommands": {
+                        "name": "Blacklisted Commands",
+                        "answers": "`Ayako Commands or Aliases`",
+                        "recommended": "This is a Switch.\nIf the entered Comand is already blacklisted it will be removed.\nIf a Command is blacklisted __and__ would be allowed to be used according to the Mod-Role Permissions, it will __not__ be able to be used"
+                    },
+                    "whitelistedcommands": {
+                        "name": "Whitelisted Commands",
+                        "answers": "`Ayako Commands or Aliases`",
+                        "recommended": "This is a Switch.\nIf the entered Comand is already whitelisted it will be removed.\nIf a Command is whitelisted __and__ would __not__ be allowed to be used according to the Mod-Role Permissions, it will be able to be used"
+                    }
+                },
+                "otherEdits": {
+                    "add": {
+                        "name": "Add a Mod-Role",
+                        "process": {
+                            "0": "Select a Role that will be used as Mod-Role"
+                        }
+                    },
+                    "remove": {
+                        "name": "Remove a Mod-Role",
+                        "process": {
+                            "0": "Respond with the ID of the Mod-Role you want to delete"
+                        }
+                    },
+                    "edit": {
+                        "active": "Whether this Mod-Role is enabled or not",
+                        "roleid": "Ayako will show a Warning if Moderator Commands are used on a Member with this Role",
+                        "perms": "Permissions listed here will overwrite Discords Role Permissions",
+                        "blacklistedcommands": "Commands listed here can __not__ be used regardless if the Specified Permissions or Discord Role Permissions allow it",
+                        "whitelistedcommands": "Commands listed here can be used regardless if the Specified Permissions or Discord Role Permissions allow it",
+                        "whitelistedusers": "Users listed here can use the Permissions of the Mod-Role, even if they have a Blacklisted Role",
+                        "blacklistedusers": "Users listed here can __not__ use the Permissions of the Mod-Role, even if they have a Whitelisted Role",
+                        "whitelistedroles": "Members with Roles listed here can use the Permissions of the Mod-Role, even if they have a Blacklisted Role",
+                        "blacklistedroles": "Members with Roles listed here can __not__ use the Permissions of the Mod-Role",
+                        "process": {
+                            "0": "What would you like to edit?\nClick on one of the Buttons"
+                        },
+                        "note": {
+                            "roleid": "Respond with or Select 1 Role ID or Mention",
+                            "perms": "Respond with Discord BitField Permissions or Select the Permissions in the Select Menu below",
+                            "blacklistedcommands": "Select 1 or more Ayako Commands or Command Aliases",
+                            "whitelistedcommands": "Select 1 or more Ayako Commands or Command Aliases",
+                            "whitelistedusers": "Respond with 1 or More User IDs or Mentions",
+                            "blacklistedusers": "Respond with 1 or More User IDs or Mentions",
+                            "whitelistedroles": "Respond with or Select 1 or more Role IDs or Mentions",
+                            "blacklistedroles": "Respond with or Select 1 or more Role IDs or Mentions",
+                            "active": "Select `True` or `False`"
+                        }
+                    }
                 }
             }
         },
