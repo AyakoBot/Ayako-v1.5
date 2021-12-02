@@ -6,7 +6,7 @@ module.exports = {
   setupRequired: false,
   mmrEmbed(msg, res) {
     const embed = new Discord.MessageEmbed();
-    for (let i = 0; i < res.length; i++) {
+    for (let i = 0; i < res.length; i += 1) {
       const r = res[i];
       embed.addFields({
         name: `${msg.language.number}: \`${r.id}\` | ${msg.lan.commands}: ${r.commands.map(
