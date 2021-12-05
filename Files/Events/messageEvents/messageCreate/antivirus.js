@@ -460,11 +460,15 @@ const makeFullLinks = async (links) => {
   const makeAndPushLinkObj = async (link) => {
     const url = new URL(link);
     const [href, contentType] = await new Promise((resolve) => {
-      request({ method: 'HEAD', url, followAllRedirects: true }, (_, response) => {
-        resolve([
-          response?.request?.href,
-          response?.headers ? response.headers['content-type'] : null,
-        ]);
+      request({ method: 'HEAD', url, followAllRedirects: true }, (error, response) => {
+        if (response) {
+          resolve([
+            response?.request?.href,
+            response?.headers ? response.headers['content-type'] : null,
+          ]);
+        } else {
+          resolve([link, null]);
+        }
       });
     });
 
