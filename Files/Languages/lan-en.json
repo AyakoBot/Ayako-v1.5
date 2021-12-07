@@ -1367,7 +1367,7 @@
         "settings": {
             "valid": "Valid Answers",
             "notValid": "This Answer was not valid",
-            "howToEdit3": "Click:\n`add` to create a new Entry\n`remove` to remove an existing Entry\n`edit` to edit an existing Entry\n`list` to list an existing Entry",
+            "mmrEditList": "Click:\n`add` to create a new Entry\n`remove` to remove an existing Entry\n`edit` to edit an existing Entry\nor Select the ID of an entry in the Select Menu below",
             "category": "Info",
             "description": "Display the Ayako Server Settings",
             "pleaseRestart": "Please try again or type |cancel|",
@@ -2868,9 +2868,9 @@
                     },
                     "remove": {
                         "name": "Remove a Mod-Role",
-                        "process": {
-                            "0": "Respond with the ID of the Mod-Role you want to delete"
-                        }
+                        "process": [
+                            "Respond with the ID of the Mod-Role you want to delete"
+                        ]
                     },
                     "edit": {
                         "active": "Whether this Mod-Role is enabled or not",

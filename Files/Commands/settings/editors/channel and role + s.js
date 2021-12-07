@@ -4,6 +4,7 @@ const misc = require('../misc');
 
 module.exports = {
   key: ['channel', 'channels', 'role', 'roles'],
+  requiresInteraction: true,
   async execute(
     msg,
     i,
