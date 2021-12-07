@@ -1,6 +1,4 @@
 const Discord = require('discord.js');
-const misc = require('./misc.js');
-const setuper = require('./setup');
 
 module.exports = {
   execute(msg, answer, file) {

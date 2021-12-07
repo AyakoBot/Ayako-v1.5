@@ -749,18 +749,18 @@
                 },
                 "disabled": {
                     "cols": ["guildid, active, channels, id, uniquetimestamp, commands"],
-                    "vals": [["{{values.guildid}}", true, ["{{values.channels}}"], "{{values.id}}", "{{values.uniquetimestamp}}", ["{{values.commands}}"]]],
+                    "vals": [["{{msg.guild.id}}", true, ["{{values.channels}}"], "{{values.id}}", "{{values.uniquetimestamp}}", ["{{values.commands}}"]]],
                     "add": ["commands", "channels"],
                     "remove": ["id"],
-                    "removeIdent": "commands",
+                    "ident": "commands",
                     "removeReq": ["id", "channels"]
                 },
                 "cooldowns": {
                     "cols": ["guildid, active, command, cooldown, id, uniquetimestamp"],
-                    "vals": [["{{values.guildid}}", true, "{{values.command}}", "{{values.cooldown}}", "{{values.id}}", "{{values.uniquetimestamp}}"]],
+                    "vals": [["{{msg.guild.id}}", true, "{{values.command}}", "{{values.cooldown}}", "{{values.id}}", "{{values.uniquetimestamp}}"]],
                     "add": ["command", "cooldown"],
                     "remove": ["id"],
-                    "removeIdent": "command",
+                    "ident": "command",
                     "removeReq": ["id", "cooldown"]
                 },
                 "overview": {
@@ -793,10 +793,10 @@
                 },
                 "selfroles": {
                     "cols": ["guildid, active, id, uniquetimestamp, roles, name"],
-                    "vals": [["{{values.guildid}}", false, "{{values.id}}", "{{values.uniquetimestamp}}", "{{values.roles}}", "{{values.name}}"]],
+                    "vals": [["{{msg.guild.id}}", false, "{{values.id}}", "{{values.uniquetimestamp}}", "{{values.roles}}", "{{values.name}}"]],
                     "add": ["roles", "name"],
                     "remove": ["id"],
-                    "removeIdent": "name",
+                    "ident": "name",
                     "removeReq": ["id", "roles"]
                 },
                 "statschannel": {
@@ -804,23 +804,25 @@
                     "vals": [["{{msg.guild.id}}", "{{values.channelid}}", "{{values.type}}", "{{values.id}}"]],
                     "add": ["channel"],
                     "remove": ["id"],
-                    "removeIdent": "",
+                    "ident": "channel",
+                    "identType" : "channel",
                     "removeReq": ["id", "channel"]
                 },
                 "separators": {
                     "cols": ["guildid, active, id, uniquetimestamp, isvarying, separator", "guildid, stillrunning, active"],
-                    "vals": [["{{values.guildid}}", false, "{{values.id}}", "{{values.uniquetimestamp}}", true, "{{values.separator}}"], ["{{values.guildid}}", false, false]],
+                    "vals": [["{{msg.guild.id}}", false, "{{values.id}}", "{{values.uniquetimestamp}}", true, "{{values.separator}}"], ["{{msg.guild.id}}", false, false]],
                     "add": ["separator"],
                     "remove": ["id"],
-                    "removeIdent": "",
+                    "ident": "separator",
+                    "identType": "role",
                     "removeReq": ["id", "roles"]
                 },
                 "autopunish": {
                     "cols": ["guildid, active, id, uniquetimestamp, punishment, confirmationreq"],
-                    "vals": [["{{values.guildid}}", false, "{{values.id}}", "{{values.uniquetimestamp}}", "{{values.punishment}}", false]],
+                    "vals": [["{{msg.guild.id}}", false, "{{values.id}}", "{{values.uniquetimestamp}}", "{{values.punishment}}", false]],
                     "add": ["warnamount"],
                     "remove": ["id"],
-                    "removeIdent": "",
+                    "ident": "",
                     "removeReq": ["id", "warnamount"]
                 },
                 "suggestions": {
@@ -857,10 +859,11 @@
                 },
                 "modroles": {
                     "cols": ["guildid, active, roleid, id, uniquetimestamp"],
-                    "vals": [["{{values.guildid}}", false, "{{values.roleid}}", "{{values.id}}", "{{values.uniquetimestamp}}"]],
+                    "vals": [["{{msg.guild.id}}", false, "{{values.roleid}}", "{{values.id}}", "{{values.uniquetimestamp}}"]],
                     "add": ["roleid"],
                     "remove": ["id"],
-                    "removeIdent": "",
+                    "ident": "roleid",
+                    "identType": "role",
                     "removeReq": ["id", "roles"]
                 }
             }
