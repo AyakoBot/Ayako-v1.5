@@ -583,7 +583,8 @@
             "checking": "Link:",
             "notexistent": "The Domain `{{url}}` does not exist (anymore)",
             "done": "Checking... Done {{tick}}",
-            "check": "Checking... {{loading}}"
+            "check": "Checking... {{loading}}",
+            "ccscam": "{{cross}} Found Link to be Malicious\nThis Link will try to gain access to your Credit Card Information"
         }, 
         "guild": {
             "notWhitelisted": "{{warning}} Message contains a not Whitelisted Link\n",
@@ -596,7 +597,8 @@
             "newLink": "{{cross}} Link is most likely malicious",
             "notexistent": "The Domain `{{url}}` does not exist (anymore)",
             "done": "Checking... Done {{tick}}",
-            "check": "Checking... {{loading}}"
+            "check": "Checking... {{loading}}",
+            "ccscam": "{{cross}} Found Link to be Malicious\nThis Link will try to gain access to your Credit Card Information"
         }
     },
     "verification": {

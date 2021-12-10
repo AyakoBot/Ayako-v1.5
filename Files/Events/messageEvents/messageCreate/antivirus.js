@@ -5,6 +5,7 @@ const request = require('request');
 const fs = require('fs');
 const Discord = require('discord.js');
 const axios = require('axios');
+const stringSimilarity = require('string-similarity');
 const blocklists = require('../../../blocklist.json');
 const auth = require('../../../BaseClient/auth.json');
 const client = require('../../../BaseClient/DiscordClient');
@@ -160,6 +161,17 @@ module.exports = {
         includedBadLink = true;
       }
 
+      await newUrl(msg, lan, embed, linkObject, check);
+      return;
+    }
+
+    const selfCheck = await selfChecker(linkObject);
+    if (selfCheck) {
+      if (!check) {
+        includedBadLink = true;
+      }
+
+      if (selfCheck === 'ccscam') await ccscam(msg, lan, embed, linkObject, check);
       await newUrl(msg, lan, embed, linkObject, check);
       return;
     }
@@ -344,6 +356,37 @@ const severeLink = async (msg, lan, embed, linkObject, urlSeverity, check) => {
   });
   if (!check) {
     client.emit('antivirusHandler', msg, linkObject.baseURL, 'virustotal');
+  }
+};
+
+const ccscam = async (msg, lan, embed, linkObject, check) => {
+  if (embed.fields.length === 0) {
+    await embed
+      .addField(
+        msg.language.result,
+        msg.client.ch.stp(lan.ccscam, {
+          cross: msg.client.constants.emotes.cross,
+        }),
+      )
+      .setDescription(
+        embed.description.replace(
+          msg.client.ch.stp(lan.check, {
+            loading: msg.client.constants.emotes.loading,
+          }),
+          msg.client.ch.stp(lan.done, {
+            tick: msg.client.constants.emotes.tick,
+          }),
+        ),
+      )
+      .setColor('#ff0000');
+
+    msg.m = await msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => {});
+  }
+  msg.client.ch.send(msg.client.channels.cache.get(msg.client.constants.standard.trashLogChannel), {
+    content: msg.url,
+  });
+  if (!check) {
+    client.emit('antivirusHandler', msg, linkObject.baseURL, 'selfscan');
   }
 };
 
@@ -716,4 +759,52 @@ const getSeverity = (VTresponse) => {
     severity += VTresponse.malicious * 2;
   }
   return severity;
+};
+
+const selfChecker = async (linkObject) => {
+  const siteHTML = (await axios.get(linkObject.href)).data;
+  // eslint-disable-next-line no-useless-escape
+  const siteNameBad = /property=["'`]og:site_name["'`](.*)content=["'`]discord["'`]>/gi.test(
+    siteHTML,
+  );
+  const embedNameBad = /property=["'`]og:title["'`](.*)content=["'`]discord/gi.test(siteHTML);
+
+  const args = siteHTML.split(/["'`]+/);
+  const embedDescription = args[args.indexOf('og:description') + 2];
+  const similarity = stringSimilarity.compareTwoStrings(
+    embedDescription,
+    'Discord is the easiest way to talk over voice, video, and text. Talk, chat, hang out, and stay close with your friends and communities.',
+  );
+  const embedDescriptionBad = Math.round(similarity * 100) > 80;
+
+  const usesDiscordImage =
+    /property=["'`]og:image["'`](.*)content=["'`]https:\/\/discord\.com\/assets\/652f40427e1f5186ad54836074898279\.png["'`]>/gi.test(
+      siteHTML,
+    );
+  const usesDiscordIcon =
+    /rel=["'`]icon["'`](.*)href=["'`]https:\/\/discord\.com\/assets\/847541504914fd33810e70a0ea73177e\.ico["'`]/gi.test(
+      siteHTML,
+    );
+  const websiteAdvertisesNitro = /(.*)3\smonths(.*)(Discord|Nitro)(\sNitro|)/gi.test(siteHTML);
+
+  const wantsCCNumber = /(.*)credit\scard\s(Number|)/gi.test(siteHTML);
+  const wantsCCexpiry = /(.*)Expiration\sDate/gi.test(siteHTML);
+  const wantsCCcvc = /(.*)cvc/gi.test(siteHTML);
+  const wantsCCzip = /(.*)(Postcode|zip)/gi.test(siteHTML);
+  const wantsCCname = /[^_|^s]name[^=]/gi.test(siteHTML);
+
+
+
+  if (
+    siteNameBad &&
+    embedNameBad &&
+    embedDescriptionBad &&
+    usesDiscordImage &&
+    usesDiscordIcon &&
+    websiteAdvertisesNitro
+  ) {
+    if (wantsCCNumber && wantsCCexpiry && wantsCCcvc && wantsCCzip && wantsCCname) return 'ccscam';
+    return 'nitroscam';
+  }
+  return false;
 };
