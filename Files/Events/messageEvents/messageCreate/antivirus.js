@@ -793,8 +793,6 @@ const selfChecker = async (linkObject) => {
   const wantsCCzip = /(.*)(Postcode|zip)/gi.test(siteHTML);
   const wantsCCname = /[^_|^s]name[^=]/gi.test(siteHTML);
 
-
-
   if (
     siteNameBad &&
     embedNameBad &&
