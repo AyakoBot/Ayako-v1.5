@@ -1,872 +1,973 @@
 {
-    "channelCreate": {
-        "color": "GREEN",
-        "author": {
-            "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673217172897822/ChannelCreate.png",
-            "link": "https://discord.com/channels/{{channel.guild.id}}/{{channel.id}}"
-        }
-    },
-    "channelDelete": {
-        "color": "RED",
-        "author": {
-            "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673218522808361/ChannelDelete.png"
-        }
-    },
-    "channelPin": {
-        "color": "GREEN",
-        "author": {
-            "image": "https://cdn.discordapp.com/attachments/760152457799401532/832029343206211614/PinAdd.png",
-            "link": "https://discord.com/channels/{{guild.id}}/{{channel.id}}/{{msg.id}}"
-        }
-    },
-    "channelUnPin": {
-        "color": "RED",
-        "author": {
-            "image": "https://cdn.discordapp.com/attachments/760152457799401532/832029341968891974/PinRemove.png",
-            "link": "https://discord.com/channels/{{guild.id}}/{{channel.id}}/{{msg.id}}"
-        }
-    },
-    "channelPinUpdate": {
-        "color": "YELLOW",
-        "author": {
-            "image": "https://cdn.discordapp.com/attachments/760152457799401532/832029346880421918/PinUpdate.png"
-        }
-    },
-    "channelUpdate": {
-        "color": "YELLOW",
-        "author": {
-            "image": "https://cdn.discordapp.com/attachments/760152457799401532/831674121997123624/ChannelUpdate.png",
-            "link": "https://discord.com/channels/{{channel.guild.id}}/{{channel.id}}"
-        }
-    },
-    "emojiCreate": {
-        "color": "GREEN",
-        "author": {
-            "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673209342263296/emojiDelete.png",
-            "link": "https://cdn.discordapp.com/emojis/{{emoji.id}}.{{ending}}"
-        }
-    },
-    "emojiDelete": {
-        "color": "RED",
-        "author": {
-            "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673209342263296/emojiDelete.png",
-            "link": "https://cdn.discordapp.com/emojis/{{emoji.id}}.{{ending}}"
-        }
-    },
-    "emojiUpdate": {
-        "color": "YELLOW",
-        "author": {
-            "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673221350162462/emojiUpdate.png",
-            "link": "https://cdn.discordapp.com/emojis/{{emoji.id}}.{{ending}}"
-        }
-    },
-    "guildBanAdd": {
-        "color": "GREEN",
-        "author": {
-            "image": "https://cdn.discordapp.com/attachments/760152457799401532/831682933777235968/BanAdd.png"
-        }
-    },
-    "guildBanRemove": {
-        "color": "GREEN",
-        "author": {
-            "image": "https://cdn.discordapp.com/attachments/760152457799401532/831682931952844851/BanRemove.png"
-        }
-    },
-    "guildCreate": {
-        "logEmbed": {
-            "guildName": "Guild Name",
-            "guildId": "Guild ID",
-            "memberCount": "Membercount",
-            "currentGuildCount": "Ayako is now in {{client.guilds.cache.size}} guilds",
-            "joinedAGuild": "<@&669894051851403294> joined a new Guild",
-            "guildOwner": "Guild Owner"
-        }
-    },
-    "guildDelete": {
-        "logEmbed": {
-            "color": "RED",
-            "guildName": "Guild Name",
-            "guildId": "Guild ID",
-            "memberCount": "Membercount",
-            "currentGuildCount": "Ayako is now in {{client.guilds.cache.size}} guilds",
-            "joinedAGuild": "<@&669894051851403294> left a Guild",
-            "guildOwner": "Guild Owner"
-        }
-    },
-    "guildIntegrationsUpdate": {
-        "color": "YELLOW",
-        "author": {
-            "image": "https://cdn.discordapp.com/attachments/760152457799401532/832079482864926760/IntegrationsUpdate.png"
-        }
-    },
-    "guildIntegrationsRemove": {
-        "color": "RED",
-        "author": {
-            "image": "https://cdn.discordapp.com/attachments/760152457799401532/832079483955576883/IntegrationsDelete.png"
-        }
-    },
-    "guildIntegrationsCreate": {
-        "color": "GREEN",
-        "author": {
-            "image": "https://cdn.discordapp.com/attachments/760152457799401532/832079485481255002/IntegrationsCreate.png"
-        }
-    },
-    "guildMemberAddLog": {
-        "color": "GREEN",
-        "author": {
-            "image": "https://cdn.discordapp.com/attachments/760152457799401532/832837384936620032/GuildMemberAdd.png",
-            "link": "https://discord.com/channels/@me/{{user.id}}"
-        }
-    },
-    "guildMemberRemove": {
-        "author": {
-           "kickImage": "https://cdn.discordapp.com/attachments/760152457799401532/833915327199969290/kick.png",
-           "leaveImage": "https://cdn.discordapp.com/attachments/760152457799401532/833915889077846036/GuildMemberRemove.png",
-           "link": "https://discord.com/channels/@me/{{user.id}}"
-        },
-        "color": "RED"
-    },
-    "guildMemberUpdate": {
-        "author": {
-           "image": "https://cdn.discordapp.com/attachments/760152457799401532/834254630644219944/GuildMemberUpdate.png",
-           "link": "https://discord.com/channels/@me/{{user.id}}"
-        },
-        "color": "YELLOW"
-    },
-    "guildUpdate": {
-        "author": {
-            "image": ""
-        },
-        "color": "YELLOW"
-    },
-    "inviteCreate": {
-        "author": {
-            "image": "",
-            "link": "https://discord.com/channels/@me/{{user.id}}"
-        },
-        "color": "GREEN"
-    },
-    "inviteDelete": {
-        "author": {
-            "image": "",
-            "link": "https://discord.com/channels/@me/{{user.id}}"
-        },
-        "color": "RED"
-    },
-    "messageDelete": {
-        "author": {
-            "image": "",
-            "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
-        },
-        "color": "RED"
-    },
-    "messageDeleteBulk": {
-        "author": {
-            "image": "",
-            "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}"
-        },
-        "color": "RED"
-    },
-    "messageReactionAddGiveaway": {
-        "author": {
-            "image": ""
-        },
-        "color": "ff0000",
-        "url": "https://discordapp.com/channels/{{reaction.message.guild.id}}/{{reaction.message.channel.id}}/{{reaction.message.id}}"
-    },
-    "messageReactionRemoveAll": {
-        "author": {
-            "image": "",
-            "link": "https://discordapp.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
-        },
-        "color": "RED"
-    },
-    "messageUpdateLogUpdate": {
-        "author": {
-            "image": "",
-            "link": "https://discordapp.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
-        },
-        "color": "YELLOW"
-    },
-    "messageUpdateLogPublish": {
-        "author": {
-            "image": "",
-            "link": "https://discordapp.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
-        },
-        "color": "GREEN"
-    },
-    "prune": {
-        "author": {
-            "image": ""
-        },
-        "color": "RED"
-    },
-    "roleCreate": {
-        "author": {
-            "image": ""
-        },
-        "color": "GREEN"
-    },
-    "roleRemove": {
-        "author": {
-            "image": ""
-        },
-        "color": "RED"
-    },
-    "roleUpdate": {
-        "author": {
-            "image": ""
-        },
-        "color": "YELLOW"
-    },
-    "userUpdate": {
-        "author": {
-            "image": "",
-            "link": "https://discord.com/channels/@me/{{user.id}}"
-        },
-        "color": "YELLOW"
-    },
-    "voiceUpdate": {
-        "author": {
-            "image": ""
-        },
-        "color": "YELLOW",
-        "joinColor": "GREEN",
-        "leaveColor": "RED"
-    },
-    "webhookCreate": {
-        "author": {
-            "image": ""
-        },
-        "color": "GREEN"
-    },
-    "webhookUpdate": {
-        "author": {
-            "image": ""
-        },
-        "color": "YELLOW"
-    },
-    "webhookDelete": {
-        "author": {
-            "image": ""
-        },
-        "color": "RED"
-    },
-    "commandCreate": {
-        "color": "GREEN",
-        "author": {
-            "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673209342263296/commandCreate.png",
-            "link": ""
-        }
-    },
-    "commandDelete": {
-        "color": "RED",
-        "author": {
-            "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673209342263296/commandDelete.png",
-            "link": ""
-        }
-    },
-    "commandUpdate": {
-        "color": "YELLOW",
-        "author": {
-            "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673221350162462/commandUpdate.png",
-            "link": ""
-        }
-    },
-    "antiraidMessage": {
-        "color": "RED",
-        "author": {
-            "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673209342263296/Warning.png",
-            "link": ""
-        }
-    },
-    "enabled": "<:enabled:831360855018962944>",
-    "disabled": "<:disabled:831360826048774176>",
-    "switch": {
-        "disable": "<:disableYesSwitch:831557872952934411><:neutralNoSwitch:831559195215134790><:enableNoSwitch:831557873086758962>",
-        "enable": "<:disableNoSwitch:831557873070637066><:neutralNoSwitch:831559195215134790><:enableYesSwitch:831557872818192457>",
-        "neutral": "<:disableNoSwitch:831557873070637066><:neutralYesSwitch:831559195185905704><:enableNoSwitch:831557873086758962>"
-    },
-    "standard": {
-        "color": "#b0ff00",
-        "name": "Ayako",
-        "guildLogChannel": "718181439354437693",
-        "errorLogChannel": "829148971125047328",
-        "trashLogChannel": "726252103302905907",
-        "prefix": "t!",
-        "invite": "https://discord.com/api/oauth2/authorize?client_id=650691698409734151&permissions=4261276919&scope=bot%20applications.commands",
-        "image": "https://ayakobot.com/DefaultEmbedImage",
-        "errorImage": "https://ayakobot.com/DefaultErrorImage",
-        "support": "https://discord.gg/animekos",
-        "webhook": {
-            "name": "Ayako Logging",
-            "avatar": "https://cdn.discordapp.com/attachments/760152457799401532/839644223074336789/6E81E655-B92C-4EC6-8015-20679059B454.png"
-        },
-        "discordUrl": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}",
-        "discordUrlDB": "https://discord.com/channels/{{guildid}}/{{channelid}}/{{msgid}}",
-        "permissionsViewer": "https://discordapi.com/permissions.html#{{permission}}"
-    },
-    "emotes": {
-        "cross": "<:Cross:902269073805701211>",
-        "crossID": "902269073805701211",
-        "crossLink": "https://cdn.discordapp.com/emojis/902269073805701211.png?size=96",
-        "crossBG": "<:CrossWithBackground:902270930716340305>",
-        "crossBGID": "902270930716340305",
-        "crossBGLink": "https://cdn.discordapp.com/emojis/902270930716340305.png?size=96",
-        "tick": "<:Tick:902269933860290650>",
-        "tickID": "902269933860290650",
-        "tickLink": "https://cdn.discordapp.com/emojis/902269933860290650.png?size=96",
-        "tickBG": "<:CrossWithBackground:902273165525409872>",
-        "tickBGID": "902273165525409872",
-        "tickBGLink": "https://cdn.discordapp.com/emojis/902273165525409872.png?size=96",
-        "loading": "<a:Loading:780543908861182013>",
-        "loadingID": "780543908861182013",
-        "loadingLink": "https://cdn.discordapp.com/emojis/780543908861182013.gif?v=1",
-        "ayakoPeek": "<:AMayakopeek:758872110067351562>",
-        "ayakoPeekID": "758872110067351562",
-        "ayakoPeekLink": "https://cdn.discordapp.com/emojis/758872110067351562.png?v=1",
-        "workload": "<:workload:902582586587635712>",
-        "workloadID": "902582586587635712",
-        "workloadLink": "https://cdn.discordapp.com/emojis/902582586587635712.png?size=96",
-        "up": "🆙",
-        "back": "⬅️",
-        "numbers": {
-            "0": "0⃣",
-            "1": "1⃣",
-            "2": "2⃣",
-            "3": "3⃣",
-            "4": "4⃣",
-            "5": "5⃣",
-            "6": "6⃣",
-            "7": "7⃣",
-            "8": "8⃣",
-            "9": "9⃣",
-            "ten": "🔟"
-        },
-        "settings": "<:Settings:781982956138659880>",
-        "settingsID": "781982956138659880",
-        "settingsLink": "https://cdn.discordapp.com/emojis/781982956138659880.png?v=1",
-        "small": "<:Small2:756379369739386910><:Small1:756379345190387712>",
-        "small1ID": "756379369739386910",
-        "small1Link": "https://cdn.discordapp.com/emojis/756379369739386910.png?v=1",
-        "small2ID": "756379345190387712",
-        "small2Link": "https://cdn.discordapp.com/emojis/756379345190387712.png?v=1",
-        "big": "<:Big:756380855395549256>",
-        "bigID": "756380855395549256",
-        "bigLink": "https://cdn.discordapp.com/emojis/756380855395549256.png?v=1",
-        "warning": "⚠️",
-        "green": "🟢",
-        "yellow": "🟡",
-        "blue": "🔵",
-        "red": "🔴",
-        "trash": "<:Trash:834326440761229363>",
-        "trashID": "834326440761229363",
-        "trashLink": "https://cdn.discordapp.com/emojis/834326440761229363.png?v=1",
-        "plus": "<:Plus:915237851799650354>",
-        "plusID": "915237851799650354",
-        "plusLink": "https://cdn.discordapp.com/emojis/915237851799650354.png?size=96",
-        "minus": "<:Minus:915237851883528243>",
-        "minusID": "915237851883528243",
-        "minusLink": "https://cdn.discordapp.com/emojis/915237851883528243.png?size=96",
-        "plusBG": "<:PlusWithBackground:915237851795451924>",
-        "plusBGID": "915237851795451924",
-        "plusBGLink": "https://cdn.discordapp.com/emojis/915237851795451924.png?size=96",
-        "minusBG": "<:MinusWithBackground:915237851803840613>",
-        "minusBGID": "915237851803840613",
-        "minusBGLink": "https://cdn.discordapp.com/emojis/915237851803840613.png?size=96",
-        "flags": {
-            "en": "🇺🇸 🇬🇧"
-        },
-        "timers": {
-             "1":  "<a:1s:762473070841036800>",  "2":  "<a:2s:762473168899539012>",  "3":  "<a:3s:762473213526933514>",  "4":  "<a:4s:762473267474071622>",  "5":  "<a:5s:762473533078765591>",  
-             "6":  "<a:6s:762473583044722709>",  "7":  "<a:7s:762473613529448448>",  "8":  "<a:8s:762473646324842536>",  "9":  "<a:9s:762473706122641408>", "10": "<a:10s:762473759541035058>",
-            "11": "<a:11s:762473793703641109>", "12": "<a:12s:762473832513536011>", "13": "<a:13s:762473884145549342>", "14": "<a:14s:762473930095067136>", "15": "<a:15s:762473955298115615>", 
-            "16": "<a:16s:762473986747007026>", "17": "<a:17s:762474020561354773>", "18": "<a:18s:762474063238791168>", "19": "<a:19s:762474094125907969>", "20": "<a:20s:762474157169704960>",
-            "21": "<a:21s:762474226308481024>", "22": "<a:22s:762474264170332201>", "23": "<a:23s:762474291072729098>", "24": "<a:24s:762474335113838622>", "25": "<a:25s:762474386317901854>", 
-            "26": "<a:26s:762474415761653782>", "27": "<a:27s:762474451953647627>", "28": "<a:28s:762474489404850176>", "29": "<a:29s:762474518861709332>", "30": "<a:30s:762474546266898502>",
-            "31": "<a:31s:910138889639964732>", "32": "<a:32s:910138889656750160>", "33": "<a:33s:910138890789208115>", "34": "<a:34s:910139956008198204>", "35": "<a:35s:910139955928526888>", 
-            "36": "<a:36s:910139955932713000>", "37": "<a:37s:910140485492961290>", "38": "<a:38s:910140485102874635>", "39": "<a:39s:910140485010599967>", "40": "<a:40s:910140485576851456>",
-            "41": "<a:41s:910140485614567435>", "42": "<a:42s:910140485581029387>", "43": "<a:43s:910140485690064936>", "44": "<a:44s:910140485350338571>", "45": "<a:45s:910140485182582806>", 
-            "46": "<a:46s:910140485820096532>", "47": "<a:47s:910140485912395796>", "48": "<a:48s:910140485841076274>", "49": "<a:49s:910140485434220555>", "50": "<a:50s:910140486017220648>",
-            "51": "<a:51s:910140486004662302>", "52": "<a:52s:910140485505536001>", "53": "<a:53s:910140485887225866>", "54": "<a:54s:910140485862064128>", "55": "<a:55s:910140485467783180>", 
-            "56": "<a:56s:910140480975671386>", "57": "<a:57s:910139954313695243>", "58": "<a:58s:910139954611494922>", "59": "<a:59s:910139954733142046>", "60": "<a:60s:910140485883031572>"
-        },
-        "lock": "🔒",
-        "unlock": "🔓"
-    },
-    "error": "ff0000",
-    "mod": {
-        "muteAdd": {
-            "color": "ff0000",
-            "author": {
-                "image": "",
-                "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
-            }
-        },
-        "strike": {
-            "color": "ff0000",
-            "author": {
-                "image": "",
-                "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
-            },
-            "confirmEmbed": {
-                "color": "ff0000",
-                "author": {
-                    "image": ""
-                }
-            }
-        },
-        "tempmuteAdd": {
-            "color": "ff0000",
-            "author": {
-                "image": "",
-                "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
-            }
-        },
-        "tempbanAdd": {
-            "color": "ff0000",
-            "author": {
-                "image": "",
-                "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
-            }
-        },
-        "muteRemove": {
-            "color": "00ff00",
-            "author": {
-                "image": "",
-                "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
-            }
-        },
-        "kickAdd": {
-            "color": "ff0000",
-            "author": {
-                "image": "",
-                "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
-            }
-        },
-        "banAdd": {
-            "color": "ff0000",
-            "author": {
-                "image": "",
-                "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
-            }
-        },
-        "banRemove": {
-            "color": "00ff00",
-            "author": {
-                "image": "",
-                "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
-            }
-        },
-        "warnAdd": {
-            "color": "ff0000"
-        }
-    },
-    "embedBuilder": {
-        "embed": {
-            "text": "text",
-            "link": "url",
-            "description": "text",
-            "icon": "url",
-            "color": "hex",
-            "image": "url",
-            "thumbnail": "url",
-            "title": "text",
-            "value": "text",
-            "inline": "boolean",
-            "timestamp": "unix"
-        }
-    },
-    "commands": {
-        "toxicityCheck": "ff0000",
-        "pardon": {
-            "success": "1aff00",
-            "log": {
-                "color": "1aff00",
-                "image": "https://ayakobot.com/cdn/Ayako_Assets/Warning.png"
-            }
-        },
-        "clearwarns": {
-            "success": "1aff00",
-            "fail": "ff0000",
-            "loading": "ffff00",
-            "log": {
-                "color": "1aff00",
-                "image": "https://ayakobot.com/cdn/Ayako_Assets/Warning.png"
-            }
-        },
-        "massban": {
-            "success": "1aff00",
-            "fail": "ff0000",
-            "log": {
-                "color": "ff0000"
-            }
-        },
-        "check": {
-            "author": {
-                "image": "https://ayakobot.com/cdn/Ayako_Assets/Warning.png",
-                "url": ""
-            }
-        },
-        "invite": {
-            "author":{
-                "image": "https://ayakobot.com/cdn/Ayako_Assets/help.png"
-            }
-        },
-        "settings": {
-            "color": "ffffff",
-            "log": {
-                "color": "YELLOW"
-            },
-            "edit": {
-                "antispam": {
-                    "banenabledtof": "boolean",
-                    "kickenabledtof": "boolean",
-                    "muteenabledtof": "boolean",
-                    "giveofficialwarnstof": "boolean",
-                    "muteafterwarnsamount": "number",
-                    "kickafterwarnsamount": "number",
-                    "banafterwarnsamount": "number",
-                    "active": "boolean",
-                    "bpchannelid": "channels",
-                    "bproleid": "roles",
-                    "bpuserid": "users",
-                    "readofwarnstof": "boolean"
-                },
-                "autorole": {
-                    "active": "boolean",
-                    "botroleid": "roles",
-                    "userroleid": "roles",
-                    "allroleid": "roles"
-                },
-                "blacklist": {
-                    "active": "boolean",
-                    "warntof": "boolean",
-                    "mutetof": "boolean",
-                    "kicktof": "boolean",
-                    "bantof": "boolean",
-                    "warnafter": "number",
-                    "muteafter": "number",
-                    "kickafter": "number",
-                    "banafter": "number",
-                    "bpchannelid": "channels",
-                    "bproleid": "roles",
-                    "bpuserid": "users",
-                    "words": "string"
-                },
-                "cooldowns": {
-                    "command": "command",
-                    "cooldown": "seconds",
-                    "activechannelid": "channels",
-                    "bpchannelid": "channels",
-                    "bproleid": "roles",
-                    "bpuserid": "users",
-                    "active": "boolean"
-                },
-                "overview": {
-                    "prefix": "string",
-                    "interactionsmode": "boolean",
-                    "muteroleid": "role",
-                    "lan": "lan"
-                },
-                "disabled": {
-                    "commands": "commands",
-                    "channels": "channels",
-                    "bproleid": "roles",
-                    "blroleid": "roles",
-                    "bpuserid": "users",
-                    "bluserid": "users",
-                    "active": "boolean"
-                },
-                "logs": {
-                    "guildevents": "channels",
-                    "emojievents": "channels",
-                    "channelevents": "channels",
-                    "inviteevents": "channels",
-                    "messageevents": "channels",
-                    "roleevents": "channels",
-                    "userevents": "channels",
-                    "voiceevents": "channels",
-                    "webhookevents": "channels",
-                    "applicationevents": "channels",
-                    "stageinstanceevents": "channels",
-                    "stickerevents": "channels",
-                    "threadevents": "channels",
-                    "guildmemberevents": "channels",
-                    "modlogs": "channels",
-                    "settingslog": "channels"
-                },
-                "interactions": {
-                    "size": "boolean",
-                    "block": "string"
-                },
-                "separators": {
-                    "active": "boolean",
-                    "stoprole": "role",
-                    "separator": "role",
-                    "oneTimeRunner": "onetimerunner",
-                    "roles": "roles",
-                    "isvarying": "boolean"
-                },
-                "autopunish": {
-                    "active": "boolean",
-                    "punishment": "punishment",
-                    "duration": "time",
-                    "warnamount": "number",
-                    "removeroles": "roles",
-                    "addroles": "roles",
-                    "confirmationreq": "boolean"
-                },
-                "antivirus": {
-                    "active": "boolean",
-                    "bantof": "boolean",
-                    "kicktof": "boolean",
-                    "mutetof": "boolean",
-                    "warntof": "boolean",
-                    "verbaltof": "boolean",
-                    "muteafterwarnsamount": "number",
-                    "kickafterwarnsamount": "number",
-                    "banafterwarnsamount": "number",
-                    "warnafterwarnsamount": "number",
-                    "delete": "time"
-                },
-                "disboard": {
-                    "active": "boolean",
-                    "roleid": "role",
-                    "channelid": "channel",
-                    "repeatreminder": "minutes"
-                },
-                "suggestions": {
-                    "active": "boolean",
-                    "channelid": "channel",
-                    "bluserid": "users",
-                    "blroleid": "roles",
-                    "approverroleid": "roles",
-                    "anon": "boolean"
-                },
-                "verification": {
-                    "active": "boolean",
-                    "greetdesc": "string",
-                    "logchannel": "channel",
-                    "finishedrole": "role",
-                    "finishdesc": "string",
-                    "pendingrole": "role",
-                    "startchannel": "channel",
-                    "selfstart": "boolean",
-                    "kickafter": "minutes",
-                    "kicktof": "boolean"
-                },
-                "antiraid": {
-                    "active": "boolean",
-                    "bantof": "boolean",
-                    "kicktof": "boolean",
-                    "posttof": "boolean",
-                    "postchannel": "channel",
-                    "pingroles": "roles",
-                    "pingusers": "users",
-                    "time": "seconds",
-                    "jointhreshold": "number",
-                    "similaridthreshold": "number"
-                },
-                "selfroles": {
-                    "active": "boolean",
-                    "roles": "roles",
-                    "onlyone": "boolean",
-                    "blacklistedroles": "roles",
-                    "blacklistedusers": "users",
-                    "whitelistedroles": "roles",
-                    "whitelistedusers": "users",
-                    "name": "string"
-                },
-                "modroles": {
-                    "active": "boolean",
-                    "blacklistedroles": "roles",
-                    "blacklistedusers": "users",
-                    "whitelistedroles": "roles",
-                    "whitelistedusers": "users",
-                    "roleid": "role",
-                    "perms": "permissions",
-                    "whitelistedcommands": "commands",
-                    "blacklistedcommands": "commands"
-                }
-            },
-            "tablenames": {
-                "cooldowns": ["cooldowns"],
-                "antispam": ["antispamsettings"],
-                "antivirus": ["antivirus"],
-                "antiraid": ["antiraidsettings"],
-                "blacklist": ["blacklists"],
-                "autorole": ["autorole"],
-                "disabled": ["disabledcommands"],
-                "disboard": ["disboard"],
-                "forcecooldowns": [null],
-                "gifposter": ["gifposter"],
-                "leveling": ["levelingsettings"],
-                "logs": ["logchannels"],
-                "nitro": ["nitrosettings"],
-                "reactionroles": ["reactionroles"],
-                "selfroles": ["selfroles"],
-                "separators": ["roleseparator", "roleseparatorsettings"],
-                "autopunish": ["autopunish"],
-                "suggestions": ["suggestionsettings"],
-                "ticketing": [null],
-                "vc": [null],
-                "verification": ["verification"],
-                "welcome": ["welcome"],
-                "language": ["language"],
-                "overview": ["guildsettings"],
-                "prefix": ["prefix"],
-                "user": ["usersettings"],
-                "interactions": ["interactions"],
-                "modroles": ["modroles"],
-                "muterole": ["muterole"]
-            },
-            "editReq": ["id", "column"],
-            "setupQueries": {
-                "antispam": {
-                    "cols": ["active, giveofficialwarnstof, muteafterwarnsamount, kickafterwarnsamount, banafterwarnsamount, readofwarnstof, muteenabledtof, kickenabledtof, banenabledtof, guildid"],
-                    "vals": [[true, true, 3, 5, 6, true, true, false, true, "{{msg.guild.id}}"]]
-                },
-                "antiraid": {
-                    "cols": ["guildid, active, kicktof, time, jointhreshold, similaridthreshold"],
-                    "vals": [["{{msg.guild.id}}", false, true, 15000, 15, 5]]
-                },
-                "blacklist": {
-                    "cols": ["guildid, active, warntof, mutetof, kicktof, bantof, warnafter, muteafter, kickafter, banafter"],
-                    "vals": [["{{msg.guild.id}}", true, true, true, true, true, 4, 6, 8, 10]]
-                },
-                "autorole": {
-                    "cols": ["guildid, active"],
-                    "vals": [["{{msg.guild.id}}", true]]
-                },
-                "disboard": {
-                    "cols": ["guildid, active, repeatreminder"],
-                    "vals": [["{{msg.guild.id}}", true, 30]]
-                },
-                "antivirus": {
-                    "cols": ["guildid, active, bantof, warntof, kicktof, mutetof, verbaltof, muteafterwarnsamount, banafterwarnsamount, kickafterwarnsamount, warnafterwarnsamount"],
-                    "vals": [["{{msg.guild.id}}", true, true, true, true, true, true, 2, 4, 3, 1]]
-                },
-                "disabled": {
-                    "cols": ["guildid, active, channels, id, uniquetimestamp, commands"],
-                    "vals": [["{{msg.guild.id}}", true, ["{{values.channels}}"], "{{values.id}}", "{{values.uniquetimestamp}}", ["{{values.commands}}"]]],
-                    "add": ["commands", "channels"],
-                    "remove": ["id"],
-                    "ident": "commands",
-                    "removeReq": ["id", "channels"]
-                },
-                "cooldowns": {
-                    "cols": ["guildid, active, command, cooldown, id, uniquetimestamp"],
-                    "vals": [["{{msg.guild.id}}", true, "{{values.command}}", "{{values.cooldown}}", "{{values.id}}", "{{values.uniquetimestamp}}"]],
-                    "add": ["command", "cooldown"],
-                    "remove": ["id"],
-                    "ident": "command",
-                    "removeReq": ["id", "cooldown"]
-                },
-                "overview": {
-                    "cols": ["guildid, interactionsmode, lan"],
-                    "vals": [["{{msg.guild.id}}", true, "en"]]
-                },
-                "forcecooldowns": {
-                    "cols": null,
-                    "vals": null
-                },
-                "gifposter": {
-                    "cols": ["guildid, active"],
-                    "vals": [["{{msg.guild.id}}", true]]
-                },
-                "leveling": {
-                    "cols": ["guildid, active, xpgain"],
-                    "vals": [["{{msg.guild.id}}", true, 1.0]]
-                },
-                "logs": {
-                    "cols": ["guildid"],
-                    "vals": [["{{msg.guild.id}}"]]
-                },
-                "nitro": {
-                    "cols": ["guildid"],
-                    "vals": [["{{msg.guild.id}}"]]
-                },
-                "reactionroles": {
-                    "cols": ["guildid"],
-                    "vals": [["{{msg.guild.id}}"]]
-                },
-                "selfroles": {
-                    "cols": ["guildid, active, id, uniquetimestamp, roles, name"],
-                    "vals": [["{{msg.guild.id}}", false, "{{values.id}}", "{{values.uniquetimestamp}}", "{{values.roles}}", "{{values.name}}"]],
-                    "add": ["roles", "name"],
-                    "remove": ["id"],
-                    "ident": "name",
-                    "removeReq": ["id", "roles"]
-                },
-                "statschannel": {
-                    "cols": ["guildid, channel, type, id"],
-                    "vals": [["{{msg.guild.id}}", "{{values.channelid}}", "{{values.type}}", "{{values.id}}"]],
-                    "add": ["channel"],
-                    "remove": ["id"],
-                    "ident": "channel",
-                    "identType" : "channel",
-                    "removeReq": ["id", "channel"]
-                },
-                "separators": {
-                    "cols": ["guildid, active, id, uniquetimestamp, isvarying, separator", "guildid, stillrunning, active"],
-                    "vals": [["{{msg.guild.id}}", false, "{{values.id}}", "{{values.uniquetimestamp}}", true, "{{values.separator}}"], ["{{msg.guild.id}}", false, false]],
-                    "add": ["separator"],
-                    "remove": ["id"],
-                    "ident": "separator",
-                    "identType": "role",
-                    "removeReq": ["id", "roles"]
-                },
-                "autopunish": {
-                    "cols": ["guildid, active, id, uniquetimestamp, punishment, confirmationreq"],
-                    "vals": [["{{msg.guild.id}}", false, "{{values.id}}", "{{values.uniquetimestamp}}", "{{values.punishment}}", false]],
-                    "add": ["warnamount"],
-                    "remove": ["id"],
-                    "ident": "",
-                    "removeReq": ["id", "warnamount"]
-                },
-                "suggestions": {
-                    "cols": ["guildid, active, anon"],
-                    "vals": [["{{msg.guild.id}}", true, true]]
-                },
-                "ticketing": {
-                    "cols": ["guildid, channelid"],
-                    "vals": [["{{msg.guild.id}}", "{{channel.id}}"]]
-                },
-                "vcsettings": {
-                    "cols": ["guildid, active, timeout"],
-                    "vals": [["{{msg.guild.id}}", true, 1800000]]
-                },
-                "verification": {
-                    "cols": ["guildid, active, kickafter, kicktof, selfstart"],
-                    "vals": [["{{msg.guild.id}}", false, 30, true, false]]
-                },
-                "welcome": {
-                    "cols": ["guildid, active"],
-                    "vals": [["{{msg.guild.id}}", true]]
-                },
-                "language": {
-                    "cols": ["guildid, language"],
-                    "vals": [["{{msg.guild.id}}", "en"]]
-                },
-                "guildsettings": {
-                    "cols": ["guildid, prefix, interactionsmode"],
-                    "vals": [["{{msg.guild.id}}", "h!", true]]
-                },
-                "user": {
-                    "cols": ["userid"],
-                    "vals": [[ "{{msg.author.id}}"]]
-                },
-                "modroles": {
-                    "cols": ["guildid, active, roleid, id, uniquetimestamp"],
-                    "vals": [["{{msg.guild.id}}", false, "{{values.roleid}}", "{{values.id}}", "{{values.uniquetimestamp}}"]],
-                    "add": ["roleid"],
-                    "remove": ["id"],
-                    "ident": "roleid",
-                    "identType": "role",
-                    "removeReq": ["id", "roles"]
-                }
-            }
-        }
+  "channelCreate": {
+    "color": "GREEN",
+    "author": {
+      "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673217172897822/ChannelCreate.png",
+      "link": "https://discord.com/channels/{{channel.guild.id}}/{{channel.id}}"
     }
+  },
+  "channelDelete": {
+    "color": "RED",
+    "author": {
+      "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673218522808361/ChannelDelete.png"
+    }
+  },
+  "channelPin": {
+    "color": "GREEN",
+    "author": {
+      "image": "https://cdn.discordapp.com/attachments/760152457799401532/832029343206211614/PinAdd.png",
+      "link": "https://discord.com/channels/{{guild.id}}/{{channel.id}}/{{msg.id}}"
+    }
+  },
+  "channelUnPin": {
+    "color": "RED",
+    "author": {
+      "image": "https://cdn.discordapp.com/attachments/760152457799401532/832029341968891974/PinRemove.png",
+      "link": "https://discord.com/channels/{{guild.id}}/{{channel.id}}/{{msg.id}}"
+    }
+  },
+  "channelPinUpdate": {
+    "color": "YELLOW",
+    "author": {
+      "image": "https://cdn.discordapp.com/attachments/760152457799401532/832029346880421918/PinUpdate.png"
+    }
+  },
+  "channelUpdate": {
+    "color": "YELLOW",
+    "author": {
+      "image": "https://cdn.discordapp.com/attachments/760152457799401532/831674121997123624/ChannelUpdate.png",
+      "link": "https://discord.com/channels/{{channel.guild.id}}/{{channel.id}}"
+    }
+  },
+  "emojiCreate": {
+    "color": "GREEN",
+    "author": {
+      "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673209342263296/emojiDelete.png",
+      "link": "https://cdn.discordapp.com/emojis/{{emoji.id}}.{{ending}}"
+    }
+  },
+  "emojiDelete": {
+    "color": "RED",
+    "author": {
+      "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673209342263296/emojiDelete.png",
+      "link": "https://cdn.discordapp.com/emojis/{{emoji.id}}.{{ending}}"
+    }
+  },
+  "emojiUpdate": {
+    "color": "YELLOW",
+    "author": {
+      "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673221350162462/emojiUpdate.png",
+      "link": "https://cdn.discordapp.com/emojis/{{emoji.id}}.{{ending}}"
+    }
+  },
+  "guildBanAdd": {
+    "color": "GREEN",
+    "author": {
+      "image": "https://cdn.discordapp.com/attachments/760152457799401532/831682933777235968/BanAdd.png"
+    }
+  },
+  "guildBanRemove": {
+    "color": "GREEN",
+    "author": {
+      "image": "https://cdn.discordapp.com/attachments/760152457799401532/831682931952844851/BanRemove.png"
+    }
+  },
+  "guildCreate": {
+    "logEmbed": {
+      "guildName": "Guild Name",
+      "guildId": "Guild ID",
+      "memberCount": "Membercount",
+      "currentGuildCount": "Ayako is now in {{client.guilds.cache.size}} guilds",
+      "joinedAGuild": "<@&669894051851403294> joined a new Guild",
+      "guildOwner": "Guild Owner"
+    }
+  },
+  "guildDelete": {
+    "logEmbed": {
+      "color": "RED",
+      "guildName": "Guild Name",
+      "guildId": "Guild ID",
+      "memberCount": "Membercount",
+      "currentGuildCount": "Ayako is now in {{client.guilds.cache.size}} guilds",
+      "joinedAGuild": "<@&669894051851403294> left a Guild",
+      "guildOwner": "Guild Owner"
+    }
+  },
+  "guildIntegrationsUpdate": {
+    "color": "YELLOW",
+    "author": {
+      "image": "https://cdn.discordapp.com/attachments/760152457799401532/832079482864926760/IntegrationsUpdate.png"
+    }
+  },
+  "guildIntegrationsRemove": {
+    "color": "RED",
+    "author": {
+      "image": "https://cdn.discordapp.com/attachments/760152457799401532/832079483955576883/IntegrationsDelete.png"
+    }
+  },
+  "guildIntegrationsCreate": {
+    "color": "GREEN",
+    "author": {
+      "image": "https://cdn.discordapp.com/attachments/760152457799401532/832079485481255002/IntegrationsCreate.png"
+    }
+  },
+  "guildMemberAddLog": {
+    "color": "GREEN",
+    "author": {
+      "image": "https://cdn.discordapp.com/attachments/760152457799401532/832837384936620032/GuildMemberAdd.png",
+      "link": "https://discord.com/channels/@me/{{user.id}}"
+    }
+  },
+  "guildMemberRemove": {
+    "author": {
+      "kickImage": "https://cdn.discordapp.com/attachments/760152457799401532/833915327199969290/kick.png",
+      "leaveImage": "https://cdn.discordapp.com/attachments/760152457799401532/833915889077846036/GuildMemberRemove.png",
+      "link": "https://discord.com/channels/@me/{{user.id}}"
+    },
+    "color": "RED"
+  },
+  "guildMemberUpdate": {
+    "author": {
+      "image": "https://cdn.discordapp.com/attachments/760152457799401532/834254630644219944/GuildMemberUpdate.png",
+      "link": "https://discord.com/channels/@me/{{user.id}}"
+    },
+    "color": "YELLOW"
+  },
+  "guildUpdate": {
+    "author": {
+      "image": ""
+    },
+    "color": "YELLOW"
+  },
+  "inviteCreate": {
+    "author": {
+      "image": "",
+      "link": "https://discord.com/channels/@me/{{user.id}}"
+    },
+    "color": "GREEN"
+  },
+  "inviteDelete": {
+    "author": {
+      "image": "",
+      "link": "https://discord.com/channels/@me/{{user.id}}"
+    },
+    "color": "RED"
+  },
+  "messageDelete": {
+    "author": {
+      "image": "",
+      "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
+    },
+    "color": "RED"
+  },
+  "messageDeleteBulk": {
+    "author": {
+      "image": "",
+      "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}"
+    },
+    "color": "RED"
+  },
+  "messageReactionAddGiveaway": {
+    "author": {
+      "image": ""
+    },
+    "color": "ff0000",
+    "url": "https://discordapp.com/channels/{{reaction.message.guild.id}}/{{reaction.message.channel.id}}/{{reaction.message.id}}"
+  },
+  "messageReactionRemoveAll": {
+    "author": {
+      "image": "",
+      "link": "https://discordapp.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
+    },
+    "color": "RED"
+  },
+  "messageUpdateLogUpdate": {
+    "author": {
+      "image": "",
+      "link": "https://discordapp.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
+    },
+    "color": "YELLOW"
+  },
+  "messageUpdateLogPublish": {
+    "author": {
+      "image": "",
+      "link": "https://discordapp.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
+    },
+    "color": "GREEN"
+  },
+  "prune": {
+    "author": {
+      "image": ""
+    },
+    "color": "RED"
+  },
+  "roleCreate": {
+    "author": {
+      "image": ""
+    },
+    "color": "GREEN"
+  },
+  "roleRemove": {
+    "author": {
+      "image": ""
+    },
+    "color": "RED"
+  },
+  "roleUpdate": {
+    "author": {
+      "image": ""
+    },
+    "color": "YELLOW"
+  },
+  "userUpdate": {
+    "author": {
+      "image": "",
+      "link": "https://discord.com/channels/@me/{{user.id}}"
+    },
+    "color": "YELLOW"
+  },
+  "voiceUpdate": {
+    "author": {
+      "image": ""
+    },
+    "color": "YELLOW",
+    "joinColor": "GREEN",
+    "leaveColor": "RED"
+  },
+  "webhookCreate": {
+    "author": {
+      "image": ""
+    },
+    "color": "GREEN"
+  },
+  "webhookUpdate": {
+    "author": {
+      "image": ""
+    },
+    "color": "YELLOW"
+  },
+  "webhookDelete": {
+    "author": {
+      "image": ""
+    },
+    "color": "RED"
+  },
+  "commandCreate": {
+    "color": "GREEN",
+    "author": {
+      "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673209342263296/commandCreate.png",
+      "link": ""
+    }
+  },
+  "commandDelete": {
+    "color": "RED",
+    "author": {
+      "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673209342263296/commandDelete.png",
+      "link": ""
+    }
+  },
+  "commandUpdate": {
+    "color": "YELLOW",
+    "author": {
+      "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673221350162462/commandUpdate.png",
+      "link": ""
+    }
+  },
+  "antiraidMessage": {
+    "color": "RED",
+    "author": {
+      "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673209342263296/Warning.png",
+      "link": ""
+    }
+  },
+  "enabled": "<:enabled:831360855018962944>",
+  "disabled": "<:disabled:831360826048774176>",
+  "switch": {
+    "disable": "<:disableYesSwitch:831557872952934411><:neutralNoSwitch:831559195215134790><:enableNoSwitch:831557873086758962>",
+    "enable": "<:disableNoSwitch:831557873070637066><:neutralNoSwitch:831559195215134790><:enableYesSwitch:831557872818192457>",
+    "neutral": "<:disableNoSwitch:831557873070637066><:neutralYesSwitch:831559195185905704><:enableNoSwitch:831557873086758962>"
+  },
+  "standard": {
+    "color": "#b0ff00",
+    "name": "Ayako",
+    "guildLogChannel": "718181439354437693",
+    "errorLogChannel": "829148971125047328",
+    "trashLogChannel": "726252103302905907",
+    "prefix": "t!",
+    "invite": "https://discord.com/api/oauth2/authorize?client_id=650691698409734151&permissions=4261276919&scope=bot%20applications.commands",
+    "image": "https://ayakobot.com/DefaultEmbedImage",
+    "errorImage": "https://ayakobot.com/DefaultErrorImage",
+    "support": "https://discord.gg/animekos",
+    "webhook": {
+      "name": "Ayako Logging",
+      "avatar": "https://cdn.discordapp.com/attachments/760152457799401532/839644223074336789/6E81E655-B92C-4EC6-8015-20679059B454.png"
+    },
+    "discordUrl": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}",
+    "discordUrlDB": "https://discord.com/channels/{{guildid}}/{{channelid}}/{{msgid}}",
+    "permissionsViewer": "https://discordapi.com/permissions.html#{{permission}}"
+  },
+  "emotes": {
+    "cross": "<:Cross:902269073805701211>",
+    "crossID": "902269073805701211",
+    "crossLink": "https://cdn.discordapp.com/emojis/902269073805701211.png?size=96",
+    "crossBG": "<:CrossWithBackground:902270930716340305>",
+    "crossBGID": "902270930716340305",
+    "crossBGLink": "https://cdn.discordapp.com/emojis/902270930716340305.png?size=96",
+    "tick": "<:Tick:902269933860290650>",
+    "tickID": "902269933860290650",
+    "tickLink": "https://cdn.discordapp.com/emojis/902269933860290650.png?size=96",
+    "tickBG": "<:CrossWithBackground:902273165525409872>",
+    "tickBGID": "902273165525409872",
+    "tickBGLink": "https://cdn.discordapp.com/emojis/902273165525409872.png?size=96",
+    "loading": "<a:Loading:780543908861182013>",
+    "loadingID": "780543908861182013",
+    "loadingLink": "https://cdn.discordapp.com/emojis/780543908861182013.gif?v=1",
+    "ayakoPeek": "<:AMayakopeek:758872110067351562>",
+    "ayakoPeekID": "758872110067351562",
+    "ayakoPeekLink": "https://cdn.discordapp.com/emojis/758872110067351562.png?v=1",
+    "workload": "<:workload:902582586587635712>",
+    "workloadID": "902582586587635712",
+    "workloadLink": "https://cdn.discordapp.com/emojis/902582586587635712.png?size=96",
+    "up": "🆙",
+    "back": "⬅️",
+    "numbers": {
+      "0": "0⃣",
+      "1": "1⃣",
+      "2": "2⃣",
+      "3": "3⃣",
+      "4": "4⃣",
+      "5": "5⃣",
+      "6": "6⃣",
+      "7": "7⃣",
+      "8": "8⃣",
+      "9": "9⃣",
+      "ten": "🔟"
+    },
+    "settings": "<:Settings:781982956138659880>",
+    "settingsID": "781982956138659880",
+    "settingsLink": "https://cdn.discordapp.com/emojis/781982956138659880.png?v=1",
+    "small": "<:Small2:756379369739386910><:Small1:756379345190387712>",
+    "small1ID": "756379369739386910",
+    "small1Link": "https://cdn.discordapp.com/emojis/756379369739386910.png?v=1",
+    "small2ID": "756379345190387712",
+    "small2Link": "https://cdn.discordapp.com/emojis/756379345190387712.png?v=1",
+    "big": "<:Big:756380855395549256>",
+    "bigID": "756380855395549256",
+    "bigLink": "https://cdn.discordapp.com/emojis/756380855395549256.png?v=1",
+    "warning": "⚠️",
+    "green": "🟢",
+    "yellow": "🟡",
+    "blue": "🔵",
+    "red": "🔴",
+    "trash": "<:Trash:834326440761229363>",
+    "trashID": "834326440761229363",
+    "trashLink": "https://cdn.discordapp.com/emojis/834326440761229363.png?v=1",
+    "plus": "<:Plus:915237851799650354>",
+    "plusID": "915237851799650354",
+    "plusLink": "https://cdn.discordapp.com/emojis/915237851799650354.png?size=96",
+    "minus": "<:Minus:915237851883528243>",
+    "minusID": "915237851883528243",
+    "minusLink": "https://cdn.discordapp.com/emojis/915237851883528243.png?size=96",
+    "plusBG": "<:PlusWithBackground:915237851795451924>",
+    "plusBGID": "915237851795451924",
+    "plusBGLink": "https://cdn.discordapp.com/emojis/915237851795451924.png?size=96",
+    "minusBG": "<:MinusWithBackground:915237851803840613>",
+    "minusBGID": "915237851803840613",
+    "minusBGLink": "https://cdn.discordapp.com/emojis/915237851803840613.png?size=96",
+    "flags": {
+      "en": "🇺🇸 🇬🇧"
+    },
+    "timers": {
+      "1": "<a:1s:762473070841036800>",
+      "2": "<a:2s:762473168899539012>",
+      "3": "<a:3s:762473213526933514>",
+      "4": "<a:4s:762473267474071622>",
+      "5": "<a:5s:762473533078765591>",
+      "6": "<a:6s:762473583044722709>",
+      "7": "<a:7s:762473613529448448>",
+      "8": "<a:8s:762473646324842536>",
+      "9": "<a:9s:762473706122641408>",
+      "10": "<a:10s:762473759541035058>",
+      "11": "<a:11s:762473793703641109>",
+      "12": "<a:12s:762473832513536011>",
+      "13": "<a:13s:762473884145549342>",
+      "14": "<a:14s:762473930095067136>",
+      "15": "<a:15s:762473955298115615>",
+      "16": "<a:16s:762473986747007026>",
+      "17": "<a:17s:762474020561354773>",
+      "18": "<a:18s:762474063238791168>",
+      "19": "<a:19s:762474094125907969>",
+      "20": "<a:20s:762474157169704960>",
+      "21": "<a:21s:762474226308481024>",
+      "22": "<a:22s:762474264170332201>",
+      "23": "<a:23s:762474291072729098>",
+      "24": "<a:24s:762474335113838622>",
+      "25": "<a:25s:762474386317901854>",
+      "26": "<a:26s:762474415761653782>",
+      "27": "<a:27s:762474451953647627>",
+      "28": "<a:28s:762474489404850176>",
+      "29": "<a:29s:762474518861709332>",
+      "30": "<a:30s:762474546266898502>",
+      "31": "<a:31s:910138889639964732>",
+      "32": "<a:32s:910138889656750160>",
+      "33": "<a:33s:910138890789208115>",
+      "34": "<a:34s:910139956008198204>",
+      "35": "<a:35s:910139955928526888>",
+      "36": "<a:36s:910139955932713000>",
+      "37": "<a:37s:910140485492961290>",
+      "38": "<a:38s:910140485102874635>",
+      "39": "<a:39s:910140485010599967>",
+      "40": "<a:40s:910140485576851456>",
+      "41": "<a:41s:910140485614567435>",
+      "42": "<a:42s:910140485581029387>",
+      "43": "<a:43s:910140485690064936>",
+      "44": "<a:44s:910140485350338571>",
+      "45": "<a:45s:910140485182582806>",
+      "46": "<a:46s:910140485820096532>",
+      "47": "<a:47s:910140485912395796>",
+      "48": "<a:48s:910140485841076274>",
+      "49": "<a:49s:910140485434220555>",
+      "50": "<a:50s:910140486017220648>",
+      "51": "<a:51s:910140486004662302>",
+      "52": "<a:52s:910140485505536001>",
+      "53": "<a:53s:910140485887225866>",
+      "54": "<a:54s:910140485862064128>",
+      "55": "<a:55s:910140485467783180>",
+      "56": "<a:56s:910140480975671386>",
+      "57": "<a:57s:910139954313695243>",
+      "58": "<a:58s:910139954611494922>",
+      "59": "<a:59s:910139954733142046>",
+      "60": "<a:60s:910140485883031572>"
+    },
+    "lock": "🔒",
+    "unlock": "🔓"
+  },
+  "error": "ff0000",
+  "mod": {
+    "muteAdd": {
+      "color": "ff0000",
+      "author": {
+        "image": "",
+        "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
+      }
+    },
+    "strike": {
+      "color": "ff0000",
+      "author": {
+        "image": "",
+        "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
+      },
+      "confirmEmbed": {
+        "color": "ff0000",
+        "author": {
+          "image": ""
+        }
+      }
+    },
+    "tempmuteAdd": {
+      "color": "ff0000",
+      "author": {
+        "image": "",
+        "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
+      }
+    },
+    "tempbanAdd": {
+      "color": "ff0000",
+      "author": {
+        "image": "",
+        "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
+      }
+    },
+    "muteRemove": {
+      "color": "00ff00",
+      "author": {
+        "image": "",
+        "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
+      }
+    },
+    "kickAdd": {
+      "color": "ff0000",
+      "author": {
+        "image": "",
+        "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
+      }
+    },
+    "banAdd": {
+      "color": "ff0000",
+      "author": {
+        "image": "",
+        "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
+      }
+    },
+    "banRemove": {
+      "color": "00ff00",
+      "author": {
+        "image": "",
+        "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
+      }
+    },
+    "warnAdd": {
+      "color": "ff0000"
+    }
+  },
+  "embedBuilder": {
+    "embed": {
+      "text": "text",
+      "link": "url",
+      "description": "text",
+      "icon": "url",
+      "color": "hex",
+      "image": "url",
+      "thumbnail": "url",
+      "title": "text",
+      "value": "text",
+      "inline": "boolean",
+      "timestamp": "unix"
+    }
+  },
+  "commands": {
+    "toxicityCheck": "ff0000",
+    "pardon": {
+      "success": "1aff00",
+      "log": {
+        "color": "1aff00",
+        "image": "https://ayakobot.com/cdn/Ayako_Assets/Warning.png"
+      }
+    },
+    "clearwarns": {
+      "success": "1aff00",
+      "fail": "ff0000",
+      "loading": "ffff00",
+      "log": {
+        "color": "1aff00",
+        "image": "https://ayakobot.com/cdn/Ayako_Assets/Warning.png"
+      }
+    },
+    "massban": {
+      "success": "1aff00",
+      "fail": "ff0000",
+      "log": {
+        "color": "ff0000"
+      }
+    },
+    "check": {
+      "author": {
+        "image": "https://ayakobot.com/cdn/Ayako_Assets/Warning.png",
+        "url": ""
+      }
+    },
+    "invite": {
+      "author": {
+        "image": "https://ayakobot.com/cdn/Ayako_Assets/help.png"
+      }
+    },
+    "settings": {
+      "color": "ffffff",
+      "log": {
+        "color": "YELLOW"
+      },
+      "edit": {
+        "antispam": {
+          "banenabledtof": "boolean",
+          "kickenabledtof": "boolean",
+          "muteenabledtof": "boolean",
+          "giveofficialwarnstof": "boolean",
+          "muteafterwarnsamount": "number",
+          "kickafterwarnsamount": "number",
+          "banafterwarnsamount": "number",
+          "active": "boolean",
+          "bpchannelid": "channels",
+          "bproleid": "roles",
+          "bpuserid": "users",
+          "readofwarnstof": "boolean"
+        },
+        "autorole": {
+          "active": "boolean",
+          "botroleid": "roles",
+          "userroleid": "roles",
+          "allroleid": "roles"
+        },
+        "blacklist": {
+          "active": "boolean",
+          "warntof": "boolean",
+          "mutetof": "boolean",
+          "kicktof": "boolean",
+          "bantof": "boolean",
+          "warnafter": "number",
+          "muteafter": "number",
+          "kickafter": "number",
+          "banafter": "number",
+          "bpchannelid": "channels",
+          "bproleid": "roles",
+          "bpuserid": "users",
+          "words": "string"
+        },
+        "cooldowns": {
+          "command": "command",
+          "cooldown": "seconds",
+          "activechannelid": "channels",
+          "bpchannelid": "channels",
+          "bproleid": "roles",
+          "bpuserid": "users",
+          "active": "boolean"
+        },
+        "overview": {
+          "prefix": "string",
+          "interactionsmode": "boolean",
+          "muteroleid": "role",
+          "lan": "lan"
+        },
+        "disabled": {
+          "commands": "commands",
+          "channels": "channels",
+          "bproleid": "roles",
+          "blroleid": "roles",
+          "bpuserid": "users",
+          "bluserid": "users",
+          "active": "boolean"
+        },
+        "logs": {
+          "guildevents": "channels",
+          "emojievents": "channels",
+          "channelevents": "channels",
+          "inviteevents": "channels",
+          "messageevents": "channels",
+          "roleevents": "channels",
+          "userevents": "channels",
+          "voiceevents": "channels",
+          "webhookevents": "channels",
+          "applicationevents": "channels",
+          "stageinstanceevents": "channels",
+          "stickerevents": "channels",
+          "threadevents": "channels",
+          "guildmemberevents": "channels",
+          "modlogs": "channels",
+          "settingslog": "channels"
+        },
+        "interactions": {
+          "size": "boolean",
+          "block": "string"
+        },
+        "separators": {
+          "active": "boolean",
+          "stoprole": "role",
+          "separator": "role",
+          "oneTimeRunner": "onetimerunner",
+          "roles": "roles",
+          "isvarying": "boolean"
+        },
+        "autopunish": {
+          "active": "boolean",
+          "punishment": "punishment",
+          "duration": "time",
+          "warnamount": "number",
+          "removeroles": "roles",
+          "addroles": "roles",
+          "confirmationreq": "boolean"
+        },
+        "antivirus": {
+          "active": "boolean",
+          "bantof": "boolean",
+          "kicktof": "boolean",
+          "mutetof": "boolean",
+          "warntof": "boolean",
+          "verbaltof": "boolean",
+          "muteafterwarnsamount": "number",
+          "kickafterwarnsamount": "number",
+          "banafterwarnsamount": "number",
+          "warnafterwarnsamount": "number",
+          "delete": "time"
+        },
+        "disboard": {
+          "active": "boolean",
+          "roleid": "role",
+          "channelid": "channel",
+          "repeatreminder": "minutes"
+        },
+        "suggestions": {
+          "active": "boolean",
+          "channelid": "channel",
+          "bluserid": "users",
+          "blroleid": "roles",
+          "approverroleid": "roles",
+          "anon": "boolean"
+        },
+        "verification": {
+          "active": "boolean",
+          "greetdesc": "string",
+          "logchannel": "channel",
+          "finishedrole": "role",
+          "finishdesc": "string",
+          "pendingrole": "role",
+          "startchannel": "channel",
+          "selfstart": "boolean",
+          "kickafter": "minutes",
+          "kicktof": "boolean"
+        },
+        "antiraid": {
+          "active": "boolean",
+          "bantof": "boolean",
+          "kicktof": "boolean",
+          "posttof": "boolean",
+          "postchannel": "channel",
+          "pingroles": "roles",
+          "pingusers": "users",
+          "time": "seconds",
+          "jointhreshold": "number",
+          "similaridthreshold": "number"
+        },
+        "selfroles": {
+          "active": "boolean",
+          "roles": "roles",
+          "onlyone": "boolean",
+          "blacklistedroles": "roles",
+          "blacklistedusers": "users",
+          "whitelistedroles": "roles",
+          "whitelistedusers": "users",
+          "name": "string"
+        },
+        "modroles": {
+          "active": "boolean",
+          "blacklistedroles": "roles",
+          "blacklistedusers": "users",
+          "whitelistedroles": "roles",
+          "whitelistedusers": "users",
+          "roleid": "role",
+          "perms": "permissions",
+          "whitelistedcommands": "commands",
+          "blacklistedcommands": "commands"
+        }
+      },
+      "tablenames": {
+        "cooldowns": ["cooldowns"],
+        "antispam": ["antispamsettings"],
+        "antivirus": ["antivirus"],
+        "antiraid": ["antiraidsettings"],
+        "blacklist": ["blacklists"],
+        "autorole": ["autorole"],
+        "disabled": ["disabledcommands"],
+        "disboard": ["disboard"],
+        "forcecooldowns": [null],
+        "gifposter": ["gifposter"],
+        "leveling": ["levelingsettings"],
+        "logs": ["logchannels"],
+        "nitro": ["nitrosettings"],
+        "reactionroles": ["reactionroles"],
+        "selfroles": ["selfroles"],
+        "separators": ["roleseparator", "roleseparatorsettings"],
+        "autopunish": ["autopunish"],
+        "suggestions": ["suggestionsettings"],
+        "ticketing": [null],
+        "vc": [null],
+        "verification": ["verification"],
+        "welcome": ["welcome"],
+        "language": ["language"],
+        "overview": ["guildsettings"],
+        "prefix": ["prefix"],
+        "user": ["usersettings"],
+        "interactions": ["interactions"],
+        "modroles": ["modroles"],
+        "muterole": ["muterole"]
+      },
+      "editReq": ["id", "column"],
+      "setupQueries": {
+        "antispam": {
+          "cols": [
+            "active, giveofficialwarnstof, muteafterwarnsamount, kickafterwarnsamount, banafterwarnsamount, readofwarnstof, muteenabledtof, kickenabledtof, banenabledtof, guildid"
+          ],
+          "vals": [[true, true, 3, 5, 6, true, true, false, true, "{{msg.guild.id}}"]]
+        },
+        "antiraid": {
+          "cols": ["guildid, active, kicktof, time, jointhreshold, similaridthreshold"],
+          "vals": [["{{msg.guild.id}}", false, true, 15000, 15, 5]]
+        },
+        "blacklist": {
+          "cols": [
+            "guildid, active, warntof, mutetof, kicktof, bantof, warnafter, muteafter, kickafter, banafter"
+          ],
+          "vals": [["{{msg.guild.id}}", true, true, true, true, true, 4, 6, 8, 10]]
+        },
+        "autorole": {
+          "cols": ["guildid, active"],
+          "vals": [["{{msg.guild.id}}", true]]
+        },
+        "disboard": {
+          "cols": ["guildid, active, repeatreminder"],
+          "vals": [["{{msg.guild.id}}", true, 30]]
+        },
+        "antivirus": {
+          "cols": [
+            "guildid, active, bantof, warntof, kicktof, mutetof, verbaltof, muteafterwarnsamount, banafterwarnsamount, kickafterwarnsamount, warnafterwarnsamount"
+          ],
+          "vals": [["{{msg.guild.id}}", true, true, true, true, true, true, 2, 4, 3, 1]]
+        },
+        "disabled": {
+          "cols": ["guildid, active, channels, id, uniquetimestamp, commands"],
+          "vals": [
+            [
+              "{{msg.guild.id}}",
+              true,
+              ["{{values.channels}}"],
+              "{{values.id}}",
+              "{{values.uniquetimestamp}}",
+              ["{{values.commands}}"]
+            ]
+          ],
+          "add": ["commands", "channels"],
+          "remove": ["id"],
+          "ident": "commands"
+        },
+        "cooldowns": {
+          "cols": ["guildid, active, command, cooldown, id, uniquetimestamp"],
+          "vals": [
+            [
+              "{{msg.guild.id}}",
+              true,
+              "{{values.command}}",
+              "{{values.cooldown}}",
+              "{{values.id}}",
+              "{{values.uniquetimestamp}}"
+            ]
+          ],
+          "add": ["command", "cooldown"],
+          "remove": ["id"],
+          "ident": "command"
+        },
+        "overview": {
+          "cols": ["guildid, interactionsmode, lan"],
+          "vals": [["{{msg.guild.id}}", true, "en"]]
+        },
+        "forcecooldowns": {
+          "cols": null,
+          "vals": null
+        },
+        "gifposter": {
+          "cols": ["guildid, active"],
+          "vals": [["{{msg.guild.id}}", true]]
+        },
+        "leveling": {
+          "cols": ["guildid, active, xpgain"],
+          "vals": [["{{msg.guild.id}}", true, 1.0]]
+        },
+        "logs": {
+          "cols": ["guildid"],
+          "vals": [["{{msg.guild.id}}"]]
+        },
+        "nitro": {
+          "cols": ["guildid"],
+          "vals": [["{{msg.guild.id}}"]]
+        },
+        "reactionroles": {
+          "cols": ["guildid"],
+          "vals": [["{{msg.guild.id}}"]]
+        },
+        "selfroles": {
+          "cols": ["guildid, active, id, uniquetimestamp, roles, name"],
+          "vals": [
+            [
+              "{{msg.guild.id}}",
+              false,
+              "{{values.id}}",
+              "{{values.uniquetimestamp}}",
+              "{{values.roles}}",
+              "{{values.name}}"
+            ]
+          ],
+          "add": ["roles", "name"],
+          "ident": "name"
+        },
+        "statschannel": {
+          "cols": ["guildid, channel, type, id"],
+          "vals": [
+            ["{{msg.guild.id}}", "{{values.channelid}}", "{{values.type}}", "{{values.id}}"]
+          ],
+          "add": ["channel"],
+          "ident": "channel",
+          "identType": "channel"
+        },
+        "separators": {
+          "cols": [
+            "guildid, active, id, uniquetimestamp, isvarying, separator",
+            "guildid, stillrunning, active"
+          ],
+          "vals": [
+            [
+              "{{msg.guild.id}}",
+              false,
+              "{{values.id}}",
+              "{{values.uniquetimestamp}}",
+              true,
+              "{{values.separator}}"
+            ],
+            ["{{msg.guild.id}}", false, false]
+          ],
+          "add": ["separator"],
+          "ident": "separator",
+          "identType": "role"
+        },
+        "autopunish": {
+          "cols": ["guildid, active, id, uniquetimestamp, punishment, confirmationreq"],
+          "vals": [
+            [
+              "{{msg.guild.id}}",
+              false,
+              "{{values.id}}",
+              "{{values.uniquetimestamp}}",
+              "{{values.punishment}}",
+              false
+            ]
+          ],
+          "add": ["warnamount"],
+          "ident": ""
+        },
+        "suggestions": {
+          "cols": ["guildid, active, anon"],
+          "vals": [["{{msg.guild.id}}", true, true]]
+        },
+        "ticketing": {
+          "cols": ["guildid, channelid"],
+          "vals": [["{{msg.guild.id}}", "{{channel.id}}"]]
+        },
+        "vcsettings": {
+          "cols": ["guildid, active, timeout"],
+          "vals": [["{{msg.guild.id}}", true, 1800000]]
+        },
+        "verification": {
+          "cols": ["guildid, active, kickafter, kicktof, selfstart"],
+          "vals": [["{{msg.guild.id}}", false, 30, true, false]]
+        },
+        "welcome": {
+          "cols": ["guildid, active"],
+          "vals": [["{{msg.guild.id}}", true]]
+        },
+        "language": {
+          "cols": ["guildid, language"],
+          "vals": [["{{msg.guild.id}}", "en"]]
+        },
+        "guildsettings": {
+          "cols": ["guildid, prefix, interactionsmode"],
+          "vals": [["{{msg.guild.id}}", "h!", true]]
+        },
+        "user": {
+          "cols": ["userid"],
+          "vals": [["{{msg.author.id}}"]]
+        },
+        "modroles": {
+          "cols": ["guildid, active, roleid, id, uniquetimestamp"],
+          "vals": [
+            [
+              "{{msg.guild.id}}",
+              false,
+              "{{values.roleid}}",
+              "{{values.id}}",
+              "{{values.uniquetimestamp}}"
+            ]
+          ],
+          "add": ["roleid"],
+          "ident": "roleid",
+          "identType": "role"
+        }
+      }
+    }
+  }
 }

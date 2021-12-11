@@ -1,5 +1,4 @@
 const Discord = require('discord.js');
-const misc = require('../misc.js');
 
 module.exports = {
 	key: ['user', 'users'],
