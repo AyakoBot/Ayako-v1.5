@@ -1,7 +1,6 @@
 /* eslint-disable global-require */
 /* eslint-disable no-param-reassign */
 const Discord = require('discord.js');
-const misc = require('../misc');
 
 module.exports = {
   key: ['permissions', 'permission'],

@@ -8,7 +8,7 @@ const editors = new Discord.Collection();
 fs.readdirSync('./Files/Commands/settings/editors')
   .filter((file) => file.endsWith('.js'))
   .forEach((file) => {
-    const editorfile = require(`./editors/settings/${file}`);
+    const editorfile = require(`./settings/editors/${file}`);
     editors.set(editorfile.key, editorfile);
   });
 
@@ -91,7 +91,9 @@ module.exports = {
 
       const embed = new Discord.MessageEmbed()
         .setAuthor(
-          msg.lan.settings.author,
+          msg.client.ch.stp(msg.lan.settings.authorEdit, {
+            type: msg.lan.settings.edit[msg.file.name].type,
+          }),
           msg.client.constants.emotes.settingsLink,
           msg.client.constants.standard.invite,
         )
@@ -115,26 +117,7 @@ module.exports = {
       msg.lan = msg.language.commands.settings[settingsFile.name];
       msg.lanSettings = msg.language.commands.settings;
 
-      if (!msg.args[1]) this.display(msg);
-      else if (
-        msg.args[1] &&
-        settingsFile.perm &&
-        !msg.member.permissions.has(new Discord.Permissions(settingsFile.perm)) &&
-        msg.author.id !== '318453143476371456'
-      ) {
-        return msg.client.ch.reply(msg, {
-          content: msg.language.commands.commandHandler.missingPermissions,
-        });
-      } else {
-        if (!msg.file.setupRequired === false) return mmrEditList({ msg }, { res });
-        const res = await msg.client.ch.query(
-          `SELECT * FROM ${
-            msg.client.constants.commands.settings.tablenames[msg.file.name][0]
-          } WHERE guildid = $1;`,
-          [msg.guild.id],
-        );
-        singleRowEdit({ msg }, res.rows[0]);
-      }
+      whereToGo();
     }
     return null;
   },
@@ -309,7 +292,7 @@ module.exports = {
 
 const noEmbed = (msg) => {
   const embed = new Discord.MessageEmbed()
-    .setAuthor(msg.client.ch.stp(msg.language.commands.settings.noEmbed.author, { type: '' }))
+    .setAuthor(msg.language.commands.settings.noEmbed.author)
     .setDescription(msg.language.commands.settings.noEmbed.desc)
     .setColor(msg.client.constants.commands.settings.color);
   msg.client.ch.reply(msg, { embeds: [embed] });
@@ -432,6 +415,45 @@ const mmrEditList = async (msgData, sendData) => {
   const { msg } = msgData;
   const { res } = sendData;
 
+  const mmrRemove = async (answer) => {
+    const removeLanguage = msg.lanSettings[msg.file.name].otherEdits.remove;
+
+    const required = {
+      key: 'id',
+      value: removeLanguage.process[0],
+    };
+    required.assinger = msg.client.constants.commands.settings.edit[msg.file.name][required.key];
+
+    const editor = editors.find((f) => f.key.includes(msg.property));
+
+    const embed = new Discord.MessageEmbed()
+      .setAuthor(
+        msg.client.ch.stp(msg.lanSettings.authorEdit, {
+          type: msg.lanSettings.edit[msg.file.name].type,
+        }),
+        msg.client.constants.emotes.settingsLink,
+        msg.client.constants.standard.link,
+      )
+      .setDescription(
+        `${msg.language.select[msg.property].desc}\n${msg.language.page}: \`1/${Math.ceil(
+          options.length / 25,
+        )}\``,
+      );
+
+    const values = await editorInteractionHandler(
+      { msg, answer, embed },
+      { insertedValues: {}, required, editor },
+    );
+    values.uniquetimestamp = res.rows[values.id - 1].uniquetimestamp;
+
+    const table = msg.client.constants.commands.settings.tablenames[msg.file.name][0];
+
+    msg.client.ch.query(`DELETE FROM ${table} WHERE id = $1 AND uniquetimestamp = $2;`, [
+      values.id,
+      values.uniquetimestamp,
+    ]);
+  };
+
   const mmrAddRepeater = async (answer, embed, addLanguage, steps, insertedValues) => {
     const { requiredSteps, currentStep } = steps;
 
@@ -441,20 +463,15 @@ const mmrEditList = async (msgData, sendData) => {
 
     const required = {
       key: msg.client.constants.commands.settings.setupQueries[msg.file.name].add[currentStep],
-      value: addLanguage[currentStep],
+      value: addLanguage.process[currentStep],
     };
     required.assinger = msg.client.constants.commands.settings.edit[msg.file.name][required.key];
 
     const editor = editors.find((f) => f.key.includes(msg.property));
     if (editor.requiresInteraction) {
-
-
-    }
-
-    if (editor.execute[Symbol.toStringTag] === 'AsyncFunction') {
-      editor.execute(msg, required, insertedValues);
+      await editorInteractionHandler({ msg, answer }, { insertedValues, required, editor });
     } else {
-      await editor.execute(msg, required, insertedValues);
+      editor.execute(msg, required, insertedValues);
     }
 
     return mmrAddRepeater(answer, embed, addLanguage, steps, insertedValues);
@@ -487,15 +504,8 @@ const mmrEditList = async (msgData, sendData) => {
       const cols = msg.client.constants.commands.settings.setupQueries.cols[i];
       const vals = msg.client.constants.commands.settings.setupQueries.vals[i];
 
-      const valueIdentifier = [];
-      cols.forEach((collumn, j) => {
-        valueIdentifier.push(`$${j + 1}`);
-      });
-
-      const valuesSTP = [];
-      vals.forEach((value) => {
-        valuesSTP.push(msg.client.ch.stp(value, { values, msg }));
-      });
+      const valueIdentifier = cols.map((collumn, j) => `$${j + 1}`);
+      const valuesSTP = vals.map((value) => msg.client.ch.stp(value, { values, msg }));
 
       msg.client.ch.query(
         `INSERT INTO ${table} (${cols}) VALUES (${valueIdentifier.join(', ')});`,
@@ -621,4 +631,130 @@ const singleRowEdit = async (msgData, row, embed, comesFromMMR) => {
   buttonsCollector.on('end', (collected, reason) => {
     if (reason === 'time') msg.client.ch.collectorEnd(msg);
   });
+};
+
+const whereToGo = async (msg, settingsFile) => {
+  if (!msg.args[1]) module.exports.display(msg);
+  else if (
+    msg.args[1] &&
+    settingsFile.perm &&
+    !msg.member.permissions.has(new Discord.Permissions(settingsFile.perm)) &&
+    msg.author.id !== '318453143476371456'
+  ) {
+    return msg.client.ch.reply(msg, {
+      content: msg.language.commands.commandHandler.missingPermissions,
+    });
+  } else {
+    if (!msg.file.setupRequired === false) return mmrEditList({ msg }, { res });
+    const res = await msg.client.ch.query(
+      `SELECT * FROM ${
+        msg.client.constants.commands.settings.tablenames[msg.file.name][0]
+      } WHERE guildid = $1;`,
+      [msg.guild.id],
+    );
+    singleRowEdit({ msg }, res.rows[0]);
+  }
+  return null;
+};
+
+const editorInteractionHandler = async (msgData, editorData) => {
+  const { msg, answer } = msgData;
+  const { insertedValues, required, editor } = editorData;
+  let { embed } = msgData;
+
+  if (!embed) {
+    const languageOfSetting = msg.language.commands.settings[msg.file];
+    const languageOfKey = languageOfSetting.edit[required.key];
+
+    embed = new Discord.MessageEmbed()
+      .setAuthor(
+        msg.client.ch.stp(msg.lanSettings.authorEdit, { type: languageOfSetting.type }),
+        msg.client.constants.emotes.settingsLink,
+        msg.client.constants.standard.invite,
+      )
+      .setTitle(languageOfKey.name)
+      .setDescription(
+        languageOfKey.recommended ? `${languageOfKey.recommended} ` : '',
+        +`${languageOfKey.desc}`,
+      );
+  }
+
+  const passObject = editor.dataPreparation(msg, { insertedValues, required });
+  embed.addField(
+    msg.language.page,
+    `${passObject.Objects.page}/${Math.ceil(passObject.Objects.options.length / 25)}`,
+  );
+
+  await replier(
+    { msg, answer },
+    { embed, rawButtons: editor.buttons(msg, passObject, insertedValues, required) },
+  );
+
+  const buttonsCollector = await msg.m.createMessageComponentCollector({ time: 60000 });
+  return new Promise((resolve, reject) => {
+    buttonsCollector.on('collect', async (interaction) => {
+      if (interaction.user.id !== msg.author.id) return msg.client.ch.notYours(interaction, msg);
+      buttonsCollector.resetTimer();
+      switch (interaction.customId) {
+        default: {
+          editor.interactionHandler({ msg, interaction }, passObject);
+          break;
+        }
+        case 'back': {
+          whereToGo(msg, msg.file);
+          buttonsCollector.stop();
+          resolve(null);
+          break;
+        }
+        case 'next': {
+          const indexLast = passObject.Objects.options.findIndex(
+            (row) =>
+              row.value ===
+              interaction.message.components[0].components[0].options[
+                interaction.message.components[0].components[0].options.length - 1
+              ].value,
+          );
+          for (
+            let j = indexLast + 1;
+            j < indexLast + 26 && j < passObject.Objects.options.length;
+            j += 1
+          ) {
+            passObject.Objects.take.push(passObject.Objects.options[j]);
+          }
+          await replier(
+            { msg, answer: interaction },
+            { rawButtons: editor.buttons(msg, passObject, insertedValues, required), embed },
+          );
+          break;
+        }
+        case 'prev': {
+          const indexFirst = passObject.Objects.options.findIndex(
+            (row) => row.value === interaction.message.components[0].components[0].options[0].value,
+          );
+          for (
+            let j = indexFirst - 25;
+            j < indexFirst && j < passObject.Objects.options.length;
+            j += 1
+          ) {
+            passObject.Objects.take.push(passObject.Objects.options[j]);
+          }
+          await replier(
+            { msg, answer: interaction },
+            { rawButtons: editor.buttons(msg, passObject, insertedValues, required), embed },
+          );
+          break;
+        }
+        case 'done': {
+          resolve(insertedValues);
+        }
+      }
+      return null;
+    });
+    buttonsCollector.on('end', (collected, reason) => {
+      if (reason === 'time') {
+        msg.client.ch.collectorEnd(msg);
+        reject();
+      }
+    });
+  }).catch(() => null);
 };

@@ -1,5 +1,4 @@
 const Discord = require('discord.js');
-const misc = require('../misc.js');
 
 module.exports = {
 	key: ['id'],
@@ -46,7 +45,6 @@ module.exports = {
 				msg.client.constants.emotes.settingsLink, 
 				msg.client.constants.standard.invite
 			)
-			.setDescription(`${msg.language.select[msg.property].desc}\n${msg.language.page}: \`1/${Math.ceil(options.length / 25)}\``);
 		const rows = msg.client.ch.buttonRower([[menu], [prev, next], [back, done]]);
 		if (answer) answer.update({embeds: [embed], components: rows}).catch(() => {});
 		else msg.m.edit({embeds: [embed], components: rows}).catch(() => {});
