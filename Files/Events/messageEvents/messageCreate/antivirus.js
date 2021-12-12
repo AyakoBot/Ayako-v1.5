@@ -659,7 +659,7 @@ const postVTUrls = async (linkObject) => {
       });
   });
 
-  if (res.data.id) {
+  if (res?.data.id) {
     return getNewVTUrls(res.data.id, 0);
   }
 
@@ -777,15 +777,18 @@ const selfChecker = async (linkObject) => {
   );
   const embedDescriptionBad = Math.round(similarity * 100) > 80;
 
+  const usesDiscordSlogan =
+    /we[`|'|´|"]re[\n|\s].*so[\n|\s].*excited[\n|\s].*to[\n|\s].*see[\n|\s].*you[\n|\s].*again/gi.test(
+      siteHTML,
+    );
   const usesDiscordImage =
     /property=["'`]og:image["'`](.*)content=["'`]https:\/\/discord\.com\/assets\/652f40427e1f5186ad54836074898279\.png["'`]>/gi.test(
       siteHTML,
-    );
-  const usesDiscordIcon =
-    /rel=["'`]icon["'`](.*)href=["'`]https:\/\/discord\.com\/assets\/847541504914fd33810e70a0ea73177e\.ico["'`]/gi.test(
+    ) ||
+    /property=["'`]og:image["'`](.*)content=["'`]\/assets\/652f40427e1f5186ad54836074898279\.png["'`]>/gi.test(
       siteHTML,
     );
-  const websiteAdvertisesNitro = /(.*)3\smonths(.*)(Discord|Nitro)(\sNitro|)/gi.test(siteHTML);
+  const websiteProbablyAdvertisesNitro = /(.*)3\smonths/gi.test(siteHTML);
 
   const wantsCCNumber = /(.*)credit\scard\s(Number|)/gi.test(siteHTML);
   const wantsCCexpiry = /(.*)Expiration\sDate/gi.test(siteHTML);
@@ -798,8 +801,8 @@ const selfChecker = async (linkObject) => {
     embedNameBad &&
     embedDescriptionBad &&
     usesDiscordImage &&
-    usesDiscordIcon &&
-    websiteAdvertisesNitro
+    usesDiscordSlogan &&
+    websiteProbablyAdvertisesNitro
   ) {
     if (wantsCCNumber && wantsCCexpiry && wantsCCcvc && wantsCCzip && wantsCCname) return 'ccscam';
     return 'nitroscam';
