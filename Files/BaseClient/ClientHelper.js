@@ -743,6 +743,12 @@ module.exports = {
       );
     return embed;
   },
+  /**
+   * Creates a sample Loading Embed.
+   * @constructor
+   * @param {array} arr1 - An Array
+   * @param {array} arr2 - The Array to compare to arr1
+   */
   arrayEquals(arr1, arr2) {
     if (arr1.length !== arr2.length) return false;
 
@@ -762,6 +768,6 @@ module.exports = {
       });
     }
 
-    return results.includes(false);
+    return !results.includes(false);
   },
 };
