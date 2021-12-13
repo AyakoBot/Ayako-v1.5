@@ -427,6 +427,7 @@ const mmrEditList = async (msgData, sendData) => {
       { msg, answer },
       { insertedValues: {}, required, editor },
       {},
+      res,
     );
     if (!returnedData) return null;
     answer = returnedData.interaction;
@@ -464,6 +465,7 @@ const mmrEditList = async (msgData, sendData) => {
         { msg, answer },
         { insertedValues, required, editor },
         row,
+        res,
       );
       if (!returnedData) return null;
       answer = returnedData.interaction;
@@ -664,7 +666,7 @@ const whereToGo = async (msg, answer) => {
   return null;
 };
 
-const editorInteractionHandler = async (msgData, editorData, row) => {
+const editorInteractionHandler = async (msgData, editorData, row, res) => {
   const { msg, answer } = msgData;
   const { insertedValues, required, editor } = editorData;
 
@@ -677,9 +679,8 @@ const editorInteractionHandler = async (msgData, editorData, row) => {
     page: 1,
   };
 
-  const passObject = editor.dataPreparation(msg, { insertedValues, required, Objects }, row);
-  const { cacheName } = passObject;
-  const selected = editor.getSelected(insertedValues, required, cacheName);
+  const passObject = editor.dataPreparation(msg, { insertedValues, required, Objects }, row, res);
+  const selected = editor.getSelected(msg, insertedValues, required, passObject);
 
   let embed = new Discord.MessageEmbed()
     .setColor(msg.client.constants.commands.settings.color)
