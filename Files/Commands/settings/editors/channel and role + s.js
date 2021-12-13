@@ -104,7 +104,7 @@ module.exports = {
     const { msg } = msgData;
     const { Objects, cacheName } = preparedData;
 
-    const selected = this.getSelected(insertedValues, required, cacheName);
+    const selected = this.getSelected(msg, insertedValues, required, cacheName);
 
     const returnEmbed = new Discord.MessageEmbed().setDescription(
       `**${msg.language.selected}:**\n${selected?.length ? selected : msg.language.none}`,
@@ -122,7 +122,7 @@ module.exports = {
 
     return { returnEmbed };
   },
-  getSelected(insertedValues, required, cacheName) {
+  getSelected(msg, insertedValues, required, { cacheName }) {
     if (insertedValues[required.assinger]) {
       return insertedValues[required.assinger]
         .map((value) => {
