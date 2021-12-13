@@ -5,3 +5,4 @@ Files/Downloads
 .vscode
 Files/blocklist.json
 .idea
+Files/Commands/execute.js
