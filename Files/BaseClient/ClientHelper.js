@@ -18,10 +18,6 @@ const regexes = {
   // eslint-disable-next-line no-control-regex
   tester: /[^\u0000-\u00ff]/,
 };
-// eslint-disable-next-line no-extend-native
-Array.prototype.equals = (arr2) => {
-  return this.length === arr2.length && this.every((value, index) => value === arr2[index]);
-};
 
 module.exports = {
   /**
@@ -57,7 +53,7 @@ module.exports = {
       return channel.forEach((c) =>
         typeof c.send === 'function' ? this.send(c, content, options) : null,
       );
-    if (typeof channel.send !== 'function') return null;
+    if (!channel || typeof channel.send !== 'function') return null;
     let webhook;
     if (client.channelWebhooks.get(channel.id)) webhook = client.channelWebhooks.get(channel.id);
     let m;
@@ -746,5 +742,26 @@ module.exports = {
         }`,
       );
     return embed;
+  },
+  arrayEquals(arr1, arr2) {
+    if (arr1.length !== arr2.length) return false;
+
+    const results = [];
+
+    arr1.every((item) => {
+      if (!arr2.includes(item)) results.push(false);
+      else results.push(true);
+      return null;
+    });
+
+    if (!results.includes(false)) {
+      arr2.every((item) => {
+        if (!arr1.includes(item)) results.push(false);
+        else results.push(true);
+        return null;
+      });
+    }
+
+    return results.includes(false);
   },
 };
