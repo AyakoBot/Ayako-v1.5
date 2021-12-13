@@ -4,12 +4,12 @@ const Discord = require('discord.js');
 module.exports = {
   key: ['channel', 'channels', 'role', 'roles'],
   requiresInteraction: true,
-  dataPreparation(msg, editorData) {
-    const { insertedValues, required } = editorData;
+  dataPreparation(msg, editorData, row) {
+    const { insertedValues, required, Objects } = editorData;
 
-    if (msg.row) {
-      insertedValues[required.key] = msg.row[required.key];
-    }
+    insertedValues[required.assinger] = [
+      ...(row[required.assinger]?.length ? row[required.assinger] : []),
+    ];
 
     const cacheName = required.key.endsWith('s') ? required.key : `${required.key}s`;
     const cache = msg.guild[cacheName].cache
@@ -28,18 +28,12 @@ module.exports = {
             'GUILD_PRIVATE_THREAD',
           ];
 
-          if (validChannelTypes.inlcudes(value.type)) {
+          if (validChannelTypes.includes(value.type)) {
             return value;
           }
         }
         return null;
       });
-
-    const Objects = {
-      options: [],
-      take: [],
-      page: 1,
-    };
 
     cache.forEach((element) => {
       const inserted = {
@@ -47,12 +41,12 @@ module.exports = {
         value: element.id,
       };
 
-      if (insertedValues[required.key].includes(element.id)) {
+      if (insertedValues[required.assinger].includes(element.id)) {
         inserted.description = msg.language.removeFromList;
-        inserted.emoji = msg.client.constants.emotes.crossBGID;
+        inserted.emoji = msg.client.constants.emotes.minusBGID;
       } else {
         inserted.description = msg.language.addToList;
-        inserted.emoji = msg.client.constants.emotes.tickBGID;
+        inserted.emoji = msg.client.constants.emotes.plusBGID;
       }
 
       Objects.options.push(inserted);
@@ -64,14 +58,17 @@ module.exports = {
 
     return { cache, Objects, cacheName };
   },
-  buttons(msg, preparedData, insertedValues, required) {
+  buttons(msg, preparedData, insertedValues, required, row) {
     const { Objects, cacheName } = preparedData;
 
     let doneDisabled = true;
-    if (Array.isArray(insertedValues[required.key])) {
-      doneDisabled = insertedValues[required.key].length === 0;
+    if (Array.isArray(insertedValues[required.assinger])) {
+      doneDisabled = msg.client.ch.arrayEquals(
+        insertedValues[required.assinger],
+        row[required.assinger],
+      );
     } else {
-      doneDisabled = !!insertedValues[required.key];
+      doneDisabled = !!insertedValues[required.assinger];
     }
 
     const menu = new Discord.MessageSelectMenu()
@@ -101,42 +98,44 @@ module.exports = {
       .setEmoji(msg.client.constants.emotes.back)
       .setStyle('DANGER');
 
-    return [[menu], [next, prev], [back, done]];
+    return [[menu], [prev, next], [back, done]];
   },
-  interactionHandler(msgData, preparedData, insertedValues) {
-    const { msg, embed, menu } = msgData;
+  interactionHandler(msgData, preparedData, insertedValues, required) {
+    const { msg } = msgData;
     const { Objects, cacheName } = preparedData;
 
-    const selected = insertedValues[cacheName]
-      .map((value) => {
-        if (cacheName === 'channels') {
-          return `<#${value.id}>`;
-        }
-        if (cacheName === 'roles') {
-          return `<@&${value.id}>`;
-        }
-        return null;
-      })
-      .join(', ');
+    const selected = this.getSelected(insertedValues, required, cacheName);
 
-    const returnEmbed = new Discord.MessageEmbed()
-      .addField(' \u200b', embed.description)
-      .setDescription(
-        `${msg.language.selected}:\n${selected.length ? selected : msg.language.none}`,
-      );
+    const returnEmbed = new Discord.MessageEmbed().setDescription(
+      `**${msg.language.selected}:**\n${selected?.length ? selected : msg.language.none}`,
+    );
 
     Objects.options.forEach((option) => {
-      if (insertedValues[cacheName].includes(option.value)) {
-        option.emoji = msg.client.constants.emotes.crossBGID;
+      if (insertedValues[required.assinger]?.includes(option.value)) {
+        option.emoji = msg.client.constants.emotes.minusBGID;
         option.description = msg.language.removeFromList;
       } else {
-        option.emoji = msg.client.constants.emotes.tickBGID;
+        option.emoji = msg.client.constants.emotes.plusBGID;
         option.description = msg.language.addToList;
       }
     });
 
-    const returnMenu = new Discord.MessageSelectMenu(menu).setOptions(Objects.take);
-
-    return { returnEmbed, returnMenu };
+    return { returnEmbed };
+  },
+  getSelected(insertedValues, required, cacheName) {
+    if (insertedValues[required.assinger]) {
+      return insertedValues[required.assinger]
+        .map((value) => {
+          if (cacheName === 'channels') {
+            return `<#${value}>`;
+          }
+          if (cacheName === 'roles') {
+            return `<@&${value}>`;
+          }
+          return null;
+        })
+        .join(', ');
+    }
+    return null;
   },
 };
