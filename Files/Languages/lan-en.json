@@ -779,6 +779,10 @@
       "select": "Select the Number",
       "desc": "Select the new Number below"
     },
+    "numbers": {
+      "select": "Select the Numbers",
+      "desc": "Select the new Numbers below"
+    },
     "command": {
       "select": "Select a Command",
       "desc": "Select the Command below"

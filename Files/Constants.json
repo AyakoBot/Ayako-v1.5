@@ -682,7 +682,7 @@
           "active": "boolean",
           "roleid": "role",
           "channelid": "channel",
-          "repeatreminder": "minutes"
+          "repeatreminder": "minute"
         },
         "suggestions": {
           "active": "boolean",
@@ -701,7 +701,7 @@
           "pendingrole": "role",
           "startchannel": "channel",
           "selfstart": "boolean",
-          "kickafter": "minutes",
+          "kickafter": "minute",
           "kicktof": "boolean"
         },
         "antiraid": {
@@ -769,7 +769,7 @@
         "modroles": ["modroles"],
         "muterole": ["muterole"]
       },
-      "editReq": ["id", "column"],
+      "editReq": ["id"],
       "setupQueries": {
         "antispam": {
           "cols": [
