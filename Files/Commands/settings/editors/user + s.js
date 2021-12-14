@@ -2,8 +2,9 @@
 const Discord = require('discord.js');
 
 module.exports = {
-  key: ['number', 'numbers'],
+  key: ['user', 'users'],
   requiresInteraction: true,
+  interactionType: 'message',
   dataPreparation(msg, editorData, row) {
     const { insertedValues, required, Objects } = editorData;
 
@@ -11,35 +12,10 @@ module.exports = {
       ...(row[required.assinger]?.length ? row[required.assinger] : []),
     ];
 
-    const numbers = new Array(9999);
-
-    numbers.forEach((element, i) => {
-      const inserted = {
-        label: i,
-        value: i,
-      };
-
-      if (insertedValues[required.assinger].includes(i)) {
-        inserted.description = msg.language.removeFromList;
-        inserted.emoji = msg.client.constants.emotes.minusBGID;
-      } else {
-        inserted.description = msg.language.addToList;
-        inserted.emoji = msg.client.constants.emotes.plusBGID;
-      }
-
-      Objects.options.push(inserted);
-    });
-
-    for (let i = 0; i < 25 && i < Objects.options.length; i += 1) {
-      Objects.take.push(Objects.options[i]);
-    }
-
     return { Objects };
   },
   buttons(msg, preparedData, insertedValues, required, row) {
     const { Objects } = preparedData;
-
-    const getMany = required.key.endsWith('s');
 
     let doneDisabled = true;
     if (Array.isArray(insertedValues[required.assinger])) {
@@ -51,12 +27,6 @@ module.exports = {
       doneDisabled = !!insertedValues[required.assinger];
     }
 
-    const menu = new Discord.MessageSelectMenu()
-      .setCustomId(required.key)
-      .addOptions(Objects.take)
-      .setMinValues(1)
-      .setMaxValues(getMany ? Objects.take.length : 1)
-      .setPlaceholder(msg.language.select[required.key].select);
     const next = new Discord.MessageButton()
       .setCustomId('next')
       .setLabel(msg.language.next)
@@ -78,27 +48,28 @@ module.exports = {
       .setEmoji(msg.client.constants.emotes.back)
       .setStyle('DANGER');
 
-    return [[menu], [prev, next], [back, done]];
+    return [
+      [prev, next],
+      [back, done],
+    ];
   },
-  interactionHandler(msgData, preparedData, insertedValues, required) {
-    const { msg } = msgData;
-    const { Objects } = preparedData;
+  messageHandler(msgData, insertedValues, required) {
+    const { msg, message } = msgData;
+
+    const args = message.content.replace(/\n/g, '').replace(/\D+/g, '').split(/ +/);
+
+    args.forEach((id) => {
+      const user = msg.client.users.cache.get(id);
+      if (user) {
+        insertedValues[required.assinger].push(user);
+      }
+    });
 
     const selected = this.getSelected(msg, insertedValues, required, required.key);
 
     const returnEmbed = new Discord.MessageEmbed().setDescription(
       `**${msg.language.selected}:**\n${selected?.length ? selected : msg.language.none}`,
     );
-
-    Objects.options.forEach((option) => {
-      if (insertedValues[required.assinger]?.includes(option.value)) {
-        option.emoji = msg.client.constants.emotes.minusBGID;
-        option.description = msg.language.removeFromList;
-      } else {
-        option.emoji = msg.client.constants.emotes.plusBGID;
-        option.description = msg.language.addToList;
-      }
-    });
 
     return { returnEmbed };
   },

@@ -16,3 +16,24 @@ module.exports = {
 	  
   },
 };
+
+/*
+
+function abc() {
+  const markup = document.documentElement.innerHTML;
+  const regex = /src="?.*\.ico"/g;
+  let found = [];
+  const foundRegex = markup.match(regex);
+  found = found.concat(foundRegex);
+  if (document.querySelector("link[rel*='ico']")) {
+    found.push(document.querySelector("link[rel*='ico']").href);
+    found.push(document.querySelector("link[rel*='ico']").src);
+  }
+  const filtered = found.filter((el) => {
+    return el != null;
+  });
+
+  console.log(filtered);
+}
+abc();
+*/
