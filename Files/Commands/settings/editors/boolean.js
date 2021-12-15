@@ -1,4 +1,4 @@
-/* eslint-disable no-param-reassign */
+
 module.exports = {
   key: ['boolean'],
   requiresInteraction: false,

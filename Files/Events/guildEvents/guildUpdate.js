@@ -1,4 +1,4 @@
-/* eslint-disable no-param-reassign */
+
 const Discord = require('discord.js');
 
 /* eslint-disable no-case-declarations */

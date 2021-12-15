@@ -1,4 +1,4 @@
-/* eslint-disable global-require */
+
 module.exports = {
   async execute(reaction, user) {
     require('./Giveaway').execute(reaction, user);

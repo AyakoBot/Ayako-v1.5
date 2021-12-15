@@ -1,4 +1,4 @@
-/* eslint-disable global-require */
+
 module.exports = {
   async execute(msg) {
     if (msg.channel.type === 'DM') return;

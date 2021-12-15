@@ -1,4 +1,4 @@
-/* eslint-disable global-require */
+
 module.exports = {
   execute() {
     require('./verification').execute();

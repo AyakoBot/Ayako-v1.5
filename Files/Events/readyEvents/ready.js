@@ -1,4 +1,4 @@
-/* eslint-disable global-require */
+
 // const { statcord } = require('../../BaseClient/Statcord');
 
 module.exports = {

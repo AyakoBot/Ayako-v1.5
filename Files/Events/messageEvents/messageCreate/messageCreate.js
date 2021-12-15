@@ -1,5 +1,5 @@
-/* eslint-disable no-param-reassign */
-/* eslint-disable global-require */
+
+
 module.exports = {
   async execute(msg) {
     if (msg.guild && msg.author.discriminator !== '0000') {

@@ -31,10 +31,11 @@
         }
     ],
         "no-use-before-define": "off",
-        "no-console": "off",
         "no-bitwise": "off",
+        "no-param-reassign": "off",
         "import/prefer-default-export": "off",
-        "camelcase": "off",
+        "global-require": "off",
+        "import/no-dynamic-require": "off",
         "prettier/prettier": [
             "warn",
             {

@@ -1,4 +1,4 @@
-/* eslint-disable no-param-reassign */
+
 module.exports = {
   async execute(oldPresence, newPresence) {
     const client = oldPresence ? oldPresence.client : newPresence.client;

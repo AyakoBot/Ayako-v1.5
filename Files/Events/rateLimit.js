@@ -1,4 +1,4 @@
-/* eslint-disable global-require */
+
 module.exports = {
   async execute(rateLimitInfo) {
     const client = require('../BaseClient/DiscordClient');

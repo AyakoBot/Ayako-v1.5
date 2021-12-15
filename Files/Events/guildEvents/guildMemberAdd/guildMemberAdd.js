@@ -1,4 +1,4 @@
-/* eslint-disable global-require */
+
 module.exports = {
   async execute(member) {
     const user = await member.guild.members.fetch(member.id);
