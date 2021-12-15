@@ -764,9 +764,9 @@ const getSeverity = (VTresponse) => {
 const selfChecker = async (linkObject) => {
   const siteHTML = (await axios.get(linkObject.href)).data;
   // eslint-disable-next-line no-useless-escape
-  const siteNameBad = /property=["'`]og:site_name["'`](.*)content=["'`]discord["'`]>/gi.test(
-    siteHTML,
-  );
+  const siteNameBad =
+    /property=["'`]og:site_name["'`](.*)content=["'`]discord["'`]>/gi.test(siteHTML) ||
+    /<title>(.*)Discord(.*)<\/title>/gi.test(siteHTML);
   const embedNameBad = /property=["'`]og:title["'`](.*)content=["'`]discord/gi.test(siteHTML);
 
   const args = siteHTML.split(/["'`]+/);
@@ -778,7 +778,7 @@ const selfChecker = async (linkObject) => {
   const embedDescriptionBad = Math.round(similarity * 100) > 80;
 
   const usesDiscordSlogan =
-    /we[`|'|´|"]re[\n|\s].*so[\n|\s].*excited[\n|\s].*to[\n|\s].*see[\n|\s].*you[\n|\s].*again/gi.test(
+    /we[`|'|´|"]re[\n|\s](.*)so[\n|\s](.*)excited[\n|\s](.*)to[\n|\s](.*)see[\n|\s](.*)you[\n|\s](.*)again/gi.test(
       siteHTML,
     );
   const usesDiscordImage =
@@ -787,8 +787,13 @@ const selfChecker = async (linkObject) => {
     ) ||
     /property=["'`]og:image["'`](.*)content=["'`]\/assets\/652f40427e1f5186ad54836074898279\.png["'`]>/gi.test(
       siteHTML,
+    ) ||
+    /rel=["'`]icon["'`](.*)href=["'`]https:\/\/discord\.com\/assets\/847541504914fd33810e70a0ea73177e\.ico["'`]/gi.test(
+      siteHTML,
     );
-  const websiteProbablyAdvertisesNitro = /(.*)3\smonths/gi.test(siteHTML);
+
+  const websiteProbablyAdvertisesNitro =
+    /(.*)3\smonths/gi.test(siteHTML) || /discord(.*)nitro(.*)free(.*)steam/gi.test(siteHTML);
 
   const wantsCCNumber = /(.*)credit\scard\s(Number|)/gi.test(siteHTML);
   const wantsCCexpiry = /(.*)Expiration\sDate/gi.test(siteHTML);
@@ -797,12 +802,9 @@ const selfChecker = async (linkObject) => {
   const wantsCCname = /[^_|^s]name[^=]/gi.test(siteHTML);
 
   if (
-    siteNameBad &&
-    embedNameBad &&
-    embedDescriptionBad &&
-    usesDiscordImage &&
-    usesDiscordSlogan &&
-    websiteProbablyAdvertisesNitro
+    (siteNameBad && websiteProbablyAdvertisesNitro) ||
+    (embedNameBad && embedDescriptionBad && usesDiscordImage) ||
+    usesDiscordSlogan
   ) {
     if (wantsCCNumber && wantsCCexpiry && wantsCCcvc && wantsCCzip && wantsCCname) return 'ccscam';
     return 'nitroscam';

@@ -22,7 +22,6 @@ module.exports = {
     require('./separators').execute();
 
     setInterval(() => {
-      require('./colorReminder').execute();
       // require('./websiteFetcher').execute();
       if (new Date().getHours() === 0) {
         client.guilds.cache.forEach((g) => {
