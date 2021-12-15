@@ -13,7 +13,7 @@ module.exports = {
   dm: true,
   takesFirstArg: false,
   async execute(msg) {
-	  
+
   },
 };
 

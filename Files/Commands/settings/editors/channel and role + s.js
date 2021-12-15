@@ -1,4 +1,3 @@
-
 const Discord = require('discord.js');
 
 module.exports = {
@@ -41,7 +40,10 @@ module.exports = {
         value: element.id,
       };
 
-      if (insertedValues[required.assinger].includes(element.id)) {
+      if (
+        Array.isArray(insertedValues[required.assinger]) &&
+        insertedValues[required.assinger].includes(element.id)
+      ) {
         inserted.description = msg.language.removeFromList;
         inserted.emoji = msg.client.constants.emotes.minusBGID;
       } else {

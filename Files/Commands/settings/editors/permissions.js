@@ -1,389 +1,129 @@
-
-
 const Discord = require('discord.js');
 
 module.exports = {
   key: ['permissions', 'permission'],
+  dataPreparation(msg, editorData, row) {
+    const { insertedValues, required, Objects } = editorData;
 
+    insertedValues[required.assinger] = row[required.assinger]?.length
+      ? row[required.assinger]
+      : msg.language.none;
 
+    const perms = Object.entries(Discord.Permissions.FLAGS);
+    const permissions = [];
+    perms.forEach(([, bits]) => {
+      msg.client.ch.permCalc(bits, msg.language).forEach((perm) => {
+        permissions.push({ perm, bits: Number(bits) });
+      });
+    });
 
-  async execute(
-    msg,
-    i,
-    embed,
-    values,
-    answer,
-    AddRemoveEditView,
-    fail,
-    srmEditing,
-    comesFromSRM,
-    answered,
-  ) {
-    if (!Array.isArray(msg.rows) && msg.rows) {
-      answered = msg.rows[msg.assigner];
+    permissions.forEach(([perm, bits]) => {
+      const inserted = {
+        label: perm,
+        value: bits,
+      };
+
+      if (
+        Array.isArray(insertedValues[required.assinger]) &&
+        insertedValues[required.assinger].includes(bits)
+      ) {
+        inserted.description = msg.language.removeFromList;
+        inserted.emoji = msg.client.constants.emotes.minusBGID;
+      } else {
+        inserted.description = msg.language.addToList;
+        inserted.emoji = msg.client.constants.emotes.plusBGID;
+      }
+
+      Objects.options.push(inserted);
+    });
+
+    for (let i = 0; i < 25 && i < Objects.options.length; i += 1) {
+      Objects.take.push(Objects.options[i]);
     }
-    const options = [];
-    values[msg.assigner] = [];
-    const perms = msg.client.ch.permCalc(Discord.Permissions.ALL, msg.language);
-    for (let j = 0; j < perms.length; j += 1) {
-      const permArray = Object.entries(msg.language.permissions).find(
-        ([, value]) => value === perms[j],
+
+    return { Objects };
+  },
+  buttons(msg, preparedData, insertedValues, required, row) {
+    const { Objects } = preparedData;
+
+    const getMany = required.key.endsWith('s');
+
+    let doneDisabled = true;
+    if (Array.isArray(insertedValues[required.assinger])) {
+      doneDisabled = msg.client.ch.arrayEquals(
+        insertedValues[required.assinger],
+        row[required.assinger],
       );
-      const perm = new Discord.Permissions(permArray[0]).bitfield;
-      options.push({ label: perms[j], value: `${Number(perm)}` });
+    } else {
+      doneDisabled = !!insertedValues[required.assinger];
     }
-    const take = [];
-    for (let j = 0; j < 25 && j < options.length; j += 1) take.push(options[j]);
+
     const menu = new Discord.MessageSelectMenu()
-      .setCustomId(msg.property)
-      .addOptions(take)
+      .setCustomId(required.key)
+      .addOptions(Objects.take)
       .setMinValues(1)
-      .setMaxValues(msg.property.includes('s') ? take.length : 1)
-      .setPlaceholder(msg.language.select[msg.property].select);
+      .setMaxValues(getMany ? Objects.take.length : 1)
+      .setPlaceholder(msg.language.select[required.key].select);
     const next = new Discord.MessageButton()
       .setCustomId('next')
       .setLabel(msg.language.next)
-      .setDisabled(options.length < 25)
+      .setDisabled(Objects.page === Math.ceil(Objects.options.length / 25))
       .setStyle('SUCCESS');
     const prev = new Discord.MessageButton()
       .setCustomId('prev')
       .setLabel(msg.language.prev)
-      .setDisabled(true)
+      .setDisabled(Objects.page === 1)
       .setStyle('DANGER');
     const done = new Discord.MessageButton()
       .setCustomId('done')
       .setLabel(msg.language.done)
-      .setDisabled(true)
+      .setDisabled(doneDisabled)
       .setStyle('PRIMARY');
     const back = new Discord.MessageButton()
       .setCustomId('back')
       .setLabel(msg.language.back)
       .setEmoji(msg.client.constants.emotes.back)
       .setStyle('DANGER');
-    embed = new Discord.MessageEmbed()
-      .setAuthor(
-        msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
-        msg.client.constants.emotes.settingsLink,
-        msg.client.constants.standard.invite,
-      )
-      .setDescription(
-        `${msg.language.select[msg.property].desc}\n${msg.language.page}: \`1/${Math.ceil(
-          options.length / 25,
-        )}\``,
-      );
-    if (answered?.length)
-      embed.addField(
-        msg.language.selected,
-        `${
-          msg.property.includes('s')
-            ? answered.map((c) =>
-                msg.compatibilityType == 'channels'
-                  ? `<#${c}>`
-                  : msg.compatibilityType == 'roles'
-                  ? `<@&${c}>`
-                  : ` ${c}`,
-              )
-            : msg.compatibilityType == 'channels'
-            ? `<#${answered}>`
-            : msg.compatibilityType == 'roles'
-            ? `<@&${answered}>`
-            : `${answered}`
-        } `,
-      );
-    const rows = msg.client.ch.buttonRower([[menu], [prev, next], [back, done]]);
-    if (answer) answer.update({ embeds: [embed], components: rows }).catch(() => {});
-    else msg.m.edit({ embeds: [embed], components: rows }).catch(() => {});
-    const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
-    const messageCollector = msg.channel.createMessageCollector({ time: 60000 });
-    let interaction;
-    const resolved = await new Promise((resolve) => {
-      buttonsCollector.on('collect', (clickButton) => {
-        if (clickButton.user.id == msg.author.id) {
-          if (clickButton.customId == 'next' || clickButton.customId == 'prev') {
-            let indexLast;
-            let indexFirst;
-            for (let j = 0; options.length > j; j++) {
-              if (
-                options[j] &&
-                options[j].value ==
-                  clickButton.message.components[0].components[0].options[
-                    clickButton.message.components[0].components[0].options.length - 1
-                  ].value
-              )
-                indexLast = j;
-              if (
-                options[j] &&
-                options[j].value == clickButton.message.components[0].components[0].options[0].value
-              )
-                indexFirst = j;
-            }
-            take.splice(0, take.length);
-            if (clickButton.customId == 'next')
-              for (let j = indexLast + 1; j < indexLast + 26; j++) {
-                if (options[j]) {
-                  take.push(options[j]);
-                }
-              }
-            if (clickButton.customId == 'prev')
-              for (let j = indexFirst - 25; j < indexFirst; j++) {
-                if (options[j]) {
-                  take.push(options[j]);
-                }
-              }
-            let page = clickButton.message.embeds[0].description
-              ? clickButton.message.embeds[0].description.split(/`+/)[1].split(/\/+/)[0]
-              : 0;
-            clickButton.customId == 'next' ? page++ : page--;
-            const menu = new Discord.MessageSelectMenu()
-              .setCustomId(msg.property)
-              .addOptions(take)
-              .setMinValues(1)
-              .setMaxValues(msg.property.includes('s') ? take.length : 1)
-              .setPlaceholder(msg.language.select[msg.property].select);
-            const next = new Discord.MessageButton()
-              .setCustomId('next')
-              .setLabel(msg.language.next)
-              .setDisabled(options.length < page * 25 + 26)
-              .setStyle('SUCCESS');
-            const prev = new Discord.MessageButton()
-              .setCustomId('prev')
-              .setLabel(msg.language.prev)
-              .setDisabled(page == 1)
-              .setStyle('DANGER');
-            const done = new Discord.MessageButton()
-              .setCustomId('done')
-              .setLabel(msg.language.done)
-              .setStyle('PRIMARY');
-            const back = new Discord.MessageButton()
-              .setCustomId('back')
-              .setLabel(msg.language.back)
-              .setEmoji(msg.client.constants.emotes.back)
-              .setStyle('DANGER');
-            if (answered.length) done.setDisabled(false);
-            else done.setDisabled(true);
-            const embed = new Discord.MessageEmbed()
-              .setAuthor(
-                msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
-                msg.client.constants.emotes.settingsLink,
-                msg.client.constants.standard.invite,
-              )
-              .setDescription(
-                `${msg.language.select[msg.property].desc}\n${
-                  msg.language.page
-                }: \`${page}/${Math.ceil(+options.length / 25)}\``,
-              );
-            if (answered?.length)
-              embed.addField(
-                msg.language.selected,
-                `${
-                  msg.property.includes('s')
-                    ? answered.map((c) =>
-                        msg.compatibilityType == 'channels'
-                          ? `<#${c}>`
-                          : msg.compatibilityType == 'roles'
-                          ? `<@&${c}>`
-                          : ` ${c}`,
-                      )
-                    : msg.compatibilityType == 'channels'
-                    ? `<#${answered}>`
-                    : msg.compatibilityType == 'roles'
-                    ? `<@&${answered}>`
-                    : `${answered}`
-                } `,
-              );
-            if (page >= Math.ceil(+options.length / 25)) next.setDisabled(true);
-            else next.setDisabled(false);
-            if (page > 1) prev.setDisabled(false);
-            else prev.setDisabled(true);
-            const rows = msg.client.ch.buttonRower([[menu], [prev, next], [back, done]]);
-            clickButton.update({ embeds: [embed], components: rows }).catch(() => {});
-          } else if (clickButton.customId == 'done') {
-            if (msg.compatibilityType == 'channels' || msg.compatibilityType == 'roles') {
-              if (answered.length) {
-                if (msg.property.includes('s')) {
-                  answered.forEach((id) => {
-                    if (values[msg.assigner] && values[msg.assigner].includes(id)) {
-                      const index = values[msg.assigner].indexOf(id);
-                      values[msg.assigner].splice(index, 1);
-                    } else if (values[msg.assigner] && values[msg.assigner].length)
-                      values[msg.assigner].push(id);
-                    else values[msg.assigner] = [id];
-                  });
-                } else values[msg.assigner] = answered[0];
-              }
-            } else if (msg.compatibilityType == 'number') {
-              if (answered.length) {
-                if (msg.property.includes('s')) {
-                  answered.forEach((id) => {
-                    if (values[msg.assigner] && values[msg.assigner].includes(id)) {
-                      const index = values[msg.assigner].indexOf(id);
-                      values[msg.assigner].splice(index, 1);
-                    } else if (values[msg.assigner] && values[msg.assigner].length)
-                      values[msg.assigner].push(id);
-                    else values[msg.assigner] = [id];
-                  });
-                } else values[msg.assigner] = answered[0];
-              }
-            }
-            messageCollector.stop('finished');
-            buttonsCollector.stop('finished');
-            interaction = clickButton;
-            resolve(true);
-          } else if (clickButton.customId == msg.property) {
-            clickButton.values.forEach((val) => {
-              if (!answered.includes(val))
-                msg.guild[msg.compatibilityType].cache.get(val)
-                  ? answered.push(msg.guild[msg.compatibilityType].cache.get(val).id)
-                  : '';
-              else answered.splice(answered.indexOf(val), 1);
-            });
-            const page = clickButton.message.embeds[0].description
-              ? clickButton.message.embeds[0].description.split(/`+/)[1].split(/\/+/)[0]
-              : 0;
-            const menu = new Discord.MessageSelectMenu()
-              .setCustomId(msg.property)
-              .addOptions(take)
-              .setMinValues(1)
-              .setMaxValues(msg.property.includes('s') ? take.length : 1)
-              .setPlaceholder(msg.language.select[msg.property].select);
-            const next = new Discord.MessageButton()
-              .setCustomId('next')
-              .setLabel(msg.language.next)
-              .setDisabled(options.length < page * 25 + 26)
-              .setStyle('SUCCESS');
-            const prev = new Discord.MessageButton()
-              .setCustomId('prev')
-              .setLabel(msg.language.prev)
-              .setDisabled(page == 1)
-              .setStyle('DANGER');
-            const done = new Discord.MessageButton()
-              .setCustomId('done')
-              .setLabel(msg.language.done)
-              .setStyle('PRIMARY');
-            const back = new Discord.MessageButton()
-              .setCustomId('back')
-              .setLabel(msg.language.back)
-              .setEmoji(msg.client.constants.emotes.back)
-              .setStyle('DANGER');
-            if (answered.length) done.setDisabled(false);
-            else done.setDisabled(true);
-            const embed = new Discord.MessageEmbed()
-              .setAuthor(
-                msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
-                msg.client.constants.emotes.settingsLink,
-                msg.client.constants.standard.invite,
-              )
-              .setDescription(
-                `${msg.language.select[msg.property].desc}\n${
-                  msg.language.page
-                }: \`${page}/${Math.ceil(+options.length / 25)}\``,
-              )
-              .addField(
-                msg.language.selected,
-                `${
-                  msg.property.includes('s')
-                    ? answered.map((c) =>
-                        msg.compatibilityType == 'channels'
-                          ? `<#${c}>`
-                          : msg.compatibilityType == 'roles'
-                          ? `<@&${c}>`
-                          : ` ${c}`,
-                      )
-                    : msg.compatibilityType == 'channels'
-                    ? `<#${answered}>`
-                    : msg.compatibilityType == 'roles'
-                    ? `<@&${answered}>`
-                    : `${answered}`
-                } `,
-              );
-            const rows = msg.client.ch.buttonRower([[menu], [prev, next], [back, done]]);
-            clickButton.update({ embeds: [embed], components: rows }).catch(() => {});
-          } else if (clickButton.customId == 'back') {
-            messageCollector.stop();
-            buttonsCollector.stop();
-            resolve(false);
-            if (comesFromSRM)
-              return require('../singleRowManager').redirecter(
-                msg,
-                clickButton,
-                AddRemoveEditView,
-                fail,
-                values,
-                values.id ? 'redirecter' : null,
-              );
-            return require('../multiRowManager').edit(msg, clickButton, {});
-          }
-        } else msg.client.ch.notYours(clickButton, msg);
-      });
-      messageCollector.on('collect', async (message) => {
-        if (msg.author.id == message.author.id) {
-          if (message.content == msg.language.cancel) {
-            resolve(false);
-            return misc.aborted(msg, [messageCollector, buttonsCollector]);
-          }
-          message.delete().catch(() => {});
-          if (msg.property == 'role' || msg.property == 'channel') {
-            const answerContent = message.content.replace(/\D+/g, '');
-            const result = msg.guild[msg.compatibilityType].cache.get(answerContent);
-            if (result) {
-              values[msg.assigner] = answerContent;
-              answered = values[msg.assigner];
-            } else misc.notValid(msg);
-          } else if (msg.property == 'roles' || msg.property == 'channels') {
-            const args = message.content.split(/ +/);
-            Promise.all(
-              args.map(async (raw) => {
-                const id = raw.replace(/\D+/g, '');
-                const request = msg.guild[msg.compatibilityType].cache.get(id);
-                if (
-                  (!request || !request.id) &&
-                  (!values[msg.assigner] ||
-                    (values[msg.assigner] && !values[msg.assigner].includes(id)))
-                )
-                  fail.push(`\`${raw}\` ${msg.lan.edit[msg.property].fail.no}`);
-                else answered.push(id);
-              }),
-            );
-            if (answered.length) {
-              if (msg.property.includes('s')) {
-                answered.forEach((id) => {
-                  if (values[msg.assigner] && values[msg.assigner].includes(id)) {
-                    const index = values[msg.assigner].indexOf(id);
-                    values[msg.assigner].splice(index, 1);
-                  } else if (values[msg.assigner] && values[msg.assigner].length)
-                    values[msg.assigner].push(id);
-                  else values[msg.assigner] = [id];
-                });
-              } else values[msg.assigner] = answered;
-            }
-            answered = values[msg.assigner];
-          } else return misc.notValid(msg);
-          buttonsCollector.stop();
-          messageCollector.stop();
-          resolve(true);
-        }
-        buttonsCollector.on('end', (collected, reason) => {
-            if (reason === 'time') {
-            msg.client.ch.collectorEnd(msg);
-            resolve(false);
-          }
-        });
-      });
+
+    return [[menu], [prev, next], [back, done]];
+  },
+  interactionHandler(msgData, preparedData, insertedValues, required) {
+    const { msg } = msgData;
+    const { Objects } = preparedData;
+
+    const selected = this.getSelected(msg, insertedValues, required, required.key);
+
+    const returnEmbed = new Discord.MessageEmbed().setDescription(
+      `**${msg.language.selected}:**\n${selected?.length ? selected : msg.language.none}`,
+    );
+
+    Objects.options.forEach((option) => {
+      if (insertedValues[required.assinger]?.includes(option.value)) {
+        option.emoji = msg.client.constants.emotes.minusBGID;
+        option.description = msg.language.removeFromList;
+      } else {
+        option.emoji = msg.client.constants.emotes.plusBGID;
+        option.description = msg.language.addToList;
+      }
     });
-    if (resolved)
-      return [
-        'repeater',
-        msg,
-        i + 1,
-        embed,
-        values,
-        interaction,
-        AddRemoveEditView,
-        fail,
-        srmEditing,
-        comesFromSRM,
-        answered,
-      ];
+
+    return { returnEmbed };
+  },
+  getSelected(msg, insertedValues, required) {
+    if (insertedValues[required.assinger]) {
+      switch (required.key.endsWith('s')) {
+        default: {
+          return insertedValues[required.assinger];
+        }
+        case true: {
+          return insertedValues[required.assinger]
+            .map((value) => {
+              return `${value}`;
+            })
+            .join(', ');
+        }
+      }
+    }
     return null;
   },
 };
