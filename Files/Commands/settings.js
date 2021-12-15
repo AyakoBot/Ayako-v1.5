@@ -1,6 +1,4 @@
-/* eslint-disable no-param-reassign */
-/* eslint-disable global-require */
-/* eslint-disable import/no-dynamic-require */
+
 const Discord = require('discord.js');
 const fs = require('fs');
 
@@ -422,7 +420,7 @@ const mmrEditList = async (msgData, sendData) => {
       assinger: msg.client.constants.commands.settings.edit[msg.file.name].id,
     };
 
-    const editor = editors.find((f) => f.key.includes(msg.property));
+    const editor = editors.find((f) => f.key.includes(required.key));
     const returnedData = await editorInteractionHandler(
       { msg, answer },
       { insertedValues: {}, required, editor },
@@ -459,7 +457,7 @@ const mmrEditList = async (msgData, sendData) => {
         ],
     };
 
-    const editor = editors.find((f) => f.key.includes(msg.property));
+    const editor = editors.find((f) => f.key.includes(required.key));
     if (editor.requiresInteraction) {
       const returnedData = await editorInteractionHandler(
         { msg, answer },
@@ -972,6 +970,7 @@ const messageHandler = async (msgData, editData) => {
   messageCollector.on('collect', async (message) => {
     if (message.author.id !== msg.author.id) return null;
     messageCollector.resetTimer();
+    message.delete().catch(() => {});
     editor.messageHandler({ msg, message }, insertedValues, required);
     return null;
   });
