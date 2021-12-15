@@ -1,9 +1,12 @@
-/* eslint-disable global-require */
-/* eslint-disable no-param-reassign */
+
+
 const Discord = require('discord.js');
 
 module.exports = {
   key: ['permissions', 'permission'],
+
+
+
   async execute(
     msg,
     i,
