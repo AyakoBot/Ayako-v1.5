@@ -1,4 +1,4 @@
-/* eslint-disable no-param-reassign */
+
 const { parentPort, workerData } = require('worker_threads');
 
 start(workerData);

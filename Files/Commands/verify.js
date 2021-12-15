@@ -1,4 +1,4 @@
-/* eslint-disable no-param-reassign */
+
 const Discord = require('discord.js');
 const { CaptchaGenerator } = require('captcha-canvas');
 const fs = require('fs');

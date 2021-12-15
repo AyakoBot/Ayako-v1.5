@@ -1,4 +1,4 @@
-/* eslint-disable no-param-reassign */
+
 const client = require('../../../BaseClient/DiscordClient');
 
 const antiSpamSettings = {

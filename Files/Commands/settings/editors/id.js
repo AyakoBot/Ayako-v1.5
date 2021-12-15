@@ -1,8 +1,8 @@
-/* eslint-disable no-param-reassign */
+
 const Discord = require('discord.js');
 
 module.exports = {
-  key: ['id'],
+  key: ['id', 'ids'],
   requiresInteraction: true,
   dataPreparation(msg, editorData, row, res) {
     const { insertedValues, required, Objects } = editorData;
@@ -96,8 +96,20 @@ module.exports = {
     return { returnEmbed };
   },
   getSelected(msg, insertedValues, required) {
-    return insertedValues[required.assinger]
-      ? insertedValues[required.assinger].join(', ')
-      : msg.language.none;
+    if (insertedValues[required.assinger]) {
+      switch (required.key.endsWith('s')) {
+        default: {
+          return insertedValues[required.assinger];
+        }
+        case true: {
+          return insertedValues[required.assinger]
+            .map((value) => {
+              return `${value}`;
+            })
+            .join(', ');
+        }
+      }
+    }
+    return null;
   },
 };

@@ -1395,6 +1395,15 @@
         "author": "Ayako Settings",
         "desc": "No Settings available for the selected Setting"
       },
+      "fails": {
+        "user": "I couldn't find this User: ",
+        "users": "I couldn't find these Users: ",
+        "channel": "I couldn't find this Channel: ",
+        "channels": "I couldn't find these Channels: ",
+        "role": "I couldn't find this Role: ",
+        "roles": "I couldn't find these Roles: "
+
+      },
       "logs": {
         "category": ["Automation"],
         "type": "Logs",
@@ -1702,11 +1711,7 @@
           "bpuserid": {
             "name": "Whitelisted Users",
             "answers": "`Mention(s) or ID(s)`",
-            "recommended": "This is a Switch.\nIf the entered User is already bypassed they will be removed.",
-            "fail": {
-              "no": "I couldn't find this User\n",
-              "wrongGuild": "This User is not Part of this Server\n"
-            }
+            "recommended": "This is a Switch.\nIf the entered User is already bypassed they will be removed."
           },
           "readofwarnstof": {
             "name": "**Read Warnings** (required for the following 3 options)",
@@ -1788,11 +1793,7 @@
           "pingusers": {
             "name": "TB Users to Ping",
             "answers": "`Mention(s) or ID(s)`",
-            "recommended": "This is a Switch.\nIf the entered User is already added they will be removed.\nWhen the Join Threshold is breached, I will Mention these Users in a Message",
-            "fail": {
-              "no": "I couldn't find this User\n",
-              "wrongGuild": "This User is not Part of this Server\n"
-            }
+            "recommended": "This is a Switch.\nIf the entered User is already added they will be removed.\nWhen the Join Threshold is breached, I will Mention these Users in a Message"
           }
         }
       },
@@ -2129,11 +2130,7 @@
           "bpuserid": {
             "name": "Whitelisted Users",
             "answers": "`Mention(s) or ID(s)`",
-            "recommended": "This is a Switch.\nIf the entered User is already added it will be removed.",
-            "fail": {
-              "no": "I couldn't find this User\n",
-              "wrongGuild": "This User is not Part of this Server\n"
-            }
+            "recommended": "This is a Switch.\nIf the entered User is already added it will be removed."
           },
           "clearint": {
             "name": "Clear Interval",
@@ -2196,11 +2193,7 @@
           "bpuserid": {
             "name": "Whitelisted Users",
             "answers": "`Mention(s) or ID(s)`",
-            "recommended": "This is a Switch.\nIf the entered User is already added it will be removed.\nUsers listed here bypass the Cooldown",
-            "fail": {
-              "no": "I couldn't find this User\n",
-              "wrongGuild": "This User is not Part of this Server\n"
-            }
+            "recommended": "This is a Switch.\nIf the entered User is already added it will be removed.\nUsers listed here bypass the Cooldown"
           }
         },
         "otherEdits": {
@@ -2290,20 +2283,12 @@
           "bpuserid": {
             "name": "Whitelisted Users",
             "answers": "`Mention(s) or ID(s)`",
-            "recommended": "This is a Switch.\nIf the entered User is already added it will be removed.\nUsers listed here can use these Commands in the Channels they are disabled in, no matter if they have a Blacklisted Role.",
-            "fail": {
-              "no": "I couldn't find this User\n",
-              "wrongGuild": "This User is not Part of this Server\n"
-            }
+            "recommended": "This is a Switch.\nIf the entered User is already added it will be removed.\nUsers listed here can use these Commands in the Channels they are disabled in, no matter if they have a Blacklisted Role."
           },
           "bluserid": {
             "name": "Blacklisted Users",
             "answers": "`Mention(s) or ID(s)`",
-            "recommended": "This is a Switch.\nIf the entered User is already added it will be removed.\nUsers listed here can never use these Commands in the Channels they are disabled in, no matter if they have a Whitelisted Role",
-            "fail": {
-              "no": "I couldn't find this User\n",
-              "wrongGuild": "This User is not Part of this Server\n"
-            }
+            "recommended": "This is a Switch.\nIf the entered User is already added it will be removed.\nUsers listed here can never use these Commands in the Channels they are disabled in, no matter if they have a Whitelisted Role"
           }
         },
         "otherEdits": {
@@ -2472,11 +2457,7 @@
           "blacklistedusers": {
             "name": "Blacklisted Users",
             "answers": "`Mention(s) or ID(s)`",
-            "recommended": "This is a Switch.\nIf the entered User is already blacklisted they will be removed.",
-            "fail": {
-              "no": "I couldn't find this User\n",
-              "wrongGuild": "This User is not Part of this Server\n"
-            }
+            "recommended": "This is a Switch.\nIf the entered User is already blacklisted they will be removed."
           },
           "whitelistedroles": {
             "name": "Whitelisted Roles",
@@ -2491,11 +2472,7 @@
           "whitelistedusers": {
             "name": "Whitelisted Users",
             "answers": "`Mention(s) or ID(s)`",
-            "recommended": "This is a Switch.\nIf the entered User is already whitelisted they will be removed.",
-            "fail": {
-              "no": "I couldn't find this User\n",
-              "wrongGuild": "This User is not Part of this Server\n"
-            }
+            "recommended": "This is a Switch.\nIf the entered User is already whitelisted they will be removed."
           },
           "name": {
             "name": "Name",
@@ -2568,11 +2545,7 @@
           "bluserid": {
             "name": "Blacklisted Users",
             "answers": "`Mentions or IDs`",
-            "recommended": "This is a Switch.\nIf the entered User is already added it will be removed.\nThese Users won't be able to send Suggestions",
-            "fail": {
-              "no": "I couldn't find this User\n",
-              "wrongGuild": "This User is not Part of this Server\n"
-            }
+            "recommended": "This is a Switch.\nIf the entered User is already added it will be removed.\nThese Users won't be able to send Suggestions"
           },
           "channelid": {
             "name": "Suggestion Channel",
@@ -2842,20 +2815,12 @@
           "blacklistedusers": {
             "name": "Blacklisted Users",
             "answers": "`Mentions or IDs`",
-            "recommended": "This is a Switch.\nIf the entered User is already blacklisted they will be removed.\nIf a User is blacklisted __and__ has the Mod-Role, they will __not__ be able to use the Mod-Roles Permissions",
-            "fail": {
-              "no": "I couldn't find this User\n",
-              "wrongGuild": "This User is not Part of this Server\n"
-            }
+            "recommended": "This is a Switch.\nIf the entered User is already blacklisted they will be removed.\nIf a User is blacklisted __and__ has the Mod-Role, they will __not__ be able to use the Mod-Roles Permissions"
           },
           "whitelistedusers": {
             "name": "Whitelisted Users",
             "answers": "`Mentions or IDs`",
-            "recommended": "This is a Switch.\nIf the entered User is already whitelisted they will be removed.\nIf a User is whitelisted, has the Mod-Role __and__ has a Blacklisted Role, they will be able to use the Mod-Roles Permissions",
-            "fail": {
-              "no": "I couldn't find this User\n",
-              "wrongGuild": "This User is not Part of this Server\n"
-            }
+            "recommended": "This is a Switch.\nIf the entered User is already whitelisted they will be removed.\nIf a User is whitelisted, has the Mod-Role __and__ has a Blacklisted Role, they will be able to use the Mod-Roles Permissions"
           },
           "blacklistedcommands": {
             "name": "Blacklisted Commands",

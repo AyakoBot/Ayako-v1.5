@@ -1,5 +1,5 @@
-/* eslint-disable no-param-reassign */
-/* eslint-disable global-require */
+
+
 const Discord = require('discord.js');
 
 module.exports = {

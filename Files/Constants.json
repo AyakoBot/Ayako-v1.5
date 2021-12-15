@@ -600,11 +600,11 @@
           "bpchannelid": "channels",
           "bproleid": "roles",
           "bpuserid": "users",
-          "words": "string"
+          "words": "stringArray"
         },
         "cooldowns": {
           "command": "command",
-          "cooldown": "seconds",
+          "cooldown": "second",
           "activechannelid": "channels",
           "bpchannelid": "channels",
           "bproleid": "roles",
@@ -646,7 +646,7 @@
         },
         "interactions": {
           "size": "boolean",
-          "block": "string"
+          "block": "stringArray"
         },
         "separators": {
           "active": "boolean",
@@ -712,7 +712,7 @@
           "postchannel": "channel",
           "pingroles": "roles",
           "pingusers": "users",
-          "time": "seconds",
+          "time": "second",
           "jointhreshold": "number",
           "similaridthreshold": "number"
         },

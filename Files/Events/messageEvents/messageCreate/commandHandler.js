@@ -1,4 +1,4 @@
-/* eslint-disable no-param-reassign */
+
 const Discord = require('discord.js');
 // const { statcord } = require('../../../BaseClient/Statcord');
 const auth = require('../../../BaseClient/auth.json');

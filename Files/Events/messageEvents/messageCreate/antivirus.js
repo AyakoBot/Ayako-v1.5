@@ -1,4 +1,4 @@
-/* eslint-disable no-param-reassign */
+
 const urlCheck = require('valid-url');
 const SA = require('superagent');
 const request = require('request');

@@ -1,4 +1,4 @@
-/* eslint-disable no-param-reassign */
+
 module.exports = {
   name: 'strike',
   perm: 4n,

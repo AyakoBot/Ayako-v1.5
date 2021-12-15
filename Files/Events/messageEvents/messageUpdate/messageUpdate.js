@@ -1,4 +1,4 @@
-/* eslint-disable global-require */
+
 module.exports = {
   async execute(oldMsg, rawnewMsg) {
     const newMsg = await rawnewMsg.fetch().catch(() => {});

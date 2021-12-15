@@ -1,4 +1,4 @@
-/* eslint-disable global-require */
+
 module.exports = {
   async execute(oldMember, newMember) {
     if (!oldMember || !newMember) return;

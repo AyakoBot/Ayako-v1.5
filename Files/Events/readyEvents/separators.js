@@ -1,5 +1,5 @@
 /* eslint-disable import/no-unresolved */
-/* eslint-disable global-require */
+
 const Discord = require('discord.js');
 const client = require('../../BaseClient/DiscordClient');
 

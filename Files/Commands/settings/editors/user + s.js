@@ -1,4 +1,4 @@
-/* eslint-disable no-param-reassign */
+
 const Discord = require('discord.js');
 
 module.exports = {
@@ -8,15 +8,13 @@ module.exports = {
   dataPreparation(msg, editorData, row) {
     const { insertedValues, required, Objects } = editorData;
 
-    insertedValues[required.assinger] = [
-      ...(row[required.assinger]?.length ? row[required.assinger] : []),
-    ];
+    insertedValues[required.assinger] = row[required.assinger]?.length
+      ? row[required.assinger]
+      : msg.language.none;
 
     return { Objects };
   },
   buttons(msg, preparedData, insertedValues, required, row) {
-    const { Objects } = preparedData;
-
     let doneDisabled = true;
     if (Array.isArray(insertedValues[required.assinger])) {
       doneDisabled = msg.client.ch.arrayEquals(
@@ -27,16 +25,6 @@ module.exports = {
       doneDisabled = !!insertedValues[required.assinger];
     }
 
-    const next = new Discord.MessageButton()
-      .setCustomId('next')
-      .setLabel(msg.language.next)
-      .setDisabled(Objects.page === Math.ceil(Objects.options.length / 25))
-      .setStyle('SUCCESS');
-    const prev = new Discord.MessageButton()
-      .setCustomId('prev')
-      .setLabel(msg.language.prev)
-      .setDisabled(Objects.page === 1)
-      .setStyle('DANGER');
     const done = new Discord.MessageButton()
       .setCustomId('done')
       .setLabel(msg.language.done)
@@ -48,22 +36,54 @@ module.exports = {
       .setEmoji(msg.client.constants.emotes.back)
       .setStyle('DANGER');
 
-    return [
-      [prev, next],
-      [back, done],
-    ];
+    return [[back, done]];
   },
   messageHandler(msgData, insertedValues, required) {
     const { msg, message } = msgData;
 
-    const args = message.content.replace(/\n/g, '').replace(/\D+/g, '').split(/ +/);
+    const fail = (arg) => {
+      let text = '';
+      if (Array.isArray(arg)) {
+        text = arg.join(', ');
+      } else text = arg;
 
-    args.forEach((id) => {
-      const user = msg.client.users.cache.get(id);
-      if (user) {
-        insertedValues[required.assinger].push(user);
+      const lan = msg.lanSettings.fails[required.key];
+      const embed = new Discord.MessageEmbed()
+        .setColor(msg.client.constants.error)
+        .setDescription(`${lan}\n${text}`);
+      message.reply({ embeds: [embed] });
+    };
+
+    const args = message.content.replace(/\\n/g, ' ').replace(/\D+/g, '').split(/ +/);
+
+    switch (required.key) {
+      default: {
+        const user = msg.client.users.cache.get(message.content);
+        if (user) {
+          insertedValues[required.assinger] = user.id;
+        } else fail(message.content);
+        break;
       }
-    });
+      case 'users': {
+        const assinged = insertedValues[required.assinger];
+        const notUserArgs = [];
+
+        args.forEach((id) => {
+          const user = msg.client.users.cache.get(id);
+
+          if (user) {
+            if (assinged && assinged.includes(user.id)) {
+              const index = assinged.indexOf(user.id);
+              assinged.splice(index, 1);
+            } else if (assinged && assinged.length) assinged.push(user.id);
+            else insertedValues[required.assinger] = [user.id];
+          } else notUserArgs.push(id);
+
+          if (notUserArgs.length) fail(notUserArgs);
+        });
+        break;
+      }
+    }
 
     const selected = this.getSelected(msg, insertedValues, required, required.key);
 
@@ -75,11 +95,18 @@ module.exports = {
   },
   getSelected(msg, insertedValues, required) {
     if (insertedValues[required.assinger]) {
-      return insertedValues[required.assinger]
-        .map((value) => {
-          return `${value}`;
-        })
-        .join(', ');
+      switch (required.key) {
+        default: {
+          return insertedValues[required.assinger];
+        }
+        case 'users': {
+          return insertedValues[required.assinger]
+            .map((value) => {
+              return `<@${value}>`;
+            })
+            .join(', ');
+        }
+      }
     }
     return null;
   },

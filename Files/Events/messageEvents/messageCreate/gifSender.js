@@ -1,4 +1,4 @@
-/* eslint-disable no-param-reassign */
+
 const Discord = require('discord.js');
 const isImageUrl = require('is-image-url');
 const Tenor = require('../../../BaseClient/tenor');

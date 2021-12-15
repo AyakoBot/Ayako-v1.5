@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-/* eslint-disable no-param-reassign */
+
 const Discord = require('discord.js');
 
 module.exports = {
