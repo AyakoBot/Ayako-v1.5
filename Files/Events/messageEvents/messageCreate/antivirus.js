@@ -1,4 +1,3 @@
-
 const urlCheck = require('valid-url');
 const SA = require('superagent');
 const request = require('request');
@@ -644,6 +643,7 @@ const promptapi = async (linkObject) => {
 
 const postVTUrls = async (linkObject) => {
   if (!linkObject.href) {
+    // eslint-disable-next-line no-console
     console.log(linkObject);
   }
 
