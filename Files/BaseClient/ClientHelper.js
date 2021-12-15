@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const URL = require('url');
 const https = require('https');
 const http = require('http');
@@ -328,38 +329,136 @@ module.exports = {
   permCalc(bits, lan) {
     const BitField = new Discord.Permissions(BigInt(bits));
     const Perms = [];
-    if (BitField.has(1n)) Perms.push(lan.permissions.CREATE_INSTANT_INVITE);
-    if (BitField.has(2n)) Perms.push(lan.permissions.KICK_MEMBERS);
-    if (BitField.has(4n)) Perms.push(lan.permissions.BAN_MEMBERS);
-    if (BitField.has(8n)) Perms.push(lan.permissions.ADMINISTRATOR);
-    if (BitField.has(16n)) Perms.push(lan.permissions.MANAGE_CHANNELS);
-    if (BitField.has(32n)) Perms.push(lan.permissions.MANAGE_GUILD);
-    if (BitField.has(64n)) Perms.push(lan.permissions.ADD_REACTIONS);
-    if (BitField.has(128n)) Perms.push(lan.permissions.VIEW_AUDIT_LOG);
-    if (BitField.has(256n)) Perms.push(lan.permissions.PRIORITY_SPEAKER);
-    if (BitField.has(512n)) Perms.push(lan.permissions.STREAM);
-    if (BitField.has(1024n)) Perms.push(lan.permissions.VIEW_CHANNEL);
-    if (BitField.has(2048n)) Perms.push(lan.permissions.SEND_MESSAGES);
-    if (BitField.has(4096n)) Perms.push(lan.permissions.SEND_TTS_MESSAGES);
-    if (BitField.has(8192n)) Perms.push(lan.permissions.MANAGE_MESSAGES);
-    if (BitField.has(16384n)) Perms.push(lan.permissions.EMBED_LINKS);
-    if (BitField.has(32768n)) Perms.push(lan.permissions.ATTACH_FILES);
-    if (BitField.has(65536n)) Perms.push(lan.permissions.READ_MESSAGE_HISTORY);
-    if (BitField.has(131072n)) Perms.push(lan.permissions.MENTION_EVERYONE);
-    if (BitField.has(262144n)) Perms.push(lan.permissions.USE_EXTERNAL_EMOJIS);
-    if (BitField.has(1048576n)) Perms.push(lan.permissions.CONNECT);
-    if (BitField.has(2097152n)) Perms.push(lan.permissions.SPEAK);
-    if (BitField.has(4194304n)) Perms.push(lan.permissions.MUTE_MEMBERS);
-    if (BitField.has(8388608n)) Perms.push(lan.permissions.DEAFEN_MEMBERS);
-    if (BitField.has(16777216n)) Perms.push(lan.permissions.MOVE_MEMBERS);
-    if (BitField.has(33554432n)) Perms.push(lan.permissions.USE_VAD);
-    if (BitField.has(67108864n)) Perms.push(lan.permissions.CHANGE_NICKNAME);
-    if (BitField.has(134217728n)) Perms.push(lan.permissions.MANAGE_NICKNAMES);
-    if (BitField.has(268435456n)) Perms.push(lan.permissions.MANAGE_ROLES);
-    if (BitField.has(536870912n)) Perms.push(lan.permissions.MANAGE_WEBHOOKS);
-    if (BitField.has(1073741824n)) Perms.push(lan.permissions.MANAGE_EMOJIS_AND_STICKERS);
-    if (BitField.has(2147483648n)) Perms.push(lan.permissions.USE_APPLICATION_COMMANDS);
-    if (BitField.has(4294967296n)) Perms.push(lan.permissions.REQUEST_TO_SPEAK);
+    if (BitField.has(1n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.CREATE_INSTANT_INVITE);
+    }
+    if (BitField.has(2n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.KICK_MEMBERS);
+    }
+    if (BitField.has(4n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.BAN_MEMBERS);
+    }
+    if (BitField.has(8n)) {
+      Perms.push(lan.permissions.ADMINISTRATOR);
+    }
+    if (BitField.has(16n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.MANAGE_CHANNELS);
+    }
+    if (BitField.has(32n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.MANAGE_GUILD);
+    }
+    if (BitField.has(64n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.ADD_REACTIONS);
+    }
+    if (BitField.has(128n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.VIEW_AUDIT_LOG);
+    }
+    if (BitField.has(256n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.PRIORITY_SPEAKER);
+    }
+    if (BitField.has(512n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.STREAM);
+    }
+    if (BitField.has(1024n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.VIEW_CHANNEL);
+    }
+    if (BitField.has(2048n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.SEND_MESSAGES);
+    }
+    if (BitField.has(4096n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.SEND_TTS_MESSAGES);
+    }
+    if (BitField.has(8192n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.MANAGE_MESSAGES);
+    }
+    if (BitField.has(16384n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.EMBED_LINKS);
+    }
+    if (BitField.has(32768n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.ATTACH_FILES);
+    }
+    if (BitField.has(65536n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.READ_MESSAGE_HISTORY);
+    }
+    if (BitField.has(131072n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.MENTION_EVERYONE);
+    }
+    if (BitField.has(262144n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.USE_EXTERNAL_EMOJIS);
+    }
+    if (BitField.has(524288n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.VIEW_GUILD_INSIGHTS);
+    }
+    if (BitField.has(1048576n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.CONNECT);
+    }
+    if (BitField.has(2097152n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.SPEAK);
+    }
+    if (BitField.has(4194304n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.MUTE_MEMBERS);
+    }
+    if (BitField.has(8388608n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.DEAFEN_MEMBERS);
+    }
+    if (BitField.has(16777216n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.MOVE_MEMBERS);
+    }
+    if (BitField.has(33554432n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.USE_VAD);
+    }
+    if (BitField.has(67108864n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.CHANGE_NICKNAME);
+    }
+    if (BitField.has(134217728n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.MANAGE_NICKNAMES);
+    }
+    if (BitField.has(268435456n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.MANAGE_ROLES);
+    }
+    if (BitField.has(536870912n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.MANAGE_WEBHOOKS);
+    }
+    if (BitField.has(1073741824n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.MANAGE_EMOJIS_AND_STICKERS);
+    }
+    if (BitField.has(2147483648n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.USE_APPLICATION_COMMANDS);
+    }
+    if (BitField.has(4294967296n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.REQUEST_TO_SPEAK);
+    }
+    if (BitField.has(17179869184n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.MANAGE_THREADS);
+    }
+    if (BitField.has(34359738368n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.USE_AND_CREATE_PUBLIC_THREADS);
+    }
+    if (BitField.has(68719476736n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.USE_AND_CREATE_PRIVATE_THREADS);
+    }
+    if (BitField.has(137438953472n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.USE_EXTERNAL_STICKERS);
+    }
+    if (BitField.has(274877906944n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.SEND_MESSAGES_IN_THREADS);
+    }
+    if (BitField.has(549755813888n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.START_EMBEDDED_ACTIVITIES);
+    }
+
+    /*
+    'VIEW_GUILD_INSIGHTS'
+  'MANAGE_THREADS',
+  'USE_PUBLIC_THREADS',
+  'CREATE_PUBLIC_THREADS',
+  'USE_PRIVATE_THREADS',
+  'CREATE_PRIVATE_THREADS',
+  'USE_EXTERNAL_STICKERS',
+  'SEND_MESSAGES_IN_THREADS',
+  'START_EMBEDDED_ACTIVITIES'
+
+    */
     return Perms;
   },
   /**
