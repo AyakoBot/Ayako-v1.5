@@ -122,7 +122,7 @@ module.exports = {
     }
 
     const postVTurlsRes = await postVTUrls(linkObject);
-    const VTurls = postVTurlsRes.stats;
+    const VTurls = postVTurlsRes?.stats;
     const urlsAttributes = postVTurlsRes;
     const urlSeverity = getSeverity(VTurls);
     if (Number.isNaN(urlSeverity) && embed.fields.length === 0) {
@@ -762,7 +762,8 @@ const getSeverity = (VTresponse) => {
 };
 
 const selfChecker = async (linkObject) => {
-  const siteHTML = (await axios.get(linkObject.href)).data;
+  const siteHTML = (await axios.get(linkObject.href).catch((e) => e))?.data;
+  if (!siteHTML) return false;
   // eslint-disable-next-line no-useless-escape
   const siteNameBad =
     /property=["'`]og:site_name["'`](.*)content=["'`]discord["'`]>/gi.test(siteHTML) ||
