@@ -97,8 +97,7 @@ module.exports = {
             prefix: msg.client.constants.standard.prefix,
             commands: categoryText,
           }),
-        )
-        .setColor(msg.client.constants.commands.settings.color);
+        );
       msg.client.ch.reply(msg, { embeds: [embed] });
     } else {
       let settingsFile = settings.get(msg.args[0].toLowerCase());
@@ -123,13 +122,11 @@ module.exports = {
           ? msg.file.displayEmbed(msg, row)
           : noEmbed(msg);
 
-      embed
-        .setAuthor(
-          msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
-          msg.client.constants.emotes.settingsLink,
-          msg.client.constants.standard.invite,
-        )
-        .setColor(msg.client.constants.commands.settings.color);
+      embed.setAuthor(
+        msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
+        msg.client.constants.emotes.settingsLink,
+        msg.client.constants.standard.invite,
+      );
 
       const edit = new Discord.MessageButton()
         .setCustomId('edit')
@@ -175,7 +172,7 @@ module.exports = {
         [msg.guild.id],
       );
 
-      let embed = new Discord.MessageEmbed().setColor(msg.client.constants.commands.settings.color);
+      let embed = new Discord.MessageEmbed();
 
       if (res && res.rowCount > 0) {
         if (msg.file.mmrEmbed[Symbol.toStringTag] === 'AsyncFunction') {
@@ -188,13 +185,11 @@ module.exports = {
         }
       } else embed = noEmbed(msg);
 
-      embed
-        .setAuthor(
-          msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
-          msg.client.constants.emotes.settingsLink,
-          msg.client.constants.standard.invite,
-        )
-        .setColor(msg.client.constants.commands.settings.color);
+      embed.setAuthor(
+        msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
+        msg.client.constants.emotes.settingsLink,
+        msg.client.constants.standard.invite,
+      );
 
       const settingsConstant = msg.client.constants.commands.settings.setupQueries[msg.file.name];
       const options = {
@@ -417,6 +412,7 @@ const mmrEditList = async (msgData, sendData) => {
       key: 'id',
       value: removeLanguage.process[0],
       assinger: msg.client.constants.commands.settings.edit[msg.file.name].id,
+      required: true,
     };
 
     const editor = editors.find((f) => f.key.includes(required.key));
@@ -447,13 +443,15 @@ const mmrEditList = async (msgData, sendData) => {
       return insertedValues;
     }
 
+    const keyOfCurStep =
+      msg.client.constants.commands.settings.setupQueries[msg.file.name].add[currentStep];
+    const DataOfCurStep = msg.client.constants.commands.settings.edit[msg.file.name][keyOfCurStep];
+
     const required = {
-      key: msg.client.constants.commands.settings.setupQueries[msg.file.name].add[currentStep],
+      key: DataOfCurStep.key,
       value: addLanguage.process[currentStep],
-      assinger:
-        msg.client.constants.commands.settings.edit[msg.file.name][
-          msg.client.constants.commands.settings.setupQueries[msg.file.name].add[currentStep]
-        ],
+      assinger: DataOfCurStep,
+      required: DataOfCurStep.required,
     };
 
     const editor = editors.find((f) => f.key.includes(required.key));
@@ -477,9 +475,11 @@ const mmrEditList = async (msgData, sendData) => {
     const addLanguage = msg.lanSettings[msg.file.name].otherEdits.add;
     const requiredSteps = msg.client.constants.commands.settings[msg.file.name].add;
 
-    const embed = new Discord.MessageEmbed()
-      .setAuthor(addLanguage.name, null, msg.client.constants.standard.invite)
-      .setColor(msg.client.constants.commands.settings.color);
+    const embed = new Discord.MessageEmbed().setAuthor(
+      addLanguage.name,
+      null,
+      msg.client.constants.standard.invite,
+    );
 
     const values = await mmrAddRepeater(
       answer,
@@ -683,10 +683,12 @@ const editorInteractionHandler = async (msgData, editorData, row, res) => {
     .setColor(msg.client.constants.commands.settings.color)
     .addField(
       ' \u200b',
-      `${languageOfKey.recommended ? `${languageOfKey.recommended}\n` : ''}${languageOfKey.desc}`,
+      `${languageOfKey.recommended ? `${languageOfKey.recommended}\n` : ''}${
+        languageOfKey.desc ? languageOfKey.desc : ''
+      }`,
     )
     .addField(msg.language.page, `\`1/${Math.ceil(Objects.options.length / 25)}\``)
-    .setTitle(languageOfKey.name)
+    .setTitle(msg.client.ch.stp(languageOfKey.name, { row: row || '--' }))
     .setAuthor(
       msg.client.ch.stp(msg.lanSettings.authorEdit, {
         type: languageOfSetting.type,
@@ -728,9 +730,16 @@ const changing = async (msgData, editData) => {
     usedKey === 'active' ? msg.lanSettings.active : msg.lanSettings[msg.file.name].edit[usedKey];
 
   const required = {
-    key: settings[usedKey],
+    key:
+      usedKey === 'active'
+        ? msg.client.constants.command.settings.edit.active.key
+        : settings[usedKey].key,
     value: language,
     assinger: usedKey,
+    required:
+      usedKey === 'active'
+        ? msg.client.constants.command.settings.edit.active.required
+        : settings[usedKey].required,
   };
 
   const insertedValues = {};
@@ -764,11 +773,15 @@ const dbUpdate = (msg, editData) => {
   if (comesFromMMR) {
     msg.client.ch.query(
       `UPDATE ${tableName} SET ${required.assinger} = $1 WHERE guildid = $2 AND uniquetimestamp = $3;`,
-      [insertedValues[required.assinger], msg.guild.id, row.uniquetimestamp],
+      [
+        insertedValues[required.assinger].length ? insertedValues[required.assinger] : null,
+        msg.guild.id,
+        row.uniquetimestamp,
+      ],
     );
   } else {
     msg.client.ch.query(`UPDATE ${tableName} SET ${required.assinger} = $1 WHERE guildid = $2;`, [
-      insertedValues[required.assinger],
+      insertedValues[required.assinger].length ? insertedValues[required.assinger] : null,
       msg.guild.id,
     ]);
   }
@@ -856,11 +869,11 @@ const buttonHandler = async (msgData, editData, languageData) => {
             .addField(
               ' \u200b',
               `${languageOfKey.recommended ? `${languageOfKey.recommended}\n` : ''}${
-                languageOfKey.desc
+                languageOfKey.desc ? languageOfKey.desc : ''
               }`,
             )
             .addField(msg.language.page, `\`1/${Math.ceil(Objects.options.length / 25)}\``)
-            .setTitle(languageOfKey.name)
+            .setTitle(msg.client.ch.stp(languageOfKey.name, { row: row || '--' }))
             .setAuthor(
               msg.client.ch.stp(msg.lanSettings.authorEdit, {
                 type: languageOfSetting.type,

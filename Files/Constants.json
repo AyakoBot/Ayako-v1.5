@@ -567,175 +567,527 @@
         "color": "YELLOW"
       },
       "edit": {
+        "active": {
+          "key": "boolean",
+          "required": true
+        },
         "antispam": {
-          "banenabledtof": "boolean",
-          "kickenabledtof": "boolean",
-          "muteenabledtof": "boolean",
-          "giveofficialwarnstof": "boolean",
-          "muteafterwarnsamount": "number",
-          "kickafterwarnsamount": "number",
-          "banafterwarnsamount": "number",
-          "active": "boolean",
-          "bpchannelid": "channels",
-          "bproleid": "roles",
-          "bpuserid": "users",
-          "readofwarnstof": "boolean"
+          "banenabledtof": {
+            "key": "boolean",
+            "required": true
+          },
+          "kickenabledtof": {
+            "key": "boolean",
+            "required": true
+          },
+          "muteenabledtof": {
+            "key": "boolean",
+            "required": true
+          },
+          "giveofficialwarnstof": {
+            "key": "boolean",
+            "required": true
+          },
+          "muteafterwarnsamount": {
+            "key": "number",
+            "required": true
+          },
+          "kickafterwarnsamount": {
+            "key": "number",
+            "required": true
+          },
+          "banafterwarnsamount": {
+            "key": "number",
+            "required": true
+          },
+          "bpchannelid": {
+            "key": "channels",
+            "required": false
+          },
+          "bproleid": {
+            "key": "roles",
+            "required": false
+          },
+          "bpuserid": {
+            "key": "users",
+            "required": false
+          },
+          "readofwarnstof": {
+            "key": "boolean",
+            "required": true
+          }
         },
         "autorole": {
-          "active": "boolean",
-          "botroleid": "roles",
-          "userroleid": "roles",
-          "allroleid": "roles"
+          "botroleid": {
+            "key": "roles",
+            "required": false
+          },
+          "userroleid": {
+            "key": "roles",
+            "required": false
+          },
+          "allroleid": {
+            "key": "roles",
+            "required": false
+          }
         },
         "blacklist": {
-          "active": "boolean",
-          "warntof": "boolean",
-          "mutetof": "boolean",
-          "kicktof": "boolean",
-          "bantof": "boolean",
-          "warnafter": "number",
-          "muteafter": "number",
-          "kickafter": "number",
-          "banafter": "number",
-          "bpchannelid": "channels",
-          "bproleid": "roles",
-          "bpuserid": "users",
-          "words": "stringArray"
+          "warntof": {
+            "key": "boolean",
+            "required": true
+          },
+          "mutetof": {
+            "key": "boolean",
+            "required": true
+          },
+          "kicktof": {
+            "key": "boolean",
+            "required": true
+          },
+          "bantof": {
+            "key": "boolean",
+            "required": true
+          },
+          "warnafter": {
+            "key": "number",
+            "required": false
+          },
+          "muteafter": {
+            "key": "number",
+            "required": false
+          },
+          "kickafter": {
+            "key": "number",
+            "required": false
+          },
+          "banafter": {
+            "key": "number",
+            "required": false
+          },
+          "bpchannelid": {
+            "key": "channels",
+            "required": false
+          },
+          "bproleid": {
+            "key": "roles",
+            "required": false
+          },
+          "bpuserid": {
+            "key": "users",
+            "required": false
+          },
+          "words": {
+            "key": "stringArray",
+            "required": false
+          }
         },
         "cooldowns": {
-          "command": "command",
-          "cooldown": "second",
-          "activechannelid": "channels",
-          "bpchannelid": "channels",
-          "bproleid": "roles",
-          "bpuserid": "users",
-          "active": "boolean"
+          "command": {
+            "key": "command",
+            "required": true
+          },
+          "cooldown": {
+            "key": "second",
+            "required": true
+          },
+          "activechannelid": {
+            "key": "channels",
+            "required": false
+          },
+          "bpchannelid": {
+            "key": "channels",
+            "required": false
+          },
+          "bproleid": {
+            "key": "roles",
+            "required": false
+          },
+          "bpuserid": {
+            "key": "users",
+            "required": false
+          }
         },
         "overview": {
-          "prefix": "string",
-          "interactionsmode": "boolean",
-          "muteroleid": "role",
-          "lan": "lan"
+          "prefix":{
+            "key": "string",
+            "required": false
+          },
+          "interactionsmode": {
+            "key": "boolean",
+            "required": true
+          },
+          "muteroleid": {
+            "key": "role",
+            "required": false
+          },
+          "lan": {
+            "key": "lan",
+            "required": true
+          }
         },
         "disabled": {
-          "commands": "commands",
-          "channels": "channels",
-          "bproleid": "roles",
-          "blroleid": "roles",
-          "bpuserid": "users",
-          "bluserid": "users",
-          "active": "boolean"
+          "commands": {
+            "key": "commands",
+            "required": false
+          },
+          "channels": {
+            "key": "channels",
+            "required": false
+          },
+          "bproleid": {
+            "key": "roles",
+            "required": false
+          },
+          "blroleid": {
+            "key": "roles",
+            "required": false
+          },
+          "bpuserid": {
+            "key": "users",
+            "required": false
+          },
+          "bluserid": {
+            "key": "users",
+            "required": false
+          }
         },
         "logs": {
-          "guildevents": "channels",
-          "emojievents": "channels",
-          "channelevents": "channels",
-          "inviteevents": "channels",
-          "messageevents": "channels",
-          "roleevents": "channels",
-          "userevents": "channels",
-          "voiceevents": "channels",
-          "webhookevents": "channels",
-          "applicationevents": "channels",
-          "stageinstanceevents": "channels",
-          "stickerevents": "channels",
-          "threadevents": "channels",
-          "guildmemberevents": "channels",
-          "modlogs": "channels",
-          "settingslog": "channels"
+          "guildevents": {
+            "key": "channels",
+            "required": false
+          },
+          "emojievents": {
+            "key": "channels",
+            "required": false
+          },
+          "channelevents": {
+            "key": "channels",
+            "required": false
+          },
+          "inviteevents": {
+            "key": "channels",
+            "required": false
+          },
+          "messageevents": {
+            "key": "channels",
+            "required": false
+          },
+          "roleevents": {
+            "key": "channels",
+            "required": false
+          },
+          "userevents": {
+            "key": "channels",
+            "required": false
+          },
+          "voiceevents": {
+            "key": "channels",
+            "required": false
+          },
+          "webhookevents": {
+            "key": "channels",
+            "required": false
+          },
+          "applicationevents": {
+            "key": "channels",
+            "required": false
+          },
+          "stageinstanceevents": {
+            "key": "channels",
+            "required": false
+          },
+          "stickerevents": {
+            "key": "channels",
+            "required": false
+          },
+          "threadevents": {
+            "key": "channels",
+            "required": false
+          },
+          "guildmemberevents": {
+            "key": "channels",
+            "required": false
+          },
+          "modlogs": {
+            "key": "channels",
+            "required": false
+          },
+          "settingslog": {
+            "key": "channels",
+            "required": false
+          }
         },
         "interactions": {
-          "size": "boolean",
-          "block": "stringArray"
+          "size": {
+            "key": "boolean",
+            "required": true
+          },
+          "block": {
+            "key": "stringArray",
+            "required": false
+          }
         },
         "separators": {
-          "active": "boolean",
-          "stoprole": "role",
-          "separator": "role",
-          "oneTimeRunner": "onetimerunner",
-          "roles": "roles",
-          "isvarying": "boolean"
+          "stoprole": {
+            "key": "role",
+            "required": false
+          },
+          "separator": {
+            "key": "role",
+            "required": true
+          },
+          "oneTimeRunner": {
+            "key": "onetimerunner",
+            "required": false
+          },
+          "roles": {
+            "key": "roles",
+            "required": false
+          },
+          "isvarying": {
+            "key": "boolean",
+            "required": true
+          }
         },
         "autopunish": {
-          "active": "boolean",
-          "punishment": "punishment",
-          "duration": "time",
-          "warnamount": "number",
-          "removeroles": "roles",
-          "addroles": "roles",
-          "confirmationreq": "boolean"
+          "punishment": {
+            "key": "punishment",
+            "required": false
+          },
+          "duration": {
+            "key": "time",
+            "required": false
+          },
+          "warnamount": {
+            "key": "number",
+            "required": true
+          },
+          "removeroles": {
+            "key": "roles",
+            "required": false
+          },
+          "addroles": {
+            "key": "roles",
+            "required": false
+          },
+          "confirmationreq": {
+            "key": "boolean",
+            "required": true
+          }
         },
         "antivirus": {
-          "active": "boolean",
-          "bantof": "boolean",
-          "kicktof": "boolean",
-          "mutetof": "boolean",
-          "warntof": "boolean",
-          "verbaltof": "boolean",
-          "muteafterwarnsamount": "number",
-          "kickafterwarnsamount": "number",
-          "banafterwarnsamount": "number",
-          "warnafterwarnsamount": "number",
-          "delete": "time"
+          "bantof": {
+            "key": "boolean",
+            "required": true
+          },
+          "kicktof": {
+            "key": "boolean",
+            "required": true
+          },
+          "mutetof": {
+            "key": "boolean",
+            "required": true
+          },
+          "warntof": {
+            "key": "boolean",
+            "required": true
+          },
+          "verbaltof": {
+            "key": "boolean",
+            "required": true
+          },
+          "muteafterwarnsamount": {
+            "key": "number",
+            "required": false
+          },
+          "kickafterwarnsamount": {
+            "key": "number",
+            "required": false
+          },
+          "banafterwarnsamount": {
+            "key": "number",
+            "required": false
+          },
+          "warnafterwarnsamount": {
+            "key": "number",
+            "required": false
+          },
+          "delete": {
+            "key": "time",
+            "required": false
+          }
         },
         "disboard": {
-          "active": "boolean",
-          "roleid": "role",
-          "channelid": "channel",
-          "repeatreminder": "minute"
+          "roleid": {
+            "key": "role",
+            "required": false
+          },
+          "channelid": {
+            "key": "channel",
+            "required": false
+          },
+          "repeatreminder": {
+            "key": "minute",
+            "required": false
+          }
         },
         "suggestions": {
-          "active": "boolean",
-          "channelid": "channel",
-          "bluserid": "users",
-          "blroleid": "roles",
-          "approverroleid": "roles",
-          "anon": "boolean"
+          "channelid": {
+            "key": "channel",
+            "required": true
+          },
+          "bluserid": {
+            "key": "users",
+            "required": false
+          },
+          "blroleid": {
+            "key": "roles",
+            "required": false
+          },
+          "approverroleid": {
+            "key": "roles",
+            "required": true
+          }
         },
         "verification": {
-          "active": "boolean",
-          "greetdesc": "string",
-          "logchannel": "channel",
-          "finishedrole": "role",
-          "finishdesc": "string",
-          "pendingrole": "role",
-          "startchannel": "channel",
-          "selfstart": "boolean",
-          "kickafter": "minute",
-          "kicktof": "boolean"
+          "greetdesc":{
+            "key": "string",
+            "required": false
+          },
+          "logchannel": {
+            "key": "channel",
+            "required": false
+          },
+          "finishedrole": {
+            "key": "role",
+            "required": false
+          },
+          "finishdesc":{
+            "key": "string",
+            "required": false
+          },
+          "pendingrole": {
+            "key": "role",
+            "required": false
+          },
+          "startchannel": {
+            "key": "channel",
+            "required": false
+          },
+          "selfstart": {
+            "key": "boolean",
+            "required": true
+          },
+          "kickafter": {
+            "key": "minute",
+            "required": false
+          },
+          "kicktof": {
+            "key": "boolean",
+            "required": true
+          }
         },
         "antiraid": {
-          "active": "boolean",
-          "bantof": "boolean",
-          "kicktof": "boolean",
-          "posttof": "boolean",
-          "postchannel": "channel",
-          "pingroles": "roles",
-          "pingusers": "users",
-          "time": "second",
-          "jointhreshold": "number",
-          "similaridthreshold": "number"
+          "bantof": {
+            "key": "boolean",
+            "required": false
+          },
+          "kicktof": {
+            "key": "boolean",
+            "required": true
+          },
+          "posttof": {
+            "key": "boolean",
+            "required": false
+          },
+          "postchannel": {
+            "key": "channel",
+            "required": false
+          },
+          "pingroles": {
+            "key": "roles",
+            "required": false
+          },
+          "pingusers": {
+            "key": "users",
+            "required": false
+          },
+          "time": {
+            "key": "second",
+            "required": true
+          },
+          "jointhreshold": {
+            "key": "number",
+            "required": true
+          },
+          "similaridthreshold": {
+            "key": "number",
+            "required": true
+          }
         },
         "selfroles": {
-          "active": "boolean",
-          "roles": "roles",
-          "onlyone": "boolean",
-          "blacklistedroles": "roles",
-          "blacklistedusers": "users",
-          "whitelistedroles": "roles",
-          "whitelistedusers": "users",
-          "name": "string"
+          "roles": {
+            "key": "roles",
+            "required": false
+          },
+          "onlyone": {
+            "key": "boolean",
+            "required": false
+          },
+          "blacklistedroles": {
+            "key": "roles",
+            "required": false
+          },
+          "blacklistedusers": {
+            "key": "users",
+            "required": false
+          },
+          "whitelistedroles": {
+            "key": "roles",
+            "required": false
+          },
+          "whitelistedusers": {
+            "key": "users",
+            "required": false
+          },
+          "name": {
+            "key": "string",
+            "required": true
+          }
         },
         "modroles": {
-          "active": "boolean",
-          "blacklistedroles": "roles",
-          "blacklistedusers": "users",
-          "whitelistedroles": "roles",
-          "whitelistedusers": "users",
-          "roleid": "role",
-          "perms": "permissions",
-          "whitelistedcommands": "commands",
-          "blacklistedcommands": "commands"
+          "blacklistedroles": {
+            "key": "roles",
+            "required": false
+          },
+          "blacklistedusers": {
+            "key": "users",
+            "required": false
+          },
+          "whitelistedroles": {
+            "key": "roles",
+            "required": false
+          },
+          "whitelistedusers": {
+            "key": "users",
+            "required": false
+          },
+          "roleid": {
+            "key": "role",
+            "required": true
+          },
+          "perms": {
+            "key": "permissions",
+            "required": false
+          },
+          "whitelistedcommands": {
+            "key": "commands",
+            "required": false
+          },
+          "blacklistedcommands": {
+            "key": "commands",
+            "required": false
+          }
         }
       },
       "tablenames": {
