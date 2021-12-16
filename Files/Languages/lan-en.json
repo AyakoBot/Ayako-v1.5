@@ -1667,17 +1667,17 @@
             "recommended": "Recommended: `True`"
           },
           "muteafterwarnsamount": {
-            "name": "Mute after **{{amount}}** warns",
+            "name": "Mute after **{{row.muteafterwarnsamount}}** warns",
             "answers": "`Number`",
             "recommended": "Recommended: `3`"
           },
           "kickafterwarnsamount": {
-            "name": "Kick after **{{amount}}** warns",
+            "name": "Kick after **{{row.kickafterwarnsamount}}** warns",
             "answers": "`Number`",
             "recommended": "Recommended: `5`"
           },
           "banafterwarnsamount": {
-            "name": "Ban after **{{amount}}** warns",
+            "name": "Ban after **{{row.banafterwarnsamount}}** warns",
             "answers": "`Number`",
             "recommended": "Recommended: `6`"
           },
@@ -1830,7 +1830,7 @@
             "recommended": "Recommended: `True`"
           },
           "warnamount": {
-            "name": "Apply this Punishment after **{{warns}}** Warns",
+            "name": "Apply this Punishment after **{{row.warnamount}}** Warns",
             "answers": "`Number`"
           },
           "removeroles": {
@@ -1939,22 +1939,22 @@
             "recommended": "Recommended: `True`"
           },
           "warnafterwarnsamount": {
-            "name": "Warn after **{{amount}}** malicious Links",
+            "name": "Warn after **{{row.warnafterwarnsamount}}** malicious Links",
             "answers": "`Number`",
             "recommended": "Recommended: `1`"
           },
           "muteafterwarnsamount": {
-            "name": "Mute after **{{amount}}** malicious Links",
+            "name": "Mute after **{{row.muteafterwarnsamount}}** malicious Links",
             "answers": "`Number`",
             "recommended": "Recommended: `2`"
           },
           "kickafterwarnsamount": {
-            "name": "Kick after **{{amount}}** malicious Links",
+            "name": "Kick after **{{row.kickafterwarnsamount}}** malicious Links",
             "answers": "`Number`",
             "recommended": "Recommended: `3`"
           },
           "banafterwarnsamount": {
-            "name": "Ban after **{{amount}}** malicious Links",
+            "name": "Ban after **{{row.banafterwarnsamount}}** malicious Links",
             "answers": "`Number`",
             "recommended": "Recommended: `4`"
           },
@@ -2088,22 +2088,22 @@
             "recommended": "Recommended: `True`"
           },
           "warnafter": {
-            "name": "Warn after **{{amount}}** blacklisted Words",
+            "name": "Warn after **{{row.warnafter}}** blacklisted Words",
             "answers": "`Number`",
             "recommended": "Recommended: `4`"
           },
           "muteafter": {
-            "name": "Mute after **{{amount}}** blacklisted Words",
+            "name": "Mute after **{{row.muteafter}}** blacklisted Words",
             "answers": "`Number`",
             "recommended": "Recommended: `6`"
           },
           "kickafter": {
-            "name": "Kick after **{{amount}}** blacklisted Words",
+            "name": "Kick after **{{row.kickafter}}** blacklisted Words",
             "answers": "`Number`",
             "recommended": "Recommended: `8`"
           },
           "banafter": {
-            "name": "Ban after **{{amount}}** blacklisted Words",
+            "name": "Ban after **{{row.banafter}}** blacklisted Words",
             "answers": "`Number`",
             "recommended": "Recommended: `10`"
           },
