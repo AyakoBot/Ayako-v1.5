@@ -1,6 +1,7 @@
 
 module.exports = {
   async execute(oldPresence, newPresence) {
+    return;
     const client = oldPresence ? oldPresence.client : newPresence.client;
     const now = Date.now();
     const { ch } = client;
