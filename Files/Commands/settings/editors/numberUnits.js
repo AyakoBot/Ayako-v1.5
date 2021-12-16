@@ -6,16 +6,16 @@ module.exports = {
   dataPreparation(msg, editorData, row) {
     const { insertedValues, required, Objects } = editorData;
 
-    insertedValues[required.assinger] = [
-      ...(row[required.assinger]?.length ? row[required.assinger] : []),
-    ];
+    insertedValues[required.assinger] = row[required.assinger]?.length
+      ? row[required.assinger]
+      : msg.language.none;
 
-    const numbers = new Array(9999);
+    const numbers = new Array(999).fill(null);
 
     numbers.forEach((element, i) => {
       const inserted = {
-        label: i,
-        value: i,
+        label: `${i}`,
+        value: `${i}`,
       };
 
       if (

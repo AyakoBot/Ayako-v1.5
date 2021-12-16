@@ -106,7 +106,7 @@ module.exports = {
     const { msg } = msgData;
     const { Objects, cacheName } = preparedData;
 
-    const selected = this.getSelected(msg, insertedValues, required, cacheName);
+    const selected = this.getSelected(msg, insertedValues, required, { cacheName });
 
     const returnEmbed = new Discord.MessageEmbed().setDescription(
       `**${msg.language.selected}:**\n${selected?.length ? selected : msg.language.none}`,
@@ -124,19 +124,35 @@ module.exports = {
 
     return { returnEmbed };
   },
-  getSelected(msg, insertedValues, required) {
+  getSelected(msg, insertedValues, required, { cacheName }) {
     if (insertedValues[required.assinger]) {
       if (insertedValues[required.assinger]) {
         switch (required.key.endsWith('s')) {
           default: {
-            return insertedValues[required.assinger];
+            if (cacheName === 'role') {
+              return `<@&${insertedValues[required.assinger]}>`;
+            }
+            if (cacheName === 'channel') {
+              return `<#${insertedValues[required.assinger]}>`;
+            }
+            return null;
           }
           case true: {
-            return insertedValues[required.assinger]
-              .map((value) => {
-                return `${value}`;
-              })
-              .join(', ');
+            if (cacheName === 'roles') {
+              return insertedValues[required.assinger]
+                .map((value) => {
+                  return `<@&${value}>`;
+                })
+                .join(', ');
+            }
+            if (cacheName === 'channels') {
+              return insertedValues[required.assinger]
+                .map((value) => {
+                  return `<#${value}>`;
+                })
+                .join(', ');
+            }
+            return null;
           }
         }
       }
