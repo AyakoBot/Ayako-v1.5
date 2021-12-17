@@ -20,10 +20,8 @@ module.exports = {
         Array.isArray(insertedValues[required.assinger]) &&
         insertedValues[required.assinger].includes(command.name)
       ) {
-        inserted.description = msg.language.removeFromList;
         inserted.emoji = msg.client.constants.emotes.minusBGID;
       } else {
-        inserted.description = msg.language.addToList;
         inserted.emoji = msg.client.constants.emotes.plusBGID;
       }
 
@@ -40,14 +38,18 @@ module.exports = {
     if (insertedValues[required.assinger]) {
       switch (required.key.endsWith('s')) {
         default: {
-          return insertedValues[required.assinger];
+          return insertedValues[required.assinger]
+            ? insertedValues[required.assinger]
+            : msg.language.none;
         }
         case true: {
           return insertedValues[required.assinger]
-            .map((value) => {
-              return `${value}`;
-            })
-            .join(', ');
+            ? insertedValues[required.assinger]
+                .map((value) => {
+                  return `${value}`;
+                })
+                .join(', ')
+            : msg.language.none;
         }
       }
     }

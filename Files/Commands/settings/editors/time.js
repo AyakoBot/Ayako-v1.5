@@ -30,7 +30,9 @@ module.exports = {
   },
   getSelected(msg, insertedValues, required) {
     if (insertedValues[required.assinger]) {
-      return insertedValues[required.assinger];
+      return insertedValues[required.assinger]
+        ? `${ms(insertedValues[required.assinger])}`
+        : msg.language.none;
     }
     return null;
   },

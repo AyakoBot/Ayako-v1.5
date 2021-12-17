@@ -39,10 +39,8 @@ module.exports = {
         Array.isArray(insertedValues[required.assinger]) &&
         insertedValues[required.assinger].includes(element.id)
       ) {
-        inserted.description = msg.language.removeFromList;
         inserted.emoji = msg.client.constants.emotes.minusBGID;
       } else {
-        inserted.description = msg.language.addToList;
         inserted.emoji = msg.client.constants.emotes.plusBGID;
       }
 
@@ -71,17 +69,21 @@ module.exports = {
           case true: {
             if (cacheName === 'roles') {
               return insertedValues[required.assinger]
-                .map((value) => {
-                  return `<@&${value}>`;
-                })
-                .join(', ');
+                ? insertedValues[required.assinger]
+                    .map((value) => {
+                      return `<@&${value}>`;
+                    })
+                    .join(', ')
+                : msg.language.none;
             }
             if (cacheName === 'channels') {
               return insertedValues[required.assinger]
-                .map((value) => {
-                  return `<#${value}>`;
-                })
-                .join(', ');
+                ? insertedValues[required.assinger]
+                    .map((value) => {
+                      return `<#${value}>`;
+                    })
+                    .join(', ')
+                : msg.language.none;
             }
             return null;
           }

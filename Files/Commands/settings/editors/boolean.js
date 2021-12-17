@@ -1,4 +1,3 @@
-
 module.exports = {
   key: ['boolean'],
   requiresInteraction: false,

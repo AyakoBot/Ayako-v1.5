@@ -64,14 +64,18 @@ module.exports = {
     if (insertedValues[required.assinger]) {
       switch (required.key) {
         default: {
-          return insertedValues[required.assinger];
+          return insertedValues[required.assinger]
+            ? insertedValues[required.assinger]
+            : msg.language.none;
         }
         case 'stringArray': {
           return insertedValues[required.assinger]
-            .map((value) => {
-              return `${value}`;
-            })
-            .join(', ');
+            ? insertedValues[required.assinger]
+                .map((value) => {
+                  return `${value}`;
+                })
+                .join(', ')
+            : msg.language.none;
         }
       }
     }

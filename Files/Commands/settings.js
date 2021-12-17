@@ -790,7 +790,9 @@ const dbUpdate = (msg, editData) => {
     );
   } else {
     msg.client.ch.query(`UPDATE ${tableName} SET ${required.assinger} = $1 WHERE guildid = $2;`, [
-      insertedValues[required.assinger].length ? insertedValues[required.assinger] : null,
+      insertedValues[required.assinger].length || insertedValues[required.assinger] !== undefined
+        ? insertedValues[required.assinger]
+        : null,
       msg.guild.id,
     ]);
   }
@@ -904,7 +906,10 @@ const buttonHandler = async (msgData, editData, languageData) => {
           await replier(
             { msg, answer: interaction },
             {
-              rawButtons: editor.buttons(msg, passObject, insertedValues, required, row),
+              rawButtons:
+                typeof editor.buttons === 'function'
+                  ? editor.buttons(msg, passObject, insertedValues, required, row)
+                  : standardButtons(msg, passObject, insertedValues, required, row, editor),
               embed,
             },
           );
@@ -945,7 +950,13 @@ const buttonHandler = async (msgData, editData, languageData) => {
 
           await replier(
             { msg, answer: interaction },
-            { rawButtons: editor.buttons(msg, passObject, insertedValues, required, row), embed },
+            {
+              rawButtons:
+                typeof editor.buttons === 'function'
+                  ? editor.buttons(msg, passObject, insertedValues, required, row)
+                  : standardButtons(msg, passObject, insertedValues, required, row, editor),
+              embed,
+            },
           );
           break;
         }
@@ -973,7 +984,13 @@ const buttonHandler = async (msgData, editData, languageData) => {
 
           await replier(
             { msg, answer: interaction },
-            { rawButtons: editor.buttons(msg, passObject, insertedValues, required, row), embed },
+            {
+              rawButtons:
+                typeof editor.buttons === 'function'
+                  ? editor.buttons(msg, passObject, insertedValues, required, row)
+                  : standardButtons(msg, passObject, insertedValues, required, row, editor),
+              embed,
+            },
           );
           break;
         }
@@ -1013,7 +1030,7 @@ const interactionHandler = (msgData, preparedData, insertedValues, required, edi
 
   const selected =
     typeof editor.getSelected === 'function'
-      ? editor.getSelected(msg, insertedValues, required, required.key)
+      ? editor.getSelected(msg, insertedValues, required, preparedData)
       : 'noSelect';
 
   const returnEmbed = new Discord.MessageEmbed().setDescription(
@@ -1023,10 +1040,8 @@ const interactionHandler = (msgData, preparedData, insertedValues, required, edi
   Objects.options.forEach((option) => {
     if (insertedValues[required.assinger]?.includes(option.value)) {
       option.emoji = msg.client.constants.emotes.minusBGID;
-      option.description = msg.language.removeFromList;
     } else {
       option.emoji = msg.client.constants.emotes.plusBGID;
-      option.description = msg.language.addToList;
     }
   });
 

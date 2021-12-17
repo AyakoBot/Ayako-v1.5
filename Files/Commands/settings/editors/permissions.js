@@ -24,10 +24,8 @@ module.exports = {
         Array.isArray(insertedValues[required.assinger]) &&
         insertedValues[required.assinger].includes(bits)
       ) {
-        inserted.description = msg.language.removeFromList;
         inserted.emoji = msg.client.constants.emotes.minusBGID;
       } else {
-        inserted.description = msg.language.addToList;
         inserted.emoji = msg.client.constants.emotes.plusBGID;
       }
 
@@ -44,12 +42,20 @@ module.exports = {
     if (insertedValues[required.assinger]) {
       switch (required.key.endsWith('s')) {
         default: {
-          return insertedValues[required.assinger];
+          return insertedValues[required.assinger]
+            ? msg.client.ch
+                .permCalc(insertedValues[required.assinger], msg.language)
+                .map((c) => `\`${c}\``)
+                .join(', ')
+            : msg.language.none;
         }
         case true: {
           return insertedValues[required.assinger]
             .map((value) => {
-              return `${value}`;
+              return msg.client.ch
+                .permCalc(value, msg.language)
+                .map((c) => `\`${c}\``)
+                .join(', ');
             })
             .join(', ');
         }
