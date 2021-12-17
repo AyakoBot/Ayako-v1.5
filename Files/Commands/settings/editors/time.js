@@ -1,4 +1,3 @@
-
 const Discord = require('discord.js');
 const ms = require('ms');
 
@@ -6,38 +5,7 @@ module.exports = {
   key: ['time'],
   requiresInteraction: true,
   interactionType: 'message',
-  dataPreparation(msg, editorData, row) {
-    const { insertedValues, required, Objects } = editorData;
-
-    insertedValues[required.assinger] = row[required.assinger]?.length
-      ? row[required.assinger]
-      : msg.language.none;
-
-    return { Objects };
-  },
-  buttons(msg, preparedData, insertedValues, required, row) {
-    let doneDisabled = true;
-    if (Array.isArray(insertedValues[required.assinger])) {
-      doneDisabled = msg.client.ch.arrayEquals(
-        insertedValues[required.assinger],
-        row[required.assinger],
-      );
-    } else {
-      doneDisabled = !!insertedValues[required.assinger];
-    }
-    const done = new Discord.MessageButton()
-      .setCustomId('done')
-      .setLabel(msg.language.done)
-      .setDisabled(doneDisabled)
-      .setStyle('PRIMARY');
-    const back = new Discord.MessageButton()
-      .setCustomId('back')
-      .setLabel(msg.language.back)
-      .setEmoji(msg.client.constants.emotes.back)
-      .setStyle('DANGER');
-
-    return [[back, done]];
-  },
+  requiresMenu: false,
   messageHandler(msgData, insertedValues, required) {
     const { msg, message } = msgData;
 

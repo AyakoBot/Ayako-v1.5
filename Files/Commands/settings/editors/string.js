@@ -3,25 +3,17 @@ const Discord = require('discord.js');
 module.exports = {
   key: ['string', 'stringArray'],
   requiresInteraction: true,
+  requiresMenu: false,
   interactionType: 'message',
-  dataPreparation(msg, editorData, row) {
-    const { insertedValues, required, Objects } = editorData;
-
-    insertedValues[required.assinger] = row[required.assinger]?.length
-      ? row[required.assinger]
-      : msg.language.none;
-
-    return { Objects };
-  },
   buttons(msg, preparedData, insertedValues, required, row) {
     let doneDisabled = true;
+
     if (Array.isArray(insertedValues[required.assinger])) {
-      doneDisabled = msg.client.ch.arrayEquals(
-        insertedValues[required.assinger],
-        row[required.assinger],
-      );
+      doneDisabled =
+        msg.client.ch.arrayEquals(insertedValues[required.assinger], row[required.assinger]) ||
+        (!insertedValues[required.assinger].length && required.required);
     } else {
-      doneDisabled = !!insertedValues[required.assinger];
+      doneDisabled = !insertedValues[required.assinger];
     }
 
     const done = new Discord.MessageButton()

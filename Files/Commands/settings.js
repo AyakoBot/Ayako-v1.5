@@ -1,14 +1,6 @@
 const Discord = require('discord.js');
 const fs = require('fs');
 
-const editors = new Discord.Collection();
-fs.readdirSync('./Files/Commands/settings/editors')
-  .filter((file) => file.endsWith('.js'))
-  .forEach((file) => {
-    const editorfile = require(`./settings/editors/${file}`);
-    editors.set(editorfile.key, editorfile);
-  });
-
 module.exports = {
   name: 'settings',
   perm: null,
@@ -415,7 +407,7 @@ const mmrEditList = async (msgData, sendData) => {
       required: true,
     };
 
-    const editor = editors.find((f) => f.key.includes(required.key));
+    const editor = msg.client.settingsEditors.find((f) => f.key.includes(required.key));
     const returnedData = await editorInteractionHandler(
       { msg, answer },
       { insertedValues: {}, required, editor },
@@ -454,7 +446,7 @@ const mmrEditList = async (msgData, sendData) => {
       required: DataOfCurStep.required,
     };
 
-    const editor = editors.find((f) => f.key.includes(required.key));
+    const editor = msg.client.settingsEditors.find((f) => f.key.includes(required.key));
     if (editor.requiresInteraction) {
       const returnedData = await editorInteractionHandler(
         { msg, answer },
@@ -676,8 +668,19 @@ const editorInteractionHandler = async (msgData, editorData, row, res) => {
     page: 1,
   };
 
-  const passObject = editor.dataPreparation(msg, { insertedValues, required, Objects }, row, res);
-  const selected = editor.getSelected(msg, insertedValues, required, passObject);
+  insertedValues[required.assinger] = row[required.assinger]?.length
+    ? row[required.assinger]
+    : msg.language.none;
+
+  const passObject =
+    typeof editor.dataPreparation === 'function'
+      ? editor.dataPreparation(msg, { insertedValues, required, Objects }, row, res)
+      : { Objects };
+
+  const selected =
+    typeof editor.getSelected === 'function'
+      ? editor.getSelected(msg, insertedValues, required, passObject)
+      : 'noSelect';
 
   const embed = new Discord.MessageEmbed()
     .setColor(msg.client.constants.commands.settings.color)
@@ -704,7 +707,13 @@ const editorInteractionHandler = async (msgData, editorData, row, res) => {
 
   await replier(
     { msg, answer },
-    { embed, rawButtons: editor.buttons(msg, passObject, insertedValues, required, row) },
+    {
+      embed,
+      rawButtons:
+        typeof editor.buttons === 'function'
+          ? editor.buttons(msg, passObject, insertedValues, required, row)
+          : standardButtons(msg, passObject, insertedValues, required, row, editor),
+    },
   );
 
   let messageCollector;
@@ -725,7 +734,7 @@ const changing = async (msgData, editData) => {
   const { usedKey, row, comesFromMMR } = editData;
 
   const settings = msg.client.constants.commands.settings.edit[msg.file.name];
-  const editor = editors.find((f) => f.key.includes(settings[usedKey]));
+  const editor = msg.client.settingsEditors.find((f) => f.key.includes(settings[usedKey].key));
   const language =
     usedKey === 'active' ? msg.lanSettings.active : msg.lanSettings[msg.file.name].edit[usedKey];
 
@@ -852,15 +861,25 @@ const buttonHandler = async (msgData, editData, languageData) => {
               }
             });
           } else {
-            insertedValues[required.assinger] = interaction.values;
+            [insertedValues[required.assinger]] = interaction.values;
           }
 
-          const returnedObject = editor.interactionHandler(
-            { msg, answer: interaction },
-            passObject,
-            insertedValues,
-            required,
-          );
+          const returnedObject =
+            typeof editor.interactionHandler === 'function'
+              ? editor.interactionHandler(
+                  { msg, answer: interaction },
+                  passObject,
+                  insertedValues,
+                  required,
+                )
+              : interactionHandler(
+                  { msg, answer: interaction },
+                  passObject,
+                  insertedValues,
+                  required,
+                  editor,
+                );
+
           if (!returnedObject) break;
           else embed = returnedObject.returnEmbed;
 
@@ -986,4 +1005,82 @@ const messageHandler = async (msgData, editData) => {
     editor.messageHandler({ msg, message }, insertedValues, required);
     return null;
   });
+};
+
+const interactionHandler = (msgData, preparedData, insertedValues, required, editor) => {
+  const { msg } = msgData;
+  const { Objects } = preparedData;
+
+  const selected =
+    typeof editor.getSelected === 'function'
+      ? editor.getSelected(msg, insertedValues, required, required.key)
+      : 'noSelect';
+
+  const returnEmbed = new Discord.MessageEmbed().setDescription(
+    `**${msg.language.selected}:**\n${selected?.length ? selected : msg.language.none}`,
+  );
+
+  Objects.options.forEach((option) => {
+    if (insertedValues[required.assinger]?.includes(option.value)) {
+      option.emoji = msg.client.constants.emotes.minusBGID;
+      option.description = msg.language.removeFromList;
+    } else {
+      option.emoji = msg.client.constants.emotes.plusBGID;
+      option.description = msg.language.addToList;
+    }
+  });
+
+  return { returnEmbed };
+};
+
+const standardButtons = (msg, preparedData, insertedValues, required, row, editor) => {
+  const { Objects } = preparedData;
+  const returnedButtons = [];
+
+  let doneDisabled = true;
+  if (Array.isArray(insertedValues[required.assinger])) {
+    doneDisabled =
+      msg.client.ch.arrayEquals(insertedValues[required.assinger], row[required.assinger]) ||
+      (!insertedValues[required.assinger].length && required.required);
+  } else {
+    doneDisabled = !insertedValues[required.assinger];
+  }
+
+  if (editor.requiresMenu) {
+    const getMany = required.key.endsWith('s');
+
+    const menu = new Discord.MessageSelectMenu()
+      .setCustomId(required.key)
+      .addOptions(Objects.take)
+      .setMinValues(1)
+      .setMaxValues(getMany ? Objects.take.length : 1)
+      .setPlaceholder(msg.language.select[required.key].select);
+    const next = new Discord.MessageButton()
+      .setCustomId('next')
+      .setLabel(msg.language.next)
+      .setDisabled(Objects.page === Math.ceil(Objects.options.length / 25))
+      .setStyle('SUCCESS');
+    const prev = new Discord.MessageButton()
+      .setCustomId('prev')
+      .setLabel(msg.language.prev)
+      .setDisabled(Objects.page === 1)
+      .setStyle('DANGER');
+
+    returnedButtons.push([menu], [prev, next]);
+  }
+
+  const done = new Discord.MessageButton()
+    .setCustomId('done')
+    .setLabel(msg.language.done)
+    .setDisabled(doneDisabled)
+    .setStyle('PRIMARY');
+  const back = new Discord.MessageButton()
+    .setCustomId('back')
+    .setLabel(msg.language.back)
+    .setEmoji(msg.client.constants.emotes.back)
+    .setStyle('DANGER');
+
+  returnedButtons.push([back, done]);
+
+  return returnedButtons;
 };
