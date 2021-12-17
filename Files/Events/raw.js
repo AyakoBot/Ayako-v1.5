@@ -49,6 +49,7 @@ module.exports = {
       }
     }
     if (event.t === 'MESSAGE_DELETE') {
+      return;
       const res = await ch.query('SELECT * FROM giveawaysettings WHERE messageid = $1;', [
         event.d.id,
       ]);

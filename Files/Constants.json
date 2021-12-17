@@ -1100,10 +1100,8 @@
         "disabled": ["disabledcommands"],
         "disboard": ["disboard"],
         "forcecooldowns": [null],
-        "gifposter": ["gifposter"],
         "leveling": ["levelingsettings"],
         "logs": ["logchannels"],
-        "nitro": ["nitrosettings"],
         "reactionroles": ["reactionroles"],
         "selfroles": ["selfroles"],
         "separators": ["roleseparator", "roleseparatorsettings"],
@@ -1116,7 +1114,6 @@
         "language": ["language"],
         "overview": ["guildsettings"],
         "prefix": ["prefix"],
-        "user": ["usersettings"],
         "interactions": ["interactions"],
         "modroles": ["modroles"],
         "muterole": ["muterole"]
@@ -1193,19 +1190,11 @@
           "cols": null,
           "vals": null
         },
-        "gifposter": {
-          "cols": ["guildid, active"],
-          "vals": [["{{msg.guild.id}}", true]]
-        },
         "leveling": {
           "cols": ["guildid, active, xpgain"],
           "vals": [["{{msg.guild.id}}", true, 1.0]]
         },
         "logs": {
-          "cols": ["guildid"],
-          "vals": [["{{msg.guild.id}}"]]
-        },
-        "nitro": {
           "cols": ["guildid"],
           "vals": [["{{msg.guild.id}}"]]
         },

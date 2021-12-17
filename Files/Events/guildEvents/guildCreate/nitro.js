@@ -1,5 +1,6 @@
 module.exports = {
   async execute(guild) {
+    return;
     const res = await guild.client.ch.query('SELECT * FROM nitrosettings WHERE guildid = $1;', [
       guild.id,
     ]);
