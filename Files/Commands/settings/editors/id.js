@@ -3,7 +3,7 @@ module.exports = {
   requiresMenu: true,
   requiresInteraction: true,
   dataPreparation(msg, editorData, row, res) {
-    const { Objects } = editorData;
+    const { insertedValues, required, Objects } = editorData;
 
     const setupQuery = msg.client.constants.commands.settings.setupQueries[msg.file.name];
 
@@ -13,9 +13,14 @@ module.exports = {
         value: element.id,
       };
 
-      inserted.description = msg.language.addToList;
-      inserted.emoji = msg.client.constants.emotes.plusBGID;
-
+      if (
+        Array.isArray(insertedValues[required.assinger]) &&
+        insertedValues[required.assinger].includes(element.id)
+      ) {
+        inserted.emoji = msg.client.constants.emotes.minusBGID;
+      } else {
+        inserted.emoji = msg.client.constants.emotes.plusBGID;
+      }
       Objects.options.push(inserted);
     });
 
@@ -29,14 +34,18 @@ module.exports = {
     if (insertedValues[required.assinger]) {
       switch (required.key.endsWith('s')) {
         default: {
-          return insertedValues[required.assinger];
+          return insertedValues[required.assinger]
+            ? insertedValues[required.assinger]
+            : msg.language.none;
         }
         case true: {
           return insertedValues[required.assinger]
-            .map((value) => {
-              return `${value}`;
-            })
-            .join(', ');
+            ? insertedValues[required.assinger]
+                .map((value) => {
+                  return `${value}`;
+                })
+                .join(', ')
+            : msg.language.none;
         }
       }
     }
