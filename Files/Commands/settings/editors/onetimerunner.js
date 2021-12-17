@@ -3,9 +3,6 @@ const Discord = require('discord.js');
 module.exports = {
   key: ['onetimerunner'],
   requiresInteraction: true,
-  dataPreparation() {
-    return null;
-  },
   buttons(msg) {
     const yes = new Discord.MessageButton()
       .setCustomId('yes')
@@ -28,7 +25,6 @@ module.exports = {
 
     answer.deferReply();
 
-    // eslint-disable-next-line global-require
     require('../../../Events/guildEvents/guildMemberUpdate/separator').oneTimeRunner(
       msg,
       returnEmbed,
@@ -36,8 +32,5 @@ module.exports = {
     );
 
     return null;
-  },
-  getSelected() {
-    return 'noSelect';
   },
 };
