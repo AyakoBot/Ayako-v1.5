@@ -63,6 +63,14 @@ eventsDir.forEach((folder) => {
   }
 });
 
+client.settingsEditors = new Discord.Collection();
+fs.readdirSync('./Files/Commands/settings/editors')
+  .filter((file) => file.endsWith('.js'))
+  .forEach((file) => {
+    const editorfile = require(`../Commands/settings/editors/${file}`);
+    client.settingsEditors.set(file.slice(0, -3), editorfile);
+  });
+
 // Connect to Discord
 client.login(auth.token).then(() => {
   console.log(`| Discord Client connected at ${new Date().toUTCString()}`);
