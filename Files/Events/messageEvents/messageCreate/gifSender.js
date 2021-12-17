@@ -5,6 +5,7 @@ const Tenor = require('../../../BaseClient/tenor');
 
 module.exports = {
   async execute(msg) {
+    return;
     if (!msg.channel || msg.channel.type === 'DM' || !msg.author || msg.author.bot) return;
     if (msg.embeds) {
       if (

@@ -5,6 +5,7 @@ const cooldownServer = new Set();
 
 module.exports = {
   async execute(msg) {
+    return;
     if (!msg.author) return;
     if (msg.author.bot) return;
     if (msg.channel.type === 'DM') return;

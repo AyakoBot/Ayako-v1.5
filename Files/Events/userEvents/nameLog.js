@@ -1,5 +1,6 @@
 module.exports = {
   async execute(oldUser, newUser) {
+    return;
     const client = oldUser ? oldUser.client : newUser.client;
     const { ch } = client;
     if (oldUser.username !== newUser.username) {

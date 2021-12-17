@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 
 module.exports = {
   async execute() {
-    // eslint-disable-next-line global-require
+    return;
     const client = require('../../BaseClient/DiscordClient');
     const { ch } = client;
     const res = await ch.query('SELECT * FROM reminders;');
