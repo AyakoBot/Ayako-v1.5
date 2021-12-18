@@ -11,8 +11,8 @@ module.exports = {
         msg.lanSettings.active,
         `${
           r.active
-            ? `${msg.client.constants.emotes.tick} ${msg.language.enabled}`
-            : `${msg.client.constants.emotes.cross} ${msg.language.disabled}`
+            ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
+            : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
         }`,
         false,
       )
@@ -20,8 +20,8 @@ module.exports = {
         msg.lan.bantof,
         `${
           r.bantof
-            ? `${msg.client.constants.emotes.tick} ${msg.language.enabled}`
-            : `${msg.client.constants.emotes.cross} ${msg.language.disabled}`
+            ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
+            : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
         }`,
         true,
       )
@@ -29,8 +29,8 @@ module.exports = {
         msg.lan.kicktof,
         `${
           r.kicktof
-            ? `${msg.client.constants.emotes.tick} ${msg.language.enabled}`
-            : `${msg.client.constants.emotes.cross} ${msg.language.disabled}`
+            ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
+            : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
         }`,
         true,
       )
@@ -39,8 +39,8 @@ module.exports = {
         msg.lan.posttof,
         `${
           r.posttof
-            ? `${msg.client.constants.emotes.tick} ${msg.language.enabled}`
-            : `${msg.client.constants.emotes.cross} ${msg.language.disabled}`
+            ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
+            : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
         }`,
         true,
       )

@@ -17,8 +17,8 @@ module.exports = {
         name: msg.lanSettings.active,
         value: `${
           r.active
-            ? `${msg.client.constants.emotes.tick} ${msg.language.enabled}`
-            : `${msg.client.constants.emotes.cross} ${msg.language.disabled}`
+            ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
+            : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
         }`,
         inline: false,
       },
@@ -71,8 +71,8 @@ module.exports = {
         name: msg.lan.warntof,
         value: `${
           r.warntof
-            ? `${msg.client.constants.emotes.tick} ${msg.language.enabled}`
-            : `${msg.client.constants.emotes.cross} ${msg.language.disabled}`
+            ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
+            : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
         }\n`,
         inline: true,
       },
@@ -80,8 +80,8 @@ module.exports = {
         name: msg.lan.mutetof,
         value: `${
           r.mutetof
-            ? `${msg.client.constants.emotes.tick} ${msg.language.enabled}`
-            : `${msg.client.constants.emotes.cross} ${msg.language.disabled}`
+            ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
+            : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
         }`,
         inline: true,
       },
@@ -89,8 +89,8 @@ module.exports = {
         name: msg.lan.kicktof,
         value: `${
           r.kicktof
-            ? `${msg.client.constants.emotes.tick} ${msg.language.enabled}`
-            : `${msg.client.constants.emotes.cross} ${msg.language.disabled}`
+            ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
+            : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
         }`,
         inline: true,
       },
@@ -98,8 +98,8 @@ module.exports = {
         name: msg.lan.bantof,
         value: `${
           r.bantof
-            ? `${msg.client.constants.emotes.tick} ${msg.language.enabled}`
-            : `${msg.client.constants.emotes.cross} ${msg.language.disabled}`
+            ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
+            : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
         }`,
         inline: true,
       },

@@ -16,8 +16,8 @@ module.exports = {
       embed.addFields({
         name: `${msg.language.number}: \`${r.id}\` | ${
           r.active
-            ? `${msg.client.constants.emotes.tick} ${msg.language.enabled}`
-            : `${msg.client.constants.emotes.cross} ${msg.language.disabled}`
+            ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
+            : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
         }`,
         value: `${msg.lan.punishment}: ${punishment}\n${msg.lan.requiredWarns} ${
           r.warnamount ? r.warnamount : msg.language.none
@@ -33,8 +33,8 @@ module.exports = {
       {
         name: msg.lanSettings.active,
         value: r.active
-          ? `${msg.client.constants.emotes.tick} ${msg.language.enabled}`
-          : `${msg.client.constants.emotes.cross} ${msg.language.disabled}`,
+          ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
+          : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
         inline: false,
       },
       {
@@ -98,8 +98,8 @@ module.exports = {
       {
         name: msg.lan.confirmationreq,
         value: r.confirmationreq
-          ? `${msg.client.constants.emotes.tick} ${msg.language.enabled}`
-          : `${msg.client.constants.emotes.cross} ${msg.language.disabled}`,
+          ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
+          : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
         inline: true,
       },
       {
