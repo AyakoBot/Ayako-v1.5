@@ -58,7 +58,7 @@ async function start(data) {
           else if (!has.includes(true) && roles.includes(sep.id)) takeThese.push(sep.id);
         } else {
           const has = [];
-          row.roles.forEach((role) => {
+          row.roles?.forEach((role) => {
             if (roles.includes(role)) has.push(true);
             else has.push(false);
           });
