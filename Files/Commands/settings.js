@@ -160,7 +160,7 @@ module.exports = {
       const res = await msg.client.ch.query(
         `SELECT * FROM ${
           msg.client.constants.commands.settings.tablenames[msg.file.name][0]
-        } WHERE guildid = $1;`,
+        } WHERE guildid = $1 ORDER BY uniquetimestamp ASC;`,
         [msg.guild.id],
       );
 
@@ -202,16 +202,16 @@ module.exports = {
 
       options.take = [];
       for (
-        let i = options.page * 25;
+        let i = options.page * 25 - 25;
         i < options.allOptions.length && i < options.page * 25 + 25;
         i += 1
       ) {
         options.take.push(options.allOptions[i]);
       }
 
-      const { list, next, prev, edit } = getMMRListButtons();
+      const { list, next, prev, edit } = getMMRListButtons(msg, options, false);
 
-      const rows = [[list], [next, prev]];
+      const rows = [[list], [prev, next]];
       if (
         !msg.file.perm ||
         msg.member.permissions.has(new Discord.Permissions(msg.file.perm)) ||
@@ -223,7 +223,7 @@ module.exports = {
       await replier({ msg, answer }, { rawButtons: rows, embed });
 
       const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
-      buttonsCollector.on('collect', (interaction) => {
+      buttonsCollector.on('collect', async (interaction) => {
         if (interaction.user.id !== msg.author.id) {
           return msg.client.ch.notYours(interaction, msg);
         }
@@ -232,7 +232,8 @@ module.exports = {
             break;
           }
           case 'list': {
-            singleRowDisplay(res.rows[interaction.values[0] - 1]);
+            await interaction.deferReply();
+            singleRowDisplay(res.rows[interaction.values[0] - 1], interaction);
             buttonsCollector.stop();
             break;
           }
@@ -258,7 +259,7 @@ module.exports = {
       });
     };
 
-    if (!msg.file.setupRequired === false) return mmrDisplay();
+    if (msg.file.setupRequired === false) return mmrDisplay();
 
     const res = await msg.client.ch.query(
       `SELECT * FROM ${
@@ -274,7 +275,6 @@ module.exports = {
 
 const noEmbed = (msg) => {
   const embed = new Discord.MessageEmbed()
-    .setColor(msg.client.constants.commands.settings.color)
     .setAuthor(msg.language.commands.settings.noEmbed.author)
     .setDescription(msg.language.commands.settings.noEmbed.desc);
   msg.client.ch.reply(msg, { embeds: [embed] });
@@ -308,8 +308,14 @@ const replier = async (msgData, sendData) => {
   const { msg, answer } = msgData;
   const { rawButtons, embed } = sendData;
   const buttons = msg.client.ch.buttonRower(rawButtons);
+  let manualReply = false;
 
-  if (answer && !answer.replied) {
+  if (answer && answer.deferred) {
+    await answer.deleteReply().catch(() => {});
+    manualReply = true;
+  }
+
+  if (answer && !answer.replied && !manualReply) {
     await answer.update({
       embeds: [embed],
       components: buttons,
@@ -339,11 +345,11 @@ const getMMRListButtons = (msg, options, editView) => {
     .setLabel(msg.language.prev)
     .setDisabled(true)
     .setStyle('DANGER');
-  const list = new Discord.MessageButton()
+  const list = new Discord.MessageSelectMenu()
     .setCustomId('list')
     .setDisabled(!options.allOptions.length)
     .setMaxValues(1)
-    .setMinvalues(1)
+    .setMinValues(1)
     .setPlaceholder(msg.language.select.id.select)
     .setOptions(options.take);
 
@@ -381,11 +387,15 @@ const getIdentifier = (msg, settingsConstant, row) => {
       break;
     }
     case 'role': {
-      identifier = msg.guild.roles.cache.get(row[settingsConstant.ident]).name;
+      identifier = msg.guild.roles.cache
+        .get(row[settingsConstant.ident])
+        .name.replace(/\W{2}/gu, '');
       break;
     }
     case 'channel': {
-      identifier = msg.guild.channels.cache.get(row[settingsConstant.ident]).name;
+      identifier = msg.guild.channels.cache
+        .get(row[settingsConstant.ident])
+        .name.replace(/\W{2}/gu, '');
       break;
     }
   }
@@ -528,7 +538,7 @@ const mmrEditList = async (msgData, sendData) => {
 
   options.take = [];
   for (
-    let i = options.page * 25;
+    let i = options.page * 25 - 25;
     i < options.allOptions.length && i < options.page * 25 + 25;
     i += 1
   ) {
@@ -540,7 +550,7 @@ const mmrEditList = async (msgData, sendData) => {
   await replier({ msg, answer }, { rawButtons, embed });
 
   const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
-  buttonsCollector.on('collect', (interaction) => {
+  buttonsCollector.on('collect', async (interaction) => {
     if (interaction.user.id !== msg.author.id) return msg.client.ch.notYours(interaction, msg);
     switch (interaction.customId) {
       default: {
@@ -565,6 +575,7 @@ const mmrEditList = async (msgData, sendData) => {
         break;
       }
       case 'list': {
+        await interaction.deferReply();
         singleRowEdit(
           { msg, answer: interaction },
           res.rows[interaction.values[0] - 1],
@@ -683,7 +694,6 @@ const editorInteractionHandler = async (msgData, editorData, row, res) => {
       : 'noSelect';
 
   const embed = new Discord.MessageEmbed()
-    .setColor(msg.client.constants.commands.settings.color)
     .addField(
       ' \u200b',
       `${languageOfKey.recommended ? `${languageOfKey.recommended}\n` : ''}${
@@ -743,20 +753,22 @@ const changing = async (msgData, editData) => {
   const { usedKey, row, comesFromMMR } = editData;
 
   const settings = msg.client.constants.commands.settings.edit[msg.file.name];
-  const editor = msg.client.settingsEditors.find((f) => f.key.includes(settings[usedKey].key));
+  const editor = msg.client.settingsEditors.find((f) =>
+    usedKey === 'active' ? f.key.includes('boolean') : f.key.includes(settings[usedKey].key),
+  );
   const language =
     usedKey === 'active' ? msg.lanSettings.active : msg.lanSettings[msg.file.name].edit[usedKey];
 
   const required = {
     key:
       usedKey === 'active'
-        ? msg.client.constants.command.settings.edit.active.key
+        ? msg.client.constants.commands.settings.edit.active.key
         : settings[usedKey].key,
     value: language,
     assinger: usedKey,
     required:
       usedKey === 'active'
-        ? msg.client.constants.command.settings.edit.active.required
+        ? msg.client.constants.commands.settings.edit.active.required
         : settings[usedKey].required,
   };
 
@@ -906,7 +918,6 @@ const buttonHandler = async (msgData, editData, languageData) => {
           else embed = returnedObject.returnEmbed;
 
           embed
-            .setColor(msg.client.constants.commands.settings.color)
             .addField(
               ' \u200b',
               `${languageOfKey.recommended ? `${languageOfKey.recommended}\n` : ''}${
@@ -1052,7 +1063,6 @@ const messageHandler = async (msgData, editData, languageData, Objects) => {
     const returnEmbed = editor.messageHandler({ msg, message }, insertedValues, required);
 
     returnEmbed
-      .setColor(msg.client.constants.commands.settings.color)
       .addField(
         ' \u200b',
         `${languageOfKey.recommended ? `${languageOfKey.recommended}\n` : ''}${
