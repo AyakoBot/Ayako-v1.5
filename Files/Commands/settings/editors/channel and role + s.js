@@ -58,13 +58,13 @@ module.exports = {
       if (insertedValues[required.assinger]) {
         switch (required.key.endsWith('s')) {
           default: {
-            if (cacheName === 'role') {
+            if (cacheName === 'roles') {
               return `<@&${insertedValues[required.assinger]}>`;
             }
-            if (cacheName === 'channel') {
+            if (cacheName === 'channels') {
               return `<#${insertedValues[required.assinger]}>`;
             }
-            return null;
+            throw new Error(`Invalid cacheName: ${cacheName}`);
           }
           case true: {
             if (cacheName === 'roles') {
@@ -85,11 +85,11 @@ module.exports = {
                     .join(', ')
                 : msg.language.none;
             }
-            return null;
+            throw new Error(`Invalid cacheName: ${cacheName}`);
           }
         }
       }
     }
-    return null;
+    throw new Error(`Invalid cacheName: ${cacheName}`);
   },
 };
