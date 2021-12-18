@@ -144,11 +144,6 @@ module.exports = {
           inline: false,
         },
         {
-          name: '\u200b',
-          value: '\u200b',
-          inline: false,
-        },
-        {
           name: `${msg.language.affected} ${affected} ${msg.language.roles}`,
           value: affectedRoleText,
           inline: false,
