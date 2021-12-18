@@ -849,6 +849,7 @@ module.exports = {
    * @param {array} arr2 - The Array to compare to arr1
    */
   arrayEquals(arr1, arr2) {
+    if (!arr1 || !arr2) return false;
     if (arr1.length !== arr2.length) return false;
 
     const results = [];
