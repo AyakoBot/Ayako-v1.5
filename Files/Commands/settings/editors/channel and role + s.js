@@ -68,7 +68,7 @@ module.exports = {
           }
           case true: {
             if (cacheName === 'roles') {
-              return insertedValues[required.assinger]
+              return Array.isArray(insertedValues[required.assinger])
                 ? insertedValues[required.assinger]
                     .map((value) => {
                       return `<@&${value}>`;
@@ -77,7 +77,7 @@ module.exports = {
                 : msg.language.none;
             }
             if (cacheName === 'channels') {
-              return insertedValues[required.assinger]
+              return Array.isArray(insertedValues[required.assinger])
                 ? insertedValues[required.assinger]
                     .map((value) => {
                       return `<#${value}>`;

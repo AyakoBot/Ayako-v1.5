@@ -669,7 +669,7 @@ const editorInteractionHandler = async (msgData, editorData, row, res) => {
   };
 
   insertedValues[required.assinger] = row[required.assinger]?.length
-    ? row[required.assinger]
+    ? msg.client.ch.objectClone(row[required.assinger])
     : msg.language.none;
 
   const passObject =
@@ -690,7 +690,6 @@ const editorInteractionHandler = async (msgData, editorData, row, res) => {
         languageOfKey.desc ? languageOfKey.desc : ''
       }`,
     )
-    .addField(msg.language.page, `\`1/${Math.ceil(Objects.options.length / 25)}\``)
     .setTitle(msg.client.ch.stp(languageOfKey.name, { row: row || '--' }))
     .setAuthor(
       msg.client.ch.stp(msg.lanSettings.authorEdit, {
@@ -699,6 +698,11 @@ const editorInteractionHandler = async (msgData, editorData, row, res) => {
       msg.client.constants.emotes.settingsLink,
       msg.client.constants.standard.invite,
     );
+
+  if (editor.requiresMenu) {
+    embed.addField(msg.language.page, `\`1/${Math.ceil(Objects.options.length / 25)}\``);
+  }
+
   if (selected !== 'noSelect') {
     embed.setDescription(
       `**${msg.language.selected}:**\n${selected.length ? selected : msg.language.none}`,
@@ -719,7 +723,12 @@ const editorInteractionHandler = async (msgData, editorData, row, res) => {
   let messageCollector;
   if (editor.interactionType === 'message') {
     messageCollector = msg.channel.createMessageCollector({ time: 60000 });
-    messageHandler({ msg, messageCollector }, { insertedValues, required, editor });
+    messageHandler(
+      { msg, messageCollector },
+      { insertedValues, required, editor, passObject, row },
+      { languageOfKey, languageOfSetting },
+      Objects,
+    );
   }
   return buttonHandler(
     { msg, row, embed, messageCollector },
@@ -863,7 +872,18 @@ const buttonHandler = async (msgData, editData, languageData) => {
               }
             });
           } else {
-            [insertedValues[required.assinger]] = interaction.values;
+            let isString = true;
+            const typeRes = await msg.client.ch.query(
+              `SELECT pg_typeof(${required.assinger}) FROM ${
+                msg.client.constants.commands.settings.tablenames[msg.file.name][0]
+              } LIMIT 1;`,
+            );
+            if (typeRes && typeRes.rowCount > 0) {
+              isString = !typeRes.rows[0].pg_typeof.endsWith('[]');
+            }
+            insertedValues[required.assinger] = isString
+              ? interaction.values[0]
+              : interaction.values;
           }
 
           const returnedObject =
@@ -893,7 +913,6 @@ const buttonHandler = async (msgData, editData, languageData) => {
                 languageOfKey.desc ? languageOfKey.desc : ''
               }`,
             )
-            .addField(msg.language.page, `\`1/${Math.ceil(Objects.options.length / 25)}\``)
             .setTitle(msg.client.ch.stp(languageOfKey.name, { row: row || '--' }))
             .setAuthor(
               msg.client.ch.stp(msg.lanSettings.authorEdit, {
@@ -902,6 +921,10 @@ const buttonHandler = async (msgData, editData, languageData) => {
               msg.client.constants.emotes.settingsLink,
               msg.client.constants.standard.invite,
             );
+
+          if (editor.requiresMenu) {
+            embed.addField(msg.language.page, `\`1/${Math.ceil(Objects.options.length / 25)}\``);
+          }
 
           await replier(
             { msg, answer: interaction },
@@ -935,10 +958,13 @@ const buttonHandler = async (msgData, editData, languageData) => {
           passObject.Objects.page += 1;
 
           embed.fields.splice(-1, 1);
-          embed.addField(
-            msg.language.page,
-            `\`${passObject.Objects.page}/${Math.ceil(passObject.Objects.options.length / 25)}\``,
-          );
+
+          if (editor.requiresMenu) {
+            embed.addField(
+              msg.language.page,
+              `\`${passObject.Objects.page}/${Math.ceil(passObject.Objects.options.length / 25)}\``,
+            );
+          }
 
           for (
             let j = indexLast + 1;
@@ -969,10 +995,13 @@ const buttonHandler = async (msgData, editData, languageData) => {
           passObject.Objects.page -= 1;
 
           embed.fields.splice(-1, 1);
-          embed.addField(
-            msg.language.page,
-            `\`${passObject.Objects.page}/${Math.ceil(passObject.Objects.options.length / 25)}\``,
-          );
+
+          if (editor.requiresMenu) {
+            embed.addField(
+              msg.language.page,
+              `\`${passObject.Objects.page}/${Math.ceil(passObject.Objects.options.length / 25)}\``,
+            );
+          }
 
           for (
             let j = indexFirst - 25;
@@ -1011,16 +1040,48 @@ const buttonHandler = async (msgData, editData, languageData) => {
   });
 };
 
-const messageHandler = async (msgData, editData) => {
-  const { insertedValues, required, editor } = editData;
+const messageHandler = async (msgData, editData, languageData, Objects) => {
+  const { insertedValues, required, editor, passObject, row } = editData;
   const { msg, messageCollector } = msgData;
+  const { languageOfKey, languageOfSetting } = languageData;
 
   messageCollector.on('collect', async (message) => {
     if (message.author.id !== msg.author.id) return null;
     messageCollector.resetTimer();
     message.delete().catch(() => {});
-    editor.messageHandler({ msg, message }, insertedValues, required);
-    return null;
+    const returnEmbed = editor.messageHandler({ msg, message }, insertedValues, required);
+
+    returnEmbed
+      .setColor(msg.client.constants.commands.settings.color)
+      .addField(
+        ' \u200b',
+        `${languageOfKey.recommended ? `${languageOfKey.recommended}\n` : ''}${
+          languageOfKey.desc ? languageOfKey.desc : ''
+        }`,
+      )
+      .setTitle(msg.client.ch.stp(languageOfKey.name, { row: row || '--' }))
+      .setAuthor(
+        msg.client.ch.stp(msg.lanSettings.authorEdit, {
+          type: languageOfSetting.type,
+        }),
+        msg.client.constants.emotes.settingsLink,
+        msg.client.constants.standard.invite,
+      );
+
+    if (editor.requiresMenu) {
+      returnEmbed.addField(msg.language.page, `\`1/${Math.ceil(Objects.options.length / 25)}\``);
+    }
+
+    return replier(
+      { msg },
+      {
+        rawButtons:
+          typeof editor.buttons === 'function'
+            ? editor.buttons(msg, passObject, insertedValues, required, row)
+            : standardButtons(msg, passObject, insertedValues, required, row, editor),
+        embed: returnEmbed,
+      },
+    );
   });
 };
 
