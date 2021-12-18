@@ -9,19 +9,22 @@ module.exports = {
     const { msg, message } = msgData;
 
     const fail = (arg) => {
-      let text = '';
+      let text;
       if (Array.isArray(arg)) {
-        text = arg.join(', ');
+        text = arg.map((c) => c).join(', ');
       } else text = arg;
 
       const lan = msg.lanSettings.fails[required.key];
       const embed = new Discord.MessageEmbed()
         .setColor(msg.client.constants.error)
         .setDescription(`${lan}\n${text}`);
-      message.reply({ embeds: [embed] });
+      message.reply({ embeds: [embed], ephemeral: true });
     };
 
-    const args = message.content.replace(/\\n/g, ' ').replace(/\D+/g, '').split(/ +/);
+    const args = message.content
+      .replace(/\\n/g, ' ')
+      .replace(/[^\d\s]/g, '')
+      .split(/ +/);
 
     switch (required.key) {
       default: {
@@ -32,17 +35,27 @@ module.exports = {
         break;
       }
       case 'users': {
-        const assinged = insertedValues[required.assinger];
+        insertedValues[required.assinger] = Array.isArray(insertedValues[required.assinger])
+          ? insertedValues[required.assinger]
+          : [];
+
         const notUserArgs = [];
 
         args.forEach((id) => {
           const user = msg.client.users.cache.get(id);
 
           if (user) {
-            if (assinged && assinged.includes(user.id)) {
-              const index = assinged.indexOf(user.id);
-              assinged.splice(index, 1);
-            } else if (assinged && assinged.length) assinged.push(user.id);
+            if (
+              insertedValues[required.assinger] &&
+              insertedValues[required.assinger].includes(user.id)
+            ) {
+              const index = insertedValues[required.assinger].indexOf(user.id);
+              insertedValues[required.assinger].splice(index, 1);
+            } else if (
+              insertedValues[required.assinger] &&
+              insertedValues[required.assinger].length
+            )
+              insertedValues[required.assinger].push(user.id);
             else insertedValues[required.assinger] = [user.id];
           } else notUserArgs.push(id);
 
@@ -58,7 +71,7 @@ module.exports = {
       `**${msg.language.selected}:**\n${selected?.length ? selected : msg.language.none}`,
     );
 
-    return { returnEmbed };
+    return returnEmbed;
   },
   getSelected(msg, insertedValues, required) {
     if (insertedValues[required.assinger]) {
@@ -69,13 +82,14 @@ module.exports = {
             : msg.language.none;
         }
         case 'users': {
-          return insertedValues[required.assinger]
-            ? insertedValues[required.assinger]
-                .map((value) => {
-                  return `<@${value}>`;
-                })
-                .join(', ')
-            : msg.language.none;
+          if (
+            insertedValues[required.assinger] &&
+            insertedValues[required.assinger].length &&
+            Array.isArray(insertedValues[required.assinger])
+          ) {
+            return insertedValues[required.assinger].map((value) => `<@${value}>`).join(', ');
+          }
+          return msg.language.none;
         }
       }
     }

@@ -43,7 +43,9 @@ module.exports = {
             : msg.language.none;
         }
         case true: {
-          return insertedValues[required.assinger]
+          return insertedValues[required.assinger] &&
+            insertedValues[required.assinger].length &&
+            Array.isArray(insertedValues[required.assinger])
             ? insertedValues[required.assinger]
                 .map((value) => {
                   return `${value}`;

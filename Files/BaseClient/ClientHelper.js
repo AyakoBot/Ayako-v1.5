@@ -3,6 +3,7 @@ const URL = require('url');
 const https = require('https');
 const http = require('http');
 const Discord = require('discord.js');
+const v8 = require('v8');
 const fs = require('fs');
 const client = require('./DiscordClient');
 const { pool } = require('./DataBase');
@@ -869,5 +870,13 @@ module.exports = {
     }
 
     return !results.includes(false);
+  },
+  /**
+   * Clones an Object.
+   * @constructor
+   * @param {array} obj - The Object to clone
+   */
+  objectClone(obj) {
+    return v8.deserialize(v8.serialize(obj));
   },
 };

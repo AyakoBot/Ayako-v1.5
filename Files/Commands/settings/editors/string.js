@@ -40,13 +40,19 @@ module.exports = {
         break;
       }
       case 'stringArray': {
-        const assinged = insertedValues[required.assinger];
+        insertedValues[required.assinger] = Array.isArray(insertedValues[required.assinger])
+          ? insertedValues[required.assinger]
+          : [];
 
         args.forEach((arg) => {
-          if (assinged && assinged.includes(arg)) {
-            const index = assinged.indexOf(arg);
-            assinged.splice(index, 1);
-          } else if (assinged && assinged.length) assinged.push(arg);
+          if (
+            insertedValues[required.assinger] &&
+            insertedValues[required.assinger].includes(arg)
+          ) {
+            const index = insertedValues[required.assinger].indexOf(arg);
+            insertedValues[required.assinger].splice(index, 1);
+          } else if (insertedValues[required.assinger] && insertedValues[required.assinger].length)
+            insertedValues[required.assinger].push(arg);
           else insertedValues[required.assinger] = [arg];
         });
       }
@@ -69,7 +75,9 @@ module.exports = {
             : msg.language.none;
         }
         case 'stringArray': {
-          return insertedValues[required.assinger]
+          return insertedValues[required.assinger] &&
+            insertedValues[required.assinger].length &&
+            Array.isArray(insertedValues[required.assinger])
             ? insertedValues[required.assinger]
                 .map((value) => {
                   return `${value}`;
