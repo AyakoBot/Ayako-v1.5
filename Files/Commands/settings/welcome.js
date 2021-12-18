@@ -8,8 +8,8 @@ module.exports = {
       {
         name: msg.lanSettings.active,
         value: r.active
-          ? `${msg.client.constants.emotes.tick} ${msg.language.enabled}`
-          : `${msg.client.constants.emotes.cross} ${msg.language.disabled}`,
+          ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
+          : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
         inline: false,
       },
       {
@@ -45,8 +45,8 @@ module.exports = {
         value:
           `${msg.lan.readofwarnstof}\n${
             r.readofwarnstof
-              ? `${msg.client.constants.emotes.tick} ${msg.language.enabled}`
-              : `${msg.client.constants.emotes.cross} ${msg.language.disabled}`
+              ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
+              : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
           }\n\n` +
           `${msg.client.ch.stp(msg.lan.muteafterwarnsamount, {
             amount: r.muteafterwarnsamount ? r.muteafterwarnsamount : '--',
@@ -67,29 +67,29 @@ module.exports = {
       {
         name: msg.lan.giveofficialwarnstof,
         value: r.giveofficialwarnstof
-          ? `${msg.client.constants.emotes.tick} ${msg.language.enabled}`
-          : `${msg.client.constants.emotes.cross} ${msg.language.disabled}`,
+          ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
+          : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
         inline: true,
       },
       {
         name: msg.lan.muteenabledtof,
         value: r.muteenabledtof
-          ? `${msg.client.constants.emotes.tick} ${msg.language.enabled}`
-          : `${msg.client.constants.emotes.cross} ${msg.language.disabled}`,
+          ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
+          : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
         inline: true,
       },
       {
         name: msg.lan.kickenabledtof,
         value: r.kickenabledtof
-          ? `${msg.client.constants.emotes.tick} ${msg.language.enabled}`
-          : `${msg.client.constants.emotes.cross} ${msg.language.disabled}`,
+          ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
+          : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
         inline: true,
       },
       {
         name: msg.lan.banenabledtof,
         value: r.banenabledtof
-          ? `${msg.client.constants.emotes.tick} ${msg.language.enabled}`
-          : `${msg.client.constants.emotes.cross} ${msg.language.disabled}`,
+          ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
+          : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
         inline: true,
       },
     );

@@ -13,8 +13,8 @@ module.exports = {
       embed.addFields({
         name: `${msg.language.number}: \`${r.id}\` | ${msg.language.command}: \`${r.command}\` | ${
           r.active
-            ? `${msg.client.constants.emotes.tick} ${msg.language.enabled}`
-            : `${msg.client.constants.emotes.cross} ${msg.language.disabled}`
+            ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
+            : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
         }`,
         value: `${msg.language.cooldown}: ${moment
           .duration(r.cooldown * 1000)
@@ -29,8 +29,8 @@ module.exports = {
       {
         name: msg.lanSettings.active,
         value: r.active
-          ? `${msg.client.constants.emotes.tick} ${msg.language.enabled}`
-          : `${msg.client.constants.emotes.cross} ${msg.language.disabled}`,
+          ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
+          : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
         inline: false,
       },
       {

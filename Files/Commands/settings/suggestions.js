@@ -8,8 +8,8 @@ module.exports = {
       {
         name: msg.lanSettings.active,
         value: r.active
-          ? `${msg.client.constants.emotes.tick} ${msg.language.enabled}`
-          : `${msg.client.constants.emotes.cross} ${msg.language.disabled}`,
+          ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
+          : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
         inline: false,
       },
       {
@@ -29,8 +29,8 @@ module.exports = {
       {
         name: msg.lan.anon,
         value: r.anon
-          ? `${msg.client.constants.emotes.tick} ${msg.language.enabled}`
-          : `${msg.client.constants.emotes.cross} ${msg.language.disabled}`,
+          ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
+          : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
         inline: false,
       },
       {
