@@ -9,7 +9,7 @@ module.exports = {
     if (result)
       res = (
         await msg.client.ch.query(
-          'SELECT * FROM roleseparator WHERE guildid = $1 ORDER BY uniquetimestamp DESC;',
+          'SELECT * FROM roleseparator WHERE guildid = $1 ORDER BY uniquetimestamp ASC;',
           [msg.guild.id],
         )
       ).rows;
@@ -145,7 +145,7 @@ module.exports = {
         },
         {
           name: `${msg.language.affected} ${affected} ${msg.language.roles}`,
-          value: affectedRoleText,
+          value: `${affectedRoleText}\u200b`,
           inline: false,
         },
       );
@@ -168,7 +168,7 @@ module.exports = {
           inline: false,
         },
         {
-          name: msg.language.isvarying,
+          name: msg.lan.isvarying,
           value: r.isvarying
             ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
             : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
@@ -181,7 +181,7 @@ module.exports = {
         },
         {
           name: msg.lan.separator,
-          value: r.separator ? `\`${msg.guild.roles.cache.get(r.separator)}\`` : msg.language.none,
+          value: r.separator ? `${msg.guild.roles.cache.get(r.separator)}` : msg.language.none,
           inline: false,
         },
         {
@@ -232,7 +232,7 @@ module.exports = {
     const separator = new Discord.MessageButton()
       .setCustomId(msg.lan.edit.separator.name)
       .setLabel(msg.lan.separator)
-      .isvarying('SECONDARY');
+      .setStyle('SECONDARY');
     const isvarying = new Discord.MessageButton()
       .setCustomId(msg.lan.edit.isvarying.name)
       .setLabel(msg.lan.isvarying)
