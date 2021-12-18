@@ -874,7 +874,7 @@ module.exports = {
   /**
    * Clones an Object.
    * @constructor
-   * @param {array} obj - The Object to clone
+   * @param {object} obj - The Object to clone
    */
   objectClone(obj) {
     return v8.deserialize(v8.serialize(obj));
