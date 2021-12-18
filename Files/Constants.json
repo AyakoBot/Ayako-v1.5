@@ -328,6 +328,12 @@
     "workload": "<:workload:902582586587635712>",
     "workloadID": "902582586587635712",
     "workloadLink": "https://cdn.discordapp.com/emojis/902582586587635712.png?size=96",
+    "disabled": "<:disabled:831360826048774176>",
+    "disabledID": "831360826048774176",
+    "disabledLink": "https://cdn.discordapp.com/emojis/831360826048774176.png?size=96",
+    "enabled": "<:enabled:831360855018962944>",
+    "enabledID": "831360855018962944",
+    "enabledLink": "https://cdn.discordapp.com/emojis/831360826048774176.png?size=96",
     "up": "🆙",
     "back": "⬅️",
     "numbers": {
