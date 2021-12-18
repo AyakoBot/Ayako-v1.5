@@ -1,4 +1,3 @@
-
 /* eslint-disable no-underscore-dangle */
 const { Worker } = require('worker_threads');
 const ch = require('../../../BaseClient/ClientHelper');
