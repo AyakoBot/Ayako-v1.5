@@ -1235,7 +1235,7 @@
         "separators": {
           "cols": [
             "guildid, active, id, uniquetimestamp, isvarying, separator",
-            "guildid, stillrunning, active"
+            "guildid, stillrunning"
           ],
           "vals": [
             [
@@ -1246,7 +1246,7 @@
               true,
               "{{values.separator}}"
             ],
-            ["{{msg.guild.id}}", false, false]
+            ["{{msg.guild.id}}", false]
           ],
           "add": ["separator"],
           "ident": "separator",

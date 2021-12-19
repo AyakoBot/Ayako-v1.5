@@ -452,7 +452,7 @@
   "selfLog": {
     "author": "Ayako {{type}} Settings Updated",
     "description": "User {{msg.author}} / `{{msg.author.tag}}` / `{{msg.author.id}}`\nhas updated Setting `{{type}}`\n\n\n**Changes:**",
-    "descriptionwithID": "User {{msg.author}} / `{{msg.author.tag}}` / `{{msg.author.id}}`\nhas updated Setting `{{type}}` with ID `{{id}}`\n\n\n**Changes:**"
+    "descriptionWithID": "User {{msg.author}} / `{{msg.author.tag}}` / `{{msg.author.id}}`\nhas updated Setting `{{type}}` with ID `{{id}}`\n\n\n**Changes:**"
   },
   "time": {
     "seconds": "Second(s)",
@@ -1377,7 +1377,7 @@
     "settings": {
       "valid": "Valid Answers",
       "notValid": "This Answer was not valid",
-      "mmrEditList": "Click:\n`add` to create a new Entry\n`remove` to remove an existing Entry\n`edit` to edit an existing Entry\nor Select the ID of an entry in the Select Menu below",
+      "mmrEditList": "Click:\n`add` to create a new Entry\n`remove` to remove an existing Entry\nor Select the ID of an entry in the Select Menu below",
       "category": "Info",
       "description": "Display the Ayako Server Settings",
       "edited": "Successfully edited\n```{{edited}}```",

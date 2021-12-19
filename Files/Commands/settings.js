@@ -246,8 +246,8 @@ module.exports = {
             break;
           }
           case 'edit': {
-            mmrEditList({ msg, answer }, { res, embed });
             buttonsCollector.stop();
+            mmrEditList({ msg, answer: interaction }, { res, embed });
             break;
           }
         }
@@ -389,13 +389,13 @@ const getIdentifier = (msg, settingsConstant, row) => {
     case 'role': {
       identifier = msg.guild.roles.cache
         .get(row[settingsConstant.ident])
-        .name.replace(/\W{2}/gu, '');
+        ?.name.replace(/\W{2}/gu, '');
       break;
     }
     case 'channel': {
       identifier = msg.guild.channels.cache
         .get(row[settingsConstant.ident])
-        .name.replace(/\W{2}/gu, '');
+        ?.name.replace(/\W{2}/gu, '');
       break;
     }
   }
@@ -475,7 +475,7 @@ const mmrEditList = async (msgData, sendData) => {
 
   const mmrAdd = async (answer, row) => {
     const addLanguage = msg.lanSettings[msg.file.name].otherEdits.add;
-    const requiredSteps = msg.client.constants.commands.settings[msg.file.name].add;
+    const requiredSteps = msg.client.constants.commands.settings.setupQueries[msg.file.name].add;
 
     const embed = new Discord.MessageEmbed().setAuthor(
       addLanguage.name,
@@ -497,17 +497,25 @@ const mmrEditList = async (msgData, sendData) => {
     values.guildid = msg.guild.id;
 
     const tables = msg.client.constants.commands.settings.tablenames[msg.file.name];
-    tables.forEach((table, i) => {
-      const cols = msg.client.constants.commands.settings.setupQueries.cols[i];
-      const vals = msg.client.constants.commands.settings.setupQueries.vals[i];
+    tables.forEach(async (table, i) => {
+      let tableRes;
+      if (i !== 0) {
+        tableRes = await msg.client.ch.query(`SELECT * FROM ${table} WHERE guildid = $1;`, [
+          msg.guild.id,
+        ]);
+      }
+      if (i === 0 || !tableRes || !tableRes.rowCount) {
+        const cols = msg.client.constants.commands.settings.setupQueries[msg.file.name].cols[i];
+        const vals = msg.client.constants.commands.settings.setupQueries[msg.file.name].vals[i];
 
-      const valueIdentifier = cols.map((collumn, j) => `$${j + 1}`);
-      const valuesSTP = vals.map((value) => msg.client.ch.stp(value, { values, msg }));
+        const valueIdentifier = cols.split(/, +/).map((collumn, j) => `$${j + 1}`);
+        const valuesSTP = vals.map((value) => msg.client.ch.stp(`${value}`, { values, msg }));
 
-      msg.client.ch.query(
-        `INSERT INTO ${table} (${cols}) VALUES (${valueIdentifier.join(', ')});`,
-        valuesSTP,
-      );
+        msg.client.ch.query(
+          `INSERT INTO ${table} (${cols}) VALUES (${valueIdentifier.join(', ')});`,
+          valuesSTP,
+        );
+      }
     });
   };
 
@@ -515,7 +523,7 @@ const mmrEditList = async (msgData, sendData) => {
   let { embed } = sendData;
 
   if (!embed) {
-    embed = msg.file.mmrEmbed(msg, res);
+    embed = await msg.file.mmrEmbed(msg, res.rows);
   }
 
   embed.setDescription(msg.lanSettings.mmrEditList);
@@ -545,9 +553,10 @@ const mmrEditList = async (msgData, sendData) => {
     options.take.push(options.allOptions[i]);
   }
 
-  const rawButtons = getMMRListButtons(msg, options, true);
+  const { list, next, prev, add, remove } = getMMRListButtons(msg, options, true);
+  const rows = [[list], [prev, next], [remove, add]];
 
-  await replier({ msg, answer }, { rawButtons, embed });
+  await replier({ msg, answer }, { rawButtons: rows, embed });
 
   const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
   buttonsCollector.on('collect', async (interaction) => {
@@ -579,7 +588,7 @@ const mmrEditList = async (msgData, sendData) => {
         singleRowEdit(
           { msg, answer: interaction },
           res.rows[interaction.values[0] - 1],
-          embed,
+          null,
           true,
         );
         buttonsCollector.stop();
@@ -654,13 +663,13 @@ const whereToGo = async (msg, answer) => {
       content: msg.language.commands.commandHandler.missingPermissions,
     });
   } else {
-    if (!msg.file.setupRequired === false) return mmrEditList({ msg, answer }, { res });
     const res = await msg.client.ch.query(
       `SELECT * FROM ${
         msg.client.constants.commands.settings.tablenames[msg.file.name][0]
       } WHERE guildid = $1;`,
       [msg.guild.id],
     );
+    if (msg.file.setupRequired === false) return mmrEditList({ msg, answer }, { res });
     singleRowEdit({ msg, answer }, res.rows[0]);
   }
   return null;
@@ -804,7 +813,9 @@ const dbUpdate = (msg, editData) => {
     msg.client.ch.query(
       `UPDATE ${tableName} SET ${required.assinger} = $1 WHERE guildid = $2 AND uniquetimestamp = $3;`,
       [
-        insertedValues[required.assinger].length ? insertedValues[required.assinger] : null,
+        insertedValues[required.assinger].length || insertedValues[required.assinger] !== undefined
+          ? insertedValues[required.assinger]
+          : null,
         msg.guild.id,
         row.uniquetimestamp,
       ],
@@ -836,10 +847,10 @@ const log = async (msg, editData) => {
   );
   if (comesFromMMR) {
     embed.setDescription(
-      msg.client.ch.stp(msg.language.descriptionWithID, { type, msg, id: row.id }),
+      msg.client.ch.stp(msg.language.selfLog.descriptionWithID, { type, msg, id: row.id }),
     );
   } else {
-    embed.setDescription(msg.client.ch.stp(msg.language.description, { type, msg }));
+    embed.setDescription(msg.client.ch.stp(msg.language.selfLog.description, { type, msg }));
   }
 
   embed.addField(msg.lanSettings.oldValue, `${settingsName}: ${oldSettings}`, true);
