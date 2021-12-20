@@ -26,8 +26,7 @@ module.exports = {
         value: `${msg.lan.separator}: ${sep}\n${msg.lan.stoprole}: ${
           r.stoprole ? stop : msg.language.none
         }\n${msg.language.affected}: ${affected} ${msg.language.roles}${
-          msg.guild.members.cache.get(msg.client.user.id).roles.highest.position <=
-          sep.position
+          msg.guild.members.cache.get(msg.client.user.id).roles.highest.position <= sep.position
             ? `\n${msg.client.constants.emotes.warning} ${msg.language.permissions.error.role}`
             : ''
         }`,
@@ -97,8 +96,7 @@ module.exports = {
         },
         {
           name:
-            msg.guild.members.cache.get(msg.client.user.id).roles.highest.position <=
-            sep.position
+            msg.guild.members.cache.get(msg.client.user.id).roles.highest.position <= sep.position
               ? `${msg.client.constants.emotes.warning} ${msg.language.permissions.error.role}`
               : '\u200b',
           value: '\u200b',
@@ -153,8 +151,7 @@ module.exports = {
         },
         {
           name:
-            msg.guild.members.cache.get(msg.client.user.id).roles.highest.position <=
-            sep.position
+            msg.guild.members.cache.get(msg.client.user.id).roles.highest.position <= sep.position
               ? `${msg.client.constants.emotes.warning} ${msg.language.permissions.error.role}`
               : '\u200b',
           value: '\u200b',
