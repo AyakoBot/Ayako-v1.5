@@ -1124,7 +1124,7 @@
         "modroles": ["modroles"],
         "muterole": ["muterole"]
       },
-      "editReq": ["id"],
+      "editReq": ["uniquetimestamp"],
       "setupQueries": {
         "antispam": {
           "cols": [
@@ -1157,35 +1157,33 @@
           "vals": [["{{msg.guild.id}}", true, true, true, true, true, true, 2, 4, 3, 1]]
         },
         "disabled": {
-          "cols": ["guildid, active, channels, id, uniquetimestamp, commands"],
+          "cols": ["guildid, active, channels, uniquetimestamp, commands"],
           "vals": [
             [
               "{{msg.guild.id}}",
               true,
               ["{{values.channels}}"],
-              "{{values.id}}",
               "{{values.uniquetimestamp}}",
               ["{{values.commands}}"]
             ]
           ],
           "add": ["commands", "channels"],
-          "remove": ["id"],
+          "remove": ["uniquetimestamp"],
           "ident": "commands"
         },
         "cooldowns": {
-          "cols": ["guildid, active, command, cooldown, id, uniquetimestamp"],
+          "cols": ["guildid, active, command, cooldown, uniquetimestamp"],
           "vals": [
             [
               "{{msg.guild.id}}",
               true,
               "{{values.command}}",
               "{{values.cooldown}}",
-              "{{values.id}}",
               "{{values.uniquetimestamp}}"
             ]
           ],
           "add": ["command", "cooldown"],
-          "remove": ["id"],
+          "remove": ["uniquetimestamp"],
           "ident": "command"
         },
         "overview": {
@@ -1209,12 +1207,11 @@
           "vals": [["{{msg.guild.id}}"]]
         },
         "selfroles": {
-          "cols": ["guildid, active, id, uniquetimestamp, roles, name"],
+          "cols": ["guildid, active, uniquetimestamp, roles, name"],
           "vals": [
             [
               "{{msg.guild.id}}",
               false,
-              "{{values.id}}",
               "{{values.uniquetimestamp}}",
               "{{values.roles}}",
               "{{values.name}}"
@@ -1224,9 +1221,9 @@
           "ident": "name"
         },
         "statschannel": {
-          "cols": ["guildid, channel, type, id"],
+          "cols": ["guildid, channel, type"],
           "vals": [
-            ["{{msg.guild.id}}", "{{values.channelid}}", "{{values.type}}", "{{values.id}}"]
+            ["{{msg.guild.id}}", "{{values.channelid}}", "{{values.type}}"]
           ],
           "add": ["channel"],
           "ident": "channel",
@@ -1234,14 +1231,13 @@
         },
         "separators": {
           "cols": [
-            "guildid, active, id, uniquetimestamp, isvarying, separator",
+            "guildid, active, uniquetimestamp, isvarying, separator",
             "guildid, stillrunning"
           ],
           "vals": [
             [
               "{{msg.guild.id}}",
               false,
-              "{{values.id}}",
               "{{values.uniquetimestamp}}",
               true,
               "{{values.separator}}"
@@ -1253,12 +1249,11 @@
           "identType": "role"
         },
         "autopunish": {
-          "cols": ["guildid, active, id, uniquetimestamp, punishment, confirmationreq"],
+          "cols": ["guildid, active, uniquetimestamp, punishment, confirmationreq"],
           "vals": [
             [
               "{{msg.guild.id}}",
               false,
-              "{{values.id}}",
               "{{values.uniquetimestamp}}",
               "{{values.punishment}}",
               false
@@ -1300,13 +1295,12 @@
           "vals": [["{{msg.author.id}}"]]
         },
         "modroles": {
-          "cols": ["guildid, active, roleid, id, uniquetimestamp"],
+          "cols": ["guildid, active, roleid, uniquetimestamp"],
           "vals": [
             [
               "{{msg.guild.id}}",
               false,
               "{{values.roleid}}",
-              "{{values.id}}",
               "{{values.uniquetimestamp}}"
             ]
           ],
