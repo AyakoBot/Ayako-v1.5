@@ -1411,6 +1411,8 @@
       "logs": {
         "category": ["Automation"],
         "type": "Logs",
+        "ayakoLogs": "Ayako Logs",
+        "discordLogs": "Discord Logs",
         "eventName": "Discord Events",
         "guildevents": "Guild Events",
         "emojievents": "Emoji Events",
@@ -1426,7 +1428,6 @@
         "stickerevents": "Sticker Events",
         "threadevents": "Thread Events",
         "guildmemberevents": "Guild Member Events",
-        "logName": "Ayako Logs",
         "modlogs": "Moderation Logs",
         "settingslog": "Settings Logs",
         "edit": {
@@ -1595,8 +1596,6 @@
       "setup": {
         "author": "Ayako Settings Set-Up",
         "question": "Would you like to set-up Ayako {{type}}?",
-        "answers": "`Yes` or `No`",
-        "done": "Setup finished\nRedirecting {{loading}}",
         "abort": "Setup aborted"
       },
       "settings": {

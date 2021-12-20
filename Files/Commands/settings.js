@@ -145,7 +145,7 @@ module.exports = {
         } else msg.client.ch.notYours(interaction, msg);
       });
       buttonsCollector.on('end', (collected, reason) => {
-        if (reason === 'time') msg.m.edit({ embeds: [embed], components: [] });
+        if (reason === 'time') msg.m.edit({ embeds: [embed], components: [] }).catch(() => {});
       });
       return null;
     };
@@ -237,7 +237,7 @@ module.exports = {
             break;
           }
           case 'list': {
-            await interaction.deferReply();
+            await interaction.deferReply().catch(() => {});
             singleRowDisplay(res.rows[interaction.values[0] - 1], interaction);
             buttonsCollector.stop();
             break;
@@ -294,16 +294,13 @@ async function rower(msg) {
   if (!res || res.rowCount === 0) return;
   if (!res.rows[0].uniquetimestamp) return;
 
-  const promises = [];
-  res.rows.forEach((row, i) => {
+  const promises = res.rows.map((row, i) => {
     res.rows[i].id = i + 1;
-    promises.push(
-      msg.client.ch.query(
-        `UPDATE ${
-          msg.client.constants.commands.settings.tablenames[msg.file.name][0]
-        } SET id = $1 WHERE uniquetimestamp = $2;`,
-        [res.rows[i].id, res.rows[i].uniquetimestamp],
-      ),
+    return msg.client.ch.query(
+      `UPDATE ${
+        msg.client.constants.commands.settings.tablenames[msg.file.name][0]
+      } SET id = $1 WHERE uniquetimestamp = $2;`,
+      [res.rows[i].id, res.rows[i].uniquetimestamp],
     );
   });
   await Promise.all(promises);
@@ -321,15 +318,19 @@ const replier = async (msgData, sendData) => {
   }
 
   if (answer && !answer.replied && !manualReply) {
-    await answer.update({
-      embeds: [embed],
-      components: buttons,
-    });
+    await answer
+      .update({
+        embeds: [embed],
+        components: buttons,
+      })
+      .catch(() => {});
   } else if (msg.m) {
-    await msg.m.edit({
-      embeds: [embed],
-      components: buttons,
-    });
+    await msg.m
+      .edit({
+        embeds: [embed],
+        components: buttons,
+      })
+      .catch(() => {});
   } else {
     msg.m = await msg.client.ch.reply(msg, {
       embeds: [embed],
@@ -440,7 +441,8 @@ const mmrEditList = async (msgData, sendData) => {
     answer = returnedData.interaction;
 
     const { values } = returnedData;
-    values.uniquetimestamp = res.rows.find((f) => f.id === Number(values.id)).uniquetimestamp;
+    const row = res.rows.find((f) => f.id === Number(values.id));
+    values.uniquetimestamp = row.uniquetimestamp;
 
     const table = msg.client.constants.commands.settings.tablenames[msg.file.name][0];
 
@@ -448,6 +450,7 @@ const mmrEditList = async (msgData, sendData) => {
       values.uniquetimestamp,
     ]);
 
+    log(msg, { insertedValues: values, required, comesFromMMR: true, row });
     return module.exports.execute(msg, answer);
   };
 
@@ -551,6 +554,7 @@ const mmrEditList = async (msgData, sendData) => {
           `INSERT INTO ${table} (${cols}) VALUES (${valueIdentifier.join(', ')});`,
           valuesSTP,
         );
+        log(msg, { insertedValues, row });
       }
     });
 
@@ -624,7 +628,7 @@ const mmrEditList = async (msgData, sendData) => {
         break;
       }
       case 'list': {
-        await interaction.deferReply();
+        await interaction.deferReply().catch(() => {});
         const row = res.rows.find((r) => r.id === Number(interaction.values[0]));
 
         singleRowEdit({ msg, answer: interaction }, { row, res }, null, true);
@@ -645,6 +649,7 @@ const singleRowEdit = async (msgData, resData, embed, comesFromMMR) => {
   const { row, res } = resData;
 
   if (!embed) {
+    if (!row) return setup(msg, answer);
     embed = msg.file.displayEmbed(msg, row);
   }
 
@@ -693,6 +698,7 @@ const singleRowEdit = async (msgData, resData, embed, comesFromMMR) => {
   buttonsCollector.on('end', (collected, reason) => {
     if (reason === 'time') msg.client.ch.collectorEnd(msg);
   });
+  return null;
 };
 
 const whereToGo = async (msg, answer) => {
@@ -845,18 +851,6 @@ const changing = async (msgData, editData, resData) => {
     editor.execute(msg, required, insertedValues, row);
   }
 
-  dbUpdate(msg, { insertedValues, required, comesFromMMR, row });
-  log(msg, { insertedValues, required, comesFromMMR, row });
-
-  row[usedKey] = insertedValues[usedKey];
-
-  const embed = msg.file.displayEmbed(msg, row);
-
-  return singleRowEdit({ msg, answer }, { row, res }, embed, comesFromMMR);
-};
-
-const dbUpdate = (msg, editData) => {
-  const { insertedValues, required, comesFromMMR, row } = editData;
   const [tableName] = msg.client.constants.commands.settings.tablenames[msg.file.name];
 
   if (comesFromMMR) {
@@ -880,6 +874,14 @@ const dbUpdate = (msg, editData) => {
       msg.guild.id,
     ]);
   }
+
+  log(msg, { insertedValues, required, comesFromMMR, row });
+
+  row[usedKey] = insertedValues[usedKey];
+
+  const embed = msg.file.displayEmbed(msg, row);
+
+  return singleRowEdit({ msg, answer }, { row, res }, embed, comesFromMMR);
 };
 
 const log = async (msg, editData) => {
@@ -948,7 +950,7 @@ const buttonHandler = async (msgData, editData, languageData) => {
             });
           } else {
             let isString;
-            if (required.assinger !== 'id') {
+            if (required.assinger !== 'id' && Object.keys(row).includes(required.assinger)) {
               const typeRes = await msg.client.ch.query(
                 `SELECT pg_typeof(${required.assinger}) FROM ${
                   msg.client.constants.commands.settings.tablenames[msg.file.name][0]
@@ -1202,7 +1204,7 @@ const standardButtons = async (msg, preparedData, insertedValues, required, row,
   let doneDisabled = false;
   let isString = true;
 
-  if (required.assinger !== 'id') {
+  if (required.assinger !== 'id' && Object.keys(row).includes(required.assinger)) {
     const typeRes = await msg.client.ch.query(
       `SELECT pg_typeof(${required.assinger}) FROM ${
         msg.client.constants.commands.settings.tablenames[msg.file.name][0]
@@ -1263,4 +1265,67 @@ const standardButtons = async (msg, preparedData, insertedValues, required, row,
   returnedButtons.push([back, done]);
 
   return returnedButtons;
+};
+
+const setup = async (msg, answer) => {
+  const lan = msg.language.commands.settings.setup;
+
+  const embed = new Discord.MessageEmbed()
+    .setAuthor(lan.author, null, msg.client.constants.standard.invite)
+    .setDescription(msg.client.ch.stp(lan.question, { type: msg.lanSettings[msg.file.name].type }));
+
+  const yes = new Discord.MessageButton()
+    .setLabel(msg.language.Yes)
+    .setCustomId('yes')
+    .setStyle('SUCCESS');
+  const no = new Discord.MessageButton()
+    .setLabel(msg.language.No)
+    .setCustomId('no')
+    .setStyle('DANGER');
+
+  await replier({ msg, answer }, { rawButtons: [[yes, no]], embed });
+
+  const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
+  buttonsCollector.on('collect', async (interaction) => {
+    if (interaction.user.id !== msg.author.id) return msg.client.ch.notYours(interaction, msg);
+    switch (interaction.customId) {
+      default: {
+        return null;
+      }
+      case 'yes': {
+        buttonsCollector.stop();
+        const settingsConst = msg.client.constants.commands.settings.setupQueries[msg.file.name];
+
+        const promises = msg.client.constants.commands.settings.tablenames[msg.file.name].map(
+          (query, i) => {
+            const assingers = settingsConst.cols[i].split(/, +/).map((q, j) => `$${j + 1}`);
+            const values = settingsConst.vals[i].map((val) => msg.client.ch.stp(`${val}`, { msg }));
+
+            return msg.client.ch.query(
+              `INSERT INTO ${
+                msg.client.constants.commands.settings.tablenames[msg.file.name][i]
+              } (${settingsConst.cols[i]}) VALUES (${assingers});`,
+              values,
+            );
+          },
+        );
+
+        await Promise.all(promises);
+
+        whereToGo(msg, interaction);
+        break;
+      }
+      case 'no': {
+        buttonsCollector.stop();
+        const abort = new Discord.MessageEmbed()
+          .setAuthor(lan.author, null, msg.client.constants.standard.invite)
+          .setDescription(lan.abort);
+        return replier({ msg, answer: interaction }, { embed: abort });
+      }
+    }
+    return null;
+  });
+  buttonsCollector.on('end', (collected, reason) => {
+    if (reason === 'time') msg.m.edit({ embeds: [embed], components: [] }).catch(() => {});
+  });
 };
