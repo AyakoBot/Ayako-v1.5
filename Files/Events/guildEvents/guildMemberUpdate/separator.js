@@ -154,42 +154,42 @@ module.exports = {
     obj.roles = [];
     obj.highestRole = {
       id: guild.roles.highest.id,
-      rawPosition: guild.roles.highest.rawPosition,
+      position: guild.roles.highest.position,
     };
     obj.clientHighestRole = {
       id: guild.members.cache.get(guild.client.user.id).roles.highest.id,
-      rawPosition: guild.members.cache.get(guild.client.user.id).roles.highest.rawPosition,
+      position: guild.members.cache.get(guild.client.user.id).roles.highest.position,
     };
     guild.members.cache.forEach((member) => {
       const roles = [];
       member.roles.cache.forEach((role) => {
-        roles.push({ id: role.id, rawPosition: role.rawPosition });
+        roles.push({ id: role.id, position: role.position });
       });
       obj.members.push({ id: member.user.id, roles });
     });
     guild.roles.cache.forEach((role) => {
-      obj.roles.push({ id: role.id, rawPosition: role.rawPosition });
+      obj.roles.push({ id: role.id, position: role.position });
     });
     res.rows.forEach((r) => {
       if (r.stoprole)
         obj.separators.push({
           separator: {
             id: r.separator,
-            rawPosition: guild.roles.cache.get(r.separator)?.rawPosition,
+            position: guild.roles.cache.get(r.separator)?.position,
           },
-          stoprole: { id: r.stoprole, rawPosition: guild.roles.cache.get(r.stoprole)?.rawPosition },
+          stoprole: { id: r.stoprole, position: guild.roles.cache.get(r.stoprole)?.position },
         });
       else
         obj.separators.push({
           separator: {
             id: r.separator,
-            rawPosition: guild.roles.cache.get(r.separator)?.rawPosition,
+            position: guild.roles.cache.get(r.separator)?.position,
           },
         });
       if (r.roles && r.roles.length)
         obj.roles.forEach((roleid) => {
           const role = guild.roles.cache.get(roleid);
-          obj.rowroles.push({ id: role.id, rawPosition: role.rawPosition });
+          obj.rowroles.push({ id: role.id, position: role.position });
         });
     });
     const worker = new Worker('./Files/Events/guildevents/guildMemberUpdate/separatorWorker.js', {

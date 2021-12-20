@@ -33,7 +33,7 @@ module.exports = {
           .setColor(con.color)
           .setThumbnail(ch.displayAvatarURL(user))
           .setTimestamp();
-        const roles = member.roles.cache.sort((a, b) => b.rawPosition - a.rawPosition);
+        const roles = member.roles.cache.sort((a, b) => b.position - a.position);
         const letters = 27 * roles.size;
         const maxFieldSize = 1024;
         if (roles.size > 0) {

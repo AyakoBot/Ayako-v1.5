@@ -24,27 +24,27 @@ async function start(data) {
           const stop = row.stoprole ? guildroles.get(row.stoprole) : null;
           const affectedRoles = [];
           if (stop) {
-            if (sep.rawPosition > stop.rawPosition)
+            if (sep.position > stop.position)
               for (
-                let i = stop.rawPosition + 1;
-                i < highestRole.rawPosition && i < sep.rawPosition;
+                let i = stop.position + 1;
+                i < highestRole.position && i < sep.position;
                 i += 1
               )
-                affectedRoles.push(guildroles.find((r) => r.rawPosition === i));
+                affectedRoles.push(guildroles.find((r) => r.position === i));
             else
               for (
-                let i = sep.rawPosition + 1;
-                i < highestRole.rawPosition && i < stop.rawPosition;
+                let i = sep.position + 1;
+                i < highestRole.position && i < stop.position;
                 i += 1
               )
-                affectedRoles.push(guildroles.find((r) => r.rawPosition === i));
-          } else if (sep.rawPosition < highestRole.rawPosition)
+                affectedRoles.push(guildroles.find((r) => r.position === i));
+          } else if (sep.position < highestRole.position)
             for (
-              let i = sep.rawPosition + 1;
-              i < highestRole.rawPosition && i < highestRole.rawPosition;
+              let i = sep.position + 1;
+              i < highestRole.position && i < highestRole.position;
               i += 1
             )
-              affectedRoles.push(guildroles.find((r) => r.rawPosition === i));
+              affectedRoles.push(guildroles.find((r) => r.position === i));
           const has = [];
           affectedRoles
             .map((o) => o)

@@ -32,8 +32,8 @@ module.exports = {
       return false;
     }
     if (
-      exec.roles.highest.rawPosition < member.roles.highest.rawPosition ||
-      exec.roles.highest.rawPosition === member.roles.highest.rawPosition
+      exec.roles.highest.position < member.roles.highest.position ||
+      exec.roles.highest.position === member.roles.highest.position
     ) {
       if (mexisted) {
         em.fields.pop();

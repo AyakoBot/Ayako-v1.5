@@ -58,8 +58,8 @@ module.exports = {
       }
     }
     if (
-      exec?.roles.highest.rawPosition < member?.roles.highest.rawPosition ||
-      exec?.roles.highest.rawPosition === member?.roles.highest.rawPosition
+      exec?.roles.highest.position < member?.roles.highest.position ||
+      exec?.roles.highest.position === member?.roles.highest.position
     ) {
       if (mexisted) {
         em.fields.pop();
@@ -70,8 +70,8 @@ module.exports = {
       return false;
     }
     if (
-      memberClient.roles.highest.rawPosition < member?.roles.highest.rawPosition ||
-      memberClient.roles.highest.rawPosition === member?.roles.highest.rawPosition ||
+      memberClient.roles.highest.position < member?.roles.highest.position ||
+      memberClient.roles.highest.position === member?.roles.highest.position ||
       !memberClient.permissions.has(268435456n)
     ) {
       if (mexisted) {

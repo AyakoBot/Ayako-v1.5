@@ -24,7 +24,7 @@ module.exports = {
         .addField(language.solution, msg.client.ch.makeCodeBlock(lan.error.roleManagedSolution));
       return msg.client.ch.reply(msg, Embed);
     }
-    if (msg.guild.me.roles.highest.rawPosition <= role.rawPosition) {
+    if (msg.guild.me.roles.highest.position <= role.position) {
       Embed.setAuthor(
         language.error,
         msg.client.constants.standard.errorImage,
