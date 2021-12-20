@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 module.exports = {
   async execute(oldRole, newRole) {
     const client = oldRole ? oldRole.client : newRole.client;
-    if (oldRole.rawPosition !== newRole.rawPosition) return; // flawed logic
+    if (oldRole.position !== newRole.position) return; // flawed logic
     const { ch } = client;
     const Constants = client.constants;
     const regexes = {

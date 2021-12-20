@@ -32,8 +32,8 @@ module.exports = {
             } else if (user.id !== msg.author.id) {
               const member = await msg.guild.members.fetch(user.id).catch(() => {});
               if (member) {
-                if (+msg.member.roles.highest.rawPosition > +member.roles.highest.rawPosition) {
-                  if (+msg.member.roles.highest.rawPosition !== +member.roles.highest.rawPosition) {
+                if (+msg.member.roles.highest.position > +member.roles.highest.position) {
+                  if (+msg.member.roles.highest.position !== +member.roles.highest.position) {
                     if (member.bannable) users.push(user);
                     else failed.push(`${arg} ${msg.lan.iCant}`);
                   } else failed.push(`${arg} ${msg.lan.youCant}`);
@@ -53,8 +53,8 @@ module.exports = {
           } else if (user.id !== msg.author.id) {
             const member = await msg.guild.members.fetch(user.id).catch(() => {});
             if (member) {
-              if (+msg.member.roles.highest.rawPosition > +member.roles.highest.rawPosition) {
-                if (+msg.member.roles.highest.rawPosition !== +member.roles.highest.rawPosition) {
+              if (+msg.member.roles.highest.position > +member.roles.highest.position) {
+                if (+msg.member.roles.highest.position !== +member.roles.highest.position) {
                   if (member.bannable) users.push(user);
                   else failed.push(`${arg} ${msg.lan.iCant}`);
                 } else failed.push(`${arg} ${msg.lan.youCant}`);

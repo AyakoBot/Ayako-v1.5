@@ -23,8 +23,8 @@ module.exports = {
     const member = await msg.guild.members.fetch(target.id).catch(() => {});
     const exec = await msg.guild.members.fetch(executor.id).catch(() => {});
     if (
-      exec?.roles.highest.rawPosition < member?.roles.highest.rawPosition ||
-      exec?.roles.highest.rawPosition === member?.roles.highest.rawPosition
+      exec?.roles.highest.position < member?.roles.highest.position ||
+      exec?.roles.highest.position === member?.roles.highest.position
     ) {
       if (mexisted) {
         em.fields.pop();

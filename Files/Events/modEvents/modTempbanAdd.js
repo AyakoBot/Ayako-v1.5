@@ -24,7 +24,7 @@ module.exports = {
       else msg.m = await msg.client.ch.reply(msg, em);
       const member = await msg.guild.members.fetch(target.id).catch(() => {});
       const exec = await msg.guild.members.fetch(executor.id).catch(() => {});
-      if (exec?.roles.highest.rawPosition <= member?.roles.highest.rawPosition) {
+      if (exec?.roles.highest.position <= member?.roles.highest.position) {
         if (mexisted) {
           em.fields.pop();
           em.addField('\u200b', `${msg.client.constants.emotes.cross} ${lan.exeNoPerms}`);

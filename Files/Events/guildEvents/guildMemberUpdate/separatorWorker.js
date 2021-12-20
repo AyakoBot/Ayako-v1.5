@@ -20,19 +20,19 @@ async function start(wd) {
             const affectedRoles = [];
             const roles = obj.roles.map((o) => o);
             if (row.stoprole) {
-              if (sep.rawPosition > stop.rawPosition)
-                for (let i = stop.rawPosition + 1; i < roles.length && i < sep.rawPosition; i += 1)
-                  affectedRoles.push(obj.roles.find((r) => r.rawPosition === i));
+              if (sep.position > stop.position)
+                for (let i = stop.position + 1; i < roles.length && i < sep.position; i += 1)
+                  affectedRoles.push(obj.roles.find((r) => r.position === i));
               else
-                for (let i = sep.rawPosition + 1; i < roles.length && i < stop.rawPosition; i += 1)
-                  affectedRoles.push(obj.roles.find((r) => r.rawPosition === i));
-            } else if (sep.rawPosition < obj.highestRole.rawPosition)
+                for (let i = sep.position + 1; i < roles.length && i < stop.position; i += 1)
+                  affectedRoles.push(obj.roles.find((r) => r.position === i));
+            } else if (sep.position < obj.highestRole.position)
               for (
-                let i = sep.rawPosition + 1;
-                i < roles.length && i < obj.highestRole.rawPosition;
+                let i = sep.position + 1;
+                i < roles.length && i < obj.highestRole.position;
                 i += 1
               )
-                affectedRoles.push(obj.roles.find((r) => r.rawPosition === i));
+                affectedRoles.push(obj.roles.find((r) => r.position === i));
             const has = [];
             affectedRoles.forEach((role) => {
               if (role) {
@@ -43,13 +43,13 @@ async function start(wd) {
             if (
               has.includes(true) &&
               !member.roles.map((o) => o.id).includes(sep.id) &&
-              obj.clientHighestRole.rawPosition > sep.rawPosition
+              obj.clientHighestRole.position > sep.position
             )
               giveThese.push(sep.id);
             else if (
               !has.includes(true) &&
               member.roles.map((o) => o.id).includes(sep.id) &&
-              obj.clientHighestRole.rawPosition > sep.rawPosition
+              obj.clientHighestRole.position > sep.position
             )
               takeThese.push(sep.id);
           } else {
@@ -61,13 +61,13 @@ async function start(wd) {
             if (
               has.includes(true) &&
               !member.roles.map((o) => o.id).includes(sep.id) &&
-              obj.clientHighestRole.rawPosition > sep.rawPosition
+              obj.clientHighestRole.position > sep.position
             )
               giveThese.push(sep.id);
             else if (
               !has.includes(true) &&
               member.roles.map((o) => o.id).includes(sep.id) &&
-              obj.clientHighestRole.rawPosition > sep.rawPosition
+              obj.clientHighestRole.position > sep.position
             )
               takeThese.push(sep.id);
           }
