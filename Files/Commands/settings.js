@@ -236,7 +236,7 @@ module.exports = {
           }
           case 'list': {
             await interaction.deferReply().catch(() => {});
-            singleRowDisplay(res.rows[interaction.values[0] - 1], interaction);
+            singleRowDisplay(res.rows[interaction.values[0]], interaction);
             buttonsCollector.stop();
             break;
           }
