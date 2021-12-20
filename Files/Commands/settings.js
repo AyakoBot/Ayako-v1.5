@@ -627,7 +627,6 @@ const mmrEditList = async (msgData, sendData) => {
         await interaction.deferReply();
         const row = res.rows.find((r) => r.id === Number(interaction.values[0]));
 
-        console.log(row);
         singleRowEdit({ msg, answer: interaction }, { row, res }, null, true);
         buttonsCollector.stop();
         break;
