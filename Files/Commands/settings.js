@@ -151,8 +151,6 @@ module.exports = {
     };
 
     const mmrDisplay = async (answer) => {
-      if (!answer) await rower(msg);
-
       msg.lanSettings = msg.language.commands.settings;
       msg.lan = msg.lanSettings[msg.file.name];
       msg.client.constants.commands.settings.editReq.splice(2, 1);
@@ -284,27 +282,6 @@ const noEmbed = (msg) => {
     .setDescription(msg.language.commands.settings.noEmbed.desc);
   msg.client.ch.reply(msg, { embeds: [embed] });
 };
-
-async function rower(msg) {
-  const res = await msg.client.ch.query(
-    `SELECT * FROM ${
-      msg.client.constants.commands.settings.tablenames[msg.file.name][0]
-    } ORDER BY uniquetimestamp ASC;`,
-  );
-  if (!res || res.rowCount === 0) return;
-  if (!res.rows[0].uniquetimestamp) return;
-
-  const promises = res.rows.map((row, i) => {
-    res.rows[i].id = i + 1;
-    return msg.client.ch.query(
-      `UPDATE ${
-        msg.client.constants.commands.settings.tablenames[msg.file.name][0]
-      } SET id = $1 WHERE uniquetimestamp = $2;`,
-      [res.rows[i].id, res.rows[i].uniquetimestamp],
-    );
-  });
-  await Promise.all(promises);
-}
 
 const replier = async (msgData, sendData) => {
   const { msg, answer } = msgData;
