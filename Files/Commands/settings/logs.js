@@ -7,7 +7,7 @@ module.exports = {
     const embed = new Discord.MessageEmbed().addFields(
       {
         name: '\u200b',
-        value: `**${msg.lan.logName}**`,
+        value: `**${msg.lan.discordLogs}**`,
         inline: false,
       },
       {
@@ -138,7 +138,7 @@ module.exports = {
       },
       {
         name: '\u200b',
-        value: `**${msg.lan.logName}**`,
+        value: `**${msg.lan.ayakoLogs}**`,
         inline: false,
       },
       {
