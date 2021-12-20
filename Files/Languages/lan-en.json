@@ -801,6 +801,10 @@
       "select": "Select the Entry",
       "desc": "Select the Entry below"
     },
+    "uniquetimestamp": {
+      "select": "Select the Entry",
+      "desc": "Select the Entry below"
+    },
     "column": {
       "select": "Select the Column you want to edit",
       "desc": "Select the Column you want to edit below"
@@ -1392,6 +1396,9 @@
       "noEmbed": {
         "author": "Ayako Settings",
         "desc": "No Settings available for the selected Setting"
+      },
+      "errors": {
+        "faultyInput": "Error, DataBase input faulty. Please contact Support on {{support}}"
       },
       "fails": {
         "user": "I couldn't find this User",
@@ -2679,7 +2686,7 @@
           "separator": {
             "name": "Separator-Role",
             "answers": "`Mention or ID`",
-            "recommended": "The Separator Role, it will be applied to Members if they fulfill following conditions:\n**Self-Adapting `True`**: \nLooking at the Role list of the Server, The Separator Role will be applied if a Member gains any Role between the Seaprator and the Stop Role, if no Stop Role is defined it stops at the top of the Role List. Any Role moved between these 2 Roles or above the Separator Role will instantly start triggering the Separator Role\n\n**Self-Adapting `False`**:\nThe Separator Role will be assinged to Members with at least one of the defined Roles",
+            "recommended": "The Separator Role, it will be applied to Members if they fulfill following conditions:\n**Self-Adapting `True`**: \nLooking at the Role list of the Server, the Separator Role will be applied if a Member gains any Role between the Seaprator and the Stop Role.\nIf no Stop Role is defined it stops at the top of the Role List.\nAny Role moved between these 2 Roles or above the Separator Role will instantly start triggering the Separator Role\n\n**Self-Adapting `False`**:\nThe Separator Role will be assinged to Members with at least one of the defined Roles",
             "fail": {
               "no": "I couldn't find this Role\n",
               "wrongGuild": "This Role is not Part of this Server\n"

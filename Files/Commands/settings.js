@@ -7,7 +7,7 @@ module.exports = {
   dm: false,
   takesFirstArg: false,
   aliases: null,
-  async execute(msg) {
+  async execute(msg, answer) {
     const settings = new Discord.Collection();
     const settingsFiles = fs
       .readdirSync('./Files/Commands/settings')
@@ -103,7 +103,7 @@ module.exports = {
       msg.lan = msg.language.commands.settings[settingsFile.name];
       msg.lanSettings = msg.language.commands.settings;
 
-      whereToGo(msg);
+      whereToGo(msg, answer);
     }
     return null;
   },
@@ -140,7 +140,7 @@ module.exports = {
         if (interaction.user.id === msg.author.id) {
           if (interaction.customId === 'edit') {
             buttonsCollector.stop();
-            singleRowEdit({ msg, answer: interaction }, row, embed, false);
+            singleRowEdit({ msg, answer: interaction }, { row, res }, embed, false);
           }
         } else msg.client.ch.notYours(interaction, msg);
       });
@@ -164,6 +164,11 @@ module.exports = {
         [msg.guild.id],
       );
 
+      if (!res.rows[0].id) {
+        res.rows.forEach((row, i) => {
+          res.rows[i].id = i;
+        });
+      }
       let embed = new Discord.MessageEmbed();
 
       if (res && res.rowCount > 0) {
@@ -196,7 +201,7 @@ module.exports = {
               ? `| ${getIdentifier(msg, settingsConstant, row)}`
               : ''
           }`,
-          value: row.id,
+          value: `${row.id}`,
         });
       });
 
@@ -351,7 +356,7 @@ const getMMRListButtons = (msg, options, editView) => {
     .setMaxValues(1)
     .setMinValues(1)
     .setPlaceholder(msg.language.select.id.select)
-    .setOptions(options.take);
+    .setOptions(options.take.length ? options.take : { label: '--', value: '0' });
 
   if (editView) {
     const add = new Discord.MessageButton()
@@ -407,13 +412,19 @@ const mmrEditList = async (msgData, sendData) => {
   const { msg } = msgData;
   const { res } = sendData;
 
+  if (!res.rows[0]?.id) {
+    res.rows.forEach((row, i) => {
+      res.rows[i].id = i;
+    });
+  }
+
   const mmrRemove = async (answer) => {
     const removeLanguage = msg.lanSettings[msg.file.name].otherEdits.remove;
 
     const required = {
-      key: 'id',
+      key: 'uniquetimestamp',
       value: removeLanguage.process[0],
-      assinger: msg.client.constants.commands.settings.edit[msg.file.name].id,
+      assinger: 'id',
       required: true,
     };
 
@@ -424,25 +435,27 @@ const mmrEditList = async (msgData, sendData) => {
       {},
       res,
     );
+
     if (!returnedData) return null;
     answer = returnedData.interaction;
 
     const { values } = returnedData;
-    values.uniquetimestamp = res.rows[values.id - 1].uniquetimestamp;
+    values.uniquetimestamp = res.rows.find((f) => f.id === Number(values.id)).uniquetimestamp;
 
     const table = msg.client.constants.commands.settings.tablenames[msg.file.name][0];
 
-    return msg.client.ch.query(`DELETE FROM ${table} WHERE id = $1 AND uniquetimestamp = $2;`, [
-      values.id,
+    await msg.client.ch.query(`DELETE FROM ${table} WHERE uniquetimestamp = $1;`, [
       values.uniquetimestamp,
     ]);
+
+    return module.exports.execute(msg, answer);
   };
 
   const mmrAddRepeater = async (answer, embed, addLanguage, steps, insertedValues, row) => {
     const { requiredSteps, currentStep } = steps;
 
-    if (requiredSteps.length === currentStep + 1) {
-      return insertedValues;
+    if (requiredSteps.length <= currentStep) {
+      return answer;
     }
 
     const keyOfCurStep =
@@ -452,7 +465,7 @@ const mmrEditList = async (msgData, sendData) => {
     const required = {
       key: DataOfCurStep.key,
       value: addLanguage.process[currentStep],
-      assinger: DataOfCurStep,
+      assinger: keyOfCurStep,
       required: DataOfCurStep.required,
     };
 
@@ -470,6 +483,7 @@ const mmrEditList = async (msgData, sendData) => {
       editor.execute(msg, required, insertedValues);
     }
 
+    steps.currentStep += 1;
     return mmrAddRepeater(answer, embed, addLanguage, steps, insertedValues, row);
   };
 
@@ -483,21 +497,25 @@ const mmrEditList = async (msgData, sendData) => {
       msg.client.constants.standard.invite,
     );
 
-    const values = await mmrAddRepeater(
+    const insertedValues = {};
+
+    const repeaterDone = await mmrAddRepeater(
       answer,
       embed,
       addLanguage,
       { requiredSteps, currentStep: 0 },
-      {},
+      insertedValues,
       row,
     );
 
-    values.uniquetimestamp = Date.now();
-    values.id = res.rows.length + 1;
-    values.guildid = msg.guild.id;
+    if (!repeaterDone) return;
+
+    insertedValues.uniquetimestamp = Date.now();
+    insertedValues.id = res.rows.length + 1;
+    insertedValues.guildid = msg.guild.id;
 
     const tables = msg.client.constants.commands.settings.tablenames[msg.file.name];
-    tables.forEach(async (table, i) => {
+    const promises = tables.map(async (table, i) => {
       let tableRes;
       if (i !== 0) {
         tableRes = await msg.client.ch.query(`SELECT * FROM ${table} WHERE guildid = $1;`, [
@@ -509,14 +527,36 @@ const mmrEditList = async (msgData, sendData) => {
         const vals = msg.client.constants.commands.settings.setupQueries[msg.file.name].vals[i];
 
         const valueIdentifier = cols.split(/, +/).map((collumn, j) => `$${j + 1}`);
-        const valuesSTP = vals.map((value) => msg.client.ch.stp(`${value}`, { values, msg }));
+        const valuesSTP = vals.map((value) =>
+          msg.client.ch.stp(`${value}`, { values: insertedValues, msg }),
+        );
 
-        msg.client.ch.query(
+        const faultyInput = valueIdentifier.map(
+          (val) => val.startsWith('{{') && val.endsWith('}}'),
+        );
+        if (faultyInput.includes(true)) {
+          msg.channel.send({
+            content: msg.client.ch.stp(msg.language.commands.settings.errors.faultyInput, {
+              support: msg.client.constants.standard.support,
+            }),
+          });
+          throw new Error(
+            `faultyInput: INSERT INTO ${table}(${cols}) VALUES(${valueIdentifier.join(
+              ', ',
+            )}); ${valuesSTP}`,
+          );
+        }
+
+        await msg.client.ch.query(
           `INSERT INTO ${table} (${cols}) VALUES (${valueIdentifier.join(', ')});`,
           valuesSTP,
         );
       }
     });
+
+    await Promise.all(promises);
+
+    module.exports.execute(msg, repeaterDone);
   };
 
   const { answer } = msgData;
@@ -540,7 +580,7 @@ const mmrEditList = async (msgData, sendData) => {
       label: `${row.id} ${
         settingsConstant.removeIdent !== '' ? `| ${getIdentifier(msg, settingsConstant, row)}` : ''
       }`,
-      value: row.id,
+      value: `${row.id}`,
     });
   });
 
@@ -585,12 +625,10 @@ const mmrEditList = async (msgData, sendData) => {
       }
       case 'list': {
         await interaction.deferReply();
-        singleRowEdit(
-          { msg, answer: interaction },
-          res.rows[interaction.values[0] - 1],
-          null,
-          true,
-        );
+        const row = res.rows.find((r) => r.id === Number(interaction.values[0]));
+
+        console.log(row);
+        singleRowEdit({ msg, answer: interaction }, { row, res }, null, true);
         buttonsCollector.stop();
         break;
       }
@@ -603,8 +641,9 @@ const mmrEditList = async (msgData, sendData) => {
   });
 };
 
-const singleRowEdit = async (msgData, row, embed, comesFromMMR) => {
+const singleRowEdit = async (msgData, resData, embed, comesFromMMR) => {
   const { msg, answer } = msgData;
+  const { row, res } = resData;
 
   if (!embed) {
     embed = msg.file.displayEmbed(msg, row);
@@ -632,7 +671,13 @@ const singleRowEdit = async (msgData, row, embed, comesFromMMR) => {
 
   const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
   buttonsCollector.on('collect', async (interaction) => {
-    if (interaction.user.id !== msg.author.id) return msg.client.ch.notYours(interaction, msg);
+    if (interaction.user.id !== msg.author.id) {
+      return msg.client.ch.notYours(interaction, msg);
+    }
+    if (interaction.customId === 'back') {
+      buttonsCollector.stop();
+      return mmrEditList({ msg, answer: interaction }, { res });
+    }
 
     const [editKey] = Object.entries(msg.lanSettings[msg.file.name].edit)
       .map(([key, value]) => {
@@ -642,7 +687,7 @@ const singleRowEdit = async (msgData, row, embed, comesFromMMR) => {
       .filter((f) => !!f);
 
     buttonsCollector.stop();
-    await changing({ msg, answer: interaction }, { usedKey: editKey, row, comesFromMMR });
+    await changing({ msg, answer: interaction }, { usedKey: editKey, comesFromMMR }, { row, res });
 
     return null;
   });
@@ -670,7 +715,7 @@ const whereToGo = async (msg, answer) => {
       [msg.guild.id],
     );
     if (msg.file.setupRequired === false) return mmrEditList({ msg, answer }, { res });
-    singleRowEdit({ msg, answer }, res.rows[0]);
+    singleRowEdit({ msg, answer }, { row: res.rows[0], res });
   }
   return null;
 };
@@ -690,7 +735,7 @@ const editorInteractionHandler = async (msgData, editorData, row, res) => {
 
   insertedValues[required.assinger] = row[required.assinger]?.length
     ? msg.client.ch.objectClone(row[required.assinger])
-    : msg.language.none;
+    : null;
 
   const passObject =
     typeof editor.dataPreparation === 'function'
@@ -702,21 +747,26 @@ const editorInteractionHandler = async (msgData, editorData, row, res) => {
       ? editor.getSelected(msg, insertedValues, required, passObject)
       : 'noSelect';
 
-  const embed = new Discord.MessageEmbed()
-    .addField(
-      ' \u200b',
-      `${languageOfKey.recommended ? `${languageOfKey.recommended}\n` : ''}${
-        languageOfKey.desc ? languageOfKey.desc : ''
-      }`,
-    )
-    .setTitle(msg.client.ch.stp(languageOfKey.name, { row: row || '--' }))
-    .setAuthor(
-      msg.client.ch.stp(msg.lanSettings.authorEdit, {
-        type: languageOfSetting.type,
-      }),
-      msg.client.constants.emotes.settingsLink,
-      msg.client.constants.standard.invite,
-    );
+  const embed = new Discord.MessageEmbed();
+  if (required.assinger !== 'id') {
+    embed
+      .addField(
+        ' \u200b',
+        `${languageOfKey.recommended ? `${languageOfKey.recommended}\n` : ''}${
+          languageOfKey.desc ? languageOfKey.desc : ''
+        }`,
+      )
+      .setTitle(msg.client.ch.stp(languageOfKey.name, { row: row || '--' }));
+  } else {
+    embed.addField(' \u200b', `${msg.language.select.id.desc}`).setTitle(msg.language.id);
+  }
+  embed.setAuthor(
+    msg.client.ch.stp(msg.lanSettings.authorEdit, {
+      type: languageOfSetting.type,
+    }),
+    msg.client.constants.emotes.settingsLink,
+    msg.client.constants.standard.invite,
+  );
 
   if (editor.requiresMenu) {
     embed.addField(msg.language.page, `\`1/${Math.ceil(Objects.options.length / 25)}\``);
@@ -724,7 +774,7 @@ const editorInteractionHandler = async (msgData, editorData, row, res) => {
 
   if (selected !== 'noSelect') {
     embed.setDescription(
-      `**${msg.language.selected}:**\n${selected.length ? selected : msg.language.none}`,
+      `**${msg.language.selected}:**\n${selected?.length ? selected : msg.language.none}`,
     );
   }
 
@@ -735,7 +785,7 @@ const editorInteractionHandler = async (msgData, editorData, row, res) => {
       rawButtons:
         typeof editor.buttons === 'function'
           ? editor.buttons(msg, passObject, insertedValues, required, row)
-          : standardButtons(msg, passObject, insertedValues, required, row, editor),
+          : await standardButtons(msg, passObject, insertedValues, required, row, editor),
     },
   );
 
@@ -756,10 +806,11 @@ const editorInteractionHandler = async (msgData, editorData, row, res) => {
   );
 };
 
-const changing = async (msgData, editData) => {
+const changing = async (msgData, editData, resData) => {
   const { msg } = msgData;
   let { answer } = msgData;
-  const { usedKey, row, comesFromMMR } = editData;
+  const { usedKey, comesFromMMR } = editData;
+  const { row, res } = resData;
 
   const settings = msg.client.constants.commands.settings.edit[msg.file.name];
   const editor = msg.client.settingsEditors.find((f) =>
@@ -802,7 +853,7 @@ const changing = async (msgData, editData) => {
 
   const embed = msg.file.displayEmbed(msg, row);
 
-  return singleRowEdit({ msg, answer }, row, embed, comesFromMMR);
+  return singleRowEdit({ msg, answer }, { row, res }, embed, comesFromMMR);
 };
 
 const dbUpdate = (msg, editData) => {
@@ -813,7 +864,8 @@ const dbUpdate = (msg, editData) => {
     msg.client.ch.query(
       `UPDATE ${tableName} SET ${required.assinger} = $1 WHERE guildid = $2 AND uniquetimestamp = $3;`,
       [
-        insertedValues[required.assinger].length || insertedValues[required.assinger] !== undefined
+        (insertedValues[required.assinger] && insertedValues[required.assinger].length) ||
+        insertedValues[required.assinger] !== undefined
           ? insertedValues[required.assinger]
           : null,
         msg.guild.id,
@@ -822,7 +874,8 @@ const dbUpdate = (msg, editData) => {
     );
   } else {
     msg.client.ch.query(`UPDATE ${tableName} SET ${required.assinger} = $1 WHERE guildid = $2;`, [
-      insertedValues[required.assinger].length || insertedValues[required.assinger] !== undefined
+      (insertedValues[required.assinger] && insertedValues[required.assinger].length) ||
+      insertedValues[required.assinger] !== undefined
         ? insertedValues[required.assinger]
         : null,
       msg.guild.id,
@@ -859,7 +912,7 @@ const log = async (msg, editData) => {
   const res = await msg.client.ch.query('SELECT settingslog FROM logchannels WHERE guildid = $1;', [
     msg.guild.id,
   ]);
-  const channels = res.rows[0].settingslog
+  const channels = res?.rows[0]?.settingslog
     ?.map((id) =>
       typeof msg.client.channels.cache.get(id)?.send === 'function'
         ? msg.client.channels.cache.get(id)
@@ -895,18 +948,24 @@ const buttonHandler = async (msgData, editData, languageData) => {
               }
             });
           } else {
-            let isString = true;
-            const typeRes = await msg.client.ch.query(
-              `SELECT pg_typeof(${required.assinger}) FROM ${
-                msg.client.constants.commands.settings.tablenames[msg.file.name][0]
-              } LIMIT 1;`,
-            );
-            if (typeRes && typeRes.rowCount > 0) {
-              isString = !typeRes.rows[0].pg_typeof.endsWith('[]');
+            let isString;
+            if (required.assinger !== 'id') {
+              const typeRes = await msg.client.ch.query(
+                `SELECT pg_typeof(${required.assinger}) FROM ${
+                  msg.client.constants.commands.settings.tablenames[msg.file.name][0]
+                } LIMIT 1;`,
+              );
+              if (typeRes && typeRes.rowCount > 0) {
+                isString = !typeRes.rows[0].pg_typeof.endsWith('[]');
+              }
+            } else {
+              isString = true;
             }
-            insertedValues[required.assinger] = isString
-              ? interaction.values[0]
-              : interaction.values;
+            if (interaction.values) {
+              insertedValues[required.assinger] = isString
+                ? interaction.values[0]
+                : interaction.values;
+            }
           }
 
           const returnedObject =
@@ -925,24 +984,31 @@ const buttonHandler = async (msgData, editData, languageData) => {
                   editor,
                 );
 
-          if (!returnedObject) break;
-          else embed = returnedObject.returnEmbed;
+          if (!returnedObject) {
+            buttonsCollector.stop();
+            break;
+          }
+          embed = returnedObject.returnEmbed;
 
-          embed
-            .addField(
-              ' \u200b',
-              `${languageOfKey.recommended ? `${languageOfKey.recommended}\n` : ''}${
-                languageOfKey.desc ? languageOfKey.desc : ''
-              }`,
-            )
-            .setTitle(msg.client.ch.stp(languageOfKey.name, { row: row || '--' }))
-            .setAuthor(
-              msg.client.ch.stp(msg.lanSettings.authorEdit, {
-                type: languageOfSetting.type,
-              }),
-              msg.client.constants.emotes.settingsLink,
-              msg.client.constants.standard.invite,
-            );
+          if (required.assinger !== 'id') {
+            embed
+              .addField(
+                ' \u200b',
+                `${languageOfKey.recommended ? `${languageOfKey.recommended}\n` : ''}${
+                  languageOfKey.desc ? languageOfKey.desc : ''
+                }`,
+              )
+              .setTitle(msg.client.ch.stp(languageOfKey.name, { row: row || '--' }));
+          } else {
+            embed.addField(' \u200b', `${msg.language.select.id.desc}`).setTitle(msg.language.id);
+          }
+          embed.setAuthor(
+            msg.client.ch.stp(msg.lanSettings.authorEdit, {
+              type: languageOfSetting.type,
+            }),
+            msg.client.constants.emotes.settingsLink,
+            msg.client.constants.standard.invite,
+          );
 
           if (editor.requiresMenu) {
             embed.addField(msg.language.page, `\`1/${Math.ceil(Objects.options.length / 25)}\``);
@@ -954,7 +1020,7 @@ const buttonHandler = async (msgData, editData, languageData) => {
               rawButtons:
                 typeof editor.buttons === 'function'
                   ? editor.buttons(msg, passObject, insertedValues, required, row)
-                  : standardButtons(msg, passObject, insertedValues, required, row, editor),
+                  : await standardButtons(msg, passObject, insertedValues, required, row, editor),
               embed,
             },
           );
@@ -1002,7 +1068,7 @@ const buttonHandler = async (msgData, editData, languageData) => {
               rawButtons:
                 typeof editor.buttons === 'function'
                   ? editor.buttons(msg, passObject, insertedValues, required, row)
-                  : standardButtons(msg, passObject, insertedValues, required, row, editor),
+                  : await standardButtons(msg, passObject, insertedValues, required, row, editor),
               embed,
             },
           );
@@ -1039,7 +1105,7 @@ const buttonHandler = async (msgData, editData, languageData) => {
               rawButtons:
                 typeof editor.buttons === 'function'
                   ? editor.buttons(msg, passObject, insertedValues, required, row)
-                  : standardButtons(msg, passObject, insertedValues, required, row, editor),
+                  : await standardButtons(msg, passObject, insertedValues, required, row, editor),
               embed,
             },
           );
@@ -1099,7 +1165,7 @@ const messageHandler = async (msgData, editData, languageData, Objects) => {
         rawButtons:
           typeof editor.buttons === 'function'
             ? editor.buttons(msg, passObject, insertedValues, required, row)
-            : standardButtons(msg, passObject, insertedValues, required, row, editor),
+            : await standardButtons(msg, passObject, insertedValues, required, row, editor),
         embed: returnEmbed,
       },
     );
@@ -1130,17 +1196,35 @@ const interactionHandler = (msgData, preparedData, insertedValues, required, edi
   return { returnEmbed };
 };
 
-const standardButtons = (msg, preparedData, insertedValues, required, row, editor) => {
+const standardButtons = async (msg, preparedData, insertedValues, required, row, editor) => {
   const { Objects } = preparedData;
   const returnedButtons = [];
 
-  let doneDisabled = true;
-  if (Array.isArray(insertedValues[required.assinger])) {
+  let doneDisabled = false;
+  let isString = true;
+
+  if (required.assinger !== 'id') {
+    const typeRes = await msg.client.ch.query(
+      `SELECT pg_typeof(${required.assinger}) FROM ${
+        msg.client.constants.commands.settings.tablenames[msg.file.name][0]
+      } LIMIT 1;`,
+    );
+    if (typeRes && typeRes.rowCount > 0) {
+      isString = !typeRes.rows[0].pg_typeof.endsWith('[]');
+    }
+  } else {
+    isString = true;
+  }
+
+  if (!isString) {
     doneDisabled =
       msg.client.ch.arrayEquals(insertedValues[required.assinger], row[required.assinger]) ||
-      (!insertedValues[required.assinger].length && required.required);
+      (insertedValues[required.assinger] &&
+        !insertedValues[required.assinger].length &&
+        required.required);
   } else {
-    doneDisabled = !insertedValues[required.assinger];
+    doneDisabled =
+      !insertedValues[required.assinger] || insertedValues[required.assinger] === msg.language.none;
   }
 
   if (editor.requiresMenu) {

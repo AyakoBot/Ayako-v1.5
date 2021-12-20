@@ -1,5 +1,5 @@
 module.exports = {
-  key: ['id', 'ids'],
+  key: ['uniquetimestamp'],
   requiresMenu: true,
   requiresInteraction: true,
   dataPreparation(msg, editorData, row, res) {
@@ -9,8 +9,8 @@ module.exports = {
 
     res.rows.forEach((element) => {
       const inserted = {
-        label: element[setupQuery.ident],
-        value: element.id,
+        label: `${element.id} | ${getIdentifier(msg, setupQuery, element)}`,
+        value: `${element.id}`,
       };
 
       if (
@@ -32,25 +32,35 @@ module.exports = {
   },
   getSelected(msg, insertedValues, required) {
     if (insertedValues[required.assinger]) {
-      switch (required.key.endsWith('s')) {
-        default: {
-          return insertedValues[required.assinger]
-            ? insertedValues[required.assinger]
-            : msg.language.none;
-        }
-        case true: {
-          return insertedValues[required.assinger] &&
-            insertedValues[required.assinger].length &&
-            Array.isArray(insertedValues[required.assinger])
-            ? insertedValues[required.assinger]
-                .map((value) => {
-                  return `${value}`;
-                })
-                .join(', ')
-            : msg.language.none;
-        }
-      }
+      return Number.isNaN(+insertedValues[required.assinger])
+        ? msg.language.none
+        : insertedValues[required.assinger];
     }
     return null;
   },
+};
+
+const getIdentifier = (msg, settingsConstant, row) => {
+  let identifier;
+
+  switch (settingsConstant.identType) {
+    default: {
+      identifier = row[settingsConstant.ident];
+      break;
+    }
+    case 'role': {
+      identifier = msg.guild.roles.cache
+        .get(row[settingsConstant.ident])
+        ?.name.replace(/\W{2}/gu, '');
+      break;
+    }
+    case 'channel': {
+      identifier = msg.guild.channels.cache
+        .get(row[settingsConstant.ident])
+        ?.name.replace(/\W{2}/gu, '');
+      break;
+    }
+  }
+
+  return identifier;
 };

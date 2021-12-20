@@ -7,7 +7,7 @@ module.exports = {
 
     const cacheName = required.key.endsWith('s') ? required.key : `${required.key}s`;
     const cache = msg.guild[cacheName].cache
-      .sort((a, b) => a.rawPosition - b.rawPosition)
+      .sort((a, b) => a.position - b.position)
       .filter((value) => {
         if (cacheName === 'roles') {
           return value;
@@ -37,6 +37,7 @@ module.exports = {
 
       if (
         Array.isArray(insertedValues[required.assinger]) &&
+        insertedValues &&
         insertedValues[required.assinger].includes(element.id)
       ) {
         inserted.emoji = msg.client.constants.emotes.minusBGID;
@@ -59,12 +60,16 @@ module.exports = {
         switch (required.key.endsWith('s')) {
           default: {
             if (cacheName === 'roles') {
-              return `<@&${insertedValues[required.assinger]}>`;
+              return Number.isNaN(+insertedValues[required.assinger])
+                ? msg.language.none
+                : `<@&${insertedValues[required.assinger]}>`;
             }
             if (cacheName === 'channels') {
-              return `<#${insertedValues[required.assinger]}>`;
+              return Number.isNaN(+insertedValues[required.assinger])
+                ? msg.language.none
+                : `<#${insertedValues[required.assinger]}>`;
             }
-            throw new Error(`Invalid cacheName: ${cacheName}`);
+            return msg.language.none;
           }
           case true: {
             if (cacheName === 'roles') {
@@ -85,11 +90,11 @@ module.exports = {
                     .join(', ')
                 : msg.language.none;
             }
-            throw new Error(`Invalid cacheName: ${cacheName}`);
+            return msg.language.none;
           }
         }
       }
     }
-    throw new Error(`Invalid cacheName: ${cacheName}`);
+    return msg.language.none;
   },
 };
