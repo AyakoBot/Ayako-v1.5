@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 
 module.exports = {
-  key: ['permissions', 'permission'],
+  key: ['permissions'],
   requiresMenu: true,
   requiresInteraction: true,
   dataPreparation(msg, editorData) {
@@ -21,10 +21,7 @@ module.exports = {
         value: `${bits}`,
       };
 
-      if (
-        Array.isArray(insertedValues[required.assinger]) &&
-        insertedValues[required.assinger].includes(bits)
-      ) {
+      if (new Discord.BitField(Number(insertedValues[required.assinger])).has(Number(bits))) {
         inserted.emoji = msg.client.constants.emotes.minusBGID;
       } else {
         inserted.emoji = msg.client.constants.emotes.plusBGID;
@@ -39,28 +36,50 @@ module.exports = {
 
     return { Objects };
   },
+  interactionHandler(msgData, passObject, insertedValues, required) {
+    const { msg, answer } = msgData;
+
+    if (!insertedValues[required.assinger]) {
+      insertedValues[required.assinger] = Number(answer.values[0]);
+      answer.values.shift();
+    }
+
+    const bitField = new Discord.BitField(insertedValues[required.assinger]);
+
+    answer.values.forEach((value) => {
+      const val = Number(value);
+
+      if (bitField.has(val)) {
+        insertedValues[required.assinger] = Number(insertedValues[required.assinger]) - Number(val);
+      } else {
+        insertedValues[required.assinger] = Number(insertedValues[required.assinger]) + Number(val);
+      }
+    });
+
+    const selected = this.getSelected(msg, insertedValues, required);
+
+    const returnEmbed = new Discord.MessageEmbed().setDescription(
+      `**${msg.language.selected}:**\n${selected?.length ? selected : msg.language.none}`,
+    );
+
+    passObject.Objects.options.forEach((option) => {
+      if (new Discord.BitField(insertedValues[required.assinger]).has(Number(option.value))) {
+        option.emoji = msg.client.constants.emotes.minusBGID;
+      } else {
+        option.emoji = msg.client.constants.emotes.plusBGID;
+      }
+    });
+
+    return { returnEmbed };
+  },
   getSelected(msg, insertedValues, required) {
     if (insertedValues[required.assinger]) {
-      switch (required.key.endsWith('s')) {
-        default: {
-          return insertedValues[required.assinger]
-            ? msg.client.ch
-                .permCalc(insertedValues[required.assinger], msg.language)
-                .map((c) => `\`${c}\``)
-                .join(', ')
-            : msg.language.none;
-        }
-        case true: {
-          return insertedValues[required.assinger]
-            .map((value) => {
-              return msg.client.ch
-                .permCalc(value, msg.language)
-                .map((c) => `\`${c}\``)
-                .join(', ');
-            })
-            .join(', ');
-        }
-      }
+      return insertedValues[required.assinger]
+        ? msg.client.ch
+            .permCalc(insertedValues[required.assinger], msg.language)
+            .map((c) => `\`${c}\``)
+            .join(', ')
+        : msg.language.none;
     }
     return null;
   },

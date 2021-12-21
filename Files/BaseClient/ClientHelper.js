@@ -448,18 +448,6 @@ module.exports = {
       Perms.push(lan.permissions.START_EMBEDDED_ACTIVITIES);
     }
 
-    /*
-    'VIEW_GUILD_INSIGHTS'
-  'MANAGE_THREADS',
-  'USE_PUBLIC_THREADS',
-  'CREATE_PUBLIC_THREADS',
-  'USE_PRIVATE_THREADS',
-  'CREATE_PRIVATE_THREADS',
-  'USE_EXTERNAL_STICKERS',
-  'SEND_MESSAGES_IN_THREADS',
-  'START_EMBEDDED_ACTIVITIES'
-
-    */
     return Perms;
   },
   /**
