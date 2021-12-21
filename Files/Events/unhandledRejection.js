@@ -6,7 +6,7 @@ module.exports = {
 
     client.ch.logger(`Unhandled Rejection`, error);
 
-    if (error.includes('GUILD_MEMBERS_TIMEOUT')) {
+    if (`${error}`.includes('GUILD_MEMBERS_TIMEOUT')) {
       client.destroy();
 
       setTimeout(() => {
