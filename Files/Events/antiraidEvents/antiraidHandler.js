@@ -8,8 +8,11 @@ module.exports = {
     const { client } = guild;
 
     if (r.posttof) sendMessage();
+    return;
     if (r.bantof) return ban();
     if (r.kicktof) return kick();
+
+    return null;
 
     function kick() {
       users.forEach((u) => {
@@ -59,6 +62,5 @@ module.exports = {
         });
       }
     }
-    return null;
   },
 };
