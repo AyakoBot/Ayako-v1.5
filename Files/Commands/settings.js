@@ -652,7 +652,6 @@ const singleRowEdit = async (msgData, resData, embed, comesFromMMR) => {
 
   const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
   buttonsCollector.on('collect', async (interaction) => {
-    console.log('recieved interaction'); //interactions duplicate for some reason :/
     if (interaction.user.id !== msg.author.id) {
       return msg.client.ch.notYours(interaction, msg);
     }
@@ -915,38 +914,6 @@ const buttonHandler = async (msgData, editData, languageData) => {
       if (messageCollector) messageCollector.resetTimer();
       switch (interaction.customId) {
         default: {
-          if (interaction.values && Array.isArray(insertedValues[required.assinger])) {
-            interaction.values.forEach((value) => {
-              if (insertedValues[required.assinger].includes(value)) {
-                insertedValues[required.assinger].splice(
-                  insertedValues[required.assinger].indexOf(value),
-                  1,
-                );
-              } else {
-                insertedValues[required.assinger].push(value);
-              }
-            });
-          } else {
-            let isString;
-            if (required.assinger !== 'id' && Object.keys(row).includes(required.assinger)) {
-              const typeRes = await msg.client.ch.query(
-                `SELECT pg_typeof(${required.assinger}) FROM ${
-                  msg.client.constants.commands.settings.tablenames[msg.file.name][0]
-                } LIMIT 1;`,
-              );
-              if (typeRes && typeRes.rowCount > 0) {
-                isString = !typeRes.rows[0].pg_typeof.endsWith('[]');
-              }
-            } else {
-              isString = true;
-            }
-            if (interaction.values) {
-              insertedValues[required.assinger] = isString
-                ? interaction.values[0]
-                : interaction.values;
-            }
-          }
-
           const returnedObject =
             typeof editor.interactionHandler === 'function'
               ? editor.interactionHandler(
@@ -954,6 +921,7 @@ const buttonHandler = async (msgData, editData, languageData) => {
                   passObject,
                   insertedValues,
                   required,
+                  row,
                 )
               : interactionHandler(
                   { msg, answer: interaction },
@@ -961,6 +929,7 @@ const buttonHandler = async (msgData, editData, languageData) => {
                   insertedValues,
                   required,
                   editor,
+                  row,
                 );
 
           if (!returnedObject) {
@@ -1151,9 +1120,39 @@ const messageHandler = async (msgData, editData, languageData, Objects) => {
   });
 };
 
-const interactionHandler = (msgData, preparedData, insertedValues, required, editor) => {
-  const { msg } = msgData;
+const interactionHandler = async (msgData, preparedData, insertedValues, required, editor, row) => {
+  const { msg, answer } = msgData;
   const { Objects } = preparedData;
+
+  if (answer.values && Array.isArray(insertedValues[required.assinger])) {
+    answer.values.forEach((value) => {
+      if (insertedValues[required.assinger].includes(value)) {
+        insertedValues[required.assinger].splice(
+          insertedValues[required.assinger].indexOf(value),
+          1,
+        );
+      } else {
+        insertedValues[required.assinger].push(value);
+      }
+    });
+  } else {
+    let isString;
+    if (required.assinger !== 'id' && Object.keys(row).includes(required.assinger)) {
+      const typeRes = await msg.client.ch.query(
+        `SELECT pg_typeof(${required.assinger}) FROM ${
+          msg.client.constants.commands.settings.tablenames[msg.file.name][0]
+        } LIMIT 1;`,
+      );
+      if (typeRes && typeRes.rowCount > 0) {
+        isString = !typeRes.rows[0].pg_typeof.endsWith('[]');
+      }
+    } else {
+      isString = true;
+    }
+    if (answer.values) {
+      insertedValues[required.assinger] = isString ? answer.values[0] : answer.values;
+    }
+  }
 
   const selected =
     typeof editor.getSelected === 'function'
