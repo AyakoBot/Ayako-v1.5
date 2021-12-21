@@ -29,15 +29,17 @@ async function start(data) {
                 let i = stop.position + 1;
                 i < highestRole.position && i < sep.position;
                 i += 1
-              )
+              ) {
                 affectedRoles.push(guildroles.find((r) => r.position === i));
+              }
             else
               for (
                 let i = sep.position + 1;
                 i < highestRole.position && i < stop.position;
                 i += 1
-              )
+              ) {
                 affectedRoles.push(guildroles.find((r) => r.position === i));
+              }
           } else if (sep.position < highestRole.position)
             for (
               let i = sep.position + 1;
