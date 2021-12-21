@@ -3,6 +3,7 @@ const Discord = require('discord.js');
 module.exports = {
   key: ['permissions', 'permission'],
   requiresMenu: true,
+  requiresInteraction: true,
   dataPreparation(msg, editorData) {
     const { insertedValues, required, Objects } = editorData;
 
@@ -14,10 +15,10 @@ module.exports = {
       });
     });
 
-    permissions.forEach(([perm, bits]) => {
+    permissions.forEach(({ perm, bits }) => {
       const inserted = {
         label: perm,
-        value: bits,
+        value: `${bits}`,
       };
 
       if (

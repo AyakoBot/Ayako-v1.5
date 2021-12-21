@@ -108,7 +108,7 @@ module.exports = {
     return null;
   },
   async display(msg) {
-    const singleRowDisplay = async (row, answer) => {
+    const singleRowDisplay = async (res, row, answer) => {
       const embed =
         typeof msg.file.displayEmbed === 'function'
           ? msg.file.displayEmbed(msg, row)
@@ -236,7 +236,7 @@ module.exports = {
           }
           case 'list': {
             await interaction.deferReply().catch(() => {});
-            singleRowDisplay(res.rows[interaction.values[0]], interaction);
+            singleRowDisplay(res, res.rows[interaction.values[0]], interaction);
             buttonsCollector.stop();
             break;
           }
@@ -271,7 +271,7 @@ module.exports = {
       [msg.guild.id],
     );
 
-    if (res && res.rowCount > 0) return singleRowDisplay(res.rows[0]);
+    if (res && res.rowCount > 0) return singleRowDisplay(res, res.rows[0]);
     return noEmbed(msg);
   },
 };
@@ -652,6 +652,7 @@ const singleRowEdit = async (msgData, resData, embed, comesFromMMR) => {
 
   const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
   buttonsCollector.on('collect', async (interaction) => {
+    console.log('recieved interaction'); //interactions duplicate for some reason :/
     if (interaction.user.id !== msg.author.id) {
       return msg.client.ch.notYours(interaction, msg);
     }
