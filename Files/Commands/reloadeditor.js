@@ -17,7 +17,7 @@ module.exports = {
     delete require.cache[require.resolve(`./settings/editors/${editorName}.js`)];
     try {
       const newEditor = require(`./settings/editors/${editorName}.js`);
-      msg.client.commands.set(editorName, newEditor);
+      msg.client.settingsEditors.set(editorName, newEditor);
       msg.channel.send(`Editor \`${editorName}\` was reloaded!`);
     } catch (error) {
       msg.channel.send(
