@@ -7,15 +7,15 @@ parentPort.on('message', (data) => {
 });
 
 async function start(data) {
-  const { roles } = data;
-  const { userid } = data;
-  const { guildid } = data;
+  const { roles, userid, guildid, language } = data;
+
   const guildroles = new Discord.Collection(data.guildroles);
   const highestRole = data.highest;
   const rows = data.res;
-  const { language } = data;
+
   const giveThese = [];
   const takeThese = [];
+
   if (rows && rows.length) {
     rows.forEach(async (row) => {
       const sep = guildroles.get(row.separator);
@@ -24,30 +24,32 @@ async function start(data) {
           const stop = row.stoprole ? guildroles.get(row.stoprole) : null;
           const affectedRoles = [];
           if (stop) {
-            if (sep.position > stop.position)
+            if (sep.rawPosition > stop.rawPosition)
               for (
-                let i = stop.position + 1;
-                i < highestRole.position && i < sep.position;
+                let i = stop.rawPosition + 1;
+                i < highestRole.rawPosition && i < sep.rawPosition;
                 i += 1
               ) {
-                affectedRoles.push(guildroles.find((r) => r.position === i));
+                affectedRoles.push(guildroles.find((r) => r.rawPosition === i));
               }
             else
               for (
-                let i = sep.position + 1;
-                i < highestRole.position && i < stop.position;
+                let i = sep.rawPosition + 1;
+                i < highestRole.rawPosition && i < stop.rawPosition;
                 i += 1
               ) {
-                affectedRoles.push(guildroles.find((r) => r.position === i));
+                affectedRoles.push(guildroles.find((r) => r.rawPosition === i));
               }
-          } else if (sep.position < highestRole.position)
+          } else if (sep.rawPosition < highestRole.rawPosition)
             for (
-              let i = sep.position + 1;
-              i < highestRole.position && i < highestRole.position;
+              let i = sep.rawPosition + 1;
+              i < highestRole.rawPosition && i < highestRole.rawPosition;
               i += 1
             )
-              affectedRoles.push(guildroles.find((r) => r.position === i));
+              affectedRoles.push(guildroles.find((r) => r.rawPosition === i));
+
           const has = [];
+
           affectedRoles
             .map((o) => o)
             .forEach((role) => {
@@ -56,6 +58,7 @@ async function start(data) {
                 else has.push(false);
               }
             });
+
           if (has.includes(true) && !roles.includes(sep.id)) giveThese.push(sep.id);
           else if (!has.includes(true) && roles.includes(sep.id)) takeThese.push(sep.id);
         } else {

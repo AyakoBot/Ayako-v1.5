@@ -4,7 +4,7 @@ const client = require('../../../BaseClient/DiscordClient');
 module.exports = {
   async execute() {
     const res = await client.ch.query('SELECT * FROM roleseparatorsettings WHERE startat < $1;', [
-      Date.now() - 3600000,
+      Date.now() - 3900000,
     ]);
     res.rows.forEach(async (row) => {
       const guild = client.guilds.cache.get(row.guildid);
@@ -31,10 +31,12 @@ module.exports = {
         msg.channel = client.channels.cache.get(row.channelid);
         if (row.index === row.length) msg.lastRun = true;
         // eslint-disable-next-line global-require
-        require('../../guildEvents/guildMemberUpdate/separator').oneTimeRunner(
-          msg,
-          new Discord.MessageEmbed(),
-        );
+        setTimeout(() => {
+          require('../../guildEvents/guildMemberUpdate/separator').oneTimeRunner(
+            msg,
+            new Discord.MessageEmbed(),
+          );
+        }, 300000);
       }
     });
   },
