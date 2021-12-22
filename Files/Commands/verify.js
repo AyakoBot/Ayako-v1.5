@@ -1,4 +1,3 @@
-
 const Discord = require('discord.js');
 const { CaptchaGenerator } = require('captcha-canvas');
 const fs = require('fs');
@@ -195,6 +194,12 @@ module.exports = {
       )
       .setColor(msg.client.constants.standard.color);
     msg.client.ch.send(msg.DM, { embeds: [embed] });
+    if (msg.member.guild.id === '298954459172700181') {
+      msg.client.ch.send(msg.DM, {
+        content:
+          '**Also worth checking out:**\n💁‍♀️ Kimetsu No Yaiba┊Demon Slayer┊500 Demon Slayer Emojis & Stickers┊Unique & Fun┊Active┊Chatting┊VC┊& much more! 💜 \nㅤㅤㅤ╰─ ʚ ୨୧ ɞ ─╮\n✧· 🐛 https://discord.gg/k76uPAzsSW ☂️ ·✧',
+      });
+    }
     msg.member.roles.add(msg.r.finishedrole).catch(() => {});
     msg.member.roles.remove(msg.r.pendingrole).catch(() => {});
   },
