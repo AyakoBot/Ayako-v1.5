@@ -1,4 +1,3 @@
-
 module.exports = {
   async execute(oldMember, newMember) {
     if (!oldMember || !newMember) return;
