@@ -113,6 +113,12 @@ module.exports = {
             });
         }
       });
+      const finishTime = Math.floor(
+        Date.now() / 1000 +
+          (membersWithRoles ? membersWithRoles.length * 3 : 0) +
+          ((membersWithRoles ? membersWithRoles.length : 0) / 3600) * 300,
+      );
+
       embed
         .setAuthor(
           msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
@@ -123,11 +129,7 @@ module.exports = {
           msg.client.ch.stp(msg.lan.edit.oneTimeRunner.stats, {
             members: membersWithRoles && membersWithRoles.length ? membersWithRoles.length : '0',
             roles: membersWithRoles && membersWithRoles.length ? membersWithRoles.length * 3 : '0',
-            finishTime: `<t:${
-              Math.floor(Date.now() / 1000) + (membersWithRoles ? membersWithRoles.length * 3 : 0)
-            }:F> (<t:${
-              Math.floor(Date.now() / 1000) + (membersWithRoles ? membersWithRoles.length * 3 : 0)
-            }:R>)`,
+            finishTime: `<t:${finishTime}:F> (<t:${finishTime}:R>)`,
           }),
         );
       msg.m.edit({ embeds: [embed], components: [] }).catch(() => {});
