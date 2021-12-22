@@ -1,4 +1,3 @@
-
 const Discord = require('discord.js');
 
 module.exports = {
@@ -10,9 +9,10 @@ module.exports = {
   type: 'roles',
   async execute(msg, answer) {
     const res = await msg.client.ch.query(
-      'SELECT * FROM selfroles WHERE guildid = $1 AND active = true ORDER BY id ASC;',
+      'SELECT * FROM selfroles WHERE guildid = $1 AND active = true ORDER BY uniquetimestamp ASC;',
       [msg.guild.id],
     );
+
     const Data = {
       currentRow: null,
       cOptions: [],
@@ -299,6 +299,8 @@ module.exports = {
       let isBlacklisted = false;
 
       res.rows.forEach((thisrow, i) => {
+        res.rows[i].id = i;
+
         if (!disabled || !isBlacklisted) {
           thisrow.blacklistedroles?.forEach((id) => {
             if (msg.member.roles.cache.get(id)) {
