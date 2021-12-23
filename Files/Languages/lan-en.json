@@ -2581,9 +2581,6 @@
       "user": {
         "category": ["None"]
       },
-      "vc": {
-        "category": ["Automation", "Fun"]
-      },
       "verification": {
         "category": ["Automation"],
         "type": "Verification",
