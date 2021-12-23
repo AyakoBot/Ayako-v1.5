@@ -518,17 +518,54 @@
   },
   "embedBuilder": {
     "embed": {
-      "text": "text",
-      "link": "url",
-      "description": "text",
-      "icon": "url",
       "color": "hex",
-      "image": "url",
-      "thumbnail": "url",
-      "title": "text",
-      "value": "text",
-      "inline": "boolean",
-      "timestamp": "unix"
+      "title": {
+        "title": "text",
+        "url": "url"
+      },
+      "author": {
+        "name": "text",
+        "url": "url",
+        "icon_url": "url"
+      },
+      "description": "text",
+      "thumbnail": "image",
+      "fields": {
+        "name": "text",
+        "value": "text",
+        "inline": "boolean"
+      },
+      "image": "iamge",
+      "timestamp": "date",
+      "footer": {
+        "name": "text",
+        "url": "url",
+        "icon_url": "url"
+      }
+    },
+    "limits": {
+      "title": 256,
+      "url": "url",
+      "author": {
+        "name": 256
+      },
+      "description": 4096,
+      "fields": {
+        "name": 256,
+        "value": 1024,
+        "count": 25
+      },
+      "footer": {
+        "name": 2048
+      },
+      "max": 6000,
+      "maxOf": [
+        "title",
+        "description",
+        { "fields": ["name", "value"] },
+        { "footer": ["name"] },
+        { "author": ["name"] }
+      ]
     }
   },
   "commands": {
@@ -714,7 +751,7 @@
           }
         },
         "overview": {
-          "prefix":{
+          "prefix": {
             "key": "string",
             "required": false
           },
@@ -956,7 +993,7 @@
           }
         },
         "verification": {
-          "greetdesc":{
+          "greetdesc": {
             "key": "string",
             "required": false
           },
@@ -968,7 +1005,7 @@
             "key": "role",
             "required": false
           },
-          "finishdesc":{
+          "finishdesc": {
             "key": "string",
             "required": false
           },
@@ -1114,7 +1151,6 @@
         "autopunish": ["autopunish"],
         "suggestions": ["suggestionsettings"],
         "ticketing": [null],
-        "vc": [null],
         "verification": ["verification"],
         "welcome": ["welcome"],
         "language": ["language"],
@@ -1222,9 +1258,7 @@
         },
         "statschannel": {
           "cols": ["guildid, channel, type"],
-          "vals": [
-            ["{{msg.guild.id}}", "{{values.channelid}}", "{{values.type}}"]
-          ],
+          "vals": [["{{msg.guild.id}}", "{{values.channelid}}", "{{values.type}}"]],
           "add": ["channel"],
           "ident": "channel",
           "identType": "channel"
@@ -1235,13 +1269,7 @@
             "guildid, stillrunning"
           ],
           "vals": [
-            [
-              "{{msg.guild.id}}",
-              false,
-              "{{values.uniquetimestamp}}",
-              true,
-              "{{values.separator}}"
-            ],
+            ["{{msg.guild.id}}", false, "{{values.uniquetimestamp}}", true, "{{values.separator}}"],
             ["{{msg.guild.id}}", false]
           ],
           "add": ["separator"],
@@ -1296,14 +1324,7 @@
         },
         "modroles": {
           "cols": ["guildid, active, roleid, uniquetimestamp"],
-          "vals": [
-            [
-              "{{msg.guild.id}}",
-              false,
-              "{{values.roleid}}",
-              "{{values.uniquetimestamp}}"
-            ]
-          ],
+          "vals": [["{{msg.guild.id}}", false, "{{values.roleid}}", "{{values.uniquetimestamp}}"]],
           "add": ["roleid"],
           "ident": "roleid",
           "identType": "role"
