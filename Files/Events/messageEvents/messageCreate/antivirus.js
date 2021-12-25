@@ -164,13 +164,13 @@ module.exports = {
       return;
     }
 
-    const selfCheck = await selfChecker(linkObject);
-    if (selfCheck) {
+    const selfCheckCatched = await selfChecker(linkObject);
+    if (selfCheckCatched) {
       if (!check) {
         includedBadLink = true;
       }
 
-      if (selfCheck === 'ccscam') await ccscam(msg, lan, embed, linkObject, check);
+      if (selfCheckCatched === 'ccscam') await ccscam(msg, lan, embed, linkObject, check);
       await newUrl(msg, lan, embed, linkObject, check);
       return;
     }
@@ -761,13 +761,14 @@ const getSeverity = (VTresponse) => {
   return severity;
 };
 
-const selfChecker = async (linkObject) => {
-  const siteHTML = (await axios.get(linkObject.href).catch((e) => e))?.data;
+const selfChecker = async (href) => {
+  const siteHTML = (await axios.get(href).catch((e) => e))?.data;
   if (!siteHTML) return false;
   // eslint-disable-next-line no-useless-escape
   const siteNameBad =
     /property=["'`]og:site_name["'`](.*)content=["'`]discord["'`]>/gi.test(siteHTML) ||
-    /<title>(.*)Discord(.*)<\/title>/gi.test(siteHTML);
+    /<title>(.*)Discord(.*)<\/title>/gi.test(siteHTML) ||
+    /<title>Redeem Promotion(.*)<\/title>/gi.test(siteHTML);
   const embedNameBad = /property=["'`]og:title["'`](.*)content=["'`]discord/gi.test(siteHTML);
 
   const args = siteHTML.split(/["'`]+/);
