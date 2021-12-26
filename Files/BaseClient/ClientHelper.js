@@ -447,6 +447,9 @@ module.exports = {
     if (BitField.has(549755813888n) && BitField.bitfield !== 8n) {
       Perms.push(lan.permissions.START_EMBEDDED_ACTIVITIES);
     }
+    if (BitField.has(1099511627776n) && BitField.bitfield !== 8n) {
+      Perms.push(lan.permissions.MODERATE_MEMBERS);
+    }
 
     return Perms;
   },

@@ -520,7 +520,8 @@
     "USE_AND_CREATE_PRIVATE_THREADS": "Use and Create Private Threads",
     "USE_EXTERNAL_STICKERS": "Use External Stickers",
     "SEND_MESSAGES_IN_THREADS": "Send Messages in Threads",
-    "START_EMBEDDED_ACTIVITIES": "Start Embedded Activities"
+    "START_EMBEDDED_ACTIVITIES": "Start Embedded Activities",
+    "MODERATE_MEMBERS": "Moderate Members"
   },
   "channels": {
     "GUILD_TEXT": "Text Channel",
@@ -871,13 +872,13 @@
       "dm": {
         "author": "You have been Temp-Muted on {{guild.name}}"
       },
-      "hasRole": "This Member is already muted",
-      "exeNoPerms": "You can't mute this Member",
-      "meNoPerms": "I can't mute this Member `Missing Permissions`",
+      "hasRole": "This Member is already Temp-Mute",
+      "exeNoPerms": "You can't Temp-Mute this Member",
+      "meNoPerms": "I can't Temp-Mute this Member `Missing Permissions`",
       "success": "Member {{target}} was Temp-Muted",
       "noRole": "I wasn't able to find a Mute Role\nVisit `h!settings overview` to set or create one",
       "loading": "Temp-Muting User...",
-      "error": "I wasn't able to mute this User!",
+      "error": "I wasn't able to Temp-Mute this User!",
       "noMemberHint": "This User is not a Member of this Server\n\n**Do you want to Temp-Mute them anyways?**\nThey will be automatically Muted if they Re-Join before their Mute ends",
       "noMember": "This User is not a Member of this Server"
     },
@@ -1181,8 +1182,7 @@
       "time": "No Time given",
       "timeError": "Please provide a valid Time",
       "timeError2": "Please provide a valid Time in the format `[number] [unit]`",
-      "timeError3": "Please provide a valid Time in the format `[number] [unit]`\nValid Units are `s` for Seconds, `m` for Minutes, `h` for Hours and `d` for Days",
-      "vcReason": "User is Temp-Muted"
+      "timeError3": "Please provide a valid Time in the format `[number] [unit]`\nValid Units are `s` for Seconds, `m` for Minutes, `h` for Hours and `d` for Days"
     },
     "kick": {
       "description": "Bans a User from the Server",

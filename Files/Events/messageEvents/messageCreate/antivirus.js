@@ -761,8 +761,8 @@ const getSeverity = (VTresponse) => {
   return severity;
 };
 
-const selfChecker = async (href) => {
-  const siteHTML = (await axios.get(href).catch((e) => e))?.data;
+const selfChecker = async (data) => {
+  const siteHTML = (await axios.get(data.href).catch((e) => e))?.data;
   if (!siteHTML) return false;
   // eslint-disable-next-line no-useless-escape
   const siteNameBad =
