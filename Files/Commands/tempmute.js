@@ -5,7 +5,7 @@ module.exports = {
   perm: 268435456n,
   dm: false,
   takesFirstArg: true,
-  aliases: null,
+  aliases: ['mute'],
   type: 'mod',
   async execute(msg) {
     const proceed = async (doProceed, module) => {
@@ -40,12 +40,20 @@ module.exports = {
     let reason = msg.args.slice(2).join(' ') ? msg.args.slice(2).join(' ') : lan.reason;
     const guildmember = await msg.guild.members.fetch(user.id).catch(() => {});
     let duration = ms(msg.args[1]);
-    // eslint-disable-next-line no-param-reassign
     msg.args[1] = msg.args[1].replace(/,/g, '.');
     if (duration === msg.args[1]) {
       duration = ms(`${msg.args[1]} ${msg.args[2]}`);
       reason = msg.args.slice(3).join(' ') ? msg.args.slice(3).join(' ') : lan.reason;
     }
+
+    if (Number.isNaN(+duration)) {
+      reason = msg.args.slice(1).join(' ') ? msg.args.slice(3).join(' ') : lan.reason;
+      const res = await msg.client.ch.query(
+        `SELECT * FROM modroles WHERE guildid = $1 AND roleid = $2;`,
+        [msg.guild.id, msg.member.modrole.id],
+      );
+    }
+
     if (guildmember) {
       const res = await msg.client.ch.query('SELECT * FROM modrolesnew WHERE guildid = $1;', [
         msg.guild.id,

@@ -1,4 +1,4 @@
-
+// TODO: assing msg.member.modrole; 
 const Discord = require('discord.js');
 // const { statcord } = require('../../../BaseClient/Statcord');
 const auth = require('../../../BaseClient/auth.json');

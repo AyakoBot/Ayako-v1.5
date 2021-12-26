@@ -1,4 +1,6 @@
 const Discord = require('discord.js');
+// TODO: add default mute time when not provided
+
 
 module.exports = {
   perm: null,

@@ -1,4 +1,3 @@
-
 const Discord = require('discord.js');
 
 module.exports = {
@@ -20,11 +19,6 @@ module.exports = {
     }
     if (mexisted) await msg.m.edit({ embeds: [em] });
     else msg.m = await msg.client.ch.reply(msg, em);
-    let role;
-    const resM = await msg.client.ch.query('SELECT * FROM guildsettings WHERE guildid = $1;', [
-      msg.guild.id,
-    ]);
-    if (resM && resM.rowCount > 0) role = msg.guild.roles.cache.get(resM.rows[0].muteroleid);
     const member = await msg.guild.members.fetch(target.id).catch(() => {});
     const exec = await msg.guild.members.fetch(executor.id).catch(() => {});
     const memberClient = msg.guild.me;
@@ -82,68 +76,58 @@ module.exports = {
       if (mexisted) setTimeout(() => msg.m?.delete().catch(() => {}), 10000);
       return false;
     }
-    if (role) {
-      if (!member?.roles.cache.has(role.id)) {
-        if (mexisted) {
-          em.fields.pop();
-          em.addField('\u200b', `${msg.client.constants.emotes.cross} ${lan.hasNoRole}`);
-        } else em.setDescription(`${msg.client.constants.emotes.cross} ${lan.hasNoRole}`);
-        msg.m?.edit({ embeds: [em] });
-        if (mexisted) setTimeout(() => msg.m?.delete().catch(() => {}), 10000);
-        return false;
-      }
-      let err;
 
-      const unmute = await msg.guild.members.cache
-        .get(target.id)
-        .roles.remove(role)
-        .catch(() => {});
-      if (unmute) {
-        if (member && member.voice.channelId !== null && member.voice.serverMute)
-          member.voice.setMute(false, lan.vcReason).catch(() => {});
-        const embed = new Discord.MessageEmbed()
-          .setColor(con.color)
-          .setAuthor(
-            msg.client.ch.stp(lan.author, { user: target }),
-            msg.client.ch.displayAvatarURL(target),
-            msg.client.constants.standard.invite,
-          )
-          .setDescription(msg.client.ch.stp(lan.description, { user: executor, target }))
-          .setTimestamp()
-          .addField(language.reason, `${reason}`)
-          .setFooter(msg.client.ch.stp(lan.footer, { user: executor, target }));
-        if (msg.logchannels && msg.logchannels.length) msg.client.ch.send(msg.logchannels, embed);
-        const dmChannel = await target.createDM().catch(() => {});
-        const DMembed = new Discord.MessageEmbed()
-          .setDescription(`${language.reason}: \n${reason}`)
-          .setColor(con.color)
-          .setTimestamp()
-          .setAuthor(
-            msg.client.ch.stp(lan.dm.author, { guild: msg.guild }),
-            lan.author.image,
-            msg.client.ch.stp(con.author.link, { guild: msg.guild }),
-          );
-        msg.client.ch.send(dmChannel, DMembed);
-      } else {
-        if (mexisted) {
-          em.fields.pop();
-          em.addField(
-            '\u200b',
-            `${msg.client.constants.emotes.cross + lan.error} ${msg.client.ch.makeCodeBlock(err)}`,
-          );
-        } else
-          em.setDescription(
-            `${msg.client.constants.emotes.cross + lan.error} ${msg.client.ch.makeCodeBlock(err)}`,
-          );
-        msg.m?.edit({ embeds: [em] });
-        if (mexisted) setTimeout(() => msg.m?.delete().catch(() => {}), 10000);
-        return false;
-      }
+    if (!member?.communicationDisabledUntil) {
+      if (mexisted) {
+        em.fields.pop();
+        em.addField('\u200b', `${msg.client.constants.emotes.cross} ${lan.hasNoRole}`);
+      } else em.setDescription(`${msg.client.constants.emotes.cross} ${lan.hasNoRole}`);
+      msg.m?.edit({ embeds: [em] });
+      if (mexisted) setTimeout(() => msg.m?.delete().catch(() => {}), 10000);
+      return false;
+    }
+    let err;
+
+    const unmute = await msg.guild.members.cache
+      .get(target.id)
+      .timeout(null, reason)
+      .catch(() => {});
+
+    if (unmute) {
+      const embed = new Discord.MessageEmbed()
+        .setColor(con.color)
+        .setAuthor(
+          msg.client.ch.stp(lan.author, { user: target }),
+          msg.client.ch.displayAvatarURL(target),
+          msg.client.constants.standard.invite,
+        )
+        .setDescription(msg.client.ch.stp(lan.description, { user: executor, target }))
+        .setTimestamp()
+        .addField(language.reason, `${reason}`)
+        .setFooter(msg.client.ch.stp(lan.footer, { user: executor, target }));
+      if (msg.logchannels && msg.logchannels.length) msg.client.ch.send(msg.logchannels, embed);
+      const dmChannel = await target.createDM().catch(() => {});
+      const DMembed = new Discord.MessageEmbed()
+        .setDescription(`${language.reason}: \n${reason}`)
+        .setColor(con.color)
+        .setTimestamp()
+        .setAuthor(
+          msg.client.ch.stp(lan.dm.author, { guild: msg.guild }),
+          lan.author.image,
+          msg.client.ch.stp(con.author.link, { guild: msg.guild }),
+        );
+      msg.client.ch.send(dmChannel, DMembed);
     } else {
       if (mexisted) {
         em.fields.pop();
-        em.addField('\u200b', `${msg.client.constants.emotes.cross} ${lan.noRole}`);
-      } else em.setDescription(`${msg.client.constants.emotes.cross} ${lan.noRole}`);
+        em.addField(
+          '\u200b',
+          `${msg.client.constants.emotes.cross + lan.error} ${msg.client.ch.makeCodeBlock(err)}`,
+        );
+      } else
+        em.setDescription(
+          `${msg.client.constants.emotes.cross + lan.error} ${msg.client.ch.makeCodeBlock(err)}`,
+        );
       msg.m?.edit({ embeds: [em] });
       if (mexisted) setTimeout(() => msg.m?.delete().catch(() => {}), 10000);
       return false;
