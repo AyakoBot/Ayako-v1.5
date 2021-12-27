@@ -8,6 +8,7 @@ module.exports = {
   aliases: ['mute'],
   type: 'mod',
   async execute(msg) {
+    console.log(1)
     const proceed = async (doProceed, module) => {
       if (doProceed === false) {
         const modRoleRes = await msg.client.ch.modRoleWaiter(msg);
