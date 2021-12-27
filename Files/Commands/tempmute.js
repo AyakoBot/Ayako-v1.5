@@ -48,10 +48,7 @@ module.exports = {
 
     if (Number.isNaN(+duration)) {
       reason = msg.args.slice(1).join(' ') ? msg.args.slice(3).join(' ') : lan.reason;
-      const res = await msg.client.ch.query(
-        `SELECT * FROM modroles WHERE guildid = $1 AND roleid = $2;`,
-        [msg.guild.id, msg.member.modrole.id],
-      );
+      duration = msg.member.modrole.mutedurationdefault;
     }
 
     if (guildmember) {
