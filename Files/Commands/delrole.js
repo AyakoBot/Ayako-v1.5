@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const stringSimilarity = require('string-similarity');
 
 module.exports = {
   name: 'delrole',
@@ -7,10 +8,24 @@ module.exports = {
   dm: false,
   type: 'util',
   async execute(msg) {
-    const role = msg.guild.roles.cache.get(msg.args[0].replace(/\D+/g, ''));
-    const { language } = msg;
-    const { lan } = msg;
-    if (!role || !role.id) msg.client.ch.reply(msg, lan.noRoleFound);
+    const { language, lan } = msg;
+
+    let role = msg.guild.roles.cache.get(msg.args[0].replace(/\D+/g, ''));
+    if (!role) {
+      const roles = msg.guild.roles.cache.filter((r) =>
+        r.name.toLowerCase().includes(msg.args[0].toLowerCase()),
+      );
+      if (roles.size === 1) role = roles.first();
+      else if (roles.size > 1) {
+        const res = stringSimilarity.findBestMatch(
+          msg.args[0].toLowerCase(),
+          roles.map((r) => r.name.toLowerCase()),
+        );
+        if (res.bestMatch.rating > 0.7) role = roles.find((r) => r.name === res.bestMatch.target);
+      }
+    }
+    if (!role) return msg.client.ch.reply(msg, lan.noRoleFound);
+
     const Embed = new Discord.MessageEmbed();
     if (role.managed) {
       Embed.setAuthor(
