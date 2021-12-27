@@ -1,5 +1,3 @@
-
-
 module.exports = {
   async execute(msg) {
     if (msg.guild && msg.author.discriminator !== '0000') {
@@ -9,7 +7,7 @@ module.exports = {
     require('./afk').execute(msg);
     require('./disboard').execute(msg);
     // require('./leveling').execute(msg);
-    require('./toxicity').execute(msg);
+    require('./blacklist').execute(msg);
     require('./willis').execute(msg);
     require('./DMlog').execute(msg);
     require('./other').execute(msg);

@@ -71,7 +71,7 @@ module.exports = {
       `**${msg.language.selected}:**\n${selected?.length ? selected : msg.language.none}`,
     );
 
-    return returnEmbed;
+    return { returnEmbed };
   },
   getSelected(msg, insertedValues, required) {
     if (insertedValues[required.assinger]) {

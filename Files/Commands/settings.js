@@ -923,7 +923,7 @@ const buttonHandler = async (msgData, editData, languageData) => {
                   required,
                   row,
                 )
-              : interactionHandler(
+              : await interactionHandler(
                   { msg, answer: interaction },
                   passObject,
                   insertedValues,
@@ -1085,7 +1085,7 @@ const messageHandler = async (msgData, editData, languageData, Objects) => {
     if (message.author.id !== msg.author.id) return null;
     messageCollector.resetTimer();
     message.delete().catch(() => {});
-    const returnEmbed = editor.messageHandler({ msg, message }, insertedValues, required);
+    const { returnEmbed } = editor.messageHandler({ msg, message }, insertedValues, required);
 
     returnEmbed
       .addField(
