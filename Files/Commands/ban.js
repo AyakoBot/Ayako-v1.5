@@ -35,7 +35,7 @@ module.exports = {
     const reason = msg.args.slice(1).join(' ') ? msg.args.slice(1).join(' ') : lan.reason;
     const guildmember = await msg.guild.members.fetch(user.id).catch(() => {});
     if (guildmember) {
-      const res = await msg.client.ch.query('SELECT * FROM modrolesnew WHERE guildid = $1;', [
+      const res = await msg.client.ch.query('SELECT * FROM modroles WHERE guildid = $1;', [
         msg.guild.id,
       ]);
       if (res && res.rowCount > 0) {
