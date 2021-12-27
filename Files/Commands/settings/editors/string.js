@@ -32,7 +32,7 @@ module.exports = {
   messageHandler(msgData, insertedValues, required) {
     const { msg, message } = msgData;
 
-    const args = message.content.replace(/\\n/g, ' ').split(/#+/);
+    const args = message.content.replace(/\\n/g, ' ').split(/ ?#+ ?/);
 
     switch (required.key) {
       default: {
@@ -80,7 +80,7 @@ module.exports = {
             Array.isArray(insertedValues[required.assinger])
             ? insertedValues[required.assinger]
                 .map((value) => {
-                  return `${value}`;
+                  return `\`${value}\``;
                 })
                 .join(', ')
             : msg.language.none;

@@ -6,16 +6,20 @@ module.exports = {
     if (!msg.channel) return;
     if (!msg.channel.type || msg.channel.type === 'DM') return;
     if (!msg.author || msg.author.bot) return;
-    if (msg.member?.permissions.has(8n)) return;
-    const result = await msg.client.ch.query('SELECT * FROM blacklists WHERE guildid = $1;', [
-      msg.guild.id,
-    ]);
+    if (!msg.member.manageable) return;
+    const result = await msg.client.ch.query(
+      'SELECT * FROM blacklists WHERE guildid = $1 AND active = true;',
+      [msg.guild.id],
+    );
     if (result && result.rowCount > 0) {
-      if (result.rows[0].active === false) return;
+      if (result.rows[0].bpchannelid?.includes(msg.channel.id)) return;
+      if (result.rows[0].bpuserid?.includes(msg.author.id)) return;
+      if (msg.member.roles.cache.some((r) => result.rows[0].bproleid?.includes(r.id))) return;
+
       const args = msg.content.split(/ +/);
       const words = [];
       if (result.rows[0].words) {
-        const blwords = result.rows[0].words.split(/, +/g);
+        const blwords = result.rows[0].words;
         for (let i = 0; i < args.length; i += 1) {
           const argr = `${args[i]}`.replace(regex, '');
           if (blwords.includes(argr.toLowerCase())) {
@@ -23,16 +27,21 @@ module.exports = {
           }
         }
         if (!words[0]) return;
+
         await msg.delete().catch(() => {});
+
         const language = await msg.client.ch.languageSelector(msg.guild);
+
         const m = await msg.client.ch.send(
           msg.channel,
           msg.client.ch.stp(language.commands.toxicityCheck.warning, { user: msg.author }),
         );
+
         if (m)
           setTimeout(() => {
             m.delete().catch(() => {});
           }, 10000);
+
         const embed = new Discord.MessageEmbed()
           .setAuthor(
             msg.client.constants.standard.image,
@@ -44,19 +53,21 @@ module.exports = {
               words.map((w) => `\`${w}\``),
           )
           .setColor(msg.client.constants.commands.toxicityCheck);
+
         const DMchannel = await msg.author.createDM().catch(() => {});
         if (DMchannel) msg.client.ch.send(DMchannel, embed);
+
+        let amount;
         const res = await msg.client.ch.query(
           'SELECT * FROM toxicitycheck WHERE userid = $2 AND guildid = $1;',
           [msg.guild.id, msg.author.id],
         );
-        let amount;
         if (res && res.rowCount > 0) {
           msg.client.ch.query(
             'UPDATE toxicitycheck SET amount = $2 WHERE userid = $3 AND guildid = $1;',
             [msg.guild.id, +res.rows[0].amount + 1, msg.author.id],
           );
-          amount = res.rows[0].amount;
+          amount = +res.rows[0].amount;
         } else {
           msg.client.ch.query(
             'INSERT INTO toxicitycheck (guildid, userid, amount) VALUES ($1, $3, $2);',
@@ -65,17 +76,41 @@ module.exports = {
           amount = 0;
         }
         amount += 1;
+
         if (result.rows[0].warntof === true) {
-          if (amount === +result.rows[0].warnafteramount) {
-            const reason = language.commands.toxicityCheck.warnReason;
-            msg.client.emit('modWarnAdd', msg.client.user, msg.author, reason, msg);
+          if (amount === +result.rows[0].warnafter) {
+            if (amount !== +result.rows[0].muteafter) {
+              const reason = language.commands.toxicityCheck.warnReason;
+              msg.client.emit('modWarnAdd', msg.client.user, msg.author, reason, msg);
+              return;
+            }
           }
         }
+
         if (result.rows[0].mutetof === true) {
-          if (amount % +result.rows[0].muteafteramount === 0) {
-            if (amount === +result.rows[0].warnafteramount) return;
+          if (amount % +result.rows[0].muteafter === 0) {
+            if (amount !== +result.rows[0].kickafter) {
+              const reason = language.commands.toxicityCheck.warnReason;
+              msg.client.emit('modTempmuteAdd', msg.client.user, msg.author, reason, msg, 3600000);
+              return;
+            }
+          }
+        }
+
+        if (result.rows[0].kicktof === true) {
+          if (amount % +result.rows[0].kickafter === 0) {
+            if (amount !== +result.rows[0].banafter) {
+              const reason = language.commands.toxicityCheck.warnReason;
+              msg.client.emit('modKickAdd', msg.client.user, msg.author, reason, msg);
+              return;
+            }
+          }
+        }
+
+        if (result.rows[0].bantof === true) {
+          if (amount >= result.rows[0].banafter) {
             const reason = language.commands.toxicityCheck.warnReason;
-            msg.client.emit('modTempmuteAdd', msg.client.user, msg.author, reason, msg, 3600000);
+            msg.client.emit('modBanAdd', msg.client.user, msg.author, reason, msg);
           }
         }
       }
