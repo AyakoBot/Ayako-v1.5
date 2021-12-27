@@ -14,7 +14,6 @@ module.exports = {
     // statcord.autopost();
 
     require('./slashcommands').execute();
-    require('./muteManager').execute();
     require('./reminder').execute();
     require('./webhooks').execute();
     require('./disboard').execute();
