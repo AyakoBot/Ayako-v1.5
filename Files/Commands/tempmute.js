@@ -52,7 +52,7 @@ module.exports = {
     }
 
     if (guildmember) {
-      const res = await msg.client.ch.query('SELECT * FROM modrolesnew WHERE guildid = $1;', [
+      const res = await msg.client.ch.query('SELECT * FROM modroles WHERE guildid = $1;', [
         msg.guild.id,
       ]);
       if (res && res.rowCount > 0) {
