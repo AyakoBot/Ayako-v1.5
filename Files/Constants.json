@@ -1194,17 +1194,15 @@
           "vals": [["{{msg.guild.id}}", true, true, true, true, true, true, 2, 4, 3, 1]]
         },
         "disabled": {
-          "cols": ["guildid, active, channels, uniquetimestamp, commands"],
+          "cols": ["guildid, active, uniquetimestamp"],
           "vals": [
             [
               "{{msg.guild.id}}",
               true,
-              ["{{values.channels}}"],
-              "{{values.uniquetimestamp}}",
-              ["{{values.commands}}"]
+              "{{values.uniquetimestamp}}"
             ]
           ],
-          "add": ["commands", "channels"],
+          "add": [],
           "remove": ["uniquetimestamp"],
           "ident": "commands"
         },
@@ -1244,17 +1242,16 @@
           "vals": [["{{msg.guild.id}}"]]
         },
         "selfroles": {
-          "cols": ["guildid, active, uniquetimestamp, roles, name"],
+          "cols": ["guildid, active, uniquetimestamp, name"],
           "vals": [
             [
               "{{msg.guild.id}}",
               false,
               "{{values.uniquetimestamp}}",
-              "{{values.roles}}",
               "{{values.name}}"
             ]
           ],
-          "add": ["roles", "name"],
+          "add": ["name"],
           "ident": "name"
         },
         "statschannel": {

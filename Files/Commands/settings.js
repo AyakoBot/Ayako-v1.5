@@ -162,7 +162,7 @@ module.exports = {
         [msg.guild.id],
       );
 
-      if (!res.rows[0].id) {
+      if (!res.rows[0]?.id) {
         res.rows.forEach((row, i) => {
           res.rows[i].id = i;
         });
@@ -172,13 +172,16 @@ module.exports = {
       if (res && res.rowCount > 0) {
         if (msg.file.mmrEmbed[Symbol.toStringTag] === 'AsyncFunction') {
           embed = await msg.file.mmrEmbed(msg, res.rows);
+        } else if (typeof msg.file.mmrEmbed === 'function') {
+          embed = msg.file.mmrEmbed(msg, res.rows);
         } else {
-          embed =
-            typeof msg.file.mmrEmbed === 'function'
-              ? msg.file.mmrEmbed(msg, res.rows)
-              : noEmbed(msg);
+          noEmbed(msg);
+          return;
         }
-      } else embed = noEmbed(msg);
+      } else {
+        noEmbed(msg);
+        return;
+      }
 
       embed.setAuthor(
         msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
@@ -526,7 +529,6 @@ const mmrEditList = async (msgData, sendData) => {
             )}); ${valuesSTP}`,
           );
         }
-
         await msg.client.ch.query(
           `INSERT INTO ${table} (${cols}) VALUES (${valueIdentifier.join(', ')});`,
           valuesSTP,
@@ -864,7 +866,7 @@ const changing = async (msgData, editData, resData) => {
 const log = async (msg, editData) => {
   const { insertedValues, required, comesFromMMR, row } = editData;
 
-  const oldSettings = row[required.assinger];
+  const oldSettings = required ? row[required.assinger] : {};
   const newSettings = insertedValues[required.assinger];
   const settingsName = msg.lanSettings[msg.file.name].edit[required.assinger].name;
   const { type } = msg.language.commands.settings[msg.file.name];
@@ -1137,7 +1139,10 @@ const interactionHandler = async (msgData, preparedData, insertedValues, require
     });
   } else {
     let isString;
-    if (required.assinger !== 'id' && Object.keys(row).includes(required.assinger)) {
+    if (
+      (!row.length && required.assinger !== 'id') ||
+      (required.assinger !== 'id' && Object.keys(row).includes(required.assinger))
+    ) {
       const typeRes = await msg.client.ch.query(
         `SELECT pg_typeof(${required.assinger}) FROM ${
           msg.client.constants.commands.settings.tablenames[msg.file.name][0]
