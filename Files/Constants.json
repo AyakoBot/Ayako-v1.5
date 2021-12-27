@@ -569,6 +569,7 @@
     }
   },
   "commands": {
+    "afk": "YELLOW",
     "toxicityCheck": "ff0000",
     "pardon": {
       "success": "1aff00",

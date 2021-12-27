@@ -6,7 +6,6 @@ module.exports = {
     if (!msg.author) return;
     if (msg.author.bot) return;
     if (!msg.guild) return;
-    return;
     const checkedMsg = await require('./commandHandler').prefix(msg);
     const res = await msg.client.ch.query('SELECT * FROM afk WHERE userid = $1 AND guildid = $2;', [
       msg.author.id,
@@ -15,7 +14,7 @@ module.exports = {
     const language = await msg.client.ch.languageSelector(msg.guild);
     if (res && res.rowCount > 0) {
       if (+res.rows[0].since + 60000 < Date.now()) {
-        if (checkedMsg?.command.name == 'afk') return;
+        if (checkedMsg?.command.name === 'afk') return;
         const m = await msg.client.ch.reply(
           msg,
           msg.client.ch.stp(language.commands.afkHandler.deletedAfk, {
@@ -37,15 +36,22 @@ module.exports = {
     let mentioned = msg.mentions.users;
     mentioned = mentioned.map((o) => o);
     mentioned.forEach(async (mention) => {
-      const res = await msg.client.ch.query(
+      const afkRes = await msg.client.ch.query(
         'SELECT * FROM afk WHERE userid = $1 AND guildid = $2;',
         [mention.id, msg.guild.id],
       );
-      if (res && res.rowCount > 0)
+      if (afkRes && afkRes.rowCount > 0)
         msg.client.ch.reply(
           msg,
-          `${res.rows[0].text} ${moment
-            .duration(+res.rows[0].since - Date.now())
+          `${
+            afkRes.rows[0].text
+              ? msg.client.ch.stp(msg.language.commands.afk.afkText2, {
+                  username: mention.username,
+                  slice: afkRes.rows[0].text,
+                })
+              : msg.client.ch.stp(msg.language.commands.afk.afkText, { username: mention.username })
+          } ${moment
+            .duration(+afkRes.rows[0].since - Date.now())
             .format(
               ` D [${language.time.days}], H [${language.time.hours}], m [${language.time.minutes}], s [${language.time.seconds}]`,
             )
