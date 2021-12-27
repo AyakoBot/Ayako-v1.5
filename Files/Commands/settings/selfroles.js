@@ -14,7 +14,9 @@ module.exports = {
             ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
             : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
         }`,
-        value: `${msg.language.affected}: ${r.roles.length}\n${msg.language.name}: ${r.name}`,
+        value: `${msg.language.affected}: ${r.roles ? r.roles.length : 0}\n${msg.language.name}: ${
+          r.name
+        }`,
         inline: true,
       });
     }
