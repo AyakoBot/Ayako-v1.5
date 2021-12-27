@@ -22,7 +22,7 @@ module.exports = {
     else msg.m = await msg.client.ch.reply(msg, em);
     const dmChannel = await target.createDM().catch(() => {});
     const DMembed = new Discord.MessageEmbed()
-      .setDescription(`${language.reason}: \n${reason}`)
+      .setDescription(`**${language.reason}:** \n${reason}`)
       .setColor(con.color)
       .setTimestamp()
       .setAuthor(

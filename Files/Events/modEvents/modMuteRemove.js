@@ -108,7 +108,7 @@ module.exports = {
       if (msg.logchannels && msg.logchannels.length) msg.client.ch.send(msg.logchannels, embed);
       const dmChannel = await target.createDM().catch(() => {});
       const DMembed = new Discord.MessageEmbed()
-        .setDescription(`${language.reason}: \n${reason}`)
+        .setDescription(`**${language.reason}:** \n${reason}`)
         .setColor(con.color)
         .setTimestamp()
         .setAuthor(
@@ -199,7 +199,7 @@ async function assingWarn(executor, target, reason, msg, answer, em, language, c
     ),
   );
   const DMembed = new Discord.MessageEmbed()
-    .setDescription(`${language.reason}: \n${reason}`)
+    .setDescription(`**${language.reason}:** \n${reason}`)
     .setColor(con.color)
     .setTimestamp()
     .setAuthor(
