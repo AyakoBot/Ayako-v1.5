@@ -1253,15 +1253,15 @@
     },
     "afk": {
       "category": "Chat",
-      "description": "Display a AFK text whenever someone pings you, automatically deleted if you send a message after creating your AFK",
+      "description": "Display a AFK text whenever someone pings you, automatically deleted if you send a Message 1 Minute after creating your AFK",
       "usage": ["afk (text)"],
       "afkText": "{{username}} is AFK **since**",
       "afkText2": "{{slice}}\n{{username}} is AFK **since**",
-      "updatedTo": "Alright, I've updated your AFK to\n{{text}}",
-      "updated": "I've updated your AFK",
+      "updatedTo": "AFK updated to:\n{{text}}",
+      "updated": "AFK updated",
       "noLinks": "You may not set Links as AFK.",
-      "set": "Alright, I've set your AFK",
-      "setTo": "Alright, I've set your AFK to\n{{text}}"
+      "set": "AFK set",
+      "setTo": "AFK set to:\n{{text}}"
     },
     "avatar": {
       "category": "User",
