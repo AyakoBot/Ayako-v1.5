@@ -127,8 +127,8 @@ module.exports = {
       .setLabel(msg.lanSettings.active)
       .setStyle(r.active ? 'SUCCESS' : 'DANGER');
     const wm = new Discord.MessageButton()
-      .setCustomId(msg.lan.edit.mutetof.name)
-      .setLabel(msg.lan.mutetof)
+      .setCustomId(msg.lan.edit.warntof.name)
+      .setLabel(msg.lan.warntof)
       .setStyle(r.warntof ? 'SUCCESS' : 'DANGER');
     const mm = new Discord.MessageButton()
       .setCustomId(msg.lan.edit.mutetof.name)
@@ -190,6 +190,7 @@ module.exports = {
         }),
       )
       .setStyle('SECONDARY');
+
     return [
       [active, words],
       [channel, user, role],
