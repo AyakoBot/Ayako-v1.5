@@ -1,7 +1,6 @@
 /* eslint-disable global-require,import/no-dynamic-require */
 const Discord = require('discord.js');
 const fs = require('fs');
-const auth = require('./auth.json');
 const Eris = require('./ErisClient');
 
 // Create Discord Client
@@ -70,11 +69,6 @@ fs.readdirSync('./Files/Commands/settings/editors')
     const editorfile = require(`../Commands/settings/editors/${file}`);
     client.settingsEditors.set(file.slice(0, -3), editorfile);
   });
-
-// Connect to Discord
-client.login(auth.token).then(() => {
-  console.log(`| Discord Client connected at ${new Date().toUTCString()}`);
-});
 
 client.invites = new Map();
 client.mutes = new Discord.Collection();

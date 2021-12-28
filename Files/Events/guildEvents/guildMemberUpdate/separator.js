@@ -149,29 +149,33 @@ module.exports = {
   },
   async getNewMembers(guild, res) {
     await guild.members.fetch();
-    const obj = {};
-    obj.members = [];
-    obj.separators = [];
-    obj.rowroles = [];
-    obj.roles = [];
-    obj.highestRole = {
-      id: guild.roles.highest.id,
-      position: guild.roles.highest.position,
+    const obj = {
+      members: [],
+      separators: [],
+      rowroles: [],
+      roles: [],
+      highestRol: {
+        id: guild.roles.highest.id,
+        position: guild.roles.highest.position,
+      },
+      clientHighestRole: {
+        id: guild.members.cache.get(guild.client.user.id).roles.highest.id,
+        position: guild.members.cache.get(guild.client.user.id).roles.highest.position,
+      },
     };
-    obj.clientHighestRole = {
-      id: guild.members.cache.get(guild.client.user.id).roles.highest.id,
-      position: guild.members.cache.get(guild.client.user.id).roles.highest.position,
-    };
-    guild.members.cache.forEach((member) => {
+
+    obj.guild.members.cache.forEach((member) => {
       const roles = [];
       member.roles.cache.forEach((role) => {
         roles.push({ id: role.id, position: role.position });
       });
       obj.members.push({ id: member.user.id, roles });
     });
+
     guild.roles.cache.forEach((role) => {
       obj.roles.push({ id: role.id, position: role.position });
     });
+
     res.rows.forEach((r) => {
       if (r.stoprole)
         obj.separators.push({

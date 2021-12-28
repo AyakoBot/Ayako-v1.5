@@ -155,11 +155,11 @@ module.exports = {
     });
     return null;
   },
-  async generateImage() {
+  generateImage() {
     const captcha = new CaptchaGenerator({ height: 200, width: 600 });
     captcha.setCaptcha({ characters: 5, size: 50 });
     captcha.setTrace({ size: 2, opacity: 3 });
-    const buffer = await captcha.generate();
+    const buffer = captcha.generateSync();
     const now = Date.now();
     const path = `./Files/Downloads/Captchas/${now}.png`;
     fs.writeFileSync(path, buffer);
@@ -194,12 +194,6 @@ module.exports = {
       )
       .setColor(msg.client.constants.standard.color);
     msg.client.ch.send(msg.DM, { embeds: [embed] });
-    if (msg.member.guild.id === '298954459172700181') {
-      msg.client.ch.send(msg.DM, {
-        content:
-          '**Also worth checking out:**\n💁‍♀️ Kimetsu No Yaiba┊Demon Slayer┊500 Demon Slayer Emojis & Stickers┊Unique & Fun┊Active┊Chatting┊VC┊& much more! 💜 \nㅤㅤㅤ╰─ ʚ ୨୧ ɞ ─╮\n✧· 🐛 https://discord.gg/k76uPAzsSW ☂️ ·✧',
-      });
-    }
     msg.member.roles.add(msg.r.finishedrole).catch(() => {});
     msg.member.roles.remove(msg.r.pendingrole).catch(() => {});
   },
