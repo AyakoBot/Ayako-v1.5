@@ -1,4 +1,3 @@
-
 const client = require('../../../BaseClient/DiscordClient');
 
 const antiSpamSettings = {
@@ -32,17 +31,19 @@ module.exports = {
     let warnnr;
     let guildSettings;
     const res = await msg.client.ch.query(
-      'SELECT * FROM antispamsettings WHERE guildid = $1 AND active = $2;',
-      [msg.guild.id, true],
+      'SELECT * FROM antispamsettings WHERE guildid = $1 AND active = true;',
+      [msg.guild.id],
     );
     if (res && res.rowCount > 0) [guildSettings] = res.rows;
     else return;
+
     const res2 = await msg.client.ch.query(
       'SELECT * FROM warns WHERE guildid = $1 AND userid = $2;',
       [msg.guild.id, msg.author.id],
     );
     if (res2 && res2.rowCount > 0) warnnr = res2.rowCount;
     else warnnr = 1;
+
     if (!msg.member) return;
     if (msg.member.permissions.has(8n)) return;
     if (guildSettings.bpchannelid && guildSettings.bpchannelid.includes(msg.channel.id)) return;
@@ -50,9 +51,12 @@ module.exports = {
     if (
       guildSettings.bproleid &&
       msg.member.roles.cache.some((role) => guildSettings.bproleid.includes(role.id))
-    )
+    ) {
       return;
+    }
+
     msg.language = await msg.client.ch.languageSelector(msg.guild);
+
     const banUser = async () => {
       data.messageCache = data.messageCache.filter((m) => m.author !== msg.author.id);
       data.bannedUsers.push(msg.author.id);
@@ -65,6 +69,7 @@ module.exports = {
         );
       return msg.client.emit('antispamBanAdd', msg);
     };
+
     const kickUser = async () => {
       data.messageCache = data.messageCache.filter((m) => m.author !== msg.author.id);
       data.kickedUsers.push(msg.author.id);
@@ -77,14 +82,17 @@ module.exports = {
         );
       return msg.client.emit('antispamKickAdd', msg);
     };
+
     const warnUser = async () => {
       data.warnedUsers.push(msg.author.id);
       return msg.client.emit('antispamWarnAdd', msg);
     };
+
     const muteUser = async () => {
       data.mutedUsers.push(msg.author.id);
       return msg.client.emit('antispamMuteAdd', msg);
     };
+
     const ofwarnUser = async () => {
       data.ofwarnedUsers.push(msg.author.id);
       if (guildSettings.readofwarnstof === true) {
@@ -104,6 +112,7 @@ module.exports = {
       }
       if (guildSettings.readofwarnstof === false) msg.client.emit('ofwarnAdd', msg);
     };
+
     data.messageCache.push({
       content: msg.content,
       author: msg.author.id,
