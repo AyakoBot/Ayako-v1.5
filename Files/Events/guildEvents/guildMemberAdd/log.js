@@ -46,7 +46,11 @@ module.exports = {
             entry = audit.sort((a, b) => b.id - a.id);
             entry = entry.first();
           }
-          embed.setAuthor(lan.author.titleBot, con.author.image, ch.stp(con.author.link, { user }));
+          embed.setAuthor({
+            name: lan.author.titleBot,
+            iconURL: con.author.image,
+            url: ch.stp(con.author.link, { user }),
+          });
           embed.setThumbnail(ch.displayAvatarURL(user));
           if (entry)
             embed.setDescription(ch.stp(lan.descriptionBot, { user: entry.executor, bot: user }));

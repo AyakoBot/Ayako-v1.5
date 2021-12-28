@@ -31,7 +31,11 @@ module.exports = {
         }
         const embed = new Discord.MessageEmbed().setColor(con.color).setTimestamp();
         if (entry) {
-          embed.setAuthor(lan.author.name, con.author.image, ch.stp(con.author.link, { msg }));
+          embed.setAuthor({
+            name: lan.author.name,
+            iconURL: con.author.image,
+            url: ch.stp(con.author.link, { msg }),
+          });
           embed.setDescription(
             ch.stp(lan.descriptionWithAudit, {
               user: entry.executor,
@@ -41,7 +45,11 @@ module.exports = {
           );
           if (entry.reason) embed.addField(language.reason, entry.reason);
         } else {
-          embed.setAuthor(lan.author.name, con.author.image, ch.stp(con.author.link, { msg }));
+          embed.setAuthor({
+            name: lan.author.name,
+            iconURL: con.author.image,
+            url: ch.stp(con.author.link, { msg }),
+          });
           embed.setDescription(
             ch.stp(lan.descriptionWithoutAudit, { user: msg.author, channel: msg.channel }),
           );

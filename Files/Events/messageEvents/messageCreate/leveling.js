@@ -206,7 +206,10 @@ module.exports = {
                 }, 10000);
               } else if (settings.lvlupmode === 'messages') {
                 const embed = new Discord.MessageEmbed()
-                  .setAuthor(`${leveluptext}`, msg.client.ch.displayAvatarURL(msg.author))
+                  .setAuthor({
+                    name: `${leveluptext}`,
+                    iconURL: msg.client.ch.displayAvatarURL(msg.author),
+                  })
                   .setColor(msg.client.ch.colorSelector(msg.guild ? msg.guild.me : null));
                 let channel;
                 if (settings.lvlupchannel) {

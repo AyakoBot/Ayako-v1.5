@@ -26,7 +26,10 @@ module.exports = {
           entry = entry.first();
         }
         const embed = new Discord.MessageEmbed()
-          .setAuthor(lan.author.title, con.author.image)
+          .setAuthor({
+            name: lan.author.title,
+            iconURL: con.author.image,
+          })
           .setColor(con.color)
           .setTimestamp();
         if (entry && entry.id) {

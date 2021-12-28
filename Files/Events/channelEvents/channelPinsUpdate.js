@@ -1,4 +1,3 @@
-
 const Discord = require('discord.js');
 
 module.exports = {
@@ -73,7 +72,11 @@ module.exports = {
           embed.setImage(`attachment://${name}`);
         }
         embed
-          .setAuthor(lan.author.title, con.author.image, con.author.link)
+          .setAuthor({
+            name: lan.author.title,
+            iconURL: con.author.image,
+            url: con.author.link,
+          })
           .setDescription(
             ch.stp(lan.description.withAuthor.withAudit, {
               user: entryPin.executor,
@@ -87,7 +90,11 @@ module.exports = {
         ch.send(logchannel, embed);
       } else {
         embed
-          .setAuthor(lan.author.title, con.author.image, con.author.link)
+          .setAuthor({
+            name: lan.author.title,
+            iconURL: con.author.image,
+            url: con.author.link,
+          })
           .setDescription(
             ch.stp(lan.description.withoutAuthor.withAudit, {
               user: entryPin.executor,
@@ -125,7 +132,11 @@ module.exports = {
           embed.setImage(`attachment://${name}`);
         }
         embed
-          .setAuthor(lan.author.title, con.author.image, con.author.link)
+          .setAuthor({
+            name: lan.author.title,
+            iconURL: con.author.image,
+            url: con.author.link,
+          })
           .setDescription(
             ch.stp(lan.description.withAuthor.withAudit, {
               user: entryUnPin.executor,
@@ -139,7 +150,11 @@ module.exports = {
         ch.send(logchannel, { embed });
       } else {
         embed
-          .setAuthor(lan.author.title, con.author.image, con.author.link)
+          .setAuthor({
+            name: lan.author.title,
+            iconURL: con.author.image,
+            url: con.author.link,
+          })
           .setDescription(
             ch.stp(lan.description.withoutAuthor.withAudit, {
               user: entryUnPin.executor,
@@ -154,7 +169,10 @@ module.exports = {
       const lan = language.channelPinUpdate;
       const con = Constants.channelPinUpdate;
       embed
-        .setAuthor(lan.author.title, con.author.image)
+        .setAuthor({
+          name: lan.author.title,
+          iconURL: con.author.image,
+        })
         .setDescription(ch.stp(lan.description.withoutAuthor.withoutAudit, { channel }))
         .setColor(con.color)
         .setTimestamp();

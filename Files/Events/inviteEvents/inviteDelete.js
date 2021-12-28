@@ -31,7 +31,11 @@ module.exports = {
         let link = invite.url;
         if (invite.inviter) link = ch.stp(con.author.link, { user: invite.inviter });
         const embed = new Discord.MessageEmbed()
-          .setAuthor(lan.author.name, con.author.image, link)
+          .setAuthor({
+            name: lan.author.name,
+            iconURL: con.author.image,
+            url: link,
+          })
           .setColor(con.color)
           .setTimestamp();
         if (entry) {

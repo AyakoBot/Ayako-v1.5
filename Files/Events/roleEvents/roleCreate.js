@@ -28,7 +28,10 @@ module.exports = {
         }
         const embed = new Discord.MessageEmbed()
           .setTimestamp()
-          .setAuthor(lan.author.name, con.author.image)
+          .setAuthor({
+            name: lan.author.name,
+            iconURL: con.author.image,
+          })
           .setColor(con.color);
         if (entry)
           embed.setDescription(ch.stp(lan.descriptionWithAudit, { user: entry.executor, role }));

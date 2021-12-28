@@ -21,7 +21,10 @@ module.exports = {
         const lan = language.commandCreate;
         const embed = new Discord.MessageEmbed()
           .setTimestamp()
-          .setAuthor(lan.author.name, con.author.image)
+          .setAuthor({
+            name: lan.author.name,
+            iconURL: con.author.image,
+          })
           .setColor(con.color)
           .setDescription(ch.stp(lan.description, { command }))
           .addField(

@@ -44,7 +44,11 @@ module.exports = {
 
     function sendMessage() {
       const embed = new Discord.MessageEmbed()
-        .setAuthor(lan.debugMessage.author, con.author.image, con.author.link)
+        .setAuthor({
+          name: lan.debugMessage.author,
+          iconURL: con.author.image,
+          url: con.author.link,
+        })
         .setColor(con.color)
         .setDescription(
           `${guild.client.ch.stp(lan.debugMessage.description, {

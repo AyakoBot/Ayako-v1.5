@@ -22,7 +22,10 @@ module.exports = {
             entry = entry.first();
             if (entry && ch.getUnix(entry.id) > Date.now() - 120000) {
               const embed = new Discord.MessageEmbed()
-                .setAuthor(lan.author, con.author.image)
+                .setAuthor({
+                  name: lan.author,
+                  iconURL: con.author.image,
+                })
                 .setDescription(
                   ch.stp(lan.description, {
                     user: entry.executor,

@@ -8,7 +8,11 @@ module.exports = {
     const language = await guild.client.ch.languageSelector(guild);
     const lan = language.guildCreate;
     const joinembed = new Discord.MessageEmbed()
-      .setAuthor(lan.author, Constants.standard.image, Constants.standard.invite)
+      .setAuthor({
+        name: lan.author,
+        iconURL: Constants.standard.image,
+        url: Constants.standard.invite,
+      })
       .setColor(guild.me.displayHexColor)
       .addField(
         ch.stp(lan.fields.one.name, { prefix: Constants.standard.prefix }),

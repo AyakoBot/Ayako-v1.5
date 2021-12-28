@@ -13,7 +13,10 @@ module.exports = {
   async execute(msg) {
     if (msg.guild.id === '298954459172700181') {
       const embed = new Discord.MessageEmbed()
-        .setAuthor('Server Role Shop', '', msg.client.constants.standard.invite)
+        .setAuthor({
+          name: 'Server Role Shop',
+          url: msg.client.constants.standard.invite,
+        })
         .addFields(
           {
             name: '**#1 - 15000<a:NadekoFlower:746420831390793899>**',
@@ -55,7 +58,10 @@ module.exports = {
       msg.client.ch.reply(msg, embed);
     } else if (msg.guild.id === '266632338883084290') {
       const embed = new Discord.MessageEmbed()
-        .setAuthor('Server Role Shop', '', msg.client.constants.standard.invite)
+        .setAuthor({
+          name: 'Server Role Shop',
+          url: msg.client.constants.standard.invite,
+        })
         .setColor(msg.client.ch.colorSelector(msg.guild.me))
         .setDescription(
           'To buy these Roles visit `t!shop` number `3` i. e. `Server Shop`\n View this message anytime by typing `h!shop`',

@@ -1,4 +1,3 @@
-
 const Discord = require('discord.js');
 
 module.exports = {
@@ -112,7 +111,11 @@ module.exports = {
           ch.send(channels, { embed });
         } else {
           const embed = new Discord.MessageEmbed()
-            .setAuthor(con.author.title, con.author.image, ch.stp(con.author.link, { channel }))
+            .setAuthor({
+              name: con.author.title,
+              url: ch.stp(con.author.link, { channel }),
+              iconURL: con.author.image,
+            })
             .setDescription(lan.description.withoutUser, {
               channel,
               type: language.channels[channel.type],

@@ -9,7 +9,9 @@ module.exports = {
     const lan = msg.language.commands.settings[path.basename(__filename).replace('.js', '')];
     const lan2 = msg.language.commands.settings;
     const embed = new Discord.MessageEmbed()
-      .setAuthor(msg.client.ch.stp(lan2.author, { type: lan.type }))
+      .setAuthor({
+        name: msg.client.ch.stp(lan2.author, { type: lan.type }),
+      })
       .addField(
         '\u200b',
         msg.client.ch.stp(lan.info, {

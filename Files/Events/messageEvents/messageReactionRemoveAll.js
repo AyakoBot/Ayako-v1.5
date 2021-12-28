@@ -21,7 +21,11 @@ module.exports = {
         const lan = language.messageReactionRemoveAll;
         const embed = new Discord.MessageEmbed()
           .setColor(con.color)
-          .setAuthor(lan.author.name, con.author.image, con.author.link)
+          .setAuthor({
+            name: lan.author.name,
+            iconURL: con.author.image,
+            url: con.author.link,
+          })
           .setTimestamp()
           .setDescription(ch.stp(lan.description, { link: ch.stp(con.author.link, { msg }) }));
         ch.send(channels, embed);

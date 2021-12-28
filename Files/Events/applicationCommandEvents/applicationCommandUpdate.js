@@ -1,4 +1,3 @@
-
 const Discord = require('discord.js');
 
 module.exports = {
@@ -22,7 +21,10 @@ module.exports = {
         const con = Constants.commandUpdate;
         const embed = new Discord.MessageEmbed()
           .setTimestamp()
-          .setAuthor(lan.author.name, con.author.image)
+          .setAuthor({
+            name: lan.author.name,
+            iconURL: con.author.image,
+          })
           .setColor(con.color);
         const ChangedKey = [];
         if (oldCommand.name !== newCommand.name) {
