@@ -1,5 +1,12 @@
 const readline = require('readline');
+const auth = require('./Files/BaseClient/auth.json');
 const client = require('./Files/BaseClient/DiscordClient');
+
+// Connect to Discord
+client.login(auth.token).then(() => {
+  console.log(`| Discord Client connected at ${new Date().toUTCString()}`);
+});
+
 client.ch = require('./Files/BaseClient/ClientHelper');
 
 client.ch.pathCheck();
@@ -27,5 +34,5 @@ process.on('uncaughtException', (error) => {
   client.ch.logger('Unhandled Exception', error);
 });
 
-//AP.on('posted', () => {console.log('Posted stats to Top.gg!')})
-//const { AP } = require('./Files/BaseClient/DBL');
+// AP.on('posted', () => {console.log('Posted stats to Top.gg!')})
+// const { AP } = require('./Files/BaseClient/DBL');
