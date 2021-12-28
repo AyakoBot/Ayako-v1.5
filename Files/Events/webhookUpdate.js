@@ -51,7 +51,10 @@ module.exports = {
             const lan = language.webhookCreate;
             const con = Constants.webhookCreate;
             embed.setColor(con.color);
-            embed.setAuthor(lan.author.name, con.author.image);
+            embed.setAuthor({
+              name: lan.author.name,
+              iconURL: con.author.image,
+            });
             if (webhook.avatar) embed.setThumbnail(ch.avatarURL(webhook));
             if (webhook.name) embed.addField(language.name, webhook.name);
             if (webhook.type)
@@ -69,7 +72,10 @@ module.exports = {
             const con = Constants.webhookUpdate;
             const changedKey = [];
             embed.setColor(con.color);
-            embed.setAuthor(lan.author.name, con.author.image);
+            embed.setAuthor({
+              name: lan.author.name,
+              iconURL: con.author.image,
+            });
 
             const download = async () => {
               const path = await ch.downloader(webhook, ch.avatarURL(webhook));
@@ -126,7 +132,10 @@ module.exports = {
             const lan = language.webhookDelete;
             const con = Constants.webhookDelete;
             embed.setColor(con.color);
-            embed.setAuthor(lan.author.name, con.author.image);
+            embed.setAuthor({
+              name: lan.author.name,
+              iconURL: con.author.image,
+            });
             [...entry.changes.entries()].forEach((change) => {
               for (let i = 1; i < change.length; i += 1) {
                 const { key } = change[i];

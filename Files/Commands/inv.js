@@ -17,7 +17,10 @@ module.exports = {
     if (channel.toLowerCase() === 'mc') {
       const SuggestEmbed = new Discord.MessageEmbed()
         .setTitle('Should this player be invited to TA Infinite MC server?')
-        .setAuthor(`${msg.author.tag}`, msg.author.displayAvatarURL())
+        .setAuthor({
+          name: `${msg.author.tag}`,
+          iconURL: msg.author.displayAvatarURL(),
+        })
         .setDescription(promotion)
         .setTimestamp()
         .setColor('#b0ff00');
@@ -31,7 +34,10 @@ module.exports = {
     } else if (channel.toLowerCase() === 'discord') {
       const SuggestEmbed = new Discord.MessageEmbed()
         .setTitle('Should this player be invited to this Discord?')
-        .setAuthor(`${msg.author.tag}`, msg.author.displayAvatarURL())
+        .setAuthor({
+          name: `${msg.author.tag}`,
+          iconURL: msg.author.displayAvatarURL(),
+        })
         .setDescription(promotion)
         .setTimestamp()
         .setColor('#b0ff00');

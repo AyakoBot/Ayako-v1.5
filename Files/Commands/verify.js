@@ -27,7 +27,10 @@ module.exports = {
       if (logchannel) {
         const log = new Discord.MessageEmbed()
           .setDescription(msg.client.ch.stp(msg.lan.log.start, { user: msg.author }))
-          .setAuthor(msg.author.tag, msg.client.ch.displayAvatarURL(msg.author))
+          .setAuthor({
+            name: msg.author.tag,
+            iconURL: msg.client.ch.displayAvatarURL(msg.author),
+          })
           .setTimestamp()
           .setColor();
         msg.client.ch.send(logchannel, { embeds: [log] });
@@ -176,7 +179,10 @@ module.exports = {
         .setDescription(
           msg.client.ch.stp(msg.language.verification?.log?.end, { user: msg.author }),
         )
-        .setAuthor(msg.author.tag, msg.client.ch.displayAvatarURL(msg.author))
+        .setAuthor({
+          name: msg.author.tag,
+          iconURL: msg.client.ch.displayAvatarURL(msg.author),
+        })
         .setTimestamp()
         .setColor();
       msg.client.ch.send(logchannel, { embeds: [log] });

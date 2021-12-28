@@ -32,7 +32,11 @@ async function end(ch, guild, Constants, channel, role) {
     .setColor(Constants.standard.color)
     .setTimestamp()
     .setThumbnail(ch.iconURL(guild))
-    .setAuthor(language.ready.disboard.title, Constants.standard.image, Constants.standard.invite);
+    .setAuthor({
+      name: language.ready.disboard.title,
+      iconURL: Constants.standard.image,
+      url: Constants.standard.invite,
+    });
   ch.send(channel, role, embed);
   ch.query('UPDATE disboard SET channelid = null, lastbump = NULL WHERE guildid = $1;', [guild.id]);
 }

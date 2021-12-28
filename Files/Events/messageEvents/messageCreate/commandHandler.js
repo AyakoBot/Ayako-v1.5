@@ -1,4 +1,4 @@
-// TODO: assing msg.member.modrole; 
+// TODO: assing msg.member.modrole;
 const Discord = require('discord.js');
 // const { statcord } = require('../../../BaseClient/Statcord');
 const auth = require('../../../BaseClient/auth.json');
@@ -237,7 +237,11 @@ module.exports = {
     } catch (e) {
       const channel = msg.client.channels.cache.get(msg.client.constants.errorchannel);
       const embed = new Discord.MessageEmbed()
-        .setAuthor('Command Error', msg.client.constants.emotes.crossLink, msg.url)
+        .setAuthor({
+          name: 'Command Error',
+          iconURL: msg.client.constants.emotes.crossLink,
+          url: msg.url,
+        })
         .setTimestamp()
         .setDescription(`${msg.client.ch.makeCodeBlock(e.stack)}`)
         .addField('Message', `${msg.client.ch.makeCodeBlock(msg)}`)

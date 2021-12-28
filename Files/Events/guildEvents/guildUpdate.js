@@ -1,4 +1,3 @@
-
 const Discord = require('discord.js');
 
 /* eslint-disable no-case-declarations */
@@ -21,7 +20,10 @@ module.exports = {
         const lan = language.guildUpdate;
         const con = Constants.guildUpdate;
         const embed = new Discord.MessageEmbed()
-          .setAuthor(lan.author.name, con.author.image)
+          .setAuthor({
+            name: lan.author.name,
+            iconURL: con.author.image,
+          })
           .setTimestamp()
           .setColor(con.color);
         let entry;

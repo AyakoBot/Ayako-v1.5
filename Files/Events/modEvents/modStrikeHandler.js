@@ -1,4 +1,3 @@
-
 const Discord = require('discord.js');
 
 module.exports = {
@@ -73,7 +72,9 @@ const doPunishment = async (punishment, executor, target, reason, msg, r) => {
     msg.client.emit(punishment, executor, target, reason, msg, r.duration ? r.duration : 3600000);
   else {
     const embed = new Discord.MessageEmbed()
-      .setAuthor(lan.confirmEmbed.author)
+      .setAuthor({
+        name: lan.confirmEmbed.author,
+      })
       .setDescription(
         msg.client.ch.stp(lan.confirmEmbed.description, {
           user: target,

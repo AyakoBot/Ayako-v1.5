@@ -25,7 +25,11 @@ module.exports = {
         const embed = new Discord.MessageEmbed()
           .setColor(con.color)
           .setTimestamp()
-          .setAuthor(lan.author.name, con.author.image, ch.stp(con.author.link, { msg: newMsg }))
+          .setAuthor({
+            name: lan.author.name,
+            iconURL: con.author.image,
+            url: ch.stp(con.author.link, { msg: newMsg }),
+          })
           .setDescription(
             ch.stp(lan.description, {
               msg: newMsg,

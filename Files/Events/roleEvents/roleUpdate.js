@@ -24,10 +24,10 @@ module.exports = {
         const language = await ch.languageSelector(guild);
         const lan = language.roleUpdate;
         const con = Constants.roleUpdate;
-        const embed = new Discord.MessageEmbed()
-          .setTimestamp()
-          .setColor(con.color)
-          .setAuthor(lan.author.name, con.author.image);
+        const embed = new Discord.MessageEmbed().setTimestamp().setColor(con.color).setAuthor({
+          name: lan.author.name,
+          iconURL: con.author.image,
+        });
         const ChangedKey = [];
         if (oldRole.name !== newRole.name) {
           ChangedKey.push(language.name);

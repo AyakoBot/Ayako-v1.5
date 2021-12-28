@@ -119,7 +119,10 @@ module.exports = {
               }),
             );
           }
-          embed.setAuthor(lan.author.title, con.author.image);
+          embed.setAuthor({
+            name: lan.author.title,
+            iconURL: con.author.image,
+          });
           embed.setColor(con.color);
           if (entry.name) embed.addField(language.name, entry.name);
           if (entry.type) embed.addField(language.type, entry.type);
@@ -150,7 +153,10 @@ module.exports = {
           embed.setDescription(
             ch.stp(lan.description.withUser, { user: entry.executor, integration: entry.target }),
           );
-          embed.setAuthor(lan.author.title, con.author.image);
+          embed.setAuthor({
+            name: lan.author.title,
+            iconURL: con.author.image,
+          });
           embed.setColor(con.color);
           if (entry.name) embed.addField(language.name, entry.name);
           if (entry.type) embed.addField(language.type, entry.type);
@@ -185,7 +191,10 @@ module.exports = {
           embed.setDescription(
             ch.stp(lan.description.withUser, { user: entry.executor, integration: entry.target }),
           );
-          embed.setAuthor(lan.author.title, con.author.image);
+          embed.setAuthor({
+            name: lan.author.title,
+            iconURL: con.author.image,
+          });
           embed.setColor(con.color);
           entry.changes.forEach((change) => {
             if (change.key === 'type')

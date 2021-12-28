@@ -135,7 +135,10 @@ module.exports = {
 
     const getRoleUpdateReplyEmbed = async (add, remove) => {
       const embed = new Discord.MessageEmbed()
-        .setAuthor(msg.lan.rolesUpdated, null, msg.client.constants.standard.invite)
+        .setAuthor({
+          name: msg.lan.rolesUpdated,
+          url: msg.client.constants.standard.invite,
+        })
         .setColor(msg.client.ch.colorSelector(msg.guild.me));
 
       if (add.length) {
@@ -154,7 +157,10 @@ module.exports = {
     const getRoleUpdateEmbed = () => {
       return new Discord.MessageEmbed()
         .setColor(msg.client.ch.colorSelector(msg.guild.me))
-        .setAuthor(Data.currentRow.name, null, msg.client.constants.standard.invite)
+        .setAuthor({
+          name: Data.currentRow.name,
+          url: msg.client.constants.standard.invite,
+        })
         .setDescription(
           `${Data.rOptions.map((r) => `<@&${r.value}>`).join(', ')}\n\n${msg.lan.categoryPage}: \`${
             Data.cPage
@@ -167,7 +173,10 @@ module.exports = {
     const getCategoryUpdateEmbed = () => {
       return new Discord.MessageEmbed()
         .setColor(msg.client.ch.colorSelector(msg.guild.me))
-        .setAuthor(Data.currentRow.name, null, msg.client.constants.standard.invite)
+        .setAuthor({
+          name: Data.currentRow.name,
+          url: msg.client.constants.standard.invite,
+        })
         .setDescription(
           `${Data.rOptions.map((r) => `<@&${r.value}>`).join(', ')}\n\n${msg.lan.categoryPage}: \`${
             Data.cPage
@@ -214,7 +223,10 @@ module.exports = {
       if (Data.currentRow) {
         return new Discord.MessageEmbed()
           .setColor(msg.client.ch.colorSelector(msg.guild.me))
-          .setAuthor(Data.currentRow.name, null, msg.client.constants.standard.invite)
+          .setAuthor({
+            name: Data.currentRow.name,
+            url: msg.client.constants.standard.invite,
+          })
           .setDescription(
             `${Data.rOptions.map((r) => `<@&${r.value}>`).join(', ')}\n\n${
               msg.lan.categoryPage
@@ -225,7 +237,10 @@ module.exports = {
       }
       const embed = new Discord.MessageEmbed()
         .setColor(msg.client.ch.colorSelector(msg.guild.me))
-        .setAuthor(msg.language.autotypes.selfroles, null, msg.client.constants.standard.invite)
+        .setAuthor({
+          name: Data.currentRow.name,
+          url: msg.client.constants.standard.invite,
+        })
         .setDescription(
           `${msg.language.page}: \`${Data.cPage}/${Math.ceil(Data.cOptions.length / 25)}\``,
         );
@@ -236,7 +251,10 @@ module.exports = {
     const getRoleButtonEmbed = () => {
       return new Discord.MessageEmbed()
         .setColor(msg.client.ch.colorSelector(msg.guild.me))
-        .setAuthor(Data.currentRow.name, null, msg.client.constants.standard.invite)
+        .setAuthor({
+          name: Data.currentRow.name,
+          url: msg.client.constants.standard.invite,
+        })
         .setDescription(
           `${Data.rOptions.map((r) => `<@&${r.value}>`).join(', ')}\n\n${msg.lan.categoryPage}: \`${
             Data.cPage
@@ -290,9 +308,10 @@ module.exports = {
     };
 
     const embed = new Discord.MessageEmbed();
-    embed
-      .setColor(msg.client.ch.colorSelector(msg.guild.me))
-      .setAuthor(msg.lan.author, null, msg.client.constants.standard.invite);
+    embed.setColor(msg.client.ch.colorSelector(msg.guild.me)).setAuthor({
+      name: msg.lan.author,
+      url: msg.client.constants.standard.invite,
+    });
 
     if (res && res.rowCount > 0) {
       let disabled = false;

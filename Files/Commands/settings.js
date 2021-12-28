@@ -281,7 +281,9 @@ module.exports = {
 
 const noEmbed = (msg) => {
   const embed = new Discord.MessageEmbed()
-    .setAuthor(msg.language.commands.settings.noEmbed.author)
+    .setAuthor({
+      name: msg.language.commands.settings.noEmbed.author,
+    })
     .setDescription(msg.language.commands.settings.noEmbed.desc);
   msg.client.ch.reply(msg, { embeds: [embed] });
 };
@@ -1253,7 +1255,10 @@ const setup = async (msg, answer) => {
   const lan = msg.language.commands.settings.setup;
 
   const embed = new Discord.MessageEmbed()
-    .setAuthor(lan.author, null, msg.client.constants.standard.invite)
+    .setAuthor({
+      name: lan.author,
+      url: msg.client.constants.standard.invite,
+    })
     .setDescription(msg.client.ch.stp(lan.question, { type: msg.lanSettings[msg.file.name].type }));
 
   const yes = new Discord.MessageButton()
@@ -1300,7 +1305,10 @@ const setup = async (msg, answer) => {
       case 'no': {
         buttonsCollector.stop();
         const abort = new Discord.MessageEmbed()
-          .setAuthor(lan.author, null, msg.client.constants.standard.invite)
+          .setAuthor({
+            name: lan.author,
+            url: msg.client.constants.standard.invite,
+          })
           .setDescription(lan.abort);
         return replier({ msg, answer: interaction }, { embed: abort });
       }

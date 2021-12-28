@@ -742,11 +742,11 @@ module.exports = {
    */
   notYours(interaction, msg) {
     const embed = new Discord.MessageEmbed()
-      .setAuthor(
-        msg.language.error,
-        client.constants.standard.image,
-        client.constants.standard.invite,
-      )
+      .setAuthor({
+        name: msg.language.error,
+        iconURL: client.constants.standard.image,
+        url: client.constants.standard.invite,
+      })
       .setColor(client.constants.error)
       .setDescription(msg.language.notYours);
     interaction.reply({ embeds: [embed], ephemeral: true }).catch(() => {});
@@ -825,7 +825,11 @@ module.exports = {
    */
   async loadingEmbed(lan, guild) {
     const embed = new Discord.MessageEmbed()
-      .setAuthor(lan.author, client.constants.emotes.loadingLink, client.constants.standard.invite)
+      .setAuthor({
+        name: lan.author,
+        iconURL: client.constants.emotes.loadingLink,
+        url: client.constants.standard.invite,
+      })
       .setColor(this.colorSelector(guild?.me))
       .setDescription(
         `${client.constants.emotes.loading} ${

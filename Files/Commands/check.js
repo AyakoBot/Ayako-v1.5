@@ -1,4 +1,3 @@
-
 const Discord = require('discord.js');
 const moment = require('moment');
 require('moment-duration-format');
@@ -23,7 +22,11 @@ module.exports = {
     msg.pages = { warn: 0, mute: 0, warnMax: 0, muteMax: 0 };
 
     const embed = new Discord.MessageEmbed()
-      .setAuthor(msg.client.ch.stp(lan.author, { target: user }), con.author.image, con.author.url)
+      .setAuthor({
+        name: msg.client.ch.stp(lan.author, { target: user }),
+        iconURL: con.author.image,
+        url: con.author.url,
+      })
       .addField(lan.banLoad, msg.client.constants.emotes.loading);
 
     const count = { warns: 0, mutes: 0 };

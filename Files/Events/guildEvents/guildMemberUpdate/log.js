@@ -23,7 +23,11 @@ module.exports = {
         const embed = new Discord.MessageEmbed().setTimestamp().setColor(con.color);
         if (oldMember && member.nickname !== oldMember.nickname) {
           const lan = language.guildMemberUpdateNickname;
-          embed.setAuthor(lan.author.name, con.author.image, ch.stp(con.author.link, { user }));
+          embed.setAuthor({
+            name: lan.author.name,
+            iconURL: con.author.image,
+            url: ch.stp(con.author.link, { user }),
+          });
           const audit = await guild.fetchAuditLogs({ limit: 5, type: 24 });
           let entry;
           if (audit && audit.entries) {
@@ -55,7 +59,11 @@ module.exports = {
           guild.features.includes('COMMUNITY')
         ) {
           const lan = language.guildMemberUpdateVerify;
-          embed.setAuthor(lan.author.name, con.author.image, ch.stp(con.author.link, { user }));
+          embed.setAuthor({
+            name: lan.author.name,
+            iconURL: con.author.image,
+            url: ch.stp(con.author.link, { user }),
+          });
           embed.setDescription(ch.stp(lan.description, { user }));
           ch.send(channels, embed);
           return;
@@ -99,7 +107,11 @@ module.exports = {
                 )
                 .join('\n')}`,
             );
-            embed.setAuthor(lan.author.name, con.author.image, ch.stp(con.author.link, { user }));
+            embed.setAuthor({
+              name: lan.author.name,
+              iconURL: con.author.image,
+              url: ch.stp(con.author.link, { user }),
+            });
             ch.send(channels, embed);
           }
         }

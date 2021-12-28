@@ -24,7 +24,10 @@ module.exports = {
                 .setColor('b0ff00')
                 .setThumbnail(user.displayAvatarURL())
                 .setDescription(`${user} accepted the submission of ${msg.author}`)
-                .setAuthor(msg.author.username, msg.author.displayAvatarURL())
+                .setAuthor({
+                  name: msg.author.username,
+                  iconURL: msg.author.displayAvatarURL(),
+                })
                 .setTimestamp();
               const log = await logchannel.send(embed2).catch(() => {});
               if (res.rows[0].willis) {
@@ -99,7 +102,10 @@ module.exports = {
                 .setColor('ff0000')
                 .setThumbnail(user.displayAvatarURL())
                 .setDescription(`${user} rejected the submission of ${msg.author}`)
-                .setAuthor(msg.author.username, msg.author.displayAvatarURL())
+                .setAuthor({
+                  name: msg.author.username,
+                  iconURL: msg.author.displayAvatarURL(),
+                })
                 .setTimestamp();
               const log = await logchannel.send(embed2).catch(() => {});
               const embed = new Discord.MessageEmbed()

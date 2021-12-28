@@ -20,10 +20,10 @@ module.exports = {
         const language = await ch.languageSelector(guild);
         const lan = language.voiceUpdate;
         const con = Constants.voiceUpdate;
-        const embed = new Discord.MessageEmbed()
-          .setTimestamp()
-          .setColor(con.color)
-          .setAuthor(lan.author.name, con.author.image);
+        const embed = new Discord.MessageEmbed().setTimestamp().setColor(con.color).setAuthor({
+          name: lan.author.name,
+          iconURL: con.author.image,
+        });
         const changedKey = [];
         if (
           oldState.selfDeaf !== newState.selfDeaf &&

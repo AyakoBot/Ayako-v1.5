@@ -44,7 +44,10 @@ module.exports = {
           ch.send(channels, { embed });
         } else {
           const embed = new Discord.MessageEmbed()
-            .setAuthor(con.author.title, con.author.image)
+            .setAuthor({
+              name: con.author.title,
+              iconURL: con.author.image,
+            })
             .setDescription(lan.description.withoutUser, {
               channel,
               type: language.channels[channel.type],
