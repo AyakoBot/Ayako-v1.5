@@ -9,11 +9,11 @@ module.exports = {
   type: 'info',
   async execute(msg) {
     const embed = new Discord.MessageEmbed()
-      .setAuthor(
-        msg.lan.author,
-        msg.client.constants.commands.invite.author.image,
-        msg.client.constants.standard.invite,
-      )
+      .setAuthor({
+        name: msg.lan.author,
+        iconURL: msg.client.constants.commands.invite.author.image,
+        url: msg.client.constants.standard.invite,
+      })
       .setDescription(
         msg.client.ch.stp(msg.lan.desc, {
           invite: msg.client.constants.standard.invite,
