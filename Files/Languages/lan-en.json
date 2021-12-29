@@ -1542,16 +1542,10 @@
       "overview": {
         "category": ["None"],
         "type": "Overview",
-        "muteroleid": "Mute Role",
         "interactionsmode": "Interactions Mode",
         "prefix": "Prefix",
         "lan": "Bot Language",
         "edit": {
-          "muteroleid": {
-            "name": "Mute Roles",
-            "select": "Select a Role",
-            "desc": "**This is not required**\n\nThe Role that will be used to mute Members"
-          },
           "interactionsmode": {
             "name": "Interactions Mode",
             "answers": "`True` for Small or `False` for Big",
@@ -2257,7 +2251,7 @@
       "leveling": {
         "category": ["Automation"],
         "type": "Leveling",
-        "description": "Also check out:\n`{{prefix}}settings levelroles` to customize Ayako's Leveling behaviour on Roles and Level Roles and\n`{{prefix}}settings levelchannels` to customize Ayako's Leveling behaviour on Channels\nFor other Leveling related Commands, check out `{{prefix}}help leveling`",
+        "description": "Also check out:\n`{{prefix}}settings levelroles` to add Roles Applied at Levels\n`{{prefix}}settings levelmultiplierroles` to add Roles which grant XP Gain Multipliers\n`{{prefix}}settings levelchannels` to customize Ayako's Leveling behaviour on Channels\nFor other Leveling related Commands, check out `{{prefix}}help leveling`",
         "xpmultiplier": "XP Multiplier",
         "blchannels": "Blacklisted Channels",
         "blroles": "Blacklisted Roles",
@@ -2323,8 +2317,23 @@
           }
         }
       },
-      "muterole": {
-        "category": ["Moderation"]
+      "levelroles": {
+        "category": ["Automation"],
+        "type": "Leveling",
+        "roles": "Roles",
+        "level": "Level",
+        "edit": {
+          "roles": {
+            "name": "Roles",
+            "answers": "Role IDs or Mentions",
+            "recommended": "Roles which will be assigned to a User who reached the defined Level"
+          },
+          "active": {
+            "name": "Level",
+            "answers": "Any Number",
+            "recommended": "The Level a Member has to reach before being granted these Roles"
+          }
+        }
       },
       "nitro": {
         "category": ["Automation"],
@@ -2868,7 +2877,6 @@
   "small": "Small",
   "big": "Big",
   "interactionsMode": "Interactions Size",
-  "muteRole": "Mute Role",
   "settingsOverview": "Settings Overview",
   "streaming": "Streaming",
   "suppress": "Suppressed",

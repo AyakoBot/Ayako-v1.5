@@ -760,10 +760,6 @@
             "key": "boolean",
             "required": true
           },
-          "muteroleid": {
-            "key": "role",
-            "required": false
-          },
           "lan": {
             "key": "lan",
             "required": true
@@ -1212,8 +1208,7 @@
         "overview": ["guildsettings"],
         "prefix": ["prefix"],
         "interactions": ["interactions"],
-        "modroles": ["modroles"],
-        "muterole": ["muterole"]
+        "modroles": ["modroles"]
       },
       "editReq": ["uniquetimestamp"],
       "setupQueries": {

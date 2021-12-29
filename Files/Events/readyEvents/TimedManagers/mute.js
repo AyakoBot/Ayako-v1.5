@@ -14,24 +14,13 @@ module.exports = {
             const user = await client.users.fetch(r.userid);
             const end = r.duration;
             if (end < Date.now()) {
-              let muteroleid;
-              let muterole;
               if (guild && guild.id) {
-                const res2 = await ch.query(
-                  'SELECT muteroleid FROM guildsettings WHERE guildid = $1;',
-                  [guild.id],
-                );
-                if (res2 && res2.rowCount > 0) {
-                  muteroleid = res2.rows[0].muteroleid;
-                  muterole = guild.roles.cache.find((re) => re.id === muteroleid);
-                } else muterole = guild.roles.cache.find((role) => role.name === 'Muted');
                 if (guild && guild.id) {
                   if (user && user.id) {
                     const member = await guild.members.fetch(user.id);
                     if (member) {
                       const language = await ch.languageSelector(guild);
-                      if (member.roles.cache.has(muterole.id)) {
-                        member.roles.remove(muterole).catch(() => {});
+                      if (member.isCommunicationDisabled()) {
                         client.emit(
                           'muteRemove',
                           client.user,

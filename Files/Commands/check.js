@@ -261,13 +261,6 @@ module.exports = {
               embeds.push(warnEmbed);
             });
           }
-          let muterole;
-          const resM = await msg.client.ch.query(
-            'SELECT * FROM guildsettings WHERE guildid = $1;',
-            [msg.guild.id],
-          );
-          if (resM && resM > 0)
-            muterole = msg.guild.roles.cache.find((r) => r.id === resM.rows[0].muteroleid);
           if (answered.mutes.length) {
             const MuteTitleEmbed = new Discord.MessageEmbed()
               .setTitle(msg.lan.mutes)
@@ -278,10 +271,11 @@ module.exports = {
               let notClosed = msg.client.ch.stp(msg.lan.notClosed, {
                 time: `<t:${mute.duration.slice(0, -3)}:F> (<t:${mute.duration.slice(0, -3)}:R>)`,
               });
-              if (muterole && member && member.roles.cache.get(muterole.id))
+              if (member && member.isCommunicationDisabled()) {
                 notClosed = msg.client.ch.stp(msg.lan.abortedMute, {
                   time: `<t:${mute.duration.slice(0, -3)}:F> (<t:${mute.duration.slice(0, -3)}:R>)`,
                 });
+              }
               let muteCloseText;
               if (mute.closed === true) {
                 muteCloseText = msg.client.ch.stp(msg.lan.closed, {
