@@ -1,11 +1,11 @@
 const Discord = require('discord.js');
 // TODO: add default mute time when not provided
 
-
 module.exports = {
   perm: null,
   type: 2,
   setupRequired: false,
+  finished: true,
   async mmrEmbed(msg, res) {
     res.sort((a, b) => a.uniquetimestamp - b.uniquetimestamp);
     const embed = new Discord.MessageEmbed();

@@ -3,6 +3,7 @@ const Discord = require('discord.js');
 module.exports = {
   perm: 268435456n,
   type: 2,
+  finished: true,
   displayEmbed(msg, r) {
     const embed = new Discord.MessageEmbed().addFields(
       {

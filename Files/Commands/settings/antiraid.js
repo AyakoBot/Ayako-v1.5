@@ -5,6 +5,7 @@ require('moment-duration-format');
 module.exports = {
   perm: 32n,
   type: 0,
+  finished: false,
   displayEmbed(msg, r) {
     const embed = new Discord.MessageEmbed()
       .addField(

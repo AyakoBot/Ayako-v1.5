@@ -15,6 +15,7 @@ module.exports = {
 
     settingsFiles.forEach((file) => {
       const settingsfile = require(`./settings/${file}`);
+      if (!settingsfile.finished) return;
       settingsfile.name = file.replace('.js', '');
 
       if (!msg.language.commands.settings[settingsfile.name]) {
