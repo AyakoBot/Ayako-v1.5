@@ -377,7 +377,7 @@ const getIdentifier = (msg, settingsConstant, row) => {
 
   switch (settingsConstant.identType) {
     default: {
-      identifier = row[settingsConstant.ident];
+      identifier = row[settingsConstant.ident] ? row[settingsConstant.ident] : '--';
       break;
     }
     case 'role': {
@@ -877,8 +877,11 @@ const log = async (msg, editData) => {
   const { insertedValues, required, comesFromMMR, row } = editData;
 
   const oldSettings = required ? row[required.assinger] : {};
-  const newSettings = insertedValues[required.assinger];
-  const settingsName = msg.lanSettings[msg.file.name].edit[required.assinger].name;
+  const newSettings = required ? insertedValues[required.assinger] : {};
+  const settingsName =
+    required && msg.lanSettings[msg.file.name].edit[required.assinger]
+      ? msg.lanSettings[msg.file.name].edit[required.assinger].name
+      : 'id';
   const { type } = msg.language.commands.settings[msg.file.name];
 
   const embed = new Discord.MessageEmbed().setAuthor({
