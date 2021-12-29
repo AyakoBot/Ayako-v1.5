@@ -28,21 +28,7 @@ module.exports = {
         }`,
         inline: true,
       },
-      {
-        name: msg.lan.muteroleid,
-        value: `${
-          r.muteroleid
-            ? msg.guild.roles.cache.get(r.muteroleid)
-              ? `<@&${r.muteroleid}>`
-              : msg.language.none
-            : msg.guild?.roles.cache.find((r) => r.name.toLowerCase() === msg.language.muted)
-            ? `<@&${
-                msg.guild?.roles.cache.find((r) => r.name.toLowerCase() === msg.language.muted).id
-              }>`
-            : msg.language.none
-        }`,
-        inline: true,
-      },
+
       {
         name: msg.lan.lan,
         value: `${msg.client.constants.emotes.flags[r.lan]} | ${
@@ -53,7 +39,7 @@ module.exports = {
     );
     return embed;
   },
-  buttons(msg, r) {
+  buttons(msg) {
     const prefix = new Discord.MessageButton()
       .setCustomId(msg.lan.edit.prefix.name)
       .setLabel(msg.lan.prefix)
@@ -62,14 +48,10 @@ module.exports = {
       .setCustomId(msg.lan.edit.interactionsmode.name)
       .setLabel(msg.lan.interactionsmode)
       .setStyle('SECONDARY');
-    const muteroleid = new Discord.MessageButton()
-      .setCustomId(msg.lan.edit.muteroleid.name)
-      .setLabel(msg.lan.muteroleid)
-      .setStyle(r.active ? 'SUCCESS' : 'DANGER');
     const language = new Discord.MessageButton()
       .setCustomId(msg.lan.edit.lan.name)
       .setLabel(msg.lan.lan)
       .setStyle('SECONDARY');
-    return [[prefix, interactionsmode, muteroleid, language]];
+    return [[prefix, interactionsmode, language]];
   },
 };
