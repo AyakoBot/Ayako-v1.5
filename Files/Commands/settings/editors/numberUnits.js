@@ -10,7 +10,7 @@ module.exports = {
     numbers.forEach((element, i) => {
       let inserted;
 
-      if (msg.file[required.assinger]) {
+      if (msg.file[required.assinger] && Array.isArray(msg.file[required.assinger])) {
         if (i > msg.file[required.assinger].length - 1) return;
 
         inserted = {

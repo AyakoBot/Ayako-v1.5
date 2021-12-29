@@ -77,17 +77,11 @@ module.exports = {
         .setColor(con.log.color)
         .setFooter(msg.lan.warnID + warn.row_number);
     } else if (warn.type === 'Mute') {
-      let muterole;
-      const resM = await msg.client.ch.query('SELECT * FROM guildsettings WHERE guildid = $1;', [
-        msg.guild.id,
-      ]);
-      if (resM && resM > 0)
-        muterole = msg.guild.roles.cache.find((r) => r.id === resM.rows[0].muteroleid);
       const member = await msg.guild.members.fetch(user.id).catch(() => {});
       let notClosed = msg.client.ch.stp(msg.lan.notClosed, {
         time: `<t:${warn.duration.slice(0, -3)}:F> (<t:${warn.duration.slice(0, -3)}:R>)`,
       });
-      if (muterole && member && member.roles.cache.get(muterole.id))
+      if (member && member.isCommunicationDisabled())
         notClosed = msg.client.ch.stp(msg.lan.abortedMute, {
           time: `<t:${warn.duration.slice(0, -3)}:F> (<t:${warn.duration.slice(0, -3)}:R>)`,
         });

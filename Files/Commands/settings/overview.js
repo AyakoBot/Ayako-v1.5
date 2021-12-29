@@ -10,8 +10,6 @@ module.exports = {
     const big = `${msg.client.constants.emotes.big} ${msg.language.big}`;
     if (r.prefix && r.prefix.startsWith('{"') && r.prefix.endsWith('"}'))
       r.prefix = r.prefix.slice(2, r.prefix.length - 2);
-    if (r.muteroleid && r.muteroleid.startsWith('{"') && r.muteroleid.endsWith('"}'))
-      r.muteroleid = r.muteroleid.slice(2, r.muteroleid.length - 2);
     const embed = new Discord.MessageEmbed().addFields(
       {
         name: msg.lan.prefix,
