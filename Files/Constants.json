@@ -1176,8 +1176,18 @@
             "key": "number",
             "required": true
           },
-          "rols": {
-            "key": "channels",
+          "roles": {
+            "key": "roles",
+            "required": true
+          }
+        },
+        "levelmultiroles": {
+          "multiplier": {
+            "key": "number",
+            "required": true
+          },
+          "roles": {
+            "key": "roles",
             "required": true
           }
         }
@@ -1194,7 +1204,8 @@
         "forcecooldowns": [null],
         "leveling": ["leveling"],
         "levelroles": ["levelingroles"],
-        "levelingchannels": ["leveling"],
+        "levelmultiroles": ["levelingmultiplierroles"],
+        "levelingchannels": ["levelingchannels"],
         "logs": ["logchannels"],
         "reactionroles": ["reactionroles"],
         "selfroles": ["selfroles"],
@@ -1355,6 +1366,20 @@
         "user": {
           "cols": ["userid"],
           "vals": [["{{msg.author.id}}"]]
+        },
+        "levelroles": {
+          "cols": ["guildid, uniquetimestamp"],
+          "vals": [["{{msg.guild.id}}", "{{values.uniquetimestamp}}"]],
+          "add": [],
+          "ident": "level",
+          "identType": "number"
+        },
+        "levelmultiroles": {
+          "cols": ["guildid, uniquetimestamp, multiplier"],
+          "vals": [["{{msg.guild.id}}", "{{values.uniquetimestamp}}", 1.0]],
+          "add": [],
+          "ident": "multiplier",
+          "identType": "number"
         },
         "modroles": {
           "cols": ["guildid, active, roleid, uniquetimestamp"],

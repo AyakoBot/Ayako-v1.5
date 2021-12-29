@@ -1778,27 +1778,6 @@
             "process": {
               "0": "Respond with the ID of the Separator you want to delete"
             }
-          },
-          "edit": {
-            "active": "Whether these Punishment Measure is enabled or not",
-            "duration": "The Duration this Punishment Measure should last for",
-            "punishment": "The Punishment applied",
-            "warnamount": "The Amount of warns required for this Punishment to be applied",
-            "removeroles": "The Roles removed from a Striked User",
-            "addroles": "Roles Added to a Striked User",
-            "confirmationreq": "Whether a Human Confirmation is required to execute the Punishment",
-            "process": {
-              "0": "What would you like to edit?\nClick on one of the Buttons"
-            },
-            "note": {
-              "active": "Select `True` or `False`",
-              "duration": "Respond with a Time",
-              "punishment": "Select the Punishment itself",
-              "warnamount": "Select a Number",
-              "removeroles": "Select the Roles removed",
-              "addroles": "Select the Roles added",
-              "confirmationreq": "Select `True` or `False`"
-            }
           }
         }
       },
@@ -2079,27 +2058,6 @@
             "process": {
               "0": "Respond with the ID of the Cooldown you want to delete"
             }
-          },
-          "edit": {
-            "activechannelid": "The Channels this Cooldown will only be applied in, if none is set the Cooldown will apply in the whole Server\n(If both `Whitelisted Channels` and `Active Channels` contain the same Channel, Whitelisted Channels win)",
-            "bpuserid": "Users immune to this Cooldown",
-            "bproleid": "Roles immune to this Cooldown",
-            "bpchannelid": "Channels immune to this Cooldown\n(If both `Whitelisted Channels` and `Active Channels` contain the same Channel, Whitelisted Channels win)",
-            "active": "Whether the Cooldown is enabled or not",
-            "command": "The Command this Cooldown applies to",
-            "cooldown": "The Length of the Cooldown in Seconds",
-            "process": {
-              "0": "What would you like to edit?\nClick on one of the Buttons"
-            },
-            "note": {
-              "command": "Select a Ayako Command or Command Alias",
-              "bpuserid": "Respond with 1 or more User IDs or Mentions",
-              "bproleid": "Respond with or Select 1 or more Role IDs or Mentions",
-              "activechannelid": "Respond with or Select 1 or more Channel IDs or Mentions",
-              "bpchannelid": "Respond with or Select 1 or more Channel IDs or Mentions)",
-              "active": "Select `true` or `false`",
-              "cooldown": "Select a Time in Seconds"
-            }
           }
         }
       },
@@ -2161,27 +2119,6 @@
             "name": "Remove disabled Commands",
             "process": {
               "0": "Respond with the ID of the disabled Commands you want to delete"
-            }
-          },
-          "edit": {
-            "active": "Whether these Commands are enabled or not",
-            "bproleid": "Roles immune to this Restriction",
-            "blroleid": "Roles reverting the immunity of the Whitelist Role restriction. Members with one of these Roles can't use these Commands, even if they have a Whitelisted Role",
-            "channels": "The Channel(s) these Commands are disabled in",
-            "bpuserid": "Users immune to this Restriction. These Users can always these Commands, even if they have a Blacklisted Role",
-            "bluserid": "Users on which the immunity of Whitelisted Roles is reverted. Users listed here can never use these Commands, even if they have a Whitelisted Role and even if they themselves are listed as Whitelisted User",
-            "commands": "The Commands which are Restricted",
-            "process": {
-              "0": "What would you like to edit?\nClick on one of the Buttons"
-            },
-            "note": {
-              "active": "Select `true` or `false`",
-              "bproleid": "Respond with or Select 1 or more Role IDs or Mentions",
-              "blroleid": "Respond with or Select 1 or more Role IDs or Mentions",
-              "channels": "Respond with or Select 1 or more Channel IDs or Mentions",
-              "bpuserid": "Respond with 1 or more User IDs or Mentions",
-              "bluserid": "Respond with 1 or more User IDs or Mentions",
-              "commands": "Select 1 or more Ayako Commands or Command Aliases"
             }
           }
         }
@@ -2251,7 +2188,7 @@
       "leveling": {
         "category": ["Automation"],
         "type": "Leveling",
-        "description": "Also check out:\n`{{prefix}}settings levelroles` to add Roles Applied at Levels\n`{{prefix}}settings levelmultiplierroles` to add Roles which grant XP Gain Multipliers\n`{{prefix}}settings levelchannels` to customize Ayako's Leveling behaviour on Channels\nFor other Leveling related Commands, check out `{{prefix}}help leveling`",
+        "description": "Also check out:\n`{{prefix}}settings levelroles` to add Roles Applied at Levels\n`{{prefix}}settings levelmultiroles` to add Roles which grant XP Gain Multipliers\n`{{prefix}}settings levelchannels` to customize Ayako's Leveling behaviour on Channels\nFor other Leveling related Commands, check out `{{prefix}}help leveling`",
         "xpmultiplier": "XP Multiplier",
         "blchannels": "Blacklisted Channels",
         "blroles": "Blacklisted Roles",
@@ -2328,10 +2265,56 @@
             "answers": "Role IDs or Mentions",
             "recommended": "Roles which will be assigned to a User who reached the defined Level"
           },
-          "active": {
+          "level": {
             "name": "Level",
             "answers": "Any Number",
             "recommended": "The Level a Member has to reach before being granted these Roles"
+          }
+        },
+        "otherEdits": {
+          "add": {
+            "name": "Add a Level Role",
+            "process": {
+              "0": "Select a Role that will be used as Level Role"
+            }
+          },
+          "remove": {
+            "name": "Remove a Level Role",
+            "process": {
+              "0": "Respond with the ID of the Level Role you want to delete"
+            }
+          }
+        }
+      },
+      "levelmultiroles": {
+        "category": ["Automation"],
+        "type": "Leveling",
+        "roles": "Roles",
+        "multiplier": "Multiplier",
+        "edit": {
+          "roles": {
+            "name": "Roles",
+            "answers": "Role IDs or Mentions",
+            "recommended": "Roles which will be assigned to a User who reached the defined Level"
+          },
+          "multiplier": {
+            "name": "Multiplier",
+            "answers": "Any Number lower than 5.0 or above 0.1",
+            "recommended": "Recommended: `1.0`"
+          }
+        },
+        "otherEdits": {
+          "add": {
+            "name": "Add a Multiplier Role",
+            "process": {
+              "0": "Select a Role that will be used as Multiplier Role"
+            }
+          },
+          "remove": {
+            "name": "Remove a Multiplier Role",
+            "process": {
+              "0": "Respond with the ID of the Multiplier Role you want to delete"
+            }
           }
         }
       },
@@ -2417,29 +2400,6 @@
             "name": "Remove a Self-Role Category",
             "process": {
               "0": "Respond with the ID of the Self-Role Category you want to delete"
-            }
-          },
-          "edit": {
-            "active": "Whether these Separator is enabled or not",
-            "onlyone": "Whether only one Self-Role in this Category can be assigned",
-            "blacklistedroles": "Members with this Role cannot take any of these Self-Roles",
-            "blacklistedusers": "Users listed here cannot take any of these Self-Roles",
-            "whitelistedroles": "Only Members with this Role can take these Self-Roles",
-            "whitelistedusers": "Only Users listed here can take these Self-Roles",
-            "roles": "The Self-Roles of this Category",
-            "name": "Custom Name for this Self-Role Category",
-            "process": {
-              "0": "What would you like to edit?\nClick on one of the Buttons"
-            },
-            "note": {
-              "active": "Select `True` or `False`",
-              "roles": "Respond with or Select 1 or more Role IDs or Mentions",
-              "onlyone": "Select `True` or `False`",
-              "blacklistedroles": "Respond with or Select 1 or more Role IDs or Mentions",
-              "blacklistedusers": "Respond with 1 or more User IDs or Mentions",
-              "whitelistedroles": "Respond with or Select 1 or more Role IDs or Mentions",
-              "whitelistedusers": "Respond with 1 or more User IDs or Mentions",
-              "name": "Enter a custom Name for this Self-Role Category"
             }
           }
         }
@@ -2617,23 +2577,6 @@
             "process": {
               "0": "Respond with the ID of the Separator you want to delete"
             }
-          },
-          "edit": {
-            "active": "Whether these Separator is enabled or not",
-            "separator": "The Separator Role, it will be applied to Members if they fulfill following conditions:\n**Self-Adapting `True`**: \nLooking at the Role list of the Server, The Separator Role will be applied if a Member gains any Role between the Seaprator and the Stop Role, if no Stop Role is defined it stops at the top of the Role List. Any Role moved between these 2 Roles or above the Separator Role will instantly start triggering the Separator Role\n\n**Self-Adapting `False`**:\nThe Separator Role will be assinged to Members with at least one of the defined Roles",
-            "stoprole": "The Role which marks the end to the Separator Roles trigger.\nIf none is defined the Separator Role will work till the very top of the Role List",
-            "isvarying": "The \"Self-Adapt\" Mode. Whether the Separator should follow defined Roles or Self-Adjust to Support every Role between it and the Stop Role (if no Stop Role is defined the Separator Role will stop at the top of the Role List)",
-            "roles": "Roles entered here will trigger the Separator Role",
-            "process": {
-              "0": "What would you like to edit?\nClick on one of the Buttons"
-            },
-            "note": {
-              "active": "Select `True` or `False`",
-              "separator": "Respond with or Select 1 Role ID or Mention",
-              "stoprole": "Respond with or Select 1 Role ID or Mention",
-              "isvarying": "Respond with or Select 1 or more Channel IDs or Mentions",
-              "roles": "Respond with 1 or more Role IDs or Mentions"
-            }
           }
         }
       },
@@ -2717,31 +2660,6 @@
           "remove": {
             "name": "Remove a Mod-Role",
             "process": ["Respond with the ID of the Mod-Role you want to delete"]
-          },
-          "edit": {
-            "active": "Whether this Mod-Role is enabled or not",
-            "roleid": "Ayako will show a Warning if Moderator Commands are used on a Member with this Role",
-            "perms": "Permissions listed here will overwrite Discords Role Permissions",
-            "blacklistedcommands": "Commands listed here can __not__ be used regardless if the Specified Permissions or Discord Role Permissions allow it",
-            "whitelistedcommands": "Commands listed here can be used regardless if the Specified Permissions or Discord Role Permissions allow it",
-            "whitelistedusers": "Users listed here can use the Permissions of the Mod-Role, even if they have a Blacklisted Role",
-            "blacklistedusers": "Users listed here can __not__ use the Permissions of the Mod-Role, even if they have a Whitelisted Role",
-            "whitelistedroles": "Members with Roles listed here can use the Permissions of the Mod-Role, even if they have a Blacklisted Role",
-            "blacklistedroles": "Members with Roles listed here can __not__ use the Permissions of the Mod-Role",
-            "process": {
-              "0": "What would you like to edit?\nClick on one of the Buttons"
-            },
-            "note": {
-              "roleid": "Respond with or Select 1 Role ID or Mention",
-              "perms": "Respond with Discord BitField Permissions or Select the Permissions in the Select Menu below",
-              "blacklistedcommands": "Select 1 or more Ayako Commands or Command Aliases",
-              "whitelistedcommands": "Select 1 or more Ayako Commands or Command Aliases",
-              "whitelistedusers": "Respond with 1 or More User IDs or Mentions",
-              "blacklistedusers": "Respond with 1 or More User IDs or Mentions",
-              "whitelistedroles": "Respond with or Select 1 or more Role IDs or Mentions",
-              "blacklistedroles": "Respond with or Select 1 or more Role IDs or Mentions",
-              "active": "Select `True` or `False`"
-            }
           }
         }
       }
@@ -2804,6 +2722,7 @@
   "granted": "Granted",
   "revoked": "Revoked",
   "aliases": "Aliases",
+  "level": "Level",
   "command": "Command",
   "hint": "Hint",
   "category": "Category",
