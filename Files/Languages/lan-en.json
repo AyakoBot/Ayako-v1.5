@@ -1396,7 +1396,7 @@
       "active": "Active",
       "noEmbed": {
         "author": "Ayako Settings",
-        "desc": "No Settings available for the selected Setting"
+        "desc": "No Settings available for the selected Setting\nUse `{{prefix}}settings {{name}} edit` to start the Set-up"
       },
       "errors": {
         "faultyInput": "Error, DataBase input faulty. Please contact Support on {{support}}"
@@ -1436,161 +1436,97 @@
             "name": "Guild Events",
             "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
             "select": "Select 1 or more Channels",
-            "desc": "Select the Channel(s) you want to Log this in Event below",
-            "fail": {
-              "no": "I couldn't find this Channel\n",
-              "wrongGuild": "This Channel is not Part of this Server\n"
-            }
+            "desc": "Select the Channel(s) you want to Log this in Event below"
           },
           "emojievents": {
             "name": "Emoji Events",
             "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
             "select": "Select 1 or more Channels",
-            "desc": "Select the Channel(s) you want to Log this in Event below",
-            "fail": {
-              "no": "I couldn't find this Channel\n",
-              "wrongGuild": "This Channel is not Part of this Server\n"
-            }
+            "desc": "Select the Channel(s) you want to Log this in Event below"
           },
           "inviteevents": {
             "name": "Invite Events",
             "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
             "select": "Select 1 or more Channels",
-            "desc": "Select the Channel(s) you want to Log this in Event below",
-            "fail": {
-              "no": "I couldn't find this Channel\n",
-              "wrongGuild": "This Channel is not Part of this Server\n"
-            }
+            "desc": "Select the Channel(s) you want to Log this in Event below"
           },
           "messageevents": {
             "name": "Message Events",
             "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
             "select": "Select 1 or more Channels",
-            "desc": "Select the Channel(s) you want to Log this in Event below",
-            "fail": {
-              "no": "I couldn't find this Channel\n",
-              "wrongGuild": "This Channel is not Part of this Server\n"
-            }
+            "desc": "Select the Channel(s) you want to Log this in Event below"
           },
           "roleevents": {
             "name": "Role Events",
             "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
             "select": "Select 1 or more Channels",
-            "desc": "Select the Channel(s) you want to Log this in Event below",
-            "fail": {
-              "no": "I couldn't find this Channel\n",
-              "wrongGuild": "This Channel is not Part of this Server\n"
-            }
+            "desc": "Select the Channel(s) you want to Log this in Event below"
           },
           "userevents": {
             "name": "User Events",
             "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
             "select": "Select 1 or more Channels",
-            "desc": "Select the Channel(s) you want to Log this in Event below",
-            "fail": {
-              "no": "I couldn't find this Channel\n",
-              "wrongGuild": "This Channel is not Part of this Server\n"
-            }
+            "desc": "Select the Channel(s) you want to Log this in Event below"
           },
           "voiceevents": {
             "name": "Voice Events",
             "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
             "select": "Select 1 or more Channels",
-            "desc": "Select the Channel(s) you want to Log this in Event below",
-            "fail": {
-              "no": "I couldn't find this Channel\n",
-              "wrongGuild": "This Channel is not Part of this Server\n"
-            }
+            "desc": "Select the Channel(s) you want to Log this in Event below"
           },
           "webhookevents": {
             "name": "Webhook Events",
             "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
             "select": "Select 1 or more Channels",
-            "desc": "Select the Channel(s) you want to Log this in Event below",
-            "fail": {
-              "no": "I couldn't find this Channel\n",
-              "wrongGuild": "This Channel is not Part of this Server\n"
-            }
+            "desc": "Select the Channel(s) you want to Log this in Event below"
           },
           "channelevents": {
             "name": "Channel Events",
             "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
             "select": "Select 1 or more Channels",
-            "desc": "Select the Channel(s) you want to Log this in Event below",
-            "fail": {
-              "no": "I couldn't find this Channel\n",
-              "wrongGuild": "This Channel is not Part of this Server\n"
-            }
+            "desc": "Select the Channel(s) you want to Log this in Event below"
           },
           "applicationevents": {
             "name": "Application Events",
             "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
             "select": "Select 1 or more Channels",
-            "desc": "Select the Channel(s) you want to Log this in Event below",
-            "fail": {
-              "no": "I couldn't find this Channel\n",
-              "wrongGuild": "This Channel is not Part of this Server\n"
-            }
+            "desc": "Select the Channel(s) you want to Log this in Event below"
           },
           "stageinstanceevents": {
             "name": "Stage Instance Events",
             "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
             "select": "Select 1 or more Channels",
-            "desc": "Select the Channel(s) you want to Log this in Event below",
-            "fail": {
-              "no": "I couldn't find this Channel\n",
-              "wrongGuild": "This Channel is not Part of this Server\n"
-            }
+            "desc": "Select the Channel(s) you want to Log this in Event below"
           },
           "stickerevents": {
             "name": "Sticker Events",
             "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
             "select": "Select 1 or more Channels",
-            "desc": "Select the Channel(s) you want to Log this in Event below",
-            "fail": {
-              "no": "I couldn't find this Channel\n",
-              "wrongGuild": "This Channel is not Part of this Server\n"
-            }
+            "desc": "Select the Channel(s) you want to Log this in Event below"
           },
           "threadevents": {
             "name": "Thread Events",
             "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
             "select": "Select 1 or more Channels",
-            "desc": "Select the Channel(s) you want to Log this in Event below",
-            "fail": {
-              "no": "I couldn't find this Channel\n",
-              "wrongGuild": "This Channel is not Part of this Server\n"
-            }
+            "desc": "Select the Channel(s) you want to Log this in Event below"
           },
           "guildmemberevents": {
             "name": "Guild Member Events",
             "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
             "select": "Select 1 or more Channels",
-            "desc": "Select the Channel(s) you want to Log this in Event below",
-            "fail": {
-              "no": "I couldn't find this Channel\n",
-              "wrongGuild": "This Channel is not Part of this Server\n"
-            }
+            "desc": "Select the Channel(s) you want to Log this in Event below"
           },
           "modlogs": {
             "name": "Moderation Logs",
             "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
             "select": "Select 1 or more Channels",
-            "desc": "Select the Channel(s) you want to Log this in Event below",
-            "fail": {
-              "no": "I couldn't find this Channel\n",
-              "wrongGuild": "This Channel is not Part of this Server\n"
-            }
+            "desc": "Select the Channel(s) you want to Log this in Event below"
           },
           "settingslog": {
             "name": "Settings Logs",
             "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
             "select": "Select 1 or more Channels",
-            "desc": "Select the Channel(s) you want to Log this in Event below",
-            "fail": {
-              "no": "I couldn't find this Channel\n",
-              "wrongGuild": "This Channel is not Part of this Server\n"
-            }
+            "desc": "Select the Channel(s) you want to Log this in Event below"
           }
         }
       },
@@ -1614,11 +1550,7 @@
           "muteroleid": {
             "name": "Mute Roles",
             "select": "Select a Role",
-            "desc": "**This is not required**\n\nThe Role that will be used to mute Members",
-            "fail": {
-              "no": "I couldn't find this Role\n",
-              "wrongGuild": "This Role is not Part of this Server\n"
-            }
+            "desc": "**This is not required**\n\nThe Role that will be used to mute Members"
           },
           "interactionsmode": {
             "name": "Interactions Mode",
@@ -1696,21 +1628,13 @@
             "name": "Whitelisted Channels",
             "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
             "select": "Select 1 or more Channels",
-            "desc": "Select the Channel(s) you want to bypass below",
-            "fail": {
-              "no": "I couldn't find this Channel\n",
-              "wrongGuild": "This Channel is not Part of this Server\n"
-            }
+            "desc": "Select the Channel(s) you want to bypass below"
           },
           "bproleid": {
             "name": "Whitelisted Roles",
             "recommended": "This is a Switch.\nIf the entered Role is already bypassed it will be removed.",
             "select": "Select 1 or more Roles",
-            "desc": "Select the Role(s) you want to bypass below",
-            "fail": {
-              "no": "I couldn't find this Role\n",
-              "wrongGuild": "This Role is not Part of this Server\n"
-            }
+            "desc": "Select the Role(s) you want to bypass below"
           },
           "bpuserid": {
             "name": "Whitelisted Users",
@@ -1763,11 +1687,7 @@
             "name": "TB post Channel",
             "recommended": "When the Join Threshold is breached, I will post a Message in this Channel",
             "select": "Select a Channel",
-            "desc": "Select the Channel you want me to use below",
-            "fail": {
-              "no": "I couldn't find this Channel\n",
-              "wrongGuild": "This Channel is not Part of this Server\n"
-            }
+            "desc": "Select the Channel you want me to use below"
           },
           "time": {
             "name": "Join Remember-Time",
@@ -1788,11 +1708,7 @@
             "name": "TB Roles to Ping",
             "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.\nWhen the Join Threshold is breached, I will Mention these Roles in a Message",
             "select": "Select 1 or more Roles",
-            "desc": "Select the Role(s) you want to add below",
-            "fail": {
-              "no": "I couldn't find this Role\n",
-              "wrongGuild": "This Role is not Part of this Server\n"
-            }
+            "desc": "Select the Role(s) you want to add below"
           },
           "pingusers": {
             "name": "TB Users to Ping",
@@ -1843,21 +1759,13 @@
             "name": "Roles to Remove from Striked User",
             "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.",
             "select": "Select 1 or more Roles",
-            "desc": "Select the Role(s) you want to add below",
-            "fail": {
-              "no": "I couldn't find this Role\n",
-              "wrongGuild": "This Role is not Part of this Server\n"
-            }
+            "desc": "Select the Role(s) you want to add below"
           },
           "addroles": {
             "name": "Roles to Add to Striked User",
             "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.",
             "select": "Select 1 or more Roles",
-            "desc": "Select the Role(s) you want to add below",
-            "fail": {
-              "no": "I couldn't find this Role\n",
-              "wrongGuild": "This Role is not Part of this Server\n"
-            }
+            "desc": "Select the Role(s) you want to add below"
           },
           "confirmationreq": {
             "name": "Human Confirmation required",
@@ -1986,11 +1894,7 @@
             "name": "Channel",
             "recommended": "The Channel this Statistic will be applied to",
             "select": "Select 1 Channel",
-            "desc": "Select the Channel you want to use below",
-            "fail": {
-              "no": "I couldn't find this Channel\n",
-              "wrongGuild": "This Channel is not Part of this Server\n"
-            }
+            "desc": "Select the Channel you want to use below"
           },
           "stat": {
             "name": "Stat",
@@ -2015,33 +1919,21 @@
             "answers": "`Mention(s) or ID(s)`",
             "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.",
             "select": "Select 1 or more Roles",
-            "desc": "Select the Role(s) you want to add/remove below",
-            "fail": {
-              "no": "I couldn't find this Role\n",
-              "wrongGuild": "This Role is not Part of this Server\n"
-            }
+            "desc": "Select the Role(s) you want to add/remove below"
           },
           "userroleid": {
             "name": "Roles given to joining Users",
             "answers": "`Mention(s) or ID(s)`",
             "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.",
             "select": "Select 1 or more Roles",
-            "desc": "Select the Role(s) you want to add/remove below",
-            "fail": {
-              "no": "I couldn't find this Role\n",
-              "wrongGuild": "This Role is not Part of this Server\n"
-            }
+            "desc": "Select the Role(s) you want to add/remove below"
           },
           "allroleid": {
             "name": "Roles given to joining Bots and Users",
             "answers": "`Mention(s) or ID(s)`",
             "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.",
             "select": "Select 1 or more Roles",
-            "desc": "Select the Role(s) you want to add/remove below",
-            "fail": {
-              "no": "I couldn't find this Role\n",
-              "wrongGuild": "This Role is not Part of this Server\n"
-            }
+            "desc": "Select the Role(s) you want to add/remove below"
           }
         }
       },
@@ -2116,20 +2008,12 @@
           "bpchannelid": {
             "name": "Whitelisted Channels",
             "answers": "`Mention(s) or ID(s)`",
-            "recommended": "This is a Switch.\nIf the entered Channel is already added it will be removed.",
-            "fail": {
-              "no": "I couldn't find this Channel\n",
-              "wrongGuild": "This Channel is not Part of this Server\n"
-            }
+            "recommended": "This is a Switch.\nIf the entered Channel is already added it will be removed."
           },
           "bproleid": {
             "name": "Whitelisted Roles",
             "answers": "`Mention(s) or ID(s)`",
-            "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.",
-            "fail": {
-              "no": "I couldn't find this Role\n",
-              "wrongGuild": "This Role is not Part of this Server\n"
-            }
+            "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed."
           },
           "bpuserid": {
             "name": "Whitelisted Users",
@@ -2170,29 +2054,17 @@
           "activechannelid": {
             "name": "Active Channels",
             "answers": "`Mention(s) or ID(s)`",
-            "recommended": "**This is not required**\n\nThis is a Switch.\nIf the entered Channel is already added it will be removed.\nThe Cooldown will only apply in these Channels, if none are set it applies on the whole Server.",
-            "fail": {
-              "no": "I couldn't find this Channel\n",
-              "wrongGuild": "This Channel is not Part of this Server\n"
-            }
+            "recommended": "**This is not required**\n\nThis is a Switch.\nIf the entered Channel is already added it will be removed.\nThe Cooldown will only apply in these Channels, if none are set it applies on the whole Server."
           },
           "bproleid": {
             "name": "Whitelisted Roles",
             "answers": "`Mention(s) or ID(s)`",
-            "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.\nMembers with one of these Roles will bypass the Cooldown.",
-            "fail": {
-              "no": "I couldn't find this Role\n",
-              "wrongGuild": "This Role is not Part of this Server\n"
-            }
+            "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.\nMembers with one of these Roles will bypass the Cooldown."
           },
           "bpchannelid": {
             "name": "Whitelisted Channels",
             "answers": "`Mention(s) or ID(s)`",
-            "recommended": "This is a Switch.\nIf the entered Channel is already added it will be removed.\nIf no Active Channels are set and the Cooldown applies on the whole Server, they will not apply on Channels listed here.",
-            "fail": {
-              "no": "I couldn't find this Channel\n",
-              "wrongGuild": "This Channel is not Part of this Server\n"
-            }
+            "recommended": "This is a Switch.\nIf the entered Channel is already added it will be removed.\nIf no Active Channels are set and the Cooldown applies on the whole Server, they will not apply on Channels listed here."
           },
           "bpuserid": {
             "name": "Whitelisted Users",
@@ -2260,29 +2132,17 @@
           "bproleid": {
             "name": "Whitelisted Roles",
             "answers": "`Mention(s) or ID(s)`",
-            "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.\nMembers with one of these Roles can still use these Commands.",
-            "fail": {
-              "no": "I couldn't find this Role\n",
-              "wrongGuild": "This Role is not Part of this Server\n"
-            }
+            "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.\nMembers with one of these Roles can still use these Commands."
           },
           "blroleid": {
             "name": "Blacklisted Roles",
             "answers": "`Mention(s) or ID(s)`",
-            "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.\nMembers with one of these Roles can not use any of these Commands, even if they have a Role that Whitelists them, doesn't apply if the User itself is Whitelisted.",
-            "fail": {
-              "no": "I couldn't find this Role\n",
-              "wrongGuild": "This Role is not Part of this Server\n"
-            }
+            "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.\nMembers with one of these Roles can not use any of these Commands, even if they have a Role that Whitelists them, doesn't apply if the User itself is Whitelisted."
           },
           "channels": {
             "name": "Channel",
             "answers": "`Mention(s) or ID(s)`",
-            "recommended": "**This is not required**\n\nThis is a Switch.\nIf the entered Channel is already added it will be removed.\nThe Channel(s) these Commands are disabled in.",
-            "fail": {
-              "no": "I couldn't find this Channel\n",
-              "wrongGuild": "This Channel is not Part of this Server\n"
-            }
+            "recommended": "**This is not required**\n\nThis is a Switch.\nIf the entered Channel is already added it will be removed.\nThe Channel(s) these Commands are disabled in."
           },
           "bpuserid": {
             "name": "Whitelisted Users",
@@ -2348,29 +2208,17 @@
           "roles": {
             "name": "Ping Roles",
             "answers": "`Mentions or IDs`",
-            "recommended": "**This is not required**\n\nThe Roles that will be pinged once you can use `!d bump` again",
-            "fail": {
-              "no": "I couldn't find this Role\n",
-              "wrongGuild": "This Role is not Part of this Server\n"
-            }
-          },          
+            "recommended": "**This is not required**\n\nThe Roles that will be pinged once you can use `!d bump` again"
+          },
           "users": {
             "name": "Ping Users",
             "answers": "`Mentions or IDs`",
-            "recommended": "**This is not required**\n\nThe Users that will be pinged once you can use `!d bump` again",
-            "fail": {
-              "no": "I couldn't find this User\n",
-              "wrongGuild": "This User is not Part of this Server\n"
-            }
+            "recommended": "**This is not required**\n\nThe Users that will be pinged once you can use `!d bump` again"
           },
           "channelid": {
             "name": "Channel",
             "answers": "`Mention or ID`",
-            "recommended": "The Channel in which Bump Reminders will be sent",
-            "fail": {
-              "no": "I couldn't find this Channel\n",
-              "wrongGuild": "This Channel is not Part of this Server\n"
-            }
+            "recommended": "The Channel in which Bump Reminders will be sent"
           },
           "repeatreminder": {
             "name": "Repeat Reminder",
@@ -2407,7 +2255,73 @@
         "category": ["None"]
       },
       "leveling": {
-        "category": ["Automation"]
+        "category": ["Automation"],
+        "type": "Leveling",
+        "description": "Also check out:\n`{{prefix}}settings levelroles` to customize Ayako's Leveling behaviour on Roles and Level Roles and\n`{{prefix}}settings levelchannels` to customize Ayako's Leveling behaviour on Channels",
+        "xpmultiplier": "XP Multiplier",
+        "blchannels": "Blacklisted Channels",
+        "blroles": "Blacklisted Roles",
+        "blusers": "Blacklisted Users",
+        "wlchannels": "Whitelisted Channels",
+        "wlroles": "Whitelisted Roles",
+        "wlusers": "Whitelisted Users",
+        "xppermsg": "XP Per Message",
+        "multiplierrole": "Multiplier Role",
+        "multiplierchannel": "Multiplier Channel",
+        "rolemode": "Role Mode",
+        "stack": "Stack",
+        "replace": "Replace",
+        "edit": {
+          "active": {
+            "name": "Active",
+            "answers": "`True` or `False`",
+            "recommended": "Recommended: `True`"
+          },
+          "xpmultiplier": {
+            "name": "XP Multiplier",
+            "answers": "Any Number lower than 5.0 or above 0.1",
+            "recommended": "Recommended: `1.0`"
+          },
+          "blchannels": {
+            "name": "Blacklisted Channels",
+            "answers": "Channel IDs or Mentions",
+            "recommended": "Channels in which no one gains any XP"
+          },
+          "blroles": {
+            "name": "Blacklisted Roles",
+            "answers": "Role IDs or Mentions",
+            "recommended": "Roles with which Members will not gain any XP"
+          },
+          "blusers": {
+            "name": "Blacklisted Users",
+            "answers": "User IDs or Mentions",
+            "recommended": "Users which will not gain any XP"
+          },
+          "wlchannels": {
+            "name": "Whitelisted Channels",
+            "answers": "Channel IDs or Mentions",
+            "recommended": "Channels in which XP gain will be activated (if a Whitelisted Channel is present, XP gain in every other non-listed Channel will be disabled)"
+          },
+          "wlroles": {
+            "name": "Whitelisted Roles",
+            "answers": "Role IDs or Mentions",
+            "recommended": "Roles which bypass Channel Blacklists"
+          },
+          "wlusers": {
+            "name": "Whitelisted Users",
+            "answers": "User IDs or Mentions",
+            "recommended": "Users which bypass every Blacklist"
+          },
+          "xppermsg": {
+            "name": "XP per Message",
+            "answers": "Number of XP gained per Message",
+            "recommended": "Recommended: `25`"
+          },
+          "rolemode": {
+            "name": "Role Mode",
+            "answers": "Stack or Replace"
+          }
+        }
       },
       "muterole": {
         "category": ["Moderation"]
@@ -2452,21 +2366,13 @@
             "name": "Self-Roles",
             "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.",
             "select": "Select 1 or more Roles",
-            "desc": "Select the Role(s) you want to added below",
-            "fail": {
-              "no": "I couldn't find this Role\n",
-              "wrongGuild": "This Role is not Part of this Server\n"
-            }
+            "desc": "Select the Role(s) you want to added below"
           },
           "blacklistedroles": {
             "name": "Blacklisted Roles",
             "recommended": "This is a Switch.\nIf the entered Role is already blacklisted it will be removed.",
             "select": "Select 1 or more Roles",
-            "desc": "Select the Role(s) you want to blacklist below",
-            "fail": {
-              "no": "I couldn't find this Role\n",
-              "wrongGuild": "This Role is not Part of this Server\n"
-            }
+            "desc": "Select the Role(s) you want to blacklist below"
           },
           "blacklistedusers": {
             "name": "Blacklisted Users",
@@ -2477,11 +2383,7 @@
             "name": "Whitelisted Roles",
             "recommended": "This is a Switch.\nIf the entered Role is already whitelisted it will be removed.",
             "select": "Select 1 or more Roles",
-            "desc": "Select the Role(s) you want to whitelist below",
-            "fail": {
-              "no": "I couldn't find this Role\n",
-              "wrongGuild": "This Role is not Part of this Server\n"
-            }
+            "desc": "Select the Role(s) you want to whitelist below"
           },
           "whitelistedusers": {
             "name": "Whitelisted Users",
@@ -2550,11 +2452,7 @@
           "blroleid": {
             "name": "Blacklisted Roles",
             "answers": "`Mentions or IDs`",
-            "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.\nUsers with one of these Roles won't be able to send Suggestions",
-            "fail": {
-              "no": "I couldn't find this Role\n",
-              "wrongGuild": "This Role is not Part of this Server\n"
-            }
+            "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.\nUsers with one of these Roles won't be able to send Suggestions"
           },
           "bluserid": {
             "name": "Blacklisted Users",
@@ -2564,20 +2462,12 @@
           "channelid": {
             "name": "Suggestion Channel",
             "answers": "`Mention or ID`",
-            "recommended": "A Channel where Suggestions will be posted",
-            "fail": {
-              "no": "I couldn't find this Channel\n",
-              "wrongGuild": "This Channel is not Part of this Server\n"
-            }
+            "recommended": "A Channel where Suggestions will be posted"
           },
           "approverroleid": {
             "name": "Approver / Denyer Roles",
             "answers": "`Mentions or IDs`",
-            "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.\nUsers with one of these Roles will be able to approve and deny Suggestions",
-            "fail": {
-              "no": "I couldn't find this Role\n",
-              "wrongGuild": "This Role is not Part of this Server\n"
-            }
+            "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.\nUsers with one of these Roles will be able to approve and deny Suggestions"
           },
           "anon": {
             "name": "Anonymous Votes",
@@ -2608,20 +2498,12 @@
           "finishedrole": {
             "name": "Verified Role",
             "answers": "`Mention or ID`",
-            "recommended": "The Role applied to Users once passing Verification",
-            "fail": {
-              "no": "I couldn't find this Role\n",
-              "wrongGuild": "This Role is not Part of this Server\n"
-            }
+            "recommended": "The Role applied to Users once passing Verification"
           },
           "logchannel": {
             "name": "Log Channel",
             "answers": "`Mention or ID`",
-            "recommended": "**This is not required**\n\nThe log Channel where verifications are logged",
-            "fail": {
-              "no": "I couldn't find this Channel\n",
-              "wrongGuild": "This Channel is not Part of this Server\n"
-            }
+            "recommended": "**This is not required**\n\nThe log Channel where verifications are logged"
           },
           "greetdesc": {
             "name": "Greet Embed Description",
@@ -2651,11 +2533,7 @@
           "startchannel": {
             "name": "Command Channel",
             "answers": "`Mention or ID`",
-            "recommended": "Pending Members will have to start Verification with the `{{prefix}}verify` Command here",
-            "fail": {
-              "no": "I couldn't find this Channel\n",
-              "wrongGuild": "This Channel is not Part of this Server\n"
-            }
+            "recommended": "Pending Members will have to start Verification with the `{{prefix}}verify` Command here"
           },
           "kickafter": {
             "name": "Kick unverified Users Timeout",
@@ -2684,20 +2562,12 @@
           "stoprole": {
             "name": "Stop-Role",
             "answers": "`Mention or ID`",
-            "recommended": "**This is not required**\n\nThe Role which marks the end to the Separator Roles trigger.\nIf none is defined the Separator Role will work till the very top of the Role List",
-            "fail": {
-              "no": "I couldn't find this Role\n",
-              "wrongGuild": "This Role is not Part of this Server\n"
-            }
+            "recommended": "**This is not required**\n\nThe Role which marks the end to the Separator Roles trigger.\nIf none is defined the Separator Role will work till the very top of the Role List"
           },
           "separator": {
             "name": "Separator-Role",
             "answers": "`Mention or ID`",
-            "recommended": "The Separator Role, it will be applied to Members if they fulfill following conditions:\n**Self-Adapting `True`**: \nLooking at the Role list of the Server, the Separator Role will be applied if a Member gains any Role between the Seaprator and the Stop Role.\nIf no Stop Role is defined it stops at the top of the Role List.\nAny Role moved between these 2 Roles or above the Separator Role will instantly start triggering the Separator Role\n\n**Self-Adapting `False`**:\nThe Separator Role will be assinged to Members with at least one of the defined Roles",
-            "fail": {
-              "no": "I couldn't find this Role\n",
-              "wrongGuild": "This Role is not Part of this Server\n"
-            }
+            "recommended": "The Separator Role, it will be applied to Members if they fulfill following conditions:\n**Self-Adapting `True`**: \nLooking at the Role list of the Server, the Separator Role will be applied if a Member gains any Role between the Seaprator and the Stop Role.\nIf no Stop Role is defined it stops at the top of the Role List.\nAny Role moved between these 2 Roles or above the Separator Role will instantly start triggering the Separator Role\n\n**Self-Adapting `False`**:\nThe Separator Role will be assinged to Members with at least one of the defined Roles"
           },
           "active": {
             "name": "Active",
@@ -2712,11 +2582,7 @@
           "roles": {
             "name": "Roles of this Separator",
             "answers": "`Mention or ID`",
-            "recommended": "This is a Switch.\nIf the entered Role is already bypassed it will be removed.\nRoles entered here will trigger the Separator Role",
-            "fail": {
-              "no": "I couldn't find this Role\n",
-              "wrongGuild": "This Role is not Part of this Server\n"
-            }
+            "recommended": "This is a Switch.\nIf the entered Role is already bypassed it will be removed.\nRoles entered here will trigger the Separator Role"
           },
           "oneTimeRunner": {
             "name": "Apply ALL Separators to EVERY Member of your Server",
@@ -2789,11 +2655,7 @@
           "roleid": {
             "name": "Mod-Role",
             "answers": "`Mention or ID`",
-            "recommended": "The Role which these Permissions will be applied to (Ayako internal only)",
-            "fail": {
-              "no": "I couldn't find this Role\n",
-              "wrongGuild": "This Role is not Part of this Server\n"
-            }
+            "recommended": "The Role which these Permissions will be applied to (Ayako internal only)"
           },
           "perms": {
             "name": "Permissions of this Mod-Role",
@@ -2808,20 +2670,12 @@
           "whitelistedroles": {
             "name": "Whitelisted Roles",
             "answers": "`Mentions or IDs`",
-            "recommended": "This is a Switch.\nIf the entered Role is already whitelisted it will be removed.\nIf a Member has the Mod-Role, a Blacklisted Role __and__ a Whitelisted Role, they will be able to use the Mod-Roles Permissions",
-            "fail": {
-              "no": "I couldn't find this Role\n",
-              "wrongGuild": "This Role is not Part of this Server\n"
-            }
+            "recommended": "This is a Switch.\nIf the entered Role is already whitelisted it will be removed.\nIf a Member has the Mod-Role, a Blacklisted Role __and__ a Whitelisted Role, they will be able to use the Mod-Roles Permissions"
           },
           "blacklistedroles": {
             "name": "Blacklisted Roles",
             "answers": "`Mentions or IDs`",
-            "recommended": "This is a Switch.\nIf the entered Role is already blacklisted it will be removed.\nIf a Member has the Mod-Role __and__ a Blacklisted Role, they will __not__ be able to use the Mod-Roles Permissions",
-            "fail": {
-              "no": "I couldn't find this Role\n",
-              "wrongGuild": "This Role is not Part of this Server\n"
-            }
+            "recommended": "This is a Switch.\nIf the entered Role is already blacklisted it will be removed.\nIf a Member has the Mod-Role __and__ a Blacklisted Role, they will __not__ be able to use the Mod-Roles Permissions"
           },
           "blacklistedusers": {
             "name": "Blacklisted Users",

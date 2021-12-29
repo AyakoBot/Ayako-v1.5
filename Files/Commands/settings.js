@@ -284,7 +284,12 @@ const noEmbed = (msg) => {
     .setAuthor({
       name: msg.language.commands.settings.noEmbed.author,
     })
-    .setDescription(msg.language.commands.settings.noEmbed.desc);
+    .setDescription(
+      msg.client.ch.stp(msg.language.commands.settings.noEmbed.desc, {
+        prefix: msg.client.constants.standard.prefix,
+        name: msg.file.name,
+      }),
+    );
   msg.client.ch.reply(msg, { embeds: [embed] });
 };
 
