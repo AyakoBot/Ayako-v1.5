@@ -30,10 +30,12 @@ module.exports = {
     if (msg.channel.type === 'DM' || msg.author.id === msg.client.user.id || msg.author.bot) return;
     let warnnr;
     let guildSettings;
+
     const res = await msg.client.ch.query(
       'SELECT * FROM antispamsettings WHERE guildid = $1 AND active = true;',
       [msg.guild.id],
     );
+
     if (res && res.rowCount > 0) [guildSettings] = res.rows;
     else return;
 
@@ -44,13 +46,13 @@ module.exports = {
     if (res2 && res2.rowCount > 0) warnnr = res2.rowCount;
     else warnnr = 1;
 
-    if (!msg.member) return;
-    if (msg.member.permissions.has(8n)) return;
-    if (guildSettings.bpchannelid && guildSettings.bpchannelid.includes(msg.channel.id)) return;
-    if (guildSettings.bpuserid && guildSettings.bpuserid.includes(msg.author.id)) return;
     if (
-      guildSettings.bproleid &&
-      msg.member.roles.cache.some((role) => guildSettings.bproleid.includes(role.id))
+      !msg.member ||
+      msg.member.permissions.has(8n) ||
+      (guildSettings.bpchannelid && guildSettings.bpchannelid.includes(msg.channel.id)) ||
+      (guildSettings.bpuserid && guildSettings.bpuserid.includes(msg.author.id)) ||
+      (guildSettings.bproleid &&
+        msg.member.roles.cache.some((role) => guildSettings.bproleid.includes(role.id)))
     ) {
       return;
     }
