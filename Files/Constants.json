@@ -1136,6 +1136,54 @@
             "key": "commands",
             "required": false
           }
+        },
+        "leveling": {
+          "xpmultiplier": {
+            "key": "number",
+            "required": true
+          },
+          "blchannels": {
+            "key": "channels",
+            "required": false
+          },
+          "blroles": {
+            "key": "roles",
+            "required": false
+          },
+          "blusers": {
+            "key": "users",
+            "required": false
+          },
+          "wlchannels": {
+            "key": "channels",
+            "required": false
+          },
+          "wlroles": {
+            "key": "roles",
+            "required": false
+          },
+          "wlusers": {
+            "key": "users",
+            "required": true
+          },
+          "xppermsg": {
+            "key": "number",
+            "required": true
+          },
+          "rolemode": {
+            "key": "boolean",
+            "required": true
+          }
+        },
+        "levelroles": {
+          "level": {
+            "key": "number",
+            "required": true
+          },
+          "rols": {
+            "key": "channels",
+            "required": true
+          }
         }
       },
       "tablenames": {
@@ -1148,7 +1196,9 @@
         "disabled": ["disabledcommands"],
         "disboard": ["disboard"],
         "forcecooldowns": [null],
-        "leveling": ["levelingsettings"],
+        "leveling": ["leveling"],
+        "levelroles": ["levelingroles"],
+        "levelingchannels": ["leveling"],
         "logs": ["logchannels"],
         "reactionroles": ["reactionroles"],
         "selfroles": ["selfroles"],
@@ -1228,8 +1278,8 @@
           "vals": null
         },
         "leveling": {
-          "cols": ["guildid, active, xpgain"],
-          "vals": [["{{msg.guild.id}}", true, 1.0]]
+          "cols": ["guildid, active, xppermsg, rolemode, xpmultiplier"],
+          "vals": [["{{msg.guild.id}}", true, 25, true, 1.0]]
         },
         "logs": {
           "cols": ["guildid"],

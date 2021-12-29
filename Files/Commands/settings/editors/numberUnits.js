@@ -8,10 +8,21 @@ module.exports = {
     const numbers = new Array(999).fill(null);
 
     numbers.forEach((element, i) => {
-      const inserted = {
-        label: `${i}`,
-        value: `${i}`,
-      };
+      let inserted;
+
+      if (msg.file[required.assinger]) {
+        if (i > msg.file[required.assinger].length - 1) return;
+
+        inserted = {
+          label: `${msg.file[required.assinger][i]}`,
+          value: `${msg.file[required.assinger][i]}`,
+        };
+      } else {
+        inserted = {
+          label: `${i}`,
+          value: `${i}`,
+        };
+      }
 
       if (
         Array.isArray(insertedValues[required.assinger]) &&
