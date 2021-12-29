@@ -127,11 +127,11 @@ module.exports = {
           msg.pages.mute = +msg.pages.mute - 1;
         }
         const newEmbed = new Discord.MessageEmbed()
-          .setAuthor(
-            msg.client.ch.stp(msg.lan.author, { target: user }),
-            msg.con.author.image,
-            msg.con.author.url,
-          )
+          .setAuthor({
+            name: msg.client.ch.stp(msg.lan.author, { target: user }),
+            iconURL: msg.con.author.image,
+            url: msg.con.author.url,
+          })
           .setDescription(
             `${msg.language.select.id.desc}\n\n${msg.lan.warnsPage}: \`${msg.pages.warn}/${msg.pages.warnMax}\`\n${msg.lan.mutesPage}: \`${msg.pages.mute}/${msg.pages.muteMax}\``,
           );
@@ -169,11 +169,11 @@ module.exports = {
           msg.pages.warn = +msg.pages.warn - 1;
         }
         const newEmbed = new Discord.MessageEmbed()
-          .setAuthor(
-            msg.client.ch.stp(msg.lan.author, { target: user }),
-            msg.con.author.image,
-            msg.con.author.url,
-          )
+          .setAuthor({
+            name: msg.client.ch.stp(msg.lan.author, { target: user }),
+            iconURL: msg.con.author.image,
+            url: msg.con.author.url,
+          })
           .setDescription(
             `${msg.language.select.id.desc}\n\n${msg.lan.warnsPage}: \`${msg.pages.warn}/${msg.pages.warnMax}\`\n${msg.lan.mutesPage}: \`${msg.pages.mute}/${msg.pages.muteMax}\``,
           );
@@ -186,11 +186,11 @@ module.exports = {
           else answered.mutes.splice(answered.mutes.indexOf(val), 1);
         });
         const newEmbed = new Discord.MessageEmbed()
-          .setAuthor(
-            msg.client.ch.stp(msg.lan.author, { target: user }),
-            msg.con.author.image,
-            msg.con.author.url,
-          )
+          .setAuthor({
+            name: msg.client.ch.stp(msg.lan.author, { target: user }),
+            iconURL: msg.con.author.image,
+            url: msg.con.author.url,
+          })
           .setDescription(
             `${msg.language.select.id.desc}\n\n${msg.lan.warnsPage}: \`${msg.pages.warn}/${msg.pages.warnMax}\`\n${msg.lan.mutesPage}: \`${msg.pages.mute}/${msg.pages.muteMax}\``,
           );
@@ -204,11 +204,11 @@ module.exports = {
           else answered.warns.splice(answered.warns.indexOf(val), 1);
         });
         const newEmbed = new Discord.MessageEmbed()
-          .setAuthor(
-            msg.client.ch.stp(msg.lan.author, { target: user }),
-            msg.con.author.image,
-            msg.con.author.url,
-          )
+          .setAuthor({
+            name: msg.client.ch.stp(msg.lan.author, { target: user }),
+            iconURL: msg.con.author.image,
+            url: msg.con.author.url,
+          })
           .setDescription(
             `${msg.language.select.id.desc}\n\n${msg.lan.warnsPage}: \`${msg.pages.warn}/${msg.pages.warnMax}\`\n${msg.lan.mutesPage}: \`${msg.pages.mute}/${msg.pages.muteMax}\``,
           );
@@ -225,18 +225,18 @@ module.exports = {
               .setColor('#ffffff');
             embeds.push(WarnTitleEmbed);
             answered.warns.forEach((number) => {
-              const warn = res.rows.filter((r) => r.row_number === number)[0];
+              const warn = res.rows.filter((r) => r.row_number === Number(number))[0];
               const warnEmbed = new Discord.MessageEmbed()
                 .setDescription(`**${msg.language.reason}:**\n${warn.reason}`)
-                .setAuthor(
-                  msg.lan.warnOf + user.tag,
-                  msg.con.author.image,
-                  msg.client.ch.stp(msg.client.constants.standard.discordUrlDB, {
+                .setAuthor({
+                  name: msg.lan.warnOf + user.tag,
+                  iconURL: msg.con.author.image,
+                  url: msg.client.ch.stp(msg.client.constants.standard.discordUrlDB, {
                     guildid: msg.guild.id,
                     channelid: msg.channel.id,
                     msgid: warn.msgid,
                   }),
-                )
+                })
                 .addFields(
                   {
                     name: msg.lan.date,
@@ -274,7 +274,7 @@ module.exports = {
               .setColor('#ffffff');
             embeds.push(MuteTitleEmbed);
             answered.mutes.forEach((number) => {
-              const mute = res.rows.filter((r) => r.row_number === number)[0];
+              const mute = res.rows.filter((r) => r.row_number === Number(number))[0];
               let notClosed = msg.client.ch.stp(msg.lan.notClosed, {
                 time: `<t:${mute.duration.slice(0, -3)}:F> (<t:${mute.duration.slice(0, -3)}:R>)`,
               });
@@ -294,15 +294,15 @@ module.exports = {
               }
               const muteEmbed = new Discord.MessageEmbed()
                 .setDescription(`**${msg.language.reason}:**\n${mute.reason}`)
-                .setAuthor(
-                  msg.lan.muteOf + user.tag,
-                  msg.con.author.image,
-                  msg.client.ch.stp(msg.client.constants.standard.discordUrlDB, {
+                .setAuthor({
+                  name: msg.lan.muteOf + user.tag,
+                  iconURL: msg.con.author.image,
+                  url: msg.client.ch.stp(msg.client.constants.standard.discordUrlDB, {
                     guildid: msg.guild.id,
                     channelid: msg.channel.id,
                     msgid: mute.msgid,
                   }),
-                )
+                })
                 .addFields(
                   {
                     name: msg.lan.date,
