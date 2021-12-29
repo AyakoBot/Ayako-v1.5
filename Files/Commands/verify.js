@@ -24,6 +24,19 @@ module.exports = {
       if (r.startchannel !== msg.channel.id) return;
       if (r.pendingrole && !msg.member.roles.cache.has(r.pendingrole)) return;
       if (r.logchannel) logchannel = msg.guild.channels.cache.get(r.logchannel);
+      if (!msg.member.roles.cache.has(r.finishedrole)) {
+        const DM = await msg.author.createDM().catch(() => {});
+        if (DM && DM.id) {
+          msg.DM = DM;
+          msg.r = r;
+          this.startProcess(msg, null, logchannel);
+        }
+      } else {
+        const m = await msg.client.ch.reply(msg, msg.lan.alreadyVerified);
+        setTimeout(() => m.delete().catch(() => {}), 5000);
+        msg.delete().catch(() => {});
+        return;
+      }
       if (logchannel) {
         const log = new Discord.MessageEmbed()
           .setDescription(msg.client.ch.stp(msg.lan.log.start, { user: msg.author }))
@@ -36,14 +49,6 @@ module.exports = {
         msg.client.ch.send(logchannel, { embeds: [log] });
       }
       msg.delete().catch(() => {});
-      if (!msg.member.roles.cache.has(r.finishedrole)) {
-        const DM = await msg.author.createDM().catch(() => {});
-        if (DM && DM.id) {
-          msg.DM = DM;
-          msg.r = r;
-          this.startProcess(msg, null, logchannel);
-        }
-      } else msg.client.ch.reply(msg, msg.lan.alreadyVerified);
     }
   },
   async startProcess(msg, answer, logchannel) {

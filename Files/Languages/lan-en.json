@@ -612,6 +612,7 @@
     "openDMs": "{{user}} **Please open your DM's** in order to verify as human. Then re-send the Command `{{prefix}}verify`.\n**You can close your DM's afterwards**.",
     "wrongInput": "That was wrong... Are you a robot?.\nThe solution was `{{solution}}`\nI added a new Image to the Embed above, try again!",
     "timeError": "Time ran out for this Verification\nPlease go to <#{{channel}}> and type `{{prefix}}verify` to re-start verification",
+    "alreadyVerified": "You are already verified",
     "log": {
       "start": "User {{user}} /`{{user.tag}}` / `{{user.id}}`\nstarted Verification",
       "end": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nfinished Verification"
