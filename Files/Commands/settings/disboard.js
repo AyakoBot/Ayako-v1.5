@@ -15,8 +15,17 @@ module.exports = {
         inline: false,
       },
       {
-        name: msg.lan.roleid,
-        value: r.roleid ? `<@&${r.roleid}>` : msg.language.none,
+        name: msg.lan.roles,
+        value: `${
+          r.roles && r.roles.length ? r.roles.map((id) => ` <#${id}>`) : msg.language.none
+        }`,
+        inline: false,
+      },
+      {
+        name: msg.lan.users,
+        value: `${
+          r.users && r.users.length ? r.users.map((id) => ` <#${id}>`) : msg.language.none
+        }`,
         inline: false,
       },
       {
@@ -41,9 +50,13 @@ module.exports = {
       .setCustomId(msg.lan.edit.active.name)
       .setLabel(msg.lanSettings.active)
       .setStyle(r.active ? 'SUCCESS' : 'DANGER');
-    const role = new Discord.MessageButton()
-      .setCustomId(msg.lan.edit.roleid.name)
-      .setLabel(msg.lan.roleid)
+    const roles = new Discord.MessageButton()
+      .setCustomId(msg.lan.edit.roles.name)
+      .setLabel(msg.lan.roles)
+      .setStyle('PRIMARY');
+    const users = new Discord.MessageButton()
+      .setCustomId(msg.lan.edit.users.name)
+      .setLabel(msg.lan.users)
       .setStyle('PRIMARY');
     const channel = new Discord.MessageButton()
       .setCustomId(msg.lan.edit.channelid.name)
@@ -53,6 +66,6 @@ module.exports = {
       .setCustomId(msg.lan.edit.repeatreminder.name)
       .setLabel(msg.lan.repeatreminder)
       .setStyle('SECONDARY');
-    return [[active], [role, channel], [repeatreminder]];
+    return [[active], [roles, users, channel], [repeatreminder]];
   },
 };

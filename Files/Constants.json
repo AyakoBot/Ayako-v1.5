@@ -962,8 +962,12 @@
           }
         },
         "disboard": {
-          "roleid": {
-            "key": "role",
+          "roles": {
+            "key": "roles",
+            "required": false
+          },
+          "users": {
+            "key": "users",
             "required": false
           },
           "channelid": {
@@ -1195,13 +1199,7 @@
         },
         "disabled": {
           "cols": ["guildid, active, uniquetimestamp"],
-          "vals": [
-            [
-              "{{msg.guild.id}}",
-              true,
-              "{{values.uniquetimestamp}}"
-            ]
-          ],
+          "vals": [["{{msg.guild.id}}", true, "{{values.uniquetimestamp}}"]],
           "add": [],
           "remove": ["uniquetimestamp"],
           "ident": "commands"
@@ -1243,14 +1241,7 @@
         },
         "selfroles": {
           "cols": ["guildid, active, uniquetimestamp, name"],
-          "vals": [
-            [
-              "{{msg.guild.id}}",
-              false,
-              "{{values.uniquetimestamp}}",
-              "{{values.name}}"
-            ]
-          ],
+          "vals": [["{{msg.guild.id}}", false, "{{values.uniquetimestamp}}", "{{values.name}}"]],
           "add": ["name"],
           "ident": "name"
         },
