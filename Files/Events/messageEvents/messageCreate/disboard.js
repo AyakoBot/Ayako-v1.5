@@ -12,10 +12,17 @@ module.exports = {
       ]);
       if (res && res.rowCount > 0) {
         if (res.rows[0].enabled) msg.react(msg.client.constants.emotes.tickID).catch(() => {});
-        msg.client.ch.query(
-          'UPDATE disboard SET lastbump = $2 WHERE guildid = $1; UPDATE disboard SET channelid = $3 WHERE guildid = $1;',
-          [msg.guild.id, +Date.now() + 7200000, msg.channel.id],
-        );
+        if (res.rows[0].channelid) {
+          msg.client.ch.query('UPDATE disboard SET lastbump = $2 WHERE guildid = $1;', [
+            msg.guild.id,
+            +Date.now() + 7200000,
+          ]);
+        } else {
+          msg.client.ch.query(
+            'UPDATE disboard SET lastbump = $2, channelid = $3 WHERE guildid = $1;',
+            [msg.guild.id, +Date.now() + 7200000, msg.channel.id],
+          );
+        }
       }
     }
   },
