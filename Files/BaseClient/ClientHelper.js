@@ -565,10 +565,8 @@ module.exports = {
       ]);
       let lang = 'en';
       if (resLan && resLan.rowCount > 0) lang = resLan.rows[0].lan;
-      // eslint-disable-next-line import/no-dynamic-require,global-require
       return require(`../Languages/lan-${lang}.json`);
     }
-    // eslint-disable-next-line import/no-dynamic-require,global-require
     return require('../Languages/lan-en.json');
   },
   /**
