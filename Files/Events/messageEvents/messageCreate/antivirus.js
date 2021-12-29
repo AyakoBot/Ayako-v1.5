@@ -39,6 +39,7 @@ module.exports = {
       await prepare(msg, lan, check);
     }
   },
+
   async run(
     msg,
     linkObject,
@@ -176,7 +177,11 @@ module.exports = {
     }
 
     if (attributes && !whitelist.includes(linkObject.baseURLhostname)) {
-      fs.appendFile('S:/Bots/ws/CDN/whitelisted.txt', `\n${linkObject.baseURLhostname}`, () => {});
+      fs.appendFile(
+        'S:/Bots/ws/CDN/antivirus/whitelisted.txt',
+        `\n${linkObject.baseURLhostname}`,
+        () => {},
+      );
       msg.client.ch.send(
         msg.client.channels.cache.get(msg.client.constants.standard.trashLogChannel),
         {
@@ -193,7 +198,11 @@ module.exports = {
       !whitelist.includes(linkObject.hostname) &&
       linkObject.hostname !== linkObject.baseURLhostname
     ) {
-      fs.appendFile('S:/Bots/ws/CDN/whitelisted.txt', `\n${linkObject.hostname}`, () => {});
+      fs.appendFile(
+        'S:/Bots/ws/CDN/antivirus/whitelisted.txt',
+        `\n${linkObject.hostname}`,
+        () => {},
+      );
       msg.client.ch.send(
         msg.client.channels.cache.get(msg.client.constants.standard.trashLogChannel),
         {
@@ -249,6 +258,7 @@ const prepare = async (msg, lan, check) => {
 
   await Promise.all(promises);
 };
+
 const doesntExist = async (msg, lan, embed, linkObject) => {
   if (embed.fields.length === 0) {
     await embed
@@ -326,6 +336,8 @@ const blacklisted = async (msg, lan, embed, linkObject, note, check) => {
 };
 
 const severeLink = async (msg, lan, embed, linkObject, urlSeverity, check) => {
+  saveToBadLink(linkObject);
+
   const severity = urlSeverity || null;
   if (embed.fields.length === 0) {
     await embed
@@ -359,6 +371,8 @@ const severeLink = async (msg, lan, embed, linkObject, urlSeverity, check) => {
 };
 
 const ccscam = async (msg, lan, embed, linkObject, check) => {
+  saveToBadLink(linkObject);
+
   if (embed.fields.length === 0) {
     await embed
       .addField(
@@ -390,6 +404,8 @@ const ccscam = async (msg, lan, embed, linkObject, check) => {
 };
 
 const newUrl = async (msg, lan, embed, linkObject, check) => {
+  saveToBadLink(linkObject);
+
   if (embed.fields.length === 0) {
     await embed
       .addField(
@@ -422,6 +438,17 @@ const newUrl = async (msg, lan, embed, linkObject, check) => {
   }
 
   return true;
+};
+
+const saveToBadLink = async (linkObject) => {
+  const file = fs.readFileSync('S:/Bots/ws/CDN/antivirus/blacklisted.txt', {
+    encoding: 'utf8',
+  });
+  const res = file ? file.split(/\n+/).map((entry) => entry.replace(/\r/g, '')) : [];
+
+  if (!res.includes(linkObject.baseURL)) {
+    fs.appendFile('S:/Bots/ws/CDN/antivirus/badLinks.txt', `\n${linkObject.baseURL}`, () => {});
+  }
 };
 
 const whitelisted = async (msg, lan, embed) => {
@@ -468,7 +495,7 @@ const getBlocklist = () => {
 
 const getWhitelist = async () => {
   // const res = await SA.get('https://ayakobot.com/cdn/whitelisted.txt').catch(() => { });
-  const file = fs.readFileSync('S:/Bots/ws/CDN/whitelisted.txt', {
+  const file = fs.readFileSync('S:/Bots/ws/CDN/antivirus/whitelisted.txt', {
     encoding: 'utf8',
   });
   const whitelistRes = file ? file.split(/\n+/) : [];
@@ -478,7 +505,7 @@ const getWhitelist = async () => {
 
 const getBlacklist = async () => {
   // const res = await SA.get('https://ayakobot.com/cdn/blacklisted.txt').catch(() => { });
-  const file = fs.readFileSync('S:/Bots/ws/CDN/blacklisted.txt', {
+  const file = fs.readFileSync('S:/Bots/ws/CDN/antivirus/blacklisted.txt', {
     encoding: 'utf8',
   });
   const blacklistRes = file ? file.split(/\n+/) : [];
@@ -488,7 +515,7 @@ const getBlacklist = async () => {
 
 const getWhitelistCDN = async () => {
   // const res = await SA.get('https://ayakobot.com/cdn/whitelistedCDN.txt').catch(() => { });
-  const file = fs.readFileSync('S:/Bots/ws/CDN/whitelistedCDN.txt', {
+  const file = fs.readFileSync('S:/Bots/ws/CDN/antivirus/whitelistedCDN.txt', {
     encoding: 'utf8',
   });
   const whitelistCDNRes = file ? file.split(/\n+/) : [];
