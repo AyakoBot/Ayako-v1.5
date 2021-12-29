@@ -10,8 +10,10 @@ module.exports = {
       const res = await msg.client.ch.query('SELECT * FROM disboard WHERE guildid = $1;', [
         msg.guild.id,
       ]);
+
       if (res && res.rowCount > 0) {
         if (res.rows[0].enabled) msg.react(msg.client.constants.emotes.tickID).catch(() => {});
+
         if (res.rows[0].channelid) {
           msg.client.ch.query('UPDATE disboard SET lastbump = $2 WHERE guildid = $1;', [
             msg.guild.id,
