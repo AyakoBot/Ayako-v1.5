@@ -79,11 +79,11 @@ module.exports = {
       });
 
       const embed = new Discord.MessageEmbed()
-        .setAuthor(
-          msg.language.commands.settings.noEmbed.author,
-          msg.client.constants.emotes.settingsLink,
-          msg.client.constants.standard.invite,
-        )
+        .setAuthor({
+          name: msg.language.commands.settings.noEmbed.author,
+          iconURL: msg.client.constants.emotes.settingsLink,
+          url: msg.client.constants.standard.invite,
+        })
         .setDescription(
           msg.client.ch.stp(msg.lan.settings.desc, {
             prefix: msg.client.constants.standard.prefix,
@@ -114,11 +114,11 @@ module.exports = {
           ? msg.file.displayEmbed(msg, row)
           : noEmbed(msg);
 
-      embed.setAuthor(
-        msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
-        msg.client.constants.emotes.settingsLink,
-        msg.client.constants.standard.invite,
-      );
+      embed.setAuthor({
+        name: msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
+        iconURL: msg.client.constants.emotes.settingsLink,
+        url: msg.client.constants.standard.invite,
+      });
 
       const edit = new Discord.MessageButton()
         .setCustomId('edit')
@@ -183,11 +183,11 @@ module.exports = {
         return;
       }
 
-      embed.setAuthor(
-        msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
-        msg.client.constants.emotes.settingsLink,
-        msg.client.constants.standard.invite,
-      );
+      embed.setAuthor({
+        name: msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
+        iconURL: msg.client.constants.emotes.settingsLink,
+        url: msg.client.constants.standard.invite,
+      });
 
       const settingsConstant = msg.client.constants.commands.settings.setupQueries[msg.file.name];
       const options = {
@@ -476,11 +476,11 @@ const mmrEditList = async (msgData, sendData) => {
     const addLanguage = msg.lanSettings[msg.file.name].otherEdits.add;
     const requiredSteps = msg.client.constants.commands.settings.setupQueries[msg.file.name].add;
 
-    const embed = new Discord.MessageEmbed().setAuthor(
-      addLanguage.name,
-      null,
-      msg.client.constants.standard.invite,
-    );
+    const embed = new Discord.MessageEmbed().setAuthor({
+      name: addLanguage.name,
+      iconURL: msg.client.constants.emotes.settingsLink,
+      url: msg.client.constants.standard.invite,
+    });
 
     const insertedValues = {};
 
@@ -646,11 +646,13 @@ const singleRowEdit = async (msgData, resData, embed, comesFromMMR) => {
     rawButtons.push(back);
   }
 
-  embed.setAuthor(
-    msg.client.ch.stp(msg.lanSettings.authorEdit, { type: msg.lanSettings[msg.file.name].type }),
-    msg.client.constants.emotes.settingsLink,
-    msg.client.constants.standard.invite,
-  );
+  embed.setAuthor({
+    name: msg.client.ch.stp(msg.lanSettings.authorEdit, {
+      type: msg.lanSettings[msg.file.name].type,
+    }),
+    iconURL: msg.client.constants.emotes.settingsLink,
+    url: msg.client.constants.standard.invite,
+  });
 
   await replier({ msg, answer }, { rawButtons, embed });
 
@@ -746,13 +748,13 @@ const editorInteractionHandler = async (msgData, editorData, row, res) => {
   } else {
     embed.addField(' \u200b', `${msg.language.select.id.desc}`).setTitle(msg.language.id);
   }
-  embed.setAuthor(
-    msg.client.ch.stp(msg.lanSettings.authorEdit, {
+  embed.setAuthor({
+    name: msg.client.ch.stp(msg.lanSettings.authorEdit, {
       type: languageOfSetting.type,
     }),
-    msg.client.constants.emotes.settingsLink,
-    msg.client.constants.standard.invite,
-  );
+    iconURL: msg.client.constants.emotes.settingsLink,
+    url: msg.client.constants.standard.invite,
+  });
 
   if (editor.requiresMenu) {
     embed.addField(msg.language.page, `\`1/${Math.ceil(Objects.options.length / 25)}\``);
@@ -873,13 +875,14 @@ const log = async (msg, editData) => {
   const settingsName = msg.lanSettings[msg.file.name].edit[required.assinger].name;
   const { type } = msg.language.commands.settings[msg.file.name];
 
-  const embed = new Discord.MessageEmbed().setAuthor(
-    msg.client.ch.stp(msg.language.selfLog.author, {
+  const embed = new Discord.MessageEmbed().setAuthor({
+    name: msg.client.ch.stp(msg.language.selfLog.author, {
       type,
     }),
-    msg.client.constants.emotes.settingsLink,
-    msg.client.constants.standard.invite,
-  );
+    iconURL: msg.client.constants.emotes.settingsLink,
+    url: msg.client.constants.standard.invite,
+  });
+
   if (comesFromMMR) {
     embed.setDescription(
       msg.client.ch.stp(msg.language.selfLog.descriptionWithID, { type, msg, id: row.id }),
@@ -954,13 +957,13 @@ const buttonHandler = async (msgData, editData, languageData) => {
           } else {
             embed.addField(' \u200b', `${msg.language.select.id.desc}`).setTitle(msg.language.id);
           }
-          embed.setAuthor(
-            msg.client.ch.stp(msg.lanSettings.authorEdit, {
+          embed.setAuthor({
+            name: msg.client.ch.stp(msg.lanSettings.authorEdit, {
               type: languageOfSetting.type,
             }),
-            msg.client.constants.emotes.settingsLink,
-            msg.client.constants.standard.invite,
-          );
+            iconURL: msg.client.constants.emotes.settingsLink,
+            url: msg.client.constants.standard.invite,
+          });
 
           if (editor.requiresMenu) {
             embed.addField(msg.language.page, `\`1/${Math.ceil(Objects.options.length / 25)}\``);
@@ -1099,13 +1102,13 @@ const messageHandler = async (msgData, editData, languageData, Objects) => {
         }`,
       )
       .setTitle(msg.client.ch.stp(languageOfKey.name, { row: row || '--' }))
-      .setAuthor(
-        msg.client.ch.stp(msg.lanSettings.authorEdit, {
+      .setAuthor({
+        name: msg.client.ch.stp(msg.lanSettings.authorEdit, {
           type: languageOfSetting.type,
         }),
-        msg.client.constants.emotes.settingsLink,
-        msg.client.constants.standard.invite,
-      );
+        iconURL: msg.client.constants.emotes.settingsLink,
+        url: msg.client.constants.standard.invite,
+      });
 
     if (editor.requiresMenu) {
       returnEmbed.addField(msg.language.page, `\`1/${Math.ceil(Objects.options.length / 25)}\``);

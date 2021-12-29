@@ -2335,7 +2335,8 @@
       "disboard": {
         "category": ["Automation"],
         "type": "DISBOARD",
-        "roleid": "Ping Role",
+        "roles": "Ping Roles",
+        "users": "Ping Users",
         "channelid": "Reminder Channel",
         "repeatreminder": "Repeat Reminder",
         "edit": {
@@ -2344,13 +2345,22 @@
             "answers": "`True` or `False`",
             "recommended": "Recommended: `True`"
           },
-          "roleid": {
-            "name": "Ping Role",
-            "answers": "`Mention or ID`",
-            "recommended": "**This is not required**\n\nThe Role that will be pinged when you can use `!d bump` again",
+          "roles": {
+            "name": "Ping Roles",
+            "answers": "`Mentions or IDs`",
+            "recommended": "**This is not required**\n\nThe Roles that will be pinged once you can use `!d bump` again",
             "fail": {
               "no": "I couldn't find this Role\n",
               "wrongGuild": "This Role is not Part of this Server\n"
+            }
+          },          
+          "users": {
+            "name": "Ping Users",
+            "answers": "`Mentions or IDs`",
+            "recommended": "**This is not required**\n\nThe Users that will be pinged once you can use `!d bump` again",
+            "fail": {
+              "no": "I couldn't find this User\n",
+              "wrongGuild": "This User is not Part of this Server\n"
             }
           },
           "channelid": {
