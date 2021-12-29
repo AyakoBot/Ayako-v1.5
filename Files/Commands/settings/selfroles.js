@@ -4,6 +4,7 @@ module.exports = {
   perm: 32n,
   type: 2,
   setupRequired: false,
+  finished: true,
   mmrEmbed(msg, res) {
     const embed = new Discord.MessageEmbed();
     for (let i = 0; i < res.length; i += 1) {

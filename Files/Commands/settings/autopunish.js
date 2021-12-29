@@ -4,8 +4,9 @@ require('moment-duration-format');
 
 module.exports = {
   perm: 8n,
-  type: 2,
+  type: 0,
   setupRequired: false,
+  finished: true,
   async mmrEmbed(msg, res) {
     const embed = new Discord.MessageEmbed().setDescription(
       msg.client.ch.stp(msg.lan.description, { prefix: msg.client.constants.standard.prefix }),

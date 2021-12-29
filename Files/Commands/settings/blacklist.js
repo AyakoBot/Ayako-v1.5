@@ -3,6 +3,7 @@ const Discord = require('discord.js');
 module.exports = {
   perm: 8192n,
   type: 1,
+  finished: true,
   displayEmbed(msg, r) {
     let wordText = '';
     const wordArr = [];

@@ -4,6 +4,7 @@ const path = require('path');
 module.exports = {
   perm: 32n,
   type: 2,
+  finished: false,
   displayEmbed(msg) {
     // eslint-disable-next-line no-undef
     const lan = msg.language.commands.settings[path.basename(__filename).replace('.js', '')];

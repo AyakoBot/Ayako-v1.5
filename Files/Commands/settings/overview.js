@@ -4,6 +4,7 @@ const Discord = require('discord.js');
 
 module.exports = {
   perm: 32n,
+  finished: true,
   displayEmbed(msg, r) {
     const small = `${msg.client.constants.emotes.small} ${msg.language.small}`;
     const big = `${msg.client.constants.emotes.big} ${msg.language.big}`;
