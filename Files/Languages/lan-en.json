@@ -2257,7 +2257,7 @@
       "leveling": {
         "category": ["Automation"],
         "type": "Leveling",
-        "description": "Also check out:\n`{{prefix}}settings levelroles` to customize Ayako's Leveling behaviour on Roles and Level Roles and\n`{{prefix}}settings levelchannels` to customize Ayako's Leveling behaviour on Channels",
+        "description": "Also check out:\n`{{prefix}}settings levelroles` to customize Ayako's Leveling behaviour on Roles and Level Roles and\n`{{prefix}}settings levelchannels` to customize Ayako's Leveling behaviour on Channels\nFor other Leveling related Commands, check out `{{prefix}}help leveling`",
         "xpmultiplier": "XP Multiplier",
         "blchannels": "Blacklisted Channels",
         "blroles": "Blacklisted Roles",
