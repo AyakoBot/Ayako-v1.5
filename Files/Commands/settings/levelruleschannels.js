@@ -1,0 +1,100 @@
+const Discord = require('discord.js');
+const ChannelRules = require('../../BaseClient/Other Client Files/ChannelRules');
+
+module.exports = {
+  perm: 32n,
+  type: 2,
+  finished: true,
+  setupRequired: false,
+  rules: ChannelRules,
+  mmrEmbed(msg, res) {
+    const embed = new Discord.MessageEmbed();
+    for (let i = 0; i < res.length; i += 1) {
+      const r = res[i];
+
+      embed.addFields({
+        name: `${msg.language.number}: \`${r.id}\` | ${
+          r.rules ? msg.client.ch.channelRuleCalc(r.rules, msg.language).length : '--'
+        } ${msg.language.ChannelRules}`,
+        value: `${msg.language.affected}: ${
+          r.channels && r.channels.length
+            ? `${r.channels.length} ${msg.language.Channels}`
+            : msg.language.none
+        }`,
+        inline: true,
+      });
+    }
+    return embed;
+  },
+  displayEmbed(msg, r) {
+    const embed = new Discord.MessageEmbed()
+      .setDescription(
+        `${msg.lan.rules}:\n${
+          r.rules
+            ? `\`${msg.client.ch.channelRuleCalc(r.rules, msg.language).join('`\n `')}\``
+            : msg.language.none
+        }`,
+      )
+      .addFields({
+        name: msg.language.Channels,
+        value: `${r.channels?.length ? r.channels.map((id) => ` <@&${id}>`) : msg.language.none}`,
+        inline: false,
+      });
+
+    if (r.rules) {
+      embed.addFields({
+        name: '\u200b',
+        value: '\u200b',
+        inline: false,
+      });
+
+      msg.client.ch.channelRuleCalc(r.rules, msg.language).forEach((rule) => {
+        const [key] = Object.entries(msg.language.channelRules).find(([, v]) => v === rule);
+
+        embed.addFields({
+          name: rule,
+          value: `${msg.language.amountDefinition}: ${
+            r[key] !== null ? r[key] : msg.language.none
+          }`,
+          inline: true,
+        });
+      });
+    }
+
+    return embed;
+  },
+  buttons(msg, r) {
+    const lan = msg.language.commands.settings[msg.file.name];
+
+    const channels = new Discord.MessageButton()
+      .setCustomId(lan.edit.channels.name)
+      .setLabel(lan.channels)
+      .setStyle('PRIMARY');
+
+    const rules = new Discord.MessageButton()
+      .setCustomId(lan.edit.rules.name)
+      .setLabel(lan.rules)
+      .setStyle('SECONDARY');
+
+    const ruleButtons = [[]];
+    let i = 0;
+
+    msg.client.ch.channelRuleCalc(r.rules, msg.language).forEach((rule) => {
+      const [key] = Object.entries(msg.language.channelRules).find(([, v]) => v === rule);
+
+      const button = new Discord.MessageButton()
+        .setCustomId(lan.edit[key].name)
+        .setLabel(lan[key])
+        .setStyle('SECONDARY');
+
+      if (ruleButtons[i].length <= 5) {
+        ruleButtons[i].push(button);
+      } else {
+        ruleButtons.push([button]);
+        i += 1;
+      }
+    });
+
+    return [[channels, rules], ...ruleButtons];
+  },
+};
