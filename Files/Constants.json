@@ -1190,6 +1190,26 @@
             "key": "roles",
             "required": true
           }
+        },
+        "levelmultichannels": {
+          "multiplier": {
+            "key": "number",
+            "required": true
+          },
+          "channels": {
+            "key": "channels",
+            "required": true
+          }
+        },
+        "levelrulechannels": {
+          "rules": {
+            "key": "channelrules",
+            "required": true
+          },
+          "channels": {
+            "key": "channels",
+            "required": true
+          }
         }
       },
       "tablenames": {
@@ -1205,7 +1225,9 @@
         "leveling": ["leveling"],
         "levelroles": ["levelingroles"],
         "levelmultiroles": ["levelingmultiplierroles"],
-        "levelingchannels": ["levelingchannels"],
+        "levelingchannels": ["levelingruleschannels"],
+        "levelmultichannels": ["levelingmultiplierchannels"],
+        "levelrulechannels": ["levelingchannels"],
         "logs": ["logchannels"],
         "reactionroles": ["reactionroles"],
         "selfroles": ["selfroles"],
@@ -1375,6 +1397,20 @@
           "identType": "number"
         },
         "levelmultiroles": {
+          "cols": ["guildid, uniquetimestamp, multiplier"],
+          "vals": [["{{msg.guild.id}}", "{{values.uniquetimestamp}}", 1.0]],
+          "add": [],
+          "ident": "multiplier",
+          "identType": "number"
+        },
+        "levelrulechannels": {
+          "cols": ["guildid, uniquetimestamp"],
+          "vals": [["{{msg.guild.id}}", "{{values.uniquetimestamp}}"]],
+          "add": [],
+          "ident": "rules",
+          "identType": "bigint"
+        },
+        "levelmultichannels": {
           "cols": ["guildid, uniquetimestamp, multiplier"],
           "vals": [["{{msg.guild.id}}", "{{values.uniquetimestamp}}", 1.0]],
           "add": [],

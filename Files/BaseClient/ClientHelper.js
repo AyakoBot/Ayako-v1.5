@@ -7,6 +7,7 @@ const v8 = require('v8');
 const fs = require('fs');
 const client = require('./DiscordClient');
 const { pool } = require('./DataBase');
+const ChannelRules = require('./Other Client Files/ChannelRules');
 
 const DiscordEpoch = 1420070400000;
 const { imgur } = require('./ImgurClient');
@@ -321,6 +322,65 @@ module.exports = {
       request.end();
     });
   },
+  channelRuleCalc(bits, lan) {
+    const BitField = new ChannelRules(BigInt(bits));
+    const Perms = [];
+
+    if (BitField.has(1n)) {
+      Perms.push(lan.permissions.HAS_LEAST_ATTACHMENTS);
+    }
+    if (BitField.has(2n)) {
+      Perms.push(lan.permissions.HAS_MOST_ATTACHMENTS);
+    }
+    if (BitField.has(4n)) {
+      Perms.push(lan.permissions.HAS_LEAST_CHARACTERS);
+    }
+    if (BitField.has(8n)) {
+      Perms.push(lan.permissions.HAS_MOST_CHARACTERS);
+    }
+    if (BitField.has(16n)) {
+      Perms.push(lan.permissions.HAS_LEAST_WORDS);
+    }
+    if (BitField.has(32n)) {
+      Perms.push(lan.permissions.HAS_MOST_WORDS);
+    }
+    if (BitField.has(64n)) {
+      Perms.push(lan.permissions.MENTIONS_LEAST_USERS);
+    }
+    if (BitField.has(128n)) {
+      Perms.push(lan.permissions.MENTIONS_MOST_USERS);
+    }
+    if (BitField.has(256n)) {
+      Perms.push(lan.permissions.MENTIONS_LEAST_CHANNELS);
+    }
+    if (BitField.has(512n)) {
+      Perms.push(lan.permissions.MENTIONS_MOST_CHANNELS);
+    }
+    if (BitField.has(1024n)) {
+      Perms.push(lan.permissions.MENTIONS_LEAST_ROLES);
+    }
+    if (BitField.has(2048n)) {
+      Perms.push(lan.permissions.MENTIONS_MOST_ROLES);
+    }
+    if (BitField.has(4096n)) {
+      Perms.push(lan.permissions.HAS_LEAST_LINKS);
+    }
+    if (BitField.has(8192n)) {
+      Perms.push(lan.permissions.HAS_MOST_LINKS);
+    }
+    if (BitField.has(16384n)) {
+      Perms.push(lan.permissions.HAS_LEAST_EMOTES);
+    }
+    if (BitField.has(32768n)) {
+      Perms.push(lan.permissions.HAS_MOST_EMOTES);
+    }
+    if (BitField.has(65536n)) {
+      Perms.push(lan.permissions.HAS_LEAST_MENTIONS);
+    }
+    if (BitField.has(131072n)) {
+      Perms.push(lan.permissions.HAS_MOST_MENTIONS);
+    }
+  },
   /**
    * A translator for Discord BitField Permissions into the given Language.
    * @constructor
@@ -330,6 +390,7 @@ module.exports = {
   permCalc(bits, lan) {
     const BitField = new Discord.Permissions(BigInt(bits));
     const Perms = [];
+
     if (BitField.has(1n) && BitField.bitfield !== 8n) {
       Perms.push(lan.permissions.CREATE_INSTANT_INVITE);
     }
