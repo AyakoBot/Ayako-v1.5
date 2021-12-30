@@ -1,18 +1,28 @@
 const Discord = require('discord.js');
+// TODO
 
-const cooldown = new Set();
-const cooldownServer = new Set();
+const globalCooldown = new Set();
+const serverCooldown = new Set();
 
 module.exports = {
   async execute(msg) {
-    return;
-    if (!msg.author) return;
-    if (msg.author.bot) return;
-    if (msg.channel.type === 'DM') return;
+    if (!msg.author || msg.author.bot || msg.channel.type === 'DM') return;
+
     const language = await msg.client.ch.languageSelector(msg.guild);
-    const resG = await msg.client.ch.query('SELECT * FROM levelglobal WHERE userid = $1;', [
-      msg.author.id,
-    ]);
+
+    globalLeveling(msg);
+    serverLeveling();
+  },
+};
+
+const globalLeveling = async (msg) => {
+  const res = await msg.client.ch.query('SELECT * FROM levelglobal WHERE userid = $1;', [
+    msg.author.id,
+  ]);
+};
+
+/* 
+
     if (resG && resG.rowCount > 0) {
       const resSpam = await msg.client.ch.query('SELECT * FROM antilevelspam WHERE userid = $1;', [
         msg.author.id,
@@ -240,5 +250,4 @@ module.exports = {
         }
       }
     }
-  },
-};
+    */
