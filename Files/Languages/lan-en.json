@@ -523,6 +523,26 @@
     "START_EMBEDDED_ACTIVITIES": "Start Embedded Activities",
     "MODERATE_MEMBERS": "Moderate Members"
   },
+  "channelRules": {
+    "HAS_LEAST_ATTACHMENTS": "Has at least [externally defined] Attachments",
+    "HAS_MOST_ATTACHMENTS": "Has at most [externally defined] Attachments",
+    "HAS_LEAST_CHARACTERS": "Has at least [externally defined] Characters in Content",
+    "HAS_MOST_CHARACTERS": "Has at most [externally defined] Characters in Content",
+    "HAS_LEAST_WORDS": "Has at least [externally defined] Words in Content",
+    "HAS_MOST_WORDS": "Has at most [externally defined] Words in Content",
+    "MENTIONS_LEAST_USERS": "Mentions at least [externally defined] Users in Content",
+    "MENTIONS_MOST_USERS": "Mentions at most [externally defined] Users in Content",
+    "MENTIONS_LEAST_CHANNELS": "Mentions at least [externally defined] Channels in Content",
+    "MENTIONS_MOST_CHANNELS": "Mentions at most [externally defined] Channels in Content",
+    "MENTIONS_LEAST_ROLES": "Mentions at least [externally defined] Roles in Content",
+    "MENTIONS_MOST_ROLES": "Mentions at most [externally defined] Roles in Content",
+    "HAS_LEAST_LINKS": "Has at least [externally defined] Links",
+    "HAS_MOST_LINKS": "Has at most [externally defined] Links",
+    "HAS_LEAST_EMOTES": "Has at least [externally defined] Emotes",
+    "HAS_MOST_EMOTES": "Has at most [externally defined] Emotes",
+    "HAS_LEAST_MENTIONS": "Has at least [externally defined] Mentions",
+    "HAS_MOST_MENTIONS": "Has at most [externally defined] Mentions"
+  },
   "channels": {
     "GUILD_TEXT": "Text Channel",
     "DM": "DM Channel",
@@ -2295,7 +2315,7 @@
           "roles": {
             "name": "Roles",
             "answers": "Role IDs or Mentions",
-            "recommended": "Roles which will be assigned to a User who reached the defined Level"
+            "recommended": "Roles which will increase the XP gained by a User"
           },
           "multiplier": {
             "name": "Multiplier",
@@ -2312,6 +2332,70 @@
           },
           "remove": {
             "name": "Remove a Multiplier Role",
+            "process": {
+              "0": "Respond with the ID of the Multiplier Role you want to delete"
+            }
+          }
+        }
+      },
+      "levelrulechannels": {
+        "category": ["Automation"],
+        "type": "Leveling",
+        "channels": "Channels",
+        "rules": "Rules",
+        "edit": {
+          "channels": {
+            "name": "Channels",
+            "answers": "Channel IDs or Mentions",
+            "recommended": "Channels which will only give XP if the Message meets the defined Rules"
+          },
+          "rules": {
+            "name": "Rules",
+            "answers": "Select the Rules in the Select Menu below",
+            "recommended": "The Rules a Message has to meet in order to gain XP"
+          }
+        },
+        "otherEdits": {
+          "add": {
+            "name": "Add a Level Role",
+            "process": {
+              "0": "Select a Role that will be used as Level Role"
+            }
+          },
+          "remove": {
+            "name": "Remove a Level Role",
+            "process": {
+              "0": "Respond with the ID of the Level Role you want to delete"
+            }
+          }
+        }
+      },
+      "levelmultichannels": {
+        "category": ["Automation"],
+        "type": "Leveling",
+        "channels": "Channels",
+        "multiplier": "Multiplier",
+        "edit": {
+          "channels": {
+            "name": "Channels",
+            "answers": "Channel IDs or Mentions",
+            "recommended": "Roles which will be assigned to a User who reached the defined Level"
+          },
+          "multiplier": {
+            "name": "Multiplier",
+            "answers": "Any Number lower than 5.0 or above 0.1",
+            "recommended": "Recommended: `1.0`"
+          }
+        },
+        "otherEdits": {
+          "add": {
+            "name": "Add a Multiplier Channel",
+            "process": {
+              "0": "Select a Role that will be used as Multiplier Role"
+            }
+          },
+          "remove": {
+            "name": "Remove a Multiplier Channel",
             "process": {
               "0": "Respond with the ID of the Multiplier Role you want to delete"
             }
@@ -2611,7 +2695,7 @@
           },
           "perms": {
             "name": "Permissions of this Mod-Role",
-            "answers": "Respond with Discord Permission Bits or Select the Permissions in the Select Menu below",
+            "answers": "Select the Permissions in the Select Menu below",
             "recommended": "**Warning:**\nPermissions Specified here will __overwrite Discord Role Permissions__\nMeaning if the specified Mod-Role does not have the Permission to Ban Members on Discord, but does have this Permission here\nMembers with this Role __will be able to use Ayakos `ban` Command__ anyways"
           },
           "active": {
