@@ -1,4 +1,14 @@
 const Discord = require('discord.js');
+/*
+TODO: 
+finish levelupmote {
+  reactions: let ppl choose reactions (lvlupemotes)
+  message: implement own embed via embed builder
+  silent
+}
+lvlupdeltimeout
+lvlupchannels
+*/
 
 module.exports = {
   perm: 32n,
@@ -10,6 +20,22 @@ module.exports = {
   ],
   finished: true,
   displayEmbed(msg, r) {
+    let levelupmode;
+    switch (msg.r.lvlupmode) {
+      default: {
+        levelupmode = msg.client.ch.stp(msg.lan.reactions, {
+          emotes:
+            r.lvlupemotes && r.lvlupemotes.length
+              ? r.lvlupemotes.map((e) => e).join('')
+              : msg.client.constants.standard.levelupemotes.map((e) => e).join(''),
+        });
+        break;
+      }
+      case '1': {
+        levelupmode = msg.lan.messages;
+      }
+    }
+
     const embed = new Discord.MessageEmbed()
       .setDescription(
         msg.client.ch.stp(msg.lan.description, { prefix: msg.client.constants.standard.prefix }),
@@ -35,6 +61,11 @@ module.exports = {
         {
           name: msg.lan.xppermsg,
           value: `${r.xppermsg}`,
+          inline: true,
+        },
+        {
+          name: msg.lan.lvlupmode,
+          value: `${r.lvlupmode ? msg.lan.stack : msg.lan.replace}`,
           inline: true,
         },
         {
