@@ -53,16 +53,17 @@ module.exports = {
   },
   async startProcess(msg, answer, logchannel) {
     if (msg.m) await msg.m.removeAttachments();
-    const file = await this.generateImage();
-    const { lan } = msg;
-    const { r } = msg;
+    const file = this.generateImage();
+    msg.client.verificationCodes.set(`${msg.author.id}-${msg.guild.id}`, file.captcha.text);
+    const { lan, r } = msg;
+
     const embed = new Discord.MessageEmbed()
       .setImage(`attachment://${file.now}.png`)
-      .setTitle(
-        lan.author.name,
-        msg.client.constants.standard.image,
-        msg.client.constants.standard.invite,
-      )
+      .setAuthor({
+        name: lan.author.name,
+        iconURL: msg.client.constants.standard.image,
+        url: msg.client.constants.standard.invite,
+      })
       .setDescription(
         r.greetdesc
           ? msg.client.ch.stp(r.greetdesc, { user: msg.author })
@@ -71,10 +72,12 @@ module.exports = {
       .addField(msg.language.hint, lan.hintmsg)
       .addField(lan.field, '\u200b')
       .setColor(msg.client.constants.standard.color);
+
     const regenerate = new Discord.MessageButton()
       .setCustomId('regenerate')
       .setLabel(msg.language.regenerate)
       .setStyle('SECONDARY');
+
     if (answer)
       answer
         .update({
@@ -97,6 +100,7 @@ module.exports = {
         components: msg.client.ch.buttonRower([regenerate]),
         files: [file.path],
       });
+
     if (!msg.m || !msg.m.id)
       return msg.client.ch.send(msg.client.channels.cache.get(r.startchannel), {
         content: msg.client.ch.stp(msg.lan.openDMs, {
@@ -104,50 +108,55 @@ module.exports = {
           prefix: msg.client.constants.standard.prefix,
         }),
       });
+
     const buttonsCollector = msg.m.createMessageComponentCollector({ time: 120000 });
     const messageCollector = msg.DM.createMessageCollector({ time: 120000 });
     buttonsCollector.on('collect', (clickButton) => {
       if (clickButton.customId === 'regenerate') {
         buttonsCollector.stop();
         messageCollector.stop();
+
+        msg.client.verificationCodes.delete(`${clickButton.user.id}-${msg.guild.id}`);
+
         return this.startProcess(msg, clickButton, logchannel);
       }
       return null;
     });
+
     messageCollector.on('collect', async (message) => {
+      buttonsCollector.stop();
+      messageCollector.stop();
       if (msg.author.id !== message.author.id && message.embeds[0]) {
-        buttonsCollector.stop();
-        messageCollector.stop();
         msg.m.delete().catch(() => {});
         return;
       }
       if (message.content.toLowerCase() === msg.language.cancel.toLowerCase()) {
         msg.m.delete().catch(() => {});
-        buttonsCollector.stop();
-        messageCollector.stop();
         msg.client.ch.reply(message, { content: msg.language.aborted });
         return;
       }
-      if (message.content.toLowerCase() === file.captcha.text.toLowerCase()) {
-        buttonsCollector.stop();
-        messageCollector.stop();
+
+      const captcha = msg.client.verificationCodes.get(`${message.author.id}-${msg.guild.id}`);
+
+      if (message.content.toLowerCase() === captcha.toLowerCase()) {
+        msg.client.verificationCodes.delete(`${message.author.id}-${msg.guild.id}`);
         this.finished(msg, logchannel);
         return;
       }
-      buttonsCollector.stop();
-      messageCollector.stop();
       const ms = await msg.client.ch.send(msg.DM, {
-        content: msg.client.ch.stp(msg.lan.wrongInput, { solution: file.captcha.text }),
+        content: msg.client.ch.stp(msg.lan.wrongInput, { solution: captcha }),
       });
       setTimeout(() => {
         ms.delete().catch(() => {});
       }, 10000);
+      msg.client.verificationCodes.delete(`${message.author.id}-${msg.guild.id}`);
       this.startProcess(msg, null, logchannel);
     });
+
     buttonsCollector.on('end', async (collected, reason) => {
       if (reason === 'time') {
-        buttonsCollector.stop();
         messageCollector.stop();
+        msg.client.verificationCodes.delete(`${collected.user.id}-${msg.guild.id}`);
         if (msg.m) await msg.m.removeAttachments();
         msg.m
           .edit({
