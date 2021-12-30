@@ -377,15 +377,21 @@ const getIdentifier = (msg, settingsConstant, row) => {
       break;
     }
     case 'role': {
-      identifier = msg.guild.roles.cache
-        .get(row[settingsConstant.ident])
-        ?.name.replace(/\W{2}/gu, '');
+      const role = msg.guild.roles.cache.get(row[settingsConstant.ident]);
+      if (role) {
+        identifier = role.name.replace(/\W{2}/gu, '');
+      } else {
+        identifier = '--';
+      }
       break;
     }
     case 'channel': {
-      identifier = msg.guild.channels.cache
-        .get(row[settingsConstant.ident])
-        ?.name.replace(/\W{2}/gu, '');
+      const channel = msg.guild.channels.cache.get(row[settingsConstant.ident]);
+      if (channel) {
+        identifier = channel.name.replace(/\W{2}/gu, '');
+      } else {
+        identifier = '--';
+      }
       break;
     }
   }
@@ -645,7 +651,11 @@ const singleRowEdit = async (msgData, resData, embed, comesFromMMR) => {
       .setEmoji(msg.client.constants.emotes.back)
       .setStyle('DANGER');
 
-    rawButtons.push(back);
+    if (rawButtons.length === 5) {
+      rawButtons[4].push(back);
+    } else {
+      rawButtons.push([back]);
+    }
   }
 
   embed.setAuthor({
@@ -741,14 +751,14 @@ const editorInteractionHandler = async (msgData, editorData, row, res) => {
   if (required.assinger !== 'id') {
     embed
       .addField(
-        ' \u200b',
-        `${languageOfKey.recommended ? `${languageOfKey.recommended}\n` : ''}${
+        '\u200b',
+        `\u200b${languageOfKey.recommended ? `${languageOfKey.recommended}\n` : ''}${
           languageOfKey.desc ? languageOfKey.desc : ''
         }`,
       )
       .setTitle(msg.client.ch.stp(languageOfKey.name, { row: row || '--' }));
   } else {
-    embed.addField(' \u200b', `${msg.language.select.id.desc}`).setTitle(msg.language.id);
+    embed.addField('\u200b', `${msg.language.select.id.desc}`).setTitle(msg.language.id);
   }
   embed.setAuthor({
     name: msg.client.ch.stp(msg.lanSettings.authorEdit, {
@@ -803,6 +813,11 @@ const changing = async (msgData, editData, resData) => {
   const { row, res } = resData;
 
   const settings = msg.client.constants.commands.settings.edit[msg.file.name];
+
+  if (!settings[usedKey]) {
+    throw new Error(`${usedKey} is not a defined Key in the Settings Constants Object`);
+  }
+
   const editor = msg.client.settingsEditors.find((f) =>
     usedKey === 'active' ? f.key.includes('boolean') : f.key.includes(settings[usedKey].key),
   );
@@ -953,14 +968,14 @@ const buttonHandler = async (msgData, editData, languageData) => {
           if (required.assinger !== 'id') {
             embed
               .addField(
-                ' \u200b',
-                `${languageOfKey.recommended ? `${languageOfKey.recommended}\n` : ''}${
+                '\u200b',
+                `\u200b${languageOfKey.recommended ? `${languageOfKey.recommended}\n` : ''}${
                   languageOfKey.desc ? languageOfKey.desc : ''
                 }`,
               )
               .setTitle(msg.client.ch.stp(languageOfKey.name, { row: row || '--' }));
           } else {
-            embed.addField(' \u200b', `${msg.language.select.id.desc}`).setTitle(msg.language.id);
+            embed.addField('\u200b', `${msg.language.select.id.desc}`).setTitle(msg.language.id);
           }
           embed.setAuthor({
             name: msg.client.ch.stp(msg.lanSettings.authorEdit, {
@@ -1101,7 +1116,7 @@ const messageHandler = async (msgData, editData, languageData, Objects) => {
 
     returnEmbed
       .addField(
-        ' \u200b',
+        '\u200b',
         `${languageOfKey.recommended ? `${languageOfKey.recommended}\n` : ''}${
           languageOfKey.desc ? languageOfKey.desc : ''
         }`,
