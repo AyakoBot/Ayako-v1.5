@@ -1201,9 +1201,9 @@
             "required": true
           }
         },
-        "levelrulechannels": {
+        "levelruleschannels": {
           "rules": {
-            "key": "channelrules",
+            "key": "permissions",
             "required": true
           },
           "channels": {
@@ -1227,7 +1227,7 @@
         "levelmultiroles": ["levelingmultiplierroles"],
         "levelingchannels": ["levelingruleschannels"],
         "levelmultichannels": ["levelingmultiplierchannels"],
-        "levelrulechannels": ["levelingchannels"],
+        "levelruleschannels": ["levelingruleschannels"],
         "logs": ["logchannels"],
         "reactionroles": ["reactionroles"],
         "selfroles": ["selfroles"],
@@ -1403,12 +1403,12 @@
           "ident": "multiplier",
           "identType": "number"
         },
-        "levelrulechannels": {
+        "levelruleschannels": {
           "cols": ["guildid, uniquetimestamp"],
           "vals": [["{{msg.guild.id}}", "{{values.uniquetimestamp}}"]],
           "add": [],
-          "ident": "rules",
-          "identType": "bigint"
+          "ident": "",
+          "identType": ""
         },
         "levelmultichannels": {
           "cols": ["guildid, uniquetimestamp, multiplier"],

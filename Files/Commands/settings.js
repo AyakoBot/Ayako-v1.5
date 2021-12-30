@@ -306,19 +306,15 @@ const replier = async (msgData, sendData) => {
   }
 
   if (answer && !answer.replied && !manualReply) {
-    await answer
-      .update({
-        embeds: [embed],
-        components: buttons,
-      })
-      .catch(() => {});
+    await answer.update({
+      embeds: [embed],
+      components: buttons,
+    });
   } else if (msg.m) {
-    await msg.m
-      .edit({
-        embeds: [embed],
-        components: buttons,
-      })
-      .catch(() => {});
+    await msg.m.edit({
+      embeds: [embed],
+      components: buttons,
+    });
   } else {
     msg.m = await msg.client.ch.reply(msg, {
       embeds: [embed],

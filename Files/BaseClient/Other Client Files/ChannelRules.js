@@ -37,8 +37,6 @@ ChannelRules.FLAGS = {
 
 ChannelRules.ALL = Object.values(ChannelRules.FLAGS).reduce((all, p) => all | p, 0n);
 
-ChannelRules.DEFAULT = BigInt(104324673);
-
 ChannelRules.defaultBit = BigInt(0);
 
 module.exports = ChannelRules;

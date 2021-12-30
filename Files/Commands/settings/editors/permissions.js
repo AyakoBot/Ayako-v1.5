@@ -6,14 +6,23 @@ module.exports = {
   requiresInteraction: true,
   dataPreparation(msg, editorData) {
     const { insertedValues, required, Objects } = editorData;
-
-    const perms = Object.entries(Discord.Permissions.FLAGS);
     const permissions = [];
-    perms.forEach(([, bits]) => {
-      msg.client.ch.permCalc(bits, msg.language).forEach((perm) => {
-        permissions.push({ perm, bits: Number(bits) });
+
+    if (msg.file[required.assinger] && required.assinger === 'rules') {
+      const flags = Object.entries(msg.file[required.assinger].FLAGS);
+      flags.forEach(([, bits]) => {
+        msg.client.ch.channelRuleCalc(bits, msg.language).forEach((perm) => {
+          permissions.push({ perm, bits: Number(bits) });
+        });
       });
-    });
+    } else {
+      const flags = Object.entries(Discord.Permissions.FLAGS);
+      flags.forEach(([, bits]) => {
+        msg.client.ch.permCalc(bits, msg.language).forEach((perm) => {
+          permissions.push({ perm, bits: Number(bits) });
+        });
+      });
+    }
 
     permissions.forEach(({ perm, bits }) => {
       const inserted = {
@@ -74,12 +83,24 @@ module.exports = {
   },
   getSelected(msg, insertedValues, required) {
     if (insertedValues[required.assinger]) {
-      return insertedValues[required.assinger]
-        ? msg.client.ch
-            .permCalc(insertedValues[required.assinger], msg.language)
-            .map((c) => `\`${c}\``)
-            .join(', ')
-        : msg.language.none;
+      switch (required.assinger) {
+        default: {
+          return insertedValues[required.assinger]
+            ? msg.client.ch
+                .permCalc(insertedValues[required.assinger], msg.language)
+                .map((c) => `\`${c}\``)
+                .join(', ')
+            : msg.language.none;
+        }
+        case 'rules': {
+          return insertedValues[required.assinger]
+            ? msg.client.ch
+                .channelRuleCalc(insertedValues[required.assinger], msg.language)
+                .map((c) => `\`${c}\``)
+                .join(', ')
+            : msg.language.none;
+        }
+      }
     }
     return null;
   },

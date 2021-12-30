@@ -2338,11 +2338,29 @@
           }
         }
       },
-      "levelrulechannels": {
+      "levelruleschannels": {
         "category": ["Automation"],
         "type": "Leveling",
         "channels": "Channels",
         "rules": "Rules",
+        "HAS_LEAST_ATTACHMENTS": "Has at least [externally defined] Attachments",
+        "HAS_MOST_ATTACHMENTS": "Has at most [externally defined] Attachments",
+        "HAS_LEAST_CHARACTERS": "Has at least [externally defined] Characters in Content",
+        "HAS_MOST_CHARACTERS": "Has at most [externally defined] Characters in Content",
+        "HAS_LEAST_WORDS": "Has at least [externally defined] Words in Content",
+        "HAS_MOST_WORDS": "Has at most [externally defined] Words in Content",
+        "MENTIONS_LEAST_USERS": "Mentions at least [externally defined] Users in Content",
+        "MENTIONS_MOST_USERS": "Mentions at most [externally defined] Users in Content",
+        "MENTIONS_LEAST_CHANNELS": "Mentions at least [externally defined] Channels in Content",
+        "MENTIONS_MOST_CHANNELS": "Mentions at most [externally defined] Channels in Content",
+        "MENTIONS_LEAST_ROLES": "Mentions at least [externally defined] Roles in Content",
+        "MENTIONS_MOST_ROLES": "Mentions at most [externally defined] Roles in Content",
+        "HAS_LEAST_LINKS": "Has at least [externally defined] Links",
+        "HAS_MOST_LINKS": "Has at most [externally defined] Links",
+        "HAS_LEAST_EMOTES": "Has at least [externally defined] Emotes",
+        "HAS_MOST_EMOTES": "Has at most [externally defined] Emotes",
+        "HAS_LEAST_MENTIONS": "Has at least [externally defined] Mentions",
+        "HAS_MOST_MENTIONS": "Has at most [externally defined] Mentions",
         "edit": {
           "channels": {
             "name": "Channels",
@@ -2353,7 +2371,41 @@
             "name": "Rules",
             "answers": "Select the Rules in the Select Menu below",
             "recommended": "The Rules a Message has to meet in order to gain XP"
-          }
+          },
+          "HAS_LEAST_ATTACHMENTS": { "name": "Has at least [externally defined] Attachments" },
+          "HAS_MOST_ATTACHMENTS": { "name": "Has at most [externally defined] Attachments" },
+          "HAS_LEAST_CHARACTERS": {
+            "name": "Has at least [externally defined] Characters in Content"
+          },
+          "HAS_MOST_CHARACTERS": {
+            "name": "Has at most [externally defined] Characters in Content"
+          },
+          "HAS_LEAST_WORDS": { "name": "Has at least [externally defined] Words in Content" },
+          "HAS_MOST_WORDS": { "name": "Has at most [externally defined] Words in Content" },
+          "MENTIONS_LEAST_USERS": {
+            "name": "Mentions at least [externally defined] Users in Content"
+          },
+          "MENTIONS_MOST_USERS": {
+            "name": "Mentions at most [externally defined] Users in Content"
+          },
+          "MENTIONS_LEAST_CHANNELS": {
+            "name": "Mentions at least [externally defined] Channels in Content"
+          },
+          "MENTIONS_MOST_CHANNELS": {
+            "name": "Mentions at most [externally defined] Channels in Content"
+          },
+          "MENTIONS_LEAST_ROLES": {
+            "name": "Mentions at least [externally defined] Roles in Content"
+          },
+          "MENTIONS_MOST_ROLES": {
+            "name": "Mentions at most [externally defined] Roles in Content"
+          },
+          "HAS_LEAST_LINKS": { "name": "Has at least [externally defined] Links" },
+          "HAS_MOST_LINKS": { "name": "Has at most [externally defined] Links" },
+          "HAS_LEAST_EMOTES": { "name": "Has at least [externally defined] Emotes" },
+          "HAS_MOST_EMOTES": { "name": "Has at most [externally defined] Emotes" },
+          "HAS_LEAST_MENTIONS": { "name": "Has at least [externally defined] Mentions" },
+          "HAS_MOST_MENTIONS": { "name": "Has at most [externally defined] Mentions" }
         },
         "otherEdits": {
           "add": {
@@ -2774,6 +2826,7 @@
   "role": "Role",
   "member": "Member",
   "deny": "Deny",
+  "ChannelRules": "Channel Rules",
   "allow": "Allow",
   "wasAdded": "was added",
   "wasRemoved": "was removed",
@@ -2823,6 +2876,7 @@
   "tooManyRoles": "Too many Roles to be displayed",
   "loading": "Loading...",
   "roles": "Roles",
+  "Channels": "Channels",
   "edit": "edit",
   "Edit": "Edit",
   "nickname": "Nickname",
@@ -2913,5 +2967,6 @@
   "all": "all",
   "verificationLevelName": "Verification Level",
   "explicitContentFilterName": "Explicit Content Filter",
-  "mfaLevelName": "2 Factor Authentification"
+  "mfaLevelName": "2 Factor Authentification",
+  "amountDefinition": "Amount Definition"
 }
