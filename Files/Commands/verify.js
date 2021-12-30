@@ -54,23 +54,23 @@ module.exports = {
   async startProcess(msg, answer, logchannel) {
     if (msg.m) await msg.m.removeAttachments();
     const file = this.generateImage();
-    msg.client.verificationCodes.set(`${msg.author.id}-${msg.guild.id}`, file.captcha.text);
-    const { lan, r } = msg;
+    msg.client.verificationCodes.set(`${msg.DM.id}-${msg.guild.id}`, file.captcha.text);
+    const { r } = msg;
 
     const embed = new Discord.MessageEmbed()
       .setImage(`attachment://${file.now}.png`)
       .setAuthor({
-        name: lan.author.name,
+        name: msg.lan.author.name,
         iconURL: msg.client.constants.standard.image,
         url: msg.client.constants.standard.invite,
       })
       .setDescription(
         r.greetdesc
           ? msg.client.ch.stp(r.greetdesc, { user: msg.author })
-          : msg.client.ch.stp(lan.description, { guild: msg.guild }),
+          : msg.client.ch.stp(msg.lan.description, { guild: msg.guild }),
       )
-      .addField(msg.language.hint, lan.hintmsg)
-      .addField(lan.field, '\u200b')
+      .addField(msg.language.hint, msg.lan.hintmsg)
+      .addField(msg.lan.field, '\u200b')
       .setColor(msg.client.constants.standard.color);
 
     const regenerate = new Discord.MessageButton()
@@ -116,7 +116,7 @@ module.exports = {
         buttonsCollector.stop();
         messageCollector.stop();
 
-        msg.client.verificationCodes.delete(`${clickButton.user.id}-${msg.guild.id}`);
+        msg.client.verificationCodes.delete(`${clickButton.channel.id}-${msg.guild.id}`);
 
         return this.startProcess(msg, clickButton, logchannel);
       }
@@ -136,10 +136,10 @@ module.exports = {
         return;
       }
 
-      const captcha = msg.client.verificationCodes.get(`${message.author.id}-${msg.guild.id}`);
+      const captcha = msg.client.verificationCodes.get(`${message.channel.id}-${msg.guild.id}`);
 
       if (message.content.toLowerCase() === captcha.toLowerCase()) {
-        msg.client.verificationCodes.delete(`${message.author.id}-${msg.guild.id}`);
+        msg.client.verificationCodes.delete(`${message.channel.id}-${msg.guild.id}`);
         this.finished(msg, logchannel);
         return;
       }
@@ -149,14 +149,16 @@ module.exports = {
       setTimeout(() => {
         ms.delete().catch(() => {});
       }, 10000);
-      msg.client.verificationCodes.delete(`${message.author.id}-${msg.guild.id}`);
+      msg.client.verificationCodes.delete(`${message.channel.id}-${msg.guild.id}`);
       this.startProcess(msg, null, logchannel);
     });
 
     buttonsCollector.on('end', async (collected, reason) => {
       if (reason === 'time') {
         messageCollector.stop();
-        msg.client.verificationCodes.delete(`${collected.user.id}-${msg.guild.id}`);
+        msg.client.verificationCodes.delete(
+          `${buttonsCollector.options.message.channelId.id}-${msg.guild.id}`,
+        );
         if (msg.m) await msg.m.removeAttachments();
         msg.m
           .edit({
