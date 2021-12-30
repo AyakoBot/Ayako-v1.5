@@ -347,7 +347,7 @@
       "7": "7⃣",
       "8": "8⃣",
       "9": "9⃣",
-      "ten": "🔟"
+      "10": "🔟"
     },
     "settings": "<:Settings:781982956138659880>",
     "settingsID": "781982956138659880",
@@ -1209,6 +1209,78 @@
           "channels": {
             "key": "channels",
             "required": true
+          },
+          "HAS_LEAST_ATTACHMENTS": {
+            "key": "number",
+            "required": true
+          },
+          "HAS_MOST_ATTACHMENTS": {
+            "key": "number",
+            "required": true
+          },
+          "HAS_LEAST_CHARACTERS": {
+            "key": "number",
+            "required": true
+          },
+          "HAS_MOST_CHARACTERS": {
+            "key": "number",
+            "required": true
+          },
+          "HAS_LEAST_WORDS": {
+            "key": "number",
+            "required": true
+          },
+          "HAS_MOST_WORDS": {
+            "key": "number",
+            "required": true
+          },
+          "MENTIONS_LEAST_USERS": {
+            "key": "number",
+            "required": true
+          },
+          "MENTIONS_MOST_USERS": {
+            "key": "number",
+            "required": true
+          },
+          "MENTIONS_LEAST_CHANNELS": {
+            "key": "number",
+            "required": true
+          },
+          "MENTIONS_MOST_CHANNELS": {
+            "key": "number",
+            "required": true
+          },
+          "MENTIONS_LEAST_ROLES": {
+            "key": "number",
+            "required": true
+          },
+          "MENTIONS_MOST_ROLES": {
+            "key": "number",
+            "required": true
+          },
+          "HAS_LEAST_LINKS": {
+            "key": "number",
+            "required": true
+          },
+          "HAS_MOST_LINKS": {
+            "key": "number",
+            "required": true
+          },
+          "HAS_LEAST_EMOTES": {
+            "key": "number",
+            "required": true
+          },
+          "HAS_MOST_EMOTES": {
+            "key": "number",
+            "required": true
+          },
+          "HAS_LEAST_MENTIONS": {
+            "key": "number",
+            "required": true
+          },
+          "HAS_MOST_MENTIONS": {
+            "key": "number",
+            "required": true
           }
         }
       },
@@ -1407,8 +1479,7 @@
           "cols": ["guildid, uniquetimestamp"],
           "vals": [["{{msg.guild.id}}", "{{values.uniquetimestamp}}"]],
           "add": [],
-          "ident": "",
-          "identType": ""
+          "ident": ""
         },
         "levelmultichannels": {
           "cols": ["guildid, uniquetimestamp, multiplier"],

@@ -48,13 +48,14 @@ module.exports = {
         inline: false,
       });
 
-      msg.client.ch.channelRuleCalc(r.rules, msg.language).forEach((rule) => {
+      msg.client.ch.channelRuleCalc(r.rules, msg.language).forEach((rule, i) => {
         const [key] = Object.entries(msg.language.channelRules).find(([, v]) => v === rule);
+        const emote = msg.client.constants.emotes.numbers[(i % 5) + 1];
 
         embed.addFields({
-          name: rule,
+          name: `${emote} ${rule}`,
           value: `${msg.language.amountDefinition}: ${
-            r[key] !== null ? r[key] : msg.language.none
+            typeof r[key] === 'string' ? r[key] : msg.language.none
           }`,
           inline: true,
         });
@@ -79,15 +80,17 @@ module.exports = {
     const ruleButtons = [[]];
     let i = 0;
 
-    msg.client.ch.channelRuleCalc(r.rules, msg.language).forEach((rule) => {
+    msg.client.ch.channelRuleCalc(r.rules, msg.language).forEach((rule, j) => {
       const [key] = Object.entries(msg.language.channelRules).find(([, v]) => v === rule);
+      const emote = msg.client.constants.emotes.numbers[(j % 5) + 1];
 
       const button = new Discord.MessageButton()
         .setCustomId(lan.edit[key].name)
-        .setLabel(lan[key])
+        .setLabel(msg.language.channelRules[`${key}_SHORT`])
+        .setEmoji(emote)
         .setStyle('SECONDARY');
 
-      if (ruleButtons[i].length <= 5) {
+      if (ruleButtons[i].length <= 4) {
         ruleButtons[i].push(button);
       } else {
         ruleButtons.push([button]);

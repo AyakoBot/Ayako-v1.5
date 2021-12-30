@@ -45,19 +45,25 @@ const getIdentifier = (msg, settingsConstant, row) => {
 
   switch (settingsConstant.identType) {
     default: {
-      identifier = row[settingsConstant.ident];
+      identifier = row[settingsConstant.ident] ? row[settingsConstant.ident] : '--';
       break;
     }
     case 'role': {
-      identifier = msg.guild.roles.cache
-        .get(row[settingsConstant.ident])
-        ?.name.replace(/\W{2}/gu, '');
+      const role = msg.guild.roles.cache.get(row[settingsConstant.ident]);
+      if (role) {
+        identifier = role.name.replace(/\W{2}/gu, '');
+      } else {
+        identifier = '--';
+      }
       break;
     }
     case 'channel': {
-      identifier = msg.guild.channels.cache
-        .get(row[settingsConstant.ident])
-        ?.name.replace(/\W{2}/gu, '');
+      const channel = msg.guild.channels.cache.get(row[settingsConstant.ident]);
+      if (channel) {
+        identifier = channel.name.replace(/\W{2}/gu, '');
+      } else {
+        identifier = '--';
+      }
       break;
     }
   }
