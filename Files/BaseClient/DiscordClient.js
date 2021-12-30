@@ -74,6 +74,7 @@ client.invites = new Map();
 client.mutes = new Discord.Collection();
 client.bans = new Discord.Collection();
 client.channelWebhooks = new Map();
+client.verificationCodes = new Map();
 client.constants = require('../Constants.json');
 
 client.setMaxListeners(63);
