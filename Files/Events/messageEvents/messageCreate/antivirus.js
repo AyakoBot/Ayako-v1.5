@@ -336,7 +336,7 @@ const blacklisted = async (msg, lan, embed, linkObject, note, check) => {
 };
 
 const severeLink = async (msg, lan, embed, linkObject, urlSeverity, check) => {
-  saveToBadLink(linkObject);
+  saveToBadLink(linkObject, msg);
 
   const severity = urlSeverity || null;
   if (embed.fields.length === 0) {
@@ -371,7 +371,7 @@ const severeLink = async (msg, lan, embed, linkObject, urlSeverity, check) => {
 };
 
 const ccscam = async (msg, lan, embed, linkObject, check) => {
-  saveToBadLink(linkObject);
+  saveToBadLink(linkObject, msg);
 
   if (embed.fields.length === 0) {
     await embed
@@ -404,7 +404,7 @@ const ccscam = async (msg, lan, embed, linkObject, check) => {
 };
 
 const newUrl = async (msg, lan, embed, linkObject, check) => {
-  saveToBadLink(linkObject);
+  saveToBadLink(linkObject, msg);
 
   if (embed.fields.length === 0) {
     await embed
@@ -440,13 +440,14 @@ const newUrl = async (msg, lan, embed, linkObject, check) => {
   return true;
 };
 
-const saveToBadLink = async (linkObject) => {
+const saveToBadLink = async (linkObject, msg) => {
   const file = fs.readFileSync('S:/Bots/ws/CDN/antivirus/blacklisted.txt', {
     encoding: 'utf8',
   });
   const res = file ? file.split(/\n+/).map((entry) => entry.replace(/\r/g, '')) : [];
 
   if (!res.includes(linkObject.baseURL)) {
+    msg.client.channels.cache.get('726252103302905907').send(`${linkObject}`);
     fs.appendFile('S:/Bots/ws/CDN/antivirus/badLinks.txt', `\n${linkObject.baseURL}`, () => {});
   }
 };
