@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const ChannelRules = require('../../BaseClient/Other Client Files/ChannelRules');
+const ChannelRules = require('../../../../BaseClient/Other Client Files/ChannelRules');
 
 module.exports = {
   perm: 32n,

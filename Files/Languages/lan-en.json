@@ -2226,7 +2226,7 @@
       "leveling": {
         "category": ["Automation"],
         "type": "Leveling",
-        "description": "Also check out:\n`{{prefix}}settings levelroles` to add Roles Applied at Levels\n`{{prefix}}settings levelmultiroles` to add Roles which grant XP Gain Multipliers\n`{{prefix}}settings levelchannels` to customize Ayako's Leveling behaviour on Channels\nFor other Leveling related Commands, check out `{{prefix}}help leveling`",
+        "description": "Also check out:\n`{{prefix}}settings levelroles` to add Roles Applied at Levels\n`{{prefix}}settings multiroles` to add Roles which grant XP Gain Multipliers\n`{{prefix}}settings levelchannels` to customize Ayako's Leveling behaviour on Channels\nFor other Leveling related Commands, check out `{{prefix}}help leveling`",
         "xpmultiplier": "XP Multiplier",
         "blchannels": "Blacklisted Channels",
         "blroles": "Blacklisted Roles",
@@ -2324,7 +2324,7 @@
           }
         }
       },
-      "levelmultiroles": {
+      "multiroles": {
         "category": ["Automation"],
         "type": "Leveling",
         "roles": "Roles",
@@ -2356,7 +2356,7 @@
           }
         }
       },
-      "levelruleschannels": {
+      "ruleschannels": {
         "category": ["Automation"],
         "type": "Leveling",
         "channels": "Channels",
@@ -2440,7 +2440,7 @@
           }
         }
       },
-      "levelmultichannels": {
+      "multichannels": {
         "category": ["Automation"],
         "type": "Leveling",
         "channels": "Channels",

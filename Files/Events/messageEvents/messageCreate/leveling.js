@@ -122,7 +122,7 @@ const globalLeveling = async (msg) => {
           const curLvL = result.rows[0].level;
           let multiplier;
           const mRes = await msg.client.ch.query(
-            'SELECT * FROM levelmultiroles WHERE guildid = $1;',
+            'SELECT * FROM multiroles WHERE guildid = $1;',
             [msg.guild.id],
           );
           if (mRes && mRes.rowCount > 0) {
@@ -130,7 +130,7 @@ const globalLeveling = async (msg) => {
               const role = msg.guild.roles.cache.get(row.role);
               if (!role)
                 return msg.client.ch.query(
-                  'DELETE FROM levelmultiroles WHERE guildid = $1 AND roleid = $2;',
+                  'DELETE FROM multiroles WHERE guildid = $1 AND roleid = $2;',
                   [msg.guild.id, row.roleid],
                 );
               if (msg.member && msg.member.roles.cache.has(role.id)) multiplier += row.multiplier;
