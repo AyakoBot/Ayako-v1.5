@@ -1182,7 +1182,7 @@
             "required": true
           }
         },
-        "levelmultiroles": {
+        "multiroles": {
           "multiplier": {
             "key": "number",
             "required": true
@@ -1192,7 +1192,7 @@
             "required": true
           }
         },
-        "levelmultichannels": {
+        "multichannels": {
           "multiplier": {
             "key": "number",
             "required": true
@@ -1202,7 +1202,7 @@
             "required": true
           }
         },
-        "levelruleschannels": {
+        "ruleschannels": {
           "rules": {
             "key": "permissions",
             "required": true
@@ -1297,10 +1297,10 @@
         "forcecooldowns": [null],
         "leveling": ["leveling"],
         "levelroles": ["levelingroles"],
-        "levelmultiroles": ["levelingmultiplierroles"],
+        "multiroles": ["levelingmultiplierroles"],
         "levelingchannels": ["levelingruleschannels"],
-        "levelmultichannels": ["levelingmultiplierchannels"],
-        "levelruleschannels": ["levelingruleschannels"],
+        "multichannels": ["levelingmultiplierchannels"],
+        "ruleschannels": ["levelingruleschannels"],
         "logs": ["logchannels"],
         "reactionroles": ["reactionroles"],
         "selfroles": ["selfroles"],
@@ -1469,20 +1469,20 @@
           "ident": "level",
           "identType": "number"
         },
-        "levelmultiroles": {
+        "multiroles": {
           "cols": ["guildid, uniquetimestamp, multiplier"],
           "vals": [["{{msg.guild.id}}", "{{values.uniquetimestamp}}", 1.0]],
           "add": [],
           "ident": "multiplier",
           "identType": "number"
         },
-        "levelruleschannels": {
+        "ruleschannels": {
           "cols": ["guildid, uniquetimestamp"],
           "vals": [["{{msg.guild.id}}", "{{values.uniquetimestamp}}"]],
           "add": [],
           "ident": ""
         },
-        "levelmultichannels": {
+        "multichannels": {
           "cols": ["guildid, uniquetimestamp, multiplier"],
           "vals": [["{{msg.guild.id}}", "{{values.uniquetimestamp}}", 1.0]],
           "add": [],
