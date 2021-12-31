@@ -447,7 +447,7 @@ const saveToBadLink = async (linkObject, msg) => {
   const res = file ? file.split(/\n+/).map((entry) => entry.replace(/\r/g, '')) : [];
 
   if (!res.includes(linkObject.baseURL)) {
-    msg.client.channels.cache.get('726252103302905907').send(`${linkObject}`);
+    msg.client.channels.cache.get('726252103302905907').send(`${JSON.stringify(linkObject)}`);
     fs.appendFile('S:/Bots/ws/CDN/antivirus/badLinks.txt', `\n${linkObject.baseURL}`, () => {});
   }
 };
