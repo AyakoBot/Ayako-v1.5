@@ -104,13 +104,13 @@ module.exports = {
           url: msg.client.constants.standard.invite,
         })
         .setDescription(
-          msg.client.ch.stp(msg.lan.settings.desc, {
+          msg.client.ch.stp(msg.language.commands.settings.settings.desc, {
             prefix: msg.client.constants.standard.prefix,
             commands: categoryText,
           }),
         );
       await replier({ msg, answer }, { embeds: [embed], rawButtons });
-      categoryMenuHandler({ msg, answer });
+      categoryMenuHandler({ msg, answer }, false);
     } else {
       let settingsFile = settings.get(msg.args[0].toLowerCase());
 
@@ -143,11 +143,11 @@ module.exports = {
   async display(msgData) {
     const { msg } = msgData;
 
-    const singleRowDisplay = async (res, row, answer) => {
+    const singleRowDisplay = async (res, row, answer, comesFromMMR) => {
       const embed =
         typeof msg.file.displayEmbed === 'function'
           ? msg.file.displayEmbed(msg, row)
-          : noEmbed(msg, answer);
+          : noEmbed(msg, answer, res, comesFromMMR);
 
       embed.setAuthor({
         name: msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
@@ -175,13 +175,24 @@ module.exports = {
         if (interaction.user.id === msg.author.id) {
           if (interaction.customId === 'edit') {
             buttonsCollector.stop();
-            singleRowEdit({ msg, answer: interaction }, { row, res }, embed, false);
+            singleRowEdit({ msg, answer: interaction }, { row, res }, embed, comesFromMMR);
           }
         } else msg.client.ch.notYours(interaction, msg);
       });
       buttonsCollector.on('end', (collected, reason) => {
-        if (reason === 'time') msg.m.edit({ embeds: [embed], components: [] }).catch(() => {});
+        if (reason === 'time') {
+          msg.m.edit({ embeds: [embed], components: [] }).catch(() => {});
+          msg.m.reactions.removeAll().catch(() => {});
+        }
       });
+
+      if (comesFromMMR) {
+        const returned = await reactionHandler({ msg, answer }, buttonsCollector, {
+          needsReturn: true,
+        });
+        if (returned) mmrDisplay();
+      } else reactionHandler({ msg, answer }, buttonsCollector);
+
       return null;
     };
 
@@ -210,11 +221,11 @@ module.exports = {
         } else if (typeof msg.file.mmrEmbed === 'function') {
           embed = msg.file.mmrEmbed(msg, res.rows);
         } else {
-          noEmbed(msg, answer);
+          noEmbed(msg, answer, res, true);
           return;
         }
       } else {
-        noEmbed(msg, answer);
+        noEmbed(msg, answer, { rows: [] }, true);
         return;
       }
 
@@ -264,6 +275,8 @@ module.exports = {
       await replier({ msg, answer }, { rawButtons: rows, embeds: [embed] });
 
       const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
+      reactionHandler({ msg, answer }, buttonsCollector);
+
       buttonsCollector.on('collect', async (interaction) => {
         if (interaction.user.id !== msg.author.id) {
           return msg.client.ch.notYours(interaction, msg);
@@ -274,7 +287,7 @@ module.exports = {
           }
           case 'list': {
             await interaction.deferReply().catch(() => {});
-            singleRowDisplay(res, res.rows[interaction.values[0]], interaction);
+            singleRowDisplay(res, res.rows[interaction.values[0]], interaction, true);
             buttonsCollector.stop();
             break;
           }
@@ -294,8 +307,12 @@ module.exports = {
         }
         return null;
       });
+
       buttonsCollector.on('end', (collected, reason) => {
-        if (reason === 'time') msg.client.ch.collectorEnd(msg);
+        if (reason === 'time') {
+          msg.client.ch.collectorEnd(msg);
+          msg.m.reactions.removeAll().catch(() => {});
+        }
         return null;
       });
     };
@@ -310,11 +327,11 @@ module.exports = {
     );
 
     if (res && res.rowCount > 0) return singleRowDisplay(res, res.rows[0], msgData.answer);
-    return noEmbed(msg, msgData.answer);
+    return noEmbed(msg, msgData.answer, res, false);
   },
 };
 
-const noEmbed = (msg, answer) => {
+const noEmbed = (msg, answer, res) => {
   const embed = new Discord.MessageEmbed()
     .setAuthor({
       name: msg.language.commands.settings.noEmbed.author,
@@ -326,7 +343,24 @@ const noEmbed = (msg, answer) => {
       }),
     );
 
-  replier({ msg, answer }, { embeds: [embed], rawButtons: [] });
+  const edit = new Discord.MessageButton()
+    .setCustomId('edit')
+    .setStyle('PRIMARY')
+    .setLabel(msg.language.Edit);
+
+  replier({ msg, answer }, { embeds: [embed], rawButtons: [edit] });
+
+  const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
+  reactionHandler({ msg, answer }, buttonsCollector);
+  buttonsCollector.on('collect', (interaction) => {
+    if (interaction.user.id !== msg.author.id) return msg.client.ch.notYours(interaction, msg);
+    buttonsCollector.stop();
+    return mmrEditList({ msg, answer: interaction }, { res, embed });
+  });
+
+  buttonsCollector.on('end', (collected, reason) => {
+    if (reason === 'time') msg.client.ch.collectorEnd(msg);
+  });
 };
 
 /**
@@ -469,6 +503,7 @@ const mmrEditList = async (msgData, sendData) => {
       { insertedValues: {}, required, editor },
       {},
       res,
+      true,
     );
 
     if (!returnedData) return null;
@@ -513,6 +548,7 @@ const mmrEditList = async (msgData, sendData) => {
         { insertedValues, required, editor },
         row,
         res,
+        true,
       );
       if (!returnedData) return null;
       answer = returnedData.interaction;
@@ -673,8 +709,13 @@ const mmrEditList = async (msgData, sendData) => {
     return null;
   });
   buttonsCollector.on('end', (collected, reason) => {
-    if (reason === 'time') msg.client.ch.collectorEnd(msg);
+    if (reason === 'time') {
+      msg.client.ch.collectorEnd(msg);
+      msg.m.reactions.removeAll().catch(() => {});
+    }
   });
+
+  reactionHandler({ msg, answer }, buttonsCollector, { isInEdit: true });
 };
 
 const singleRowEdit = async (msgData, resData, embed, comesFromMMR) => {
@@ -687,20 +728,6 @@ const singleRowEdit = async (msgData, resData, embed, comesFromMMR) => {
   }
 
   const rawButtons = msg.file.buttons(msg, row);
-
-  if (comesFromMMR) {
-    const back = new Discord.MessageButton()
-      .setCustomId('back')
-      .setLabel(msg.language.back)
-      .setEmoji(msg.client.constants.emotes.back)
-      .setStyle('DANGER');
-
-    if (rawButtons.length === 5) {
-      rawButtons[4].push(back);
-    } else {
-      rawButtons.push([back]);
-    }
-  }
 
   embed.setAuthor({
     name: msg.client.ch.stp(msg.lanSettings.authorEdit, {
@@ -717,10 +744,6 @@ const singleRowEdit = async (msgData, resData, embed, comesFromMMR) => {
     if (interaction.user.id !== msg.author.id) {
       return msg.client.ch.notYours(interaction, msg);
     }
-    if (interaction.customId === 'back') {
-      buttonsCollector.stop();
-      return mmrEditList({ msg, answer: interaction }, { res });
-    }
 
     const [editKey] = Object.entries(msg.lanSettings[msg.file.name].edit)
       .map(([key, value]) => {
@@ -735,8 +758,21 @@ const singleRowEdit = async (msgData, resData, embed, comesFromMMR) => {
     return null;
   });
   buttonsCollector.on('end', (collected, reason) => {
-    if (reason === 'time') msg.client.ch.collectorEnd(msg);
+    if (reason === 'time') {
+      msg.client.ch.collectorEnd(msg);
+      msg.m.reactions.removeAll().catch(() => {});
+    }
   });
+
+  if (comesFromMMR) {
+    const returned = await reactionHandler({ msg, answer }, buttonsCollector, {
+      needsReturn: true,
+    });
+    if (returned) mmrEditList({ msg, answer }, { res });
+  } else {
+    reactionHandler({ msg, answer }, buttonsCollector, { needsReturn: false, sendTo: 'settings' });
+  }
+
   return null;
 };
 
@@ -766,7 +802,7 @@ const whereToGo = async (msg, answer) => {
   return null;
 };
 
-const editorInteractionHandler = async (msgData, editorData, row, res) => {
+const editorInteractionHandler = async (msgData, editorData, row, res, comesFromMMR) => {
   const { msg, answer } = msgData;
   const { insertedValues, required, editor } = editorData;
 
@@ -845,10 +881,12 @@ const editorInteractionHandler = async (msgData, editorData, row, res) => {
       Objects,
     );
   }
+
   return buttonHandler(
-    { msg, row, embed, messageCollector },
+    { msg, row, embed, messageCollector, res },
     { insertedValues, required, editor, passObject, Objects },
     { languageOfKey, languageOfSetting },
+    comesFromMMR,
   );
 };
 
@@ -894,6 +932,8 @@ const changing = async (msgData, editData, resData) => {
       { msg, answer },
       { insertedValues, required, editor },
       row,
+      res,
+      comesFromMMR,
     );
     if (!returnedData) return null;
     answer = returnedData.interaction;
@@ -928,7 +968,6 @@ const changing = async (msgData, editData, resData) => {
   log(msg, { insertedValues, required, comesFromMMR, row });
 
   row[usedKey] = insertedValues[usedKey];
-
   const embed = msg.file.displayEmbed(msg, row);
 
   return singleRowEdit({ msg, answer }, { row, res }, embed, comesFromMMR);
@@ -977,9 +1016,9 @@ const log = async (msg, editData) => {
   msg.client.ch.send(channels, { embeds: [embed] });
 };
 
-const buttonHandler = async (msgData, editData, languageData) => {
+const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
   const { insertedValues, required, editor, passObject, Objects } = editData;
-  const { msg, row, messageCollector } = msgData;
+  const { msg, row, messageCollector, res } = msgData;
   let { embed } = msgData;
   const { languageOfKey, languageOfSetting } = languageData;
 
@@ -1049,13 +1088,6 @@ const buttonHandler = async (msgData, editData, languageData) => {
               embeds: [embed],
             },
           );
-          break;
-        }
-        case 'back': {
-          whereToGo(msg, interaction);
-          buttonsCollector.stop();
-          if (messageCollector) messageCollector.stop();
-          resolve(null);
           break;
         }
         case 'next': {
@@ -1147,8 +1179,30 @@ const buttonHandler = async (msgData, editData, languageData) => {
     buttonsCollector.on('end', (collected, reason) => {
       if (reason === 'time') {
         msg.client.ch.collectorEnd(msg);
+        msg.m.reactions.removeAll().catch(() => {});
         resolve(null);
       }
+    });
+
+    reactionHandler({ msg }, buttonsCollector, {
+      needsReturn: true,
+      isInEdit: true,
+      removeReact: false,
+    }).then((returned) => {
+      if (messageCollector) messageCollector.stop();
+
+      if (returned.isInEdit) {
+        reassignMsg(
+          `${msg.client.constants.standard.prefix}${module.exports.name} ${msg.file.name} ${msg.language.edit}`,
+          msg,
+        );
+      }
+
+      if (!comesFromMMR) {
+        if (returned) whereToGo(msg);
+      } else if (returned) singleRowEdit({ msg }, { res, row }, null, comesFromMMR);
+
+      resolve(null);
     });
   });
 };
@@ -1313,13 +1367,8 @@ const standardButtons = async (msg, preparedData, insertedValues, required, row,
     .setLabel(msg.language.done)
     .setDisabled(doneDisabled)
     .setStyle('PRIMARY');
-  const back = new Discord.MessageButton()
-    .setCustomId('back')
-    .setLabel(msg.language.back)
-    .setEmoji(msg.client.constants.emotes.back)
-    .setStyle('DANGER');
 
-  returnedButtons.push([back, done]);
+  returnedButtons.push([done]);
 
   return returnedButtons;
 };
@@ -1389,7 +1438,10 @@ const setup = async (msg, answer) => {
     return null;
   });
   buttonsCollector.on('end', (collected, reason) => {
-    if (reason === 'time') msg.m.edit({ embeds: [embed], components: [] }).catch(() => {});
+    if (reason === 'time') {
+      msg.client.ch.collectorEnd(msg);
+      msg.m.reactions.removeAll().catch(() => {});
+    }
   });
 };
 
@@ -1500,12 +1552,14 @@ const categoryDisplay = async (msg, answer, needsBack) => {
 
   const embed = new Discord.MessageEmbed()
     .setAuthor({
-      name: msg.language.commands.settings.noEmbed.author,
+      name: msg.client.ch.stp(msg.language.commands.settings.author, {
+        type: msg.language.commands.settings[settings.first().name].type,
+      }),
       iconURL: msg.client.constants.emotes.settingsLink,
       url: msg.client.constants.standard.invite,
     })
     .setDescription(
-      msg.client.ch.stp(msg.lan.settings.desc, {
+      msg.client.ch.stp(msg.language.commands.settings.settings.desc, {
         prefix: msg.client.constants.standard.prefix,
         commands: categoryText,
       }),
@@ -1520,47 +1574,135 @@ const categoryDisplay = async (msg, answer, needsBack) => {
       .setPlaceholder(msg.language.commands.settings.menu.placeholder),
   ];
 
-  if (needsBack) {
-    rawButtons.push(
-      new Discord.MessageButton()
-        .setCustomId('back')
-        .setLabel(msg.language.back)
-        .setEmoji(msg.client.constants.emotes.back)
-        .setStyle('DANGER'),
-    );
-  }
-
   await replier({ msg, answer }, { embeds: [embed], rawButtons });
-  categoryMenuHandler({ msg });
+  categoryMenuHandler({ msg, answer }, needsBack);
 };
 
-const categoryMenuHandler = ({ msg }) => {
-  const reassign = (interaction, newContent) => {
-    msg.content = `${newContent}`;
-    msg.args = msg.content.replace(new RegExp('\\n', 'g'), ' ').split(/ +/);
-
-    msg.args.shift();
-  };
-
+const categoryMenuHandler = async ({ msg, answer }, needsBack) => {
   const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
+
   buttonsCollector.on('collect', (interaction) => {
     if (interaction.user.id !== msg.author.id) return msg.client.ch.notYours(interaction, msg);
-    switch (interaction.customId) {
-      default: {
-        reassign(
-          interaction,
-          `${msg.client.constants.standard.prefix}${module.exports.name} ${interaction.values[0]}`,
-        );
+    reassignMsg(
+      `${msg.client.constants.standard.prefix}${module.exports.name} ${interaction.values[0]}`,
+      msg,
+    );
 
-        buttonsCollector.stop();
-        return module.exports.execute(msg, interaction);
-      }
-      case 'back': {
-        reassign(interaction, `${msg.client.constants.standard.prefix}${module.exports.name}`);
+    buttonsCollector.stop();
+    return module.exports.execute(msg, interaction);
+  });
 
-        buttonsCollector.stop();
-        return module.exports.execute(msg, interaction);
+  buttonsCollector.on('end', (collected, reason) => {
+    if (reason === 'time') {
+      msg.client.ch.collectorEnd(msg);
+      msg.m.reactions.removeAll().catch(() => {});
+    }
+  });
+
+  if (needsBack) {
+    reactionHandler({ msg, answer }, buttonsCollector, { needsReturn: false });
+  }
+};
+
+const reassignMsg = (newContent, msg) => {
+  msg.content = `${newContent}`;
+  msg.args = msg.content.replace(new RegExp('\\n', 'g'), ' ').split(/ +/);
+
+  msg.args.shift();
+};
+
+const reactionHandler = ({ msg, answer }, buttonsCollector, byData) => {
+  let needsReturn;
+  let sendTo;
+  let isInEdit;
+  let removeReact;
+
+  if (byData) {
+    needsReturn = byData.needsReturn;
+    sendTo = byData.sendTo;
+    isInEdit = byData.isInEdit;
+    removeReact = byData.removeReact;
+  }
+
+  if (!msg.m.reactions.cache.get(msg.client.constants.emotes.back)?.me) {
+    msg.m.react(msg.client.constants.emotes.back).catch(() => {});
+  }
+  const reactionsCollector = msg.m.createReactionCollector({
+    time: 60000,
+  });
+
+  return new Promise((resolve) => {
+    reactionsCollector.on('collect', (reaction, user) => {
+      if (user.id !== msg.author.id && user.id !== msg.client.user.id) {
+        return reaction.remove().catch(() => {});
       }
+
+      if (user.id === msg.client.user.id) return null;
+
+      if (reaction.emoji.name === msg.client.constants.emotes.back) {
+        if (buttonsCollector) buttonsCollector.stop();
+        reactionsCollector.stop();
+
+        resolve({ isInEdit });
+
+        if (needsReturn) {
+          if (removeReact) msg.m.reactions.removeAll().catch(() => {});
+          else reaction.users.remove(user.id);
+          return null;
+        }
+
+        if (sendTo) {
+          if (Array.isArray(sendTo)) {
+            const [, folder] = sendTo;
+
+            reassignMsg(
+              `${msg.client.constants.standard.prefix}${module.exports.name} ${folder}`,
+              msg,
+            );
+            msg.file = undefined;
+            reaction.users.remove(user.id);
+            module.exports.execute(msg, answer);
+            return null;
+          }
+
+          switch (sendTo) {
+            default: {
+              reassignMsg(`${msg.client.constants.standard.prefix}${module.exports.name}`, msg);
+              msg.m.reactions.removeAll().catch(() => {});
+              module.exports.execute(msg, answer);
+              return null;
+            }
+          }
+        }
+
+        if (msg.file && msg.file.folder) {
+          reassignMsg(
+            `${msg.client.constants.standard.prefix}${module.exports.name} ${msg.file.folder}`,
+            msg,
+          );
+          msg.file = undefined;
+          reaction.users.remove(user.id);
+          module.exports.execute(msg, answer);
+        } else {
+          reassignMsg(`${msg.client.constants.standard.prefix}${module.exports.name}`, msg);
+          msg.m.reactions.removeAll().catch(() => {});
+          module.exports.execute(msg, answer);
+        }
+      }
+      return null;
+    });
+
+    reactionsCollector.on('remove', (reaction, user) => {
+      if (user.id === msg.author.id) {
+        reactionsCollector.stop();
+        resolve();
+      }
+    });
+
+    if (buttonsCollector) {
+      buttonsCollector.on('end', () => {
+        reactionsCollector.stop();
+      });
     }
   });
 };

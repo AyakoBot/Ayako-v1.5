@@ -615,9 +615,6 @@
       "baseSettings": {
         "leveling": "levelsettings"
       },
-      "settingsLink": {
-        "leveling": ["levelsettings", "levelroles", "multichannels", "multiroles", "ruleschannels"]
-      },
       "edit": {
         "active": {
           "key": "boolean",
