@@ -639,7 +639,13 @@ const mmrEditList = async (msgData, sendData) => {
     embed = await msg.file.mmrEmbed(msg, res.rows);
   }
 
-  embed.setDescription(msg.lanSettings.mmrEditList);
+  embed.setDescription(msg.lanSettings.mmrEditList).setAuthor({
+    name: msg.client.ch.stp(msg.lanSettings.authorEdit, {
+      type: msg.lanSettings[msg.file.name].type,
+    }),
+    iconURL: msg.client.constants.emotes.settingsLink,
+    url: msg.client.constants.standard.invite,
+  });
 
   const options = {
     allOptions: [],
