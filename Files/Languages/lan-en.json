@@ -1125,7 +1125,7 @@
       "reason": "No Reason given",
       "vcReason": "User is Un-Muted"
     },
-    "leveling": {
+    "levelsettings": {
       "levelUp": {
         "author": "{{user.tag}} just advanced to level {{level}}",
         "description": "Level Ups are indicated by me reacting to your message with {{emote1}}{{emote2}}",
@@ -1435,6 +1435,9 @@
       "noEmbed": {
         "author": "Ayako Settings",
         "desc": "No Settings available for the selected Setting\nUse `{{prefix}}settings {{name}} edit` to start the Set-up"
+      },
+      "menu": {
+        "placeholder": "Select the Setting you want to view"
       },
       "errors": {
         "faultyInput": "Error, DataBase input faulty. Please contact Support on {{support}}"
@@ -2223,10 +2226,10 @@
       "language": {
         "category": ["None"]
       },
-      "leveling": {
+      "levelsettings": {
         "category": ["Automation"],
         "type": "Leveling",
-        "description": "Also check out:\n`{{prefix}}settings levelroles` to add Roles Applied at Levels\n`{{prefix}}settings multiroles` to add Roles which grant XP Gain Multipliers\n`{{prefix}}settings levelchannels` to customize Ayako's Leveling behaviour on Channels\nFor other Leveling related Commands, check out `{{prefix}}help leveling`",
+        "description": "Also check out:\n`{{prefix}}settings levelroles` to add Roles Applied at Levels\n`{{prefix}}settings multiroles` to add Roles which grant XP Gain Multipliers\n`{{prefix}}settings levelchannels` to customize Ayako's Leveling behaviour on Channels",
         "xpmultiplier": "XP Multiplier",
         "blchannels": "Blacklisted Channels",
         "blroles": "Blacklisted Roles",

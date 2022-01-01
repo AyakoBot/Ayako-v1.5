@@ -9,7 +9,7 @@ module.exports = {
   aliases: null,
   async execute(msg, answer) {
     const settings = getSettings(msg);
-    const rawButtons = [];
+    const options = [];
 
     if (!msg.args[0]) {
       let categoryText = '';
@@ -24,18 +24,25 @@ module.exports = {
         const settingCategories = [];
         settings.forEach((s) => {
           if (s.category.includes(category)) {
-            if (s.folder) {
-              if (s.folder === s.name) {
-                settingCategories.push(s.name);
+            if (s.folder && !!settingCategories.findIndex((a) => a.folder === s.folder)) {
+              if (msg.client.constants.commands.settings.baseSettings[s.folder] === s.name) {
+                options.push({ label: s.folder, value: s.folder });
+                settingCategories.push(s.folder);
               }
             } else {
+              options.push({ label: s.name, value: s.name });
               settingCategories.push(s.name);
             }
           }
         });
 
         for (let i = 0; i < settingCategories.length; i += 1) {
-          const settingsFile = settings.get(settingCategories[i]);
+          let settingsFile = settings.get(settingCategories[i]);
+          if (!settingsFile) {
+            settingsFile = settings.get(
+              msg.client.constants.commands.settings.baseSettings[settingCategories[i]],
+            );
+          }
 
           let type;
           if (settingsFile.type) {
@@ -63,6 +70,15 @@ module.exports = {
             }
           } else type = msg.client.constants.emotes.blue;
 
+          const index = options.findIndex((o) => o.value === settingsFile.name);
+          if (options[index]) {
+            options[index].emoji = type;
+            options[index].description = category;
+          } else {
+            const ind = options.findIndex((o) => o.value === settingsFile.folder);
+            options[ind].emoji = msg.client.constants.emotes.folder;
+          }
+
           settingCategories[i] = `${type}${settingCategories[i]} `;
           settingCategories[i] += new Array(22 - settingCategories[i].length).join(' ');
         }
@@ -71,6 +87,15 @@ module.exports = {
           `${settingCategories.map((s) => `${s}`)}`.replace(/,/g, ''),
         )}\n`;
       });
+
+      const rawButtons = [
+        new Discord.MessageSelectMenu()
+          .addOptions(options)
+          .setCustomId('menu')
+          .setMaxValues(1)
+          .setMinValues(1)
+          .setPlaceholder(msg.language.commands.settings.menu.placeholder),
+      ];
 
       const embed = new Discord.MessageEmbed()
         .setAuthor({
@@ -84,13 +109,23 @@ module.exports = {
             commands: categoryText,
           }),
         );
-      replier({ msg, answer }, { embeds: [embed], rawButtons });
+      await replier({ msg, answer }, { embeds: [embed], rawButtons });
+      categoryMenuHandler({ msg, answer });
     } else {
       let settingsFile = settings.get(msg.args[0].toLowerCase());
 
-      if (!settingsFile) return msg.client.ch.reply(msg, { content: msg.lan.invalSettings });
+      if (!settingsFile && msg.client.constants.commands.settings.baseSettings[msg.args[0]]) {
+        settingsFile = {
+          name: msg.args[0].toLowerCase(),
+          folder: msg.args[0].toLowerCase(),
+        };
+      }
+      if (!settingsFile) {
+        return msg.client.ch.reply(msg, { content: msg.lan.invalSettings, components: [] });
+      }
+
       if (settingsFile.name === settingsFile.folder) {
-        return categoryDisplay(msg, answer);
+        return categoryDisplay(msg, answer, true);
       }
       if (settingsFile.hasNoSettings) {
         settingsFile = require('./settings/categories/overview');
@@ -105,12 +140,14 @@ module.exports = {
     }
     return null;
   },
-  async display(msg) {
+  async display(msgData) {
+    const { msg } = msgData;
+
     const singleRowDisplay = async (res, row, answer) => {
       const embed =
         typeof msg.file.displayEmbed === 'function'
           ? msg.file.displayEmbed(msg, row)
-          : noEmbed(msg);
+          : noEmbed(msg, answer);
 
       embed.setAuthor({
         name: msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
@@ -128,10 +165,10 @@ module.exports = {
         !msg.member.permissions.has(new Discord.Permissions(msg.file.perm)) &&
         msg.author.id !== '318453143476371456'
       ) {
-        return msg.client.ch.reply(msg, { embeds: [embed] });
+        return replier({ msg, answer }, { embeds: [embed] });
       }
 
-      await replier({ msg, answer }, { embed, rawButtons: [edit] });
+      await replier({ msg, answer }, { embeds: [embed], rawButtons: [edit] });
 
       const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
       buttonsCollector.on('collect', (interaction) => {
@@ -173,11 +210,11 @@ module.exports = {
         } else if (typeof msg.file.mmrEmbed === 'function') {
           embed = msg.file.mmrEmbed(msg, res.rows);
         } else {
-          noEmbed(msg);
+          noEmbed(msg, answer);
           return;
         }
       } else {
-        noEmbed(msg);
+        noEmbed(msg, answer);
         return;
       }
 
@@ -224,7 +261,7 @@ module.exports = {
         rows.push([edit]);
       }
 
-      await replier({ msg, answer }, { rawButtons: rows, embed });
+      await replier({ msg, answer }, { rawButtons: rows, embeds: [embed] });
 
       const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
       buttonsCollector.on('collect', async (interaction) => {
@@ -263,7 +300,7 @@ module.exports = {
       });
     };
 
-    if (msg.file.setupRequired === false) return mmrDisplay();
+    if (msg.file.setupRequired === false) return mmrDisplay(msgData.answer);
 
     const res = await msg.client.ch.query(
       `SELECT * FROM ${
@@ -272,12 +309,12 @@ module.exports = {
       [msg.guild.id],
     );
 
-    if (res && res.rowCount > 0) return singleRowDisplay(res, res.rows[0]);
-    return noEmbed(msg);
+    if (res && res.rowCount > 0) return singleRowDisplay(res, res.rows[0], msgData.answer);
+    return noEmbed(msg, msgData.answer);
   },
 };
 
-const noEmbed = (msg) => {
+const noEmbed = (msg, answer) => {
   const embed = new Discord.MessageEmbed()
     .setAuthor({
       name: msg.language.commands.settings.noEmbed.author,
@@ -288,7 +325,8 @@ const noEmbed = (msg) => {
         name: msg.file.name,
       }),
     );
-  msg.client.ch.reply(msg, { embeds: [embed] });
+
+  replier({ msg, answer }, { embeds: [embed], rawButtons: [] });
 };
 
 /**
@@ -299,7 +337,7 @@ const noEmbed = (msg) => {
 const replier = async (msgData, sendData) => {
   const { msg, answer } = msgData;
   const { rawButtons, embeds } = sendData;
-  let buttons;
+  let buttons = [];
   let manualReply = false;
 
   if (rawButtons && rawButtons.length) {
@@ -703,17 +741,19 @@ const singleRowEdit = async (msgData, resData, embed, comesFromMMR) => {
 };
 
 const whereToGo = async (msg, answer) => {
-  if (!msg.args[1]) module.exports.display(msg);
+  if (!msg.args[1] || msg.args[1].toLowerCase() !== msg.language.edit)
+    module.exports.display({ msg, answer });
   else if (
-    msg.args[1] &&
+    msg.args[1].toLowerCase() === msg.language.edit &&
     msg.file.perm &&
     !msg.member.permissions.has(new Discord.Permissions(msg.file.perm)) &&
     msg.author.id !== '318453143476371456'
   ) {
     return msg.client.ch.reply(msg, {
       content: msg.language.commands.commandHandler.missingPermissions,
+      components: [],
     });
-  } else {
+  } else if (msg.args[1].toLowerCase() === msg.language.edit) {
     const res = await msg.client.ch.query(
       `SELECT * FROM ${
         msg.client.constants.commands.settings.tablenames[msg.file.name][0]
@@ -819,6 +859,10 @@ const changing = async (msgData, editData, resData) => {
   const { row, res } = resData;
 
   const settings = msg.client.constants.commands.settings.edit[msg.file.name];
+
+  if (!settings[usedKey] && usedKey === 'active') {
+    settings[usedKey] = msg.client.constants.commands.settings.edit.active;
+  }
 
   if (!settings[usedKey]) {
     throw new Error(`${usedKey} is not a defined Key in the Settings Constants Object`);
@@ -1391,9 +1435,10 @@ const getSettings = (msg) => {
   return settings;
 };
 
-const categoryDisplay = (msg, answer) => {
+const categoryDisplay = async (msg, answer, needsBack) => {
   let categoryText = '';
   const categories = [];
+  const options = [];
   const settings = getSettings(msg).filter((setting) => setting.folder === msg.args[0]);
 
   settings.forEach((setting) => {
@@ -1407,6 +1452,7 @@ const categoryDisplay = (msg, answer) => {
     settings.forEach((s) => {
       if (s.category.includes(category)) {
         settingCategories.push(s.name);
+        options.push({ label: s.name, value: s.name });
       }
     });
 
@@ -1441,6 +1487,10 @@ const categoryDisplay = (msg, answer) => {
 
       settingCategories[i] = `${type}${settingCategories[i]} `;
       settingCategories[i] += new Array(22 - settingCategories[i].length).join(' ');
+
+      const index = options.findIndex((o) => o.value === settingsFile.name);
+      options[index].emoji = type;
+      options[index].description = category;
     }
 
     categoryText += `__${category}__:\n${msg.client.ch.makeCodeBlock(
@@ -1461,5 +1511,56 @@ const categoryDisplay = (msg, answer) => {
       }),
     );
 
-  replier({ msg, answer }, { embeds: [embed] });
+  const rawButtons = [
+    new Discord.MessageSelectMenu()
+      .addOptions(options)
+      .setCustomId('menu')
+      .setMaxValues(1)
+      .setMinValues(1)
+      .setPlaceholder(msg.language.commands.settings.menu.placeholder),
+  ];
+
+  if (needsBack) {
+    rawButtons.push(
+      new Discord.MessageButton()
+        .setCustomId('back')
+        .setLabel(msg.language.back)
+        .setEmoji(msg.client.constants.emotes.back)
+        .setStyle('DANGER'),
+    );
+  }
+
+  await replier({ msg, answer }, { embeds: [embed], rawButtons });
+  categoryMenuHandler({ msg });
+};
+
+const categoryMenuHandler = ({ msg }) => {
+  const reassign = (interaction, newContent) => {
+    msg.content = `${newContent}`;
+    msg.args = msg.content.replace(new RegExp('\\n', 'g'), ' ').split(/ +/);
+
+    msg.args.shift();
+  };
+
+  const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
+  buttonsCollector.on('collect', (interaction) => {
+    if (interaction.user.id !== msg.author.id) return msg.client.ch.notYours(interaction, msg);
+    switch (interaction.customId) {
+      default: {
+        reassign(
+          interaction,
+          `${msg.client.constants.standard.prefix}${module.exports.name} ${interaction.values[0]}`,
+        );
+
+        buttonsCollector.stop();
+        return module.exports.execute(msg, interaction);
+      }
+      case 'back': {
+        reassign(interaction, `${msg.client.constants.standard.prefix}${module.exports.name}`);
+
+        buttonsCollector.stop();
+        return module.exports.execute(msg, interaction);
+      }
+    }
+  });
 };

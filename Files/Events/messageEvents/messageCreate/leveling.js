@@ -155,7 +155,7 @@ const globalLeveling = async (msg) => {
               if (settings.lvlupmode === 'reactions') {
                 const LevelUpEmbed = new Discord.MessageEmbed()
                   .setAuthor(
-                    msg.client.ch.stp(language.commands.leveling.levelUp.author, {
+                    msg.client.ch.stp(language.commands.levelsettings.levelUp.author, {
                       user: msg.author,
                       level: newLevel,
                     }),
@@ -163,13 +163,13 @@ const globalLeveling = async (msg) => {
                   )
                   .setTimestamp()
                   .setDescription(
-                    msg.client.ch.stp(language.commands.leveling.levelUp.description, {
+                    msg.client.ch.stp(language.commands.levelsettings.levelUp.description, {
                       emote1: msg.client.constants.emotes.ayakoPeek,
                       emote2: msg.client.constants.emotes.up,
                     }),
                   )
                   .setColor(msg.client.ch.colorSelector(msg.guild ? msg.guild.me : null))
-                  .setFooter(language.commands.leveling.levelUp.footer);
+                  .setFooter(language.commands.levelsettings.levelUp.footer);
                 const m = await msg.client.ch.send(msg.channel, LevelUpEmbed);
                 setTimeout(() => {
                   m.delete().catch(() => {});
@@ -185,7 +185,7 @@ const globalLeveling = async (msg) => {
               if (settings.lvlupmode === 'reactions') {
                 const LevelUpEmbed = new Discord.MessageEmbed()
                   .setAuthor(
-                    msg.client.ch.stp(language.commands.leveling.levelUp.author, {
+                    msg.client.ch.stp(language.commands.levelsettings.levelUp.author, {
                       user: msg.author,
                       level: newLevel,
                     }),
@@ -193,14 +193,14 @@ const globalLeveling = async (msg) => {
                   )
                   .setTimestamp()
                   .setColor(msg.client.ch.colorSelector(msg.guild ? msg.guild.me : null))
-                  .setFooter(language.commands.leveling.levelUp.footer);
+                  .setFooter(language.commands.levelsettings.levelUp.footer);
                 const m = await msg.client.ch.send(msg.channel, LevelUpEmbed);
                 setTimeout(() => {
                   m.delete().catch(() => {});
                 }, 10000);
               }
             } else {
-              let leveluptext = msg.client.ch.stp(language.commands.leveling.levelUp.author, {
+              let leveluptext = msg.client.ch.stp(language.commands.levelsettings.levelUp.author, {
                 user: msg.author,
                 level: newLevel,
               });
