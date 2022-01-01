@@ -350,6 +350,7 @@
       "9": "9⃣",
       "10": "🔟"
     },
+    "folder": "📁",
     "settings": "<:Settings:781982956138659880>",
     "settingsID": "781982956138659880",
     "settingsLink": "https://cdn.discordapp.com/emojis/781982956138659880.png?v=1",
@@ -610,6 +611,12 @@
       "color": "ffffff",
       "log": {
         "color": "YELLOW"
+      },
+      "baseSettings": {
+        "leveling": "levelsettings"
+      },
+      "settingsLink": {
+        "leveling": ["levelsettings", "levelroles", "multichannels", "multiroles", "ruleschannels"]
       },
       "edit": {
         "active": {
@@ -1134,7 +1141,7 @@
             "required": false
           }
         },
-        "leveling": {
+        "levelsettings": {
           "xpmultiplier": {
             "key": "number",
             "required": true
@@ -1295,7 +1302,7 @@
         "disabled": ["disabledcommands"],
         "disboard": ["disboard"],
         "forcecooldowns": [null],
-        "leveling": ["leveling"],
+        "levelsettings": ["leveling"],
         "levelroles": ["levelingroles"],
         "multiroles": ["levelingmultiplierroles"],
         "levelingchannels": ["levelingruleschannels"],
@@ -1378,7 +1385,7 @@
           "cols": null,
           "vals": null
         },
-        "leveling": {
+        "levelsettings": {
           "cols": ["guildid, active, xppermsg, rolemode, xpmultiplier"],
           "vals": [["{{msg.guild.id}}", true, 25, true, 1.0]]
         },
