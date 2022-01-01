@@ -9,6 +9,17 @@ const blocklists = require('../../../blocklist.json');
 const auth = require('../../../BaseClient/auth.json');
 const client = require('../../../BaseClient/DiscordClient');
 
+/*
+  {
+    contentType: 'text/html; charset=ISO-8859-1',
+    href: 'https://www.google.com/',
+    url: 'https://www.google.com/',
+    hostname: 'google.com',
+    baseURL: 'https://google.com',
+    baseURLhostname: 'google.com'
+  }
+*/
+
 module.exports = {
   async execute(msg) {
     let check = false;
@@ -95,6 +106,16 @@ module.exports = {
       if (check) {
         await whitelisted(msg, lan, embed);
       }
+      return;
+    }
+
+    const sinkingYachtsBad = sinkingYatchtsCheck(linkObject);
+
+    if (sinkingYachtsBad === true) {
+      if (!check) {
+        includedBadLink = true;
+      }
+      await blacklisted(msg, lan, embed, linkObject, null, check);
       return;
     }
 
@@ -789,8 +810,8 @@ const getSeverity = (VTresponse) => {
   return severity;
 };
 
-const selfChecker = async (data) => {
-  const siteHTML = (await axios.get(data.href).catch((e) => e))?.data;
+const selfChecker = async (linkObject) => {
+  const siteHTML = (await axios.get(linkObject.href).catch((e) => e))?.data;
   if (!siteHTML) return false;
   // eslint-disable-next-line no-useless-escape
   const siteNameBad =
@@ -840,4 +861,16 @@ const selfChecker = async (data) => {
     return 'nitroscam';
   }
   return false;
+};
+
+// https://phish.sinking.yachts/
+const sinkingYatchtsCheck = async (linkObject) => {
+  const res = await SA.get(`https://phish.sinking.yachts/v2/check/${linkObject.baseURLhostname}`)
+    .set('X-Identity', `Discord Bot - Owner ID ${auth.ownerID}`)
+    .catch(() => {});
+
+  if (res && res.statusCode === 200) {
+    return res.body;
+  }
+  return 'unkown';
 };
