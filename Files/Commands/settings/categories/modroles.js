@@ -6,6 +6,7 @@ module.exports = {
   type: 2,
   setupRequired: false,
   finished: true,
+  category: ['moderation'],
   async mmrEmbed(msg, res) {
     res.sort((a, b) => a.uniquetimestamp - b.uniquetimestamp);
     const embed = new Discord.MessageEmbed();

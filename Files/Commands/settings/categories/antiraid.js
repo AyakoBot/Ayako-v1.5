@@ -6,6 +6,7 @@ module.exports = {
   perm: 32n,
   type: 0,
   finished: false,
+  category: ['auto-moderation'],
   displayEmbed(msg, r) {
     const embed = new Discord.MessageEmbed()
       .addField(

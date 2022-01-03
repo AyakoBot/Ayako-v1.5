@@ -5,6 +5,7 @@ module.exports = {
   type: 1,
   setupRequired: false,
   finished: false,
+  category: ['automation', 'none'],
   mmrEmbed(msg, res) {
     const embed = new Discord.MessageEmbed();
     for (let i = 0; i < res.length; i += 1) {

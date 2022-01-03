@@ -1432,6 +1432,14 @@
       "author": "Ayako {{type}} Settings",
       "authorEdit": "[Edit Mode] Ayako {{type}} Settings",
       "active": "Active",
+      "categories": {
+        "auto-moderation": "Auto-Moderation",
+        "automation": "Automation",
+        "none": "None",
+        "compaction": "Compaction",
+        "fun": "Fun",
+        "mod": "Moderation"
+      },
       "noEmbed": {
         "author": "Ayako Settings",
         "desc": "No Settings available for the selected Setting\nUse `{{prefix}}settings {{name}} edit` to start the Set-up"
@@ -1451,7 +1459,6 @@
         "roles": "I couldn't find these Roles"
       },
       "logs": {
-        "category": ["Automation"],
         "type": "Logs",
         "ayakoLogs": "Ayako Logs",
         "discordLogs": "Discord Logs",
@@ -1581,7 +1588,6 @@
         "desc": "Settings can be displayed and edited with this Command: `{{prefix}}settings [command]`\n\n```Other = 🔵\nRoles = 🔴\nChannels = 🟢\nChats = 🟡```\n**Available Command Settings**:\n{{commands}}"
       },
       "overview": {
-        "category": ["None"],
         "type": "Overview",
         "interactionsmode": "Interactions Mode",
         "prefix": "Prefix",
@@ -1605,7 +1611,6 @@
         }
       },
       "antispam": {
-        "category": ["Auto Moderation"],
         "type": "Anti-Spam",
         "banenabledtof": "Ban Members",
         "kickenabledtof": "Kick Members",
@@ -1684,7 +1689,6 @@
         }
       },
       "antiraid": {
-        "category": ["Auto Moderation"],
         "type": "Anti-Raid",
         "bantof": "Ban Members",
         "kicktof": "Kick Members",
@@ -1753,7 +1757,6 @@
         }
       },
       "autopunish": {
-        "category": ["Auto Moderation"],
         "description": "**How to use**\nTo use the Auto-Punishment System, **use** `{{prefix}}strike [user] (reason)`\ninstead of regular Moderation Commands\n\nThe Auto-Punish System does not take your ability to use regular Moderation Commands, it just guarantees consisten Punishments\n\n\u200b",
         "type": "Auto-Punish",
         "punishment": "Punishment",
@@ -1817,13 +1820,105 @@
           "remove": {
             "name": "Remove a Punishment Measure",
             "process": {
-              "0": "Respond with the ID of the Separator you want to delete"
+              "0": "Respond with the ID of the Punishment you want to delete"
+            }
+          }
+        }
+      },
+      "embeds": {
+        "type": "Custom Embed",
+        "totalLimit": "`Author Name`, `Title`, `Description`, `Field Names`, `Field Values` and `Footer Name` together can not exceed {{maxLimit}} Characters",
+        "limit": "{{name}} can not exceed {{limit}} Characters",
+        "edit": {
+          "color": {
+            "name": "Color",
+            "answers": "HEX Color Code",
+            "recommended": "Can be obtained [here](https://imagecolorpicker.com/ \"Click me\")"
+          },
+          "title": {
+            "name": "Title",
+            "answers": "Any Text",
+            "recommended": "Does __not__ accept Mentions"
+          },
+          "url": {
+            "name": "URL",
+            "answers": "Any URL",
+            "recommended": "Will make the Title appear Blue and click-able"
+          },
+          "author-name": {
+            "name": "Author Name",
+            "answers": "Any Text",
+            "recommended": "Does __not__ accept Mentions"
+          },
+          "author-iconURL": {
+            "name": "Author Icon URL",
+            "answers": "Any Image/Gif URL",
+            "recommended": "Will add a little Icon to the Author"
+          },
+          "author-url": {
+            "name": "Author URL",
+            "answers": "Any Url",
+            "recommended": "Will __not__ change the Author Name's appearance, makes the Author Name click-able"
+          },
+          "description": {
+            "name": "Description",
+            "answers": "Any Text"
+          },
+          "field-names": {
+            "name": "Field Name",
+            "answers": "Any Text",
+            "recommended": "Does __not__ accept Mentions"
+          },
+          "field-values": {
+            "name": "Field Value",
+            "answers": "Any Text"
+          },
+          "field-inlines": {
+            "name": "Field Inline?",
+            "answers": "`True` or `False`",
+            "recommended": "Whether the Field should be in-line with other Fields (this will group them in blocks of 3)"
+          },
+          "image": {
+            "name": "Image",
+            "answers": "Any Image/Gif URL",
+            "recommended": "Will add an Image to the Bottom of the Embed (above Footer and Timestamp)"
+          },
+          "timestamp": {
+            "name": "Timestamp",
+            "answers": "Any UNIX Timestamp",
+            "recommended": "Can be obtained [here](https://hammertime.djdavid98.art/ \"Click me\")"
+          },
+          "footer-text": {
+            "name": "Footer Text",
+            "answers": "Any Text"
+          },
+          "footer-iconURL": {
+            "name": "Footer Icon URL",
+            "answers": "Any Image/Gif URL",
+            "recommended": "Will add a little Icon to the Footer"
+          },
+          "name": {
+            "name": "Name",
+            "answers": "Any Text",
+            "recommended": "Custom Name for this Embed"
+          }
+        },
+        "otherEdits": {
+          "add": {
+            "name": "Add a custom Embed",
+            "process": {
+              "0": "Enter a Name"
+            }
+          },
+          "remove": {
+            "name": "Remove a custom Embed",
+            "process": {
+              "0": "Respond with the ID of the custom Embed you want to delete"
             }
           }
         }
       },
       "antivirus": {
-        "category": ["Auto Moderation"],
         "type": "Anti-Virus",
         "bantof": "Ban Members",
         "kicktof": "Kick Members",
@@ -1894,7 +1989,6 @@
         }
       },
       "statschannel": {
-        "category": ["Automation"],
         "type": "Stats Channels",
         "channel": "Channel",
         "stat": "Statistics",
@@ -1917,7 +2011,6 @@
         }
       },
       "autorole": {
-        "category": ["Automation"],
         "type": "Auto-Role",
         "botroleid": "Roles given to joining Bots",
         "userroleid": "Roles given to joining Users",
@@ -1952,7 +2045,6 @@
         }
       },
       "blacklist": {
-        "category": ["Auto Moderation"],
         "type": "Blacklist",
         "words": "Blacklisted Words",
         "warntof": "Warn Members",
@@ -2042,7 +2134,6 @@
         }
       },
       "cooldowns": {
-        "category": ["Automation"],
         "type": "Cooldowns",
         "command": "Command",
         "cooldown": "Cooldown",
@@ -2103,7 +2194,6 @@
         }
       },
       "disabled": {
-        "category": ["Automation", "None"],
         "type": "Disabled",
         "commands": "Commands",
         "bproleid": "Whitelisted Roles",
@@ -2165,7 +2255,6 @@
         }
       },
       "disboard": {
-        "category": ["Automation"],
         "type": "DISBOARD",
         "roles": "Ping Roles",
         "users": "Ping Users",
@@ -2199,14 +2288,7 @@
           }
         }
       },
-      "forcecooldowns": {
-        "category": ["Automation", "Compaction"]
-      },
-      "gifposter": {
-        "category": ["Compaction", "Automation"]
-      },
       "interactions": {
-        "category": ["Compaction", "Fun"],
         "type": "Interactions",
         "size": "Interaction Size",
         "block": "**Blocked Interactions**",
@@ -2223,11 +2305,7 @@
           }
         }
       },
-      "language": {
-        "category": ["None"]
-      },
       "levelsettings": {
-        "category": ["Automation"],
         "type": "Leveling",
         "description": "Also check out:\n`{{prefix}}settings levelroles` to add Roles Applied at Levels\n`{{prefix}}settings multiroles` to add Roles which grant XP Gain Multipliers\n`{{prefix}}settings levelchannels` to customize Ayako's Leveling behaviour on Channels",
         "xpmultiplier": "XP Multiplier",
@@ -2296,7 +2374,6 @@
         }
       },
       "levelroles": {
-        "category": ["Automation"],
         "type": "Leveling",
         "roles": "Roles",
         "level": "Level",
@@ -2328,7 +2405,6 @@
         }
       },
       "multiroles": {
-        "category": ["Automation"],
         "type": "Leveling",
         "roles": "Roles",
         "multiplier": "Multiplier",
@@ -2360,7 +2436,6 @@
         }
       },
       "ruleschannels": {
-        "category": ["Automation"],
         "type": "Leveling",
         "channels": "Channels",
         "rules": "Rules",
@@ -2444,7 +2519,6 @@
         }
       },
       "multichannels": {
-        "category": ["Automation"],
         "type": "Leveling",
         "channels": "Channels",
         "multiplier": "Multiplier",
@@ -2476,7 +2550,6 @@
         }
       },
       "nitro": {
-        "category": ["Automation"],
         "type": "Nitro",
         "role": "Booster Role",
         "channel": "Boost Log-Channel",
@@ -2485,14 +2558,7 @@
         "inactiveBoosters": "Inactive Boosters",
         "info": "The stats arent corrent? Wait until {{time}}"
       },
-      "prefix": {
-        "category": ["None"]
-      },
-      "reactionroles": {
-        "category": ["Automation"]
-      },
       "selfroles": {
-        "category": ["Automation"],
         "type": "Self-Roles",
         "roles": "Self-Roles",
         "onlyone": "Only one of these Roles",
@@ -2562,7 +2628,6 @@
         }
       },
       "suggestions": {
-        "category": ["Automation"],
         "type": "Suggestions",
         "channelid": "Suggestion Channel",
         "bluserid": "Blacklisted Users",
@@ -2602,14 +2667,7 @@
           }
         }
       },
-      "ticketing": {
-        "category": ["Automation"]
-      },
-      "user": {
-        "category": ["None"]
-      },
       "verification": {
-        "category": ["Automation"],
         "type": "Verification",
         "greetdesc": "Greet Embed Description",
         "logchannel": "Log Channel",
@@ -2673,11 +2731,7 @@
           }
         }
       },
-      "welcome": {
-        "category": ["Automation"]
-      },
       "separators": {
-        "category": ["Automation"],
         "type": "Separator",
         "stoprole": "Stop Role",
         "separator": "Separator Role",
@@ -2738,7 +2792,6 @@
         }
       },
       "giveaway": {
-        "category": ["Automation", "Fun"],
         "embed": {
           "list": "`{{prefix}}list` - List all running Giveaways on your Server",
           "create": "`{{prefix}}create` - Create a Giveaway (step by step)",
@@ -2749,7 +2802,6 @@
         }
       },
       "modroles": {
-        "category": ["Moderation"],
         "type": "Mod-Roles",
         "roleid": "Mod-Role",
         "perms": "Permissions of this Mod-Role",
