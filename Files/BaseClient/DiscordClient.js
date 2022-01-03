@@ -145,24 +145,24 @@ const getClient = () => {
       parse: ['users', 'roles'],
       repliedUser: false,
     },
-
-    commands: getCommands(),
-    events: getEvents(),
-    languages: getLanguages(),
-    settingsEditors: getSettingsEditors(),
-    settings: getSettings(),
-
-    mutes: new Discord.Collection(),
-    bans: new Discord.Collection(),
-    antiraidCache: new Discord.Collection(),
-
-    invites: new Map(),
-    channelWebhooks: new Map(),
-    verificationCodes: new Map(),
-
-    eris: Eris,
-    constants: Constants,
   });
+
+  client.commands = getCommands();
+  client.events = getEvents();
+  client.languages = getLanguages();
+  client.settingsEditors = getSettingsEditors();
+  client.settings = getSettings();
+
+  client.mutes = new Discord.Collection();
+  client.bans = new Discord.Collection();
+  client.antiraidCache = new Discord.Collection();
+
+  client.invites = new Map();
+  client.channelWebhooks = new Map();
+  client.verificationCodes = new Map();
+
+  client.eris = Eris;
+  client.constants = Constants;
 
   client.setMaxListeners(client.events.size);
 
