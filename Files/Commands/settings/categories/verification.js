@@ -4,6 +4,7 @@ module.exports = {
   perm: 32n,
   type: 2,
   finished: true,
+  category: ['automation'],
   displayEmbed(msg, r) {
     if (r.greetdesc && r.greetdesc.startsWith('{"') && r.greetdesc.endsWith('"}'))
       r.greetdesc = r.greetdesc.slice(2, r.greetdesc.length - 2);

@@ -3,4 +3,5 @@ module.exports = {
   type: 1,
   hasNoSettings: true,
   finished: true,
+  category: ['none'],
 };

@@ -7,6 +7,8 @@ module.exports = {
   finished: true,
   setupRequired: false,
   rules: ChannelRules,
+  childOf: 'leveling',
+  category: ['automation'],
   mmrEmbed(msg, res) {
     const embed = new Discord.MessageEmbed();
     for (let i = 0; i < res.length; i += 1) {

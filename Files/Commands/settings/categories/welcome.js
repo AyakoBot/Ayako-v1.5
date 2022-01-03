@@ -4,6 +4,7 @@ module.exports = {
   perm: 32n,
   type: 1,
   finished: false,
+  category: ['automation'],
   displayEmbed(msg, r) {
     const embed = new Discord.MessageEmbed().addFields(
       {

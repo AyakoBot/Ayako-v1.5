@@ -4,6 +4,7 @@ module.exports = {
   perm: 8192n,
   type: 1,
   finished: true,
+  category: ['auto-moderation'],
   displayEmbed(msg, r) {
     let wordText = '';
     const wordArr = [];

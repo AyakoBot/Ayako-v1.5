@@ -147,7 +147,7 @@ module.exports = {
       const embed =
         typeof msg.file.displayEmbed === 'function'
           ? msg.file.displayEmbed(msg, row)
-          : noEmbed(msg, answer, res, comesFromMMR);
+          : await noEmbed(msg, answer, res, comesFromMMR);
 
       embed.setAuthor({
         name: msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
@@ -200,6 +200,10 @@ module.exports = {
       msg.lanSettings = msg.language.commands.settings;
       msg.lan = msg.lanSettings[msg.file.name];
       msg.client.constants.commands.settings.editReq.splice(2, 1);
+
+      if (!msg.client.constants.commands.settings.tablenames[msg.file.name]) {
+        throw new Error(`Table Names for ${msg.file.name} missing in Constants.json`);
+      }
 
       const res = await msg.client.ch.query(
         `SELECT * FROM ${
@@ -331,7 +335,7 @@ module.exports = {
   },
 };
 
-const noEmbed = (msg, answer, res) => {
+const noEmbed = async (msg, answer, res) => {
   const embed = new Discord.MessageEmbed()
     .setAuthor({
       name: msg.language.commands.settings.noEmbed.author,
@@ -348,10 +352,11 @@ const noEmbed = (msg, answer, res) => {
     .setStyle('PRIMARY')
     .setLabel(msg.language.Edit);
 
-  replier({ msg, answer }, { embeds: [embed], rawButtons: [edit] });
+  await replier({ msg, answer }, { embeds: [embed], rawButtons: [edit] });
 
   const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
   reactionHandler({ msg, answer }, buttonsCollector);
+
   buttonsCollector.on('collect', (interaction) => {
     if (interaction.user.id !== msg.author.id) return msg.client.ch.notYours(interaction, msg);
     buttonsCollector.stop();
@@ -533,6 +538,12 @@ const mmrEditList = async (msgData, sendData) => {
     const keyOfCurStep =
       msg.client.constants.commands.settings.setupQueries[msg.file.name].add[currentStep];
     const DataOfCurStep = msg.client.constants.commands.settings.edit[msg.file.name][keyOfCurStep];
+
+    if (!DataOfCurStep) {
+      throw new Error(
+        `"${keyOfCurStep}" missing in Constants.json. "${msg.file.name}" Settings used`,
+      );
+    }
 
     const required = {
       key: DataOfCurStep.key,
@@ -1449,48 +1460,6 @@ const setup = async (msg, answer) => {
       msg.m.reactions.removeAll().catch(() => {});
     }
   });
-};
-
-const getSettings = (msg) => {
-  const settings = new Discord.Collection();
-  const settingsFiles = fs
-    .readdirSync('./Files/Commands/settings/categories')
-    .filter((file) => file.endsWith('.js'));
-
-  const settingsFolders = fs
-    .readdirSync('./Files/Commands/settings/categories')
-    .filter((file) => !file.endsWith('.js'));
-
-  settingsFolders.forEach((folder) => {
-    const files = fs
-      .readdirSync(`./Files/Commands/settings/categories/${folder}`)
-      .filter((file) => file.endsWith('.js'));
-
-    files.forEach((file) => {
-      settingsFiles.push([file, folder]);
-    });
-  });
-
-  settingsFiles.forEach((file) => {
-    let settingsFile;
-    if (Array.isArray(file)) {
-      settingsFile = require(`./settings/categories/${file[1]}/${file[0]}`);
-      [file, settingsFile.folder] = file;
-    } else {
-      settingsFile = require(`./settings/categories/${file}`);
-    }
-    if (!settingsFile.finished) return;
-    settingsFile.name = file.replace('.js', '');
-
-    if (!msg.language.commands.settings[settingsFile.name]) {
-      throw new Error(`Couldn't find ${settingsFile.name} in msg.language.commands.settings`);
-    }
-
-    settingsFile.category = msg.language.commands.settings[settingsFile.name].category;
-    settings.set(file.replace('.js', ''), settingsFile);
-  });
-
-  return settings;
 };
 
 const categoryDisplay = async (msg, answer, needsBack) => {
