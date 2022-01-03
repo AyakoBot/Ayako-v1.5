@@ -1,6 +1,7 @@
 /* eslint-disable global-require,import/no-dynamic-require */
 const Discord = require('discord.js');
 const fs = require('fs');
+const Constants = require('../Constants.json');
 const Eris = require('./ErisClient');
 
 const getSettings = () => {
@@ -42,6 +43,8 @@ const getSettings = () => {
 
     settings.set(file.replace('.js', ''), settingsFile);
   });
+
+  return settings;
 };
 
 const getSettingsEditors = () => {
@@ -120,7 +123,7 @@ const getEvents = () => {
 };
 
 const getClient = () => {
-  return new Discord.Client({
+  const client = new Discord.Client({
     shards: 'auto',
     partials: ['MESSAGE', 'REACTION', 'CHANNEL', 'USER', 'GUILD_MEMBER'],
     intents: new Discord.Intents(14335),
@@ -129,28 +132,28 @@ const getClient = () => {
       repliedUser: false,
     },
     failIfNotExists: false,
+
+    commands: getCommands(),
+    events: getEvents(),
+    languages: getLanguages(),
+    settingsEditors: getSettingsEditors(),
+    settings: getSettings(),
+
+    mutes: new Discord.Collection(),
+    bans: new Discord.Collection(),
+    antiraidCache: new Discord.Collection(),
+
+    invites: new Map(),
+    channelWebhooks: new Map(),
+    verificationCodes: new Map(),
+
+    eris: Eris,
+    constants: Constants,
   });
+
+  client.setMaxListeners(client.events.size);
+
+  return client;
 };
 
-const client = getClient();
-
-client.commands = getCommands();
-client.events = getEvents();
-client.languages = getLanguages();
-client.settingsEditors = getSettingsEditors();
-client.settings = getSettings();
-
-client.mutes = new Discord.Collection();
-client.bans = new Discord.Collection();
-client.antiraidCache = new Discord.Collection();
-
-client.invites = new Map();
-client.channelWebhooks = new Map();
-client.verificationCodes = new Map();
-
-client.constants = require('../Constants.json');
-
-client.setMaxListeners(client.events.size);
-client.eris = Eris;
-
-module.exports = client;
+module.exports = getClient();
