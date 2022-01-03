@@ -150,7 +150,7 @@ client.verificationCodes = new Map();
 
 client.constants = require('../Constants.json');
 
-client.setMaxListeners(63);
+client.setMaxListeners(client.events.size);
 client.eris = Eris;
 
 module.exports = client;
