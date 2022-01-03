@@ -1,22 +1,25 @@
 /* eslint-disable global-require,import/no-dynamic-require */
 const Discord = require('discord.js');
 const fs = require('fs');
+const { dirname } = require('path');
 const Constants = require('../Constants.json');
 const Eris = require('./ErisClient');
+
+const appDir = dirname(require.main.filename);
 
 const getSettings = () => {
   const settings = new Discord.Collection();
   const settingsFiles = fs
-    .readdirSync('./Files/Commands/settings/categories')
+    .readdirSync(`${appDir}/Files/Commands/settings/categories`)
     .filter((file) => file.endsWith('.js'));
 
   const settingsFolders = fs
-    .readdirSync('./Files/Commands/settings/categories')
+    .readdirSync(`${appDir}/Files/Commands/settings/categories`)
     .filter((file) => !file.endsWith('.js'));
 
   settingsFolders.forEach((folder) => {
     const files = fs
-      .readdirSync(`./Files/Commands/settings/categories/${folder}`)
+      .readdirSync(`${appDir}/Files/Commands/settings/categories/${folder}`)
       .filter((file) => file.endsWith('.js'));
 
     files.forEach((file) => {
@@ -29,11 +32,11 @@ const getSettings = () => {
     let path;
 
     if (Array.isArray(file)) {
-      path = `./settings/categories/${file[1]}/${file[0]}`;
+      path = `${appDir}/Files/Commands/settings/categories/${file[1]}/${file[0]}`;
       settingsFile = require(path);
       [file, settingsFile.folder] = file;
     } else {
-      path = `./settings/categories/${file}`;
+      path = `${appDir}/Files/Commands/settings/categories/${file}`;
       settingsFile = require(path);
     }
 
@@ -50,7 +53,7 @@ const getSettings = () => {
 const getSettingsEditors = () => {
   const settingsEditors = new Discord.Collection();
 
-  fs.readdirSync('./Files/Commands/settings/editors')
+  fs.readdirSync(`${appDir}/Files/Commands/settings/editors`)
     .filter((file) => file.endsWith('.js'))
     .forEach((file) => {
       const editorfile = require(`../Commands/settings/editors/${file}`);
@@ -64,7 +67,9 @@ const getSettingsEditors = () => {
 
 const getCommands = () => {
   const commands = new Discord.Collection();
-  const commandFiles = fs.readdirSync('./Files/Commands').filter((file) => file.endsWith('.js'));
+  const commandFiles = fs
+    .readdirSync(`${appDir}/Files/Commands`)
+    .filter((file) => file.endsWith('.js'));
 
   commandFiles.forEach((file) => {
     const command = require(`../Commands/${file}`);
@@ -78,7 +83,7 @@ const getCommands = () => {
 const getLanguages = () => {
   const languages = new Discord.Collection();
   const languageFiles = fs
-    .readdirSync('./Files/Languages')
+    .readdirSync(`${appDir}/Files/Languages`)
     .filter((file) => file.endsWith('.json'));
 
   languageFiles.forEach((file) => {
@@ -93,7 +98,7 @@ const getLanguages = () => {
 
 const getEvents = () => {
   const events = new Discord.Collection();
-  const eventsDir = fs.readdirSync('./Files/Events');
+  const eventsDir = fs.readdirSync(`${appDir}/Files/Events`);
   const reg = new RegExp('.js', 'g');
 
   eventsDir.forEach((folder) => {
@@ -104,7 +109,7 @@ const getEvents = () => {
       events.set(folder.replace(reg, ''), event);
     } else {
       const key = folder.replace(/Events/g, '');
-      const eventFiles = fs.readdirSync(`./Files/Events/${folder}`);
+      const eventFiles = fs.readdirSync(`${appDir}/Files/Events/${folder}`);
 
       eventFiles.forEach((file) => {
         if (file.endsWith('.js') && file.startsWith(key)) {
@@ -113,7 +118,7 @@ const getEvents = () => {
 
           events.set(file.replace(reg, ''), event);
         } else if (file.startsWith(key) && !file.endsWith('.js')) {
-          fs.readdirSync(`./Files/Events/${folder}/${file}`).forEach((eventFolderFile) => {
+          fs.readdirSync(`${appDir}/Files/Events/${folder}/${file}`).forEach((eventFolderFile) => {
             if (`${eventFolderFile}`.endsWith('.js') && `${eventFolderFile}`.startsWith(key)) {
               const event = require(`../Events/${folder}/${file}/${eventFolderFile}`);
               event.path = `../Events/${folder}/${file}/${eventFolderFile}`;
