@@ -518,55 +518,25 @@
       "color": "ff0000"
     }
   },
-  "embedBuilder": {
-    "embed": {
-      "color": "hex",
-      "title": {
-        "title": "text",
-        "url": "url"
-      },
-      "author": {
-        "name": "text",
-        "url": "url",
-        "icon_url": "url"
-      },
-      "description": "text",
-      "thumbnail": "image",
-      "fields": {
-        "name": "text",
-        "value": "text",
-        "inline": "boolean"
-      },
-      "image": "iamge",
-      "timestamp": "date",
-      "footer": {
-        "name": "text",
-        "url": "url",
-        "icon_url": "url"
-      }
-    },
+  "customembeds": {
     "limits": {
-      "title": 256,
-      "url": "url",
-      "author": {
-        "name": 256
-      },
-      "description": 4096,
       "fields": {
-        "name": 256,
-        "value": 1024,
-        "count": 25
+        "title": 256,
+        "author-name": 256,
+        "description": 4096,
+        "field-names": 256,
+        "field-values": 1024,
+        "field-length": 25,
+        "footer-name": 2048
       },
-      "footer": {
-        "name": 2048
-      },
-      "max": 6000,
-      "maxOf": [
+      "total": 6000,
+      "totalOf": [
         "title",
         "description",
-        { "fields": ["name", "value"] },
-        { "footer": ["name"] },
-        { "author": ["name"] }
+        "field-names",
+        "field-values",
+        "footer-name",
+        "author-name"
       ]
     }
   },
@@ -613,12 +583,79 @@
         "color": "YELLOW"
       },
       "baseSettings": {
-        "leveling": "levelsettings"
+        "leveling": "levelsettings",
+        "customembeds": "embeds"
       },
       "edit": {
         "active": {
           "key": "boolean",
           "required": true
+        },
+        "embeds": {
+          "color": {
+            "key": "string",
+            "required": false
+          },
+          "title": {
+            "key": "string",
+            "required": false
+          },
+          "url": {
+            "key": "url",
+            "required": false
+          },
+          "author-name": {
+            "key": "string",
+            "required": false
+          },
+          "author-iconURL": {
+            "key": "url",
+            "required": false
+          },
+          "author-url": {
+            "key": "url",
+            "required": false
+          },
+          "description": {
+            "key": "string",
+            "required": false
+          },
+          "thumbnail": {
+            "key": "url",
+            "required": false
+          },
+          "field-names": {
+            "key": "string",
+            "required": false
+          },
+          "field-values": {
+            "key": "string",
+            "required": false
+          },
+          "field-inlines": {
+            "key": "boolean",
+            "required": false
+          },
+          "image": {
+            "key": "url",
+            "required": false
+          },
+          "timestamp": {
+            "key": "number",
+            "required": false
+          },
+          "footer-text": {
+            "key": "string",
+            "required": false
+          },
+          "footer-iconURL": {
+            "key": "url",
+            "required": false
+          },
+          "name": {
+            "key": "string",
+            "required": true
+          }
         },
         "antispam": {
           "banenabledtof": {
@@ -1318,7 +1355,8 @@
         "overview": ["guildsettings"],
         "prefix": ["prefix"],
         "interactions": ["interactions"],
-        "modroles": ["modroles"]
+        "modroles": ["modroles"],
+        "embeds": ["customembeds"]
       },
       "editReq": ["uniquetimestamp"],
       "setupQueries": {
@@ -1397,6 +1435,12 @@
         "selfroles": {
           "cols": ["guildid, active, uniquetimestamp, name"],
           "vals": [["{{msg.guild.id}}", false, "{{values.uniquetimestamp}}", "{{values.name}}"]],
+          "add": ["name"],
+          "ident": "name"
+        },
+        "embeds": {
+          "cols": ["guildid, uniquetimestamp, name"],
+          "vals": [["{{msg.guild.id}}", "{{values.uniquetimestamp}}", "{{values.name}}"]],
           "add": ["name"],
           "ident": "name"
         },
