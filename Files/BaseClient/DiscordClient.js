@@ -44,7 +44,7 @@ const getSettings = () => {
     settingsFile.name = file.replace('.js', '');
     settingsFile.path = path;
 
-    settings.set(file.replace('.js', ''), settingsFile);
+    settings.set(settingsFile.name, settingsFile);
   });
 
   return settings;

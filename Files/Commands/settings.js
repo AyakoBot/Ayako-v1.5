@@ -1,5 +1,4 @@
 const Discord = require('discord.js');
-const fs = require('fs');
 
 module.exports = {
   name: 'settings',
@@ -8,13 +7,12 @@ module.exports = {
   takesFirstArg: false,
   aliases: null,
   async execute(msg, answer) {
-    const settings = getSettings(msg);
     const options = [];
 
     if (!msg.args[0]) {
       let categoryText = '';
       const categories = [];
-      settings.forEach((setting) => {
+      msg.client.settings.forEach((setting) => {
         setting.category.forEach((category) => {
           if (!categories.includes(category)) categories.push(category);
         });
@@ -22,7 +20,7 @@ module.exports = {
 
       categories.forEach((category) => {
         const settingCategories = [];
-        settings.forEach((s) => {
+        msg.client.settings.forEach((s) => {
           if (s.category.includes(category)) {
             if (s.folder && !!settingCategories.findIndex((a) => a.folder === s.folder)) {
               if (msg.client.constants.commands.settings.baseSettings[s.folder] === s.name) {
@@ -37,9 +35,9 @@ module.exports = {
         });
 
         for (let i = 0; i < settingCategories.length; i += 1) {
-          let settingsFile = settings.get(settingCategories[i]);
+          let settingsFile = msg.client.settings.get(settingCategories[i]);
           if (!settingsFile) {
-            settingsFile = settings.get(
+            settingsFile = msg.client.settings.get(
               msg.client.constants.commands.settings.baseSettings[settingCategories[i]],
             );
           }
@@ -112,7 +110,7 @@ module.exports = {
       await replier({ msg, answer }, { embeds: [embed], rawButtons });
       categoryMenuHandler({ msg, answer }, false);
     } else {
-      let settingsFile = settings.get(msg.args[0].toLowerCase());
+      let settingsFile = msg.client.settings.get(msg.args[0].toLowerCase());
 
       if (!settingsFile && msg.client.constants.commands.settings.baseSettings[msg.args[0]]) {
         settingsFile = {
@@ -1466,7 +1464,7 @@ const categoryDisplay = async (msg, answer, needsBack) => {
   let categoryText = '';
   const categories = [];
   const options = [];
-  const settings = getSettings(msg).filter((setting) => setting.folder === msg.args[0]);
+  const settings = msg.client.settings.find((setting) => setting.folder === msg.args[0]);
 
   settings.forEach((setting) => {
     setting.category.forEach((category) => {
