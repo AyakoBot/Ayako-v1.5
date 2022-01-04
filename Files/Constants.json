@@ -644,7 +644,7 @@
             "key": "number",
             "required": false
           },
-          "footer-text": {
+          "footer-name": {
             "key": "string",
             "required": false
           },

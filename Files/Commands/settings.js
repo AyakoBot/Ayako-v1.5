@@ -142,10 +142,17 @@ module.exports = {
     const { msg } = msgData;
 
     const singleRowDisplay = async (res, row, answer, comesFromMMR) => {
-      const embed =
-        typeof msg.file.displayEmbed === 'function'
-          ? msg.file.displayEmbed(msg, row)
-          : await noEmbed(msg, answer, res, comesFromMMR);
+      let embed;
+      let embed2;
+
+      if (typeof msg.file.displayEmbed === 'function') {
+        const returned = msg.file.displayEmbed(msg, row);
+        if (Array.isArray(returned)) {
+          [embed, embed2] = returned;
+        } else {
+          embed = returned;
+        }
+      } else embed = noEmbed(msg, answer, res, comesFromMMR);
 
       embed.setAuthor({
         name: msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
@@ -163,10 +170,12 @@ module.exports = {
         !msg.member.permissions.has(new Discord.Permissions(msg.file.perm)) &&
         msg.author.id !== '318453143476371456'
       ) {
+        if (embed2) return replier({ msg, answer }, { embeds: [embed2, embed] });
         return replier({ msg, answer }, { embeds: [embed] });
       }
 
-      await replier({ msg, answer }, { embeds: [embed], rawButtons: [edit] });
+      if (embed2) await replier({ msg, answer }, { embeds: [embed2, embed], rawButtons: [edit] });
+      else await replier({ msg, answer }, { embeds: [embed], rawButtons: [edit] });
 
       const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
       buttonsCollector.on('collect', (interaction) => {
@@ -736,10 +745,22 @@ const mmrEditList = async (msgData, sendData) => {
 const singleRowEdit = async (msgData, resData, embed, comesFromMMR) => {
   const { msg, answer } = msgData;
   const { row, res } = resData;
+  let embed2;
+
+  if (Array.isArray(embed)) {
+    [embed, embed2] = embed;
+  }
 
   if (!embed) {
     if (!row) return setup(msg, answer);
-    embed = msg.file.displayEmbed(msg, row);
+    if (typeof msg.file.displayEmbed === 'function') {
+      const returned = msg.file.displayEmbed(msg, row);
+      if (Array.isArray(returned)) {
+        [embed, embed2] = returned;
+      } else {
+        embed = returned;
+      }
+    } else embed = noEmbed(msg, answer, res, comesFromMMR);
   }
 
   const rawButtons = msg.file.buttons(msg, row);
@@ -752,7 +773,8 @@ const singleRowEdit = async (msgData, resData, embed, comesFromMMR) => {
     url: msg.client.constants.standard.invite,
   });
 
-  await replier({ msg, answer }, { rawButtons, embeds: [embed] });
+  if (embed2) await replier({ msg, answer }, { embeds: [embed2, embed], rawButtons });
+  else await replier({ msg, answer }, { rawButtons, embeds: [embed] });
 
   const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
   buttonsCollector.on('collect', async (interaction) => {
@@ -983,8 +1005,19 @@ const changing = async (msgData, editData, resData) => {
   log(msg, { insertedValues, required, comesFromMMR, row });
 
   row[usedKey] = insertedValues[usedKey];
-  const embed = msg.file.displayEmbed(msg, row);
+  let embed;
+  let embed2;
 
+  if (typeof msg.file.displayEmbed === 'function') {
+    const returned = msg.file.displayEmbed(msg, row);
+    if (Array.isArray(returned)) {
+      [embed, embed2] = returned;
+    } else {
+      embed = returned;
+    }
+  } else embed = noEmbed(msg, answer, res, comesFromMMR);
+
+  if (embed2) return singleRowEdit({ msg, answer }, { row, res }, [embed, embed2], comesFromMMR);
   return singleRowEdit({ msg, answer }, { row, res }, embed, comesFromMMR);
 };
 
