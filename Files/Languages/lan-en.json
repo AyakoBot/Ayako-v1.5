@@ -1015,51 +1015,6 @@
       "loading": "Warning User..."
     }
   },
-  "embedBuilder": {
-    "author": "Ayako Embed Builder",
-    "decide": "Decide what to add, edit or remove next via Buttons",
-    "placeholder": "This will be your Embed",
-    "embed": {
-      "title": {
-        "title": "Title",
-        "text": "Title Text",
-        "link": "Title Link"
-      },
-      "description": {
-        "description": "Description"
-      },
-      "author": {
-        "author": "Author",
-        "icon": "Author Icon",
-        "text": "Author Text",
-        "link": "Author Link"
-      },
-      "color": {
-        "color": "Color"
-      },
-      "image": {
-        "image": "Image"
-      },
-      "thumbnail": {
-        "thumbnail": "Thumbnail"
-      },
-      "field": {
-        "field": "Fields",
-        "name": "Field Title",
-        "value": "Field Value",
-        "inline": "Field Inline"
-      },
-      "footer": {
-        "footer": "Footer",
-        "icon": "Footer Icon",
-        "text": "Footer Text",
-        "link": "Footer Link"
-      },
-      "timestamp": {
-        "timestamp": "Timestamp"
-      }
-    }
-  },
   "commands": {
     "selfroles": {
       "description": "Get Self-Assingable Roles",
@@ -1257,6 +1212,16 @@
         "reloadevent ch",
         "reloadevent lan [language]"
       ]
+    },
+    "reloadsettings": {
+      "category": "Owner",
+      "description": "Reloads a Settings File",
+      "usage": ["reloadsettings [settings Name]"]
+    },
+    "reloadeditor": {
+      "category": "Owner",
+      "description": "Reloads an Editor File",
+      "usage": ["reloadeditor [editor Name]"]
     },
     "ping": {
       "category": "Info",
@@ -1827,8 +1792,9 @@
       },
       "embeds": {
         "type": "Custom Embed",
-        "totalLimit": "`Author Name`, `Title`, `Description`, `Field Names`, `Field Values` and `Footer Name` together can not exceed {{maxLimit}} Characters",
-        "limit": "{{name}} can not exceed {{limit}} Characters",
+        "totalLimit": "`Author Name`, `Title`, `Description`, `Field Names`, `Field Values` and `Footer Name` together can not exceed {{maxLimit}} Characters\nCurrent: {{currentChars}}",
+        "limit": "**{{name}}** can not exceed **{{limit}} Characters**",
+        "placeholder": "This will be your Embed",
         "edit": {
           "color": {
             "name": "Color",
@@ -1888,8 +1854,8 @@
             "answers": "Any UNIX Timestamp",
             "recommended": "Can be obtained [here](https://hammertime.djdavid98.art/ \"Click me\")"
           },
-          "footer-text": {
-            "name": "Footer Text",
+          "footer-name": {
+            "name": "Footer Name",
             "answers": "Any Text"
           },
           "footer-iconURL": {

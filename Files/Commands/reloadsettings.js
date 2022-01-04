@@ -21,6 +21,8 @@ module.exports = {
     try {
       const newSetting = require(setting.path);
       newSetting.folder = setting.folder;
+      newSetting.name = setting.name;
+      newSetting.path = setting.path;
 
       msg.client.settings.set(settingName, newSetting);
       msg.channel.send(`Setting \`${settingName}\` was reloaded!`);
