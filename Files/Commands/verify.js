@@ -216,7 +216,12 @@ module.exports = {
       )
       .setColor(msg.client.constants.standard.color);
     msg.client.ch.send(msg.DM, { embeds: [embed] });
-    msg.member.roles.add(msg.r.finishedrole).catch(() => {});
-    msg.member.roles.remove(msg.r.pendingrole).catch(() => {});
+    if (msg.guild.id === '298954459172700181') {
+      msg.client.ch.send(msg.DM, {
+        content: `**Also worth checking out:**\n💁‍♀️ Kimetsu No Yaiba┊Demon Slayer┊500 Demon Slayer Emojis & Stickers┊Unique & Fun┊Active┊Chatting┊VC┊& much more! 💜 \nㅤㅤㅤ╰─ ʚ ୨୧ ɞ ─╮\nF✧· 🐛 https://discord.gg/k76uPAzsSW ☂️ ·✧`,
+      });
+    }
+    if (msg.r.finishedrole) msg.member.roles.add(msg.r.finishedrole).catch(() => {});
+    if (msg.r.pendingrole) msg.member.roles.remove(msg.r.pendingrole).catch(() => {});
   },
 };
