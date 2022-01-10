@@ -138,6 +138,17 @@ module.exports = {
 
       const captcha = msg.client.verificationCodes.get(`${message.channel.id}-${msg.guild.id}`);
 
+      if (!captcha) {
+        msg.client.ch.reply(message, { content: `${msg.language.error} ${msg.lan.error}` });
+        msg.client.ch.send(
+          msg.client.channels.cache.get('726252103302905907', {
+            content: `${message.channel.id}-${msg.guild.id} did not exist in Verification Codes, check console`,
+          }),
+        );
+        console.log(msg.client.verificationCodes);
+        return;
+      }
+
       if (message.content.toLowerCase() === captcha.toLowerCase()) {
         msg.client.verificationCodes.delete(`${message.channel.id}-${msg.guild.id}`);
         this.finished(msg, logchannel);

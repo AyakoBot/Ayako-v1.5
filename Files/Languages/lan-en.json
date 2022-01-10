@@ -654,7 +654,8 @@
     "log": {
       "start": "User {{user}} /`{{user.tag}}` / `{{user.id}}`\nstarted Verification",
       "end": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nfinished Verification"
-    }
+    },
+    "error": "An error occured while verifying! I have reported this to the Devs. Please re-try verification"
   },
   "expireBehavior": {
     "name": "What happens when subscription expires",
@@ -1795,6 +1796,14 @@
         "totalLimit": "`Author Name`, `Title`, `Description`, `Field Names`, `Field Values` and `Footer Name` together can not exceed {{maxLimit}} Characters\nCurrent: {{currentChars}}",
         "limit": "**{{name}}** can not exceed **{{limit}} Characters**",
         "placeholder": "This will be your Embed",
+        "error": "**{{name}}** is exceeding {{limit}} Characters by {{tooMany}}",
+        "fieldsPlaceholder": "Select Fields you want to edit",
+        "otherPlaceholder": "Select anything (except Fields) you want to edit",
+        "addField": "Add Field",
+        "inheritSettings": "Inherit Settings from another Embed",
+        "viewRaw": "View Raw Embed Code",
+        "inheritCode": "Inherit Raw Embed Code",
+        "removeField": "Remove Field",
         "edit": {
           "color": {
             "name": "Color",

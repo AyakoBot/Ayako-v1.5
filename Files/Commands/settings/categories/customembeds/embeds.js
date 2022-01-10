@@ -48,27 +48,110 @@ module.exports = {
       embed.addField(key.name, key.answers, true);
     });
 
+    const errors = [];
+
     if (r.color) embed2.setColor(r.color);
-    if (r.title) embed2.setTitle(r.title);
     if (r.url) embed2.setURL(r.url);
-    if (r['author-name']) {
-      embed2.setAuthor({
-        name: r['author-name'],
-        iconURL: r['author-icon'],
-        url: r['author-url'],
-      });
-    }
-    if (r.description) embed2.setDescription(r.description);
     if (r.thumbnail) embed2.setThumbnail(r.thumbnail);
     if (r.image) embed2.setImage(r.image);
     if (r.timestamp) embed2.setTimestamp(r.timestamp);
-    if (r['footer-text']) {
-      embed2.setFooter({ text: r['footer-text'], iconURL: r['footer-iconURL'] });
-    }
     if (r.uniquetimestamp) embed2.setTimestamp(r.uniquetimestamp);
-    if (r.fields && r.fields.length) {
+
+    if (r.title) {
+      const limit = msg.client.constants.customembeds.limits.fields.title;
+      if (r.title.length <= limit) {
+        embed2.setTitle(r.title);
+      } else {
+        errors.push(
+          msg.client.ch.stp(msg.lan.error, {
+            name: msg.lan.edit.title.name,
+            limit,
+            tooMany: limit - r.title.length,
+          }),
+        );
+      }
+    }
+
+    if (r['author-name']) {
+      const limit = msg.client.constants.customembeds.limits.fields['author-name'];
+      if (r['author-name'].length <= limit) {
+        embed2.setAuthor({
+          name: r['author-name'],
+          iconURL: r['author-icon'],
+          url: r['author-url'],
+        });
+      } else {
+        errors.push(
+          msg.client.ch.stp(msg.lan.error, {
+            name: msg.lan.edit['author-name'].name,
+            limit,
+            tooMany: limit - r['author-name'].length,
+          }),
+        );
+      }
+    }
+
+    if (r.description) {
+      const limit = msg.client.constants.customembeds.limits.fields.description;
+      if (r.description.length <= limit) {
+        embed2.setDescription(r.description);
+      } else {
+        errors.push(
+          msg.client.ch.stp(msg.lan.error, {
+            name: msg.lan.edit.description.name,
+            limit,
+            tooMany: limit - r.description.length,
+          }),
+        );
+      }
+    }
+
+    if (r['footer-text']) {
+      const limit = msg.client.constants.customembeds.limits.fields['footer-text'];
+      if (r['footer-text'].length <= limit) {
+        embed2.setFooter({ text: r['footer-text'], iconURL: r['footer-iconURL'] });
+      } else {
+        errors.push(
+          msg.client.ch.stp(msg.lan.error, {
+            name: msg.lan.edit['footer-text'].name,
+            limit,
+            tooMany: limit - r['footer-text'].length,
+          }),
+        );
+      }
+    }
+
+    if (r['field-names'] && r['field-names'].length) {
       r['field-names'].forEach((fieldName, i) => {
-        embed2.addField(fieldName, r['field-values'][i], r['field-inlines'][i]);
+        const fieldValue = r['field-values'][i];
+        const fieldInline = r['field-inlines'][i];
+
+        const textLimit = msg.client.constants.customembeds.limits.fields['footer-text'];
+        const valueLimit = msg.client.constants.customembeds.limits.fields['footer-values'];
+
+        if (fieldName.length > textLimit) {
+          errors.push(
+            msg.client.ch.stp(msg.lan.error, {
+              name: msg.lan.edit['footer-text'].name,
+              limit: textLimit,
+              tooMany: textLimit - fieldName.length,
+            }),
+          );
+        }
+
+        if (fieldValue.length > valueLimit) {
+          errors.push(
+            msg.client.ch.stp(msg.lan.error, {
+              name: msg.lan.edit['field-values'].name,
+              limit: valueLimit,
+              tooMany: valueLimit - r['footer-values'].length,
+            }),
+          );
+        }
+
+        if (fieldValue.length <= valueLimit && r['field-names'][i].length <= textLimit) {
+          embed2.addField(fieldName, fieldValue, fieldInline);
+        }
       });
     }
 
@@ -88,7 +171,95 @@ module.exports = {
 
     return [embed, embed2];
   },
-  buttons(msg) {
-    return [];
+  buttons(msg, r) {
+    const fields = [];
+    const other = [];
+
+    if (r['field-names'] && r['field-names'].length) {
+      r['field-names'].forEach((fieldName, i) => {
+        const fieldValue = r['field-values'][i];
+        const textLimit = msg.client.constants.customembeds.limits.fields['footer-text'];
+        const valueLimit = msg.client.constants.customembeds.limits.fields['footer-values'];
+
+        let errors = false;
+
+        if (fieldName.length > textLimit) {
+          errors = true;
+        }
+
+        if (fieldValue.length > valueLimit) {
+          errors = true;
+        }
+
+        fields.push({
+          label: fieldName.slice(0, 100),
+          description: fieldValue.slice(0, 100),
+          value: i,
+          emoji: errors ? msg.client.constants.emotes.warning : msg.client.constants.emotes.tickBG,
+        });
+      });
+    }
+
+    Object.entries(msg.lan.edit).forEach(([key, value]) => {
+      if (key === 'field-names' || key === 'field-values' || key === 'field-inlines') return;
+
+      other.push({
+        label: value.name,
+        description: value.recommended,
+        value: key,
+      });
+    });
+
+    const fieldsMenu = new Discord.MessageSelectMenu()
+      .setCustomId('fields')
+      .setOptions(
+        fields.length ? fields : [{ label: 'empty', description: 'empty', value: 'empty' }],
+      )
+      .setMaxValues(1)
+      .setMinValues(1)
+      .setDisabled(!fields.length)
+      .setPlaceholder(msg.lan.fieldsPlaceholder);
+
+    const addField = new Discord.MessageButton()
+      .setCustomId('addField')
+      .setLabel(msg.lan.addField)
+      .setDisabled(fields.length === 25)
+      .setStyle('SUCCESS');
+
+    const removeField = new Discord.MessageButton()
+      .setCustomId('removeField')
+      .setLabel(msg.lan.removeField)
+      .setDisabled(!fields.length)
+      .setStyle('DANGER');
+
+    const otherMenu = new Discord.MessageSelectMenu()
+      .setCustomId('other')
+      .setOptions(other)
+      .setMaxValues(1)
+      .setMinValues(1)
+      .setPlaceholder(msg.lan.otherPlaceholder);
+
+    const inheritSettings = new Discord.MessageButton()
+      .setCustomId('inheritSettings')
+      .setLabel(msg.lan.inheritSettings)
+      .setStyle('SECONDARY');
+
+    const viewRaw = new Discord.MessageButton()
+      .setCustomId('viewRaw')
+      .setLabel(msg.lan.viewRaw)
+      .setStyle('SECONDARY');
+
+    const inheritCode = new Discord.MessageButton()
+      .setCustomId('inheritCode')
+      .setLabel(msg.lan.inheritCode)
+      .setStyle('SECONDARY');
+
+    return [
+      [fieldsMenu],
+      [addField, removeField],
+      [otherMenu],
+      [inheritSettings],
+      [viewRaw, inheritCode],
+    ];
   },
 };
