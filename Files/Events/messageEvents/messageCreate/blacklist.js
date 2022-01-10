@@ -14,7 +14,7 @@ module.exports = {
     if (result && result.rowCount > 0) {
       if (result.rows[0].bpchannelid?.includes(msg.channel.id)) return;
       if (result.rows[0].bpuserid?.includes(msg.author.id)) return;
-      if (msg.member.roles.cache.some((r) => result.rows[0].bproleid?.includes(r.id))) return;
+      if (msg.member?.roles.cache.some((r) => result.rows[0].bproleid?.includes(r.id))) return;
 
       const args = msg.content.split(/ +/);
       const words = [];
