@@ -197,6 +197,16 @@ module.exports = {
       return;
     }
 
+    const isCloudFlareProtected = await checkCloudFlare(linkObject);
+    if (isCloudFlareProtected === true) {
+      if (!check) {
+        includedBadLink = true;
+      }
+
+      await cloudFlare(msg, lan, embed, linkObject, check);
+      return;
+    }
+
     if (attributes && !whitelist.includes(linkObject.baseURLhostname)) {
       fs.appendFile(
         'S:/Bots/ws/CDN/antivirus/whitelisted.txt',
@@ -506,6 +516,36 @@ const whitelisted = async (msg, lan, embed) => {
 
   msg.client.ch.send(msg.client.channels.cache.get(msg.client.constants.standard.trashLogChannel), {
     content: msg.url,
+  });
+  return true;
+};
+
+const cloudFlare = async (msg, lan, embed, linkObject) => {
+  if (embed.fields.length === 0) {
+    await embed
+      .addField(
+        msg.language.result,
+        msg.client.ch.stp(lan.cfProtected, {
+          tick: msg.client.constants.emotes.cross,
+        }),
+      )
+      .setDescription(
+        embed.description.replace(
+          msg.client.ch.stp(lan.check, {
+            loading: msg.client.constants.emotes.loading,
+          }),
+          msg.client.ch.stp(lan.done, {
+            tick: msg.client.constants.emotes.cross,
+          }),
+        ),
+      )
+      .setColor('#ffff00');
+
+    msg.client.ch.reply(msg, { embeds: [embed] }).catch(() => {});
+  }
+
+  msg.client.ch.send(msg.client.channels.cache.get(msg.client.constants.standard.trashLogChannel), {
+    content: `${msg.url}\nis CloudFlare Protected\n${linkObject.href}`,
   });
   return true;
 };
@@ -878,6 +918,18 @@ const sinkingYatchtsCheck = async (linkObject) => {
 
   if (res && res.statusCode === 200) {
     return res.body;
+  }
+  return 'unkown';
+};
+
+const checkCloudFlare = async (linkObject) => {
+  const res = await SA.get(linkObject.href).catch((e) => e);
+
+  if (res) {
+    return (
+      /https:\/\/www\.cloudflare\.com\/5xx-error-landing/gi.test(res.response.text) &&
+      /We\sare\schecking\syour\sbrowser/gi.test(res.response.text)
+    );
   }
   return 'unkown';
 };
