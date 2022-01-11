@@ -23,6 +23,7 @@ const client = require('../../../BaseClient/DiscordClient');
 module.exports = {
   async execute(msg) {
     let check = false;
+    let reaction;
 
     if (!msg.content || msg.author.id === msg.client.user.id) {
       return;
@@ -30,6 +31,7 @@ module.exports = {
 
     if (msg.channel.type === 'DM') {
       check = true;
+      reaction = await msg.react(msg.client.constants.emotes.loading);
     }
 
     msg.language = await msg.client.ch.languageSelector(check ? null : msg.guild);
@@ -37,7 +39,7 @@ module.exports = {
     const lan = check ? msg.language.antivirus.dm : msg.language.antivirus.guild;
 
     if (check) {
-      await prepare(msg, lan, check);
+      await prepare(msg, lan, check, reaction);
       return;
     }
 
@@ -47,7 +49,7 @@ module.exports = {
     );
 
     if (res && res.rowCount > 0) {
-      await prepare(msg, lan, check);
+      await prepare(msg, lan, check, reaction);
     }
   },
 
@@ -61,6 +63,7 @@ module.exports = {
     whitelist,
     whitelistCDN,
     blocklist,
+    reaction,
   ) {
     const embed = new Discord.MessageEmbed();
 
@@ -87,6 +90,7 @@ module.exports = {
         includedBadLink = true;
       }
 
+      if (reaction) await reaction.users.remove(msg.client.user.id);
       await blacklisted(msg, lan, embed, linkObject, note, check);
       return;
     }
@@ -104,6 +108,7 @@ module.exports = {
       (isFile && whitelistCDN.includes(linkObject.baseURLhostname))
     ) {
       if (check) {
+        if (reaction) await reaction.users.remove(msg.client.user.id);
         await whitelisted(msg, lan, embed);
       }
       return;
@@ -115,6 +120,8 @@ module.exports = {
       if (!check) {
         includedBadLink = true;
       }
+
+      if (reaction) await reaction.users.remove(msg.client.user.id);
       await blacklisted(msg, lan, embed, linkObject, null, check);
       return;
     }
@@ -129,6 +136,8 @@ module.exports = {
       if (!check) {
         includedBadLink = true;
       }
+
+      if (reaction) await reaction.users.remove(msg.client.user.id);
       await blacklisted(msg, lan, embed, linkObject, note, check);
       return;
     }
@@ -138,6 +147,8 @@ module.exports = {
       if (!check) {
         includedBadLink = true;
       }
+
+      if (reaction) await reaction.users.remove(msg.client.user.id);
       await newUrl(msg, lan, embed, linkObject, check);
       return;
     }
@@ -167,12 +178,12 @@ module.exports = {
     }
 
     if (urlSeverity > 2) {
-      await severeLink(msg, lan, embed, linkObject, urlSeverity, check);
-
       if (!check) {
         includedBadLink = true;
       }
 
+      if (reaction) await reaction.users.remove(msg.client.user.id);
+      await severeLink(msg, lan, embed, linkObject, urlSeverity, check);
       return;
     }
 
@@ -182,6 +193,7 @@ module.exports = {
         includedBadLink = true;
       }
 
+      if (reaction) await reaction.users.remove(msg.client.user.id);
       await newUrl(msg, lan, embed, linkObject, check);
       return;
     }
@@ -192,6 +204,7 @@ module.exports = {
         includedBadLink = true;
       }
 
+      if (reaction) await reaction.users.remove(msg.client.user.id);
       if (selfCheckCatched === 'ccscam') await ccscam(msg, lan, embed, linkObject, check);
       await newUrl(msg, lan, embed, linkObject, check);
       return;
@@ -203,6 +216,7 @@ module.exports = {
         includedBadLink = true;
       }
 
+      if (reaction) await reaction.users.remove(msg.client.user.id);
       await cloudFlare(msg, lan, embed, linkObject, check);
       return;
     }
@@ -220,6 +234,7 @@ module.exports = {
         },
       );
       if (check) {
+        if (reaction) await reaction.users.remove(msg.client.user.id);
         await whitelisted(msg, lan, embed);
       }
     }
@@ -241,13 +256,14 @@ module.exports = {
         },
       );
       if (check) {
+        if (reaction) await reaction.users.remove(msg.client.user.id);
         await whitelisted(msg, lan, embed);
       }
     }
   },
 };
 
-const prepare = async (msg, lan, check) => {
+const prepare = async (msg, lan, check, reaction) => {
   const { content } = msg;
   const args = content
     .replace(/\n/g, ' ')
@@ -284,6 +300,7 @@ const prepare = async (msg, lan, check) => {
       whitelist,
       whitelistCDN,
       blocklist,
+      reaction,
     ),
   );
 
