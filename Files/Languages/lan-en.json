@@ -620,7 +620,8 @@
       "notexistent": "The Domain `{{url}}` does not exist (anymore)",
       "done": "Checking... Done {{tick}}",
       "check": "Checking... {{loading}}",
-      "ccscam": "{{cross}} Found Link to be Malicious\nThis Link will try to gain access to your Credit Card Information"
+      "ccscam": "{{cross}} Found Link to be Malicious\nThis Link will try to gain access to your Credit Card Information",
+      "cfProtected": "The Intent of this Website couldn't be determined\nas it is CloudFlare protected\n**Proceed with Caution**"
     },
     "guild": {
       "notWhitelisted": "{{warning}} Message contains a not Whitelisted Link\n",
@@ -634,7 +635,8 @@
       "notexistent": "The Domain `{{url}}` does not exist (anymore)",
       "done": "Checking... Done {{tick}}",
       "check": "Checking... {{loading}}",
-      "ccscam": "{{cross}} Found Link to be Malicious\nThis Link will try to gain access to your Credit Card Information"
+      "ccscam": "{{cross}} Found Link to be Malicious\nThis Link will try to gain access to your Credit Card Information",
+      "cfProtected": "The Intent of this Website couldn't be determined\nas it is CloudFlare protected\n**Proceed with Caution**"
     }
   },
   "verification": {
