@@ -1,4 +1,3 @@
-
 module.exports = {
   async execute(msg, rawLink, type) {
     const link = new URL(rawLink);
