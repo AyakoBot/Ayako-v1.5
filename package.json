@@ -15,7 +15,7 @@
     "axios": "^0.24.0",
     "canvas": "^2.8.0",
     "captcha-canvas": "^2.3.1",
-    "discord.js": "^13.5.0",
+    "discord.js": "^13.6.0",
     "eris": "^0.15.1",
     "express": "^4.17.1",
     "imgur": "^1.0.2",
