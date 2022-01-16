@@ -613,7 +613,7 @@
       "VTanalyze": "{{warning}} Analyzing Link\n",
       "VTfail": "{{cross}} Failed to analyze Link",
       "VTharmless": "{{tick}} Found Link to be Harmless",
-      "VTmalicious": "{{cross}} Found Link to be Malicious\nSeverity Score: {{severity}}",
+      "VTmalicious": "{{cross}} Found Link to be Malicious",
       "newLink": "{{cross}} Link is most likely Malicious",
       "whitelisted": "{{tick}} This Link is not Malicious",
       "checking": "Link:",
