@@ -571,7 +571,7 @@ const mmrEditList = async (msgData, sendData) => {
       if (!returnedData) return null;
       answer = returnedData.interaction;
     } else {
-      editor.execute(msg, required, insertedValues);
+      await editor.execute(msg, required, insertedValues, answer);
     }
 
     steps.currentStep += 1;
@@ -782,7 +782,7 @@ const singleRowEdit = async (msgData, resData, embed, comesFromMMR) => {
       return msg.client.ch.notYours(interaction, msg);
     }
 
-    const [editKey] = Object.entries(msg.lanSettings[msg.file.name].edit)
+    let [editKey] = Object.entries(msg.lanSettings[msg.file.name].edit)
       .map(([key, value]) => {
         if (interaction.customId === value.name) return key;
         return null;
@@ -790,6 +790,7 @@ const singleRowEdit = async (msgData, resData, embed, comesFromMMR) => {
       .filter((f) => !!f);
 
     buttonsCollector.stop();
+    if (!editKey) editKey = interaction.customId;
     await changing({ msg, answer: interaction }, { usedKey: editKey, comesFromMMR }, { row, res });
 
     return null;
@@ -944,7 +945,7 @@ const changing = async (msgData, editData, resData) => {
   }
 
   const editor = msg.client.settingsEditors.find((f) =>
-    usedKey === 'active' ? f.key.includes('boolean') : f.key.includes(settings[usedKey].key),
+    usedKey === 'active' ? f.key.includes('boolean') : f.key?.includes(settings[usedKey].key),
   );
   const language =
     usedKey === 'active' ? msg.lanSettings.active : msg.lanSettings[msg.file.name].edit[usedKey];
@@ -975,7 +976,7 @@ const changing = async (msgData, editData, resData) => {
     if (!returnedData) return null;
     answer = returnedData.interaction;
   } else {
-    editor.execute(msg, required, insertedValues, row);
+    await editor.execute(msg, required, insertedValues, row);
   }
 
   const [tableName] = msg.client.constants.commands.settings.tablenames[msg.file.name];
@@ -1497,7 +1498,7 @@ const categoryDisplay = async (msg, answer, needsBack) => {
   let categoryText = '';
   const categories = [];
   const options = [];
-  const settings = msg.client.settings.find((setting) => setting.folder === msg.args[0]);
+  const settings = msg.client.settings.filter((setting) => setting.folder === msg.args[0]);
 
   settings.forEach((setting) => {
     setting.category.forEach((category) => {

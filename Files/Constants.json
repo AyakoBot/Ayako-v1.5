@@ -592,6 +592,18 @@
           "required": true
         },
         "embeds": {
+          "addField": {
+            "key": "customEmbedFieldHandler",
+            "required": true
+          },
+          "removeField": {
+            "key": "customEmbedFieldHandler",
+            "required": true
+          },
+          "fields": {
+            "key": "customEmbedFieldHandler",
+            "required": true
+          },
           "color": {
             "key": "string",
             "required": false
