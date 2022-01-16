@@ -9,13 +9,16 @@ module.exports = {
   messageHandler(msgData, insertedValues, required) {
     const { msg, message } = msgData;
 
-    const args = message.content.replace(/\\n/g, ' ').replace(/\D+/g, '').split(/ +/);
+    const args = message.content.replace(/\\n/g, ' ').split(/ +/);
 
     let duration = 0;
     args.forEach((n, i) => {
       if (!Number.isNaN(ms(n))) {
-        if (args[i + 1] && Number.isNaN(ms(args[i + 1]))) n = `${n} ${args[i + 1]}`;
-        duration = +duration + +ms(n);
+        if (args[i + 1] && Number.isNaN(+ms(args[i + 1]))) {
+          n = `${n} ${args[i + 1]}`;
+          args.splice(i + 1, 1);
+        }
+        duration = Number(duration) + Number(ms(n));
       }
     });
     insertedValues[required.assinger] = duration;
