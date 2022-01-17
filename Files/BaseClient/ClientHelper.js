@@ -5,13 +5,15 @@ const http = require('http');
 const Discord = require('discord.js');
 const v8 = require('v8');
 const fs = require('fs');
+const { dirname } = require('path');
+
 const client = require('./DiscordClient');
 const { pool } = require('./DataBase');
 const ChannelRules = require('./Other Client Files/ChannelRules');
-
-const DiscordEpoch = 1420070400000;
-const { imgur } = require('./ImgurClient');
 const Constants = require('../Constants.json');
+
+const appDir = dirname(require.main.filename);
+const DiscordEpoch = 1420070400000;
 
 const regexes = {
   templateMatcher: /{{\s?([^{}\s]*)\s?}}/g,
@@ -639,74 +641,56 @@ module.exports = {
     return require('../Languages/lan-en.json');
   },
   /**
-   * Writes a Ban or Massban report including previously sent Messages of the Target.
+   * Turns an Array of Strings into a .txt file and returns ints Path.
    * @constructor
-   * @param {object} object - The Object to create a Log from.
+   * @param {msg} object - A reference Message.
+   * @param {array} array - The Array of Strings to convert.
+   * @param {source} string - The Source of this function call for sorting in correct Folders.
    */
-  async txtFileWriter(rawObject) {
-    const object = rawObject.map((o) => o);
+  async txtFileWriter(msg, array, source) {
+    if (!array.length) return null;
+
+    const checkPath = (path) => {
+      const parts = path.split(/\\+/);
+      let fullPath = '';
+
+      parts.forEach((part, i) => {
+        fullPath += `${part}/`;
+
+        if (!fs.existsSync(fullPath) && parts.length !== i + 1) fs.mkdirSync(fullPath);
+      });
+    };
+
+    const now = Date.now();
     let content = '';
-    if (object[0].source === 'debug') {
-      object.forEach((entries) => {
-        content += `${entries[object.toBeLogged ? object.toBeLogged[0] : '']} - ${
-          entries[object.toBeLogged ? object.toBeLogged[1] : '']
-        } - ${entries[object.toBeLogged ? object.toBeLogged[2] : '']}\n`;
-        const path = `.\\Files\\Downloads\\Debug\\${Date.now()}.txt`;
-        fs.writeFile(path, content, (err) => {
-          if (err) throw err;
-        });
-      });
+    let path;
+
+    switch (source) {
+      default: {
+        path = `${appDir}\\Files/Downloads\\Logs\\debug.txt`;
+        break;
+      }
+      case 'massban': {
+        path = `${appDir}\\Files\\Downloads\\Massbans\\Guild - ${msg.guild.id}\\${now}.txt`;
+        break;
+      }
+      case 'messageDeleteBulk': {
+        path = `${appDir}\\Files\\Downloads\\Messages\\Bulk Deletes\\Guild - ${msg.guild.id}\\Channel - ${msg.channel.id}\\${now}.txt`;
+        break;
+      }
     }
-    if (object[0].source === 'massban') {
-      object.forEach((obj) => {
-        content += `${obj.tag} / ${obj.id}\n`;
-      });
-      const now = Date.now();
-      const path = `.\\Files\\Downloads\\Massbans\\Guild - ${object[0].guild.id}\\${now}.txt`;
-      const guilddir = `.\\Files\\Downloads\\Massbans\\Guild - ${object[0].guild.id}`;
-      if (!fs.existsSync(guilddir)) fs.mkdirSync(guilddir);
-      fs.writeFile(path, content, (err) => {
-        if (err) throw err;
-      });
-      return path;
-    }
-    if (!object[0].source) {
-      const createTxt = async (obj) => {
-        let urls = '';
-        const msg = [];
-        const o = obj;
-        msg.author = o.author;
-        msg.timestamp = this.getUnix(o.id);
-        msg.content = o.content;
-        if (o.attachments) {
-          o.attachments = o.attachments.map((a) => a);
-          const imgurUpload = async (attachment) => {
-            const json = await imgur.uploadUrl(attachment.url).catch(() => {});
-            if (json) urls += ` ${json.link} `;
-          };
-          const imgurPromises = o.attachments.map((attachment) => imgurUpload(attachment));
-          await Promise.all(imgurPromises);
-        }
-        content += `\n${msg.author && msg.author.tag ? msg.author.tag : 'Unknown Author'} (${
-          msg.author && msg.author.id ? msg.author.id : 'Unknown Author'
-        }) at ${new Date(msg.timestamp).toUTCString()}\n${
-          urls !== '' ? `Attachments: ${urls}\n` : ''
-        }${msg.content ? msg.content : 'Unknown Content'}\n`;
-      };
-      const promises = object.map((obj) => createTxt(obj));
-      await Promise.all(promises);
-      const now = Date.now();
-      const path = `.\\Files\\Downloads\\Messages\\Bulk Deletes\\Guild - ${object[0].guild.id}\\Channel - ${object[0].channel.id}\\${now}.txt`;
-      const guilddir = `.\\Files\\Downloads\\Messages\\Bulk Deletes\\Guild - ${object[0].guild.id}`;
-      if (!fs.existsSync(guilddir)) fs.mkdirSync(guilddir);
-      const channeldir = `.\\Files\\Downloads\\Messages\\Bulk Deletes\\Guild - ${object[0].guild.id}\\Channel - ${object[0].channel.id}`;
-      if (!fs.existsSync(channeldir)) fs.mkdirSync(channeldir);
-      fs.writeFile(path, content, (err) => {
-        if (err) throw err;
-      });
-      return path;
-    }
-    return null;
+
+    checkPath(path);
+
+    array.forEach((element) => {
+      content += `${element}\n`;
+    });
+
+    fs.writeFile(path, content, (err) => {
+      if (err) throw err;
+    });
+
+    return path;
   },
   /**
    * Tests if a String containts non-Latin Codepoints.
