@@ -20,7 +20,16 @@ module.exports = {
         const language = await ch.languageSelector(guild);
         const con = Constants.messageDeleteBulk;
         const lan = language.messageDeleteBulk;
-        const path = await ch.txtFileWriter(msgs);
+
+        const arr = msgs.map(
+          (msg) =>
+            `${msg.author.tag} (${msg.author.id}) | ${msg.content}\n${msg.attachments.map(
+              (attachment) =>
+                `${attachment.description ? attachment.description : ''} ${attachment.url}\n`,
+            )}`,
+        );
+
+        const path = await ch.txtFileWriter(msgs.first(), arr, 'messageDeleteBulk');
         let audits = await guild.fetchAuditLogs({ limit: 5, type: 73 }).catch(() => {});
         let entry;
         if (audits && audits.entries.size > 0) {
