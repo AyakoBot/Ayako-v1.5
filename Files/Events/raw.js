@@ -5,6 +5,7 @@ module.exports = {
     const { ch } = client;
     if (event.t === 'MESSAGE_REACTION_ADD') {
       const channel = client.channels.cache.get(event.d.channel_id);
+      if (!channel) return;
       if (channel.messages.cache.has(event.d.message_id)) return;
       const res = await ch.query('SELECT * FROM reactionroles WHERE msgid = $1;', [
         event.d.message_id,
