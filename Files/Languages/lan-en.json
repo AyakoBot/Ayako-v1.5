@@ -1296,7 +1296,7 @@
       "selfban": "(You can't ban yourself)",
       "reason": "No Reason given",
       "noRaidIDs": "There are currently no Raid IDs to ban",
-      "ohno": "(Something went wrong while banning)",
+      "ohno": "(Not a valid User)",
       "descS": "Users I successfully banned will appear here",
       "descSLoading": "Successfully banned | Loading",
       "sBannedUsers": "Successfully banned {{amount}} Users",
