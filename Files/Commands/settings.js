@@ -367,7 +367,10 @@ const noEmbed = async (msg, answer, res) => {
   buttonsCollector.on('collect', (interaction) => {
     if (interaction.user.id !== msg.author.id) return msg.client.ch.notYours(interaction, msg);
     buttonsCollector.stop();
-    return mmrEditList({ msg, answer: interaction }, { res, embed });
+    if (msg.file.setupRequired === false) {
+      return mmrEditList({ msg, answer: interaction }, { res, embed });
+    }
+    return setup(msg, interaction);
   });
 
   buttonsCollector.on('end', (collected, reason) => {
