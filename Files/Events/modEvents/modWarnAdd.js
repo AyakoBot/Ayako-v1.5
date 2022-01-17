@@ -1,4 +1,3 @@
-
 const Discord = require('discord.js');
 
 module.exports = {
@@ -41,11 +40,11 @@ module.exports = {
       .setTimestamp();
     msg.client.ch.send(target, warnEmbed);
     const WarnLogEmbed = new Discord.MessageEmbed()
-      .setAuthor(
-        msg.client.ch.stp(lan.log.author, { target }),
-        msg.client.ch.displayAvatarURL(target),
-        msg.url,
-      )
+      .setAuthor({
+        name: msg.client.ch.stp(lan.log.author, { target }),
+        iconURL: msg.client.ch.displayAvatarURL(target),
+        url: msg.url,
+      })
       .setDescription(msg.client.ch.stp(lan.log.description, { target, user: executor }))
       .addField(language.reason, `${reason}`)
       .setColor(con.color)
