@@ -7,8 +7,6 @@ const v8 = require('v8');
 const fs = require('fs');
 const { dirname } = require('path');
 
-const client = require('./DiscordClient');
-const { pool } = require('./DataBase');
 const ChannelRules = require('./Other Client Files/ChannelRules');
 const Constants = require('../Constants.json');
 
@@ -54,6 +52,8 @@ module.exports = {
    * - The Options of this Message, if any.
    */
   async send(channel, content, options) {
+    const client = require('./DiscordClient');
+
     if (Array.isArray(channel))
       return channel.forEach((c) =>
         typeof c.send === 'function' ? this.send(c, content, options) : null,
@@ -186,6 +186,8 @@ module.exports = {
    * @param {boolean} debug - Wether the Query should be logged in the Console when arriving here.
    */
   async query(query, arr, debug) {
+    const { pool } = require('./DataBase');
+
     if (debug === true) console.log(query, arr);
     const res = await pool.query(query, arr).catch((err) => {
       console.log(query, arr);
@@ -201,6 +203,8 @@ module.exports = {
    * @param {string|object} log - The Log that will be logged to the Console and Error Channel.
    */
   async logger(type, log) {
+    const client = require('./DiscordClient');
+
     if (client && client.user) {
       const channel = await client.channels
         .fetch(Constants.standard.errorLogChannel)
@@ -754,11 +758,11 @@ module.exports = {
       .setCustomId('modProceedAction')
       .setLabel(msg.language.mod.warning.proceed)
       .setStyle('SUCCESS')
-      .setEmoji(client.constants.emotes.tickBGID);
+      .setEmoji(Constants.emotes.tickBGID);
     const DANGER = new Discord.MessageButton()
       .setCustomId('modAbortAction')
       .setLabel(msg.language.mod.warning.abort)
-      .setEmoji(client.constants.emotes.crossBGID)
+      .setEmoji(Constants.emotes.crossBGID)
       .setStyle('DANGER');
     const m = await this.reply(msg, {
       content: msg.language.mod.warning.text,
@@ -795,10 +799,10 @@ module.exports = {
     const embed = new Discord.MessageEmbed()
       .setAuthor({
         name: msg.language.error,
-        iconURL: client.constants.standard.image,
-        url: client.constants.standard.invite,
+        iconURL: Constants.standard.image,
+        url: Constants.standard.invite,
       })
-      .setColor(client.constants.error)
+      .setColor(Constants.error)
       .setDescription(msg.language.notYours);
     interaction.reply({ embeds: [embed], ephemeral: true }).catch(() => {});
   },
@@ -810,7 +814,7 @@ module.exports = {
   collectorEnd(msg) {
     const embed = new Discord.MessageEmbed()
       .setDescription(msg.language.timeError)
-      .setColor(msg.client.constants.error);
+      .setColor(Constants.error);
     msg.m.edit({ embeds: [embed], components: [] }).catch(() => {});
   },
   /**
@@ -830,16 +834,6 @@ module.exports = {
       actionRows.push(row);
     });
     return actionRows;
-  },
-  /**
-   * Makes the embed Builder available from whever Client is available.
-   * @constructor
-   * @param {object} msg - The Message that initiated this.
-   * @param {object} answer - The Interaction to Update, if any.
-   */
-  async embedBuilder(msg, answer) {
-    const FinishedEmbed = await client.commands.get('embedbuilder').builder(msg, answer);
-    return FinishedEmbed;
   },
   /**
    * Aborts a Collector.
@@ -878,12 +872,12 @@ module.exports = {
     const embed = new Discord.MessageEmbed()
       .setAuthor({
         name: lan.author,
-        iconURL: client.constants.emotes.loadingLink,
-        url: client.constants.standard.invite,
+        iconURL: guild.client.constants.emotes.loadingLink,
+        url: guild.client.constants.standard.invite,
       })
       .setColor(this.colorSelector(guild?.me))
       .setDescription(
-        `${client.constants.emotes.loading} ${
+        `${guild.client.constants.emotes.loading} ${
           lan.loading ? lan.loading : (await this.languageSelector(guild)).loading
         }`,
       );

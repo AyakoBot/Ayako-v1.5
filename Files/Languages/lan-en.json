@@ -606,38 +606,15 @@
     "WELCOME_SCREEN_ENBALED": "```Welcome Screen enabled```\n`(Server has welcome Screen enabled)`"
   },
   "antivirus": {
-    "dm": {
-      "notWhitelisted": "{{warning}} This Link is not Whitelisted\n",
-      "blacklisted": "{{cross}} This Link is Blacklisted\nTherefore Malicious",
-      "notBlacklisted": "{{warning}} This Link is not Blacklisted\n",
-      "VTanalyze": "{{warning}} Analyzing Link\n",
-      "VTfail": "{{cross}} Failed to analyze Link",
-      "VTharmless": "{{tick}} Found Link to be Harmless",
-      "VTmalicious": "{{cross}} Found Link to be Malicious",
-      "newLink": "{{cross}} Link is most likely Malicious",
-      "whitelisted": "{{tick}} This Link is not Malicious",
-      "checking": "Link:",
-      "notexistent": "The Domain `{{url}}` does not exist (anymore)",
-      "done": "Checking... Done {{tick}}",
-      "check": "Checking... {{loading}}",
-      "ccscam": "{{cross}} Found Link to be Malicious\nThis Link will try to gain access to your Credit Card Information",
-      "cfProtected": "The Intent of this Website couldn't be determined\nas it is CloudFlare protected\n**Proceed with Caution**"
-    },
-    "guild": {
-      "notWhitelisted": "{{warning}} Message contains a not Whitelisted Link\n",
-      "blacklisted": "{{cross}} The not Whitelisted Link is Blacklisted\nTherefore Malicious",
-      "notBlacklisted": "{{warning}} The not Whitelisted Link is also not Blacklisted\n",
-      "VTanalyze": "{{warning}} Analyzing Link\n",
-      "VTfail": "{{cross}} Failed to analyze Link",
-      "VTharmless": "{{tick}} Found Link to be Harmless\nLink is now Whitelisted",
-      "VTmalicious": "{{cross}} Found Link to be Malicious\nSeverity Score: {{severity}}",
-      "newLink": "{{cross}} Link is most likely malicious",
-      "notexistent": "The Domain `{{url}}` does not exist (anymore)",
-      "done": "Checking... Done {{tick}}",
-      "check": "Checking... {{loading}}",
-      "ccscam": "{{cross}} Found Link to be Malicious\nThis Link will try to gain access to your Credit Card Information",
-      "cfProtected": "The Intent of this Website couldn't be determined\nas it is CloudFlare protected\n**Proceed with Caution**"
-    }
+    "whitelisted": "{{tick}} This Link is __not__ Malicious",
+    "checking": "Link:",
+    "VTfail": "{{cross}} Failed to analyze Link",
+    "malicious": "{{cross}} This Link __is__ Malicious",
+    "newLink": "{{cross}} Link is __most likely__ Malicious",
+    "notexistent": "The Domain `{{url}}` does not exist (anymore)",
+    "ccscam": "{{cross}} This Link __is__ Malicious\nIt try to gain access to your Credit Card Information",
+    "cfProtected": "The Intent of this Website couldn't be determined\nas it is CloudFlare protected\n**Proceed with Caution**",
+    "timedOut": "The Operation timed out, after 120 Seconds without response.\nThe Intent of this Website couldn't be determined\n**Proceed with Caution**"
   },
   "verification": {
     "author": {
