@@ -1,4 +1,3 @@
-
 const Discord = require('discord.js');
 
 module.exports = {
@@ -85,11 +84,11 @@ module.exports = {
       .setDescription(`**${language.reason}:** \n${reason}`)
       .setColor(con.color)
       .setTimestamp()
-      .setAuthor(
-        msg.client.ch.stp(lan.dm.author, { guild: msg.guild }),
-        lan.author.image,
-        msg.client.ch.stp(con.author.link, { guild: msg.guild }),
-      );
+      .setAuthor({
+        name: msg.client.ch.stp(lan.dm.author, { guild: msg.guild }),
+        iconURL: lan.author.image,
+        url: msg.client.ch.stp(con.author.link, { guild: msg.guild }),
+      });
     const m = await msg.client.ch.send(dmChannel, DMembed);
     let err;
     const ban = await msg.guild.members.ban(target, { reason, days: 1 }).catch((e) => {
@@ -98,15 +97,15 @@ module.exports = {
     if (ban) {
       const embed = new Discord.MessageEmbed()
         .setColor(con.color)
-        .setAuthor(
-          msg.client.ch.stp(lan.author, { user: target }),
-          msg.client.ch.displayAvatarURL(target),
-          msg.client.constants.standard.invite,
-        )
+        .setAuthor({
+          name: msg.client.ch.stp(lan.author, { user: target }),
+          iconURL: msg.client.ch.displayAvatarURL(target),
+          url: msg.client.constants.standard.invite,
+        })
         .setDescription(msg.client.ch.stp(lan.description, { user: executor, target }))
         .setTimestamp()
         .addField(language.reason, `${reason}`)
-        .setFooter(msg.client.ch.stp(lan.footer, { user: executor, target }));
+        .setFooter({ text: msg.client.ch.stp(lan.footer, { user: executor, target }) });
       if (msg.logchannels && msg.logchannels.length) msg.client.ch.send(msg.logchannels, embed);
     } else {
       m?.delete().catch(() => {});
