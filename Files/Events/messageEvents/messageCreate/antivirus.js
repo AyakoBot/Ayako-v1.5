@@ -942,10 +942,10 @@ const sinkingYatchtsCheck = async (linkObject) => {
 const checkCloudFlare = async (linkObject) => {
   const res = await SA.get(linkObject.href).catch((e) => e);
 
-  if (res) {
+  if (res && res.response) {
     return (
-      /https:\/\/www\.cloudflare\.com\/5xx-error-landing/gi.test(res.response.text) &&
-      /We\sare\schecking\syour\sbrowser/gi.test(res.response.text)
+      /https:\/\/www\.cloudflare\.com\/5xx-error-landing/gi.test(res.response?.text) &&
+      /We\sare\schecking\syour\sbrowser/gi.test(res.response?.text)
     );
   }
   return 'unkown';
