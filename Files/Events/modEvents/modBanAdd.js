@@ -79,7 +79,7 @@ module.exports = {
         return false;
       }
     }
-    const dmChannel = await target.createDM().catch(() => {});
+    const dmChannel = await target?.createDM().catch(() => {});
     const DMembed = new Discord.MessageEmbed()
       .setDescription(`**${language.reason}:** \n${reason}`)
       .setColor(con.color)

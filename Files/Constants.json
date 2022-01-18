@@ -1086,11 +1086,11 @@
           }
         },
         "antiraid": {
-          "bantof": {
+          "punishmenttof": {
             "key": "boolean",
-            "required": false
+            "required": true
           },
-          "kicktof": {
+          "punishment": {
             "key": "boolean",
             "required": true
           },
@@ -1379,8 +1379,8 @@
           "vals": [[true, true, 3, 5, 6, true, true, false, true, "{{msg.guild.id}}"]]
         },
         "antiraid": {
-          "cols": ["guildid, active, kicktof, time, jointhreshold, similaridthreshold"],
-          "vals": [["{{msg.guild.id}}", false, true, 15000, 15, 5]]
+          "cols": ["guildid, active, punishment, punishmenttof, time, jointhreshold, similaridthreshold"],
+          "vals": [["{{msg.guild.id}}", false, true, false, 15000, 15, 5]]
         },
         "blacklist": {
           "cols": [

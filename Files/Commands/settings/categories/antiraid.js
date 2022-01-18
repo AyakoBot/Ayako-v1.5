@@ -5,7 +5,7 @@ require('moment-duration-format');
 module.exports = {
   perm: 32n,
   type: 0,
-  finished: false,
+  finished: true,
   category: ['auto-moderation'],
   displayEmbed(msg, r) {
     const embed = new Discord.MessageEmbed()
@@ -19,21 +19,15 @@ module.exports = {
         false,
       )
       .addField(
-        msg.lan.bantof,
-        `${
-          r.bantof
-            ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-            : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
-        }`,
+        msg.lan.punishmenttof,
+        r.punishmenttof
+          ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
+          : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
         true,
       )
       .addField(
-        msg.lan.kicktof,
-        `${
-          r.kicktof
-            ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-            : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
-        }`,
+        msg.lan.punishment,
+        `${r.punishment ? `${msg.language.Ban}` : `${msg.language.Kick}`}`,
         true,
       )
       .addField('\u200b', `${msg.lan.debugSettings}`, false)
@@ -92,14 +86,14 @@ module.exports = {
       .setCustomId(msg.lan.edit.active.name)
       .setLabel(msg.lanSettings.active)
       .setStyle(r.active ? 'SUCCESS' : 'DANGER');
-    const ban = new Discord.MessageButton()
-      .setCustomId(msg.lan.edit.bantof.name)
-      .setLabel(msg.lan.bantof)
-      .setStyle(r.bantof ? 'SUCCESS' : 'DANGER');
-    const kick = new Discord.MessageButton()
-      .setCustomId(msg.lan.edit.kicktof.name)
-      .setLabel(msg.lan.kicktof)
-      .setStyle(r.kicktof ? 'SUCCESS' : 'DANGER');
+    const punishmenttof = new Discord.MessageButton()
+      .setCustomId(msg.lan.edit.punishmenttof.name)
+      .setLabel(msg.lan.punishmenttof)
+      .setStyle(r.punishmenttof ? 'SUCCESS' : 'DANGER');
+    const punishment = new Discord.MessageButton()
+      .setCustomId(msg.lan.edit.punishment.name)
+      .setLabel(msg.lan.punishment)
+      .setStyle(r.punishment ? 'SECONDARY' : 'PRIMARY');
     const post = new Discord.MessageButton()
       .setCustomId(msg.lan.edit.posttof.name)
       .setLabel(msg.lan.posttof)
@@ -130,7 +124,7 @@ module.exports = {
       .setStyle('PRIMARY');
     return [
       [active],
-      [ban, kick],
+      [punishmenttof, punishment],
       [post, postchannel, pingusers, pingroles],
       [time, jointhreshold, similaridthreshold],
     ];

@@ -651,7 +651,7 @@ module.exports = {
    * @param {array} array - The Array of Strings to convert.
    * @param {source} string - The Source of this function call for sorting in correct Folders.
    */
-  async txtFileWriter(msg, array, source) {
+  txtFileWriter(msg, array, source) {
     if (!array.length) return null;
 
     const checkPath = (path) => {
@@ -667,6 +667,7 @@ module.exports = {
 
     const now = Date.now();
     let content = '';
+    let split = '\n';
     let path;
 
     switch (source) {
@@ -675,11 +676,20 @@ module.exports = {
         break;
       }
       case 'massban': {
-        path = `${appDir}\\Files\\Downloads\\Massbans\\Guild - ${msg.guild.id}\\${now}.txt`;
+        path = `${appDir}\\Files\\Downloads\\Guilds\\Guild - ${msg.guild.id}\\Massbans\\${now}.txt`;
         break;
       }
       case 'messageDeleteBulk': {
-        path = `${appDir}\\Files\\Downloads\\Messages\\Bulk Deletes\\Guild - ${msg.guild.id}\\Channel - ${msg.channel.id}\\${now}.txt`;
+        path = `${appDir}\\Files\\Downloads\\Guilds\\Guild - ${msg.guild.id}\\Messages\\Bulk Deletes\\Channel - ${msg.channel.id}\\${now}.txt`;
+        break;
+      }
+      case 'antiraid': {
+        path = `${appDir}\\Files\\Downloads\\Guilds\\Guild - ${msg.id}\\Raids\\${now}.txt`;
+        split = ' ';
+        break;
+      }
+      case 'antiraidPunishment': {
+        path = `${appDir}\\Files\\Downloads\\Guilds\\Guild - ${msg.id}\\Raids\\${now}.txt`;
         break;
       }
     }
@@ -687,7 +697,7 @@ module.exports = {
     checkPath(path);
 
     array.forEach((element) => {
-      content += `${element}\n`;
+      content += `${element}${split}`;
     });
 
     fs.writeFile(path, content, (err) => {

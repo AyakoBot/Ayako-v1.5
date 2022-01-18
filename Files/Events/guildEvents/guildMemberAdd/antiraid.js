@@ -1,19 +1,27 @@
+const Discord = require('discord.js');
+
+const antiraidCache = new Discord.Collection();
+
 module.exports = {
   async execute(member) {
     if (!member || !member.guild) return;
+
     const res = await member.client.ch.query(
       'SELECT * FROM antiraidsettings WHERE guildid = $1 AND active = true;',
       [member.guild.id],
     );
     if (!res || res.rowCount === 0) return;
+
     this.addMember(member, res.rows[0]);
     const caches = this.check(member, res.rows[0]);
+
     if (caches) member.client.emit('antiraidHandler', caches, member.guild, res.rows[0], member);
   },
   addMember(member, r) {
-    if (!member.client.antiraidCache.get(member.guild.id))
-      member.client.antiraidCache.set(member.guild.id, []);
-    const guildJoins = member.client.antiraidCache.get(member.guild.id);
+    if (!antiraidCache.get(member.guild.id)) {
+      antiraidCache.set(member.guild.id, []);
+    }
+    const guildJoins = antiraidCache.get(member.guild.id);
 
     const memberObject = {
       id: member.user.id,
@@ -24,7 +32,7 @@ module.exports = {
       timeout: setTimeout(
         () =>
           guildJoins.length
-            ? member.client.antiraidCache.delete(member.guild.id)
+            ? antiraidCache.delete(member.guild.id)
             : guildJoins.splice(
                 guildJoins.findIndex((m) => m.id === member.user.id),
                 1,
@@ -41,7 +49,7 @@ module.exports = {
       existingMember.timeout = setTimeout(
         () =>
           guildJoins.length > 1
-            ? member.client.antiraidCache.delete(member.guild.id)
+            ? antiraidCache.delete(member.guild.id)
             : guildJoins.splice(
                 guildJoins.findIndex((m) => m.id === member.user.id),
                 1,
@@ -54,7 +62,7 @@ module.exports = {
   },
   check(member, r) {
     let caches = null;
-    const guildJoins = member.client.antiraidCache.get(member.guild.id);
+    const guildJoins = antiraidCache.get(member.guild.id);
     if (guildJoins) {
       if (guildJoins.length >= r.jointhreshold) caches = guildJoins;
       else {
