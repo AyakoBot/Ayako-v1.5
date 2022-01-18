@@ -88,7 +88,7 @@ module.exports = {
         `${msg.client.constants.emotes.tick} ${msg.client.ch.stp(lan.success, { target })}`,
       );
     await msg.m?.edit({ embeds: [em] });
-    if (msg.source) msg.client.emit('modSourceHandler', msg);
+    if (msg.source) msg.client.emit('modSourceHandler', msg, em);
     return true;
   },
 };
