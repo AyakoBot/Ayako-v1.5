@@ -155,7 +155,6 @@ const getClient = () => {
 
   client.mutes = new Discord.Collection();
   client.bans = new Discord.Collection();
-  client.antiraidCache = new Discord.Collection();
 
   client.invites = new Map();
   client.channelWebhooks = new Map();

@@ -80,11 +80,7 @@ const prepare = async (msg, lan, check, language) => {
     });
 
     AVworker.on('message', (data) => {
-      const message = msg.client.channels.cache
-        .get(data.msgData.channelid)
-        .messages.cache.get(data.msgData.msgid);
-
-      data.msg = message;
+      data.msg = msg;
       data.language = language;
 
       if (!data.check && data.type !== 'send') {
@@ -281,7 +277,7 @@ const blacklisted = async ({ msg, lan, linkObject, note, check, language }) => {
 
     if (check) embed.addField(lan.checking, linkObject.href);
 
-    msg.m = await client.ch.reply(msg, { embeds: [embed] }).catch(() => {});
+    await client.ch.reply(msg, { embeds: [embed] }).catch(() => {});
   } else {
     const embed = new Discord.MessageEmbed()
       .setDescription(
@@ -293,7 +289,7 @@ const blacklisted = async ({ msg, lan, linkObject, note, check, language }) => {
 
     if (check) embed.addField(lan.checking, linkObject.href);
 
-    msg.m = await client.ch.reply(msg, { embeds: [embed] }).catch(() => {});
+    await client.ch.reply(msg, { embeds: [embed] }).catch(() => {});
 
     client.ch.send(client.channels.cache.get(client.constants.standard.trashLogChannel), {
       content: msg.url,
@@ -318,7 +314,7 @@ const severeLink = async ({ msg, lan, linkObject, check, language }) => {
 
   if (check) embed.addField(lan.checking, linkObject.href);
 
-  msg.m = await client.ch.reply(msg, { embeds: [embed] }).catch(() => {});
+  await client.ch.reply(msg, { embeds: [embed] }).catch(() => {});
 
   client.ch.send(client.channels.cache.get(client.constants.standard.trashLogChannel), {
     content: msg.url,
@@ -340,7 +336,7 @@ const ccscam = async ({ msg, lan, linkObject, check, language }) => {
 
   if (check) embed.addField(lan.checking, linkObject.href);
 
-  msg.m = await client.ch.reply(msg, { embeds: [embed] }).catch(() => {});
+  await client.ch.reply(msg, { embeds: [embed] }).catch(() => {});
   client.ch.send(client.channels.cache.get(client.constants.standard.trashLogChannel), {
     content: msg.url,
   });
@@ -362,7 +358,7 @@ const newUrl = async ({ msg, lan, linkObject, check, language }) => {
 
   if (check) embed.addField(lan.checking, linkObject.href);
 
-  msg.m = await client.ch.reply(msg, { embeds: [embed] }).catch(() => {});
+  await client.ch.reply(msg, { embeds: [embed] }).catch(() => {});
 
   client.ch.send(client.channels.cache.get(client.constants.standard.trashLogChannel), {
     content: msg.url,

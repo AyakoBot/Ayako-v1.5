@@ -995,6 +995,14 @@
       "loading": "Warning User..."
     }
   },
+  "antiraid": {
+    "banAdd": {
+      "author": "{{amount}} Users were Banned by Ayako Anti-Raid"
+    },
+    "kickAdd": {
+      "author": "{{amount}} Users were Kicked by Ayako Anti-Raid"
+    }
+  },
   "commands": {
     "selfroles": {
       "description": "Get Self-Assingable Roles",
@@ -1046,8 +1054,9 @@
     "antiraidHandler": {
       "debugMessage": {
         "author": "Join Threshold Breached!",
-        "description": "The join of {{user}} breached the Join Threshold\nEvery join within the 15 Seconds prior:",
-        "question": "**Is this a Raid ?**"
+        "description": "The join Threshold was breached",
+        "below": "Every join within the last 20 Seconds:",
+        "file": "Every join within the last 20 Seconds can be found in the File attached"
       }
     },
     "afkHandler": {
@@ -1635,8 +1644,8 @@
       },
       "antiraid": {
         "type": "Anti-Raid",
-        "bantof": "Ban Members",
-        "kicktof": "Kick Members",
+        "punishment": "Punishment Type",
+        "punishmenttof": "Punishment",
         "posttof": "Post Threshold Breach (TB)",
         "postchannel": "TB post Channel",
         "pingroles": "TB Roles to Ping",
@@ -1652,13 +1661,13 @@
             "answers": "`True` or `False`",
             "recommended": "Recommended: `True`"
           },
-          "bantof": {
-            "name": "Ban Members",
+          "punishmenttof": {
+            "name": "Punishment",
             "answers": "`True` or `False`",
-            "recommended": "Recommended: `True`"
+            "recommended": "Recommended: `False`"
           },
-          "kicktof": {
-            "name": "Kick Members",
+          "punishment": {
+            "name": "Punishment Type",
             "answers": "`True` or `False`",
             "recommended": "Recommended: `False`"
           },
@@ -2995,5 +3004,7 @@
   "verificationLevelName": "Verification Level",
   "explicitContentFilterName": "Explicit Content Filter",
   "mfaLevelName": "2 Factor Authentification",
-  "amountDefinition": "Amount Definition"
+  "amountDefinition": "Amount Definition",
+  "Kick": "Kick",
+  "Ban": "Ban"
 }
