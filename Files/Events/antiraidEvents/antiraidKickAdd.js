@@ -2,18 +2,18 @@ const Discord = require('discord.js');
 
 module.exports = {
   async execute(executor, targets, reason, guild) {
-    const kicks = targets.map((target) =>
+    const kickPromises = targets.map((target) =>
       guild.members.kick(target, `${executor.username} | ${reason}`).catch((e) => {
         return `${target} | ${e}`;
       }),
     );
 
-    await Promise.all(kicks);
+    const kicks = await Promise.all(kickPromises);
 
     const path = guild.client.ch.txtFileWriter(
       guild,
       kicks.map((kicked) =>
-        typeof kicked === 'object' || typeof Number(kicked) === 'number'
+        typeof kicked === 'object' || !Number.isNaN(+kicked) === 'number'
           ? `User ID ${kicked.user?.id ?? kicked.id ?? kicked} | User Tag: ${
               kicked.user?.tag ?? kicked.tag ?? 'Unkown'
             }`
@@ -35,8 +35,9 @@ module.exports = {
         .setColor(con.color)
         .setAuthor({
           name: guild.client.ch.stp(lan.author, {
-            amount: kicks.filter((k) => typeof k === 'object' || typeof Number(k) === 'number')
-              .length,
+            amount:
+              kicks.filter((k) => typeof k === 'object' || !Number.isNaN(+k) === 'number').length ||
+              0,
           }),
           iconURL: con.author.image,
           url: guild.client.constants.standard.invite,
