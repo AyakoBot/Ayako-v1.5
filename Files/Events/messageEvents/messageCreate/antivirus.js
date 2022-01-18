@@ -20,11 +20,11 @@ module.exports = {
       check = true;
     }
 
-    msg.language = await msg.client.ch.languageSelector(check ? null : msg.guild);
-    const lan = msg.language.antivirus;
+    const language = await msg.client.ch.languageSelector(check ? null : msg.guild);
+    const lan = language.antivirus;
 
     if (check) {
-      await prepare(msg, lan, check);
+      await prepare(msg, lan, check, language);
       return;
     }
 
@@ -34,12 +34,12 @@ module.exports = {
     );
 
     if (res && res.rowCount > 0) {
-      await prepare(msg, lan, check);
+      await prepare(msg, lan, check, language);
     }
   },
 };
 
-const prepare = async (msg, lan, check) => {
+const prepare = async (msg, lan, check, language) => {
   const { content } = msg;
   const args = content
     .replace(/\n/g, ' ')
@@ -85,6 +85,7 @@ const prepare = async (msg, lan, check) => {
         .messages.cache.get(data.msgData.msgid);
 
       data.msg = message;
+      data.language = language;
 
       if (!data.check && data.type !== 'send') {
         includedBadLink = true;
@@ -253,10 +254,10 @@ const makeFullLinks = async (links) => {
   });
 };
 
-const doesntExist = async ({ msg, lan, linkObject, check }) => {
+const doesntExist = async ({ msg, lan, linkObject, check, language }) => {
   const embed = new Discord.MessageEmbed()
     .setDescription(
-      `**${msg.language.result}**\n${client.ch.stp(lan.notexistent, {
+      `**${language.result}**\n${client.ch.stp(lan.notexistent, {
         url: linkObject.baseURLhostname,
       })}`,
     )
@@ -267,15 +268,15 @@ const doesntExist = async ({ msg, lan, linkObject, check }) => {
   client.ch.reply(msg, { embeds: [embed] }).catch(() => {});
 };
 
-const blacklisted = async ({ msg, lan, linkObject, note, check }) => {
+const blacklisted = async ({ msg, lan, linkObject, note, check, language }) => {
   if (note && note !== false) {
     const embed = new Discord.MessageEmbed()
       .setDescription(
-        `**${msg.language.result}**\n${client.ch.stp(lan.malicious, {
+        `**${language.result}**\n${client.ch.stp(lan.malicious, {
           cross: client.constants.emotes.cross,
         })}`,
       )
-      .addField(msg.language.attention, note.split(/\|+/)[1])
+      .addField(language.attention, note.split(/\|+/)[1])
       .setColor('#ff0000');
 
     if (check) embed.addField(lan.checking, linkObject.href);
@@ -284,7 +285,7 @@ const blacklisted = async ({ msg, lan, linkObject, note, check }) => {
   } else {
     const embed = new Discord.MessageEmbed()
       .setDescription(
-        `**${msg.language.result}**\n${client.ch.stp(lan.malicious, {
+        `**${language.result}**\n${client.ch.stp(lan.malicious, {
           cross: client.constants.emotes.cross,
         })}`,
       )
@@ -304,12 +305,12 @@ const blacklisted = async ({ msg, lan, linkObject, note, check }) => {
   }
 };
 
-const severeLink = async ({ msg, lan, linkObject, check }) => {
+const severeLink = async ({ msg, lan, linkObject, check, language }) => {
   saveToBadLink(linkObject, msg);
 
   const embed = new Discord.MessageEmbed()
     .setDescription(
-      `**${msg.language.result}**\n${client.ch.stp(lan.malicious, {
+      `**${language.result}**\n${client.ch.stp(lan.malicious, {
         cross: client.constants.emotes.cross,
       })}`,
     )
@@ -327,11 +328,11 @@ const severeLink = async ({ msg, lan, linkObject, check }) => {
   }
 };
 
-const ccscam = async ({ msg, lan, linkObject, check }) => {
+const ccscam = async ({ msg, lan, linkObject, check, language }) => {
   saveToBadLink(linkObject, msg);
   const embed = new Discord.MessageEmbed()
     .setDescription(
-      `**${msg.language.result}**\n${client.ch.stp(lan.ccscam, {
+      `**${language.result}**\n${client.ch.stp(lan.ccscam, {
         cross: client.constants.emotes.cross,
       })}`,
     )
@@ -348,12 +349,12 @@ const ccscam = async ({ msg, lan, linkObject, check }) => {
   }
 };
 
-const newUrl = async ({ msg, lan, linkObject, check }) => {
+const newUrl = async ({ msg, lan, linkObject, check, language }) => {
   saveToBadLink(linkObject, msg);
 
   const embed = new Discord.MessageEmbed()
     .setDescription(
-      `**${msg.language.result}**\n${client.ch.stp(lan.newLink, {
+      `**${language.result}**\n${client.ch.stp(lan.newLink, {
         cross: client.constants.emotes.cross,
       })}`,
     )
@@ -393,10 +394,10 @@ const saveToBadLink = async (linkObject) => {
   }
 };
 
-const whitelisted = async ({ msg, lan, check, linkObject }) => {
+const whitelisted = async ({ msg, lan, check, linkObject, language }) => {
   const embed = new Discord.MessageEmbed()
     .setDescription(
-      `**${msg.language.result}**\n${client.ch.stp(lan.whitelisted, {
+      `**${language.result}**\n${client.ch.stp(lan.whitelisted, {
         tick: client.constants.emotes.tick,
       })}`,
     )
@@ -409,10 +410,10 @@ const whitelisted = async ({ msg, lan, check, linkObject }) => {
   return true;
 };
 
-const cloudFlare = async ({ msg, lan, linkObject, check }) => {
+const cloudFlare = async ({ msg, lan, linkObject, check, language }) => {
   const embed = new Discord.MessageEmbed()
     .setDescription(
-      `**${msg.language.result}**\n${client.ch.stp(lan.cfProtected, {
+      `**${language.result}**\n${client.ch.stp(lan.cfProtected, {
         tick: client.constants.emotes.cross,
       })}`,
     )
@@ -428,10 +429,10 @@ const cloudFlare = async ({ msg, lan, linkObject, check }) => {
   return true;
 };
 
-const VTfail = ({ msg, lan, check, linkObject }) => {
+const VTfail = ({ msg, lan, check, linkObject, language }) => {
   const embed = new Discord.MessageEmbed()
     .setDescription(
-      `**${msg.language.result}**\n${client.ch.stp(lan.VTfail, {
+      `**${language.result}**\n${client.ch.stp(lan.VTfail, {
         cross: msg.client.constants.emotes.cross,
       })}`,
     )
@@ -442,10 +443,10 @@ const VTfail = ({ msg, lan, check, linkObject }) => {
   msg.client.ch.reply(msg, { embeds: [embed] });
 };
 
-const timedOut = ({ msg, lan, check, linkObject }) => {
+const timedOut = ({ msg, lan, check, linkObject, language }) => {
   const embed = new Discord.MessageEmbed()
     .setDescription(
-      `**${msg.language.result}**\n${client.ch.stp(lan.timedOut, {
+      `**${language.result}**\n${client.ch.stp(lan.timedOut, {
         cross: msg.client.constants.emotes.cross,
       })}`,
     )
