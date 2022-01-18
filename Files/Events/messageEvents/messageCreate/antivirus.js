@@ -277,7 +277,7 @@ const blacklisted = async ({ msg, lan, linkObject, note, check, language }) => {
 
     if (check) embed.addField(lan.checking, linkObject.href);
 
-    await client.ch.reply(msg, { embeds: [embed] }).catch(() => {});
+    msg.m = await client.ch.reply(msg, { embeds: [embed] }).catch(() => {});
   } else {
     const embed = new Discord.MessageEmbed()
       .setDescription(
@@ -289,7 +289,7 @@ const blacklisted = async ({ msg, lan, linkObject, note, check, language }) => {
 
     if (check) embed.addField(lan.checking, linkObject.href);
 
-    await client.ch.reply(msg, { embeds: [embed] }).catch(() => {});
+    msg.m = await client.ch.reply(msg, { embeds: [embed] }).catch(() => {});
 
     client.ch.send(client.channels.cache.get(client.constants.standard.trashLogChannel), {
       content: msg.url,
@@ -314,7 +314,7 @@ const severeLink = async ({ msg, lan, linkObject, check, language }) => {
 
   if (check) embed.addField(lan.checking, linkObject.href);
 
-  await client.ch.reply(msg, { embeds: [embed] }).catch(() => {});
+  msg.m = await client.ch.reply(msg, { embeds: [embed] }).catch(() => {});
 
   client.ch.send(client.channels.cache.get(client.constants.standard.trashLogChannel), {
     content: msg.url,
@@ -336,7 +336,7 @@ const ccscam = async ({ msg, lan, linkObject, check, language }) => {
 
   if (check) embed.addField(lan.checking, linkObject.href);
 
-  await client.ch.reply(msg, { embeds: [embed] }).catch(() => {});
+  msg.m = await client.ch.reply(msg, { embeds: [embed] }).catch(() => {});
   client.ch.send(client.channels.cache.get(client.constants.standard.trashLogChannel), {
     content: msg.url,
   });
@@ -358,7 +358,7 @@ const newUrl = async ({ msg, lan, linkObject, check, language }) => {
 
   if (check) embed.addField(lan.checking, linkObject.href);
 
-  await client.ch.reply(msg, { embeds: [embed] }).catch(() => {});
+  msg.m = await client.ch.reply(msg, { embeds: [embed] }).catch(() => {});
 
   client.ch.send(client.channels.cache.get(client.constants.standard.trashLogChannel), {
     content: msg.url,
@@ -372,7 +372,7 @@ const newUrl = async ({ msg, lan, linkObject, check, language }) => {
 };
 
 const saveToBadLink = async (linkObject) => {
-  const file = fs.readFileSync('S:/Bots/ws/CDN/antivirus/blacklisted.txt', {
+  const file = fs.readFileSync('S:/Bots/ws/CDN/antivirus/badLinks.txt', {
     encoding: 'utf8',
   });
   const res = file ? file.split(/\n+/).map((entry) => entry.replace(/\r/g, '')) : [];
