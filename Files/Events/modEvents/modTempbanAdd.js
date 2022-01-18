@@ -177,7 +177,7 @@ module.exports = {
           duration,
         ),
       );
-      if (msg.source) msg.client.emit('modSourceHandler', msg);
+      if (msg.source) msg.client.emit('modSourceHandler', msg, em);
       return true;
     }
     return false;

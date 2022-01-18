@@ -155,7 +155,7 @@ module.exports = {
         [r.dateofwarn, msg.guild.id, target.id],
       ),
     );
-    if (msg.source) msg.client.emit('modSourceHandler', msg);
+    if (msg.source) msg.client.emit('modSourceHandler', msg, em);
     return true;
   },
 };

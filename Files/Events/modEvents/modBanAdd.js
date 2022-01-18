@@ -2,7 +2,6 @@ const Discord = require('discord.js');
 
 module.exports = {
   async execute(executor, target, reason, msg) {
-    if (msg.m) msg.m = await msg.m.fetch();
     const mexisted = !!msg.m;
     const language = await msg.client.ch.languageSelector(msg.guild);
     const lan = language.mod.banAdd;
@@ -136,7 +135,7 @@ module.exports = {
         `${msg.client.constants.emotes.tick} ${msg.client.ch.stp(lan.success, { target })}`,
       );
     await msg.m?.edit({ embeds: [em] });
-    if (msg.source) msg.client.emit('modSourceHandler', msg);
+    if (msg.source) msg.client.emit('modSourceHandler', msg, em);
     return true;
   },
 };
