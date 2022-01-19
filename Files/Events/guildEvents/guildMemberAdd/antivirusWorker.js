@@ -64,7 +64,7 @@ const run = async ({
   if (
     (whitelist.includes(linkObject.baseURLhostname) &&
       linkObject.hostname.endsWith(linkObject.baseURLhostname)) ||
-    (whitelist.includes(linkObject.hostname) && !isFile) ||
+    (whitelist.includes(linkObject.baseURLhostname) && !isFile) ||
     (isFile && whitelistCDN.includes(linkObject.baseURLhostname))
   ) {
     parentPort.postMessage({ msgData, lan, linkObject, check, type: 'whitelisted' });
@@ -84,9 +84,7 @@ const run = async ({
   const spamHausIncluded = await getSpamHaus(linkObject);
   if (
     blocklist.includes(linkObject.baseURLhostname) ||
-    blocklist.includes(linkObject.hostname) ||
     blacklist.includes(linkObject.baseURLhostname) ||
-    blacklist.includes(linkObject.hostname) ||
     spamHausIncluded
   ) {
     if (!check) {
