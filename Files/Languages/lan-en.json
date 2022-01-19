@@ -1004,6 +1004,97 @@
     }
   },
   "commands": {
+    "embedBuilder": {
+      "warns": {
+        "error": "**{{name}}** is exceeding {{limit}} Characters by {{tooMany}}"
+      },
+      "name": "Custom Embed",
+      "totalLimit": "`Author Name`, `Title`, `Description`, `Field Names`, `Field Values` and `Footer Name` together can not exceed {{maxLimit}} Characters\nCurrent: {{currentChars}}",
+      "limit": "**{{name}}** can not exceed **{{limit}} Characters**",
+      "placeholder": "This will be your Embed",
+      "fieldsPlaceholder": "Select Fields you want to edit",
+      "otherPlaceholder": "Select anything (except Fields) you want to edit",
+      "addField": "Add Field",
+      "inheritSettings": "Inherit Settings from another Embed",
+      "viewRaw": "View Raw Embed Code",
+      "inheritCode": "Inherit Raw Embed Code",
+      "removeField": "Remove Field",
+      "edit": {
+        "color": {
+          "name": "Color",
+          "answers": "HEX Color Code",
+          "recommended": "Can be obtained [here](https://imagecolorpicker.com/ \"Click me\")"
+        },
+        "title": {
+          "name": "Title",
+          "answers": "Any Text",
+          "recommended": "Does __not__ accept Mentions"
+        },
+        "url": {
+          "name": "URL",
+          "answers": "Any URL",
+          "recommended": "Will make the Title appear Blue and click-able"
+        },
+        "author-name": {
+          "name": "Author Name",
+          "answers": "Any Text",
+          "recommended": "Does __not__ accept Mentions"
+        },
+        "author-iconURL": {
+          "name": "Author Icon URL",
+          "answers": "Any Image/Gif URL",
+          "recommended": "Will add a little Icon to the Author"
+        },
+        "author-url": {
+          "name": "Author URL",
+          "answers": "Any Url",
+          "recommended": "Will __not__ change the Author Name's appearance, makes the Author Name click-able"
+        },
+        "description": {
+          "name": "Description",
+          "answers": "Any Text"
+        },
+        "field-names": {
+          "name": "Field Name",
+          "answers": "Any Text",
+          "recommended": "Does __not__ accept Mentions"
+        },
+        "field-values": {
+          "name": "Field Value",
+          "answers": "Any Text"
+        },
+        "field-inlines": {
+          "name": "Field Inline?",
+          "answers": "`True` or `False`",
+          "recommended": "Whether the Field should be in-line with other Fields (this will group them in blocks of 3)"
+        },
+        "image": {
+          "name": "Image",
+          "answers": "Any Image/Gif URL",
+          "recommended": "Will add an Image to the Bottom of the Embed (above Footer and Timestamp)"
+        },
+        "timestamp": {
+          "name": "Timestamp",
+          "answers": "Any UNIX Timestamp",
+          "recommended": "Can be obtained [here](https://hammertime.djdavid98.art/ \"Click me\")"
+        },
+        "footer-name": {
+          "name": "Footer Name",
+          "answers": "Any Text"
+        },
+        "footer-iconURL": {
+          "name": "Footer Icon URL",
+          "answers": "Any Image/Gif URL",
+          "recommended": "Will add a little Icon to the Footer"
+        },
+        "name": {
+          "name": "Name",
+          "answers": "Any Text",
+          "recommended": "Custom Name for this Embed"
+        }
+      }
+    },
+
     "selfroles": {
       "description": "Get Self-Assingable Roles",
       "usage": ["im", "iam", "iamn", "iamnot", "lsar", "imn"],
@@ -1775,108 +1866,6 @@
             "name": "Remove a Punishment Measure",
             "process": {
               "0": "Respond with the ID of the Punishment you want to delete"
-            }
-          }
-        }
-      },
-      "embeds": {
-        "type": "Custom Embed",
-        "totalLimit": "`Author Name`, `Title`, `Description`, `Field Names`, `Field Values` and `Footer Name` together can not exceed {{maxLimit}} Characters\nCurrent: {{currentChars}}",
-        "limit": "**{{name}}** can not exceed **{{limit}} Characters**",
-        "placeholder": "This will be your Embed",
-        "error": "**{{name}}** is exceeding {{limit}} Characters by {{tooMany}}",
-        "fieldsPlaceholder": "Select Fields you want to edit",
-        "otherPlaceholder": "Select anything (except Fields) you want to edit",
-        "addField": "Add Field",
-        "inheritSettings": "Inherit Settings from another Embed",
-        "viewRaw": "View Raw Embed Code",
-        "inheritCode": "Inherit Raw Embed Code",
-        "removeField": "Remove Field",
-        "edit": {
-          "color": {
-            "name": "Color",
-            "answers": "HEX Color Code",
-            "recommended": "Can be obtained [here](https://imagecolorpicker.com/ \"Click me\")"
-          },
-          "title": {
-            "name": "Title",
-            "answers": "Any Text",
-            "recommended": "Does __not__ accept Mentions"
-          },
-          "url": {
-            "name": "URL",
-            "answers": "Any URL",
-            "recommended": "Will make the Title appear Blue and click-able"
-          },
-          "author-name": {
-            "name": "Author Name",
-            "answers": "Any Text",
-            "recommended": "Does __not__ accept Mentions"
-          },
-          "author-iconURL": {
-            "name": "Author Icon URL",
-            "answers": "Any Image/Gif URL",
-            "recommended": "Will add a little Icon to the Author"
-          },
-          "author-url": {
-            "name": "Author URL",
-            "answers": "Any Url",
-            "recommended": "Will __not__ change the Author Name's appearance, makes the Author Name click-able"
-          },
-          "description": {
-            "name": "Description",
-            "answers": "Any Text"
-          },
-          "field-names": {
-            "name": "Field Name",
-            "answers": "Any Text",
-            "recommended": "Does __not__ accept Mentions"
-          },
-          "field-values": {
-            "name": "Field Value",
-            "answers": "Any Text"
-          },
-          "field-inlines": {
-            "name": "Field Inline?",
-            "answers": "`True` or `False`",
-            "recommended": "Whether the Field should be in-line with other Fields (this will group them in blocks of 3)"
-          },
-          "image": {
-            "name": "Image",
-            "answers": "Any Image/Gif URL",
-            "recommended": "Will add an Image to the Bottom of the Embed (above Footer and Timestamp)"
-          },
-          "timestamp": {
-            "name": "Timestamp",
-            "answers": "Any UNIX Timestamp",
-            "recommended": "Can be obtained [here](https://hammertime.djdavid98.art/ \"Click me\")"
-          },
-          "footer-name": {
-            "name": "Footer Name",
-            "answers": "Any Text"
-          },
-          "footer-iconURL": {
-            "name": "Footer Icon URL",
-            "answers": "Any Image/Gif URL",
-            "recommended": "Will add a little Icon to the Footer"
-          },
-          "name": {
-            "name": "Name",
-            "answers": "Any Text",
-            "recommended": "Custom Name for this Embed"
-          }
-        },
-        "otherEdits": {
-          "add": {
-            "name": "Add a custom Embed",
-            "process": {
-              "0": "Enter a Name"
-            }
-          },
-          "remove": {
-            "name": "Remove a custom Embed",
-            "process": {
-              "0": "Respond with the ID of the custom Embed you want to delete"
             }
           }
         }

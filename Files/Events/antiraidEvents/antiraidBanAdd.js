@@ -5,7 +5,9 @@ module.exports = {
     const banPromises = targets.map((target) =>
       guild.bans
         .create(target, { days: 7, reason: `${executor.username} | ${reason}` })
-        .catch((e) => `${target} | ${e}`),
+        .catch((e) => {
+          return `${target} | ${e}`;
+        }),
     );
 
     const bans = await Promise.all(banPromises);
@@ -35,9 +37,8 @@ module.exports = {
         .setColor(con.color)
         .setAuthor({
           name: guild.client.ch.stp(lan.author, {
-            amount:
-              bans.filter((b) => typeof b === 'object' || !Number.isNaN(+b) === 'number').length ||
-              0,
+            amount: bans.filter((b) => typeof b === 'object' || !Number.isNaN(+b) === 'number')
+              .length,
           }),
           iconURL: con.author.image,
           url: guild.client.constants.standard.invite,
