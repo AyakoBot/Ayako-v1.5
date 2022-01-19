@@ -4,9 +4,10 @@ const SA = require('superagent');
 const axios = require('axios');
 const stringSimilarity = require('string-similarity');
 const fs = require('fs');
+const confusables = require('confusables');
+
 const ch = require('../../../BaseClient/ClientHelper');
 const constants = require('../../../Constants.json');
-
 const auth = require('../../../BaseClient/auth.json');
 
 parentPort.on('message', async (data) => {
@@ -431,7 +432,7 @@ const getSeverity = (VTresponse) => {
 };
 
 const selfChecker = async (linkObject) => {
-  const siteHTML = (await axios.get(linkObject.href).catch((e) => e))?.data;
+  const siteHTML = confusables.remove((await axios.get(linkObject.href).catch((e) => e))?.data);
   if (!siteHTML) return false;
   // eslint-disable-next-line no-useless-escape
   const siteNameBad =
