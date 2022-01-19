@@ -667,7 +667,7 @@ module.exports = {
 
     const now = Date.now();
     let content = '';
-    let split = '\n';
+    const split = '\n';
     let path;
 
     switch (source) {
@@ -685,7 +685,9 @@ module.exports = {
       }
       case 'antiraid': {
         path = `${appDir}\\Files\\Downloads\\Guilds\\Guild - ${msg.id}\\Raids\\${now}.txt`;
-        split = ' ';
+        array.forEach((element, i) => {
+          content += `${element}${i % 3 === 2 ? split : ' '}`;
+        });
         break;
       }
       case 'antiraidPunishment': {
@@ -696,9 +698,11 @@ module.exports = {
 
     checkPath(path);
 
-    array.forEach((element) => {
-      content += `${element}${split}`;
-    });
+    if (!content.length) {
+      array.forEach((element) => {
+        content += `${element}${split}`;
+      });
+    }
 
     fs.writeFile(path, content, (err) => {
       if (err) throw err;

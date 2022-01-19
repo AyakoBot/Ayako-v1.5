@@ -583,91 +583,12 @@
         "color": "YELLOW"
       },
       "baseSettings": {
-        "leveling": "levelsettings",
-        "customembeds": "embeds"
+        "leveling": "levelsettings"
       },
       "edit": {
         "active": {
           "key": "boolean",
           "required": true
-        },
-        "embeds": {
-          "addField": {
-            "key": "customEmbedFieldHandler",
-            "required": true
-          },
-          "removeField": {
-            "key": "customEmbedFieldHandler",
-            "required": true
-          },
-          "fields": {
-            "key": "customEmbedFieldHandler",
-            "required": true
-          },
-          "color": {
-            "key": "string",
-            "required": false
-          },
-          "title": {
-            "key": "string",
-            "required": false
-          },
-          "url": {
-            "key": "url",
-            "required": false
-          },
-          "author-name": {
-            "key": "string",
-            "required": false
-          },
-          "author-iconURL": {
-            "key": "url",
-            "required": false
-          },
-          "author-url": {
-            "key": "url",
-            "required": false
-          },
-          "description": {
-            "key": "string",
-            "required": false
-          },
-          "thumbnail": {
-            "key": "url",
-            "required": false
-          },
-          "field-names": {
-            "key": "string",
-            "required": false
-          },
-          "field-values": {
-            "key": "string",
-            "required": false
-          },
-          "field-inlines": {
-            "key": "boolean",
-            "required": false
-          },
-          "image": {
-            "key": "url",
-            "required": false
-          },
-          "timestamp": {
-            "key": "number",
-            "required": false
-          },
-          "footer-name": {
-            "key": "string",
-            "required": false
-          },
-          "footer-iconURL": {
-            "key": "url",
-            "required": false
-          },
-          "name": {
-            "key": "string",
-            "required": true
-          }
         },
         "antispam": {
           "banenabledtof": {
@@ -1367,8 +1288,7 @@
         "overview": ["guildsettings"],
         "prefix": ["prefix"],
         "interactions": ["interactions"],
-        "modroles": ["modroles"],
-        "embeds": ["customembeds"]
+        "modroles": ["modroles"]
       },
       "editReq": ["uniquetimestamp"],
       "setupQueries": {
@@ -1447,12 +1367,6 @@
         "selfroles": {
           "cols": ["guildid, active, uniquetimestamp, name"],
           "vals": [["{{msg.guild.id}}", false, "{{values.uniquetimestamp}}", "{{values.name}}"]],
-          "add": ["name"],
-          "ident": "name"
-        },
-        "embeds": {
-          "cols": ["guildid, uniquetimestamp, name"],
-          "vals": [["{{msg.guild.id}}", "{{values.uniquetimestamp}}", "{{values.name}}"]],
           "add": ["name"],
           "ident": "name"
         },

@@ -35,9 +35,9 @@ module.exports = {
         .setColor(con.color)
         .setAuthor({
           name: guild.client.ch.stp(lan.author, {
-            amount:
-              kicks.filter((k) => typeof k === 'object' || !Number.isNaN(+k) === 'number').length ||
-              0,
+            amount: `${
+              kicks.filter((k) => typeof k === 'object' || !Number.isNaN(+k) === 'number').length
+            }`,
           }),
           iconURL: con.author.image,
           url: guild.client.constants.standard.invite,
