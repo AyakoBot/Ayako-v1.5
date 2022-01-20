@@ -1009,16 +1009,20 @@
         "error": "**{{name}}** is exceeding {{limit}} Characters by {{tooMany}}"
       },
       "name": "Custom Embed",
-      "totalLimit": "`Author Name`, `Title`, `Description`, `Field Names`, `Field Values` and `Footer Name` together can not exceed {{maxLimit}} Characters\nCurrent: {{currentChars}}",
+      "totalLimit": "`Author Name`, `Title`, `Description`, `Field Names`, `Field Values` and `Footer Text` together can not exceed {{maxLimit}} Characters\nCurrent: {{currentChars}}",
       "limit": "**{{name}}** can not exceed **{{limit}} Characters**",
       "placeholder": "This will be your Embed",
       "fieldsPlaceholder": "Select Fields you want to edit",
       "otherPlaceholder": "Select anything (except Fields) you want to edit",
       "addField": "Add Field",
-      "inheritSettings": "Inherit Settings from another Embed",
       "viewRaw": "View Raw Embed Code",
       "inheritCode": "Inherit Raw Embed Code",
       "removeField": "Remove Field",
+      "save": "Save Embed",
+      "send": "Send Embed",
+      "error": "Cannot be displayed as Embed Code contains an error (see Red Embed below for Info)",
+      "inheritCodeDescription": "__Send a Message__ with raw Embed Code or a .txt File if the Embed is too long",
+      "giveName": "__Send a Message__ with a Name for this Embed to identify it later",
       "edit": {
         "color": {
           "name": "Color",
@@ -1078,8 +1082,8 @@
           "answers": "Any UNIX Timestamp",
           "recommended": "Can be obtained [here](https://hammertime.djdavid98.art/ \"Click me\")"
         },
-        "footer-name": {
-          "name": "Footer Name",
+        "footer-text": {
+          "name": "Footer Text",
           "answers": "Any Text"
         },
         "footer-iconURL": {
@@ -1094,7 +1098,6 @@
         }
       }
     },
-
     "selfroles": {
       "description": "Get Self-Assingable Roles",
       "usage": ["im", "iam", "iamn", "iamnot", "lsar", "imn"],
