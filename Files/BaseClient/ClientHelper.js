@@ -235,24 +235,31 @@ module.exports = {
     if (pathers) pathend = `${pathers[pathers.length - 1]}`.replace(URL.parse(url).search, '');
     if (ident.channel) {
       path = `.\\Files\\Downloads\\Guilds\\Guild - ${ident.guild.id}\\Channel - ${ident.channel.id}\\${ident.id}`;
+
       const guilddir = `.\\Files\\Downloads\\Guilds\\Guild - ${ident.guild.id}`;
       if (!fs.existsSync(guilddir)) fs.mkdirSync(guilddir);
+
       const channeldir = `.\\Files\\Downloads\\Guilds\\Guild - ${ident.guild.id}\\Channel - ${ident.channel.id}`;
       if (!fs.existsSync(channeldir)) fs.mkdirSync(channeldir);
     } else if (ident.animated !== undefined && ident.animated !== null) {
       path = `.\\Files\\Downloads\\Guilds\\Guild - ${ident.guild.id}\\Deleted Emotes\\${ident.id}`;
+
       const lastdir = `.\\Files\\Downloads\\Guilds\\Guild - ${ident.guild.id}`;
       if (!fs.existsSync(lastdir)) fs.mkdirSync(lastdir);
+
       const emotedir = `.\\Files\\Downloads\\Guilds\\Guild - ${ident.guild.id}\\Deleted Emotes`;
       if (!fs.existsSync(emotedir)) fs.mkdirSync(emotedir);
+
       const guilddir = `.\\Files\\Downloads\\Guilds\\Guild - ${ident.guild.id}`;
       if (!fs.existsSync(guilddir)) fs.mkdirSync(guilddir);
     } else if (ident.ownerID) {
       const now = Date.now();
       if (ident.wanted) {
         path = `.\\Files\\Downloads\\Guilds\\Guild - ${ident.id}\\${ident.wanted}\\${now}`;
+
         const guilddir = `.\\Files\\Downloads\\Guilds\\Guild - ${ident.id}`;
         if (!fs.existsSync(guilddir)) fs.mkdirSync(guilddir);
+
         const channeldir = `.\\Files\\Downloads\\Guilds\\Guild - ${ident.id}\\${ident.wanted}`;
         if (!fs.existsSync(channeldir)) fs.mkdirSync(channeldir);
       }
@@ -260,10 +267,9 @@ module.exports = {
       const now = Date.now();
       if (ident.wanted) {
         path = `.\\Files\\Downloads\\Users\\User - ${ident.id}\\${now}`;
+
         const userdir = `.\\Files\\Downloads\\Users\\User - ${ident.id}`;
-        if (!fs.existsSync(userdir)) {
-          fs.mkdirSync(userdir);
-        }
+        if (!fs.existsSync(userdir)) fs.mkdirSync(userdir);
       }
     }
     if (!url) {
@@ -654,17 +660,6 @@ module.exports = {
   txtFileWriter(msg, array, source) {
     if (!array.length) return null;
 
-    const checkPath = (path) => {
-      const parts = path.split(/\\+/);
-      let fullPath = '';
-
-      parts.forEach((part, i) => {
-        fullPath += `${part}/`;
-
-        if (!fs.existsSync(fullPath) && parts.length !== i + 1) fs.mkdirSync(fullPath);
-      });
-    };
-
     const now = Date.now();
     let content = '';
     const split = '\n';
@@ -672,7 +667,7 @@ module.exports = {
 
     switch (source) {
       default: {
-        path = `${appDir}\\Files/Downloads\\Logs\\debug.txt`;
+        path = `${appDir}\\Files\\Downloads\\Logs\\debug.txt`;
         break;
       }
       case 'massban': {
@@ -694,9 +689,13 @@ module.exports = {
         path = `${appDir}\\Files\\Downloads\\Guilds\\Guild - ${msg.id}\\Raids\\${now}.txt`;
         break;
       }
+      case 'json': {
+        path = `${appDir}\\Files\\Downloads\\Guilds\\Guild - ${msg.guild.id}\\JSON\\${now}.json`;
+        break;
+      }
     }
 
-    checkPath(path);
+    this.checkPath(path);
 
     if (!content.length) {
       array.forEach((element) => {
@@ -852,7 +851,7 @@ module.exports = {
   /**
    * Aborts a Collector.
    * @constructor
-   * @param {object} msg - The Message that initiates this.
+   * @param {object} msg - The Message that initiated this.
    * @param {array} collectors - The Collectors to stop.
    */
   async aborted(msg, collectors) {
@@ -932,5 +931,35 @@ module.exports = {
    */
   objectClone(obj) {
     return v8.deserialize(v8.serialize(obj));
+  },
+  /**
+   * Converts a File URL into a string if URL leads to a .txt File
+   * @constructor
+   * @param {string} url - The URL to convert
+   */
+  async convertTxtFileLinkToString(url) {
+    if (!url.endsWith('.txt')) return null;
+
+    const path = `${appDir}\\Files\\Downloads\\Messages\\Attachments\\${Date.now()}.txt`;
+    this.checkPath(path);
+
+    await this.download(url, path);
+
+    return fs.readFileSync(path, 'utf8');
+  },
+  /**
+   * Checks if a Path exists, if not creates it.
+   * @constructor
+   * @param {string} path - The Path to check (has to be split with '\\')
+   */
+  checkPath(path) {
+    const parts = path.split(/\\+/);
+    let fullPath = '';
+
+    parts.forEach((part, i) => {
+      fullPath += `${part}/`;
+
+      if (!fs.existsSync(fullPath) && parts.length !== i + 1) fs.mkdirSync(fullPath);
+    });
   },
 };

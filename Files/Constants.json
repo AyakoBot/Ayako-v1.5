@@ -522,12 +522,12 @@
     "limits": {
       "fields": {
         "title": 256,
-        "author-name": 256,
         "description": 4096,
+        "author-name": 256,
         "field-names": 256,
         "field-values": 1024,
         "field-length": 25,
-        "footer-name": 2048
+        "footer-text": 2048
       },
       "total": 6000,
       "totalOf": [
@@ -535,7 +535,7 @@
         "description",
         "field-names",
         "field-values",
-        "footer-name",
+        "footer-text",
         "author-name"
       ]
     }
