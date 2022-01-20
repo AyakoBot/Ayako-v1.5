@@ -24,16 +24,21 @@ module.exports = {
     if (settingsRes && settingsRes.rowCount > 0) {
       const r = settingsRes.rows[0];
       msg.r = r;
-      if (+amountOfTimes >= +r.banafterwarnsamount && r.bantof === true)
+      if (+amountOfTimes >= +r.banafterwarnsamount && r.bantof === true) {
         return client.emit('antivirusBanAdd', msg, link);
-      if (+amountOfTimes >= +r.kickafterwarnsamount && r.kicktof === true)
+      }
+      if (+amountOfTimes >= +r.kickafterwarnsamount && r.kicktof === true) {
         return client.emit('antivirusKickAdd', msg, link);
-      if (+amountOfTimes >= +r.muteafterwarnsamount && r.mutetof === true)
+      }
+      if (+amountOfTimes >= +r.muteafterwarnsamount && r.mutetof === true) {
         return client.emit('antivirusMuteAdd', msg, link);
-      if (+amountOfTimes >= 2 && r.warntof === true)
+      }
+      if (+amountOfTimes >= +r.warnafterwarnsamount && r.warntof === true) {
         return client.emit('antivirusOfwarnAdd', msg, link);
-      if (+amountOfTimes >= 1 && r.verbaltof === true)
+      }
+      if (+amountOfTimes >= 1 && r.verbaltof === true) {
         return client.emit('antivirusWarnAdd', msg, link);
+      }
     }
     return null;
   },
