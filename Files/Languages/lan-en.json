@@ -1884,7 +1884,8 @@
         "muteafterwarnsamount": "Mute after **{{amount}}** malicious Links",
         "kickafterwarnsamount": "Kick after **{{amount}}** malicious Links",
         "banafterwarnsamount": "Ban after **{{amount}}** malicious Links",
-        "delete": "Minimize Response Embed Timeout for Mod Action Messages",
+        "minimize": "Minimize Response Embed Timeout for Mod Action Messages",
+        "delete": "Delete Response Embed Timeout for Mod Action Messages",
         "edit": {
           "active": {
             "name": "Active",
@@ -1936,10 +1937,15 @@
             "answers": "`Number`",
             "recommended": "Recommended: `4`"
           },
-          "delete": {
+          "minimize": {
             "name": "Minimize Timeout for Mod Action Messages",
             "answers": "Examples: `2 hours 15 min`, `2h 15m`",
             "recommended": "Recommended: `10 - 20 seconds`"
+          },
+          "delete": {
+            "name": "Delete Timeout for Mod Action Messages",
+            "answers": "Examples: `2 hours 15 min`, `2h 15m`",
+            "recommended": "Recommended: `20 - 30 seconds`"
           }
         }
       },

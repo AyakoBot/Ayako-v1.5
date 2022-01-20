@@ -79,6 +79,23 @@ module.exports = {
         inline: false,
       },
       {
+        name: msg.lan.minimize,
+        value: moment
+          .duration(+r.minimize)
+          .format(
+            `Y [${msg.language.time.years}], M [${msg.language.time.months}], W [${msg.language.time.weeks}], d [${msg.language.time.days}], h [${msg.language.time.hours}], m [${msg.language.time.minutes}], s [${msg.language.time.seconds}]`,
+            { trim: 'all' },
+          )
+          ? moment
+              .duration(+r.minimize)
+              .format(
+                `Y [${msg.language.time.years}], M [${msg.language.time.months}], W [${msg.language.time.weeks}], d [${msg.language.time.days}], h [${msg.language.time.hours}], m [${msg.language.time.minutes}], s [${msg.language.time.seconds}]`,
+                { trim: 'all' },
+              )
+          : msg.language.none,
+        inline: false,
+      },
+      {
         name: msg.lan.delete,
         value: moment
           .duration(+r.delete)
@@ -155,10 +172,14 @@ module.exports = {
         }),
       )
       .setStyle(!r.readofwarnstof ? 'DANGER' : 'SECONDARY');
-    const deleteB = new Discord.MessageButton()
+    const minimize = new Discord.MessageButton()
+      .setCustomId(msg.lan.edit.minimize.name)
+      .setLabel(msg.lan.minimize)
+      .setStyle('SECONDARY');
+    const del = new Discord.MessageButton()
       .setCustomId(msg.lan.edit.delete.name)
       .setLabel(msg.lan.delete)
       .setStyle('SECONDARY');
-    return [[active], [verbal, warn, mute, kick, ban], [waw, maw, kaw, baw], [deleteB]];
+    return [[active], [verbal, warn, mute, kick, ban], [waw, maw, kaw, baw], [minimize, del]];
   },
 };

@@ -927,6 +927,10 @@
             "key": "number",
             "required": false
           },
+          "minimize": {
+            "key": "time",
+            "required": false
+          },
           "delete": {
             "key": "time",
             "required": false
@@ -1299,7 +1303,9 @@
           "vals": [[true, true, 3, 5, 6, true, true, false, true, "{{msg.guild.id}}"]]
         },
         "antiraid": {
-          "cols": ["guildid, active, punishment, punishmenttof, time, jointhreshold, similaridthreshold"],
+          "cols": [
+            "guildid, active, punishment, punishmenttof, time, jointhreshold, similaridthreshold"
+          ],
           "vals": [["{{msg.guild.id}}", false, true, false, 15000, 15, 5]]
         },
         "blacklist": {
