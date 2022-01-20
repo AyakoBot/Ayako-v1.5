@@ -120,11 +120,11 @@ module.exports = {
       );
 
       embed
-        .setAuthor(
-          msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
-          msg.client.constants.emotes.settingsLink,
-          msg.client.constants.standard.invite,
-        )
+        .setAuthor({
+          name: msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
+          iconURL: msg.client.constants.emotes.settingsLink,
+          url: msg.client.constants.standard.invite,
+        })
         .setDescription(
           msg.client.ch.stp(msg.lan.edit.oneTimeRunner.stats, {
             members: membersWithRoles && membersWithRoles.length ? membersWithRoles.length : '0',
@@ -154,7 +154,7 @@ module.exports = {
       separators: [],
       rowroles: [],
       roles: [],
-      highestRol: {
+      highestRole: {
         id: guild.roles.highest.id,
         position: guild.roles.highest.position,
       },
@@ -164,7 +164,7 @@ module.exports = {
       },
     };
 
-    obj.guild.members.cache.forEach((member) => {
+    guild.members.cache.forEach((member) => {
       const roles = [];
       member.roles.cache.forEach((role) => {
         roles.push({ id: role.id, position: role.position });
