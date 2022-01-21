@@ -1644,7 +1644,7 @@ const reactionHandler = ({ msg, answer }, buttonsCollector, byData) => {
   return new Promise((resolve) => {
     reactionsCollector.on('collect', (reaction, user) => {
       if (user.id !== msg.author.id && user.id !== msg.client.user.id) {
-        return reaction.remove().catch(() => {});
+        return reaction.users.remove(user.id);
       }
 
       if (user.id === msg.client.user.id) return null;
