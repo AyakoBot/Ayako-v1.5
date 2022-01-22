@@ -287,6 +287,11 @@
     "enable": "<:disableNoSwitch:831557873070637066><:neutralNoSwitch:831559195215134790><:enableYesSwitch:831557872818192457>",
     "neutral": "<:disableNoSwitch:831557873070637066><:neutralYesSwitch:831559195185905704><:enableNoSwitch:831557873086758962>"
   },
+  "discordMsgUrls": [
+    "https://discord.com/channels/[Guild ID]/[Channel ID]/[Message ID]",
+    "https://ptb.discord.com/channels/[Guild ID]/[Channel ID]/[Message ID]",
+    "https://canary.discord.com/channels/[Guild ID]/[Channel ID]/[Message ID]"
+  ],
   "standard": {
     "color": "#b0ff00",
     "name": "Ayako",
@@ -538,7 +543,16 @@
         "footer-text",
         "author-name"
       ]
-    }
+    },
+    "needsOneOf": [
+      "title",
+      "author-name",
+      "description",
+      "thumbnail", 
+      "fields",
+      "image",
+      "footer-text"
+    ]
   },
   "commands": {
     "afk": "YELLOW",
@@ -549,6 +563,9 @@
         "color": "1aff00",
         "image": "https://ayakobot.com/cdn/Ayako_Assets/Warning.png"
       }
+    },
+    "embedBuilder": {
+      "error": "https://ayakobot.com/cdn/Ayako_Assets/Warning.png"
     },
     "clearwarns": {
       "success": "1aff00",

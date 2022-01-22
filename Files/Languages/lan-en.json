@@ -1006,7 +1006,9 @@
   "commands": {
     "embedBuilder": {
       "warns": {
-        "error": "**{{name}}** is exceeding {{limit}} Characters by {{tooMany}}"
+        "error": "**{{name}}** is exceeding {{limit}} Characters by {{tooMany}}",
+        "noValue": "Embed needs at least one of the following set: `Author Name`, `Title`, `Description`, `Thumbnail`, `Field Name`, `Field Value`, `Image`, `Footer Text`",
+        "resolveAndRetry": "Resolve the Errors above and re-try"
       },
       "name": "Custom Embed",
       "totalLimit": "`Author Name`, `Title`, `Description`, `Field Names`, `Field Values` and `Footer Text` together can not exceed {{maxLimit}} Characters\nCurrent: {{currentChars}}",
@@ -1016,6 +1018,7 @@
       "otherPlaceholder": "Select anything (except Fields) you want to edit",
       "addField": "Add Field",
       "viewRaw": "View Raw Embed Code",
+      "viewRawOtherMsg": "View Raw Embed Code of any Message",
       "inheritCode": "Inherit Raw Embed Code",
       "removeField": "Remove Field",
       "save": "Save Embed",
@@ -1023,6 +1026,18 @@
       "error": "Cannot be displayed as Embed Code contains an error (see Red Embed below for Info)",
       "inheritCodeDescription": "__Send a Message__ with raw Embed Code or a .txt File if the Embed is too long",
       "giveName": "__Send a Message__ with a Name for this Embed to identify it later",
+      "sendWhere": "Choose one or more Channels to send the Embed to below",
+      "sendError": "I could not send to {{channel}}. Error: {{error}}",
+      "sendSuccess": "Successfully sent to {{channel}}",
+      "otherMsg": "Reply with a Message URL of any Message __I can access__\nCan be in this Server or any other Server __I am in__",
+      "noUrlFound": "No valid Discord Message URL found",
+      "regFail": "Input did not pass Validation Regex",
+      "lengthFail": "Input is too long, max length is {{max}}",
+      "noTimestamp": "Input is not a valid Timestamp",
+      "errorVal": "Input was Invalid",
+      "unsaved": "Your unsaved Embed:",
+      "unsavedFieldValue": "To continue the Embed, copy the Code above and Enter it via the\n`Inherit Raw Embed Code` Button on the Embed Builer Page 3",
+      "chooseTheEdit": "Choose what to Edit below",
       "edit": {
         "color": {
           "name": "Color",
@@ -1068,7 +1083,7 @@
           "answers": "Any Text"
         },
         "field-inlines": {
-          "name": "Field Inline?",
+          "name": "Field Inline",
           "answers": "`True` or `False`",
           "recommended": "Whether the Field should be in-line with other Fields (this will group them in blocks of 3)"
         },
@@ -1077,9 +1092,14 @@
           "answers": "Any Image/Gif URL",
           "recommended": "Will add an Image to the Bottom of the Embed (above Footer and Timestamp)"
         },
+        "thumbnail": {
+          "name": "Thumbnail",
+          "answers": "Any Image/Gif URL",
+          "recommended": "Will add an Image to the right side of the Embed"
+        },
         "timestamp": {
           "name": "Timestamp",
-          "answers": "Any UNIX Timestamp",
+          "answers": "Any UNIX Timestamp or `now` for the current Time",
           "recommended": "Can be obtained [here](https://hammertime.djdavid98.art/ \"Click me\")"
         },
         "footer-text": {
@@ -3004,5 +3024,7 @@
   "mfaLevelName": "2 Factor Authentification",
   "amountDefinition": "Amount Definition",
   "Kick": "Kick",
-  "Ban": "Ban"
+  "Ban": "Ban",
+  "Example": "Example",
+  "Examples": "Examples"
 }
