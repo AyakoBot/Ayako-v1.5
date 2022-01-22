@@ -7,6 +7,7 @@ const v8 = require('v8');
 const fs = require('fs');
 const { dirname } = require('path');
 
+const auth = require('./auth.json');
 const ChannelRules = require('./Other Client Files/ChannelRules');
 const Constants = require('../Constants.json');
 
@@ -146,7 +147,7 @@ module.exports = {
                 if (i === 1) decided = Result[element];
                 if (i > 1) decided = decided[element];
               });
-              return decided;
+              return decided.replace();
             }
             return Result;
           }
@@ -170,13 +171,13 @@ module.exports = {
             if (i === 1) decided = Result[objValue];
             if (i > 1) decided = decided[objValue];
           });
-          return decided;
+          return decided.replace(RegExp(auth.token, 'g'), 'TOKEN');
         }
-        return Result;
+        return Result.replace(RegExp(auth.token, 'g'), 'TOKEN');
       }
-      return substring;
+      return substring.replace(RegExp(auth.token, 'g'), 'TOKEN');
     });
-    return text;
+    return text.replace(RegExp(auth.token, 'g'), 'TOKEN');
   },
   /**
    * Sends a query to the DataBase.
