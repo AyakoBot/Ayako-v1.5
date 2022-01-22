@@ -58,9 +58,10 @@ const prepare = async (msg, lan, check, language) => {
       links.push(arg);
   });
   const blocklist = getBlocklist();
-  const whitelist = await getWhitelist();
-  const blacklist = await getBlacklist();
-  const whitelistCDN = await getWhitelistCDN();
+  const whitelist = getWhitelist();
+  const blacklist = getBlacklist();
+  const badLinks = getBadLinks();
+  const whitelistCDN = getWhitelistCDN();
 
   const fullLinks = await makeFullLinks(links);
 
@@ -152,6 +153,7 @@ const prepare = async (msg, lan, check, language) => {
       whitelist,
       whitelistCDN,
       blocklist,
+      badLinks,
     });
 
     setTimeout(() => {
@@ -175,7 +177,7 @@ const getBlocklist = () => {
   return blacklist;
 };
 
-const getWhitelist = async () => {
+const getWhitelist = () => {
   const file = fs.readFileSync('S:/Bots/ws/CDN/antivirus/whitelisted.txt', {
     encoding: 'utf8',
   });
@@ -184,7 +186,7 @@ const getWhitelist = async () => {
   return whitelistRes.map((entry) => entry.replace(/\r/g, ''));
 };
 
-const getBlacklist = async () => {
+const getBlacklist = () => {
   const file = fs.readFileSync('S:/Bots/ws/CDN/antivirus/blacklisted.txt', {
     encoding: 'utf8',
   });
@@ -193,11 +195,20 @@ const getBlacklist = async () => {
   return blacklistRes.map((entry) => entry.replace(/\r/g, ''));
 };
 
-const getWhitelistCDN = async () => {
+const getBadLinks = () => {
+  const file = fs.readFileSync('S:/Bots/ws/CDN/antivirus/badLinks.txt', {
+    encoding: 'utf8',
+  });
+  const badLinks = file ? file.split(/\n+/).filter((line) => !line.startsWith('//')) : [];
+
+  return badLinks.map((entry) => entry.replace(/\r/g, '').replace(/https:\/\//g, ''));
+};
+
+const getWhitelistCDN = () => {
   const file = fs.readFileSync('S:/Bots/ws/CDN/antivirus/whitelistedCDN.txt', {
     encoding: 'utf8',
   });
-  const whitelistCDNRes = file ? file.split(/\n+/) : [];
+  const whitelistCDNRes = file ? file.split(/\nhttps:\/\/+/) : [];
 
   return whitelistCDNRes.map((entry) => entry.replace(/\r/g, ''));
 };

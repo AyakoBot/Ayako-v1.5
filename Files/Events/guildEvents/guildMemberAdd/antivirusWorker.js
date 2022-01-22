@@ -35,6 +35,7 @@ const run = async ({
   whitelist,
   whitelistCDN,
   blocklist,
+  badLinks,
 }) => {
   if (includedBadLink) {
     return;
@@ -83,7 +84,9 @@ const run = async ({
   }
 
   const spamHausIncluded = await getSpamHaus(linkObject);
+
   if (
+    badLinks.includes(linkObject.baseURLhostname) ||
     blocklist.includes(linkObject.baseURLhostname) ||
     blacklist.includes(linkObject.baseURLhostname) ||
     spamHausIncluded

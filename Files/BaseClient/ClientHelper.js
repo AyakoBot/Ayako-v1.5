@@ -829,6 +829,7 @@ module.exports = {
       .setDescription(msg.language.timeError)
       .setColor(Constants.error);
     msg.m.edit({ embeds: [embed], components: [] }).catch(() => {});
+    return embed;
   },
   /**
    * Converts Button Arrays into Action Rows usable by Discord.js. Multiple Action Rows are separated by nested Arrays.
