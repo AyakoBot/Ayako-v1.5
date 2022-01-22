@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 
-const testReg = /(canary\.discord|ptb\.discord|discord)\.com\/channels\//gi;
+const testReg = /discord\.com\/channels\//gi;
 const colorReg = /[0-9A-Fa-f]{6}/g;
 
 module.exports = {
@@ -317,19 +317,19 @@ const postCode = (Objects, msg, interaction, embed, noRemove) => {
     replier({ msg, answer: interaction }, { files: [path], components: [], embeds: [embed] });
   } else {
     const embeds = [];
-    
+    if (embed) embeds.push(embed);
+    embeds.push(
+      new Discord.MessageEmbed()
+        .setDescription(msg.client.ch.makeCodeBlock(JSON.stringify(rawCode, null, 1)))
+        .setColor('ffffff')
+        .setTitle(msg.language.commands.embedBuilder.unsaved)
+        .addField('\u200b', msg.language.commands.embedBuilder.unsavedFieldValue),
+    );
 
     replier(
       { msg, answer: interaction },
       {
-        embeds: [
-          embed,
-          new Discord.MessageEmbed()
-            .setDescription(msg.client.ch.makeCodeBlock(JSON.stringify(rawCode)))
-            .setColor('ffffff')
-            .setTitle(msg.language.commands.embedBuilder.unsaved)
-            .addField('\u200b', msg.language.commands.embedBuilder.unsavedFieldValue),
-        ],
+        embeds,
         components: [],
       },
     );
@@ -365,8 +365,8 @@ const handleSave = async (msg, answer, Objects) => {
         .setDisabled(!message.content.length);
 
       embed.fields.length = 0;
-      embed.addField(msg.language.name, message.content.split(0, 1024));
-      name = message.content.split(0, 1024);
+      embed.addField(msg.language.name, `\u200b${message.content.slice(0, 1024)}`);
+      name = message.content.slice(0, 1024);
     });
     buttonsCollector.on('collect', (interaction) => {
       if (interaction.user.id !== msg.author.id) {
@@ -558,6 +558,8 @@ const handleSend = async (msg, answer, Objects) => {
 };
 
 const handleOtherMsgRaw = async (msg, answer, Objects) => {
+  msg.m.reactions.removeAll().catch(() => {});
+
   const noFound = () => {
     const embed = new Discord.MessageEmbed().setDescription(
       msg.language.commands.embedBuilder.noUrlFound,
@@ -575,7 +577,12 @@ const handleOtherMsgRaw = async (msg, answer, Objects) => {
 
   replier({ msg, answer }, { embeds: [embed], components: [] }, Objects);
 
-  const messageCollector = msg.m.createMessageCollector({ time: 60000 });
+  const messageCollector = msg.channel.createMessageCollector({ time: 60000 });
+  handleReactionsCollector({ msg, answer }, messageCollector, Objects, {
+    needsBack: true,
+    needsPages: false,
+  });
+
   messageCollector.on('collect', async (message) => {
     if (message.author.id !== msg.author.id) return;
 
@@ -591,8 +598,18 @@ const handleOtherMsgRaw = async (msg, answer, Objects) => {
     const messageUrls = [];
 
     args.forEach((arg) => {
-      if (testReg.test(arg)) {
-        messageUrls.push(arg);
+      try {
+        const url = new URL(arg);
+        if (
+          (url.hostname === 'discord.com' ||
+            url.hostname === 'canary.discord.com' ||
+            url.hostname === 'ptb.discord.com') &&
+          url.pathname.startsWith('/channels/')
+        ) {
+          messageUrls.push(arg);
+        }
+      } catch {
+        // empty
       }
     });
 
@@ -600,23 +617,17 @@ const handleOtherMsgRaw = async (msg, answer, Objects) => {
       const path = url.replace(testReg, '');
 
       const ids = path.split(/\/+/);
+      if (ids[0] === 'https:' || ids[0] === 'http:') ids.shift();
 
       if (Number.isNaN(+ids[0]) && ids[0] === '@me') {
-        return (
-          await msg.client.guilds.cache.channels
-            .fetch(ids[1])
-            .catch((e) => e)
-            .then((c) => c)
-        )?.messages
+        return (await msg.client.guilds.cache.channels.fetch(ids[1]).catch((e) => e))?.messages
           ?.fetch(ids[2])
-          ?.catch((e) => e)
-          ?.then((m) => m);
+          ?.catch((e) => e);
       }
       return msg.client.channels.cache
         .get(ids[1])
         .messages?.fetch(ids[2])
-        .catch((e) => e)
-        ?.then((m) => m);
+        .catch((e) => e);
     });
 
     const messages = await Promise.all(messagePromises);
@@ -624,7 +635,7 @@ const handleOtherMsgRaw = async (msg, answer, Objects) => {
     const messageEmbedJSONs = [];
     messages.forEach((m) => {
       m.embeds.forEach((membed) => {
-        messageEmbedJSONs.push(new Discord.MessageEmbed(membed).toJSON());
+        messageEmbedJSONs.push(`${m.url}\n${JSON.stringify(membed, null, 1)}`);
       });
     });
 
@@ -658,6 +669,7 @@ const embedButtonsHandler = async (Objects, msg, answer) => {
 
       messageCollector.on('end', (collected, reason) => {
         if (reason === 'time') {
+          postCode(Objects, msg);
           msg.client.ch.collectorEnd(msg);
           resolve();
         }
@@ -1000,11 +1012,12 @@ const embedButtonsHandler = async (Objects, msg, answer) => {
 
 const handleReactionsCollector = (
   { msg, answer },
-  buttonsCollector,
-  reactionsCollector,
+  collector,
   Objects,
   { needsBack, needsPages },
 ) => {
+  const reactionsCollector = msg.m.createReactionCollector({ time: 120000 });
+
   if (needsBack) {
     if (
       !msg.m.reactions.cache
@@ -1035,7 +1048,7 @@ const handleReactionsCollector = (
       return;
     }
 
-    if (buttonsCollector) buttonsCollector.stop();
+    if (collector) collector.stop();
     reactionsCollector.stop();
 
     module.exports.builder(msg, answer, Objects.embed, Number(reaction.emoji.name[0]));
@@ -1044,10 +1057,9 @@ const handleReactionsCollector = (
 
 const handleBuilderButtons = ({ msg, answer }, Objects, resolve, lan) => {
   const buttonsCollector = msg.m.createMessageComponentCollector({ time: 120000 });
-  const reactionsCollector = msg.m.createReactionCollector({ time: 120000 });
   let ended = false;
 
-  handleReactionsCollector({ msg, answer }, buttonsCollector, reactionsCollector, Objects, {
+  handleReactionsCollector({ msg, answer }, buttonsCollector, Objects, {
     needsBack: false,
     needsPages: [1, 2, 3],
   });

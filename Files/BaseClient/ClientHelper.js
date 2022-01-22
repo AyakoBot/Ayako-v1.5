@@ -952,7 +952,7 @@ module.exports = {
   /**
    * Checks if a Path exists, if not creates it.
    * @constructor
-   * @param {string} path - The Path to check (has to be split with '\\')
+   * @param {string} path - The Path to check (has to be split with '\\\\' (2 backslashes))
    */
   checkPath(path) {
     const parts = path.split(/\\+/);
