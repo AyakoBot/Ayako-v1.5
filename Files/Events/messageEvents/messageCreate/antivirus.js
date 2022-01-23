@@ -208,7 +208,7 @@ const getWhitelistCDN = () => {
   const file = fs.readFileSync('S:/Bots/ws/CDN/antivirus/whitelistedCDN.txt', {
     encoding: 'utf8',
   });
-  const whitelistCDNRes = file ? file.split(/\nhttps:\/\/+/) : [];
+  const whitelistCDNRes = file ? file.split(/\n+/) : [];
 
   return whitelistCDNRes.map((entry) => entry.replace(/\r/g, ''));
 };
@@ -312,8 +312,8 @@ const blacklisted = async ({ msg, lan, linkObject, note, check, language }) => {
   }
 };
 
-const severeLink = async ({ msg, lan, linkObject, check, language }) => {
-  saveToBadLink(linkObject, msg);
+const severeLink = async ({ msg, lan, linkObject, check, language, hrefLogging }) => {
+  saveToBadLink(linkObject, msg, hrefLogging);
 
   const embed = new Discord.MessageEmbed()
     .setDescription(
@@ -382,7 +382,7 @@ const newUrl = async ({ msg, lan, linkObject, check, language }) => {
   return true;
 };
 
-const saveToBadLink = async (linkObject) => {
+const saveToBadLink = async (linkObject, msg, hrefLogging) => {
   const file = fs.readFileSync('S:/Bots/ws/CDN/antivirus/badLinks.txt', {
     encoding: 'utf8',
   });
@@ -397,7 +397,9 @@ const saveToBadLink = async (linkObject) => {
     baseURL: ${linkObject.baseURL}
     baseURLhostname: ${linkObject.baseURLhostname}
     `);
-    fs.appendFile('S:/Bots/ws/CDN/antivirus/badLinks.txt', `\n${linkObject.baseURL}`, () => {});
+
+    const appended = hrefLogging ? linkObject.href : linkObject.baseURL;
+    fs.appendFile('S:/Bots/ws/CDN/antivirus/badLinks.txt', `\n${appended}`, () => {});
   }
 };
 

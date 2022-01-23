@@ -64,11 +64,26 @@ const run = async ({
   );
 
   if (
-    (whitelist.includes(linkObject.baseURLhostname) &&
+    ((whitelist.includes(linkObject.baseURLhostname) &&
       linkObject.hostname.endsWith(linkObject.baseURLhostname)) ||
-    (whitelist.includes(linkObject.baseURLhostname) && !isFile) ||
-    (isFile && whitelistCDN.includes(linkObject.baseURLhostname))
+      whitelist.includes(linkObject.baseURLhostname)) &&
+    !isFile
   ) {
+    parentPort.postMessage({ msgData, lan, linkObject, check, type: 'whitelisted' });
+    return;
+  }
+
+  let hrefLogging = false;
+  const whitelistCDNindex = whitelistCDN.findIndex((line) =>
+    line.startsWith(linkObject.baseURLhostname),
+  );
+  if (
+    isFile &&
+    whitelistCDNindex &&
+    whitelistCDN[whitelistCDNindex]?.endsWith('requiresAdditionalCheck')
+  ) {
+    hrefLogging = true;
+  } else if (isFile && whitelistCDN.includes(linkObject.baseURLhostname)) {
     parentPort.postMessage({ msgData, lan, linkObject, check, type: 'whitelisted' });
     return;
   }
@@ -87,6 +102,7 @@ const run = async ({
 
   if (
     badLinks.includes(linkObject.baseURLhostname) ||
+    badLinks.includes(linkObject.href) ||
     blocklist.includes(linkObject.baseURLhostname) ||
     blacklist.includes(linkObject.baseURLhostname) ||
     spamHausIncluded
@@ -130,6 +146,7 @@ const run = async ({
       check,
       urlSeverity,
       type: 'severeLink',
+      hrefLogging,
     });
     return;
   }
