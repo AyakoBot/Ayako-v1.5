@@ -147,7 +147,7 @@ module.exports = {
                 if (i === 1) decided = Result[element];
                 if (i > 1) decided = decided[element];
               });
-              return decided.replace();
+              return decided;
             }
             return Result;
           }
@@ -171,11 +171,11 @@ module.exports = {
             if (i === 1) decided = Result[objValue];
             if (i > 1) decided = decided[objValue];
           });
-          return decided.replace(RegExp(auth.token, 'g'), 'TOKEN');
+          return decided;
         }
-        return Result.replace(RegExp(auth.token, 'g'), 'TOKEN');
+        return Result;
       }
-      return substring.replace(RegExp(auth.token, 'g'), 'TOKEN');
+      return substring;
     });
     return text.replace(RegExp(auth.token, 'g'), 'TOKEN');
   },
