@@ -50,11 +50,11 @@ module.exports = {
             .setDescription(
               ch.stp(lan.descriptionKicked, { user: entry.executor, target: entry.target }),
             )
-            .setAuthor(
-              lan.author.nameKick,
-              con.author.kickImage,
-              ch.stp(con.author.link, { user }),
-            );
+            .setAuthor({
+              name: lan.author.nameKick,
+              iconURL: con.author.kickImage,
+              url: ch.stp(con.author.link, { user }),
+            });
         } else {
           embed.setDescription(ch.stp(lan.descriptionLeft, { user })).setAuthor({
             name: lan.author.nameLeave,
