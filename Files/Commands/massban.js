@@ -210,17 +210,13 @@ module.exports = {
         const arr = uniqueUsers.map(
           (user) => `ID: ${user.id ? user.id : user} | Tag: ${user.tag ? user.tag : 'Unknown'}`,
         );
-        const path = await msg.client.ch.txtFileWriter(msg, arr, this.name);
+        const attachment = msg.client.ch.txtFileWriter(arr);
         if (msg.logchannels && msg.logchannels.length !== 0 && uniqueUsers.length !== 0) {
-          if (path) {
+          if (attachment) {
             msg.logchannels.forEach((c) => {
               msg.client.ch.send(c, {
                 embeds: [logembed],
-                files: [
-                  {
-                    attachment: path,
-                  },
-                ],
+                files: [attachment],
               });
             });
           } else msg.logchannels.forEach((c) => msg.client.ch.send(c, { embeds: [logembed] }));

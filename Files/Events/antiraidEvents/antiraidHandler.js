@@ -68,7 +68,7 @@ const ban = (client, guild, language) => {
 };
 
 const sendMessage = (client, guild, lan, con, r) => {
-  let path;
+  let attachment;
   const embed = new Discord.MessageEmbed()
     .setAuthor({
       name: lan.debugMessage.author,
@@ -88,8 +88,7 @@ const sendMessage = (client, guild, lan, con, r) => {
   if (embed.description.length > 2000) {
     embed.setDescription(`${lan.debugMessage.description}\n${lan.debugMessage.file}`);
 
-    path = client.ch.txtFileWriter(
-      guild,
+    attachment = client.ch.txtFileWriter(
       cooldowns.get(guild.id).users.map((u) => `${u.id}`),
       'antiraid',
     );
@@ -101,7 +100,7 @@ const sendMessage = (client, guild, lan, con, r) => {
     const pingUsers = r.pingusers?.map((user) => `<@${user}>`);
 
     const payload = { embeds: [embed], content: `${pingRoles || ''}\n${pingUsers || ''}` };
-    if (path) payload.files = [path];
+    if (attachment) payload.files = [attachment];
 
     client.ch.send(channel, payload);
   }

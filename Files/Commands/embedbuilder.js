@@ -312,9 +312,9 @@ const postCode = (Objects, msg, interaction, embed, noRemove) => {
 
   const rawCode = Objects.embed.toJSON();
   if (rawCode.length > 4000) {
-    const path = msg.client.ch.txtFileWriter(msg, [rawCode], 'json');
+    const attachment = msg.client.ch.txtFileWriter([rawCode]);
 
-    replier({ msg, answer: interaction }, { files: [path], components: [], embeds: [embed] });
+    replier({ msg, answer: interaction }, { files: [attachment], components: [], embeds: [embed] });
   } else {
     const embeds = [];
     if (embed) embeds.push(embed);
@@ -639,9 +639,9 @@ const handleOtherMsgRaw = async (msg, answer, Objects) => {
       });
     });
 
-    const path = msg.client.ch.txtFileWriter(msg, messageEmbedJSONs, 'json');
+    const attachment = msg.client.ch.txtFileWriter(messageEmbedJSONs);
 
-    msg.client.ch.send(msg.channel, { files: [path] });
+    msg.client.ch.send(msg.channel, { files: [attachment] });
   });
 };
 
