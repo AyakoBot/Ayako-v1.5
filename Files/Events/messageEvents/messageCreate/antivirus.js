@@ -20,8 +20,6 @@ module.exports = {
       check = true;
     }
 
-    if (!check) return;
-
     const language = await msg.client.ch.languageSelector(check ? null : msg.guild);
     const lan = language.antivirus;
 
@@ -455,6 +453,9 @@ const VTfail = ({ msg, lan, check, linkObject, language }) => {
 };
 
 const timedOut = ({ msg, lan, check, linkObject, language }) => {
+  msg.client.ch.send(msg.client.channels.cache.get('726252103302905907'), {
+    content: linkObject.href,
+  });
   const embed = new Discord.MessageEmbed()
     .setDescription(
       `**${language.result}**\n${client.ch.stp(lan.timedOut, {
