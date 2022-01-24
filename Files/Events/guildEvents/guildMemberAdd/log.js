@@ -9,7 +9,6 @@ module.exports = {
     const { ch } = client;
     const Constants = client.constants;
     const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);
-    console.log(res);
     if (res && res.rowCount > 0) {
       const channels = res.rows[0].guildmemberevents
         ?.map((id) =>
@@ -19,7 +18,6 @@ module.exports = {
         )
         .filter((c) => c !== null);
 
-      console.log(1);
       if (channels && channels.length) {
         const language = await ch.languageSelector(guild);
         const lan = language.guildMemberAddLog;

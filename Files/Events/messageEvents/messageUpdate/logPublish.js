@@ -55,17 +55,18 @@ module.exports = {
           });
         }
 
-        let paths = [];
+        let buffers = [];
         let files = [];
         if (newMsg.attachments.size > 0) {
-          const urls = newMsg.attachments.map((attachment) => attachment.url);
-          paths = await ch.downloader(newMsg, urls, 'message');
-          if (paths.length === 1) {
-            const name = await ch.getName(paths[0]);
-            embed.setImage(`attachment://${name}`);
-            files = paths;
+          if (newMsg.attachments.size > 0) {
+            const urls = newMsg.attachments.map((attachment) => attachment.url);
+            buffers = await ch.convertImageURLtoBuffer(urls);
+          }
+          if (buffers.length === 1) {
+            embed.setImage(`attachment://${buffers[0].name}`);
+            files = buffers;
           } else {
-            files = paths;
+            files = buffers;
           }
         }
         ch.send(channels, { embeds: [embed], files });

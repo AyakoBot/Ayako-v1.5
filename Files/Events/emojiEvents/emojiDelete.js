@@ -27,28 +27,30 @@ module.exports = {
           entry = entry.first();
         }
 
-        const [path] = await ch.downloader(
-          emoji,
-          [ch.stp(con.author.link, { emoji, ending: emoji.animated ? 'gif' : 'png' })],
-          'emoji',
-        );
         const embed = new Discord.MessageEmbed()
-          .setAuthor(
-            lan.author.title,
-            con.author.image,
-            ch.stp(con.author.link, { emoji, ending: emoji.animated ? 'gif' : 'png' }),
-          )
+          .setAuthor({
+            name: lan.author.title,
+            iconURL: con.author.image,
+            url: ch.stp(con.author.link, { emoji, ending: emoji.animated ? 'gif' : 'png' }),
+          })
           .setColor(con.color)
           .setTimestamp();
-        if (path) {
-          const name = await ch.getName(path);
-          embed.setThumbnail(`attachment://${name}`);
+
+        let files;
+        const buffers = await ch.convertImageURLtoBuffer([
+          ch.stp(con.author.link, { emoji, ending: emoji.animated ? 'gif' : 'png' }),
+        ]);
+        if (buffers.length) {
+          embed.setThumbnail(`attachment://${buffers[0].name}`);
+          files = buffers;
         }
-        if (entry && entry.id)
+
+        if (entry && entry.id) {
           embed.setDescription(ch.stp(lan.description.withUser, { user: entry.executor, emoji }));
-        else embed.setDescription(ch.stp(lan.description.withoutUser, { emoji }));
-        if (path) ch.send(channels, { embeds: [embed], files: [path] });
-        else ch.send(channels, embed);
+        } else {
+          embed.setDescription(ch.stp(lan.description.withoutUser, { emoji }));
+        }
+        ch.send(channels, { embeds: [embed], files });
       }
     }
   },
