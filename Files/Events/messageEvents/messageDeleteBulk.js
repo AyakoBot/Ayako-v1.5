@@ -23,7 +23,7 @@ module.exports = {
 
         const arr = msgs.map(
           (msg) =>
-            `${msg.author.tag} (${msg.author.id}) | ${msg.content}\n${msg.attachments.map(
+            `${msg.author?.tag} (${msg.author?.id}) | ${msg.content}\n${msg.attachments.map(
               (attachment) =>
                 `${attachment.description ? attachment.description : ''} ${attachment.url}\n`,
             )}`,
@@ -40,11 +40,11 @@ module.exports = {
         const embed = new Discord.MessageEmbed()
           .setTimestamp()
           .setColor(con.color)
-          .setAuthor(
-            lan.author.name,
-            con.author.image,
-            ch.stp(con.author.link, { msg: msgs.first() }),
-          );
+          .setAuthor({
+            name: lan.author.name,
+            iconURL: con.author.image,
+            url: ch.stp(con.author.link, { msg: msgs.first() }),
+          });
         if (entry)
           embed.setDescription(
             ch.stp(lan.descriptionWithAudit, {

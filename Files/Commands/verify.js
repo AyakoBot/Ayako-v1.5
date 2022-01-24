@@ -1,6 +1,5 @@
 const Discord = require('discord.js');
 const { CaptchaGenerator } = require('captcha-canvas');
-const fs = require('fs');
 
 module.exports = {
   name: 'verify',
@@ -58,7 +57,7 @@ module.exports = {
     const { r } = msg;
 
     const embed = new Discord.MessageEmbed()
-      .setImage(`attachment://${file.now}.png`)
+      .setImage(`attachment://${file.name}`)
       .setAuthor({
         name: msg.lan.author.name,
         iconURL: msg.client.constants.standard.image,
@@ -83,7 +82,7 @@ module.exports = {
         .update({
           embeds: [embed],
           components: msg.client.ch.buttonRower([regenerate]),
-          files: [file.path],
+          files: [file],
         })
         .catch(() => {});
     else if (msg.m)
@@ -91,14 +90,14 @@ module.exports = {
         .edit({
           embeds: [embed],
           components: msg.client.ch.buttonRower([regenerate]),
-          files: [file.path],
+          files: [file],
         })
         .catch(() => {});
     else
       msg.m = await msg.client.ch.send(msg.DM, {
         embeds: [embed],
         components: msg.client.ch.buttonRower([regenerate]),
-        files: [file.path],
+        files: [file],
       });
 
     if (!msg.m || !msg.m.id)
@@ -145,7 +144,6 @@ module.exports = {
             content: `${message.channel.id}-${msg.guild.id} did not exist in Verification Codes, check console`,
           }),
         );
-        console.log(msg.client.verificationCodes);
         return;
       }
 
@@ -191,12 +189,8 @@ module.exports = {
     captcha.setTrace({ size: 2, opacity: 3 });
     const buffer = captcha.generateSync();
     const now = Date.now();
-    const path = `./Files/Downloads/Captchas/${now}.png`;
-    fs.writeFileSync(path, buffer);
-    const file = {};
-    file.path = path;
-    file.now = now;
-    file.captcha = captcha;
+
+    const file = { attachment: buffer, name: `${now}.png`, captcha };
     return file;
   },
   async finished(msg, logchannel) {

@@ -5,6 +5,7 @@ const Discord = require('discord.js');
 const v8 = require('v8');
 const fs = require('fs');
 const { dirname } = require('path');
+const SA = require('superagent');
 
 const auth = require('./auth.json');
 const ChannelRules = require('./Other Client Files/ChannelRules');
@@ -23,15 +24,6 @@ const regexes = {
 };
 
 module.exports = {
-  /**
-   * Checks if needed Paths exist on startup and if not creates them.
-   * @constructor
-   */
-  pathCheck() {
-    if (!fs.existsSync('.\\Files\\Downloads\\Captchas')) {
-      fs.mkdirSync('.\\Files\\Downloads\\Captchas');
-    }
-  },
   /**
    * Sends a Message to a channel.
    * @constructor
@@ -215,64 +207,29 @@ module.exports = {
   /**
    * Prepares incoming URLs for Download, giving it its Destination Path.
    * @constructor
-   * @param {object} base - The Base Object for these URLs
-   * @param {array} urls - The URLs the files will be downloaded from.
-   * @param {string} type - The type of Base Object.
+   * @param {array} urls - The URLs the buffers will be created from.
    */
-  async downloader(base, urls, type) {
-    const pathPromises = urls.map((url) => {
-      const URLObject = new URL(url);
-      const fileType = URLObject.pathname.split('.').pop();
+  async convertImageURLtoBuffer(urls) {
+    const superagentPromises = urls.map((url) => SA.get(url).catch((e) => e));
 
-      let path;
-      switch (type) {
-        default: {
-          break;
-        }
-        case 'webhook': {
-          path = `${appDir}\\Files\\Downloads\\Guilds\\Guild - ${
-            base.guild.id
-          }\\Webhooks\\Webhook - ${base.id}\\${Date.now()}.${fileType}`;
-          break;
-        }
-        case 'message': {
-          if (base.guild) {
-            path = `${appDir}\\Files\\Downloads\\Guilds\\Guild - ${
-              base.guild.id
-            }\\Channels\\Channel - ${base.channel.id}\\Messages\\Message - ${
-              base.id
-            }\\${Date.now()}.${fileType}`;
-          } else {
-            path = `${appDir}\\Files\\Downloads\\DMs\\User - ${
-              base.author.id
-            }\\Messages\\Message - ${base.id}\\${Date.now()}.${fileType}`;
-          }
-          break;
-        }
-        case 'emoji': {
-          path = `${appDir}\\Files\\Downloads\\Guilds\\Guild - ${base.guild.id}\\Emoji\\Emoji - ${
-            base.id
-          }\\${Date.now()}.${fileType}`;
-          break;
-        }
-        case 'guild': {
-          path = `${appDir}\\Files\\Downloads\\Guilds\\Guild - ${
-            base.id
-          }\\Other\\${Date.now()}.${fileType}`;
-          break;
-        }
-        case 'user': {
-          path = `${appDir}\\Files\\Downloads\\Users\\User - ${base.id}\\${Date.now()}.${fileType}`;
-          break;
-        }
-      }
+    const responses = await Promise.all(superagentPromises);
 
-      this.checkPath(path);
+    return responses
+      .map((res, i) => {
+        const URLObject = new URL(urls[i]);
+        const name = URLObject.pathname.split(/\/+/).pop();
 
-      return this.download(url, path);
-    });
+        const buffer = res?.body;
 
-    return Promise.all(pathPromises);
+        if (buffer) {
+          return {
+            attachment: buffer,
+            name,
+          };
+        }
+        return null;
+      })
+      .filter((r) => !!r);
   },
   /**
    * Extracts a File Name out of a File Path.
@@ -285,7 +242,7 @@ module.exports = {
     return name;
   },
   /**
-   * The actual File Downloader.
+   * Downloads a File from the given URL and saves it to the given Path.
    * @constructor
    * @param {string} url - The URL the File will be downloaded from.
    * @param {object} filePath - The Path to the previously generated Placeholder File.

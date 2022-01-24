@@ -27,8 +27,11 @@ module.exports = {
           auditsCreate.entries.forEach((a) => audits.push(a));
         if (auditsUpdate && auditsUpdate.entries)
           auditsUpdate.entries.forEach((a) => audits.push(a));
+
         let entry;
         let webhook;
+        let files = [];
+
         if (audits.length) {
           audits.sort((a, b) => a.id - b.id);
           webhooks.forEach((w) =>
@@ -67,6 +70,7 @@ module.exports = {
               ch.stp(lan.description, { user: entry.executor, channel: data, webhook }),
             );
           }
+
           if (entry.actionType === 'UPDATE') {
             const lan = language.webhookUpdate;
             const con = Constants.webhookUpdate;
@@ -77,20 +81,13 @@ module.exports = {
               iconURL: con.author.image,
             });
 
-            const download = async () => {
-              const [path] = await ch.downloader(webhook, [ch.avatarURL(webhook)], 'webhook');
-              if (path) {
-                const name = await ch.getName(path);
-                embed.setThumbnail(`attachment://${name}`);
-                embed.addField(language.avatar, lan.avatar);
-              }
-            };
             const promises = [];
             [...entry.changes.entries()].forEach((change) => {
               for (let i = 1; i < change.length; i += 1) {
                 const { key } = change[i];
                 const before = change[i].old;
                 const after = change[i].new;
+
                 if (key === 'name') {
                   embed.addField(
                     language.name,
@@ -98,6 +95,7 @@ module.exports = {
                   );
                   changedKey.push(language.name);
                 }
+
                 if (key === 'channel_id') {
                   const oldChannel = client.channels.cache.get(before);
                   const newChannel = client.channels.cache.get(after);
@@ -115,13 +113,14 @@ module.exports = {
                   );
                   changedKey.push(language.channel);
                 }
+
                 if (key === 'avatar_hash') {
-                  webhook.wanted = 'avatar';
-                  promises.push(download());
+                  promises.push(getBuffer(ch, webhook, embed, language, lan, files));
                 }
               }
             });
-            await Promise.all(promises);
+            files = await Promise.all(promises);
+
             embed.setDescription(
               ch.stp(lan.description, { user: entry.executor, channel: data, webhook }) +
                 changedKey.map((o) => ` \`${o}\``),
@@ -151,9 +150,19 @@ module.exports = {
             if (entry.reason) embed.addField(language.reason, entry.reason);
             embed.setDescription(ch.stp(lan.description, { user: entry.executor, channel: data }));
           }
-          if (embed.description) ch.send(channels, embed);
+          if (embed.description) ch.send(channels, { embebs: [embed], files });
         }
       }
     }
   },
+};
+
+const getBuffer = async (ch, webhook, embed, language, lan, files) => {
+  const buffers = await ch.convertImageURLtoBuffer([ch.avatarURL(webhook)]);
+  if (buffers.length) {
+    embed.setThumbnail(`attachment://${buffers[0].name}`);
+    embed.addField(language.avatar, lan.avatar);
+    files = buffers;
+  }
+  return files;
 };

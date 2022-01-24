@@ -31,17 +31,15 @@ module.exports = {
               })
               .setColor(con.color);
 
-            const files = [];
-            let path;
+            let files = [];
             if (oldUser.avatar !== newUser.avatar) {
               changedKey.push(language.avatar);
 
-              [path] = await ch.downloader(newUser, [ch.displayAvatarURL(newUser)], 'user');
-              if (path) {
-                files.push(path);
-                const name = await ch.getName(path);
+              const buffers = await ch.convertImageURLtoBuffer([ch.displayAvatarURL(newUser)]);
+              if (buffers.length) {
+                files = buffers;
                 embed.addField(language.avatar, lan.avatar);
-                embed.setThumbnail(`attachment://${name}`);
+                embed.setThumbnail(`attachment://${buffers[0].name}`);
               }
             }
             if (oldUser.username !== newUser.username) {

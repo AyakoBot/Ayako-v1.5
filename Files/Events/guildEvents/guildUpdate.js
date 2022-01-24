@@ -46,60 +46,44 @@ module.exports = {
             `${language.before}: \`${oldGuild.name}\`\n${language.after}: \`${newGuild.name}\``,
           );
         }
-        let path;
+        let files;
         if (oldGuild.icon !== newGuild.icon) {
           oldGuild.change.push('icon');
           entry = await getAudits(newGuild);
-          oldGuild.wanted = 'icon';
-          newGuild.wanted = 'icon';
-          const [oldPath] = await ch.downloader(oldGuild, [ch.iconURL(oldGuild)], 'guild');
-          if (oldPath) {
-            path = oldPath;
-            const name = await ch.getName(oldPath);
-            embed.setImage(`attachment://${name}`);
+          const buffers = await ch.convertImageURLtoBuffer([ch.splashURL(oldGuild)]);
+          if (buffers.length) {
+            files = buffers;
+            embed.setImage(`attachment://${buffers[0].name}`);
             embed.addField('\u200b', lan.IconOld);
           }
         }
         if (oldGuild.splash !== newGuild.splash) {
           oldGuild.change.push('splash');
           entry = await getAudits(newGuild);
-          oldGuild.wanted = 'splash';
-          newGuild.wanted = 'splash';
-          const [oldPath] = await ch.downloader(oldGuild, [ch.splashURL(oldGuild)], 'guild');
-          if (oldPath) {
-            path = oldPath;
-            const name = await ch.getName(oldPath);
-            embed.setImage(`attachment://${name}`);
+          const buffers = await ch.convertImageURLtoBuffer([ch.splashURL(oldGuild)]);
+          if (buffers.length) {
+            files = buffers;
+            embed.setImage(`attachment://${buffers[0].name}`);
             embed.addField('\u200b', lan.splashOld);
           }
         }
         if (oldGuild.discoverySplash !== newGuild.discoverySplash) {
           oldGuild.change.push('discoverySplash');
           entry = await getAudits(newGuild);
-          oldGuild.wanted = 'discoverySplash';
-          newGuild.wanted = 'discoverySplash';
-          const [oldPath] = await ch.downloader(
-            oldGuild,
-            [ch.discoverySplashURL(oldGuild)],
-            'guild',
-          );
-          if (oldPath) {
-            path = oldPath;
-            const name = await ch.getName(oldPath);
-            embed.setImage(`attachment://${name}`);
+          const buffers = await ch.convertImageURLtoBuffer([ch.splashURL(oldGuild)]);
+          if (buffers.length) {
+            files = buffers;
+            embed.setImage(`attachment://${buffers[0].name}`);
             embed.addField('\u200b', lan.discoverySplashOld);
           }
         }
         if (oldGuild.banner !== newGuild.banner) {
           oldGuild.change.push('banner');
           entry = await getAudits(newGuild);
-          oldGuild.wanted = 'banner';
-          newGuild.wanted = 'banner';
-          const [oldPath] = await ch.downloader(oldGuild, [ch.bannerURL(oldGuild)], 'guild');
-          if (oldPath) {
-            path = oldPath;
-            const name = await ch.getName(oldPath);
-            embed.setImage(`attachment://${name}`);
+          const buffers = await ch.convertImageURLtoBuffer([ch.splashURL(oldGuild)]);
+          if (buffers.length) {
+            files = buffers;
+            embed.setImage(`attachment://${buffers[0].name}`);
             embed.addField('\u200b', lan.bannerOld);
           }
         }
@@ -320,8 +304,7 @@ module.exports = {
           }
         }
         if (embed.description) {
-          if (path) ch.send(channels, { embeds: [embed], files: [path] });
-          else ch.send(channels, { embeds: [embed] });
+          ch.send(channels, { embeds: [embed], files });
         }
       }
     }

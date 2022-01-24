@@ -62,18 +62,17 @@ module.exports = {
         }
       }
 
-      let paths = [];
+      let buffers = [];
       let files = [];
       if (pinned.attachments.size > 0) {
         const urls = pinned.attachments.map((attachment) => attachment.url);
-        paths = await ch.downloader(pinned, urls, 'message');
+        buffers = await ch.convertImageURLtoBuffer(urls);
       }
-      if (paths.length === 1) {
-        const name = await ch.getName(paths[0]);
-        embed.setImage(`attachment://${name}`);
-        files = paths;
+      if (buffers.length === 1) {
+        embed.setImage(`attachment://${buffers[0].name}`);
+        files = buffers;
       } else {
-        files = paths;
+        files = buffers;
       }
 
       if (pinned && pinned.author) {
@@ -128,18 +127,17 @@ module.exports = {
         }
       }
 
-      let paths = [];
+      let buffers = [];
       let files = [];
       if (pinned.attachments.size > 0) {
         const urls = pinned.attachments.map((attachment) => attachment.url);
-        paths = await ch.downloader(pinned, urls, 'message');
+        buffers = await ch.convertImageURLtoBuffer(urls);
       }
-      if (paths.length === 1) {
-        const name = await ch.getName(paths[0]);
-        embed.setImage(`attachment://${name}`);
-        files = paths;
+      if (buffers.length === 1) {
+        embed.setImage(`attachment://${buffers[0].name}`);
+        files = buffers;
       } else {
-        files = paths;
+        files = buffers;
       }
 
       if (pinned && pinned.author) {

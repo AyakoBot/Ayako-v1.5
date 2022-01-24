@@ -17,20 +17,15 @@ module.exports = {
               if (guild && guild.id) {
                 if (guild && guild.id) {
                   if (user && user.id) {
-                    const member = await guild.members.fetch(user.id);
-                    if (member) {
-                      const language = await ch.languageSelector(guild);
-                      if (member.isCommunicationDisabled()) {
-                        client.emit(
-                          'muteRemove',
-                          client.user,
-                          user,
-                          guild,
-                          language.ready.unmute.reason,
-                        );
-                        closed(guild, user, end);
-                      } else closed(guild, user, end);
-                    } else closed(guild, user, end);
+                    const language = await ch.languageSelector(guild);
+                    client.emit(
+                      'muteRemove',
+                      client.user,
+                      user,
+                      guild,
+                      language.ready.unmute.reason,
+                    );
+                    closed(guild, user, end);
                   }
                 }
               }
