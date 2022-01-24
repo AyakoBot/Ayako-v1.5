@@ -10,8 +10,7 @@ module.exports = {
 
     const kicks = await Promise.all(kickPromises);
 
-    const path = guild.client.ch.txtFileWriter(
-      guild,
+    const attachment = guild.client.ch.txtFileWriter(
       kicks.map((kicked) =>
         typeof kicked === 'object' || !Number.isNaN(+kicked) === 'number'
           ? `User ID ${kicked.user?.id ?? kicked.id ?? kicked} | User Tag: ${
@@ -19,7 +18,6 @@ module.exports = {
             }`
           : kicked,
       ),
-      'antiraidPunishment',
     );
 
     const res = await guild.client.ch.query(`SELECT modlogs FROM logchannels WHERE guildid = $1;`, [
@@ -47,7 +45,7 @@ module.exports = {
 
       res.rows[0].modlogs.forEach((logChannel) => {
         const channel = guild.channels.cache.get(logChannel);
-        guild.client.ch.send(channel, { embeds: [embed], files: [path] });
+        guild.client.ch.send(channel, { embeds: [embed], files: [attachment] });
       });
     }
   },

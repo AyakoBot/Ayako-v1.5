@@ -29,7 +29,7 @@ module.exports = {
             )}`,
         );
 
-        const path = await ch.txtFileWriter(msgs.first(), arr, 'messageDeleteBulk');
+        const attachment = ch.txtFileWriter(arr);
         let audits = await guild.fetchAuditLogs({ limit: 5, type: 73 }).catch(() => {});
         let entry;
         if (audits && audits.entries.size > 0) {
@@ -60,7 +60,7 @@ module.exports = {
               amount: msgs.size,
             }),
           );
-        if (path) ch.send(channels, { embeds: [embed], files: [path] });
+        if (attachment) ch.send(channels, { embeds: [embed], files: [attachment] });
         else ch.send(channels, { embeds: [embed] });
       }
     }

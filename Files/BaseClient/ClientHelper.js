@@ -4,14 +4,15 @@ const http = require('http');
 const Discord = require('discord.js');
 const v8 = require('v8');
 const fs = require('fs');
-const { dirname } = require('path');
+
 const SA = require('superagent');
 
 const auth = require('./auth.json');
 const ChannelRules = require('./Other Client Files/ChannelRules');
 const Constants = require('../Constants.json');
 
-const appDir = dirname(require.main.filename);
+// const { dirname } = require('path');
+// const appDir = dirname(require.main.filename);
 const DiscordEpoch = 1420070400000;
 
 const regexes = {
@@ -596,45 +597,24 @@ module.exports = {
    * @param {array} array - The Array of Strings to convert.
    * @param {source} string - The Source of this function call for sorting in correct Folders.
    */
-  txtFileWriter(msg, array, source) {
+  txtFileWriter(array, source) {
     if (!array.length) return null;
 
     const now = Date.now();
     let content = '';
     const split = '\n';
-    let path;
 
     switch (source) {
       default: {
-        path = `${appDir}\\Files\\Downloads\\Logs\\debug.txt`;
-        break;
-      }
-      case 'massban': {
-        path = `${appDir}\\Files\\Downloads\\Guilds\\Guild - ${msg.guild.id}\\Massbans\\${now}.txt`;
-        break;
-      }
-      case 'messageDeleteBulk': {
-        path = `${appDir}\\Files\\Downloads\\Guilds\\Guild - ${msg.guild.id}\\Messages\\Bulk Deletes\\Channel - ${msg.channel.id}\\${now}.txt`;
         break;
       }
       case 'antiraid': {
-        path = `${appDir}\\Files\\Downloads\\Guilds\\Guild - ${msg.id}\\Raids\\${now}.txt`;
         array.forEach((element, i) => {
           content += `${element}${i % 3 === 2 ? split : ' '}`;
         });
         break;
       }
-      case 'antiraidPunishment': {
-        path = `${appDir}\\Files\\Downloads\\Guilds\\Guild - ${msg.id}\\Raids\\${now}.txt`;
-        break;
-      }
-      case 'json': {
-        path = `${appDir}\\Files\\Downloads\\Guilds\\Guild - ${msg.guild.id}\\JSON\\${now}.json`;
-        break;
-      }
     }
-
-    this.checkPath(path);
 
     if (!content.length) {
       array.forEach((element) => {
@@ -642,11 +622,10 @@ module.exports = {
       });
     }
 
-    fs.writeFile(path, content, (err) => {
-      if (err) throw err;
-    });
+    const buffer = Buffer.from(content, 'utf-8');
+    const attachment = { attachment: buffer, name: `${now}.txt` };
 
-    return path;
+    return attachment;
   },
   /**
    * Tests if a String containts non-Latin Codepoints.
@@ -878,28 +857,13 @@ module.exports = {
    * @param {string} url - The URL to convert
    */
   async convertTxtFileLinkToString(url) {
-    if (!url.endsWith('.txt')) return null;
+    if (!URL(url).pathname.endsWith('.txt')) return null;
 
-    const path = `${appDir}\\Files\\Downloads\\Messages\\Attachments\\${Date.now()}.txt`;
-    this.checkPath(path);
+    const res = await SA.get(url).catch((e) => e);
+    const buffer = res?.body;
 
-    await this.download(url, path);
+    if (!buffer) return null;
 
-    return fs.readFileSync(path, 'utf8');
-  },
-  /**
-   * Checks if a Path exists, if not creates it.
-   * @constructor
-   * @param {string} path - The Path to check (has to be split with '\\\\' (2 backslashes))
-   */
-  checkPath(path) {
-    const parts = path.split(/\\+/);
-    let fullPath = '';
-
-    parts.forEach((part, i) => {
-      fullPath += `${part}/`;
-
-      if (!fs.existsSync(fullPath) && parts.length !== i + 1) fs.mkdirSync(fullPath);
-    });
+    return buffer.toString('utf8');
   },
 };
