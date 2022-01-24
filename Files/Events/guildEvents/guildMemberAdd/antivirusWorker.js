@@ -64,10 +64,10 @@ const run = async ({
   );
 
   if (
-    ((whitelist.includes(linkObject.baseURLhostname) &&
+    (whitelist.includes(linkObject.baseURLhostname) &&
       linkObject.hostname.endsWith(linkObject.baseURLhostname)) ||
-      whitelist.includes(linkObject.baseURLhostname)) &&
-    !isFile
+    (whitelist.includes(linkObject.baseURLhostname) && !isFile) ||
+    (isFile && whitelistCDN.includes(linkObject.baseURLhostname))
   ) {
     parentPort.postMessage({ msgData, lan, linkObject, check, type: 'whitelisted' });
     return;

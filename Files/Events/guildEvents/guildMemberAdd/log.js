@@ -9,6 +9,7 @@ module.exports = {
     const { ch } = client;
     const Constants = client.constants;
     const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);
+    console.log(res);
     if (res && res.rowCount > 0) {
       const channels = res.rows[0].guildmemberevents
         ?.map((id) =>
@@ -17,6 +18,8 @@ module.exports = {
             : null,
         )
         .filter((c) => c !== null);
+
+      console.log(1);
       if (channels && channels.length) {
         const language = await ch.languageSelector(guild);
         const lan = language.guildMemberAddLog;
@@ -38,6 +41,7 @@ module.exports = {
           )
           .setColor(con.color);
         const cachedInvites = client.invites.get(guild.id);
+
         if (user.bot) {
           const audits = await guild.fetchAuditLogs({ limit: 3, type: 28 });
           let entry;
@@ -59,15 +63,16 @@ module.exports = {
           const newInvites = await guild.invites.fetch();
           client.invites.set(guild.id, newInvites);
           let usedInvite;
-          if (cachedInvites)
+          if (cachedInvites) {
             usedInvite = newInvites.find(
               (inv) => cachedInvites.find((i) => i.code === inv.code).uses < inv.uses,
             );
-          embed.setAuthor(
-            lan.author.titleUser,
-            con.author.image,
-            ch.stp(con.author.link, { user }),
-          );
+          }
+          embed.setAuthor({
+            name: lan.author.titleUser,
+            iconURL: con.author.image,
+            url: ch.stp(con.author.link, { user }),
+          });
           embed.setThumbnail(ch.displayAvatarURL(member.user));
           embed.setDescription(ch.stp(lan.descriptionUser, { user }));
           if (usedInvite) {
