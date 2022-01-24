@@ -56,13 +56,11 @@ module.exports = {
               ch.stp(con.author.link, { user }),
             );
         } else {
-          embed
-            .setDescription(ch.stp(lan.descriptionLeft, { user }))
-            .setAuthor(
-              lan.author.nameLeave,
-              con.author.leaveImage,
-              ch.stp(con.author.link, { user }),
-            );
+          embed.setDescription(ch.stp(lan.descriptionLeft, { user })).setAuthor({
+            name: lan.author.nameLeave,
+            iconURL: con.author.leaveImage,
+            url: ch.stp(con.author.link, { user }),
+          });
         }
         embed.addField(
           language.joinedAt,
