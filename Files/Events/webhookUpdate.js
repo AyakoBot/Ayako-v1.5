@@ -81,7 +81,6 @@ module.exports = {
               const [path] = await ch.downloader(webhook, [ch.avatarURL(webhook)], 'webhook');
               if (path) {
                 const name = await ch.getName(path);
-                embed.attachFiles([path]);
                 embed.setThumbnail(`attachment://${name}`);
                 embed.addField(language.avatar, lan.avatar);
               }

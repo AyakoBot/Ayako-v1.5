@@ -62,7 +62,6 @@ module.exports = {
           paths = await ch.downloader(newMsg, urls, 'message');
           if (paths.length === 1) {
             const name = await ch.getName(paths[0]);
-            embed.attachFiles([paths[0]]);
             embed.setImage(`attachment://${name}`);
             files = paths;
           } else {
