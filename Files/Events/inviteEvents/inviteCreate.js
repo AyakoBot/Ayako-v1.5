@@ -76,7 +76,7 @@ module.exports = {
               ),
             true,
           );
-        if (invite.maxUses) embed.addField(lan.uses, invite.maxUses, true);
+        if (invite.maxUses) embed.addField(lan.uses, `\u200B${invite.maxUses}`, true);
         if (invite.targetUser)
           embed.addField(
             lan.targetedUser,

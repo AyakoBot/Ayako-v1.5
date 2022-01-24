@@ -54,15 +54,22 @@ module.exports = {
             else embed.addField(language.unknownEmbed, '\u200b');
           });
         }
+
+        let paths = [];
+        let files = [];
         if (newMsg.attachments.size > 0) {
-          const path = await ch.downloader(newMsg);
-          if (path) {
-            const name = await ch.getName(path);
-            embed.attachFiles([path]);
+          const urls = newMsg.attachments.map((attachment) => attachment.url);
+          paths = await ch.downloader(newMsg, urls, 'message');
+          if (paths.length === 1) {
+            const name = await ch.getName(paths[0]);
+            embed.attachFiles([paths[0]]);
             embed.setImage(`attachment://${name}`);
+            files = paths;
+          } else {
+            files = paths;
           }
         }
-        ch.send(channels, embed);
+        ch.send(channels, { embeds: [embed], files });
       }
     }
   },

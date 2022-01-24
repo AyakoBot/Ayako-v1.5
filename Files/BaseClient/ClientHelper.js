@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-const URL = require('url');
 const https = require('https');
 const http = require('http');
 const Discord = require('discord.js');
@@ -29,18 +28,9 @@ module.exports = {
    * @constructor
    */
   pathCheck() {
-    if (!fs.existsSync('.\\Files\\Downloads')) fs.mkdirSync('.\\Files\\Downloads');
-    if (!fs.existsSync('.\\Files\\Downloads\\Messages'))
-      fs.mkdirSync('.\\Files\\Downloads\\Messages');
-    if (!fs.existsSync('.\\Files\\Downloads\\Messages\\Bulk Deletes'))
-      fs.mkdirSync('.\\Files\\Downloads\\Messages\\Bulk Deletes');
-    if (!fs.existsSync('.\\Files\\Downloads\\Guilds')) fs.mkdirSync('.\\Files\\Downloads\\Guilds');
-    if (!fs.existsSync('.\\Files\\Downloads\\Users')) fs.mkdirSync('.\\Files\\Downloads\\Users');
-    if (!fs.existsSync('.\\Files\\Downloads\\Massbans'))
-      fs.mkdirSync('.\\Files\\Downloads\\Massbans');
-    if (!fs.existsSync('.\\Files\\Downloads\\Captchas'))
+    if (!fs.existsSync('.\\Files\\Downloads\\Captchas')) {
       fs.mkdirSync('.\\Files\\Downloads\\Captchas');
-    if (!fs.existsSync('.\\Files\\Downloads\\Logs')) fs.mkdirSync('.\\Files\\Downloads\\Logs');
+    }
   },
   /**
    * Sends a Message to a channel.
@@ -225,76 +215,64 @@ module.exports = {
   /**
    * Prepares incoming URLs for Download, giving it its Destination Path.
    * @constructor
-   * @param {object} ident - The Identifier of this URL
-   * @param {string} url - The URL the file will be downloaded from.
+   * @param {object} base - The Base Object for these URLs
+   * @param {array} urls - The URLs the files will be downloaded from.
+   * @param {string} type - The type of Base Object.
    */
-  async downloader(ident, url) {
-    const newUrl = [];
-    let path;
-    const pathers = url ? url.split('.') : null;
-    let pathend;
-    if (pathers) pathend = `${pathers[pathers.length - 1]}`.replace(URL.parse(url).search, '');
-    if (ident.channel) {
-      path = `.\\Files\\Downloads\\Guilds\\Guild - ${ident.guild.id}\\Channel - ${ident.channel.id}\\${ident.id}`;
+  async downloader(base, urls, type) {
+    const pathPromises = urls.map((url) => {
+      const URLObject = new URL(url);
+      const fileType = URLObject.pathname.split('.').pop();
 
-      const guilddir = `.\\Files\\Downloads\\Guilds\\Guild - ${ident.guild.id}`;
-      if (!fs.existsSync(guilddir)) fs.mkdirSync(guilddir);
-
-      const channeldir = `.\\Files\\Downloads\\Guilds\\Guild - ${ident.guild.id}\\Channel - ${ident.channel.id}`;
-      if (!fs.existsSync(channeldir)) fs.mkdirSync(channeldir);
-    } else if (ident.animated !== undefined && ident.animated !== null) {
-      path = `.\\Files\\Downloads\\Guilds\\Guild - ${ident.guild.id}\\Deleted Emotes\\${ident.id}`;
-
-      const lastdir = `.\\Files\\Downloads\\Guilds\\Guild - ${ident.guild.id}`;
-      if (!fs.existsSync(lastdir)) fs.mkdirSync(lastdir);
-
-      const emotedir = `.\\Files\\Downloads\\Guilds\\Guild - ${ident.guild.id}\\Deleted Emotes`;
-      if (!fs.existsSync(emotedir)) fs.mkdirSync(emotedir);
-
-      const guilddir = `.\\Files\\Downloads\\Guilds\\Guild - ${ident.guild.id}`;
-      if (!fs.existsSync(guilddir)) fs.mkdirSync(guilddir);
-    } else if (ident.ownerID) {
-      const now = Date.now();
-      if (ident.wanted) {
-        path = `.\\Files\\Downloads\\Guilds\\Guild - ${ident.id}\\${ident.wanted}\\${now}`;
-
-        const guilddir = `.\\Files\\Downloads\\Guilds\\Guild - ${ident.id}`;
-        if (!fs.existsSync(guilddir)) fs.mkdirSync(guilddir);
-
-        const channeldir = `.\\Files\\Downloads\\Guilds\\Guild - ${ident.id}\\${ident.wanted}`;
-        if (!fs.existsSync(channeldir)) fs.mkdirSync(channeldir);
+      let path;
+      switch (type) {
+        default: {
+          break;
+        }
+        case 'webhook': {
+          path = `${appDir}\\Files\\Downloads\\Guilds\\Guild - ${
+            base.guild.id
+          }\\Webhooks\\Webhook - ${base.id}\\${Date.now()}.${fileType}`;
+          break;
+        }
+        case 'message': {
+          if (base.guild) {
+            path = `${appDir}\\Files\\Downloads\\Guilds\\Guild - ${
+              base.guild.id
+            }\\Channels\\Channel - ${base.channel.id}\\Messages\\Message - ${
+              base.id
+            }\\${Date.now()}.${fileType}`;
+          } else {
+            path = `${appDir}\\Files\\Downloads\\DMs\\User - ${
+              base.author.id
+            }\\Messages\\Message - ${base.id}\\${Date.now()}.${fileType}`;
+          }
+          break;
+        }
+        case 'emoji': {
+          path = `${appDir}\\Files\\Downloads\\Guilds\\Guild - ${base.guild.id}\\Emoji\\Emoji - ${
+            base.id
+          }\\${Date.now()}.${fileType}`;
+          break;
+        }
+        case 'guild': {
+          path = `${appDir}\\Files\\Downloads\\Guilds\\Guild - ${
+            base.id
+          }\\Other\\${Date.now()}.${fileType}`;
+          break;
+        }
+        case 'user': {
+          path = `${appDir}\\Files\\Downloads\\Users\\User - ${base.id}\\${Date.now()}.${fileType}`;
+          break;
+        }
       }
-    } else if (ident.avatar) {
-      const now = Date.now();
-      if (ident.wanted) {
-        path = `.\\Files\\Downloads\\Users\\User - ${ident.id}\\${now}`;
 
-        const userdir = `.\\Files\\Downloads\\Users\\User - ${ident.id}`;
-        if (!fs.existsSync(userdir)) fs.mkdirSync(userdir);
-      }
-    }
-    if (!url) {
-      // eslint-disable-next-line no-param-reassign
-      ident.attachments = ident.attachments
-        .map((o) => o)
-        .map((attachment, i) => {
-          path = `${path}-${i}`;
-          const pather = attachment.url.split('.');
-          pathend = `${pather[pather.length - 1]}`;
-          const urlArray = {
-            url: attachment.url,
-            path: `${path}.${pathend}`,
-          };
-          return urlArray;
-        });
-    } else if (ident.animated) {
-      pathend = ident.animated ? 'gif' : 'png';
-    }
-    if (Array.isArray(newUrl)) {
-      const promises = newUrl.map((u) => this.download(u.url, u.path));
-      await Promise.all(promises);
-    } else await this.download(newUrl, `${path}.${pathend}`);
-    return `${path}.${pathend}`;
+      this.checkPath(path);
+
+      return this.download(url, path);
+    });
+
+    return Promise.all(pathPromises);
   },
   /**
    * Extracts a File Name out of a File Path.
@@ -314,7 +292,8 @@ module.exports = {
    */
   async download(url, filePath) {
     const proto = !url.charAt(4).localeCompare('s') ? https : http;
-    return new Promise((resolve, reject) => {
+
+    await new Promise((resolve, reject) => {
       const file = fs.createWriteStream(filePath);
       let fileInfo = null;
       const request = proto.get(url, (response) => {
@@ -334,6 +313,8 @@ module.exports = {
       });
       request.end();
     });
+
+    return filePath;
   },
   /**
    * A translator for Channel Rules into the given Language.

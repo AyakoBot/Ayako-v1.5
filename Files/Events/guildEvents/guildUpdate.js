@@ -52,7 +52,7 @@ module.exports = {
           entry = await getAudits(newGuild);
           oldGuild.wanted = 'icon';
           newGuild.wanted = 'icon';
-          const oldPath = await ch.downloader(oldGuild, ch.iconURL(oldGuild));
+          const [oldPath] = await ch.downloader(oldGuild, [ch.iconURL(oldGuild)], 'guild');
           if (oldPath) {
             path = oldPath;
             const name = await ch.getName(oldPath);
@@ -65,7 +65,7 @@ module.exports = {
           entry = await getAudits(newGuild);
           oldGuild.wanted = 'splash';
           newGuild.wanted = 'splash';
-          const oldPath = await ch.downloader(oldGuild, ch.splashURL(oldGuild));
+          const [oldPath] = await ch.downloader(oldGuild, [ch.splashURL(oldGuild)], 'guild');
           if (oldPath) {
             path = oldPath;
             const name = await ch.getName(oldPath);
@@ -78,7 +78,11 @@ module.exports = {
           entry = await getAudits(newGuild);
           oldGuild.wanted = 'discoverySplash';
           newGuild.wanted = 'discoverySplash';
-          const oldPath = await ch.downloader(oldGuild, ch.discoverySplashURL(oldGuild));
+          const [oldPath] = await ch.downloader(
+            oldGuild,
+            [ch.discoverySplashURL(oldGuild)],
+            'guild',
+          );
           if (oldPath) {
             path = oldPath;
             const name = await ch.getName(oldPath);
@@ -91,7 +95,7 @@ module.exports = {
           entry = await getAudits(newGuild);
           oldGuild.wanted = 'banner';
           newGuild.wanted = 'banner';
-          const oldPath = await ch.downloader(oldGuild, ch.bannerURL(oldGuild));
+          const [oldPath] = await ch.downloader(oldGuild, [ch.bannerURL(oldGuild)], 'guild');
           if (oldPath) {
             path = oldPath;
             const name = await ch.getName(oldPath);
