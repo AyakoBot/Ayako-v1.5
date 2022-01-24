@@ -78,7 +78,7 @@ module.exports = {
             });
 
             const download = async () => {
-              const path = await ch.downloader(webhook, ch.avatarURL(webhook));
+              const [path] = await ch.downloader(webhook, [ch.avatarURL(webhook)], 'webhook');
               if (path) {
                 const name = await ch.getName(path);
                 embed.attachFiles([path]);

@@ -20,6 +20,8 @@ module.exports = {
       check = true;
     }
 
+    if (!check) return;
+
     const language = await msg.client.ch.languageSelector(check ? null : msg.guild);
     const lan = language.antivirus;
 
@@ -159,7 +161,7 @@ const prepare = async (msg, lan, check, language) => {
     setTimeout(() => {
       if (!exited) {
         AVworker.terminate();
-        timedOut({ msg, lan, check, linkObject });
+        timedOut({ msg, lan, check, linkObject, language });
       }
     }, 120000);
   });

@@ -1,4 +1,3 @@
-
 const Discord = require('discord.js');
 
 module.exports = {
@@ -27,10 +26,11 @@ module.exports = {
           entry = audit.sort((a, b) => b.id - a.id);
           entry = entry.first();
         }
-        emoji.wanted = 'emote';
-        const path = await ch.downloader(
+
+        const [path] = await ch.downloader(
           emoji,
-          ch.stp(con.author.link, { emoji, ending: emoji.animated ? 'gif' : 'png' }),
+          [ch.stp(con.author.link, { emoji, ending: emoji.animated ? 'gif' : 'png' })],
+          'emoji',
         );
         const embed = new Discord.MessageEmbed()
           .setAuthor(

@@ -24,23 +24,24 @@ module.exports = {
             const changedKey = [];
             const embed = new Discord.MessageEmbed()
               .setTimestamp()
-              .setAuthor(
-                lan.author.name,
-                con.author.image,
-                ch.stp(con.author.link, { user: newUser }),
-              )
+              .setAuthor({
+                name: lan.author.name,
+                iconURL: con.author.image,
+                url: ch.stp(con.author.link, { user: newUser }),
+              })
               .setColor(con.color);
-            const file = [];
+
+            const files = [];
+            let path;
             if (oldUser.avatar !== newUser.avatar) {
               changedKey.push(language.avatar);
-              // eslint-disable-next-line no-param-reassign
-              newUser.wanted = 'avatar';
-              const path = await ch.downloader(newUser, ch.displayAvatarURL(newUser));
+
+              [path] = await ch.downloader(newUser, [ch.displayAvatarURL(newUser)], 'user');
               if (path) {
-                file.path = path;
-                file.name = await ch.getName(path);
+                files.push(path);
+                const name = await ch.getName(path);
                 embed.addField(language.avatar, lan.avatar);
-                embed.setThumbnail(`attachment://${file.name}`);
+                embed.setThumbnail(`attachment://${name}`);
               }
             }
             if (oldUser.username !== newUser.username) {
@@ -60,9 +61,8 @@ module.exports = {
             embed.setDescription(
               ch.stp(lan.description, { user: newUser }) + changedKey.map((o) => ` \`${o}\``),
             );
-            if (embed.fields.length) {
-              if (file) ch.send(channels, { embeds: [embed], files: [file.path] });
-              else ch.send(channels, { embeds: [embed] });
+            if (embed.fields.length || (embed.thumbnail && embed.thumbnail.url)) {
+              ch.send(channels, { embeds: [embed], files });
             }
           }
         }

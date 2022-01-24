@@ -49,28 +49,35 @@ module.exports = {
       const pinned = await channel.messages.fetch(entryPin.extra.messageID).catch(() => {});
       const lan = language.channelPin;
       const con = Constants.channelPin;
+      if (pinned.content) {
+        embed.addField(language.content, pinned.content);
+      }
+      for (let i = 0; pinned.embeds.length > i; i += 1) {
+        if (pinned.embeds[i].title) {
+          embed.addField(language.embedTitle, pinned.embeds[i].title);
+        } else if (pinned.embeds[i].description) {
+          embed.addField(language.embedDescription, pinned.embeds[i].description);
+        } else {
+          embed.addField(language.embed, language.unknownEmbed);
+        }
+      }
+
+      let paths = [];
+      let files = [];
+      if (pinned.attachments.size > 0) {
+        const urls = pinned.attachments.map((attachment) => attachment.url);
+        paths = await ch.downloader(pinned, urls, 'message');
+      }
+      if (paths.length === 1) {
+        const name = await ch.getName(paths[0]);
+        embed.attachFiles([paths[0]]);
+        embed.setImage(`attachment://${name}`);
+        files = paths;
+      } else {
+        files = paths;
+      }
+
       if (pinned && pinned.author) {
-        if (pinned.content) {
-          embed.addField(language.content, pinned.content);
-        }
-        for (let i = 0; pinned.embeds.length > i; i += 1) {
-          if (pinned.embeds[i].title) {
-            embed.addField(language.embedTitle, pinned.embeds[i].title);
-          } else if (pinned.embeds[i].description) {
-            embed.addField(language.embedDescription, pinned.embeds[i].description);
-          } else {
-            embed.addField(language.embed, language.unknownEmbed);
-          }
-        }
-        let path;
-        if (pinned.attachments.size > 0) {
-          path = await ch.downloader(pinned);
-        }
-        if (path) {
-          const name = await ch.getName(path);
-          embed.attachFiles([path]);
-          embed.setImage(`attachment://${name}`);
-        }
         embed
           .setAuthor({
             name: lan.author.title,
@@ -87,7 +94,7 @@ module.exports = {
             }),
           )
           .setColor(con.color);
-        ch.send(logchannel, embed);
+        ch.send(logchannel, { embeds: [embed], files });
       } else {
         embed
           .setAuthor({
@@ -102,35 +109,42 @@ module.exports = {
             }),
           )
           .setColor(con.color);
-        ch.send(logchannel, { embed });
+        ch.send(logchannel, { embeds: [embed], files });
       }
     }
     async function caseUnPin(entryUnPin, embed, language, logchannel) {
       const pinned = await channel.messages.fetch(entryUnPin.extra.messageID).catch(() => {});
       const lan = language.channelUnPin;
       const con = Constants.channelUnPin;
+      if (pinned.content) {
+        embed.addField(language.content, pinned.content);
+      }
+      for (let i = 0; pinned.embeds.length > i; i += 1) {
+        if (pinned.embeds[i].title) {
+          embed.addField(language.embedTitle, pinned.embeds[i].title);
+        } else if (pinned.embeds[i].description) {
+          embed.addField(language.embedDescription, pinned.embeds[i].description);
+        } else {
+          embed.addField(language.embed, language.unknownEmbed);
+        }
+      }
+
+      let paths = [];
+      let files = [];
+      if (pinned.attachments.size > 0) {
+        const urls = pinned.attachments.map((attachment) => attachment.url);
+        paths = await ch.downloader(pinned, urls, 'message');
+      }
+      if (paths.length === 1) {
+        const name = await ch.getName(paths[0]);
+        embed.attachFiles([paths[0]]);
+        embed.setImage(`attachment://${name}`);
+        files = paths;
+      } else {
+        files = paths;
+      }
+
       if (pinned && pinned.author) {
-        if (pinned.content) {
-          embed.addField(language.content, pinned.content);
-        }
-        for (let i = 0; pinned.embeds.length > i; i += 1) {
-          if (pinned.embeds[i].title) {
-            embed.addField(language.embedTitle, pinned.embeds[i].title);
-          } else if (pinned.embeds[i].description) {
-            embed.addField(language.embedDescription, pinned.embeds[i].description);
-          } else {
-            embed.addField(language.embed, language.unknownEmbed);
-          }
-        }
-        let path;
-        if (pinned.attachments.size > 0) {
-          path = await ch.downloader(pinned);
-        }
-        if (path) {
-          const name = await ch.getName(path);
-          embed.attachFiles([path]);
-          embed.setImage(`attachment://${name}`);
-        }
         embed
           .setAuthor({
             name: lan.author.title,
@@ -147,7 +161,7 @@ module.exports = {
             }),
           )
           .setColor(con.color);
-        ch.send(logchannel, { embed });
+        ch.send(logchannel, { embeds: [embed], files });
       } else {
         embed
           .setAuthor({
@@ -162,7 +176,7 @@ module.exports = {
             }),
           )
           .setColor(con.color);
-        ch.send(logchannel, { embed });
+        ch.send(logchannel, { embeds: [embed], files });
       }
     }
     function caseUnknown(embed, language, logchannel) {

@@ -65,12 +65,21 @@ module.exports = {
             embed.addField('\u200b', chunks.last);
           } else embed.addField(language.content, msg.content);
         }
-        let path;
-        if (msg.attachments.size > 0) path = await ch.downloader(msg);
-        if (path) {
-          const name = await ch.getName(path);
-          embed.setImage(`attachment://${name}`);
+        let paths = [];
+        let files = [];
+        if (msg.attachments.size > 0) {
+          const urls = msg.attachments.map((attachment) => attachment.url);
+          paths = await ch.downloader(msg, urls, 'message');
         }
+        if (paths.length === 1) {
+          const name = await ch.getName(paths[0]);
+          embed.attachFiles([paths[0]]);
+          embed.setImage(`attachment://${name}`);
+          files = paths;
+        } else {
+          files = paths;
+        }
+
         if (msg.embeds.size > 0) {
           for (let i = 0; i < msg.embeds.size; i += 1) {
             if (msg.embeds[i].title) embed.addField(language.embedTitle, msg.embeds[i].title);
@@ -78,8 +87,7 @@ module.exports = {
               embed.addField(language.embedDescription, msg.embeds[i].description);
           }
         }
-        if (path) ch.send(channels, { embeds: [embed], files: [path] });
-        else ch.send(channels, { embeds: [embed] });
+        ch.send(channels, { embeds: [embed], files });
       }
     }
   },
