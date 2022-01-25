@@ -560,7 +560,7 @@
         "image": "https://ayakobot.com/cdn/Ayako_Assets/Warning.png"
       }
     },
-    "embedBuilder": {
+    "embedbuilder": {
       "error": "https://ayakobot.com/cdn/Ayako_Assets/Warning.png"
     },
     "clearwarns": {
