@@ -21,7 +21,7 @@ module.exports = {
 
     msg.m?.reactions.cache.get(msg.client.constants.emotes.back).users.remove(msg.client.user.id);
 
-    const lan = msg.language.commands.embedBuilder;
+    const lan = msg.language.commands.embedbuilder;
     const finishedEmbed = new Discord.MessageEmbed().setDescription(lan.placeholder);
 
     const Objects = {
@@ -65,9 +65,9 @@ const replier = async ({ msg, answer }, { embeds, components, content, files }, 
       (!Objects.embed.footer || !Objects.embed.footer.text)
     ) {
       finishedEmbed = new Discord.MessageEmbed()
-        .setDescription(msg.language.commands.embedBuilder.warns.noValue)
+        .setDescription(msg.language.commands.embedbuilder.warns.noValue)
         .setColor('FF0000')
-        .setThumbnail(msg.client.constants.commands.embedBuilder.error);
+        .setThumbnail(msg.client.constants.commands.embedbuilder.error);
     } else {
       finishedEmbed = Objects.embed;
     }
@@ -102,8 +102,8 @@ const replier = async ({ msg, answer }, { embeds, components, content, files }, 
 
 const getComponents = (msg, { page, Objects }) => {
   const components = [];
-  const lan = msg.language.commands.embedBuilder.edit;
-  const baseLan = msg.language.commands.embedBuilder;
+  const lan = msg.language.commands.embedbuilder.edit;
+  const baseLan = msg.language.commands.embedbuilder;
 
   switch (page) {
     default: {
@@ -326,8 +326,8 @@ const postCode = (Objects, msg, interaction, embed, noRemove) => {
       new Discord.MessageEmbed()
         .setDescription(msg.client.ch.makeCodeBlock(JSON.stringify(rawCode, null, 1)))
         .setColor('ffffff')
-        .setTitle(msg.language.commands.embedBuilder.unsaved)
-        .addField('\u200b', msg.language.commands.embedBuilder.unsavedFieldValue),
+        .setTitle(msg.language.commands.embedbuilder.unsaved)
+        .addField('\u200b', msg.language.commands.embedbuilder.unsavedFieldValue),
     );
 
     replier(
@@ -341,7 +341,7 @@ const postCode = (Objects, msg, interaction, embed, noRemove) => {
 };
 
 const handleSave = async (msg, answer, Objects) => {
-  const lan = msg.language.commands.embedBuilder;
+  const lan = msg.language.commands.embedbuilder;
   const save = new Discord.MessageButton()
     .setCustomId('save')
     .setLabel(lan.save)
@@ -433,7 +433,7 @@ const handleSend = async (msg, answer, Objects) => {
       .setStyle('PRIMARY');
     const send = new Discord.MessageButton()
       .setCustomId('send')
-      .setLabel(msg.language.commands.embedBuilder.send)
+      .setLabel(msg.language.commands.embedbuilder.send)
       .setStyle('PRIMARY');
     const channels = new Discord.MessageSelectMenu()
       .setCustomId('channels')
@@ -448,7 +448,7 @@ const handleSend = async (msg, answer, Objects) => {
   const getEmbed = (options) => {
     const embed = new Discord.MessageEmbed()
       .setDescription(
-        `${msg.language.commands.embedBuilder.sendWhere}\n\n**${msg.language.selected}**:\n${
+        `${msg.language.commands.embedbuilder.sendWhere}\n\n**${msg.language.selected}**:\n${
           options.selected.lenght
             ? options.selected.map((c) => `<#${c}>`).join(', ')
             : msg.language.none
@@ -534,7 +534,7 @@ const handleSend = async (msg, answer, Objects) => {
               ? errors
                   .map(
                     (err) =>
-                      `${msg.client.ch.stp(`${msg.language.commands.embedBuilder.sendError}`, {
+                      `${msg.client.ch.stp(`${msg.language.commands.embedbuilder.sendError}`, {
                         channel: `<#${err[0]}>`,
                         error: err[1],
                       })}`,
@@ -542,7 +542,7 @@ const handleSend = async (msg, answer, Objects) => {
                   .join('\n')
               : '',
             successes.map((c) => {
-              return msg.client.ch.stp(`${msg.language.commands.embedBuilder.sendSuccess}`, {
+              return msg.client.ch.stp(`${msg.language.commands.embedbuilder.sendSuccess}`, {
                 channel: `<#${c[0]}>`,
               });
             }))
@@ -567,14 +567,14 @@ const handleOtherMsgRaw = async (msg, answer, Objects) => {
 
   const noFound = () => {
     const embed = new Discord.MessageEmbed().setDescription(
-      msg.language.commands.embedBuilder.noUrlFound,
+      msg.language.commands.embedbuilder.noUrlFound,
     );
 
     return replier({ msg, answer }, { embeds: [embed], components: [] }, Objects);
   };
 
   const embed = new Discord.MessageEmbed()
-    .setDescription(msg.language.commands.embedBuilder.otherMsg)
+    .setDescription(msg.language.commands.embedbuilder.otherMsg)
     .addField(
       msg.language.Examples,
       msg.client.constants.discordMsgUrls.map((url) => `\`${url}\``).join('\n'),
@@ -653,7 +653,7 @@ const handleOtherMsgRaw = async (msg, answer, Objects) => {
 const embedButtonsHandler = async (Objects, msg, answer) => {
   const messageHandler = (type) => {
     const messageCollector = msg.channel.createMessageCollector({ time: 60000 });
-    const lan = msg.language.commands.embedBuilder.edit[type];
+    const lan = msg.language.commands.embedbuilder.edit[type];
 
     const embed = new Discord.MessageEmbed().setTitle(lan.name).setDescription(lan.answers);
 
@@ -686,7 +686,7 @@ const embedButtonsHandler = async (Objects, msg, answer) => {
   const limits = msg.client.constants.customembeds.limits.fields;
 
   const errorVal = (error, valid) => {
-    const lan = msg.language.commands.embedBuilder;
+    const lan = msg.language.commands.embedbuilder;
     let lanError;
 
     switch (error) {
@@ -709,7 +709,7 @@ const embedButtonsHandler = async (Objects, msg, answer) => {
     }
 
     const embed = new Discord.MessageEmbed()
-      .setDescription(msg.language.commands.embedBuilder.errorVal)
+      .setDescription(msg.language.commands.embedbuilder.errorVal)
       .setColor('ff0000');
     if (error) embed.addField(msg.language.error, `${lanError}`);
 
