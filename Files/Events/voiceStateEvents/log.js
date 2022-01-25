@@ -189,7 +189,7 @@ module.exports = {
         embed.description = embed.description
           ? `${embed.description}\n\n${language.changes}: ${changedKey.map((o) => ` \`${o}\``)}`
           : `${language.changes}: ${changedKey.map((o) => ` \`${o}\``)}`;
-        if (embed.description) ch.send(channels, embed);
+        if (embed.description) ch.send(channels, { embeds: [embed] });
       }
     }
     async function getAudit(type) {

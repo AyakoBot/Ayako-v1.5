@@ -13,7 +13,6 @@ module.exports = {
     require('./other').execute(msg);
     require('./shoob').execute(msg);
     require('./nadeko').execute(msg);
-    require('./gifSender').execute(msg);
     require('./antivirus').execute(msg);
     require('./autothreading').execute(msg);
     if (!msg.editedAt) {

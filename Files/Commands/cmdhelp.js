@@ -125,6 +125,6 @@ module.exports = {
         false,
       );
     }
-    return msg.client.ch.reply(msg, embed);
+    return msg.client.ch.reply(msg, { embeds: [embed] });
   },
 };

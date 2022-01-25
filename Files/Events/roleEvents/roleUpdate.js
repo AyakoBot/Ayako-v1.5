@@ -103,7 +103,7 @@ module.exports = {
             ch.stp(lan.descriptionWithoutAudit, { role: newRole }) +
               ChangedKey.map((o) => ` \`${o}\``),
           );
-        if (embed.fields.length) ch.send(channels, embed);
+        if (embed.fields.length) ch.send(channels, { embeds: [embed] });
       }
     }
   },

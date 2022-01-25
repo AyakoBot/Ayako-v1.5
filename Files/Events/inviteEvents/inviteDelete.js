@@ -99,7 +99,7 @@ module.exports = {
             )}\`)`,
             false,
           );
-        ch.send(channels, embed);
+        ch.send(channels, { embeds: [embed] });
       }
     }
   },

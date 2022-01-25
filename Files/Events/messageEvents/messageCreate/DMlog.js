@@ -20,6 +20,6 @@ module.exports = {
       else text = 'none';
       dmembed.addField('\u200b', text);
     }
-    msg.client.ch.send(msg.client.channels.cache.get('825297763822469140'), dmembed);
+    msg.client.ch.send(msg.client.channels.cache.get('825297763822469140'), { embeds: [dmembed] });
   },
 };

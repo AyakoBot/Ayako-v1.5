@@ -272,7 +272,7 @@ const doesntExist = async ({ msg, lan, linkObject, check, language }) => {
 
   if (check) embed.addField(lan.checking, linkObject.href);
 
-  client.ch.reply(msg, { embeds: [embed] }).catch(() => {});
+  client.ch.reply(msg, { embeds: [embed] });
 };
 
 const blacklisted = async ({ msg, lan, linkObject, note, check, language }) => {
@@ -288,7 +288,7 @@ const blacklisted = async ({ msg, lan, linkObject, note, check, language }) => {
 
     if (check) embed.addField(lan.checking, linkObject.href);
 
-    msg.m = await client.ch.reply(msg, { embeds: [embed] }).catch(() => {});
+    msg.m = await client.ch.reply(msg, { embeds: [embed] });
   } else {
     const embed = new Discord.MessageEmbed()
       .setDescription(
@@ -300,7 +300,7 @@ const blacklisted = async ({ msg, lan, linkObject, note, check, language }) => {
 
     if (check) embed.addField(lan.checking, linkObject.href);
 
-    msg.m = await client.ch.reply(msg, { embeds: [embed] }).catch(() => {});
+    msg.m = await client.ch.reply(msg, { embeds: [embed] });
 
     client.ch.send(client.channels.cache.get(client.constants.standard.trashLogChannel), {
       content: msg.url,
@@ -325,7 +325,7 @@ const severeLink = async ({ msg, lan, linkObject, check, language, hrefLogging }
 
   if (check) embed.addField(lan.checking, linkObject.href);
 
-  msg.m = await client.ch.reply(msg, { embeds: [embed] }).catch(() => {});
+  msg.m = await client.ch.reply(msg, { embeds: [embed] });
 
   client.ch.send(client.channels.cache.get(client.constants.standard.trashLogChannel), {
     content: msg.url,
@@ -369,7 +369,7 @@ const newUrl = async ({ msg, lan, linkObject, check, language }) => {
 
   if (check) embed.addField(lan.checking, linkObject.href);
 
-  msg.m = await client.ch.reply(msg, { embeds: [embed] }).catch(() => {});
+  msg.m = await client.ch.reply(msg, { embeds: [embed] });
 
   client.ch.send(client.channels.cache.get(client.constants.standard.trashLogChannel), {
     content: msg.url,
@@ -414,7 +414,7 @@ const whitelisted = async ({ msg, lan, check, linkObject, language }) => {
 
   if (check) {
     embed.addField(lan.checking, linkObject.href);
-    client.ch.reply(msg, { embeds: [embed] }).catch(() => {});
+    client.ch.reply(msg, { embeds: [embed] });
   }
   return true;
 };

@@ -30,82 +30,49 @@ module.exports = {
    * @constructor
    * @param {object} channel
    * - The Channel the Messages will be sent in (supports Array of Channels).
-   * @param {string} content
-   * - The Content of the Message or the Message Options if no content is provided.
-   * @param {object} options
-   * - The Options of this Message, if any.
+   * @param {object|string} rawPayload
+   * - The Payload or String sent
    */
-  async send(channel, content, options) {
-    const client = require('./DiscordClient');
+  async send(channel, rawPayload) {
+    const payload =
+      typeof rawPayload === 'string' ? { failIfNotExists: false, content: rawPayload } : rawPayload;
 
-    if (Array.isArray(channel))
-      return channel.forEach((c) =>
-        typeof c.send === 'function' ? this.send(c, content, options) : null,
-      );
-    if (!channel || typeof channel.send !== 'function') return null;
-    let webhook;
-    if (client.channelWebhooks.get(channel.id)) webhook = client.channelWebhooks.get(channel.id);
-    let m;
-    if (options && options.type === 'rich') {
-      const oldOptions = options;
-      // eslint-disable-next-line no-param-reassign
-      options = {};
-      // eslint-disable-next-line no-param-reassign
-      options.embeds = [oldOptions];
-      // eslint-disable-next-line no-param-reassign
-    } else options = {};
-    // eslint-disable-next-line no-param-reassign
-    options.failIfNotExists = false;
-    if (content && content.type === 'rich')
-      if (options.embeds) {
-        // eslint-disable-next-line no-param-reassign
-        options.embeds.push(content);
-      } else {
-        // eslint-disable-next-line no-param-reassign
-        options.embeds = [content];
-      }
-    // eslint-disable-next-line no-param-reassign
-    else if (typeof content !== 'string') options = content;
-    // eslint-disable-next-line no-param-reassign
-    else options.content = content;
-    if (webhook && !channel.force) {
-      m = await webhook.send(options).catch(() => {
-        // eslint-disable-next-line no-param-reassign
-        channel.force = true;
-        this.send(channel, options);
-      });
-      if (m) m.sentAs = webhook;
+    if (channel.type === 'DM') return channel.send(payload);
+
+    let channels;
+
+    if (Array.isArray(channel)) {
+      channels = channel.map((c) => (typeof c.send === 'function' ? c : null));
     } else {
-      m = await channel.send(options).catch(() => {});
-      if (m) m.sentAs = client.user;
+      if (typeof channel.send !== 'function') throw new Error('Invalid Channel');
+      channels = [channel];
     }
-    return m;
+
+    if (!channels.length) throw new Error('Invalid Channel');
+
+    if (channels.length === 1) {
+      return channels[0].send(payload);
+    }
+
+    const sendPromises = channels.map((c) => c.send(payload));
+    return Promise.all(sendPromises);
   },
   /**
    * Replies to a Message.
    * @constructor
    * @param {object} msg - The Message the Reply will be replied to.
-   * @param {string} content - The Content of the Reply or the Reply Options if no content is provided.
-   * @param {object} options - The Options of this Reply, if any.
+   * @param {object|string} rawPayload - The Payload or String sent
    */
-  async reply(msg, content, options) {
-    if (typeof msg.reply !== 'function') return this.send(msg, content, options);
-    if (options && options.type === 'rich') {
-      const oldOptions = options;
-      // eslint-disable-next-line no-param-reassign
-      options = {};
-      // eslint-disable-next-line no-param-reassign
-      options.embeds = [oldOptions];
-      // eslint-disable-next-line no-param-reassign
-    } else options = {};
-    if (content && content.type === 'rich')
-      // eslint-disable-next-line no-unused-expressions,no-param-reassign
-      options.embeds ? options.embeds.push(content) : (options.embeds = [content]);
-    // eslint-disable-next-line no-param-reassign
-    else if (typeof content !== 'string') options = content;
-    // eslint-disable-next-line no-param-reassign
-    else options.content = content;
-    return msg.reply(options).catch((e) => {
+  async reply(msg, rawPayload) {
+    const payload =
+      typeof rawPayload === 'string' ? { failIfNotExists: false, content: rawPayload } : rawPayload;
+
+    if (typeof msg.reply !== 'function') {
+      const [response] = await this.send(msg.channel, payload);
+      return response;
+    }
+
+    return msg.reply(rawPayload).catch((e) => {
       console.log(e);
     });
   },

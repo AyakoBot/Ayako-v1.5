@@ -21,6 +21,6 @@ module.exports = {
         }),
       )
       .setColor(msg.client.constants.standard.color);
-    msg.client.ch.reply(msg, embed);
+    msg.client.ch.reply(msg, { embeds: [embed] });
   },
 };

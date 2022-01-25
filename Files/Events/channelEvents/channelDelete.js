@@ -41,7 +41,7 @@ module.exports = {
             )
             .setColor(con.color)
             .setTimestamp();
-          ch.send(channels, { embed });
+          ch.send(channels, { embeds: [embed] });
         } else {
           const embed = new Discord.MessageEmbed()
             .setAuthor({
@@ -54,7 +54,7 @@ module.exports = {
             })
             .setColor(con.color)
             .setTimestamp();
-          ch.send(channels, { embed });
+          ch.send(channels, { embeds: [embed] });
         }
       }
     }

@@ -25,10 +25,9 @@ module.exports = {
         .setTimestamp()
         .setColor('#b0ff00');
       msg.react('670163913370894346').catch(() => {});
-      const m = await msg.client.ch.send(
-        msg.client.channels.cache.get('773310464700579851'),
-        SuggestEmbed,
-      );
+      const m = await msg.client.ch.send(msg.client.channels.cache.get('773310464700579851'), {
+        embeds: [SuggestEmbed],
+      });
       m.react('670163913370894346').catch(() => {});
       m.react('746392936807268474').catch(() => {});
     } else if (channel.toLowerCase() === 'discord') {
@@ -42,10 +41,9 @@ module.exports = {
         .setTimestamp()
         .setColor('#b0ff00');
       msg.react('670163913370894346').catch(() => {});
-      const m = await msg.client.ch.send(
-        msg.client.channels.cache.get('773310464700579851'),
-        SuggestEmbed,
-      );
+      const m = await msg.client.ch.send(msg.client.channels.cache.get('773310464700579851'), {
+        embeds: [SuggestEmbed],
+      });
       m.react('670163913370894346').catch(() => {});
       m.react('746392936807268474').catch(() => {});
     } else return msg.reply('That was not a valid channel option. -> `h!inv MC/Discord [user]`');

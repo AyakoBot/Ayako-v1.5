@@ -61,7 +61,7 @@ module.exports = {
             embed.addField(lan.newContent, newMsg.content);
           }
         }
-        ch.send(channels, embed);
+        ch.send(channels, { embeds: [embed] });
       }
     }
   },

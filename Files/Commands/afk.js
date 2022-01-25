@@ -31,11 +31,11 @@ module.exports = {
       );
       if (msg.args[0]) {
         embed.setDescription(msg.client.ch.stp(msg.lan.updatedTo, { text }));
-        msg.client.ch.reply(msg, embed);
+        msg.client.ch.reply(msg, { embeds: [embed] });
       }
       if (!msg.args[0]) {
         embed.setDescription(msg.lan.updated);
-        msg.client.ch.reply(msg, embed);
+        msg.client.ch.reply(msg, { embeds: [embed] });
       }
     } else {
       msg.client.ch.query(
@@ -44,11 +44,11 @@ module.exports = {
       );
       if (msg.args[0]) {
         embed.setDescription(msg.client.ch.stp(msg.lan.setTo, { text }));
-        msg.client.ch.reply(msg, embed);
+        msg.client.ch.reply(msg, { embeds: [embed] });
       }
       if (!msg.args[0]) {
         embed.setDescription(msg.lan.set);
-        msg.client.ch.reply(msg, embed);
+        msg.client.ch.reply(msg, { embeds: [embed] });
       }
     }
     return null;

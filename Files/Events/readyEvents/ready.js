@@ -28,7 +28,6 @@ module.exports = {
 
     require('./slashcommands').execute();
     require('./reminder').execute();
-    require('./webhooks').execute();
     require('./disboard').execute();
     require('./giveaway').execute();
     require('./separators').execute();

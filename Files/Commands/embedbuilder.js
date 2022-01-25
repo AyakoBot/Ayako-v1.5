@@ -13,11 +13,13 @@ module.exports = {
     const embed = await this.builder(msg);
 
     if (embed) {
-      msg.client.ch.reply(msg, embed);
+      msg.client.ch.reply(msg, { embeds: [embed] });
     }
   },
   async builder(msg, answer, existingEmbed, page) {
     if (typeof page !== 'number') page = 1;
+
+    msg.m?.reactions.cache.get(msg.client.constants.emotes.back).users.remove(msg.client.user.id);
 
     const lan = msg.language.commands.embedBuilder;
     const finishedEmbed = new Discord.MessageEmbed().setDescription(lan.placeholder);
@@ -34,7 +36,7 @@ module.exports = {
 
     await replier(
       { msg, answer },
-      { embeds: [embed], components: getComponents(msg, { page, Objects }) },
+      { embeds: [embed], components: getComponents(msg, { page, Objects }), files: [] },
       Objects,
     );
 
@@ -47,6 +49,8 @@ module.exports = {
 };
 
 const replier = async ({ msg, answer }, { embeds, components, content, files }, Objects) => {
+  console.log('replier called');
+
   if (components) components = msg.client.ch.buttonRower(components);
 
   let finishedEmbed;
@@ -405,6 +409,7 @@ const handleSave = async (msg, answer, Objects) => {
     });
     buttonsCollector.on('end', (collected, reason) => {
       if (reason === 'time') {
+        console.log(2);
         postCode(Objects, msg);
         msg.client.ch.collectorEnd(msg);
       }
@@ -641,7 +646,7 @@ const handleOtherMsgRaw = async (msg, answer, Objects) => {
 
     const attachment = msg.client.ch.txtFileWriter(messageEmbedJSONs);
 
-    msg.client.ch.send(msg.channel, { files: [attachment] });
+    await replier({ msg, answer }, { files: [attachment], embeds: [embed] });
   });
 };
 
@@ -669,6 +674,7 @@ const embedButtonsHandler = async (Objects, msg, answer) => {
 
       messageCollector.on('end', (collected, reason) => {
         if (reason === 'time') {
+          console.log(3);
           postCode(Objects, msg);
           msg.client.ch.collectorEnd(msg);
           resolve();
@@ -1079,6 +1085,7 @@ const handleBuilderButtons = ({ msg, answer }, Objects, resolve, lan) => {
       }
       case 'viewRaw': {
         postCode(Objects, msg, interaction, null, true);
+        console.log(4);
         break;
       }
       case 'inheritCode': {
@@ -1120,6 +1127,7 @@ const handleBuilderButtons = ({ msg, answer }, Objects, resolve, lan) => {
           if (reason === 'time') {
             ended = true;
             msg.client.ch.collectorEnd(msg);
+            console.log(5);
             postCode(Objects, msg);
           }
         });
@@ -1142,7 +1150,9 @@ const handleBuilderButtons = ({ msg, answer }, Objects, resolve, lan) => {
   });
   buttonsCollector.on('end', (collected, reason) => {
     if (reason === 'time' && !ended) {
+      ended = true;
       const endedCollectorEmbed = msg.client.ch.collectorEnd(msg);
+      console.log(1);
       postCode(Objects, msg, null, endedCollectorEmbed);
       resolve(null);
     }

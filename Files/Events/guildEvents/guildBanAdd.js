@@ -41,7 +41,7 @@ module.exports = {
           embed.setDescription(ch.stp(lan.description.withoutUser, { target: ban.guild }));
           embed.addField(language.reason, ban.reason ? ban.reason : language.unknown);
         }
-        ch.send(channels, embed);
+        ch.send(channels, { embeds: [embed] });
       }
     }
   },

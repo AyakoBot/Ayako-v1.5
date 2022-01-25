@@ -32,7 +32,6 @@ module.exports = {
                 )
                 .setDescription(ch.stp(lan.description, { guild, channel, message: m }))
                 .setColor(Constants.standard.color);
-              ch.send(DM, embed);
             }
           }
         }

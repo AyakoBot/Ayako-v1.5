@@ -18,7 +18,7 @@ module.exports = {
         .setDescription(`${msg.client.constants.emotes.loading} ${lan.loading}`);
     }
     if (mexisted) await msg.m.edit({ embeds: [em] });
-    else msg.m = await msg.client.ch.reply(msg, em);
+    else msg.m = await msg.client.ch.reply(msg, { embeds: [em] });
     const member = await msg.guild.members.fetch(target.id).catch(() => {});
     const exec = await msg.guild.members.fetch(executor.id).catch(() => {});
     if (
@@ -38,7 +38,7 @@ module.exports = {
       .setColor(con.color)
       .setDescription(`${msg.language.reason}: \n${reason}`)
       .setTimestamp();
-    msg.client.ch.send(target, warnEmbed);
+    msg.client.ch.send(target, { embeds: [warnEmbed] });
     const WarnLogEmbed = new Discord.MessageEmbed()
       .setAuthor({
         name: msg.client.ch.stp(lan.log.author, { target }),
@@ -50,7 +50,7 @@ module.exports = {
       .setColor(con.color)
       .setTimestamp();
     if (msg.logchannels && msg.logchannels.length)
-      msg.client.ch.send(msg.logchannels, WarnLogEmbed);
+      msg.client.ch.send(msg.logchannels, { embeds: [WarnLogEmbed] });
     let warnnr;
     const res = await msg.client.ch.query(
       'SELECT * FROM warns WHERE guildid = $1 AND userid = $2;',

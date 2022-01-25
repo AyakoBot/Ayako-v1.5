@@ -93,7 +93,7 @@ module.exports = {
           url: msg.client.constants.standard.invite,
         })
         .setTimestamp();
-      const m = await msg.client.ch.reply(msg, replyEmbed);
+      const m = await msg.client.ch.reply(msg, { embeds: [replyEmbed] });
       uniqueUsers.forEach(async (user, i) => {
         const ban = await msg.guild.bans
           .create(user, {
@@ -151,7 +151,7 @@ module.exports = {
           url: msg.client.constants.standard.invite,
         })
         .setTimestamp();
-      const m = await msg.client.ch.reply(msg, replyEmbed);
+      const m = await msg.client.ch.reply(msg, { embeds: [replyEmbed] });
 
       uniqueFails.forEach(async (fail) => {
         descF.push(`${fail}\n`);

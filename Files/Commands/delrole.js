@@ -26,34 +26,36 @@ module.exports = {
     }
     if (!role) return msg.client.ch.reply(msg, lan.noRoleFound);
 
-    const Embed = new Discord.MessageEmbed();
+    const embed = new Discord.MessageEmbed();
     if (role.managed) {
-      Embed.setAuthor(
-        language.error,
-        msg.client.constants.standard.errorImage,
-        msg.client.constants.standard.invite,
-      )
+      embed
+        .setAuthor({
+          name: language.error,
+          iconURL: msg.client.constants.standard.errorImage,
+          url: msg.client.constants.standard.invite,
+        })
         .setColor(msg.client.constants.error)
         .setDescription(msg.client.ch.makeUnderlined(msg.language.permissions.error.msg))
         .addField(language.problem, msg.client.ch.makeCodeBlock(lan.error.roleManagedProblem))
         .addField(language.solution, msg.client.ch.makeCodeBlock(lan.error.roleManagedSolution));
-      return msg.client.ch.reply(msg, Embed);
+      return msg.client.ch.reply(msg, { embeds: [embed] });
     }
     if (msg.guild.me.roles.highest.position <= role.position) {
-      Embed.setAuthor(
-        language.error,
-        msg.client.constants.standard.errorImage,
-        msg.client.constants.standard.invite,
-      )
+      embed
+        .setAuthor({
+          name: language.error,
+          iconURL: msg.client.constants.standard.errorImage,
+          url: msg.client.constants.standard.invite,
+        })
         .setColor(msg.client.constants.error)
         .setDescription(msg.client.ch.makeUnderlined(msg.language.permissions.error.msg))
         .addField(language.problem, msg.client.ch.makeCodeBlock(lan.error.rolePosProblem))
         .addField(language.solution, msg.client.ch.makeCodeBlock(lan.error.rolePosSolution));
-      return msg.client.ch.reply(msg, Embed);
+      return msg.client.ch.reply(msg, { embeds: [embed] });
     }
     await role.delete().catch(() => {});
-    Embed.setDescription(msg.client.ch.stp(lan.deleted, { role })).setColor(role.color);
-    msg.client.ch.reply(msg, Embed);
+    embed.setDescription(msg.client.ch.stp(lan.deleted, { role })).setColor(role.color);
+    msg.client.ch.reply(msg, { embeds: [embed] });
     return null;
   },
 };

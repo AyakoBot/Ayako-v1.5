@@ -37,7 +37,7 @@ module.exports = {
           embed.setDescription(ch.stp(lan.descriptionWithAudit, { user: entry.executor, role }));
         else if (role.managed) embed.setDescription(ch.stp(lan.descriptionAutorole, { role }));
         else embed.setDescription(ch.stp(lan.descriptionWithoutAudit, { role }));
-        ch.send(channels, embed);
+        ch.send(channels, { embeds: [embed] });
       }
     }
   },

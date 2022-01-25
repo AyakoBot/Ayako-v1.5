@@ -55,7 +55,7 @@ module.exports = {
         )
         .setColor(msg.client.ch.colorSelector(msg.guild.me))
         .setFooter('If it doesnt work for some reason, wait for the Staff to reply');
-      msg.client.ch.reply(msg, embed);
+      msg.client.ch.reply(msg, { embeds: [embed] });
     } else if (msg.guild.id === '266632338883084290') {
       const embed = new Discord.MessageEmbed()
         .setAuthor({
@@ -99,7 +99,7 @@ module.exports = {
           'Just be active in chat, you get 5 Server Coins per message',
           false,
         );
-      msg.client.ch.reply(msg, embed);
+      msg.client.ch.reply(msg, { embeds: [embed] });
     }
   },
 };

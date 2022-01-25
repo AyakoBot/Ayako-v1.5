@@ -107,7 +107,7 @@ module.exports = {
           ch.stp(lan.description, { command: oldCommand || newCommand }) +
             ChangedKey.map((o) => ` \`${o}\``),
         );
-        if (embed.fields.length) ch.send(channels, embed);
+        if (embed.fields.length) ch.send(channels, { embeds: [embed] });
       }
     }
   },

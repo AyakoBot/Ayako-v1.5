@@ -38,7 +38,7 @@ module.exports = {
             language.description,
             Discord.Util.cleanCodeBlockContent(command.desciption),
           );
-        ch.send(channels, embed);
+        ch.send(channels, { embeds: [embed] });
       }
     }
   },

@@ -157,7 +157,6 @@ const getClient = () => {
   client.bans = new Discord.Collection();
 
   client.invites = new Map();
-  client.channelWebhooks = new Map();
   client.verificationCodes = new Map();
 
   client.eris = Eris;

@@ -75,7 +75,7 @@ module.exports = {
             },
           )}\`)`,
         );
-        ch.send(channels, embed);
+        ch.send(channels, { embeds: [embed] });
       }
     }
   },

@@ -17,7 +17,7 @@ module.exports = {
     if (!user) {
       embed.setDescription(lan.noUser);
       embed.setColor(con.fail);
-      return msg.client.ch.reply(msg, embed);
+      return msg.client.ch.reply(msg, { embeds: [embed] });
     }
     const res = await msg.client.ch.query(
       'SELECT * FROM warns WHERE userid = $1 AND guildid = $2;',
@@ -26,7 +26,7 @@ module.exports = {
     if (!res || res.rowCount === 0) {
       embed.setDescription(lan.noWarns);
       embed.setColor(con.fail);
-      return msg.client.ch.reply(msg, embed);
+      return msg.client.ch.reply(msg, { embeds: [embed] });
     }
 
     embed.setDescription(msg.client.ch.stp(lan.sure, { user }));
@@ -110,5 +110,5 @@ function log(msg, res, user, lan, con) {
     }
   });
   logEmbed.setDescription(description);
-  if (msg.logchannels) msg.client.ch.send(msg.logchannels, logEmbed);
+  if (msg.logchannels) msg.client.ch.send(msg.logchannels, { embeds: [logEmbed] });
 }

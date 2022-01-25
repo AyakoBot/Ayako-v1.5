@@ -31,9 +31,11 @@ module.exports = {
             .setDescription(`${language.ready.reminder.description}\n${text}`)
             .setColor(guild.me.displayHexColor)
             .setTimestamp();
-          const m = await ch.send(channel, `${user}`, embed);
+          const m = await ch.send(channel, `${user}`, { embeds: [embed] });
           if (!m || !m.id)
-            ch.send(user, ch.stp(language.ready.reminder.failedMsg, { channel }), embed);
+            ch.send(user, ch.stp(language.ready.reminder.failedMsg, { channel }), {
+              embeds: [embed],
+            });
           ch.query('DELETE FROM reminders WHERE userid = $1 AND duration = $2;', [
             user.id,
             duration,
@@ -44,7 +46,7 @@ module.exports = {
             .setDescription(`${language.ready.reminder.description}\n${text}`)
             .setColor(guild.me.displayHexColor)
             .setTimestamp();
-          ch.send(user, embed);
+          ch.send(user, { embeds: [embed] });
           ch.query('DELETE FROM reminders WHERE userid = $1 AND duration = $2;', [
             user.id,
             duration,
