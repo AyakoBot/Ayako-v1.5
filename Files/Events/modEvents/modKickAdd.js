@@ -18,7 +18,7 @@ module.exports = {
         .setDescription(`${msg.client.constants.emotes.loading} ${lan.loading}`);
     }
     if (mexisted) await msg.m.edit({ embeds: [em] });
-    else msg.m = await msg.client.ch.reply(msg, em);
+    else msg.m = await msg.client.ch.reply(msg, { embeds: [em] });
     const member = await msg.guild.members.fetch(target.id).catch(() => {});
     const exec = await msg.guild.members.fetch(executor.id).catch(() => {});
     if (!member) {
@@ -62,7 +62,7 @@ module.exports = {
         iconURL: lan.author.image,
         url: msg.client.ch.stp(con.author.link, { guild: msg.guild }),
       });
-    const m = msg.client.ch.send(dmChannel, DMembed);
+    const m = msg.client.ch.send(dmChannel, { embeds: [DMembed] });
     let err;
     const kick = await member.kick(reason).catch((e) => {
       err = e;
@@ -79,7 +79,7 @@ module.exports = {
         .setTimestamp()
         .addField(language.reason, `${reason}`)
         .setFooter({ text: msg.client.ch.stp(lan.footer, { user: executor, target }) });
-      if (msg.logchannels && msg.logchannels.length) msg.client.ch.send(msg.logchannels, embed);
+      if (msg.logchannels && msg.logchannels.length) msg.client.ch.send(msg.logchannels, { embeds: [embed] });
     } else if (!member) {
       if (mexisted) {
         em.fields.pop();

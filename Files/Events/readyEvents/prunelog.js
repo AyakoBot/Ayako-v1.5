@@ -36,7 +36,7 @@ module.exports = {
                 .setTimestamp()
                 .setColor(con.color);
               if (entry.reason) embed.addField(language.reason, entry.reason);
-              ch.send(logchannel, embed);
+              ch.send(logchannel, { embeds: [embed] });
             }
           }
         }

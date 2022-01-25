@@ -47,13 +47,16 @@ module.exports = {
     if (entry && entry.id) {
       for (let i = 0; map.length > i; i += 1) {
         if (sent === true) return;
-        const m = await ch.send(map[i], `Thank you for adding me! ${entry.executor}`, joinembed);
+        const m = await ch.send(map[i], {
+          embeds: [joinembed],
+          content: `Thank you for adding me! ${entry.executor}`,
+        });
         if (m && m.id) sent = true;
       }
     } else {
       for (let i = 0; map.length > i; i += 1) {
         if (sent === true) return;
-        const m = await ch.send(map[i], joinembed);
+        const m = await ch.send(map[i], { embeds: [joinembed] });
         if (m && m.id) sent = true;
       }
     }

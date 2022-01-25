@@ -110,7 +110,7 @@ module.exports = {
                   .map((p) => `${msg.client.ch.makeInlineCode(msg.language.permissions[p])}`)
           }`,
         );
-      return msg.client.ch.reply(msg, embed);
+      return msg.client.ch.reply(msg, { embeds: [embed] });
     }
     if (msg.command.perm === 0) {
       if (msg.author.id !== auth.ownerID)
@@ -249,7 +249,7 @@ module.exports = {
         .addField('Channel', `${msg.channel?.name} | ${msg.channel?.id}`)
         .addField('Message Link', msg.url)
         .setColor('ff0000');
-      if (channel) msg.client.ch.send(msg.channel, embed);
+      if (channel) msg.client.ch.send(msg.channel, { embeds: [embed] });
     }
   },
 };

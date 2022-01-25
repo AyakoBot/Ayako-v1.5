@@ -1,4 +1,3 @@
-
 const Discord = require('discord.js');
 
 module.exports = {
@@ -47,7 +46,7 @@ module.exports = {
             }),
           );
         else embed.setDescription(ch.stp(lan.description.withoutUser, { newEmoji, oldEmoji }));
-        ch.send(channels, embed);
+        ch.send(channels, { embeds: [embed] });
       }
     }
   },

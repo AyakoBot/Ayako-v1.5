@@ -18,6 +18,7 @@ module.exports = {
     if (!done1 || !done2) {
       msg.react(msg.client.constants.emotes.crossID).catch(() => {});
       msg.client.ch.reply(
+        msg,
         'Something went wrong when I tried to update the Members Roles. Please check manually.',
       );
     } else {

@@ -49,7 +49,7 @@ module.exports = {
               language.after
             }: \`${member.nickname ? member.nickname : user.username}\``,
           );
-          ch.send(channels, embed);
+          ch.send(channels, { embeds: [embed] });
           return;
         }
         if (
@@ -65,7 +65,7 @@ module.exports = {
             url: ch.stp(con.author.link, { user }),
           });
           embed.setDescription(ch.stp(lan.description, { user }));
-          ch.send(channels, embed);
+          ch.send(channels, { embeds: [embed] });
           return;
         }
         if (oldMember.roles.cache === newMember.roles.cache) return;
@@ -112,7 +112,7 @@ module.exports = {
               iconURL: con.author.image,
               url: ch.stp(con.author.link, { user }),
             });
-            ch.send(channels, embed);
+            ch.send(channels, { embeds: [embed] });
           }
         }
       }

@@ -186,7 +186,7 @@ module.exports = {
         .setDescription(ch.stp(lan.description.withoutAuthor.withoutAudit, { channel }))
         .setColor(con.color)
         .setTimestamp();
-      ch.send(logchannel, { embed });
+      ch.send(logchannel, { embeds: [embed] });
     }
   },
 };

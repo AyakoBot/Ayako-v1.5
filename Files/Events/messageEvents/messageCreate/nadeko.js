@@ -48,12 +48,12 @@ module.exports = {
                   .setDescription(`Congraz! You now have the ${PaidRole} role`)
                   .setColor('#b0ff00');
                 msg.member.roles.add(PaidRole).catch(() => {});
-                msg.client.ch.reply(msg, successEmbed);
+                msg.client.ch.reply(msg, { embeds: [successEmbed] });
               } else {
                 const successEmbed = new Discord.MessageEmbed()
                   .setDescription('Seems like something went wrong')
                   .setColor('#b0ff00');
-                msg.client.ch.reply(msg, successEmbed);
+                msg.client.ch.reply(msg, { embeds: [successEmbed] });
               }
               return null;
             });

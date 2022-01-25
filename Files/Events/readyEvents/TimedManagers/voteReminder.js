@@ -19,15 +19,15 @@ module.exports = {
           const DMchannel = await user.createDM().catch(() => {});
           const language = await ch.languageSelector('en');
           const reEmbed = new Discord.MessageEmbed()
-            .setAuthor(
-              language.ready.vote.author,
-              Constants.standard.image,
-              Constants.standard.invite,
-            )
+            .setAuthor({
+              name: language.ready.vote.author,
+              iconURL: Constants.standard.image,
+              url: Constants.standard.invite,
+            })
             .setDescription(ch.stp(language.ready.vote.description, { votegain }))
             .setColor(Constants.standard.color)
             .setTimestamp();
-          ch.send(DMchannel, reEmbed);
+          ch.send(DMchannel, { embeds: [reEmbed] });
           ch.query('UPDATE levelglobal SET reminderdone = $1 WHERE userid = $2;', [true, user.id]);
         }
         if (Date.now() > +runsoutat && reminderdone === true && votegain !== 1.0)

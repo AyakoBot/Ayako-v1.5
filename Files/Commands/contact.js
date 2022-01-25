@@ -20,17 +20,19 @@ module.exports = {
     msg.attachments.forEach((o) => {
       SuggestEmbed.addField('Attachment', `${o.url}`);
     });
-    msg.client.ch.send(msg.client.channels.cache.get('745080980431175792'), SuggestEmbed);
-    const SuggestReplyEmbed = new Discord.MessageEmbed()
-      .setAuthor(
-        msg.lan.thanks.thanks,
-        msg.client.constants.standard.image,
-        msg.client.constants.standard.invite,
-      )
+    msg.client.ch.send(msg.client.channels.cache.get('745080980431175792'), {
+      embeds: [SuggestEmbed],
+    });
+    const suggestReplyEmbed = new Discord.MessageEmbed()
+      .setAuthor({
+        name: msg.lan.thanks.thanks,
+        iconURL: msg.client.constants.standard.image,
+        url: msg.client.constants.standard.invite,
+      })
       .setDescription(msg.lan.thanks.desc)
       .addField(msg.lan.thanks.field, '\u200B')
       .setTimestamp()
       .setColor(msg.client.ch.colorSelector(msg.guild ? msg.guild.me : null));
-    msg.client.ch.reply(msg, SuggestReplyEmbed);
+    msg.client.ch.reply(msg, { embeds: [suggestReplyEmbed] });
   },
 };

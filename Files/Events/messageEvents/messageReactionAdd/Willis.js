@@ -86,7 +86,7 @@ module.exports = {
                   .setColor('b0ff00')
                   // .addField('\u200b', '[Click here to get to the Giveaway](https://givelab.com/primogem/10k-primogem-giveaway)')
                   .setTimestamp();
-                const m = await ch.send(msg.author, embed);
+                const m = await ch.send(msg.author, { embeds: [embed] });
                 if (m && m.id) log.react('670163913370894346');
                 else log.react('746392936807268474');
                 ch.query('UPDATE stats SET willis = $1; UPDATE stats SET count = $2;', [
@@ -123,7 +123,7 @@ module.exports = {
                 .setColor('ff0000')
                 // .addField('\u200b', '[Click here to get to the Giveaway](https://givelab.com/genshin10k/)')
                 .setTimestamp();
-              const m = await ch.send(msg.author, embed);
+              const m = await ch.send(msg.author, { embeds: [embed] });
               if (m && m.id) log.react('670163913370894346');
               else log.react('746392936807268474');
             }

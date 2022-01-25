@@ -18,7 +18,7 @@ module.exports = {
     }
     if (msg.id) {
       if (mexisted) await msg.m.edit({ embeds: [em] });
-      else msg.m = await msg.client.ch.reply(msg, em);
+      else msg.m = await msg.client.ch.reply(msg, { embeds: [em] });
       const member = await msg.guild.members.fetch(target.id).catch(() => {});
       const exec = await msg.guild.members.fetch(executor.id).catch(() => {});
       if (exec?.roles.highest.position <= member?.roles.highest.position) {
@@ -88,7 +88,7 @@ module.exports = {
         iconURL: lan.author.image,
         url: msg.client.ch.stp(con.author.link, { guild: msg.guild }),
       });
-    const m = await msg.client.ch.send(dmChannel, DMembed);
+    const m = await msg.client.ch.send(dmChannel, { embeds: [DMembed] });
     let err;
     const ban = await msg.guild.members.ban(target, { reason, days: 1 }).catch((e) => {
       err = e;
@@ -105,7 +105,7 @@ module.exports = {
         .setTimestamp()
         .addField(language.reason, `${reason}`)
         .setFooter({ text: msg.client.ch.stp(lan.footer, { user: executor, target }) });
-      if (msg.logchannels && msg.logchannels.length) msg.client.ch.send(msg.logchannels, embed);
+      if (msg.logchannels && msg.logchannels.length) msg.client.ch.send(msg.logchannels, { embeds: [embed] });
     } else {
       m?.delete().catch(() => {});
       if (mexisted) {

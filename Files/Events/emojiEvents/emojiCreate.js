@@ -1,4 +1,3 @@
-
 const Discord = require('discord.js');
 
 module.exports = {
@@ -39,7 +38,7 @@ module.exports = {
         if (entry && entry.id)
           embed.setDescription(ch.stp(lan.description.withUser, { user: entry.executor, emoji }));
         else embed.setDescription(ch.stp(lan.description.withoutUser, { emoji }));
-        ch.send(channels, embed);
+        ch.send(channels, { embeds: [embed] });
       }
     }
   },

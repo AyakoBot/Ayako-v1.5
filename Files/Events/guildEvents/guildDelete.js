@@ -14,6 +14,6 @@ module.exports = {
       .addField(con.logEmbed.guildOwner, guild.ownerID, true)
       .setFooter(ch.stp(con.logEmbed.currentGuildCount, { client }))
       .setColor(con.logEmbed.color);
-    ch.send(client.channels.cache.get(Constants.standard.guildLogChannel), logEmbed);
+    ch.send(client.channels.cache.get(Constants.standard.guildLogChannel), { embeds: [logEmbed] });
   },
 };

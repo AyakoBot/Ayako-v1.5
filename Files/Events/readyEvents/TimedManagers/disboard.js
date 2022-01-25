@@ -24,12 +24,12 @@ module.exports = {
                 .setColor(Constants.standard.color)
                 .setTimestamp()
                 .setThumbnail(ch.iconURL(guild))
-                .setAuthor(
-                  language.ready.disboard.title,
-                  Constants.standard.image,
-                  Constants.standard.invite,
-                );
-              ch.send(channel, role, embed);
+                .setAuthor({
+                  name: language.ready.disboard.title,
+                  iconURL: Constants.standard.image,
+                  url: Constants.standard.invite,
+                });
+              ch.send(channel, { content: `${role}`, embeds: [embed] });
               ch.query(
                 `
 				UPDATE disboard SET channelid = null WHERE guildid = $1;

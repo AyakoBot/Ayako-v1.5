@@ -282,7 +282,7 @@ module.exports = {
           });
           ch.logger(`Integration Update Check console at ${new Date().toUTCString()}`);
         }
-        ch.send(channels, embed);
+        ch.send(channels, { embeds: [embed] });
       }
     }
   },

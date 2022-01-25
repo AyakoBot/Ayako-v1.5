@@ -157,7 +157,7 @@ module.exports = {
                 `${msg.author} killed ${killedUser} while being too retarded to use the proper commands`,
               )
               .setThumbnail(link);
-            msg.client.ch.send(msg.channel, embed);
+            msg.client.ch.send(msg.channel, { embeds: [embed] });
             msg.delete();
           }
         }
@@ -214,7 +214,7 @@ module.exports = {
                   .setColor('#ff0000')
                   .setDescription(`${msg.author} was banned from the server`)
                   .setTimestamp();
-                msg.client.ch.send(msg.channel, embed).catch(() => {});
+                msg.client.ch.send(msg.channel, { embeds: [embed] });
               } else return msg.reactions.removeAll().catch(() => {});
             } else return msg.reactions.removeAll().catch(() => {});
             return null;

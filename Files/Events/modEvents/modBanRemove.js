@@ -19,7 +19,7 @@ module.exports = {
         .setDescription(`${msg.client.constants.emotes.loading} ${lan.loading}`);
     }
     if (mexisted) await msg.m.edit({ embeds: [em] });
-    else msg.m = await msg.client.ch.reply(msg, em);
+    else msg.m = await msg.client.ch.reply(msg, { embeds: [em] });
     const dmChannel = await target.createDM().catch(() => {});
     const DMembed = new Discord.MessageEmbed()
       .setDescription(`**${language.reason}:** \n${reason}`)
@@ -30,7 +30,7 @@ module.exports = {
         lan.author.image,
         msg.client.ch.stp(con.author.link, { guild: msg.guild }),
       );
-    const m = await msg.client.ch.send(dmChannel, DMembed);
+    const m = await msg.client.ch.send(dmChannel, { embeds: [DMembed] });
     const ban = await msg.guild.bans.fetch(target).catch(() => {});
     if (ban) {
       let err;
@@ -49,7 +49,7 @@ module.exports = {
           .setTimestamp()
           .addField(language.reason, `${reason}`)
           .setFooter(msg.client.ch.stp(lan.footer, { user: executor, target }));
-        if (msg.logchannels && msg.logchannels.length) msg.client.ch.send(msg.logchannels, embed);
+        if (msg.logchannels && msg.logchannels.length) msg.client.ch.send(msg.logchannels, { embeds: [embed] });
       } else {
         m?.delete().catch(() => {});
         if (mexisted) {

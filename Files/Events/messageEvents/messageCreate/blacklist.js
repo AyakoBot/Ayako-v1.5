@@ -43,11 +43,11 @@ module.exports = {
           }, 10000);
 
         const embed = new Discord.MessageEmbed()
-          .setAuthor(
-            msg.client.constants.standard.image,
-            language.commands.toxicityCheck.author,
-            msg.client.constants.standard.invite,
-          )
+          .setAuthor({
+            name: msg.client.constants.standard.image,
+            iconURL: language.commands.toxicityCheck.author,
+            url: msg.client.constants.standard.invite,
+          })
           .setDescription(
             msg.client.ch.stp(language.commands.toxicityCheck.info, { guild: msg.guild }) +
               words.map((w) => `\`${w}\``),
@@ -55,7 +55,7 @@ module.exports = {
           .setColor(msg.client.constants.commands.toxicityCheck);
 
         const DMchannel = await msg.author.createDM().catch(() => {});
-        if (DMchannel) msg.client.ch.send(DMchannel, embed);
+        if (DMchannel) msg.client.ch.send(DMchannel, { embeds: [embed] });
 
         let amount;
         const res = await msg.client.ch.query(

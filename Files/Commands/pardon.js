@@ -37,21 +37,21 @@ module.exports = {
       .setColor(msg.client.constants.commands.pardon.success)
       .setFooter(msg.lan.warnIssue)
       .setTimestamp(Number(warn.dateofwarn));
-    msg.client.ch.reply(msg, embed);
+    msg.client.ch.reply(msg, { embeds: [embed] });
     const logEmbed = new Discord.MessageEmbed();
     const con = msg.client.constants.commands.pardon;
     if (warn.type === 'Warn') {
       logEmbed
         .setDescription(`**${msg.language.reason}:**\n${warn.reason}`)
-        .setAuthor(
-          msg.client.ch.stp(msg.lan.warnOf, { target: user }),
-          con.log.image,
-          msg.client.ch.stp(msg.client.constants.standard.discordUrlDB, {
+        .setAuthor({
+          name: msg.client.ch.stp(msg.lan.warnOf, { target: user }),
+          iconURL: con.log.image,
+          url: msg.client.ch.stp(msg.client.constants.standard.discordUrlDB, {
             guildid: msg.guild.id,
             channelid: msg.channel.id,
             msgid: warn.msgid,
           }),
-        )
+        })
         .addFields(
           {
             name: msg.lan.date,

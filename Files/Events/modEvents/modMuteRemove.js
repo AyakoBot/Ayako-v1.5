@@ -18,7 +18,7 @@ module.exports = {
         .setDescription(`${msg.client.constants.emotes.loading} ${lan.loading}`);
     }
     if (mexisted) await msg.m.edit({ embeds: [em] });
-    else msg.m = await msg.client.ch.reply(msg, em);
+    else msg.m = await msg.client.ch.reply(msg, { embeds: [em] });
     const member = await msg.guild.members.fetch(target.id).catch(() => {});
     const exec = await msg.guild.members.fetch(executor.id).catch(() => {});
     const memberClient = msg.guild.me;
@@ -105,7 +105,7 @@ module.exports = {
         .setTimestamp()
         .addField(language.reason, `${reason}`)
         .setFooter(msg.client.ch.stp(lan.footer, { user: executor, target }));
-      if (msg.logchannels && msg.logchannels.length) msg.client.ch.send(msg.logchannels, embed);
+      if (msg.logchannels && msg.logchannels.length) msg.client.ch.send(msg.logchannels, { embeds: [embed] });
       const dmChannel = await target.createDM().catch(() => {});
       const DMembed = new Discord.MessageEmbed()
         .setDescription(`**${language.reason}:** \n${reason}`)
@@ -116,7 +116,7 @@ module.exports = {
           lan.author.image,
           msg.client.ch.stp(con.author.link, { guild: msg.guild }),
         );
-      msg.client.ch.send(dmChannel, DMembed);
+      msg.client.ch.send(dmChannel, { embeds: [DMembed] });
     } else {
       if (mexisted) {
         em.fields.pop();
@@ -207,7 +207,7 @@ async function assingWarn(executor, target, reason, msg, answer, em, language, c
       lan.author.image,
       msg.client.ch.stp(con.author.link, { guild: msg.guild }),
     );
-  msg.client.ch.send(dmChannel, DMembed);
+  msg.client.ch.send(dmChannel, { embeds: [DMembed] });
   const embed = new Discord.MessageEmbed()
     .setColor(con.color)
     .setAuthor(
@@ -219,7 +219,7 @@ async function assingWarn(executor, target, reason, msg, answer, em, language, c
     .setTimestamp()
     .addField(language.reason, `${reason}`)
     .setFooter(msg.client.ch.stp(lan.footer, { user: executor, target }));
-  if (msg.logchannels) msg.client.ch.send(msg.logchannels, embed);
+  if (msg.logchannels) msg.client.ch.send(msg.logchannels, { embeds: [embed] });
   em.setDescription(
     `${msg.client.constants.emotes.tick} ${msg.client.ch.stp(lan.success, { target })}`,
   );

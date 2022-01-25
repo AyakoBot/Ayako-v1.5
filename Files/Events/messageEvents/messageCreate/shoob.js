@@ -92,7 +92,7 @@ module.exports = {
                       .setDescription(`${user} now has the ${fivekRole} role`);
                   }
                 }
-                msg.client.ch.send(msg.channel, rembed);
+                msg.client.ch.send(msg.channel, { embeds: [rembed] });
               }
             }
           }

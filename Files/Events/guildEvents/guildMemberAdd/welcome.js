@@ -29,13 +29,16 @@ module.exports = {
             const role = guild.roles.cache.get(r.pingrole);
             role.exists = !!role.id;
             if (r.pingtof === true) {
-              ch.send(channel, role.exists ? `${role}, ${user}` : `${user}`, embed).catch(() => {});
-            } else if (role.exists) ch.send(channel, `${role}`, embed);
-            else ch.send(channel, embed).catch(() => {});
+              ch.send(channel, {
+                content: role.exists ? `${role}, ${user}` : `${user}`,
+                embeds: [embed],
+              });
+            } else if (role.exists) ch.send(channel, { content: `${role}`, embeds: [embed] });
+            else ch.send(channel, { embeds: [embed] });
           } else if (r.pingtof === true) {
-            ch.send(channel, `${user}`, embed).catch(() => {});
+            ch.send(channel, { content: `${user}`, embeds: [embed] });
           } else {
-            ch.send(channel, embed).catch(() => {});
+            ch.send(channel, { embeds: [embed] });
           }
         }
       }

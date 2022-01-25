@@ -1,5 +1,3 @@
-
-
 const Discord = require('discord.js');
 
 module.exports = {
@@ -26,11 +24,11 @@ module.exports = {
         const con = Constants.channelUpdate;
         let typeID;
         const embed = new Discord.MessageEmbed()
-          .setAuthor(
-            ch.stp(lan.author.title, { type: `${language.channels[newChannel.type]}` }),
-            con.author.image,
-            ch.stp(con.author.link, { channel: newChannel }),
-          )
+          .setAuthor({
+            name: ch.stp(lan.author.title, { type: `${language.channels[newChannel.type]}` }),
+            iconURL: con.author.image,
+            url: ch.stp(con.author.link, { channel: newChannel }),
+          })
           .setTimestamp()
           .setColor(con.color);
         const changedKey = [];
@@ -127,7 +125,7 @@ module.exports = {
         if (oldChannel.permissionOverwrites.cache !== newChannel.permissionOverwrites.cache) {
           const oldPerms = [];
           const newPerms = [];
-          oldChannel.permissionOverwrites.cache.entries().forEach(([, overwrite]) => {
+          oldChannel.permissionOverwrites.cache.entries()?.forEach(([, overwrite]) => {
             const temp = {};
             temp.id = overwrite.id;
             temp.type = overwrite.type;
@@ -135,7 +133,7 @@ module.exports = {
             temp.deny = overwrite.deny;
             oldPerms.push(temp);
           });
-          newChannel.permissionOverwrites.cache.entries().forEach(([, overwrite]) => {
+          newChannel.permissionOverwrites.cache.entries()?.forEach(([, overwrite]) => {
             const temp = {};
             temp.id = overwrite.id;
             temp.type = overwrite.type;
@@ -326,5 +324,5 @@ function send(logchannel, embed, language) {
         .replace(re3, language.allow);
     }
   });
-  client.ch.send(logchannel, embed);
+  client.ch.send(logchannel, { embeds: [embed] });
 }
