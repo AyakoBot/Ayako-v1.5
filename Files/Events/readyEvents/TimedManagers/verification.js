@@ -18,18 +18,38 @@ module.exports = {
                 if (member.kickable) {
                   const language = await client.ch.languageSelector(guild);
                   const lan = language.verification;
-                  const embed = new Discord.MessageEmbed()
-                    .setDescription(client.ch.stp(lan.kickMsg, { guild }))
-                    .setColor(client.constants.mod.kickAdd.color);
+
+                  const embed = getEmbed(guild, lan);
+
                   const DM = await member.user.createDM().catch(() => {});
                   if (DM) await client.ch.send(DM, { embeds: [embed] });
+
                   member.kick(lan.kickReason).catch(() => {});
                 }
               }
+            });
+          } else {
+            const members = guild.members.cache.filter((m) => m.roles.cache.size === 1);
+            members.forEach(async (member) => {
+              const language = await client.ch.languageSelector(guild);
+              const lan = language.verification;
+
+              const embed = getEmbed(guild, lan);
+
+              const DM = await member.user.createDM().catch(() => {});
+              if (DM) await client.ch.send(DM, { embeds: [embed] });
+
+              member.kick(lan.kickReason).catch(() => {});
             });
           }
         }
       });
     }
   },
+};
+
+const getEmbed = (guild, lan) => {
+  return new Discord.MessageEmbed()
+    .setDescription(client.ch.stp(lan.kickMsg, { guild }))
+    .setColor(client.constants.mod.kickAdd.color);
 };

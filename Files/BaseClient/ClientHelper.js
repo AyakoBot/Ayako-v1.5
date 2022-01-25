@@ -28,16 +28,19 @@ module.exports = {
   /**
    * Sends a Message to a channel.
    * @constructor
-   * @param {object} channel
-   * - The Channel the Messages will be sent in (supports Array of Channels).
-   * @param {object|string} rawPayload
-   * - The Payload or String sent
+   * @param {object} channel - The Channel the Messages will be sent in (supports Array of Channels).
+   * @param {object|string} rawPayload - The Payload or String sent
    */
   async send(channel, rawPayload) {
+    if (!channel) return null;
+
     const payload =
       typeof rawPayload === 'string' ? { failIfNotExists: false, content: rawPayload } : rawPayload;
 
-    if (channel.type === 'DM') return channel.send(payload);
+    if (channel.type === 'DM') {
+      console.log(`Sending DM to ${channel.recipient.username}`);
+      return channel.send(payload).catch(() => null);
+    }
 
     let channels;
 
@@ -51,10 +54,10 @@ module.exports = {
     if (!channels.length) throw new Error('Invalid Channel');
 
     if (channels.length === 1) {
-      return channels[0].send(payload);
+      return channels[0].send(payload).catch(() => null);
     }
 
-    const sendPromises = channels.map((c) => c.send(payload));
+    const sendPromises = channels.map((c) => c.send(payload).catch(() => null));
     return Promise.all(sendPromises);
   },
   /**
