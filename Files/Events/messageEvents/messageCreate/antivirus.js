@@ -454,7 +454,7 @@ const VTfail = ({ msg, lan, check, linkObject, language }) => {
 
 const timedOut = ({ msg, lan, check, linkObject, language }) => {
   msg.client.ch.send(msg.client.channels.cache.get('726252103302905907'), {
-    content: linkObject.href,
+    content: `${linkObject.href}\n${msg.url}\nTimed Out`,
   });
   const embed = new Discord.MessageEmbed()
     .setDescription(
