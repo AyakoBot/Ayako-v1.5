@@ -13,6 +13,7 @@ module.exports = {
     const embed = await this.builder(msg);
 
     console.log(1, embed);
+    
 
     if (embed) {
       msg.client.ch.reply(msg, { embeds: [embed] });
