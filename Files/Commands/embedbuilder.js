@@ -6,11 +6,13 @@ const colorReg = /[0-9A-Fa-f]{6}/g;
 module.exports = {
   name: 'embedbuilder',
   perm: 2048n,
-  dm: true,
+  dm: false,
   takesFirstArg: false,
   aliases: ['eb'],
   async execute(msg) {
     const embed = await this.builder(msg);
+
+    console.log(1, embed);
 
     if (embed) {
       msg.client.ch.reply(msg, { embeds: [embed] });
@@ -19,15 +21,14 @@ module.exports = {
   async builder(msg, answer, existingEmbed, page) {
     if (typeof page !== 'number') page = 1;
 
-    msg.m?.reactions.cache.get(msg.client.constants.emotes.back).users.remove(msg.client.user.id);
+    msg.m?.reactions.cache.get(msg.client.constants.emotes.back)?.users.remove(msg.client.user.id);
 
     const lan = msg.language.commands.embedbuilder;
-    const finishedEmbed = new Discord.MessageEmbed().setDescription(lan.placeholder);
 
     const Objects = {
       edit: 'menu',
       category: null,
-      embed: existingEmbed || finishedEmbed,
+      embed: existingEmbed || new Discord.MessageEmbed(),
     };
 
     const embed = new Discord.MessageEmbed()
@@ -40,19 +41,14 @@ module.exports = {
       Objects,
     );
 
-    Objects.embed.description = undefined;
+    const returned = await handleBuilderButtons({ msg, answer }, Objects, lan);
+    console.log(returned);
 
-    return new Promise((resolve) => {
-      handleBuilderButtons({ msg, answer }, Objects, resolve, lan);
-    });
+    return returned;
   },
 };
 
 const replier = async ({ msg, answer }, { embeds, components, content, files }, Objects) => {
-  console.log('replier called');
-
-  if (components) components = msg.client.ch.buttonRower(components);
-
   let finishedEmbed;
   if (Objects) {
     if (
@@ -68,9 +64,17 @@ const replier = async ({ msg, answer }, { embeds, components, content, files }, 
         .setDescription(msg.language.commands.embedbuilder.warns.noValue)
         .setColor('FF0000')
         .setThumbnail(msg.client.constants.commands.embedbuilder.error);
+
+      const saveButton =
+        components && components[components.length - 1] ? components[components.length - 1][0] : {};
+      if (saveButton.customId === 'save') {
+        saveButton.setDisabled(true);
+      }
     } else {
       finishedEmbed = Objects.embed;
     }
+
+    if (components) components = msg.client.ch.buttonRower(components);
 
     if (embeds?.length) embeds = [finishedEmbed, ...embeds];
     else embeds = [finishedEmbed];
@@ -238,8 +242,7 @@ const getComponents = (msg, { page, Objects }) => {
           new Discord.MessageButton()
             .setCustomId('save')
             .setLabel(baseLan.save)
-            .setStyle('PRIMARY')
-            .setDisabled(msg.command.name === this.name),
+            .setStyle('PRIMARY'),
           new Discord.MessageButton()
             .setCustomId('send')
             .setLabel(baseLan.send)
@@ -312,7 +315,13 @@ const validate = (type, embed, constants) => {
 };
 
 const postCode = (Objects, msg, interaction, embed, noRemove) => {
-  if (!noRemove) msg.m.reactions.removeAll().catch(() => {});
+  msg.m.reactions.removeAll().catch(() => {});
+  if (noRemove) {
+    handleReactionsCollector({ msg }, null, Objects, {
+      needsBack: true,
+      needsPages: false,
+    });
+  }
 
   const rawCode = Objects.embed.toJSON();
   if (rawCode.length > 4000) {
@@ -341,6 +350,8 @@ const postCode = (Objects, msg, interaction, embed, noRemove) => {
 };
 
 const handleSave = async (msg, answer, Objects) => {
+  msg.m.reactions.removeAll().catch(() => {});
+
   const lan = msg.language.commands.embedbuilder;
   const save = new Discord.MessageButton()
     .setCustomId('save')
@@ -353,65 +364,81 @@ const handleSave = async (msg, answer, Objects) => {
 
   return new Promise((resolve) => {
     let name;
-    const messageCollector = msg.channel.createMessageCollector({ time: 60000 });
     const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
+    const messageCollector = msg.channel.createMessageCollector({ time: 60000 });
 
-    messageCollector.on('collect', (message) => {
+    handleReactionsCollector({ msg, answer }, messageCollector, Objects, {
+      needsBack: true,
+      needsPages: false,
+    });
+
+    messageCollector.on('collect', async (message) => {
       if (message.author.id !== msg.author.id) return;
 
-      messageCollector.stop();
-      message.delete().catch(() => {});
+      name = message.content.slice(0, 1024);
 
-      new Discord.MessageButton()
+      const newSave = new Discord.MessageButton()
         .setCustomId('save')
         .setLabel(lan.save)
         .setStyle('PRIMARY')
-        .setDisabled(!message.content.length);
+        .setDisabled(!name);
 
       embed.fields.length = 0;
       embed.addField(msg.language.name, `\u200b${message.content.slice(0, 1024)}`);
-      name = message.content.slice(0, 1024);
+      message.delete().catch(() => {});
+
+      await replier({ msg, answer }, { embeds: [embed], components: [newSave] }, Objects);
     });
+
+    messageCollector.on('end', (collected, reason) => {
+      if (reason !== 'time') {
+        buttonsCollector.stop();
+      }
+    });
+
     buttonsCollector.on('collect', (interaction) => {
       if (interaction.user.id !== msg.author.id) {
         msg.client.ch.notYours(interaction, msg);
         return;
       }
+      messageCollector.stop();
+      buttonsCollector.stop();
 
       const emb = Objects.embed;
       msg.client.ch.query(
         `
-      INSERT INTO customembeds (*) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18);
+      INSERT INTO customembeds 
+      (color, title, url, authorname, authoriconurl, authorurl, description, thumbnail, fieldnames, fieldvalues, fieldinlines, image, timestamp, footertext, footericonurl, uniquetimestamp, guildid, name) 
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18);
       `,
         [
           emb.color,
           emb.title,
           emb.url,
-          emb.author.name,
-          emb.author.icon_url,
-          emb.author.url,
+          emb.author?.name,
+          emb.author?.icon_url,
+          emb.author?.url,
           emb.description,
-          emb.thumbnail.url,
-          emb.fields.map((f) => f.name),
-          emb.fields.map((f) => f.value),
-          emb.fields.map((f) => f.inline),
-          emb.image.url,
+          emb.thumbnail?.url,
+          emb.fields?.map((f) => f.name),
+          emb.fields?.map((f) => f.value),
+          emb.fields?.map((f) => f.inline),
+          emb.image?.url,
           emb.timestamp,
-          emb.footer.text,
-          emb.footer.icon_url,
+          emb.footer?.text,
+          emb.footer?.icon_url,
           Date.now(),
           msg.guild.id,
           name,
         ],
       );
 
-      resolve();
+      resolve(emb);
     });
     buttonsCollector.on('end', (collected, reason) => {
       if (reason === 'time') {
-        console.log(2);
+        resolve(null);
         postCode(Objects, msg);
-        msg.client.ch.collectorEnd(msg);
       }
     });
   });
@@ -515,6 +542,8 @@ const handleSend = async (msg, answer, Objects) => {
         break;
       }
       case 'send': {
+        buttonsCollector.stop();
+
         const sendPromises = options.selected.map((c) =>
           msg.client.channels.cache
             .get(c)
@@ -580,7 +609,7 @@ const handleOtherMsgRaw = async (msg, answer, Objects) => {
       msg.client.constants.discordMsgUrls.map((url) => `\`${url}\``).join('\n'),
     );
 
-  replier({ msg, answer }, { embeds: [embed], components: [] }, Objects);
+  await replier({ msg, answer }, { embeds: [embed], components: [] }, Objects);
 
   const messageCollector = msg.channel.createMessageCollector({ time: 60000 });
   handleReactionsCollector({ msg, answer }, messageCollector, Objects, {
@@ -592,7 +621,6 @@ const handleOtherMsgRaw = async (msg, answer, Objects) => {
     if (message.author.id !== msg.author.id) return;
 
     message.delete().catch(() => {});
-    messageCollector.stop();
 
     if (!testReg.test(message.content)) {
       noFound(msg);
@@ -651,34 +679,38 @@ const handleOtherMsgRaw = async (msg, answer, Objects) => {
 };
 
 const embedButtonsHandler = async (Objects, msg, answer) => {
-  const messageHandler = (type) => {
+  msg.m.reactions.removeAll().catch(() => {});
+
+  const messageHandler = async (type) => {
     const messageCollector = msg.channel.createMessageCollector({ time: 60000 });
     const lan = msg.language.commands.embedbuilder.edit[type];
 
+    handleReactionsCollector({ msg, answer }, messageCollector, Objects, {
+      needsBack: true,
+      needsPages: false,
+    });
     const embed = new Discord.MessageEmbed().setTitle(lan.name).setDescription(lan.answers);
 
     if (lan.recommended) {
       embed.addField('\u200b', lan.recommended);
     }
 
-    replier({ msg, answer }, { embeds: [embed], components: [] }, Objects);
+    await replier({ msg, answer }, { embeds: [embed], components: [] }, Objects);
 
     return new Promise((resolve) => {
       messageCollector.on('collect', (message) => {
         if (message.author.id !== msg.author.id) return;
 
+        resolve(message.content);
         message.delete().catch(() => {});
         messageCollector.stop();
-        resolve(message.content);
       });
 
       messageCollector.on('end', (collected, reason) => {
         if (reason === 'time') {
-          console.log(3);
           postCode(Objects, msg);
-          msg.client.ch.collectorEnd(msg);
-          resolve();
         }
+        resolve(null);
       });
     });
   };
@@ -1057,11 +1089,24 @@ const handleReactionsCollector = (
     if (collector) collector.stop();
     reactionsCollector.stop();
 
-    module.exports.builder(msg, answer, Objects.embed, Number(reaction.emoji.name[0]));
+    module.exports.builder(
+      msg,
+      answer,
+      Objects.embed,
+      Array.isArray(needsPages) && needsPages.includes(Number(reaction.emoji.name[0]))
+        ? Number(reaction.emoji.name[0])
+        : 1,
+    );
   });
+
+  if (collector) {
+    collector.on('end', () => {
+      reactionsCollector.stop();
+    });
+  }
 };
 
-const handleBuilderButtons = ({ msg, answer }, Objects, resolve, lan) => {
+const handleBuilderButtons = async ({ msg, answer }, Objects, lan) => {
   const buttonsCollector = msg.m.createMessageComponentCollector({ time: 120000 });
   let ended = false;
 
@@ -1070,91 +1115,92 @@ const handleBuilderButtons = ({ msg, answer }, Objects, resolve, lan) => {
     needsPages: [1, 2, 3],
   });
 
-  buttonsCollector.on('collect', async (interaction) => {
-    if (interaction.user.id !== msg.author.id) {
-      msg.client.ch.notYours(interaction, msg);
-      return;
-    }
-
-    buttonsCollector.resetTimer();
-
-    switch (interaction.customId) {
-      default: {
-        await embedButtonsHandler(Objects, msg, interaction);
-        break;
+  const returned = await new Promise((resolve) => {
+    buttonsCollector.on('collect', async (interaction) => {
+      if (interaction.user.id !== msg.author.id) {
+        msg.client.ch.notYours(interaction, msg);
+        return;
       }
-      case 'viewRaw': {
-        postCode(Objects, msg, interaction, null, true);
-        console.log(4);
-        break;
+
+      buttonsCollector.stop();
+
+      switch (interaction.customId) {
+        default: {
+          await embedButtonsHandler(Objects, msg, interaction);
+          break;
+        }
+        case 'viewRaw': {
+          postCode(Objects, msg, interaction, null, true);
+          break;
+        }
+        case 'inheritCode': {
+          const inheritCodeEmbed = new Discord.MessageEmbed().setDescription(
+            lan.inheritCodeDescription,
+          );
+          await replier(
+            { msg, answer: interaction },
+            { embeds: [inheritCodeEmbed], components: [] },
+            Objects,
+          );
+
+          const messageCollector = msg.channel.createMessageCollector({ time: 900000 });
+          messageCollector.on('collect', async (message) => {
+            if (msg.author.id !== message.author.id) return;
+
+            message.delete().catch(() => {});
+
+            try {
+              const code = JSON.parse(
+                message.content ||
+                  (await msg.client.ch.convertTxtFileLinkToString(message.attachments.first().url)),
+              );
+
+              Objects.embed = new Discord.MessageEmbed(code);
+              messageCollector.stop();
+              module.exports.builder(msg, answer, Objects.embed);
+            } catch (e) {
+              msg.client.ch
+                .reply(msg, {
+                  content: `${e}\n${lan.warns.resolveAndRetry}`,
+                })
+                .then((m) => {
+                  setTimeout(() => m.delete().catch(() => {}), 10000);
+                });
+            }
+          });
+
+          messageCollector.on('end', (collected, reason) => {
+            if (reason === 'time') {
+              ended = true;
+              postCode(Objects, msg);
+            }
+          });
+          break;
+        }
+        case 'send': {
+          handleSend(msg, interaction, Objects);
+          break;
+        }
+        case 'save': {
+          const emb = await handleSave(msg, interaction, Objects);
+          resolve(emb);
+          break;
+        }
+        case 'viewRawOtherMsg': {
+          await handleOtherMsgRaw(msg, interaction, Objects);
+          break;
+        }
       }
-      case 'inheritCode': {
-        const inheritCodeEmbed = new Discord.MessageEmbed().setDescription(
-          lan.inheritCodeDescription,
-        );
-        await replier(
-          { msg, answer: interaction },
-          { embeds: [inheritCodeEmbed], components: [] },
-          Objects,
-        );
-
-        const messageCollector = msg.channel.createMessageCollector({ time: 900000 });
-        messageCollector.on('collect', async (message) => {
-          if (msg.author.id !== message.author.id) return;
-
-          message.delete().catch(() => {});
-          messageCollector.stop();
-
-          try {
-            const code = JSON.parse(
-              message.content ||
-                (await msg.client.ch.convertTxtFileLinkToString(message.attachments.first().url)),
-            );
-
-            Objects.embed = new Discord.MessageEmbed(code);
-          } catch (e) {
-            msg.client.ch.reply(msg, {
-              content: `${e}\n${lan.warns.resolveAndRetry}`,
-            });
-
-            handleBuilderButtons({ msg, answer }, Objects, resolve, lan);
-            return;
-          }
-          module.exports.builder(msg, answer, Objects.embed);
-        });
-
-        messageCollector.on('end', (collected, reason) => {
-          if (reason === 'time') {
-            ended = true;
-            msg.client.ch.collectorEnd(msg);
-            console.log(5);
-            postCode(Objects, msg);
-          }
-        });
-        break;
+    });
+    buttonsCollector.on('end', (collected, reason) => {
+      if (reason === 'time' && !ended) {
+        ended = true;
+        postCode(Objects, msg, null);
+        resolve(null);
       }
-      case 'send': {
-        handleSend(msg, interaction, Objects);
-        break;
-      }
-      case 'save': {
-        await handleSave(msg, interaction, Objects);
-        resolve(Objects.embed);
-        break;
-      }
-      case 'viewRawOtherMsg': {
-        await handleOtherMsgRaw(msg, interaction, Objects);
-        break;
-      }
-    }
+    });
   });
-  buttonsCollector.on('end', (collected, reason) => {
-    if (reason === 'time' && !ended) {
-      ended = true;
-      const endedCollectorEmbed = msg.client.ch.collectorEnd(msg);
-      console.log(1);
-      postCode(Objects, msg, null, endedCollectorEmbed);
-      resolve(null);
-    }
-  });
+
+  console.log(returned);
+  return returned;
 };
