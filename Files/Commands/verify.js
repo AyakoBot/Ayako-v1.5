@@ -226,6 +226,11 @@ module.exports = {
         content: `**Also worth checking out:**\n💁‍♀️ Kimetsu No Yaiba┊Demon Slayer┊500 Demon Slayer Emojis & Stickers┊Unique & Fun┊Active┊Chatting┊VC┊& much more! 💜 \nㅤㅤㅤ╰─ ʚ ୨୧ ɞ ─╮\nF✧· 🐛 https://discord.gg/k76uPAzsSW ☂️ ·✧`,
       });
     }
+    if (msg.guild.id === '366219406776336385') {
+      msg.client.ch.send(msg.DM, {
+        content: `**Also worth checking out:**\n<:AMcatbaby:774005429469708300> **Animekos | Anime & Art | Ayako Bot Support | 400+ Emotes | Self Promotion Channels** <:AMcatlove:774010328978686052>\n🌸 https://discord.gg/3U8y58unKy 🌸`,
+      });
+    }
     if (msg.r.finishedrole) msg.member.roles.add(msg.r.finishedrole).catch(() => {});
     if (msg.r.pendingrole) msg.member.roles.remove(msg.r.pendingrole).catch(() => {});
   },
