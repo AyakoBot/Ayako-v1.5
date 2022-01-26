@@ -817,6 +817,14 @@
       "select": "Select Minutes",
       "desc": "Select the Minutes"
     },
+    "second": {
+      "select": "Select Seconds",
+      "desc": "Select the Seconds"
+    },
+    "minute": {
+      "select": "Select Minutes",
+      "desc": "Select the Minutes"
+    },
     "id": {
       "select": "Select the Entry",
       "desc": "Select the Entry below"
