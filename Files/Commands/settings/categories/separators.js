@@ -12,26 +12,49 @@ module.exports = {
       const r = res[i];
       const sep = msg.guild.roles.cache.get(r.separator);
       const stop = r.stoprole ? msg.guild.roles.cache.get(r.stoprole) : null;
-      const affected = r.stoprole
-        ? (sep.position > stop.position
-            ? sep.position - stop.position
-            : stop.position - sep.position) - 1
-        : (sep.position >= msg.guild.roles.highest.position
-            ? sep.position - msg.guild.roles.highest.position
-            : msg.guild.roles.highest.position - sep.position) - 1;
+
+      let affected;
+      let affectedText;
+      let sepMention;
+      if (sep) {
+        affectedText =
+          msg.guild.members.cache.get(msg.client.user.id).roles.highest.position <= sep.position
+            ? `\n${msg.client.constants.emotes.warning} ${msg.language.permissions.error.role}`
+            : '';
+
+        sepMention = `${sep}`;
+
+        affected = r.stoprole
+          ? (sep?.position > stop?.position
+              ? sep?.position - stop?.position
+              : stop?.position - sep?.position) - 1
+          : (sep?.position >= msg.guild.roles.highest.position
+              ? sep?.position - msg.guild.roles.highest.position
+              : msg.guild.roles.highest.position - sep?.position) - 1;
+      } else {
+        sepMention = `${msg.client.constants.emotes.warning} ${msg.lan.deletedRole}`;
+
+        affected = `--`;
+      }
+
+      let stopMention;
+      if (stop) {
+        stopMention = `${stop}`;
+      } else {
+        stopMention = `${msg.client.constants.emotes.warning} ${msg.lan.deletedRole}`;
+      }
+
+      if (Number.isNaN(+affected)) affected = '--';
+
       embed.addFields({
         name: `${msg.language.number}: \`${r.id}\` | ${
           r.active
             ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
             : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
         }`,
-        value: `${msg.lan.separator}: ${sep}\n${msg.lan.stoprole}: ${
-          r.stoprole ? stop : msg.language.none
-        }\n${msg.language.affected}: ${affected} ${msg.language.roles}${
-          msg.guild.members.cache.get(msg.client.user.id).roles.highest.position <= sep.position
-            ? `\n${msg.client.constants.emotes.warning} ${msg.language.permissions.error.role}`
-            : ''
-        }`,
+        value: `${msg.lan.separator}: ${sepMention}\n${msg.lan.stoprole}: ${
+          r.stoprole ? stopMention : msg.language.none
+        }\n${msg.language.affected}: ${affected} ${msg.language.roles}${affectedText || ''}`,
         inline: true,
       });
     }
@@ -43,34 +66,34 @@ module.exports = {
 
     let affected;
     if (r.stoprole) {
-      if (sep.position > stop.position) {
-        affected = sep.position - stop.position;
+      if (sep?.position > stop?.position) {
+        affected = sep?.position - stop?.position;
       } else {
-        affected = stop.position - sep.position - 1;
+        affected = stop?.position - sep?.position - 1;
       }
     } else {
-      affected = msg.guild.roles.highest.position - sep.position - 1;
+      affected = msg.guild.roles.highest.position - sep?.position - 1;
     }
 
     const affectedRoles = [];
     if (r.stoprole) {
-      if (sep.position > stop.position)
+      if (sep?.position > stop?.position)
         for (
-          let i = stop.position + 1;
-          i < msg.guild.roles.highest.position && i < sep.position;
+          let i = stop?.position + 1;
+          i < msg.guild.roles.highest.position && i < sep?.position;
           i += 1
         )
           affectedRoles.push(msg.guild.roles.cache.find((role) => role.position === i));
       else
         for (
-          let i = sep.position + 1;
-          i < msg.guild.roles.highest.position && i < stop.position;
+          let i = sep?.position + 1;
+          i < msg.guild.roles.highest.position && i < stop?.position;
           i += 1
         )
           affectedRoles.push(msg.guild.roles.cache.find((role) => role.position === i));
-    } else if (sep.position < msg.guild.roles.highest.position)
+    } else if (sep?.position < msg.guild.roles.highest.position)
       for (
-        let i = sep.position + 1;
+        let i = sep?.position + 1;
         i < msg.guild.roles.highest.position && i < msg.guild.roles.highest.position;
         i += 1
       )
@@ -88,6 +111,27 @@ module.exports = {
         affectedRoleText = msg.language.none;
       }
 
+      let sepMention;
+      if (sep) {
+        sepMention = `${sep}`;
+      } else {
+        sepMention = `${msg.client.constants.emotes.warning} ${msg.lan.deletedRole}`;
+      }
+
+      let stopMention;
+      if (stop) {
+        stopMention = `${stop}`;
+      } else {
+        stopMention = `${msg.client.constants.emotes.warning} ${msg.lan.deletedRole}`;
+      }
+
+      let affectedNumber;
+      if (Number.isNaN(+affected)) {
+        affectedNumber = '--';
+      } else {
+        affectedNumber = affected;
+      }
+
       embed.addFields(
         {
           name: msg.lanSettings.active,
@@ -98,7 +142,7 @@ module.exports = {
         },
         {
           name:
-            msg.guild.members.cache.get(msg.client.user.id).roles.highest.position <= sep.position
+            msg.guild.members.cache.get(msg.client.user.id).roles.highest.position <= sep?.position
               ? `${msg.client.constants.emotes.warning} ${msg.language.permissions.error.role}`
               : '\u200b',
           value: '\u200b',
@@ -118,12 +162,12 @@ module.exports = {
         },
         {
           name: msg.lan.separator,
-          value: r.separator ? `${sep}` : msg.language.none,
+          value: r.separator ? `${sepMention}` : msg.language.none,
           inline: false,
         },
         {
           name: msg.lan.stoprole,
-          value: r.stoprole ? `${stop}` : msg.language.none,
+          value: r.stoprole ? `${stopMention}` : msg.language.none,
           inline: false,
         },
         {
@@ -137,7 +181,7 @@ module.exports = {
           inline: false,
         },
         {
-          name: `${msg.language.affected} ${affected} ${msg.language.roles}`,
+          name: `${msg.language.affected} ${affectedNumber} ${msg.language.roles}`,
           value: `${affectedRoleText}\u200b`,
           inline: false,
         },
@@ -153,7 +197,7 @@ module.exports = {
         },
         {
           name:
-            msg.guild.members.cache.get(msg.client.user.id).roles.highest.position <= sep.position
+            msg.guild.members.cache.get(msg.client.user.id).roles.highest.position <= sep?.position
               ? `${msg.client.constants.emotes.warning} ${msg.language.permissions.error.role}`
               : '\u200b',
           value: '\u200b',

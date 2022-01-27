@@ -70,7 +70,7 @@ async function start(data) {
           if (has.includes(true) && !roles.includes(sep.id)) giveThese.push(sep.id);
           else if (!has.includes(true) && roles.includes(sep.id)) takeThese.push(sep.id);
         }
-      } else parentPort.postMessage('NO_SEP', { sep: row.separator });
+      } else parentPort.postMessage('NO_SEP', { text: 'NO_SEP', sep: row.separator });
     });
   }
   const newRoles = [...roles, ...giveThese];
