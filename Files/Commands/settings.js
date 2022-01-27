@@ -534,7 +534,7 @@ const mmrEditList = async (msgData, sendData) => {
       values.uniquetimestamp,
     ]);
 
-    log(msg, { insertedValues: values, required, comesFromMMR: true, row });
+    log(msg, { insertedValues: values, required, comesFromMMR: true, row }, 'del');
     return module.exports.execute(msg, answer);
   };
 
@@ -644,7 +644,7 @@ const mmrEditList = async (msgData, sendData) => {
           `INSERT INTO ${table} (${cols}) VALUES (${valueIdentifier.join(', ')});`,
           valuesSTP,
         );
-        log(msg, { insertedValues, row });
+        log(msg, { insertedValues, row }, 'add');
       }
     });
 
@@ -1006,7 +1006,7 @@ const changing = async (msgData, editData, resData) => {
     ]);
   }
 
-  log(msg, { insertedValues, required, comesFromMMR, row });
+  log(msg, { insertedValues, required, comesFromMMR, row }, 'update');
 
   row[usedKey] = insertedValues[usedKey];
   let embed;
@@ -1025,7 +1025,7 @@ const changing = async (msgData, editData, resData) => {
   return singleRowEdit({ msg, answer }, { row, res }, embed, comesFromMMR);
 };
 
-const log = async (msg, editData) => {
+const log = async (msg, editData, logType) => {
   const { insertedValues, required, comesFromMMR, row } = editData;
 
   const oldSettings = required ? row[required.assinger] : {};
@@ -1044,16 +1044,53 @@ const log = async (msg, editData) => {
     url: msg.client.constants.standard.invite,
   });
 
-  if (comesFromMMR) {
-    embed.setDescription(
-      msg.client.ch.stp(msg.language.selfLog.descriptionWithID, { type, msg, id: row.id }),
-    );
-  } else {
-    embed.setDescription(msg.client.ch.stp(msg.language.selfLog.description, { type, msg }));
-  }
+  switch (logType) {
+    default: {
+      embed.addField(msg.lanSettings.oldValue, `${settingsName}: ${oldSettings}`, true);
+      embed.addField(msg.lanSettings.newValue, `${settingsName}: ${newSettings}`, true);
 
-  embed.addField(msg.lanSettings.oldValue, `${settingsName}: ${oldSettings}`, true);
-  embed.addField(msg.lanSettings.newValue, `${settingsName}: ${newSettings}`, true);
+      if (comesFromMMR) {
+        embed.setDescription(
+          msg.client.ch.stp(msg.language.selfLog.descriptionWithID, { type, msg, id: row.id }),
+        );
+      } else {
+        embed.setDescription(msg.client.ch.stp(msg.language.selfLog.description, { type, msg }));
+      }
+      break;
+    }
+    case 'add': {
+      embed.addField(
+        msg.lanSettings.newValue,
+        `\`\`\`${JSON.stringify(insertedValues, null, 1)}\`\`\``,
+        true,
+      );
+
+      if (comesFromMMR) {
+        embed.setDescription(
+          msg.client.ch.stp(msg.language.selfLog.addedWithID, { type, msg, id: row.id }),
+        );
+      } else {
+        embed.setDescription(msg.client.ch.stp(msg.language.selfLog.added, { type, msg }));
+      }
+      break;
+    }
+    case 'del': {
+      embed.addField(
+        msg.lanSettings.oldValue,
+        `\`\`\`${JSON.stringify(insertedValues, null, 1)}\`\`\``,
+        true,
+      );
+
+      if (comesFromMMR) {
+        embed.setDescription(
+          msg.client.ch.stp(msg.language.selfLog.deletedWithID, { type, msg, id: row.id }),
+        );
+      } else {
+        embed.setDescription(msg.client.ch.stp(msg.language.selfLog.deleted, { type, msg }));
+      }
+      break;
+    }
+  }
 
   const res = await msg.client.ch.query('SELECT settingslog FROM logchannels WHERE guildid = $1;', [
     msg.guild.id,
