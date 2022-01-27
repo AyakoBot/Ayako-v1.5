@@ -452,7 +452,11 @@
   "selfLog": {
     "author": "Ayako {{type}} Settings Updated",
     "description": "User {{msg.author}} / `{{msg.author.tag}}` / `{{msg.author.id}}`\nhas updated Setting `{{type}}`\n\n\n**Changes:**",
-    "descriptionWithID": "User {{msg.author}} / `{{msg.author.tag}}` / `{{msg.author.id}}`\nhas updated Setting `{{type}}` with ID `{{id}}`\n\n\n**Changes:**"
+    "descriptionWithID": "User {{msg.author}} / `{{msg.author.tag}}` / `{{msg.author.id}}`\nhas updated Setting `{{type}}` with ID `{{id}}`\n\n\n**Changes:**",
+    "deletedWithID": "User {{msg.author}} / `{{msg.author.tag}}` / `{{msg.author.id}}`\nhas deleted Setting `{{type}}` with ID `{{id}}`\n\n\n**Old Data:**",
+    "deleted": "User {{msg.author}} / `{{msg.author.tag}}` / `{{msg.author.id}}`\nhas deleted Setting `{{type}}`\n\n\n**Old Data:**",
+    "added": "User {{msg.author}} / `{{msg.author.tag}}` / `{{msg.author.id}}`\nhas added Setting `{{type}}`\n\n\n**New Data:**",
+    "addedWithID": "User {{msg.author}} / `{{msg.author.tag}}` / `{{msg.author.id}}`\nhas added Setting `{{type}}` with ID `{{id}}`\n\n\n**New Data:**"
   },
   "time": {
     "seconds": "Second(s)",
@@ -2727,6 +2731,8 @@
         "isvarying": "Self-Adapting",
         "roles": "Roles of this Separator",
         "oneTimeRunner": "Apply all Separators to every Member of your Server",
+        "deletedRole": "Role was deleted or not found",
+        "calcError": "Could not be calculated",
         "edit": {
           "stoprole": {
             "name": "Stop-Role",
