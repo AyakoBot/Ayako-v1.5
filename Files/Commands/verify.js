@@ -228,7 +228,7 @@ module.exports = {
     }
     if (msg.guild.id === '366219406776336385') {
       msg.client.ch.send(msg.DM, {
-        content: `**Also worth checking out:**\n<:AMcatbaby:774005429469708300> **Animekos | Anime & Art | Ayako Bot Support | 400+ Emotes | Self Promotion Channels** <:AMcatlove:774010328978686052>\n🌸 https://discord.gg/3U8y58unKy 🌸`,
+        content: `**Also worth checking out:**\n<:AMcatbaby:774005429469708300> **Animekos | Anime & Art | Ayako Bot Support | 400+ Emotes | Self Promotion Channels** <:AMcatlove:774010328978686052>\n🌸 https://discord.gg/tMb3QZaWHA 🌸`,
       });
     }
     if (msg.r.finishedrole) msg.member.roles.add(msg.r.finishedrole).catch(() => {});
