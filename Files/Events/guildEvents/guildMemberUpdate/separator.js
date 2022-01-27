@@ -4,8 +4,8 @@ const ch = require('../../../BaseClient/ClientHelper');
 
 const UpdateWorker = new Worker('./Files/Events/guildevents/guildMemberUpdate/separatorUpdater.js');
 
-UpdateWorker.on('message', (msg, data) => {
-  if (msg === 'NO_SEP')
+UpdateWorker.on('message', ({ text, data }) => {
+  if (text === 'NO_SEP')
     ch.query('UPDATE roleseparator SET active = false WHERE separator = $1;', [data.sep]);
 });
 UpdateWorker.on('error', (error) => {
