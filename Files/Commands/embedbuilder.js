@@ -10,13 +10,14 @@ module.exports = {
   takesFirstArg: false,
   aliases: ['eb'],
   async execute(msg) {
-    const embed = await this.builder(msg);
+    const returned = await this.builder(msg);
+    msg.m.reactions.removeAll().catch(() => {});
 
-    console.log(1, embed);
-    
+    if (!returned) return;
 
+    const { embed, answer } = returned;
     if (embed) {
-      msg.client.ch.reply(msg, { embeds: [embed] });
+      replier({ msg, answer }, { embeds: [embed], components: [] });
     }
   },
   async builder(msg, answer, existingEmbed, page) {
@@ -43,7 +44,6 @@ module.exports = {
     );
 
     const returned = await handleBuilderButtons({ msg, answer }, Objects, lan);
-    console.log(returned);
 
     return returned;
   },
@@ -248,10 +248,9 @@ const getComponents = (msg, { page, Objects }) => {
             .setCustomId('send')
             .setLabel(baseLan.send)
             .setStyle('PRIMARY')
-            .setDisabled(msg.command.name !== this.name),
+            .setDisabled(msg.command.name !== module.exports.name),
         ],
       );
-      break;
     }
   }
 
@@ -318,7 +317,7 @@ const validate = (type, embed, constants) => {
 const postCode = (Objects, msg, interaction, embed, noRemove) => {
   msg.m.reactions.removeAll().catch(() => {});
   if (noRemove) {
-    handleReactionsCollector({ msg }, null, Objects, {
+    return handleReactionsCollector({ msg }, null, Objects, {
       needsBack: true,
       needsPages: false,
     });
@@ -348,6 +347,7 @@ const postCode = (Objects, msg, interaction, embed, noRemove) => {
       },
     );
   }
+  return null;
 };
 
 const handleSave = async (msg, answer, Objects) => {
@@ -368,10 +368,16 @@ const handleSave = async (msg, answer, Objects) => {
     const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
     const messageCollector = msg.channel.createMessageCollector({ time: 60000 });
 
-    handleReactionsCollector({ msg, answer }, messageCollector, Objects, {
-      needsBack: true,
-      needsPages: false,
-    });
+    handleReactionsCollector(
+      { msg, answer },
+      messageCollector,
+      Objects,
+      {
+        needsBack: true,
+        needsPages: false,
+      },
+      resolve,
+    );
 
     messageCollector.on('collect', async (message) => {
       if (message.author.id !== msg.author.id) return;
@@ -434,7 +440,7 @@ const handleSave = async (msg, answer, Objects) => {
         ],
       );
 
-      resolve(emb);
+      resolve({ embed: emb, answer: interaction });
     });
     buttonsCollector.on('end', (collected, reason) => {
       if (reason === 'time') {
@@ -453,12 +459,12 @@ const handleSend = async (msg, answer, Objects) => {
       .setDisabled(
         options.options.length > 25 && options.page === Math.ceil(options.options.length / 25),
       )
-      .setStyle('PRIMARY');
+      .setStyle('SUCCESS');
     const prev = new Discord.MessageButton()
       .setCustomId('prev')
       .setLabel(msg.language.prev)
       .setDisabled(options.page === 1)
-      .setStyle('PRIMARY');
+      .setStyle('DANGER');
     const send = new Discord.MessageButton()
       .setCustomId('send')
       .setLabel(msg.language.commands.embedbuilder.send)
@@ -466,11 +472,11 @@ const handleSend = async (msg, answer, Objects) => {
     const channels = new Discord.MessageSelectMenu()
       .setCustomId('channels')
       .addOptions(options.take)
-      .setPlaceholder(msg.language.select.select)
+      .setPlaceholder(msg.language.select.channels.select)
       .setMaxValues(options.take.length)
       .setMinValues(1);
 
-    return [prev, next, send, channels];
+    return [[prev, next], channels, send];
   };
 
   const getEmbed = (options) => {
@@ -482,14 +488,14 @@ const handleSend = async (msg, answer, Objects) => {
             : msg.language.none
         }`,
       )
-      .addField(msg.language.page, options.page);
+      .addField(msg.language.page, `\`${options.page}/${Math.ceil(options.options.length / 25)}\``);
 
     return embed;
   };
 
   const options = {
     page: 1,
-    options: msg.guild.channels
+    options: msg.guild.channels.cache
       .filter((c) =>
         [
           'GUILD_TEXT',
@@ -499,11 +505,20 @@ const handleSend = async (msg, answer, Objects) => {
           'GUILD_PRIVATE_THREAD',
         ].includes(c.type),
       )
+      .sort((a, b) => a.rawPosition - b.rawPosition)
       .map((c) => {
-        return { name: c.name, value: c.id };
+        return { label: `${c.name}`, value: `${c.id}` };
       }),
     selected: [],
   };
+
+  const getTake = () => {
+    const neededIndex = options.page * 25 - 25;
+    for (let j = neededIndex + 1; j < neededIndex + 26 && j < options.options.length; j += 1) {
+      options.take.push(options.options[j]);
+    }
+  };
+
   options.take = options.options.filter((o, i) => i < 25);
 
   await replier(
@@ -534,12 +549,14 @@ const handleSend = async (msg, answer, Objects) => {
       }
       case 'next': {
         options.page += 1;
-        options.take = options.options.filter((o, i) => i < 25 + 25 * (options.page - 1));
+        options.take.length = 0;
+        getTake();
         break;
       }
       case 'prev': {
         options.page -= 1;
-        options.take = options.options.filter((o, i) => i < 25 + 25 * (options.page - 1));
+        options.take.length = 0;
+        getTake();
         break;
       }
       case 'send': {
@@ -586,7 +603,7 @@ const handleSend = async (msg, answer, Objects) => {
 
     await replier(
       { msg, answer: interaction },
-      { embeds: [getEmbed(options)], components: getComponents(options) },
+      { embeds: [getEmbed(options)], components: getButtons(options) },
       Objects,
     );
   });
@@ -613,69 +630,76 @@ const handleOtherMsgRaw = async (msg, answer, Objects) => {
   await replier({ msg, answer }, { embeds: [embed], components: [] }, Objects);
 
   const messageCollector = msg.channel.createMessageCollector({ time: 60000 });
-  handleReactionsCollector({ msg, answer }, messageCollector, Objects, {
-    needsBack: true,
-    needsPages: false,
-  });
+  return new Promise((resolve) => {
+    handleReactionsCollector(
+      { msg, answer },
+      messageCollector,
+      Objects,
+      {
+        needsBack: true,
+        needsPages: false,
+      },
+      resolve,
+    );
 
-  messageCollector.on('collect', async (message) => {
-    if (message.author.id !== msg.author.id) return;
+    messageCollector.on('collect', async (message) => {
+      if (message.author.id !== msg.author.id) return;
 
-    message.delete().catch(() => {});
+      message.delete().catch(() => {});
 
-    if (!testReg.test(message.content)) {
-      noFound(msg);
-      return;
-    }
+      if (!testReg.test(message.content)) {
+        noFound(msg);
+      }
 
-    const args = message.content.replace(/\n/g, ' ').split(/ +/);
-    const messageUrls = [];
+      const args = message.content.replace(/\n/g, ' ').split(/ +/);
+      const messageUrls = [];
 
-    args.forEach((arg) => {
-      try {
-        const url = new URL(arg);
-        if (
-          (url.hostname === 'discord.com' ||
-            url.hostname === 'canary.discord.com' ||
-            url.hostname === 'ptb.discord.com') &&
-          url.pathname.startsWith('/channels/')
-        ) {
-          messageUrls.push(arg);
+      args.forEach((arg) => {
+        try {
+          const url = new URL(arg);
+          if (
+            (url.hostname === 'discord.com' ||
+              url.hostname === 'canary.discord.com' ||
+              url.hostname === 'ptb.discord.com') &&
+            url.pathname.startsWith('/channels/')
+          ) {
+            messageUrls.push(arg);
+          }
+        } catch {
+          // empty
         }
-      } catch {
-        // empty
-      }
-    });
-
-    const messagePromises = messageUrls.map(async (url) => {
-      const path = url.replace(testReg, '');
-
-      const ids = path.split(/\/+/);
-      if (ids[0] === 'https:' || ids[0] === 'http:') ids.shift();
-
-      if (Number.isNaN(+ids[0]) && ids[0] === '@me') {
-        return (await msg.client.guilds.cache.channels.fetch(ids[1]).catch((e) => e))?.messages
-          ?.fetch(ids[2])
-          ?.catch((e) => e);
-      }
-      return msg.client.channels.cache
-        .get(ids[1])
-        .messages?.fetch(ids[2])
-        .catch((e) => e);
-    });
-
-    const messages = await Promise.all(messagePromises);
-
-    const messageEmbedJSONs = [];
-    messages.forEach((m) => {
-      m.embeds.forEach((membed) => {
-        messageEmbedJSONs.push(`${m.url}\n${JSON.stringify(membed, null, 1)}`);
       });
+
+      const messagePromises = messageUrls.map(async (url) => {
+        const path = url.replace(testReg, '');
+
+        const ids = path.split(/\/+/);
+        if (ids[0] === 'https:' || ids[0] === 'http:') ids.shift();
+
+        if (Number.isNaN(+ids[0]) && ids[0] === '@me') {
+          return (await msg.client.guilds.cache.channels.fetch(ids[1]).catch((e) => e))?.messages
+            ?.fetch(ids[2])
+            ?.catch((e) => e);
+        }
+        return msg.client.channels.cache
+          .get(ids[1])
+          .messages?.fetch(ids[2])
+          .catch((e) => e);
+      });
+
+      const messages = await Promise.all(messagePromises);
+
+      const messageEmbedJSONs = [];
+      messages.forEach((m) => {
+        m.embeds.forEach((membed) => {
+          messageEmbedJSONs.push(`${m.url}\n${JSON.stringify(membed, null, 1)}`);
+        });
+      });
+
+      const attachment = msg.client.ch.txtFileWriter(messageEmbedJSONs);
+
+      await replier({ msg, answer }, { files: [attachment], embeds: [embed] });
     });
-
-    const attachment = msg.client.ch.txtFileWriter(messageEmbedJSONs);
-
-    await replier({ msg, answer }, { files: [attachment], embeds: [embed] });
   });
 };
 
@@ -686,10 +710,6 @@ const embedButtonsHandler = async (Objects, msg, answer) => {
     const messageCollector = msg.channel.createMessageCollector({ time: 60000 });
     const lan = msg.language.commands.embedbuilder.edit[type];
 
-    handleReactionsCollector({ msg, answer }, messageCollector, Objects, {
-      needsBack: true,
-      needsPages: false,
-    });
     const embed = new Discord.MessageEmbed().setTitle(lan.name).setDescription(lan.answers);
 
     if (lan.recommended) {
@@ -698,7 +718,18 @@ const embedButtonsHandler = async (Objects, msg, answer) => {
 
     await replier({ msg, answer }, { embeds: [embed], components: [] }, Objects);
 
-    return new Promise((resolve) => {
+    const returned = await new Promise((resolve) => {
+      handleReactionsCollector(
+        { msg, answer },
+        messageCollector,
+        Objects,
+        {
+          needsBack: true,
+          needsPages: false,
+        },
+        resolve,
+      );
+
       messageCollector.on('collect', (message) => {
         if (message.author.id !== msg.author.id) return;
 
@@ -714,6 +745,8 @@ const embedButtonsHandler = async (Objects, msg, answer) => {
         resolve(null);
       });
     });
+
+    return returned;
   };
 
   const limits = msg.client.constants.customembeds.limits.fields;
@@ -752,7 +785,7 @@ const embedButtonsHandler = async (Objects, msg, answer) => {
 
   const entered = await messageHandler(answer.customId);
   let errored = false;
-  if (!entered) return;
+  if (!entered) return null;
 
   switch (answer.customId) {
     default: {
@@ -1045,15 +1078,16 @@ const embedButtonsHandler = async (Objects, msg, answer) => {
     }
   }
 
-  if (errored) embedButtonsHandler(Objects, msg, answer);
-  else module.exports.builder(msg, null, Objects.embed);
+  if (errored) return embedButtonsHandler(Objects, msg, answer);
+  return module.exports.builder(msg, null, Objects.embed);
 };
 
-const handleReactionsCollector = (
+const handleReactionsCollector = async (
   { msg, answer },
   collector,
   Objects,
   { needsBack, needsPages },
+  parentResolve,
 ) => {
   const reactionsCollector = msg.m.createReactionCollector({ time: 120000 });
 
@@ -1080,43 +1114,58 @@ const handleReactionsCollector = (
     });
   }
 
-  reactionsCollector.on('collect', (reaction, user) => {
-    if (user.id === msg.client.user.id) return;
-    reaction.users.remove(user.id);
-    if (user.id !== msg.author.id && user.id !== msg.client.user.id) {
-      return;
+  const returned = await new Promise((resolve) => {
+    reactionsCollector.on('collect', async (reaction, user) => {
+      if (user.id === msg.client.user.id) return;
+      reaction.users.remove(user.id);
+      if (user.id !== msg.author.id && user.id !== msg.client.user.id) {
+        return;
+      }
+
+      if (collector) collector.stop();
+      reactionsCollector.stop();
+
+      resolve(
+        await module.exports.builder(
+          msg,
+          answer,
+          Objects.embed,
+          Array.isArray(needsPages) && needsPages.includes(Number(reaction.emoji.name[0]))
+            ? Number(reaction.emoji.name[0])
+            : 1,
+        ),
+      );
+    });
+
+    if (collector) {
+      collector.on('end', () => {
+        reactionsCollector.stop();
+      });
     }
-
-    if (collector) collector.stop();
-    reactionsCollector.stop();
-
-    module.exports.builder(
-      msg,
-      answer,
-      Objects.embed,
-      Array.isArray(needsPages) && needsPages.includes(Number(reaction.emoji.name[0]))
-        ? Number(reaction.emoji.name[0])
-        : 1,
-    );
   });
 
-  if (collector) {
-    collector.on('end', () => {
-      reactionsCollector.stop();
-    });
+  if (parentResolve) {
+    parentResolve(returned);
   }
+  return returned;
 };
 
 const handleBuilderButtons = async ({ msg, answer }, Objects, lan) => {
   const buttonsCollector = msg.m.createMessageComponentCollector({ time: 120000 });
   let ended = false;
 
-  handleReactionsCollector({ msg, answer }, buttonsCollector, Objects, {
-    needsBack: false,
-    needsPages: [1, 2, 3],
-  });
-
   const returned = await new Promise((resolve) => {
+    handleReactionsCollector(
+      { msg, answer },
+      buttonsCollector,
+      Objects,
+      {
+        needsBack: false,
+        needsPages: [1, 2, 3],
+      },
+      resolve,
+    );
+
     buttonsCollector.on('collect', async (interaction) => {
       if (interaction.user.id !== msg.author.id) {
         msg.client.ch.notYours(interaction, msg);
@@ -1127,11 +1176,11 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan) => {
 
       switch (interaction.customId) {
         default: {
-          await embedButtonsHandler(Objects, msg, interaction);
+          resolve(await embedButtonsHandler(Objects, msg, interaction));
           break;
         }
         case 'viewRaw': {
-          postCode(Objects, msg, interaction, null, true);
+          resolve(await postCode(Objects, msg, interaction, null, true));
           break;
         }
         case 'inheritCode': {
@@ -1158,7 +1207,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan) => {
 
               Objects.embed = new Discord.MessageEmbed(code);
               messageCollector.stop();
-              module.exports.builder(msg, answer, Objects.embed);
+              resolve(await module.exports.builder(msg, answer, Objects.embed));
             } catch (e) {
               msg.client.ch
                 .reply(msg, {
@@ -1179,7 +1228,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan) => {
           break;
         }
         case 'send': {
-          handleSend(msg, interaction, Objects);
+          resolve(await handleSend(msg, interaction, Objects));
           break;
         }
         case 'save': {
@@ -1188,7 +1237,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan) => {
           break;
         }
         case 'viewRawOtherMsg': {
-          await handleOtherMsgRaw(msg, interaction, Objects);
+          resolve(await handleOtherMsgRaw(msg, interaction, Objects));
           break;
         }
       }
@@ -1202,6 +1251,5 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan) => {
     });
   });
 
-  console.log(returned);
   return returned;
 };
