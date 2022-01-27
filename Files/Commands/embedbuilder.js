@@ -34,6 +34,11 @@ module.exports = {
     };
 
     const embed = new Discord.MessageEmbed()
+      .setAuthor({
+        name: msg.language.commands.embedbuilder.author,
+        iconURL: msg.client.constants.commands.embedbuilder.author,
+        url: msg.client.constants.standard.invite,
+      })
       .setDescription(lan.chooseTheEdit)
       .setColor(msg.client.ch.colorSelector(msg.guild.me));
 
@@ -333,6 +338,11 @@ const postCode = (Objects, msg, interaction, embed, noRemove) => {
     if (embed) embeds.push(embed);
     embeds.push(
       new Discord.MessageEmbed()
+        .setAuthor({
+          name: msg.language.commands.embedbuilder.author,
+          iconURL: msg.client.constants.commands.embedbuilder.author,
+          url: msg.client.constants.standard.invite,
+        })
         .setDescription(msg.client.ch.makeCodeBlock(JSON.stringify(rawCode, null, 1)))
         .setColor('ffffff')
         .setTitle(msg.language.commands.embedbuilder.unsaved)
@@ -360,7 +370,11 @@ const handleSave = async (msg, answer, Objects) => {
     .setStyle('PRIMARY')
     .setDisabled(true);
 
-  const embed = new Discord.MessageEmbed().setDescription(lan.giveName);
+  const embed = new Discord.MessageEmbed().setDescription(lan.giveName).setAuthor({
+    name: msg.language.commands.embedbuilder.author,
+    iconURL: msg.client.constants.commands.embedbuilder.author,
+    url: msg.client.constants.standard.invite,
+  });
   await replier({ msg, answer }, { embeds: [embed], components: [save] }, Objects);
 
   return new Promise((resolve) => {
@@ -481,6 +495,11 @@ const handleSend = async (msg, answer, Objects) => {
 
   const getEmbed = (options) => {
     const embed = new Discord.MessageEmbed()
+      .setAuthor({
+        name: msg.language.commands.embedbuilder.author,
+        iconURL: msg.client.constants.commands.embedbuilder.author,
+        url: msg.client.constants.standard.invite,
+      })
       .setDescription(
         `${msg.language.commands.embedbuilder.sendWhere}\n\n**${msg.language.selected}**:\n${
           options.selected.lenght
@@ -575,26 +594,32 @@ const handleSend = async (msg, answer, Objects) => {
         const errors = returns.filter((r) => r[1]);
         const successes = returns.filter((r) => !r[1]);
 
-        const embed = new Discord.MessageEmbed().setDescription(
-          `${
-            (errors.length
-              ? errors
-                  .map(
-                    (err) =>
-                      `${msg.client.ch.stp(`${msg.language.commands.embedbuilder.sendError}`, {
-                        channel: `<#${err[0]}>`,
-                        error: err[1],
-                      })}`,
-                  )
-                  .join('\n')
-              : '',
-            successes.map((c) => {
-              return msg.client.ch.stp(`${msg.language.commands.embedbuilder.sendSuccess}`, {
-                channel: `<#${c[0]}>`,
-              });
-            }))
-          }`,
-        );
+        const embed = new Discord.MessageEmbed()
+          .setAuthor({
+            name: msg.language.commands.embedbuilder.author,
+            iconURL: msg.client.constants.commands.embedbuilder.author,
+            url: msg.client.constants.standard.invite,
+          })
+          .setDescription(
+            `${
+              (errors.length
+                ? errors
+                    .map(
+                      (err) =>
+                        `${msg.client.ch.stp(`${msg.language.commands.embedbuilder.sendError}`, {
+                          channel: `<#${err[0]}>`,
+                          error: err[1],
+                        })}`,
+                    )
+                    .join('\n')
+                : '',
+              successes.map((c) => {
+                return msg.client.ch.stp(`${msg.language.commands.embedbuilder.sendSuccess}`, {
+                  channel: `<#${c[0]}>`,
+                });
+              }))
+            }`,
+          );
 
         await replier({ msg, answer: interaction }, { embeds: [embed], components: [] }, Objects);
         return;
@@ -613,14 +638,23 @@ const handleOtherMsgRaw = async (msg, answer, Objects) => {
   msg.m.reactions.removeAll().catch(() => {});
 
   const noFound = () => {
-    const embed = new Discord.MessageEmbed().setDescription(
-      msg.language.commands.embedbuilder.noUrlFound,
-    );
+    const embed = new Discord.MessageEmbed()
+      .setAuthor({
+        name: msg.language.commands.embedbuilder.author,
+        iconURL: msg.client.constants.commands.embedbuilder.author,
+        url: msg.client.constants.standard.invite,
+      })
+      .setDescription(msg.language.commands.embedbuilder.noUrlFound);
 
     return replier({ msg, answer }, { embeds: [embed], components: [] }, Objects);
   };
 
   const embed = new Discord.MessageEmbed()
+    .setAuthor({
+      name: msg.language.commands.embedbuilder.author,
+      iconURL: msg.client.constants.commands.embedbuilder.author,
+      url: msg.client.constants.standard.invite,
+    })
     .setDescription(msg.language.commands.embedbuilder.otherMsg)
     .addField(
       msg.language.Examples,
@@ -710,7 +744,14 @@ const embedButtonsHandler = async (Objects, msg, answer) => {
     const messageCollector = msg.channel.createMessageCollector({ time: 60000 });
     const lan = msg.language.commands.embedbuilder.edit[type];
 
-    const embed = new Discord.MessageEmbed().setTitle(lan.name).setDescription(lan.answers);
+    const embed = new Discord.MessageEmbed()
+      .setAuthor({
+        name: msg.language.commands.embedbuilder.author,
+        iconURL: msg.client.constants.commands.embedbuilder.author,
+        url: msg.client.constants.standard.invite,
+      })
+      .setTitle(lan.name)
+      .setDescription(lan.answers);
 
     if (lan.recommended) {
       embed.addField('\u200b', lan.recommended);
@@ -775,6 +816,11 @@ const embedButtonsHandler = async (Objects, msg, answer) => {
     }
 
     const embed = new Discord.MessageEmbed()
+      .setAuthor({
+        name: msg.language.commands.embedbuilder.author,
+        iconURL: msg.client.constants.commands.embedbuilder.author,
+        url: msg.client.constants.standard.invite,
+      })
       .setDescription(msg.language.commands.embedbuilder.errorVal)
       .setColor('ff0000');
     if (error) embed.addField(msg.language.error, `${lanError}`);

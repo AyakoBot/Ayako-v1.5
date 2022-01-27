@@ -1017,6 +1017,7 @@
   },
   "commands": {
     "embedbuilder": {
+      "author": "Ayako Embed Builder",
       "warns": {
         "error": "**{{name}}** is exceeding {{limit}} Characters by {{tooMany}}",
         "noValue": "Embed needs at least one of the following set: `Author Name`, `Title`, `Description`, `Thumbnail`, `Field Name`, `Field Value`, `Image`, `Footer Text`",
