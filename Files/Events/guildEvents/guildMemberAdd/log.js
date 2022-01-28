@@ -77,7 +77,13 @@ module.exports = {
             if (usedInvite.uses)
               embed.addField(
                 lan.inviteInfoTitle,
-                ch.stp(lan.inviteInfoUses, { invite: usedInvite }),
+                ch.stp(lan.inviteInfoUses, {
+                  invite: usedInvite,
+                  mention:
+                    guild.id === usedInvite.inviter.id
+                      ? usedInvite.inviter.username
+                      : `${usedInvite.inviter}`,
+                }),
               );
             else
               embed.addField(lan.inviteInfoTitle, ch.stp(lan.inviteInfo, { invite: usedInvite }));

@@ -873,12 +873,13 @@ module.exports = {
 
     if (guild.vanityURLCode) {
       const vanity = await guild.fetchVanityData();
+      const language = await this.languageSelector(guild);
 
       invitesMap.set(vanity.code, {
         code: vanity.code,
         deletable: false,
         guild,
-        inviter: (await this.languageSelector(guild)).vanityUrl,
+        inviter: { username: language.vanityUrl, tag: language.none, id: guild.id },
         memberCount: guild.memberCount,
         presenceCount: guild.approximatePresenceCount,
         url: `https://discord.gg/${vanity.code}`,
