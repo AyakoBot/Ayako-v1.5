@@ -64,16 +64,16 @@ module.exports = {
         }
         embed.addField(
           language.joinedAt,
-          `\`${new Date(member.joinedTimestamp).toUTCString()}\`\n(\`${ch.stp(
-            language.time.timeAgo,
-            {
-              time: moment
-                .duration(Date.now() - member.joinedTimestamp)
-                .format(
-                  `Y [${language.time.years}], M [${language.time.months}], W [${language.time.weeks}], D [${language.time.days}], H [${language.time.hours}], m [${language.time.minutes}], s [${language.time.seconds}]`,
-                ),
-            },
-          )}\`)`,
+          `<t:${`${member.joinedTimestamp}`.slice(0, -3)}> <t:${`${member.joinedTimestamp}`.slice(
+            0,
+            -3,
+          )}:R>\n(\`${ch.stp(language.time.timeAgo, {
+            time: moment
+              .duration(Date.now() - member.joinedTimestamp)
+              .format(
+                `Y [${language.time.years}], M [${language.time.months}], W [${language.time.weeks}], D [${language.time.days}], H [${language.time.hours}], m [${language.time.minutes}], s [${language.time.seconds}]`,
+              ),
+          })}\`)`,
         );
         ch.send(channels, { embeds: [embed] });
       }

@@ -26,16 +26,16 @@ module.exports = {
           .setTimestamp()
           .addField(
             language.createdAt,
-            `\`${new Date(user.createdTimestamp).toUTCString()}\`\n(\`${ch.stp(
-              language.time.timeAgo,
-              {
-                time: moment
-                  .duration(Date.now() - user.createdTimestamp)
-                  .format(
-                    `Y [${language.time.years}], M [${language.time.months}], W [${language.time.weeks}], D [${language.time.days}], H [${language.time.hours}], m [${language.time.minutes}], s [${language.time.seconds}]`,
-                  ),
-              },
-            )}\`)`,
+            `<t:${`${user.createdTimestamp}`.slice(0, -3)}> <t:${`${user.createdTimestamp}`.slice(
+              0,
+              -3,
+            )}:R>\n(\`${ch.stp(language.time.timeAgo, {
+              time: moment
+                .duration(Date.now() - user.createdTimestamp)
+                .format(
+                  `Y [${language.time.years}], M [${language.time.months}], W [${language.time.weeks}], D [${language.time.days}], H [${language.time.hours}], m [${language.time.minutes}], s [${language.time.seconds}]`,
+                ),
+            })}\`)`,
           )
           .setColor(con.color);
         const cachedInvites = client.invites.get(guild.id);
@@ -62,9 +62,7 @@ module.exports = {
           client.invites.set(guild.id, newInvites);
           let usedInvite;
           if (cachedInvites) {
-            usedInvite = newInvites.find(
-              (inv) => cachedInvites.find((i) => i.code === inv.code).uses < inv.uses,
-            );
+            usedInvite = newInvites.find((inv) => cachedInvites.get(inv.code).uses < inv.uses);
           }
           embed.setAuthor({
             name: lan.author.titleUser,
@@ -83,7 +81,7 @@ module.exports = {
               embed.addField(lan.inviteInfoTitle, ch.stp(lan.inviteInfo, { invite: usedInvite }));
           }
         }
-        ch.send(channels, embed);
+        ch.send(channels, { embeds: [embed] });
       }
     }
   },
