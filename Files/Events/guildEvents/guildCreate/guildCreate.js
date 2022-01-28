@@ -1,4 +1,3 @@
-
 module.exports = {
   async execute(guild) {
     require('./log').execute(guild);
