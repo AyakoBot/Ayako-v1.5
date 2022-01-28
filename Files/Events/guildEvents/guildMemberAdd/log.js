@@ -59,11 +59,13 @@ module.exports = {
           else embed.setDescription(ch.stp(lan.descriptionBotNoAudit, { bot: user }));
         } else {
           const newInvites = await client.ch.getErisInvites(guild);
-          client.invites.set(guild.id, newInvites);
+
           let usedInvite;
           if (cachedInvites) {
             usedInvite = newInvites.find((inv) => cachedInvites.get(inv.code).uses < inv.uses);
           }
+          client.invites.set(guild.id, newInvites);
+
           embed.setAuthor({
             name: lan.author.titleUser,
             iconURL: con.author.image,

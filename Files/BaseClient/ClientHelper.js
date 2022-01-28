@@ -865,6 +865,7 @@ module.exports = {
         presenceCount: inv.presenceCount,
         temporary: inv.temporary,
         url: `https://discord.gg/${inv.code}`,
+        uses: inv.uses,
       };
 
       invitesMap.set(invite.code, invite);
