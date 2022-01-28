@@ -871,6 +871,21 @@ module.exports = {
       invitesMap.set(invite.code, invite);
     });
 
+    if (guild.vanityURLCode) {
+      const vanity = await guild.fetchVanityData();
+
+      invitesMap.set(vanity.code, {
+        code: vanity.code,
+        deletable: false,
+        guild,
+        inviter: (await this.languageSelector(guild)).vanityUrl,
+        memberCount: guild.memberCount,
+        presenceCount: guild.approximatePresenceCount,
+        url: `https://discord.gg/${vanity.code}`,
+        uses: vanity.uses,
+      });
+    }
+
     return invitesMap;
   },
   /**
