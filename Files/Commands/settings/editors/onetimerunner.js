@@ -12,12 +12,7 @@ module.exports = {
       .setCustomId('no')
       .setLabel(msg.language.No)
       .setStyle('SECONDARY');
-    const back = new Discord.MessageButton()
-      .setCustomId('back')
-      .setLabel(msg.language.back)
-      .setEmoji(msg.client.constants.emotes.back)
-      .setStyle('DANGER');
-    return [[yes, no], [back]];
+    return [[yes, no]];
   },
   interactionHandler(msgData) {
     const { msg, answer } = msgData;
