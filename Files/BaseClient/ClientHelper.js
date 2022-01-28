@@ -848,7 +848,27 @@ module.exports = {
     if (!invites) return null;
 
     const invitesMap = new Discord.Collection();
-    invites.forEach((invite) => invitesMap.set(invite.code, invite));
+    invites.forEach((inv) => {
+      const invite = {
+        channel: client.channels.cache.get(inv.channel.id),
+        channelId: inv.channel.id,
+        code: inv.code,
+        deletable: true,
+        expiresAt: inv.maxAge ? new Date(inv.maxAge) : null,
+        expiresTimestamp: inv.maxAge ? new Date(inv.maxAge).getTime() : null,
+        guild,
+        inviter: client.users.cache.get(inv.inviter.id),
+        inviterId: inv.inviter.id,
+        maxAge: inv.maxAge,
+        maxUses: inv.maxUses,
+        memberCount: inv.memberCount,
+        presenceCount: inv.presenceCount,
+        temporary: inv.temporary,
+        url: `https://discord.gg/${inv.code}`,
+      };
+
+      invitesMap.set(invite.code, invite);
+    });
 
     return invitesMap;
   },
@@ -864,7 +884,16 @@ module.exports = {
     if (!bans) return null;
 
     const bansMap = new Discord.Collection();
-    bans.forEach((ban) => bansMap.set(ban.user.id, ban));
+    bans.forEach((b) => {
+      const ban = {
+        guild,
+        user: client.users.cache.get(b.user.id),
+        partial: false,
+        reason: b.reason,
+      };
+
+      bansMap.set(b.user.id, ban);
+    });
 
     return bansMap;
   },
