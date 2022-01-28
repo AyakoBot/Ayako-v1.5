@@ -115,8 +115,8 @@ module.exports = {
       });
       const finishTime = Math.floor(
         Date.now() / 1000 +
-          (membersWithRoles ? membersWithRoles.length * 3 : 0) +
-          ((membersWithRoles ? membersWithRoles.length : 0) / 3600) * 300,
+          (membersWithRoles ? membersWithRoles.length * 4 : 0) +
+          ((membersWithRoles ? membersWithRoles.length : 0) / 3600) * 400,
       );
 
       embed
@@ -128,7 +128,7 @@ module.exports = {
         .setDescription(
           msg.client.ch.stp(msg.lan.edit.oneTimeRunner.stats, {
             members: membersWithRoles && membersWithRoles.length ? membersWithRoles.length : '0',
-            roles: membersWithRoles && membersWithRoles.length ? membersWithRoles.length * 3 : '0',
+            roles: membersWithRoles && membersWithRoles.length ? membersWithRoles.length * 4 : '0',
             finishTime: `<t:${finishTime}:F> (<t:${finishTime}:R>)`,
           }),
         );
@@ -139,7 +139,7 @@ module.exports = {
       [
         true,
         msg.guild.id,
-        Math.floor(Date.now() / 1000) + (membersWithRoles ? membersWithRoles.length * 3 : 0),
+        Math.floor(Date.now() / 1000) + (membersWithRoles ? membersWithRoles.length * 4 : 0),
         Date.now(),
         msg.channel.id,
         msg.m.id,
@@ -259,7 +259,7 @@ module.exports = {
               'UPDATE roleseparatorsettings SET index = $1, length = $3 WHERE guildid = $2;',
               [index, msg.guild.id, membersWithRoles.length - 1],
             );
-        }, index * 2000);
+        }, index * 3000);
       });
     } else {
       embed
