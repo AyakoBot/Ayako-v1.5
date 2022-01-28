@@ -9,8 +9,8 @@ module.exports = {
     console.log(`Login at ${new Date(Date.now()).toLocaleString()}`);
 
     client.guilds.cache.forEach(async (guild) => {
-      client.invites.set(guild.id, await guild.invites.fetch().catch(() => {}));
-      guild.bans.fetch().catch(() => {});
+      client.invites.set(guild.id, await client.ch.getErisInvites(guild));
+      client.ch.getErisBans(guild);
     });
 
     // statcord.autopost();

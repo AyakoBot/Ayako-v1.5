@@ -8,7 +8,7 @@ module.exports = {
     const { ch } = client;
     const Constants = client.constants;
     const { guild } = invite;
-    client.invites.set(guild.id, await guild.invites.fetch());
+    client.invites.set(guild.id, await client.ch.getErisInvites(guild));
     const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);
     if (res && res.rowCount > 0) {
       const channels = res.rows[0].inviteevents

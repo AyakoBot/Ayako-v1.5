@@ -836,4 +836,36 @@ module.exports = {
 
     return buffer.toString('utf8');
   },
+  /**
+   * Returns a Guilds Invites mapped by invite Code
+   * @constructor
+   * @param {object} guild - The Guild to get invites from
+   */
+  async getErisInvites(guild) {
+    const client = require('./DiscordClient');
+    const invites = await client.eris.getGuildInvites(guild.id).catch(() => {});
+
+    if (!invites) return null;
+
+    const invitesMap = new Discord.Collection();
+    invites.forEach((invite) => invitesMap.set(invite.code, invite));
+
+    return invitesMap;
+  },
+  /**
+   * Returns a Guilds Bans mapped by ID of Ban Target
+   * @constructor
+   * @param {object} guild - The Guild to get invites from
+   */
+  async getErisBans(guild) {
+    const client = require('./DiscordClient');
+    const bans = await client.eris.getGuildBans(guild.id).catch(() => {});
+
+    if (!bans) return null;
+
+    const bansMap = new Discord.Collection();
+    bans.forEach((ban) => bansMap.set(ban.user.id, ban));
+
+    return bansMap;
+  },
 };
