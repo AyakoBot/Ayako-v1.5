@@ -58,7 +58,7 @@ module.exports = {
             embed.setDescription(ch.stp(lan.descriptionBot, { user: entry.executor, bot: user }));
           else embed.setDescription(ch.stp(lan.descriptionBotNoAudit, { bot: user }));
         } else {
-          const newInvites = await guild.invites.fetch();
+          const newInvites = await client.ch.getErisInvites(guild);
           client.invites.set(guild.id, newInvites);
           let usedInvite;
           if (cachedInvites) {
