@@ -34,7 +34,7 @@ module.exports = {
         ch.stp(lan.fields.five.name, { prefix: Constants.standard.prefix }),
         lan.fields.five.value,
       );
-    const audits = await guild.fetchAuditLogs({ limit: 3, type: 28 });
+    const audits = await guild.fetchAuditLogs({ limit: 3, type: 28 }).catch(() => {});
     let entry;
     if (audits && audits.entries) {
       const audit = audits.entries.filter((a) => a.target.id === guild.client.user.id);
