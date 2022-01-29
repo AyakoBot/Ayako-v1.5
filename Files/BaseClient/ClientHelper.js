@@ -85,27 +85,32 @@ module.exports = {
    * @param {string} expression - The String following Strings/Objects will be put into.
    * @param {object} Object - The Object containing all Strings/Objects that will be put into the expression.
    */
-  stp(expression, Object) {
+  stp: (expression, Object) => {
+    const replacer = (e) => {
+      const text = e.replace(regexes.templateMatcher, (substring, value) => {
+        const newValue = value.split('.');
+        let decided;
+        const Result = Object[newValue[0]];
+        if (Result) {
+          if (newValue.length > 1) {
+            newValue.forEach((element, i) => {
+              if (i === 1) decided = Result[element];
+              if (i > 1) decided = decided[element];
+            });
+            return decided;
+          }
+          return Result;
+        }
+        return substring;
+      });
+      return text;
+    };
+
     if (Array.isArray(expression)) {
       const returned = [];
       expression.forEach((rawE) => {
         const e = `${rawE}`;
-        let text = e.replace(regexes.templateMatcher, (substring, value) => {
-          const newValue = value.split('.');
-          let decided;
-          const Result = Object[newValue[0]];
-          if (Result) {
-            if (newValue.length > 1) {
-              newValue.forEach((element, i) => {
-                if (i === 1) decided = Result[element];
-                if (i > 1) decided = decided[element];
-              });
-              return decided;
-            }
-            return Result;
-          }
-          return substring;
-        });
+        let text = replacer(e);
         if (text === 'true') text = true;
         if (text === 'false') text = false;
         if (`${text}`.replace(/\D+/g, '') === text && Number.MAX_SAFE_INTEGER > parseInt(text, 10))
@@ -114,22 +119,7 @@ module.exports = {
       });
       return returned;
     }
-    const text = expression.replace(regexes.templateMatcher, (substring, value) => {
-      const newValue = value.split('.');
-      let decided;
-      const Result = Object[newValue[0]];
-      if (Result) {
-        if (newValue.length > 1) {
-          newValue.forEach((objValue, i) => {
-            if (i === 1) decided = Result[objValue];
-            if (i > 1) decided = decided[objValue];
-          });
-          return decided;
-        }
-        return Result;
-      }
-      return substring;
-    });
+    const text = replacer(expression);
     return text.replace(RegExp(auth.token, 'g'), 'TOKEN');
   },
   /**
