@@ -84,6 +84,7 @@ module.exports = {
    * @constructor
    * @param {string} expression - The String following Strings/Objects will be put into.
    * @param {object} Object - The Object containing all Strings/Objects that will be put into the expression.
+   * @returns {string} The finished String with replaced variables
    */
   stp: (expression, Object) => {
     const replacer = (e) => {
