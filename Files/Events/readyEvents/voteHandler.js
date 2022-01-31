@@ -155,6 +155,9 @@ const announcement = async (voter, usedRole) => {
 };
 
 const reminder = async (voter) => {
+  const allowsReminder = await getReminder(voter);
+  if (!allowsReminder) return;
+
   const embed = new Discord.MessageEmbed()
     .setColor('#b0ff00')
     .setAuthor({
@@ -166,8 +169,20 @@ const reminder = async (voter) => {
       `Thank you for Voting for Ayako!\nI will send you a reminder once you can vote again`,
     );
 
+  const disable = new Discord.MessageButton()
+    .setLabel('Disable Vote Reminder')
+    .setStyle('DANGER')
+    .setCustomId('vote_reminder_disable');
+
+  const vote = new Discord.MessageButton()
+    .setLabel('Vote for Ayako')
+    .setStyle('LINK')
+    .setURL('https://top.gg/bot/650691698409734151/vote');
+
   const dm = await voter.createDM();
-  client.ch.send(dm, { embeds: [embed] }).catch(() => {});
+  client.ch
+    .send(dm, { embeds: [embed], components: [client.ch.buttonRower([disable, vote])] })
+    .catch(() => {});
 
   const endTime = Date.now() + 43200000;
   client.ch.query(`INSERT INTO votereminder (userid, removetime) VALUES ($1, $2);`, [
@@ -181,6 +196,9 @@ const reminder = async (voter) => {
 };
 
 const endReminder = async (voter, endTime) => {
+  const allowsReminder = await getReminder(voter);
+  if (!allowsReminder) return;
+
   client.ch.query(`DELETE FROM votereminder WHERE userid = $1 AND removetime = $2;`, [
     voter.id,
     endTime,
@@ -199,4 +217,12 @@ const endReminder = async (voter, endTime) => {
 
   const dm = await voter.createDM();
   client.ch.send(dm, { embeds: [embed] }).catch(() => {});
+};
+
+const getReminder = async (user) => {
+  const res = await client.ch.query(`SELECT votereminders FROM users WHERE userid = $1;`, [
+    user.id,
+  ]);
+  if (!res || !res.rowCount || res.rows[0].votereminders === true) return true;
+  return false;
 };
