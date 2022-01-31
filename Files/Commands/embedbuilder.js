@@ -31,6 +31,7 @@ module.exports = {
       edit: 'menu',
       category: null,
       embed: existingEmbed || new Discord.MessageEmbed(),
+      page: page || 1,
     };
 
     const embed = new Discord.MessageEmbed()
@@ -110,7 +111,7 @@ const replier = async ({ msg, answer }, { embeds, components, content, files }, 
   }
 };
 
-const getComponents = (msg, { page, Objects }) => {
+const getComponents = (msg, { page, Objects }, editing) => {
   const components = [];
   const lan = msg.language.commands.embedbuilder.edit;
   const baseLan = msg.language.commands.embedbuilder;
@@ -124,19 +125,47 @@ const getComponents = (msg, { page, Objects }) => {
       authorNameStyle = validate('author-name', Objects.embed, msg.client.constants)
         ? 'DANGER'
         : authorNameStyle;
+      if (editing === 'author-name') authorNameStyle = 'SUCCESS';
 
       let titleStyle = Objects.embed.title ? 'SECONDARY' : 'PRIMARY';
       titleStyle = validate('title', Objects.embed, msg.client.constants) ? 'DANGER' : titleStyle;
+      if (editing === 'title') titleStyle = 'SUCCESS';
 
       let descriptionStyle = Objects.embed.description ? 'SECONDARY' : 'PRIMARY';
       descriptionStyle = validate('description', Objects.embed, msg.client.constants)
         ? 'DANGER'
         : descriptionStyle;
+      if (editing === 'description') descriptionStyle = 'SUCCESS';
 
       let footerTextStyle = Objects.embed.description ? 'SECONDARY' : 'PRIMARY';
       footerTextStyle = validate('footer-text', Objects.embed, msg.client.constants)
         ? 'DANGER'
         : footerTextStyle;
+      if (editing === 'footer-text') footerTextStyle = 'SUCCESS';
+
+      let authorIconUrlStyle = Objects.embed.author?.iconURL ? 'SECONDARY' : 'PRIMARY';
+      if (editing === 'author-iconURL') authorIconUrlStyle = 'SUCCESS';
+
+      let authorUrlStyle = Objects.embed.author?.url ? 'SECONDARY' : 'PRIMARY';
+      if (editing === 'author-url') authorUrlStyle = 'SUCCESS';
+
+      let urlStyle = Objects.embed.url ? 'SECONDARY' : 'PRIMARY';
+      if (editing === 'url') urlStyle = 'SUCCESS';
+
+      let thumbnailStyle = Objects.embed.thumbnail?.url ? 'SECONDARY' : 'PRIMARY';
+      if (editing === 'thumbnail') thumbnailStyle = 'SUCCESS';
+
+      let imageStyle = Objects.embed.image?.url ? 'SECONDARY' : 'PRIMARY';
+      if (editing === 'image') imageStyle = 'SUCCESS';
+
+      let footerIconUrlStyle = Objects.embed.footer?.iconURL ? 'SECONDARY' : 'PRIMARY';
+      if (editing === 'footer-iconURL') footerIconUrlStyle = 'SUCCESS';
+
+      let colorStyle = Objects.embed.color ? 'SECONDARY' : 'PRIMARY';
+      if (editing === 'color') colorStyle = 'SUCCESS';
+
+      let timestampStyle = Objects.embed.timestamp ? 'SECONDARY' : 'PRIMARY';
+      if (editing === 'timestamp') timestampStyle = 'SUCCESS';
 
       components.push(
         [
@@ -147,21 +176,18 @@ const getComponents = (msg, { page, Objects }) => {
           new Discord.MessageButton()
             .setCustomId('author-iconURL')
             .setLabel(lan['author-iconURL'].name)
-            .setStyle(Objects.embed.author?.iconURL ? 'SECONDARY' : 'PRIMARY'),
+            .setStyle(authorIconUrlStyle),
           new Discord.MessageButton()
             .setCustomId('author-url')
             .setLabel(lan['author-url'].name)
-            .setStyle(Objects.embed.author?.url ? 'SECONDARY' : 'PRIMARY'),
+            .setStyle(authorUrlStyle),
         ],
         [
           new Discord.MessageButton()
             .setCustomId('title')
             .setLabel(lan.title.name)
             .setStyle(titleStyle),
-          new Discord.MessageButton()
-            .setCustomId('url')
-            .setLabel(lan.url.name)
-            .setStyle(Objects.embed.url ? 'SECONDARY' : 'PRIMARY'),
+          new Discord.MessageButton().setCustomId('url').setLabel(lan.url.name).setStyle(urlStyle),
           new Discord.MessageButton()
             .setCustomId('description')
             .setLabel(lan.description.name)
@@ -171,11 +197,11 @@ const getComponents = (msg, { page, Objects }) => {
           new Discord.MessageButton()
             .setCustomId('thumbnail')
             .setLabel(lan.thumbnail.name)
-            .setStyle(Objects.embed.thumbnail?.url ? 'SECONDARY' : 'PRIMARY'),
+            .setStyle(thumbnailStyle),
           new Discord.MessageButton()
             .setCustomId('image')
             .setLabel(lan.image.name)
-            .setStyle(Objects.embed.image?.url ? 'SECONDARY' : 'PRIMARY'),
+            .setStyle(imageStyle),
         ],
         [
           new Discord.MessageButton()
@@ -185,17 +211,17 @@ const getComponents = (msg, { page, Objects }) => {
           new Discord.MessageButton()
             .setCustomId('footer-iconURL')
             .setLabel(lan['footer-iconURL'].name)
-            .setStyle(Objects.embed.footer?.iconURL ? 'SECONDARY' : 'PRIMARY'),
+            .setStyle(footerIconUrlStyle),
         ],
         [
           new Discord.MessageButton()
             .setCustomId('color')
             .setLabel(lan.color.name)
-            .setStyle(Objects.embed.color ? 'SECONDARY' : 'PRIMARY'),
+            .setStyle(colorStyle),
           new Discord.MessageButton()
             .setCustomId('timestamp')
             .setLabel(lan.timestamp.name)
-            .setStyle(Objects.embed.timestamp ? 'SECONDARY' : 'PRIMARY'),
+            .setStyle(timestampStyle),
         ],
       );
       break;
@@ -628,6 +654,7 @@ const handleSend = async (msg, answer, Objects) => {
           );
 
         await replier({ msg, answer: interaction }, { embeds: [embed], components: [] }, Objects);
+        msg.m.reactions.removeAll().catch(() => {});
         return;
       }
     }
@@ -745,10 +772,11 @@ const handleOtherMsgRaw = async (msg, answer, Objects) => {
 
 const embedButtonsHandler = async (Objects, msg, answer, erroredPreviously) => {
   if (!erroredPreviously) msg.m.reactions.removeAll().catch(() => {});
+  const editing = answer.customId;
 
-  const messageHandler = async (type) => {
+  const messageHandler = async () => {
     const messageCollector = msg.channel.createMessageCollector({ time: 60000 });
-    const lan = msg.language.commands.embedbuilder.edit[type];
+    const lan = msg.language.commands.embedbuilder.edit[editing];
 
     const embed = new Discord.MessageEmbed()
       .setAuthor({
@@ -763,7 +791,11 @@ const embedButtonsHandler = async (Objects, msg, answer, erroredPreviously) => {
       embed.addField('\u200b', lan.recommended);
     }
 
-    await replier({ msg, answer }, { embeds: [embed], components: [] }, Objects);
+    await replier(
+      { msg, answer },
+      { embeds: [embed], components: getComponents(msg, { page: 1, Objects }, editing) },
+      Objects,
+    );
 
     const returned = await new Promise((resolve) => {
       handleReactionsCollector(
@@ -832,6 +864,8 @@ const embedButtonsHandler = async (Objects, msg, answer, erroredPreviously) => {
     if (error) embed.addField(msg.language.error, `${lanError}`);
 
     await replier({ msg, answer }, { embeds: [embed], components: [] }, Objects);
+
+    msg.m.reactions.cache.get(msg.client.constants.emotes.back).users.remove(msg.client.user);
     const reaction = await msg.m.react(msg.client.constants.emotes.timers[3]);
 
     return new Promise((resolve) => {
@@ -842,7 +876,7 @@ const embedButtonsHandler = async (Objects, msg, answer, erroredPreviously) => {
     });
   };
 
-  const entered = await messageHandler(answer.customId);
+  const entered = await messageHandler();
   let errored = false;
   if (!entered) return null;
 
@@ -1224,7 +1258,7 @@ const handleReactionsCollector = async (
           Objects.embed,
           Array.isArray(needsPages) && needsPages.includes(Number(reaction.emoji.name[0]))
             ? Number(reaction.emoji.name[0])
-            : 1,
+            : Objects.page,
         ),
       );
     });
