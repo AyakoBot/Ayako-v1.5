@@ -2,7 +2,7 @@
 
 module.exports = {
   once: true,
-  async execute() {
+  execute: async () => {
     // eslint-disable-next-line global-require
     const client = require('../../BaseClient/DiscordClient');
     console.log(`|Logged in as Ayako\n|-> Bot: ${client.user.tag}`);
@@ -32,6 +32,7 @@ module.exports = {
     require('./giveaway').execute();
     require('./separators').execute();
     require('./antivirusBlocklistCacher').execute();
+    require('./voteHandler').execute();
 
     setInterval(() => require('./TimedManagers/TimedManagerSplitter').execute(), 2000);
     setInterval(() => require('./prunelog').execute(), 120000);

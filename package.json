@@ -30,6 +30,7 @@
     "os": "^0.1.2",
     "pg": "^8.6.0",
     "request": "^2.88.2",
+    "socket.io-client": "^4.4.1",
     "statcord.js": "^3.2.0",
     "string-similarity": "^4.0.4",
     "superagent": "^6.1.0",
