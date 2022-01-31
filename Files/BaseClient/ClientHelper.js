@@ -31,7 +31,7 @@ module.exports = {
    * @param {object} channel - The Channel the Messages will be sent in (supports Array of Channels).
    * @param {object|string} rawPayload - The Payload or String sent
    */
-  async send(channel, rawPayload) {
+  send: async (channel, rawPayload) => {
     if (!channel) return null;
 
     const payload =
@@ -66,7 +66,7 @@ module.exports = {
    * @param {object} msg - The Message the Reply will be replied to.
    * @param {object|string} rawPayload - The Payload or String sent
    */
-  async reply(msg, rawPayload) {
+  reply: async (msg, rawPayload) => {
     const payload =
       typeof rawPayload === 'string' ? { failIfNotExists: false, content: rawPayload } : rawPayload;
 
@@ -130,7 +130,7 @@ module.exports = {
    * @param {array} arr - The Array of Arguments passed to the DataBase for sanitizing, if any.
    * @param {boolean} debug - Wether the Query should be logged in the Console when arriving here.
    */
-  async query(query, arr, debug) {
+  query: async (query, arr, debug) => {
     const { pool } = require('./DataBase');
 
     if (debug === true) console.log(query, arr);
@@ -147,7 +147,7 @@ module.exports = {
    * @param {string} type - The Type or Origin of this Log
    * @param {string|object} log - The Log that will be logged to the Console and Error Channel.
    */
-  async logger(type, log) {
+  logger: async (type, log) => {
     const client = require('./DiscordClient');
 
     if (client && client.user) {
@@ -171,7 +171,7 @@ module.exports = {
    * @constructor
    * @param {array} urls - The URLs the buffers will be created from.
    */
-  async convertImageURLtoBuffer(urls) {
+  convertImageURLtoBuffer: async (urls) => {
     const superagentPromises = urls.map((url) => SA.get(url).catch((e) => e));
 
     const responses = await Promise.all(superagentPromises);
@@ -198,7 +198,7 @@ module.exports = {
    * @constructor
    * @param {string} path - The Path of the File the Name will be extracted from.
    */
-  async getName(path) {
+  getName: async (path) => {
     let name = path.split('\\');
     name = name[name.length - 1];
     return name;
@@ -209,7 +209,7 @@ module.exports = {
    * @param {string} url - The URL the File will be downloaded from.
    * @param {object} filePath - The Path to the previously generated Placeholder File.
    */
-  async download(url, filePath) {
+  download: async (url, filePath) => {
     const proto = !url.charAt(4).localeCompare('s') ? https : http;
 
     await new Promise((resolve, reject) => {
@@ -241,7 +241,7 @@ module.exports = {
    * @param {number} bits - The Bits the Language will be translated from.
    * @param {object} lan - The Language File the Bits will be Translated based off of.
    */
-  channelRuleCalc(bits, lan) {
+  channelRuleCalc: (bits, lan) => {
     const BitField = new ChannelRules(BigInt(bits));
     const Rules = [];
 
@@ -308,7 +308,7 @@ module.exports = {
    * @param {number} bits - The Bits the Language will be translated from.
    * @param {object} lan - The Language File the Bits will be Translated based off of.
    */
-  permCalc(bits, lan) {
+  permCalc: (bits, lan) => {
     const BitField = new Discord.Permissions(BigInt(bits));
     const Perms = [];
 
@@ -440,7 +440,7 @@ module.exports = {
    * @constructor
    * @param {number} ID - The Snwoflake ID the Unix Timestamp will be created from.
    */
-  getUnix(ID) {
+  getUnix: (ID) => {
     const variable = BigInt(ID);
     const id = BigInt.asUintN(64, variable);
     const dateBits = Number(id >> 22n);
@@ -453,7 +453,7 @@ module.exports = {
    * @param {array} array1 - The first Array.
    * @param {array} array2 - The second Array.
    */
-  getDifference(array1, array2) {
+  getDifference: (array1, array2) => {
     return array1.filter((i) => array2.indexOf(i) < 0);
   },
   /**
@@ -461,7 +461,7 @@ module.exports = {
    * @constructor
    * @param {object} rawUser - The User Object the Avatar URL is extracted from.
    */
-  displayAvatarURL(rawUser) {
+  displayAvatarURL: (rawUser) => {
     let user = {};
     if (rawUser.user) {
       user = rawUser.user;
@@ -479,7 +479,7 @@ module.exports = {
    * @constructor
    * @param {object} guild - The Guild Object the Icon URL is extracted from.
    */
-  iconURL(guild) {
+  iconURL: (guild) => {
     return guild.iconURL({
       dynamic: true,
       size: 2048,
@@ -491,7 +491,7 @@ module.exports = {
    * @constructor
    * @param {object} guild - The Guild Object the Banner URL is extracted from.
    */
-  bannerURL(guild) {
+  bannerURL: (guild) => {
     return guild.bannerURL({
       dynamic: true,
       size: 2048,
@@ -503,7 +503,7 @@ module.exports = {
    * @constructor
    * @param {object} guild - The Guild Object the Splash URL is extracted from.
    */
-  splashURL(guild) {
+  splashURL: (guild) => {
     return guild.splashURL({
       dynamic: true,
       size: 2048,
@@ -515,7 +515,7 @@ module.exports = {
    * @constructor
    * @param {object} guild - The Guild Object the discovery Splash URL is extracted from.
    */
-  discoverySplashURL(guild) {
+  discoverySplashURL: (guild) => {
     return guild.discoverySplashURL({
       dynamic: true,
       size: 2048,
@@ -527,7 +527,7 @@ module.exports = {
    * @constructor
    * @param {object} webhook - The Webhook Object the Avatar URL is extracted from.
    */
-  avatarURL(webhook) {
+  avatarURL: (webhook) => {
     return webhook.avatarURL({
       dynamic: true,
       size: 2048,
@@ -539,7 +539,7 @@ module.exports = {
    * @constructor
    * @param {object} guild - The Guild the Language is Selected for.
    */
-  async languageSelector(guild) {
+  languageSelector: async (guild) => {
     const guildid = guild?.id ? guild?.id : guild;
     if (guildid) {
       const resLan = await this.query('SELECT lan FROM guildsettings WHERE guildid = $1;', [
@@ -558,7 +558,7 @@ module.exports = {
    * @param {array} array - The Array of Strings to convert.
    * @param {source} string - The Source of this function call for sorting in correct Folders.
    */
-  txtFileWriter(array, source) {
+  txtFileWriter: (array, source) => {
     if (!array.length) return null;
 
     const now = Date.now();
@@ -593,7 +593,7 @@ module.exports = {
    * @constructor
    * @param {string} text - The String to Test.
    */
-  containsNonLatinCodepoints(text) {
+  containsNonLatinCodepoints: (text) => {
     return regexes.tester.test(text);
   },
   /**
@@ -602,7 +602,7 @@ module.exports = {
    * @param {object} bit1 - The first BitField.
    * @param {object} bit2 - The second BitField.
    */
-  bitUniques(bit1, bit2) {
+  bitUniques: (bit1, bit2) => {
     const bit = new Discord.Permissions(bit1.bitfield & bit2.bitfield);
     const newBit1 = bit1.remove([...bit]);
     const newBit2 = bit2.remove([...bit]);
@@ -613,7 +613,7 @@ module.exports = {
    * @constructor
    * @param {string} text - The Text to turn into a Codeblock.
    */
-  makeCodeBlock(text) {
+  makeCodeBlock: (text) => {
     return `\`\`\`${text}\`\`\``;
   },
   /**
@@ -621,7 +621,7 @@ module.exports = {
    * @constructor
    * @param {string} text - The Text to turn into a One-Line-Code.
    */
-  makeInlineCode(text) {
+  makeInlineCode: (text) => {
     return `\`${text}\``;
   },
   /**
@@ -629,7 +629,7 @@ module.exports = {
    * @constructor
    * @param {string} text - The Text to turn Bold.
    */
-  makeBold(text) {
+  makeBold: (text) => {
     return `**${text}**`;
   },
   /**
@@ -637,7 +637,7 @@ module.exports = {
    * @constructor
    * @param {string} text - The Text to turn Underlined.
    */
-  makeUnderlined(text) {
+  makeUnderlined: (text) => {
     return `__${text}__`;
   },
   /**
@@ -645,7 +645,7 @@ module.exports = {
    * @constructor
    * @param {object} msg - The triggering Message of this Awaiter.
    */
-  async modRoleWaiter(msg) {
+  modRoleWaiter: async (msg) => {
     const SUCCESS = new Discord.MessageButton()
       .setCustomId('modProceedAction')
       .setLabel(msg.language.mod.warning.proceed)
@@ -687,7 +687,7 @@ module.exports = {
    * @param {object} interaction - The Interaction the triggering User sent.
    * @param {object} msg - The Message this Button/Select Menu triggered.
    */
-  notYours(interaction, msg) {
+  notYours: (interaction, msg) => {
     const embed = new Discord.MessageEmbed()
       .setAuthor({
         name: msg.language.error,
@@ -703,7 +703,7 @@ module.exports = {
    * @constructor
    * @param {object} msg - The Message this Function replies to.
    */
-  collectorEnd(msg) {
+  collectorEnd: (msg) => {
     const embed = new Discord.MessageEmbed()
       .setDescription(msg.language.timeError)
       .setColor(Constants.error);
@@ -715,7 +715,7 @@ module.exports = {
    * @constructor
    * @param {array} buttonArrays - The Buttons that will be put into the Action Rows.
    */
-  buttonRower(buttonArrays) {
+  buttonRower: (buttonArrays) => {
     const actionRows = [];
     buttonArrays.forEach((buttonRow) => {
       const row = new Discord.MessageActionRow();
@@ -734,7 +734,7 @@ module.exports = {
    * @param {object} msg - The Message that initiated this.
    * @param {array} collectors - The Collectors to stop.
    */
-  async aborted(msg, collectors) {
+  aborted: async (msg, collectors) => {
     collectors?.forEach((collector) => collector.stop());
     msg.m?.delete().catch(() => {});
     this.reply(msg, { content: msg.language.aborted });
@@ -744,7 +744,7 @@ module.exports = {
    * @constructor
    * @param {object} member - The Client User Member of this Guild.
    */
-  colorSelector(member) {
+  colorSelector: (member) => {
     return member && member.displayHexColor !== 0 ? member.displayHexColor : 'b0ff00';
   },
   /**
@@ -752,7 +752,7 @@ module.exports = {
    * @constructor
    * @param {string} string - The String of which to capitalize the first Letter.
    */
-  CFL(string) {
+  CFL: (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   },
   /**
@@ -761,7 +761,7 @@ module.exports = {
    * @param {object} lan - The Language which is to be used.
    * @param {object} guild - The Guild in which this Command was called
    */
-  async loadingEmbed(lan, guild) {
+  loadingEmbed: async (lan, guild) => {
     const embed = new Discord.MessageEmbed()
       .setAuthor({
         name: lan.author,
@@ -782,7 +782,7 @@ module.exports = {
    * @param {array} arr1 - An Array
    * @param {array} arr2 - The Array to compare to arr1
    */
-  arrayEquals(arr1, arr2) {
+  arrayEquals: (arr1, arr2) => {
     if (!arr1 || !arr2) return false;
     if (arr1.length !== arr2.length) return false;
 
@@ -809,7 +809,7 @@ module.exports = {
    * @constructor
    * @param {object} obj - The Object to clone
    */
-  objectClone(obj) {
+  objectClone: (obj) => {
     return v8.deserialize(v8.serialize(obj));
   },
   /**
@@ -817,7 +817,7 @@ module.exports = {
    * @constructor
    * @param {string} url - The URL to convert
    */
-  async convertTxtFileLinkToString(url) {
+  convertTxtFileLinkToString: async (url) => {
     if (!URL(url).pathname.endsWith('.txt')) return null;
 
     const res = await SA.get(url).catch((e) => e);
@@ -832,7 +832,7 @@ module.exports = {
    * @constructor
    * @param {object} guild - The Guild to get invites from
    */
-  async getErisInvites(guild) {
+  getErisInvites: async (guild) => {
     const client = require('./DiscordClient');
     const invites = await client.eris.getGuildInvites(guild.id).catch(() => {});
 
@@ -885,7 +885,7 @@ module.exports = {
    * @constructor
    * @param {object} guild - The Guild to get invites from
    */
-  async getErisBans(guild) {
+  getErisBans: async (guild) => {
     const client = require('./DiscordClient');
     const bans = await client.eris.getGuildBans(guild.id).catch(() => {});
 
