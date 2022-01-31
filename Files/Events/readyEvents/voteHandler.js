@@ -15,6 +15,12 @@ module.exports = {
     });
 
     socket.on('TOP_GG_VOTE', async (voteData) => {
+      const res = await client.ch.query(`SELECT * FROM votereminder WHERE userid = $1;`, [
+        voteData.user,
+      ]);
+
+      if (res && res.rowCount) return;
+
       const voter = await client.users.fetch(voteData.user);
       roleReward(voteData);
       reminder(voter);
@@ -39,9 +45,12 @@ const roleReward = async (voteData) => {
   ];
 
   let [gettingThisRole] = roles;
-  if (member.roles.cache.has(roles[0])) [, gettingThisRole] = roles;
-  if (member.roles.cache.has(roles[1])) [, , gettingThisRole] = roles;
-  if (member.roles.cache.has(roles[2])) return;
+  if (member.roles.cache.has(roles[0].id)) [, gettingThisRole] = roles;
+  if (member.roles.cache.has(roles[1].id)) [, , gettingThisRole] = roles;
+  if (member.roles.cache.has(roles[2].id)) {
+    announcement(voter);
+    return;
+  }
 
   if (voteData.isWeekend) {
     gettingThisRole = roles[roles.findIndex((r) => r.id === gettingThisRole.id) + 1];
@@ -68,20 +77,20 @@ const roleReward = async (voteData) => {
 const queryCheck = async () => {
   const rewardsRes = await client.ch.query(`SELECT * FROM voterewards;`);
   if (rewardsRes && rewardsRes.rowCount) {
-    rewardsRes.rows.forEach((row) => {
+    rewardsRes.rows.forEach(async (row) => {
       if (row.removetime < Date.now()) {
         removeRoles(
           row.userid,
           row.removetime,
-          client.guilds.cache.get('298954459172700181').members.cache.get(row.userid),
+          await client.guilds.cache.get('298954459172700181').members.fetch(row.userid),
           client.guilds.cache.get('298954459172700181'),
         );
       } else {
-        setTimeout(() => {
+        setTimeout(async () => {
           removeRoles(
             row.userid,
             row.removetime,
-            client.guilds.cache.get('298954459172700181').members.cache.get(row.userid),
+            await client.guilds.cache.get('298954459172700181').members.fetch(row.userid),
             client.guilds.cache.get('298954459172700181'),
           );
         }, row.removetime - Date.now());
@@ -124,6 +133,12 @@ const announcement = async (voter, usedRole) => {
   const webhook = await client.fetchWebhook(
     '937523756669239347',
     'owoDfJHBLZiD7NzuYPZ5m8jAoeGOHXUSa1o3YkLgDxKGsedip4xke_5aQSt66hks4zQF',
+  );
+
+  // eslint-disable-next-line no-unused-vars
+  const debugWebhook = await client.fetchWebhook(
+    '937575279411478588',
+    'CMmKtjyPv1GHxUCbd3jLC2VWyzc1FkhRPk0tZMkdIY-tWjZhvasmtYuVu6WqPFkqbgt1',
   );
 
   webhook
