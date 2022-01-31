@@ -3,6 +3,8 @@ module.exports = {
     if (msg.guild && msg.author.discriminator !== '0000') {
       msg.member = await msg.guild.members.fetch(msg.author.id).catch(() => {});
     }
+    if (msg.author.discriminator === '0000') return;
+
     require('./commandHandler').execute(msg);
     require('./afk').execute(msg);
     require('./disboard').execute(msg);
