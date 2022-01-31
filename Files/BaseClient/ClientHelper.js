@@ -71,7 +71,7 @@ module.exports = {
       typeof rawPayload === 'string' ? { failIfNotExists: false, content: rawPayload } : rawPayload;
 
     if (typeof msg.reply !== 'function') {
-      const [response] = await this.send(msg.channel, payload);
+      const [response] = await module.exports.send(msg.channel, payload);
       return response;
     }
 
@@ -136,7 +136,7 @@ module.exports = {
     if (debug === true) console.log(query, arr);
     const res = await pool.query(query, arr).catch((err) => {
       console.log(query, arr);
-      this.logger('Pool Query Error', err);
+      module.exports.logger('Pool Query Error', err);
     });
     if (res) return res;
     return null;
@@ -144,7 +144,7 @@ module.exports = {
   /**
    * Logs any incoming Messages to the Console and the Discord Error Channel.
    * @constructor
-   * @param {string} type - The Type or Origin of this Log
+   * @param {string} type - The Type or Origin of module.exports Log
    * @param {string|object} log - The Log that will be logged to the Console and Error Channel.
    */
   logger: async (type, log) => {
@@ -156,8 +156,9 @@ module.exports = {
         .catch(() => {});
       if (channel && channel.id) {
         if (log) {
-          if (log.stack) channel.send(`${type}${this.makeCodeBlock(log.stack)}`).catch(() => {});
-          else channel.send(`${type}${this.makeCodeBlock(log)}`).catch(() => {});
+          if (log.stack)
+            channel.send(`${type}${module.exports.makeCodeBlock(log.stack)}`).catch(() => {});
+          else channel.send(`${type}${module.exports.makeCodeBlock(log)}`).catch(() => {});
           console.error(type, log);
         } else {
           channel.send(`${type}`).catch(() => {});
@@ -542,9 +543,10 @@ module.exports = {
   languageSelector: async (guild) => {
     const guildid = guild?.id ? guild?.id : guild;
     if (guildid) {
-      const resLan = await this.query('SELECT lan FROM guildsettings WHERE guildid = $1;', [
-        guildid,
-      ]);
+      const resLan = await module.exports.query(
+        'SELECT lan FROM guildsettings WHERE guildid = $1;',
+        [guildid],
+      );
       let lang = 'en';
       if (resLan && resLan.rowCount > 0) lang = resLan.rows[0].lan;
       return require(`../Languages/lan-${lang}.json`);
@@ -556,7 +558,7 @@ module.exports = {
    * @constructor
    * @param {msg} object - A reference Message.
    * @param {array} array - The Array of Strings to convert.
-   * @param {source} string - The Source of this function call for sorting in correct Folders.
+   * @param {source} string - The Source of module.exports function call for sorting in correct Folders.
    */
   txtFileWriter: (array, source) => {
     if (!array.length) return null;
@@ -643,7 +645,7 @@ module.exports = {
   /**
    * Awaits a reply of the Executor of a Moderation Command when the Command is used on another Moderator.
    * @constructor
-   * @param {object} msg - The triggering Message of this Awaiter.
+   * @param {object} msg - The triggering Message of module.exports Awaiter.
    */
   modRoleWaiter: async (msg) => {
     const SUCCESS = new Discord.MessageButton()
@@ -656,15 +658,15 @@ module.exports = {
       .setLabel(msg.language.mod.warning.abort)
       .setEmoji(Constants.emotes.crossBGID)
       .setStyle('DANGER');
-    const m = await this.reply(msg, {
+    const m = await module.exports.reply(msg, {
       content: msg.language.mod.warning.text,
-      components: this.buttonRower([SUCCESS, DANGER]),
+      components: module.exports.buttonRower([SUCCESS, DANGER]),
       allowedMentions: { repliedUser: true },
     });
     const collector = m.createMessageComponentCollector({ time: 30000 });
     return new Promise((resolve) => {
       collector.on('collect', (answer) => {
-        if (answer.user.id !== msg.author.id) this.notYours(answer, msg);
+        if (answer.user.id !== msg.author.id) module.exports.notYours(answer, msg);
         else if (answer.customId === 'modProceedAction') {
           m.delete().catch(() => {});
           resolve(true);
@@ -682,10 +684,10 @@ module.exports = {
     });
   },
   /**
-   * Sends an ephemeral Message to the triggering User, telling them this Button/Select Menu was not meant for them.
+   * Sends an ephemeral Message to the triggering User, telling them module.exports Button/Select Menu was not meant for them.
    * @constructor
    * @param {object} interaction - The Interaction the triggering User sent.
-   * @param {object} msg - The Message this Button/Select Menu triggered.
+   * @param {object} msg - The Message module.exports Button/Select Menu triggered.
    */
   notYours: (interaction, msg) => {
     const embed = new Discord.MessageEmbed()
@@ -701,7 +703,7 @@ module.exports = {
   /**
    * Edits a Message to display a "time has run out" Error.
    * @constructor
-   * @param {object} msg - The Message this Function replies to.
+   * @param {object} msg - The Message module.exports Function replies to.
    */
   collectorEnd: (msg) => {
     const embed = new Discord.MessageEmbed()
@@ -731,18 +733,18 @@ module.exports = {
   /**
    * Aborts a Collector.
    * @constructor
-   * @param {object} msg - The Message that initiated this.
+   * @param {object} msg - The Message that initiated module.exports.
    * @param {array} collectors - The Collectors to stop.
    */
   aborted: async (msg, collectors) => {
     collectors?.forEach((collector) => collector.stop());
     msg.m?.delete().catch(() => {});
-    this.reply(msg, { content: msg.language.aborted });
+    module.exports.reply(msg, { content: msg.language.aborted });
   },
   /**
    * Returns the Client Users Color to use in Embeds.
    * @constructor
-   * @param {object} member - The Client User Member of this Guild.
+   * @param {object} member - The Client User Member of module.exports Guild.
    */
   colorSelector: (member) => {
     return member && member.displayHexColor !== 0 ? member.displayHexColor : 'b0ff00';
@@ -759,7 +761,7 @@ module.exports = {
    * Creates a sample Loading Embed.
    * @constructor
    * @param {object} lan - The Language which is to be used.
-   * @param {object} guild - The Guild in which this Command was called
+   * @param {object} guild - The Guild in which module.exports Command was called
    */
   loadingEmbed: async (lan, guild) => {
     const embed = new Discord.MessageEmbed()
@@ -768,10 +770,10 @@ module.exports = {
         iconURL: guild.client.constants.emotes.loadingLink,
         url: guild.client.constants.standard.invite,
       })
-      .setColor(this.colorSelector(guild?.me))
+      .setColor(module.exports.colorSelector(guild?.me))
       .setDescription(
         `${guild.client.constants.emotes.loading} ${
-          lan.loading ? lan.loading : (await this.languageSelector(guild)).loading
+          lan.loading ? lan.loading : (await module.exports.languageSelector(guild)).loading
         }`,
       );
     return embed;
@@ -864,7 +866,7 @@ module.exports = {
 
     if (guild.vanityURLCode) {
       const vanity = await guild.fetchVanityData();
-      const language = await this.languageSelector(guild);
+      const language = await module.exports.languageSelector(guild);
 
       invitesMap.set(vanity.code, {
         code: vanity.code,
