@@ -4,7 +4,7 @@ module.exports = {
   execute(error) {
     const client = require('../BaseClient/DiscordClient');
 
-    client.ch.logger(`Unhandled Rejection`, error);
+    console.log(`Unhandled Rejection`, error);
 
     if (`${error}`.includes('GUILD_MEMBERS_TIMEOUT')) {
       client.destroy();

@@ -1,8 +1,12 @@
 const io = require('socket.io-client');
+const Discord = require('discord.js');
 
+const client = require('../../BaseClient/DiscordClient');
 
 module.exports = {
   execute: () => {
+    queryCheck();
+
     const socket = io('https://ayakobot.com', {
       transports: ['websocket'],
       auth: {
@@ -10,8 +14,174 @@ module.exports = {
       },
     });
 
-    socket.on('TOP_GG_VOTE', (voteData) => {
-      console.log(voteData);
+    socket.on('TOP_GG_VOTE', async (voteData) => {
+      const voter = await client.users.fetch(voteData.user);
+      roleReward(voteData);
+      reminder(voter);
     });
   },
+};
+
+const roleReward = async (voteData) => {
+  const guild = client.guilds.cache.get('298954459172700181');
+  const member = await guild.members.fetch(voteData.user);
+
+  if (!member) {
+    const voter = await client.users.fetch(voteData.user);
+    announcement(voter);
+    return;
+  }
+
+  const roles = [
+    guild.roles.cache.get('327424359016824842'),
+    guild.roles.cache.get('910079633477730364'),
+    guild.roles.cache.get('910079643267252235'),
+  ];
+
+  let [gettingThisRole] = roles;
+  if (member.roles.cache.has(roles[0])) [, gettingThisRole] = roles;
+  if (member.roles.cache.has(roles[1])) [, , gettingThisRole] = roles;
+  if (member.roles.cache.has(roles[2])) return;
+
+  if (voteData.isWeekend) {
+    gettingThisRole = roles[roles.findIndex((r) => r.id === gettingThisRole.id) + 1];
+    if (!roles.findIndex((r) => r.id === gettingThisRole.id)) [, , gettingThisRole] = roles;
+  }
+
+  await member.roles.add(gettingThisRole);
+  const voter = await client.users.fetch(voteData.user);
+  announcement(voter, gettingThisRole);
+
+  const delTime = Date.now() + 43200000;
+
+  client.ch.query(`INSERT INTO voterewards (userid, roleid, removetime) VALUES ($1, $2, $3);`, [
+    voteData.user,
+    gettingThisRole.id,
+    delTime,
+  ]);
+
+  setTimeout(() => {
+    removeRoles(voteData.user, delTime, member, guild);
+  }, 43200000);
+};
+
+const queryCheck = async () => {
+  const rewardsRes = await client.ch.query(`SELECT * FROM voterewards;`);
+  if (rewardsRes && rewardsRes.rowCount) {
+    rewardsRes.rows.forEach((row) => {
+      if (row.removetime < Date.now()) {
+        removeRoles(
+          row.userid,
+          row.removetime,
+          client.guilds.cache.get('298954459172700181').members.cache.get(row.userid),
+          client.guilds.cache.get('298954459172700181'),
+        );
+      } else {
+        setTimeout(() => {
+          removeRoles(
+            row.userid,
+            row.removetime,
+            client.guilds.cache.get('298954459172700181').members.cache.get(row.userid),
+            client.guilds.cache.get('298954459172700181'),
+          );
+        }, row.removetime - Date.now());
+      }
+    });
+  }
+
+  const reminderRes = await client.ch.query(`SELECT * FROM votereminder;`);
+  if (reminderRes && reminderRes.rowCount) {
+    reminderRes.rows.forEach((row) => {
+      if (row.removetime < Date.now()) {
+        client.ch.query(`DELETE FROM votereminder WHERE userid = $1;`, [row.userid]);
+      } else {
+        setTimeout(() => {
+          endReminder(client.users.cache.get(row.userid), row.removetime);
+        }, row.removetime - Date.now());
+      }
+    });
+  }
+};
+
+const removeRoles = (userid, delTime, member, guild) => {
+  const roles = [
+    guild.roles.cache.get('327424359016824842'),
+    guild.roles.cache.get('910079633477730364'),
+    guild.roles.cache.get('910079643267252235'),
+  ];
+
+  client.ch.query(`DELETE FROM voterewards WHERE userid = $1 AND removetime = $2;`, [
+    userid,
+    delTime,
+  ]);
+
+  if (member.roles.cache.has(roles[2])) member.roles.remove(roles[2]).catch(() => {});
+  else if (member.roles.cache.has(roles[1])) member.roles.remove(roles[1]).catch(() => {});
+  else if (member.roles.cache.has(roles[0])) member.roles.remove(roles[0]).catch(() => {});
+};
+
+const announcement = async (voter, usedRole) => {
+  const webhook = await client.fetchWebhook(
+    '937523756669239347',
+    'owoDfJHBLZiD7NzuYPZ5m8jAoeGOHXUSa1o3YkLgDxKGsedip4xke_5aQSt66hks4zQF',
+  );
+
+  webhook
+    .send({
+      content: `Thanks ${voter} for [voting for Ayako](<https://top.gg/bot/650691698409734151/vote> "Click me to Vote too!")!${
+        usedRole ? `\nYou have been given ${usedRole} as gift for the next 12 Hours~` : ''
+      }`,
+      allowedMentions: {
+        users: [],
+        roles: [],
+      },
+    })
+    .catch(() => {});
+};
+
+const reminder = async (voter) => {
+  const embed = new Discord.MessageEmbed()
+    .setColor('#b0ff00')
+    .setAuthor({
+      name: 'Ayako Vote Reminder',
+      iconURL: 'https://ayakobot.com/cdn/Ayako_Assets/ayakolove.png',
+      url: client.constants.standard.invite,
+    })
+    .setDescription(
+      `Thank you for Voting for Ayako!\nI will send you a reminder once you can vote again`,
+    );
+
+  const dm = await voter.createDM();
+  client.ch.send(dm, { embeds: [embed] }).catch(() => {});
+
+  const endTime = Date.now() + 43200000;
+  client.ch.query(`INSERT INTO votereminder (userid, removetime) VALUES ($1, $2);`, [
+    voter.id,
+    endTime,
+  ]);
+
+  setTimeout(() => {
+    endReminder(voter, endTime);
+  }, 43200000);
+};
+
+const endReminder = async (voter, endTime) => {
+  client.ch.query(`DELETE FROM votereminder WHERE userid = $1 AND removetime = $2;`, [
+    voter.id,
+    endTime,
+  ]);
+
+  const embed = new Discord.MessageEmbed()
+    .setColor('#b0ff00')
+    .setAuthor({
+      name: 'Ayako Vote Reminder',
+      iconURL: 'https://ayakobot.com/cdn/Ayako_Assets/ayakolove.png',
+      url: client.constants.standard.invite,
+    })
+    .setDescription(
+      'You can now Vote for Ayako again!\n[Click here to Vote](https://top.gg/bot/650691698409734151/vote "Click me to Vote!")',
+    );
+
+  const dm = await voter.createDM();
+  client.ch.send(dm, { embeds: [embed] }).catch(() => {});
 };
