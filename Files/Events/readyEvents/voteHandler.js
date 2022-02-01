@@ -151,9 +151,9 @@ const removeRoles = (userid, delTime, member, guild) => {
     delTime,
   ]);
 
-  if (member.roles.cache.has(roles[2])) member.roles.remove(roles[2]).catch(() => {});
-  else if (member.roles.cache.has(roles[1])) member.roles.remove(roles[1]).catch(() => {});
-  else if (member.roles.cache.has(roles[0])) member.roles.remove(roles[0]).catch(() => {});
+  if (member.roles.cache.has(roles[2])) member.roles.remove(roles[2].id).catch(() => {});
+  else if (member.roles.cache.has(roles[1])) member.roles.remove(roles[1].id).catch(() => {});
+  else if (member.roles.cache.has(roles[0])) member.roles.remove(roles[0].id).catch(() => {});
 };
 
 const announcement = async (voter, usedRole) => {
