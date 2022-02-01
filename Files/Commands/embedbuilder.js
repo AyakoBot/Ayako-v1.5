@@ -11,7 +11,6 @@ module.exports = {
   aliases: ['eb'],
   async execute(msg) {
     const returned = await this.builder(msg);
-    msg.m.reactions.removeAll().catch(() => {});
 
     if (!returned) return;
 
@@ -22,8 +21,6 @@ module.exports = {
   },
   async builder(msg, answer, existingEmbed, page) {
     if (typeof page !== 'number') page = 1;
-
-    msg.m?.reactions.cache.get(msg.client.constants.emotes.back)?.users.remove(msg.client.user.id);
 
     const lan = msg.language.commands.embedbuilder;
 
@@ -111,6 +108,63 @@ const replier = async ({ msg, answer }, { embeds, components, content, files }, 
   }
 };
 
+const validate = (type, embed, constants) => {
+  const { limits } = constants.customembeds;
+
+  if (limits.totalOf.includes(type)) {
+    let total = 0;
+
+    limits.totalOf.forEach((limit) => {
+      switch (limit) {
+        default: {
+          total += embed[type]?.length;
+          break;
+        }
+        case 'field-names': {
+          embed.fieldNames?.forEach((field) => {
+            total += field.name.length;
+            total += field.value.length;
+          });
+          break;
+        }
+        case 'footer-text': {
+          total += embed.footer?.name?.length;
+          break;
+        }
+        case 'author-name': {
+          total += embed.author?.name?.length;
+          break;
+        }
+      }
+    });
+
+    if (total > limits.total) return 'total_fail';
+  }
+
+  switch (type) {
+    default: {
+      return embed[type]?.length >= limits.fields[type];
+    }
+    case 'author-name': {
+      return embed.author?.name?.length >= limits.fields[type];
+    }
+    case 'footer-text': {
+      return embed.footer?.text?.length >= limits.fields[type];
+    }
+    case 'field-names' || 'field-values': {
+      const failed = embed.fields
+        ?.map((field, i) => {
+          if (field.name.length >= limits.fields[type]) return i;
+          if (field.name.length >= limits.fields[type]) return i;
+          return undefined;
+        })
+        .filter((i) => i !== undefined);
+      if (failed.lenght) return failed;
+      return true;
+    }
+  }
+};
+
 const getComponents = (msg, { page, Objects }, editing) => {
   const components = [];
   const lan = msg.language.commands.embedbuilder.edit;
@@ -137,7 +191,7 @@ const getComponents = (msg, { page, Objects }, editing) => {
         : descriptionStyle;
       if (editing === 'description') descriptionStyle = 'SUCCESS';
 
-      let footerTextStyle = Objects.embed.description ? 'SECONDARY' : 'PRIMARY';
+      let footerTextStyle = Objects.embed.footer?.text ? 'SECONDARY' : 'PRIMARY';
       footerTextStyle = validate('footer-text', Objects.embed, msg.client.constants)
         ? 'DANGER'
         : footerTextStyle;
@@ -202,6 +256,10 @@ const getComponents = (msg, { page, Objects }, editing) => {
             .setCustomId('image')
             .setLabel(lan.image.name)
             .setStyle(imageStyle),
+          new Discord.MessageButton()
+            .setCustomId('color')
+            .setLabel(lan.color.name)
+            .setStyle(colorStyle),
         ],
         [
           new Discord.MessageButton()
@@ -212,12 +270,6 @@ const getComponents = (msg, { page, Objects }, editing) => {
             .setCustomId('footer-iconURL')
             .setLabel(lan['footer-iconURL'].name)
             .setStyle(footerIconUrlStyle),
-        ],
-        [
-          new Discord.MessageButton()
-            .setCustomId('color')
-            .setLabel(lan.color.name)
-            .setStyle(colorStyle),
           new Discord.MessageButton()
             .setCustomId('timestamp')
             .setLabel(lan.timestamp.name)
@@ -291,80 +343,594 @@ const getComponents = (msg, { page, Objects }, editing) => {
     }
   }
 
+  components.push([
+    new Discord.MessageButton()
+      .setLabel('\u200b')
+      .setCustomId('left')
+      .setStyle('SECONDARY')
+      .setEmoji(msg.client.constants.emotes.back)
+      .setDisabled(page === 1),
+    new Discord.MessageButton()
+      .setLabel('\u200b')
+      .setCustomId('cross')
+      .setStyle('DANGER')
+      .setEmoji(msg.client.constants.emotes.cross),
+    new Discord.MessageButton()
+      .setLabel('\u200b')
+      .setCustomId('right')
+      .setStyle('SECONDARY')
+      .setEmoji(msg.client.constants.emotes.forth)
+      .setDisabled(page === 4),
+  ]);
   return components;
 };
 
-const validate = (type, embed, constants) => {
-  const { limits } = constants.customembeds;
+const handleBuilderButtons = async ({ msg, answer }, Objects, lan, embed) => {
+  const reply = async (editing, interaction) => {
+    const lang = msg.language.commands.embedbuilder.edit[editing];
 
-  if (limits.totalOf.includes(type)) {
-    let total = 0;
+    const recommendedEmbed = new Discord.MessageEmbed()
+      .setAuthor({
+        name: msg.language.commands.embedbuilder.author,
+        iconURL: msg.client.constants.commands.embedbuilder.author,
+        url: msg.client.constants.standard.invite,
+      })
+      .setTitle(lang.name)
+      .setDescription(lang.answers);
 
-    limits.totalOf.forEach((limit) => {
-      switch (limit) {
+    if (lang.recommended) {
+      recommendedEmbed.addField('\u200b', lang.recommended);
+    }
+
+    await replier(
+      { msg, answer: interaction },
+      {
+        embeds: [recommendedEmbed],
+        components: getComponents(msg, { page: Objects.page, Objects }, editing),
+      },
+      Objects,
+    );
+  };
+
+  const messageCollector = msg.channel.createMessageCollector({ time: 180000 });
+  const buttonsCollector = msg.m.createMessageComponentCollector({ time: 180000 });
+
+  return new Promise((resolve) => {
+    let editing = null;
+
+    buttonsCollector.on('collect', async (interaction) => {
+      if (interaction.user.id !== msg.author.id) {
+        msg.client.ch.notYours(interaction, msg);
+        return;
+      }
+
+      buttonsCollector.resetTimer();
+      messageCollector.resetTimer();
+
+      editing = interaction.customId;
+      switch (editing) {
         default: {
-          total += embed[type]?.length;
+          reply(editing, interaction);
           break;
         }
-        case 'field-names': {
-          embed.fieldNames?.forEach((field) => {
-            total += field.name.length;
-            total += field.value.length;
+        case 'cross': {
+          buttonsCollector.stop();
+          messageCollector.stop();
+
+          resolve(null);
+          postCode(Objects, msg, interaction);
+          break;
+        }
+        case 'left': {
+          buttonsCollector.stop();
+          messageCollector.stop();
+
+          const page = Objects.page - 1;
+          resolve(await module.exports.builder(msg, interaction, Objects.embed, page));
+          break;
+        }
+        case 'right': {
+          buttonsCollector.stop();
+          messageCollector.stop();
+
+          const page = Objects.page + 1;
+          resolve(await module.exports.builder(msg, interaction, Objects.embed, page));
+          break;
+        }
+        case 'viewRaw': {
+          messageCollector.stop();
+          buttonsCollector.stop();
+
+          resolve(await postCode(Objects, msg, interaction, null, true));
+          break;
+        }
+        case 'inheritCode': {
+          messageCollector.stop();
+          buttonsCollector.stop();
+
+          const inheritCodeEmbed = new Discord.MessageEmbed().setDescription(
+            lan.inheritCodeDescription,
+          );
+          await replier(
+            { msg, answer: interaction },
+            { embeds: [inheritCodeEmbed], components: [] },
+            Objects,
+          );
+
+          const inheritCodeEmbedMessageCollector = msg.channel.createMessageCollector({
+            time: 900000,
+          });
+          inheritCodeEmbedMessageCollector.on('collect', async (inheritCodeEmbedMessage) => {
+            if (msg.author.id !== inheritCodeEmbedMessage.author.id) return;
+
+            inheritCodeEmbedMessage.delete().catch(() => {});
+
+            try {
+              const code = JSON.parse(
+                inheritCodeEmbedMessage.content ||
+                  (await msg.client.ch.convertTxtFileLinkToString(
+                    inheritCodeEmbedMessage.attachments.first().url,
+                  )),
+              );
+
+              Objects.embed = new Discord.MessageEmbed(code);
+              inheritCodeEmbedMessageCollector.stop();
+              resolve(await module.exports.builder(msg, answer, Objects.embed));
+            } catch (e) {
+              msg.client.ch
+                .reply(msg, {
+                  content: `${e}\n${lan.warns.resolveAndRetry}`,
+                })
+                .then((m) => {
+                  setTimeout(() => m.delete().catch(() => {}), 10000);
+                });
+            }
+          });
+
+          inheritCodeEmbedMessageCollector.on('end', (collected, reason) => {
+            if (reason === 'time') {
+              postCode(Objects, msg);
+            }
           });
           break;
         }
-        case 'footer-text': {
-          total += embed.footer?.name?.length;
+        case 'send': {
+          messageCollector.stop();
+          buttonsCollector.stop();
+          resolve(await handleSend(msg, interaction, Objects));
           break;
         }
-        case 'author-name': {
-          total += embed.author?.name?.length;
+        case 'save': {
+          messageCollector.stop();
+          buttonsCollector.stop();
+          const emb = await handleSave(msg, interaction, Objects);
+          resolve(emb);
+          break;
+        }
+        case 'viewRawOtherMsg': {
+          messageCollector.stop();
+          buttonsCollector.stop();
+          resolve(await handleOtherMsgRaw(msg, interaction, Objects));
+          break;
+        }
+        case 'add-field': {
+          Objects.embed.addField('\u200b', '\u200b', false);
+
+          messageCollector.stop();
+          buttonsCollector.stop();
+
+          await replier(
+            { msg, answer: interaction },
+            {
+              embeds: [embed],
+              components: getComponents(msg, { page: 2, Objects }),
+            },
+            Objects,
+          );
+
+          resolve(await module.exports.builder(msg, interaction, Objects.embed, 2));
+          break;
+        }
+        case 'field-select': {
+          messageCollector.stop();
+          buttonsCollector.stop();
+          resolve(await fieldSelect(msg, interaction, Objects));
           break;
         }
       }
     });
 
-    if (total > limits.total) return 'total_fail';
-  }
+    messageCollector.on('collect', async (message) => {
+      if (message.author.id !== msg.author.id) return;
 
-  switch (type) {
-    default: {
-      return embed[type]?.length >= limits.fields[type];
-    }
-    case 'author-name': {
-      return embed.author?.name?.length >= limits.fields[type];
-    }
-    case 'footer-text': {
-      return embed.footer?.text?.length >= limits.fields[type];
-    }
-    case 'field-names' || 'field-values': {
-      const failed = embed.fields
-        ?.map((field, i) => {
-          if (field.name.length >= limits.fields[type]) return i;
-          if (field.name.length >= limits.fields[type]) return i;
-          return undefined;
-        })
-        .filter((i) => i !== undefined);
-      if (failed.lenght) return failed;
-      return true;
-    }
-  }
+      const limits = msg.client.constants.customembeds.limits.fields;
+
+      message.delete().catch(() => {});
+      buttonsCollector.resetTimer();
+      messageCollector.resetTimer();
+
+      switch (editing) {
+        default: {
+          break;
+        }
+        case 'color': {
+          const passesReg = colorReg.test(message.content);
+
+          let e;
+          if (passesReg) {
+            try {
+              new Discord.MessageEmbed().setColor(message.content);
+            } catch (err) {
+              e = err;
+            }
+          }
+
+          if (!passesReg || e) {
+            let valid;
+            if (!passesReg) valid = 'regFail';
+
+            await errorVal(msg, lan, valid, Objects, e, answer);
+            break;
+          }
+
+          Objects.embed.setColor(message.content);
+          break;
+        }
+        case 'title': {
+          const passesLength = limits.title >= message.content.length;
+
+          let e;
+          if (!passesLength) {
+            try {
+              new Discord.MessageEmbed().setTitle(message.content);
+            } catch (err) {
+              e = err;
+            }
+          }
+
+          if (e || !passesLength) {
+            let valid;
+            if (!passesLength) valid = 'length';
+
+            await errorVal(msg, lan, valid, Objects, e, answer);
+            break;
+          }
+
+          Objects.embed.setTitle(message.content);
+          break;
+        }
+        case 'url': {
+          let isUrl = false;
+          try {
+            // eslint-disable-next-line no-new
+            new URL(message.content);
+            isUrl = true;
+          } catch (err) {
+            isUrl = false;
+          }
+
+          let e;
+          if (!isUrl) {
+            try {
+              new Discord.MessageEmbed().setURL(message.content);
+            } catch (err) {
+              e = err;
+            }
+          }
+
+          if (e || !isUrl) {
+            let valid;
+            if (!isUrl) valid = 'noUrl';
+
+            await errorVal(msg, lan, valid, Objects, e, answer);
+            break;
+          }
+
+          Objects.embed.setURL(message.content);
+          break;
+        }
+        case 'author-name': {
+          const passesLength = limits['author-name'] >= message.content.length;
+
+          let e;
+          if (!passesLength) {
+            try {
+              new Discord.MessageEmbed().setAuthor({ name: message.content });
+            } catch (err) {
+              e = err;
+            }
+          }
+
+          if (e || !passesLength) {
+            let valid;
+            if (!passesLength) valid = 'length';
+
+            await errorVal(msg, lan, valid, Objects, e, answer);
+            break;
+          }
+
+          Objects.embed.setAuthor({
+            name: message.content,
+            url: Objects.embed.author?.url,
+            iconURL: Objects.embed.author?.iconURL,
+          });
+          break;
+        }
+        case 'author-iconURL': {
+          let isUrl = false;
+          try {
+            // eslint-disable-next-line no-new
+            new URL(message.content);
+            isUrl = true;
+          } catch (err) {
+            isUrl = false;
+          }
+
+          let e;
+          if (!isUrl) {
+            try {
+              new Discord.MessageEmbed().setAuthor({
+                name: '\u200b',
+                iconURL: message.content,
+              });
+            } catch (err) {
+              e = err;
+            }
+          }
+
+          if (e || !isUrl) {
+            let valid;
+            if (!isUrl) valid = 'noUrl';
+
+            await errorVal(msg, lan, valid, Objects, e, answer);
+            break;
+          }
+
+          Objects.embed.setAuthor({
+            name:
+              Objects.embed.author && Objects.embed.author.name
+                ? Objects.embed.author.name
+                : '\u200b',
+            url: Objects.embed.author?.url,
+            iconURL: message.content,
+          });
+          break;
+        }
+        case 'author-url': {
+          let isUrl = false;
+          try {
+            // eslint-disable-next-line no-new
+            new URL(message.content);
+            isUrl = true;
+          } catch (err) {
+            isUrl = false;
+          }
+
+          let e;
+          if (!isUrl) {
+            try {
+              new Discord.MessageEmbed().setAuthor({ name: '\u200b', url: message.content });
+            } catch (err) {
+              e = err;
+            }
+          }
+
+          if (e || !isUrl) {
+            let valid;
+            if (!isUrl) valid = 'noUrl';
+
+            await errorVal(msg, lan, valid, Objects, e, answer);
+            break;
+          }
+
+          Objects.embed.setAuthor({
+            name:
+              Objects.embed.author && Objects.embed.author.name
+                ? Objects.embed.author.name
+                : '\u200b',
+            url: message.content,
+            iconURL: Objects.embed.author?.iconURL,
+          });
+          break;
+        }
+        case 'description': {
+          let e;
+          try {
+            new Discord.MessageEmbed().setDescription(message.content);
+          } catch (err) {
+            e = err;
+          }
+
+          if (e) {
+            await errorVal(msg, lan, null, Objects, e, answer);
+            break;
+          }
+
+          Objects.embed.setDescription(message.content);
+          break;
+        }
+        case 'image': {
+          let isUrl = false;
+          try {
+            // eslint-disable-next-line no-new
+            new URL(message.content);
+            isUrl = true;
+          } catch (err) {
+            isUrl = false;
+          }
+
+          let e;
+          if (!isUrl) {
+            try {
+              new Discord.MessageEmbed().setImage(message.content);
+            } catch (err) {
+              e = err;
+            }
+          }
+
+          if (e || !isUrl) {
+            let valid;
+            if (!isUrl) valid = 'noUrl';
+
+            await errorVal(msg, lan, valid, Objects, e, answer);
+            break;
+          }
+
+          Objects.embed.setImage(message.content);
+          break;
+        }
+        case 'thumbnail': {
+          let isUrl = false;
+          try {
+            // eslint-disable-next-line no-new
+            new URL(message.content);
+            isUrl = true;
+          } catch (err) {
+            isUrl = false;
+          }
+
+          let e;
+          if (!isUrl) {
+            try {
+              new Discord.MessageEmbed().setThumbnail(message.content);
+            } catch (err) {
+              e = err;
+            }
+          }
+
+          if (e || !isUrl) {
+            let valid;
+            if (!isUrl) valid = 'noUrl';
+
+            await errorVal(msg, lan, valid, Objects, e, answer);
+            break;
+          }
+
+          Objects.embed.setThumbnail(message.content);
+          break;
+        }
+        case 'timestamp': {
+          let isTimestamp = false;
+          try {
+            // eslint-disable-next-line no-new
+            new Date(Number(message.content));
+            isTimestamp = true;
+          } catch (err) {
+            isTimestamp = false;
+          }
+
+          let e;
+          try {
+            new Discord.MessageEmbed().setTimestamp(message.content);
+          } catch (err) {
+            e = err;
+          }
+
+          if (e || !isTimestamp) {
+            let valid;
+            if (!isTimestamp) valid = 'noTimestamp';
+
+            await errorVal(msg, lan, valid, Objects, e, answer);
+            break;
+          }
+
+          Objects.embed.setTimestamp(Number(`${message.content}000`));
+          break;
+        }
+        case 'footer-text': {
+          let e;
+          try {
+            new Discord.MessageEmbed().setFooter({ text: message.content });
+          } catch (err) {
+            e = err;
+          }
+
+          if (e) {
+            await errorVal(msg, lan, null, Objects, e, answer);
+            break;
+          }
+
+          Objects.embed.setFooter({
+            text: message.content,
+            iconUrl: Objects.embed.footer?.iconUrl,
+          });
+          break;
+        }
+        case 'footer-iconURL': {
+          let isUrl = false;
+          try {
+            // eslint-disable-next-line no-new
+            new URL(message.content);
+            isUrl = true;
+          } catch (err) {
+            isUrl = false;
+          }
+
+          let e;
+          if (!isUrl) {
+            try {
+              new Discord.MessageEmbed().setFooter({
+                text: '\u200b',
+                iconURL: message.content,
+              });
+            } catch (err) {
+              e = err;
+            }
+          }
+
+          if (e || !isUrl) {
+            let valid;
+            if (!isUrl) valid = 'noUrl';
+
+            await errorVal(msg, lan, valid, Objects, e, answer);
+            break;
+          }
+
+          Objects.embed.setFooter({
+            iconURL: message.content,
+            text:
+              Objects.embed.footer && Objects.embed.footer.text
+                ? Objects.embed.footer.text
+                : '\u200b',
+          });
+          break;
+        }
+      }
+
+      await replier(
+        { msg, answer },
+        { embeds: [embed], components: getComponents(msg, { page: Objects.page, Objects }) },
+        Objects,
+      );
+    });
+    messageCollector.on('end', (collected, reason) => {
+      if (reason !== 'time') buttonsCollector.stop();
+      else postCode(Objects, msg, answer);
+    });
+  });
 };
 
-const postCode = (Objects, msg, interaction, embed, noRemove) => {
-  msg.m.reactions.removeAll().catch(() => {});
+const postCode = (Objects, msg, answer, embed, noRemove) => {
+  let components = [];
   if (noRemove) {
-    return handleReactionsCollector({ msg }, null, Objects, {
-      needsBack: true,
-      needsPages: false,
-    });
+    components = msg.client.ch.buttonRower([
+      [
+        new Discord.MessageButton()
+          .setLabel('\u200b')
+          .setStyle('PRIMARY')
+          .setEmoji(msg.client.constants.emotes.back)
+          .setCustomId('back'),
+      ],
+    ]);
   }
+
+  const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
 
   const rawCode = Objects.embed.toJSON();
   if (rawCode.length > 4000) {
     const attachment = msg.client.ch.txtFileWriter([rawCode]);
 
-    replier({ msg, answer: interaction }, { files: [attachment], components: [], embeds: [embed] });
+    replier({ msg, answer }, { files: [attachment], components, embeds: [embed] });
   } else {
     const embeds = [];
     if (embed) embeds.push(embed);
@@ -382,19 +948,36 @@ const postCode = (Objects, msg, interaction, embed, noRemove) => {
     );
 
     replier(
-      { msg, answer: interaction },
+      { msg, answer },
       {
         embeds,
-        components: [],
+        components,
       },
     );
   }
-  return null;
+
+  return new Promise((resolve) => {
+    buttonsCollector.on('collect', async (interaction) => {
+      if (interaction.user.id !== msg.author.id) {
+        msg.client.ch.notYours(interaction, msg);
+        return;
+      }
+
+      if (interaction.customId === 'back') {
+        buttonsCollector.stop();
+        resolve(await module.exports.builder(msg, interaction, Objects.embed, 3));
+      }
+    });
+
+    buttonsCollector.on('end', async (collected, reason) => {
+      if (reason === 'time') {
+        resolve(await postCode(Objects, msg, answer));
+      }
+    });
+  });
 };
 
 const handleSave = async (msg, answer, Objects) => {
-  msg.m.reactions.removeAll().catch(() => {});
-
   const lan = msg.language.commands.embedbuilder;
   const save = new Discord.MessageButton()
     .setCustomId('save')
@@ -414,16 +997,29 @@ const handleSave = async (msg, answer, Objects) => {
     const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
     const messageCollector = msg.channel.createMessageCollector({ time: 60000 });
 
-    handleReactionsCollector(
-      { msg, answer },
-      messageCollector,
-      Objects,
-      {
-        needsBack: true,
-        needsPages: false,
-      },
-      resolve,
-    );
+    const back = new Discord.MessageButton()
+      .setLabel('\u200b')
+      .setEmoji(msg.client.constants.emotes.back)
+      .setStyle('PRIMARY')
+      .setCustomId('back');
+
+    buttonsCollector.on('collect', async (interaction) => {
+      if (interaction.user.id !== msg.author.id) {
+        msg.client.ch.notYours(interaction, msg);
+        return;
+      }
+      if (interaction.customId === 'back') {
+        messageCollector.stop();
+        buttonsCollector.stop();
+        resolve(await module.exports.build({ msg, answer }, Objects, 3));
+      }
+    });
+
+    buttonsCollector.on('end', async (collected, reason) => {
+      if (reason === 'time') {
+        resolve(await postCode(Objects, msg, answer));
+      }
+    });
 
     messageCollector.on('collect', async (message) => {
       if (message.author.id !== msg.author.id) return;
@@ -440,7 +1036,7 @@ const handleSave = async (msg, answer, Objects) => {
       embed.addField(msg.language.name, `\u200b${message.content.slice(0, 1024)}`);
       message.delete().catch(() => {});
 
-      await replier({ msg, answer }, { embeds: [embed], components: [newSave] }, Objects);
+      await replier({ msg, answer }, { embeds: [embed], components: [newSave, back] }, Objects);
     });
 
     messageCollector.on('end', (collected, reason) => {
@@ -654,7 +1250,6 @@ const handleSend = async (msg, answer, Objects) => {
           );
 
         await replier({ msg, answer: interaction }, { embeds: [embed], components: [] }, Objects);
-        msg.m.reactions.removeAll().catch(() => {});
         return;
       }
     }
@@ -668,8 +1263,6 @@ const handleSend = async (msg, answer, Objects) => {
 };
 
 const handleOtherMsgRaw = async (msg, answer, Objects) => {
-  msg.m.reactions.removeAll().catch(() => {});
-
   const noFound = () => {
     const embed = new Discord.MessageEmbed()
       .setAuthor({
@@ -694,23 +1287,40 @@ const handleOtherMsgRaw = async (msg, answer, Objects) => {
       msg.client.constants.discordMsgUrls.map((url) => `\`${url}\``).join('\n'),
     );
 
-  await replier({ msg, answer }, { embeds: [embed], components: [] }, Objects);
+  const back = new Discord.MessageButton()
+    .setLabel('\u200b')
+    .setEmoji(msg.client.constants.emotes.back)
+    .setStyle('PRIMARY')
+    .setCustomId('back');
+
+  await replier({ msg, answer }, { embeds: [embed], components: [back] }, Objects);
 
   const messageCollector = msg.channel.createMessageCollector({ time: 60000 });
+  const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
   return new Promise((resolve) => {
-    handleReactionsCollector(
-      { msg, answer },
-      messageCollector,
-      Objects,
-      {
-        needsBack: true,
-        needsPages: false,
-      },
-      resolve,
-    );
+    buttonsCollector.on('collect', async (interaction) => {
+      if (interaction.user.id !== msg.author.id) {
+        msg.client.ch.notYours(interaction, msg);
+        return;
+      }
+      if (interaction.customId === 'back') {
+        messageCollector.stop();
+        buttonsCollector.stop();
+        resolve(await module.exports.build({ msg, answer }, Objects, 3));
+      }
+    });
+
+    buttonsCollector.on('end', async (collected, reason) => {
+      if (reason === 'time') {
+        resolve(await postCode(Objects, msg, answer));
+      }
+    });
 
     messageCollector.on('collect', async (message) => {
       if (message.author.id !== msg.author.id) return;
+
+      buttonsCollector.resetTimer();
+      messageCollector.resetTimer();
 
       message.delete().catch(() => {});
 
@@ -770,635 +1380,51 @@ const handleOtherMsgRaw = async (msg, answer, Objects) => {
   });
 };
 
-const embedButtonsHandler = async (Objects, msg, answer, erroredPreviously) => {
-  if (!erroredPreviously) msg.m.reactions.removeAll().catch(() => {});
-  const editing = answer.customId;
+const errorVal = async (msg, lan, valid, Objects, error, answer) => {
+  let lanError;
 
-  const messageHandler = async () => {
-    const messageCollector = msg.channel.createMessageCollector({ time: 60000 });
-    const lan = msg.language.commands.embedbuilder.edit[editing];
-
-    const embed = new Discord.MessageEmbed()
-      .setAuthor({
-        name: msg.language.commands.embedbuilder.author,
-        iconURL: msg.client.constants.commands.embedbuilder.author,
-        url: msg.client.constants.standard.invite,
-      })
-      .setTitle(lan.name)
-      .setDescription(lan.answers);
-
-    if (lan.recommended) {
-      embed.addField('\u200b', lan.recommended);
-    }
-
-    await replier(
-      { msg, answer },
-      { embeds: [embed], components: getComponents(msg, { page: 1, Objects }, editing) },
-      Objects,
-    );
-
-    const returned = await new Promise((resolve) => {
-      handleReactionsCollector(
-        { msg, answer },
-        messageCollector,
-        Objects,
-        {
-          needsBack: true,
-          needsPages: false,
-        },
-        resolve,
-      );
-
-      messageCollector.on('collect', (message) => {
-        if (message.author.id !== msg.author.id) return;
-
-        resolve(message.content);
-        message.delete().catch(() => {});
-        messageCollector.stop();
-      });
-
-      messageCollector.on('end', (collected, reason) => {
-        if (reason === 'time') {
-          postCode(Objects, msg);
-        }
-        resolve(null);
-      });
-    });
-
-    return returned;
-  };
-
-  const limits = msg.client.constants.customembeds.limits.fields;
-
-  const errorVal = async (error, valid) => {
-    const lan = msg.language.commands.embedbuilder;
-    let lanError;
-
-    switch (error) {
-      default: {
-        lanError = error;
-        break;
-      }
-      case 'regFail': {
-        lanError = lan.regFail;
-        break;
-      }
-      case 'length': {
-        lanError = msg.client.ch.stp(lan.lengthFail, { max: valid });
-        break;
-      }
-      case 'noTimestamp': {
-        lanError = lan.noTimestamp;
-        break;
-      }
-    }
-
-    const embed = new Discord.MessageEmbed()
-      .setAuthor({
-        name: msg.language.commands.embedbuilder.author,
-        iconURL: msg.client.constants.commands.embedbuilder.author,
-        url: msg.client.constants.standard.invite,
-      })
-      .setDescription(msg.language.commands.embedbuilder.errorVal)
-      .setColor('ff0000');
-    if (error) embed.addField(msg.language.error, `${lanError}`);
-
-    await replier({ msg, answer }, { embeds: [embed], components: [] }, Objects);
-
-    msg.m.reactions.cache.get(msg.client.constants.emotes.back).users.remove(msg.client.user);
-    const reaction = await msg.m.react(msg.client.constants.emotes.timers[3]);
-
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(true);
-        reaction.remove(msg.client.user.id).catch(() => {});
-      }, 3000);
-    });
-  };
-
-  const entered = await messageHandler();
-  let errored = false;
-  if (!entered) return null;
-
-  switch (answer.customId) {
+  switch (error) {
     default: {
+      lanError = error;
       break;
     }
-    case 'color': {
-      const passesReg = colorReg.test(entered);
-
-      let e;
-      if (passesReg) {
-        try {
-          new Discord.MessageEmbed().setColor(entered);
-        } catch (err) {
-          e = err;
-        }
-      }
-
-      if (!passesReg || e) {
-        let valid;
-        if (!passesReg) valid = 'regFail';
-
-        errored = await errorVal(e, valid);
-        break;
-      }
-
-      Objects.embed.setColor(entered);
+    case 'regFail': {
+      lanError = lan.regFail;
       break;
     }
-    case 'title': {
-      const passesLength = limits.title >= entered.length;
-
-      let e;
-      if (!passesLength) {
-        try {
-          new Discord.MessageEmbed().setTitle(entered);
-        } catch (err) {
-          e = err;
-        }
-      }
-
-      if (e || !passesLength) {
-        let valid;
-        if (!passesLength) valid = 'length';
-
-        errored = await errorVal(e, valid);
-        break;
-      }
-
-      Objects.embed.setTitle(entered);
+    case 'length': {
+      lanError = msg.client.ch.stp(lan.lengthFail, { max: valid });
       break;
     }
-    case 'url': {
-      let isUrl = false;
-      try {
-        URL(entered);
-        isUrl = true;
-      } catch (err) {
-        isUrl = false;
-      }
-
-      let e;
-      if (!isUrl) {
-        try {
-          new Discord.MessageEmbed().setURL(entered);
-        } catch (err) {
-          e = err;
-        }
-      }
-
-      if (e || !isUrl) {
-        let valid;
-        if (!isUrl) valid = 'noUrl';
-
-        errored = await errorVal(e, valid);
-        break;
-      }
-
-      Objects.embed.setURL(entered);
-      break;
-    }
-    case 'author-name': {
-      const passesLength = limits['author-name'] >= entered.length;
-
-      let e;
-      if (!passesLength) {
-        try {
-          new Discord.MessageEmbed().setAuthor({ name: entered });
-        } catch (err) {
-          e = err;
-        }
-      }
-
-      if (e || !passesLength) {
-        let valid;
-        if (!passesLength) valid = 'length';
-
-        errored = await errorVal(e, valid);
-        break;
-      }
-
-      Objects.embed.setAuthor({
-        name: entered,
-        url: Objects.embed.author?.url,
-        iconURL: Objects.embed.author?.iconURL,
-      });
-      break;
-    }
-    case 'author-iconURL': {
-      let isUrl = false;
-      try {
-        URL(entered);
-        isUrl = true;
-      } catch (err) {
-        isUrl = false;
-      }
-
-      let e;
-      if (!isUrl) {
-        try {
-          new Discord.MessageEmbed().setAuthor({ iconURL: entered });
-        } catch (err) {
-          e = err;
-        }
-      }
-
-      if (e || !isUrl) {
-        let valid;
-        if (!isUrl) valid = 'noUrl';
-
-        errored = await errorVal(e, valid);
-        break;
-      }
-
-      Objects.embed.setAuthor({
-        name: Objects.embed.author?.name,
-        url: Objects.embed.author?.url,
-        iconURL: entered,
-      });
-      break;
-    }
-    case 'author-url': {
-      let isUrl = false;
-      try {
-        URL(entered);
-        isUrl = true;
-      } catch (err) {
-        isUrl = false;
-      }
-
-      let e;
-      if (!isUrl) {
-        try {
-          new Discord.MessageEmbed().setAuthor({ url: entered });
-        } catch (err) {
-          e = err;
-        }
-      }
-
-      if (e || !isUrl) {
-        let valid;
-        if (!isUrl) valid = 'noUrl';
-
-        errored = await errorVal(e, valid);
-        break;
-      }
-
-      Objects.embed.setAuthor({
-        name: Objects.embed.author?.name,
-        url: entered,
-        iconURL: Objects.embed.author?.iconURL,
-      });
-      break;
-    }
-    case 'description': {
-      let e;
-      try {
-        new Discord.MessageEmbed().setDescription(entered);
-      } catch (err) {
-        e = err;
-      }
-
-      if (e) {
-        errored = await errorVal(e);
-        break;
-      }
-
-      Objects.embed.setDescription(entered);
-      break;
-    }
-    case 'image': {
-      let isUrl = false;
-      try {
-        // eslint-disable-next-line no-new
-        new URL(entered);
-        isUrl = true;
-      } catch (err) {
-        isUrl = false;
-      }
-
-      let e;
-      if (!isUrl) {
-        try {
-          new Discord.MessageEmbed().setImage(entered);
-        } catch (err) {
-          e = err;
-        }
-      }
-
-      if (e || !isUrl) {
-        let valid;
-        if (!isUrl) valid = 'noUrl';
-
-        errored = await errorVal(e, valid);
-        break;
-      }
-
-      Objects.embed.setImage(entered);
-      break;
-    }
-    case 'thumbnail': {
-      let isUrl = false;
-      try {
-        // eslint-disable-next-line no-new
-        new URL(entered);
-        isUrl = true;
-      } catch (err) {
-        isUrl = false;
-      }
-
-      let e;
-      if (!isUrl) {
-        try {
-          new Discord.MessageEmbed().setThumbnail(entered);
-        } catch (err) {
-          e = err;
-        }
-      }
-
-      if (e || !isUrl) {
-        let valid;
-        if (!isUrl) valid = 'noUrl';
-
-        errored = await errorVal(e, valid);
-        break;
-      }
-
-      Objects.embed.setThumbnail(entered);
-      break;
-    }
-
-    case 'timestamp': {
-      let isTimestamp = false;
-      try {
-        // eslint-disable-next-line no-new
-        new Date(entered);
-        isTimestamp = true;
-      } catch (err) {
-        isTimestamp = false;
-      }
-
-      let e;
-      try {
-        new Discord.MessageEmbed().setTimestamp(entered);
-      } catch (err) {
-        e = err;
-      }
-
-      if (e || !isTimestamp) {
-        let valid;
-        if (!isTimestamp) valid = 'noTimestamp';
-
-        errored = await errorVal(e, valid);
-        break;
-      }
-
-      Objects.embed.setTimestamp(entered);
-      break;
-    }
-    case 'footer-text': {
-      let e;
-      try {
-        new Discord.MessageEmbed().setFooter({ text: entered });
-      } catch (err) {
-        e = err;
-      }
-
-      if (e) {
-        errored = await errorVal(e);
-        break;
-      }
-
-      Objects.embed.setFooter({ text: entered });
-      break;
-    }
-    case 'footer-iconURL': {
-      let isUrl = false;
-      try {
-        URL(entered);
-        isUrl = true;
-      } catch (err) {
-        isUrl = false;
-      }
-
-      let e;
-      if (!isUrl) {
-        try {
-          new Discord.MessageEmbed().setFooter({ iconURL: entered });
-        } catch (err) {
-          e = err;
-        }
-      }
-
-      if (e || !isUrl) {
-        let valid;
-        if (!isUrl) valid = 'noUrl';
-
-        errored = await errorVal(e, valid);
-        break;
-      }
-
-      Objects.embed.setFooter({ iconURL: entered });
+    case 'noTimestamp': {
+      lanError = lan.noTimestamp;
       break;
     }
   }
 
-  if (errored) return embedButtonsHandler(Objects, msg, answer, true);
-  return module.exports.builder(msg, null, Objects.embed);
-};
+  const errorEmbed = new Discord.MessageEmbed()
+    .setAuthor({
+      name: msg.language.commands.embedbuilder.author,
+      iconURL: msg.client.constants.commands.embedbuilder.author,
+      url: msg.client.constants.standard.invite,
+    })
+    .setDescription(msg.language.commands.embedbuilder.errorVal)
+    .setColor('ff0000');
+  if (error) errorEmbed.addField(msg.language.error, `${lanError}`);
 
-const handleReactionsCollector = async (
-  { msg, answer },
-  collector,
-  Objects,
-  { needsBack, needsPages },
-  parentResolve,
-) => {
-  const reactionsCollector = msg.m.createReactionCollector({ time: 120000 });
+  await replier({ msg, answer }, { embeds: [errorEmbed], components: [] }, Objects);
 
-  if (needsBack) {
-    if (
-      !msg.m.reactions.cache
-        .get(msg.client.constants.emotes.back)
-        ?.users.cache.has(msg.client.user.id)
-    ) {
-      msg.m.react(msg.client.constants.emotes.back).catch(() => {});
-    }
-  }
-  if (needsPages && needsPages.length) {
-    needsPages.forEach((page, i) => {
-      if (
-        !msg.m.reactions.cache
-          .get(msg.client.constants.emotes.numbers[page])
-          ?.users.cache.has(msg.client.user.id)
-      ) {
-        setTimeout(() => {
-          msg.m.react(msg.client.constants.emotes.numbers[page]).catch(() => {});
-        }, i * 1000);
-      }
-    });
-  }
+  const reaction = await msg.m.react(msg.client.constants.emotes.timers[3]);
 
-  const returned = await new Promise((resolve) => {
-    reactionsCollector.on('collect', async (reaction, user) => {
-      if (user.id === msg.client.user.id) return;
-      reaction.users.remove(user.id);
-      if (user.id !== msg.author.id && user.id !== msg.client.user.id) {
-        return;
-      }
-
-      if (collector) collector.stop();
-      reactionsCollector.stop();
-
-      resolve(
-        await module.exports.builder(
-          msg,
-          answer,
-          Objects.embed,
-          Array.isArray(needsPages) && needsPages.includes(Number(reaction.emoji.name[0]))
-            ? Number(reaction.emoji.name[0])
-            : Objects.page,
-        ),
-      );
-    });
-
-    if (collector) {
-      collector.on('end', () => {
-        reactionsCollector.stop();
-      });
-    }
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(true);
+      reaction.remove(msg.client.user.id).catch(() => {});
+    }, 3000);
   });
-
-  if (parentResolve) {
-    parentResolve(returned);
-  }
-  return returned;
-};
-
-const handleBuilderButtons = async ({ msg, answer }, Objects, lan, embed) => {
-  const buttonsCollector = msg.m.createMessageComponentCollector({ time: 120000 });
-  let ended = false;
-
-  const returned = await new Promise((resolve) => {
-    handleReactionsCollector(
-      { msg, answer },
-      buttonsCollector,
-      Objects,
-      {
-        needsBack: false,
-        needsPages: [1, 2, 3],
-      },
-      resolve,
-    );
-
-    buttonsCollector.on('collect', async (interaction) => {
-      if (interaction.user.id !== msg.author.id) {
-        msg.client.ch.notYours(interaction, msg);
-        return;
-      }
-
-      buttonsCollector.stop();
-
-      switch (interaction.customId) {
-        default: {
-          resolve(await embedButtonsHandler(Objects, msg, interaction));
-          break;
-        }
-        case 'viewRaw': {
-          resolve(await postCode(Objects, msg, interaction, null, true));
-          break;
-        }
-        case 'inheritCode': {
-          const inheritCodeEmbed = new Discord.MessageEmbed().setDescription(
-            lan.inheritCodeDescription,
-          );
-          await replier(
-            { msg, answer: interaction },
-            { embeds: [inheritCodeEmbed], components: [] },
-            Objects,
-          );
-
-          const messageCollector = msg.channel.createMessageCollector({ time: 900000 });
-          messageCollector.on('collect', async (message) => {
-            if (msg.author.id !== message.author.id) return;
-
-            message.delete().catch(() => {});
-
-            try {
-              const code = JSON.parse(
-                message.content ||
-                  (await msg.client.ch.convertTxtFileLinkToString(message.attachments.first().url)),
-              );
-
-              Objects.embed = new Discord.MessageEmbed(code);
-              messageCollector.stop();
-              resolve(await module.exports.builder(msg, answer, Objects.embed));
-            } catch (e) {
-              msg.client.ch
-                .reply(msg, {
-                  content: `${e}\n${lan.warns.resolveAndRetry}`,
-                })
-                .then((m) => {
-                  setTimeout(() => m.delete().catch(() => {}), 10000);
-                });
-            }
-          });
-
-          messageCollector.on('end', (collected, reason) => {
-            if (reason === 'time') {
-              ended = true;
-              postCode(Objects, msg);
-            }
-          });
-          break;
-        }
-        case 'send': {
-          resolve(await handleSend(msg, interaction, Objects));
-          break;
-        }
-        case 'save': {
-          const emb = await handleSave(msg, interaction, Objects);
-          resolve(emb);
-          break;
-        }
-        case 'viewRawOtherMsg': {
-          resolve(await handleOtherMsgRaw(msg, interaction, Objects));
-          break;
-        }
-        case 'add-field': {
-          Objects.embed.addField('\u200b', '\u200b', false);
-
-          await replier(
-            { msg, answer: interaction },
-            { embeds: [embed], components: getComponents(msg, { page: 2, Objects }) },
-            Objects,
-          );
-
-          resolve(module.exports.builder(msg, interaction, Objects.embed, 2));
-          break;
-        }
-        case 'field-select': {
-          resolve(await fieldSelect(msg, interaction, Objects));
-          break;
-        }
-      }
-    });
-    buttonsCollector.on('end', (collected, reason) => {
-      if (reason === 'time' && !ended) {
-        ended = true;
-        postCode(Objects, msg, null);
-        resolve(null);
-      }
-    });
-  });
-
-  return returned;
 };
 
 const fieldSelect = async (msg, answer, Objects) => {
-  msg.m.reactions.removeAll().catch(() => {});
-
   const baseLan = msg.language.commands.embedbuilder;
 
   const index = answer.values[0];
@@ -1427,6 +1453,13 @@ const fieldSelect = async (msg, answer, Objects) => {
           .setLabel(baseLan.fieldInline)
           .setStyle(selected.inline ? 'SUCCESS' : 'SECONDARY'),
       ],
+      [
+        new Discord.MessageButton()
+          .setLabel('\u200b')
+          .setStyle('PRIMARY')
+          .setEmoji(msg.client.constants.emotes.back)
+          .setCustomId('back'),
+      ],
     ];
   };
 
@@ -1447,16 +1480,12 @@ const fieldSelect = async (msg, answer, Objects) => {
   );
 
   return new Promise((resolve) => {
-    const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
-    const messageCollector = msg.channel.createMessageCollector({ time: 60000 });
-
-    handleReactionsCollector(
-      { msg, answer },
-      buttonsCollector,
-      Objects,
-      { needsBack: true, needsPages: false },
-      resolve,
-    );
+    const buttonsCollector = msg.m.createMessageComponentCollector({
+      time: 60000,
+    });
+    const messageCollector = msg.channel.createMessageCollector({
+      time: 60000,
+    });
 
     buttonsCollector.on('end', (collected, reason) => {
       if (reason !== 'time') messageCollector.stop();
@@ -1522,7 +1551,9 @@ const fieldSelect = async (msg, answer, Objects) => {
         }
         case 'remove-field': {
           Objects.embed.fields.splice(index, 1);
-          resolve(module.exports.builder(msg, interaction, Objects.embed, 2));
+          buttonsCollector.stop();
+          messageCollector.stop();
+          resolve(await module.exports.builder(msg, interaction, Objects.embed, 2));
           return;
         }
         case 'name': {
@@ -1531,6 +1562,12 @@ const fieldSelect = async (msg, answer, Objects) => {
         }
         case 'value': {
           editing = 'value';
+          break;
+        }
+        case 'back': {
+          buttonsCollector.stop();
+          messageCollector.stop();
+          resolve(await module.exports.builder(msg, interaction, Objects.embed, 2));
           break;
         }
       }
