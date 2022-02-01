@@ -38,7 +38,6 @@ module.exports = {
       typeof rawPayload === 'string' ? { failIfNotExists: false, content: rawPayload } : rawPayload;
 
     if (channel.type === 'DM') {
-      console.log(`Sending DM to ${channel.recipient.username}`);
       return channel.send(payload).catch(() => null);
     }
 

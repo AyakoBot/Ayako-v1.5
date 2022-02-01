@@ -23,6 +23,7 @@ module.exports = {
       if (res && res.rowCount) return;
 
       const voter = await client.users.fetch(voteData.user);
+      console.log(`User ${voteData.user} has voted`);
       roleReward(voteData);
       reminder(voter);
     });
@@ -31,10 +32,10 @@ module.exports = {
 
 const roleReward = async (voteData) => {
   const guild = client.guilds.cache.get('298954459172700181');
-  const member = await guild.members.fetch(voteData.user);
+  const member = await guild.members.fetch(voteData.user).catch(() => {});
+  const voter = await client.users.fetch(voteData.user);
 
   if (!member) {
-    const voter = await client.users.fetch(voteData.user);
     announcement(voter);
     return;
   }
@@ -79,7 +80,6 @@ const roleReward = async (voteData) => {
   }
 
   await member.roles.add(gettingThisRole);
-  const voter = await client.users.fetch(voteData.user);
   announcement(voter, gettingThisRole);
 
   const delTime = Date.now() + 43200000;
@@ -151,12 +151,13 @@ const removeRoles = (userid, delTime, member, guild) => {
     delTime,
   ]);
 
-  if (member.roles.cache.has(roles[2])) member.roles.remove(roles[2].id).catch(() => {});
-  else if (member.roles.cache.has(roles[1])) member.roles.remove(roles[1].id).catch(() => {});
-  else if (member.roles.cache.has(roles[0])) member.roles.remove(roles[0].id).catch(() => {});
+  if (member.roles.cache.has(roles[2].id)) member.roles.remove(roles[2].id).catch(() => {});
+  else if (member.roles.cache.has(roles[1].id)) member.roles.remove(roles[1].id).catch(() => {});
+  else if (member.roles.cache.has(roles[0].id)) member.roles.remove(roles[0].id).catch(() => {});
 };
 
 const announcement = async (voter, usedRole) => {
+  // eslint-disable-next-line no-unused-vars
   const webhook = await client.fetchWebhook(
     '937523756669239347',
     'owoDfJHBLZiD7NzuYPZ5m8jAoeGOHXUSa1o3YkLgDxKGsedip4xke_5aQSt66hks4zQF',
@@ -196,20 +197,8 @@ const reminder = async (voter) => {
       `Thank you for Voting for Ayako!\nI will send you a reminder once you can vote again`,
     );
 
-  const disable = new Discord.MessageButton()
-    .setLabel('Disable Vote Reminder')
-    .setStyle('DANGER')
-    .setCustomId('vote_reminder_disable');
-
-  const vote = new Discord.MessageButton()
-    .setLabel('Vote for Ayako')
-    .setStyle('LINK')
-    .setURL('https://top.gg/bot/650691698409734151/vote');
-
   const dm = await voter.createDM();
-  client.ch
-    .send(dm, { embeds: [embed], components: [client.ch.buttonRower([disable, vote])] })
-    .catch(() => {});
+  client.ch.send(dm, { embeds: [embed] }).catch(() => {});
 
   const endTime = Date.now() + 43200000;
   client.ch.query(`INSERT INTO votereminder (userid, removetime) VALUES ($1, $2);`, [
@@ -231,6 +220,16 @@ const endReminder = async (voter, endTime) => {
     endTime,
   ]);
 
+  const disable = new Discord.MessageButton()
+    .setLabel('Disable Vote Reminder')
+    .setStyle('DANGER')
+    .setCustomId('vote_reminder_disable');
+
+  const vote = new Discord.MessageButton()
+    .setLabel('Vote for Ayako')
+    .setStyle('LINK')
+    .setURL('https://top.gg/bot/650691698409734151/vote');
+
   const embed = new Discord.MessageEmbed()
     .setColor('#b0ff00')
     .setAuthor({
@@ -243,7 +242,9 @@ const endReminder = async (voter, endTime) => {
     );
 
   const dm = await voter.createDM();
-  client.ch.send(dm, { embeds: [embed] }).catch(() => {});
+  client.ch
+    .send(dm, { embeds: [embed], components: client.ch.buttonRower([disable, vote]) })
+    .catch(() => {});
 };
 
 const getReminder = async (user) => {

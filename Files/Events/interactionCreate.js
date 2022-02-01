@@ -31,7 +31,7 @@ module.exports = {
 
         interaction.update({
           embeds: [embed],
-          components: [interaction.client.ch.buttonRower([enable, vote])],
+          components: interaction.client.ch.buttonRower([enable, vote]),
         });
 
         break;
@@ -61,7 +61,7 @@ module.exports = {
 
         interaction.update({
           embeds: [embed],
-          components: [interaction.client.ch.buttonRower([disable, vote])],
+          components: interaction.client.ch.buttonRower([disable, vote]),
         });
 
         break;
