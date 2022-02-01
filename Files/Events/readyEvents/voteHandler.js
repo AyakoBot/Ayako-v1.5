@@ -1,7 +1,8 @@
 const io = require('socket.io-client');
 const Discord = require('discord.js');
-
 const client = require('../../BaseClient/DiscordClient');
+
+const timeouts = new Map();
 
 module.exports = {
   execute: () => {
@@ -38,6 +39,26 @@ const roleReward = async (voteData) => {
     return;
   }
 
+  const res = await client.ch.query(`SELECT * FROM voterewards WHERE userid = $1;`, [
+    voteData.user,
+  ]);
+  if (res && res.rowCount) {
+    client.ch.query(`UPDATE voterewards SET removetime = $1 WHERE userid = $2;`, [
+      Date.now() + 43200000,
+      voteData.user,
+    ]);
+
+    clearTimeout(timeouts.get(voteData.user));
+    timeouts.set(
+      voteData.user,
+      setTimeout(() => {
+        removeRoles(voteData.user, Date.now() + 43200000, member, guild);
+      }, 43200000),
+    );
+    announcement(voter, guild.roles.cache.get(res.rows[0].roleid));
+    return;
+  }
+
   const roles = [
     guild.roles.cache.get('327424359016824842'),
     guild.roles.cache.get('910079633477730364'),
@@ -69,9 +90,12 @@ const roleReward = async (voteData) => {
     delTime,
   ]);
 
-  setTimeout(() => {
-    removeRoles(voteData.user, delTime, member, guild);
-  }, 43200000);
+  timeouts.set(
+    voteData.user,
+    setTimeout(() => {
+      removeRoles(voteData.user, delTime, member, guild);
+    }, 43200000),
+  );
 };
 
 const queryCheck = async () => {
@@ -86,14 +110,17 @@ const queryCheck = async () => {
           client.guilds.cache.get('298954459172700181'),
         );
       } else {
-        setTimeout(async () => {
-          removeRoles(
-            row.userid,
-            row.removetime,
-            await client.guilds.cache.get('298954459172700181').members.fetch(row.userid),
-            client.guilds.cache.get('298954459172700181'),
-          );
-        }, row.removetime - Date.now());
+        timeouts.set(
+          row.userid,
+          setTimeout(async () => {
+            removeRoles(
+              row.userid,
+              row.removetime,
+              await client.guilds.cache.get('298954459172700181').members.fetch(row.userid),
+              client.guilds.cache.get('298954459172700181'),
+            );
+          }, row.removetime - Date.now()),
+        );
       }
     });
   }
