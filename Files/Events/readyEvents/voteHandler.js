@@ -185,7 +185,9 @@ const announcement = async (voter, usedRole) => {
           .setLabel('Vote Here'),
       ]),
     })
-    .catch(() => {});
+    .catch((e) => {
+      console.log(e);
+    });
 };
 
 const reminder = async (voter) => {
