@@ -911,9 +911,9 @@ module.exports = {
    * @constructor
    * @param {object} DBembed - The Embed Data from the Database
    */
-  getDiscordEmbed: async (DBembed) => {
+  getDiscordEmbed: (DBembed) => {
     return new Discord.MessageEmbed({
-      color: DBembed.color,
+      color: Number(DBembed.color),
       title: DBembed.title,
       url: DBembed.url,
       author: {
@@ -934,7 +934,7 @@ module.exports = {
       image: {
         url: DBembed.image,
       },
-      timestamp: DBembed.timestamp,
+      timestamp: Number(DBembed.timestamp),
       footer: {
         text: DBembed.footertext,
         icon_url: DBembed.footericonurl,
