@@ -178,6 +178,12 @@ const announcement = async (voter, usedRole) => {
         users: [],
         roles: [],
       },
+      components: client.ch.buttonRower([
+        new Discord.MessageButton()
+          .setURL('https://top.gg/bot/650691698409734151/vote')
+          .setStyle('LINK')
+          .setLabel('Vote Here'),
+      ]),
     })
     .catch(() => {});
 };
