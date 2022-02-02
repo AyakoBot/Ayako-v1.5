@@ -906,4 +906,39 @@ module.exports = {
 
     return bansMap;
   },
+  /**
+   * Converts custom Embed Data into a Discord Embed
+   * @constructor
+   * @param {object} DBembed - The Embed Data from the Database
+   */
+  getDiscordEmbed: async (DBembed) => {
+    return new Discord.MessageEmbed({
+      color: DBembed.color,
+      title: DBembed.title,
+      url: DBembed.url,
+      author: {
+        name: DBembed.authorname,
+        icon_url: DBembed.authoriconurl,
+        url: DBembed.authorurl,
+      },
+      description: DBembed.description,
+      thumbnail: {
+        url: DBembed.thumbnail,
+      },
+      fields:
+        DBembed.fieldnames.map((fieldName, i) => {
+          const fieldValue = DBembed.fieldvalues[i];
+          const fieldInline = DBembed.fieldinlines[i];
+          return { name: fieldName, value: fieldValue, inline: fieldInline };
+        }) || [],
+      image: {
+        url: DBembed.image,
+      },
+      timestamp: DBembed.timestamp,
+      footer: {
+        text: DBembed.footertext,
+        icon_url: DBembed.footericonurl,
+      },
+    });
+  },
 };
