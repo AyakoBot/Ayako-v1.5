@@ -926,7 +926,7 @@ module.exports = {
         url: DBembed.thumbnail,
       },
       fields:
-        DBembed.fieldnames.map((fieldName, i) => {
+        DBembed.fieldnames?.map((fieldName, i) => {
           const fieldValue = DBembed.fieldvalues[i];
           const fieldInline = DBembed.fieldinlines[i];
           return { name: fieldName, value: fieldValue, inline: fieldInline };

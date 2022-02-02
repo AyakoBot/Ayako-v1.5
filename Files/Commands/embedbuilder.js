@@ -5,7 +5,8 @@ const colorReg = /[0-9A-Fa-f]{6}/g;
 
 module.exports = {
   name: 'embedbuilder',
-  perm: 2048n,
+  perm: null,
+  insideCommandPerm: 2048n,
   dm: false,
   takesFirstArg: false,
   aliases: ['eb'],
@@ -16,7 +17,13 @@ module.exports = {
 
     const { embed, answer } = returned;
     if (embed) {
-      replier({ msg, answer }, { embeds: [embed], components: [] });
+      if (answer && !answer.replied && !answer.deferred) {
+        answer.update({ embeds: [embed] });
+      } else if (msg.m) {
+        msg.m.edit({ embeds: [embed] });
+      } else {
+        msg.channel.send({ embeds: [embed] });
+      }
     }
   },
   async builder(msg, answer, existingEmbed, page) {
@@ -27,7 +34,7 @@ module.exports = {
     const Objects = {
       edit: 'menu',
       category: null,
-      embed: existingEmbed || new Discord.MessageEmbed(),
+      embed: new Discord.MessageEmbed(existingEmbed) || new Discord.MessageEmbed(),
       page: page || 1,
     };
 
@@ -40,13 +47,14 @@ module.exports = {
       .setDescription(lan.chooseTheEdit)
       .setColor(msg.client.ch.colorSelector(msg.guild.me));
 
-    await replier(
-      { msg, answer },
-      { embeds: [embed], components: getComponents(msg, { page, Objects }), files: [] },
-      Objects,
-    );
+    const components = await getComponents(msg, { page, Objects });
 
-    const returned = await handleBuilderButtons({ msg, answer }, Objects, lan, embed);
+    await replier({ msg, answer }, { embeds: [embed], components, files: [] }, Objects);
+
+    const returned = await handleBuilderButtons({ msg, answer }, Objects, lan, {
+      embed,
+      components,
+    });
 
     return returned;
   },
@@ -55,22 +63,14 @@ module.exports = {
 const replier = async ({ msg, answer }, { embeds, components, content, files }, Objects) => {
   let finishedEmbed;
   if (Objects) {
-    if (
-      !Objects.embed.title &&
-      (!Objects.embed.author || !Objects.embed.author.name) &&
-      !Objects.embed.description &&
-      (!Objects.embed.thumbnail || !Objects.embed.thumbnail.url) &&
-      !Objects.embed.fields.length &&
-      (!Objects.embed.image || !Objects.embed.image.url) &&
-      (!Objects.embed.footer || !Objects.embed.footer.text)
-    ) {
+    if (cantBeSent(Objects)) {
       finishedEmbed = new Discord.MessageEmbed()
         .setDescription(msg.language.commands.embedbuilder.warns.noValue)
         .setColor('FF0000')
         .setThumbnail(msg.client.constants.commands.embedbuilder.error);
 
       const saveButton =
-        components && components[components.length - 1] ? components[components.length - 1][0] : {};
+        components && components[components.length - 1] ? components[components.length - 1] : {};
       if (saveButton.customId === 'save') {
         saveButton.setDisabled(true);
       }
@@ -165,7 +165,7 @@ const validate = (type, embed, constants) => {
   }
 };
 
-const getComponents = (msg, { page, Objects }, editing) => {
+const getComponents = async (msg, { page, Objects }, editing) => {
   const components = [];
   const lan = msg.language.commands.embedbuilder.edit;
   const baseLan = msg.language.commands.embedbuilder;
@@ -286,9 +286,9 @@ const getComponents = (msg, { page, Objects }, editing) => {
             .setMaxValues(1)
             .setMinValues(1)
             .setPlaceholder(baseLan.fieldsPlaceholder)
-            .setDisabled(!Objects.embed.fields.length)
+            .setDisabled(!Objects.embed.fields?.length)
             .addOptions(
-              Objects.embed.fields.length
+              Objects.embed.fields?.length
                 ? Objects.embed.fields.map((field, i) => {
                     return {
                       label: field.name === '\u200b' ? msg.language.none : field.name.slice(0, 100),
@@ -305,7 +305,7 @@ const getComponents = (msg, { page, Objects }, editing) => {
             .setCustomId('add-field')
             .setLabel(baseLan.addField)
             .setStyle('SUCCESS')
-            .setDisabled(Objects.embed.fields.length === 25),
+            .setDisabled(Objects.embed.fields?.length === 25),
         ],
       );
       break;
@@ -332,18 +332,67 @@ const getComponents = (msg, { page, Objects }, editing) => {
           new Discord.MessageButton()
             .setCustomId('save')
             .setLabel(baseLan.save)
-            .setStyle('PRIMARY'),
+            .setStyle('PRIMARY')
+            .setDisabled(
+              !(
+                msg.member.permissions.has(module.exports.insideCommandPerm) && !cantBeSent(Objects)
+              ),
+            ),
           new Discord.MessageButton()
             .setCustomId('send')
             .setLabel(baseLan.send)
             .setStyle('PRIMARY')
-            .setDisabled(msg.command.name !== module.exports.name),
+            .setDisabled(!(msg.command.name === module.exports.name && !cantBeSent(Objects))),
         ],
       );
+      break;
+    }
+    case 4: {
+      const savedEmbeds = await getSavedEmbeds(msg);
+
+      components.push(
+        getMenu(savedEmbeds, baseLan, msg),
+        getArrows(msg, 1, Math.ceil(savedEmbeds.length / 25)),
+        getOtherButtons(baseLan),
+      );
+      break;
     }
   }
 
-  components.push([
+  components.push(getNavigation(msg, page));
+  return components;
+};
+
+const getMenu = (savedEmbeds, baseLan, msg) => {
+  return [
+    new Discord.MessageSelectMenu()
+      .setCustomId('savedEmbedSelection')
+      .setMaxValues(1)
+      .setMinValues(1)
+      .setPlaceholder(baseLan.embedPlaceholder)
+      .setDisabled(
+        !savedEmbeds.length || !msg.member.permissions.has(module.exports.insideCommandPerm),
+      )
+      .addOptions(
+        savedEmbeds.length
+          ? savedEmbeds
+              .map((embed, i) => {
+                if (i < 25) {
+                  return {
+                    label: embed.name.slice(0, 100),
+                    value: `${embed.uniquetimestamp}`,
+                  };
+                }
+                return null;
+              })
+              .filter((r) => !!r)
+          : { label: 'placeholder', value: 'placeholder' },
+      ),
+  ];
+};
+
+const getNavigation = (msg, page) => {
+  return [
     new Discord.MessageButton()
       .setLabel('\u200b')
       .setCustomId('left')
@@ -361,11 +410,42 @@ const getComponents = (msg, { page, Objects }, editing) => {
       .setStyle('SECONDARY')
       .setEmoji(msg.client.constants.emotes.forth)
       .setDisabled(page === 4),
-  ]);
-  return components;
+  ];
 };
 
-const handleBuilderButtons = async ({ msg, answer }, Objects, lan, embed) => {
+const getArrows = (msg, currentPage, maxPage) => {
+  return [
+    new Discord.MessageButton()
+      .setLabel('\u200b')
+      .setCustomId('prev')
+      .setStyle('DANGER')
+      .setEmoji(msg.client.constants.emotes.back)
+      .setDisabled(currentPage === 1),
+    new Discord.MessageButton()
+      .setLabel('\u200b')
+      .setCustomId('next')
+      .setStyle('SUCCESS')
+      .setEmoji(msg.client.constants.emotes.forth)
+      .setDisabled(currentPage === maxPage),
+  ];
+};
+
+const getOtherButtons = (baseLan) => {
+  return [
+    new Discord.MessageButton()
+      .setCustomId('inheritFromSavedEmbed')
+      .setLabel(baseLan.inheritFromSavedEmbed)
+      .setStyle('PRIMARY')
+      .setDisabled(true),
+    new Discord.MessageButton()
+      .setCustomId('deleteSavedEmbed')
+      .setLabel(baseLan.deleteSavedEmbed)
+      .setStyle('PRIMARY')
+      .setDisabled(true),
+  ];
+};
+
+const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, components }) => {
   const reply = async (editing, interaction) => {
     const lang = msg.language.commands.embedbuilder.edit[editing];
 
@@ -386,7 +466,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, embed) => {
       { msg, answer: interaction },
       {
         embeds: [recommendedEmbed],
-        components: getComponents(msg, { page: Objects.page, Objects }, editing),
+        components: await getComponents(msg, { page: Objects.page, Objects }, editing),
       },
       Objects,
     );
@@ -413,11 +493,40 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, embed) => {
           reply(editing, interaction);
           break;
         }
+        case 'deleteSavedEmbed': {
+          buttonsCollector.stop();
+          messageCollector.stop();
+
+          resolve(await handleDelete({ msg, answer: interaction }, Objects, { embed, components }));
+          break;
+        }
+        case 'inheritFromSavedEmbed': {
+          buttonsCollector.stop();
+          messageCollector.stop();
+
+          resolve(
+            await handleInherit({ msg, answer: interaction }, Objects, { embed, components }),
+          );
+          break;
+        }
+        case 'next': {
+          await handlePage({ msg, answer: interaction }, Objects, { embed, components }, true);
+          break;
+        }
+        case 'prev': {
+          await handlePage({ msg, answer: interaction }, Objects, { embed, components }, false);
+          break;
+        }
+        case 'savedEmbedSelection': {
+          await handleEmbedSelection({ msg, answer: interaction }, Objects, { embed, components });
+          break;
+        }
         case 'cross': {
           buttonsCollector.stop();
           messageCollector.stop();
 
           resolve(null);
+
           postCode(Objects, msg, interaction);
           break;
         }
@@ -451,6 +560,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, embed) => {
           const inheritCodeEmbed = new Discord.MessageEmbed().setDescription(
             lan.inheritCodeDescription,
           );
+
           await replier(
             { msg, answer: interaction },
             { embeds: [inheritCodeEmbed], components: [] },
@@ -503,8 +613,8 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, embed) => {
         case 'save': {
           messageCollector.stop();
           buttonsCollector.stop();
-          const emb = await handleSave(msg, interaction, Objects);
-          resolve(emb);
+
+          resolve(await handleSave(msg, interaction, Objects));
           break;
         }
         case 'viewRawOtherMsg': {
@@ -523,7 +633,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, embed) => {
             { msg, answer: interaction },
             {
               embeds: [embed],
-              components: getComponents(msg, { page: 2, Objects }),
+              components: await getComponents(msg, { page: 2, Objects }),
             },
             Objects,
           );
@@ -542,6 +652,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, embed) => {
 
     messageCollector.on('collect', async (message) => {
       if (message.author.id !== msg.author.id) return;
+      if (!editing) return;
 
       const limits = msg.client.constants.customembeds.limits.fields;
 
@@ -810,31 +921,35 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, embed) => {
           break;
         }
         case 'timestamp': {
-          let isTimestamp = false;
-          try {
-            // eslint-disable-next-line no-new
-            new Date(Number(message.content));
-            isTimestamp = true;
-          } catch (err) {
-            isTimestamp = false;
+          if (message.content !== msg.language.now) {
+            let isTimestamp = false;
+            try {
+              // eslint-disable-next-line no-new
+              new Date(Number(message.content));
+              isTimestamp = true;
+            } catch (err) {
+              isTimestamp = false;
+            }
+
+            let e;
+            try {
+              new Discord.MessageEmbed().setTimestamp(message.content);
+            } catch (err) {
+              e = err;
+            }
+
+            if (e || !isTimestamp) {
+              let valid;
+              if (!isTimestamp) valid = 'noTimestamp';
+
+              await errorVal(msg, lan, valid, Objects, e, answer);
+              break;
+            }
+
+            Objects.embed.setTimestamp(Number(`${message.content}000`));
+          } else {
+            Objects.embed.setTimestamp();
           }
-
-          let e;
-          try {
-            new Discord.MessageEmbed().setTimestamp(message.content);
-          } catch (err) {
-            e = err;
-          }
-
-          if (e || !isTimestamp) {
-            let valid;
-            if (!isTimestamp) valid = 'noTimestamp';
-
-            await errorVal(msg, lan, valid, Objects, e, answer);
-            break;
-          }
-
-          Objects.embed.setTimestamp(Number(`${message.content}000`));
           break;
         }
         case 'footer-text': {
@@ -899,13 +1014,15 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, embed) => {
 
       await replier(
         { msg, answer },
-        { embeds: [embed], components: getComponents(msg, { page: Objects.page, Objects }) },
+        { embeds: [embed], components: await getComponents(msg, { page: Objects.page, Objects }) },
         Objects,
       );
     });
     messageCollector.on('end', (collected, reason) => {
       if (reason !== 'time') buttonsCollector.stop();
-      else postCode(Objects, msg, answer);
+      else {
+        postCode(Objects, msg, answer);
+      }
     });
   });
 };
@@ -926,7 +1043,7 @@ const postCode = (Objects, msg, answer, embed, noRemove) => {
 
   const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
 
-  const rawCode = Objects.embed.toJSON();
+  const rawCode = new Discord.MessageEmbed(Objects.embed).toJSON();
   if (rawCode.length > 4000) {
     const attachment = msg.client.ch.txtFileWriter([rawCode]);
 
@@ -971,7 +1088,8 @@ const postCode = (Objects, msg, answer, embed, noRemove) => {
 
     buttonsCollector.on('end', async (collected, reason) => {
       if (reason === 'time') {
-        resolve(await postCode(Objects, msg, answer));
+        resolve(null);
+        await postCode(Objects, msg, answer);
       }
     });
   });
@@ -990,6 +1108,7 @@ const handleSave = async (msg, answer, Objects) => {
     iconURL: msg.client.constants.commands.embedbuilder.author,
     url: msg.client.constants.standard.invite,
   });
+
   await replier({ msg, answer }, { embeds: [embed], components: [save] }, Objects);
 
   return new Promise((resolve) => {
@@ -1054,6 +1173,7 @@ const handleSave = async (msg, answer, Objects) => {
       buttonsCollector.stop();
 
       const emb = Objects.embed;
+
       msg.client.ch.query(
         `
       INSERT INTO customembeds 
@@ -1065,7 +1185,7 @@ const handleSave = async (msg, answer, Objects) => {
           emb.title,
           emb.url,
           emb.author?.name,
-          emb.author?.icon_url,
+          emb.author?.iconURL,
           emb.author?.url,
           emb.description,
           emb.thumbnail?.url,
@@ -1075,7 +1195,7 @@ const handleSave = async (msg, answer, Objects) => {
           emb.image?.url,
           emb.timestamp,
           emb.footer?.text,
-          emb.footer?.icon_url,
+          emb.footer?.iconURL,
           Date.now(),
           msg.guild.id,
           name,
@@ -1087,6 +1207,7 @@ const handleSave = async (msg, answer, Objects) => {
     buttonsCollector.on('end', (collected, reason) => {
       if (reason === 'time') {
         resolve(null);
+
         postCode(Objects, msg);
       }
     });
@@ -1130,7 +1251,7 @@ const handleSend = async (msg, answer, Objects) => {
       })
       .setDescription(
         `${msg.language.commands.embedbuilder.sendWhere}\n\n**${msg.language.selected}**:\n${
-          options.selected.lenght
+          options.selected.length
             ? options.selected.map((c) => `<#${c}>`).join(', ')
             : msg.language.none
         }`,
@@ -1306,7 +1427,7 @@ const handleOtherMsgRaw = async (msg, answer, Objects) => {
       if (interaction.customId === 'back') {
         messageCollector.stop();
         buttonsCollector.stop();
-        resolve(await module.exports.build({ msg, answer }, Objects, 3));
+        resolve(await module.exports.builder(msg, interaction, Objects, 3));
       }
     });
 
@@ -1579,4 +1700,237 @@ const fieldSelect = async (msg, answer, Objects) => {
       );
     });
   });
+};
+
+const getSavedEmbeds = async (msg) => {
+  const res = await msg.client.ch.query(
+    `SELECT * FROM customembeds WHERE guildid = $1 ORDER BY uniquetimestamp DESC;`,
+    [msg.guild.id],
+  );
+  if (res && res.rowCount) return res.rows;
+  return [];
+};
+
+const handleEmbedSelection = async ({ msg, answer }, Objects, { embed, components }) => {
+  const embeds = await getSavedEmbeds(msg);
+
+  const Options = {
+    options: embeds.map((e) => {
+      return { name: e.name.slice(0, 100), value: e.uniquetimestamp };
+    }),
+  };
+  Options.page = Math.ceil(embeds.findIndex((e) => e.uniquetimestamp === answer.values[0]) / 25);
+  if (Options.page === 0) Options.page = 1;
+
+  Options.take = Options.options
+    .map((option, i) =>
+      i < 25 * Options.page && i > 25 * Options.page - 26
+        ? { name: option.name, value: option.value }
+        : null,
+    )
+    .filter((r) => !!r);
+
+  Options.take.forEach((option, i) => {
+    if (`${option.value}` === `${answer.values[0]}`) Options.take[i].default = true;
+    else Options.take[i].default = false;
+  });
+
+  const newMenu = new Discord.MessageSelectMenu()
+    .setCustomId('savedEmbedSelection')
+    .setMaxValues(1)
+    .setMinValues(1)
+    .setPlaceholder(msg.language.commands.embedbuilder.embedPlaceholder)
+    .setDisabled(
+      !Options.take.length || !msg.member.permissions.has(module.exports.insideCommandPerm),
+    )
+    .addOptions(
+      Options.take.length
+        ? Options.take.map((e) => {
+            return {
+              label: e.name.slice(0, 100),
+              value: `${e.value}`,
+              default: e.default,
+            };
+          })
+        : { label: 'placeholder', value: 'placeholder' },
+    );
+
+  const enableButtons = (customId, i, j) => {
+    switch (customId) {
+      default: {
+        break;
+      }
+      case newMenu.customId: {
+        if (typeof j === 'number') {
+          components[i][j] = newMenu;
+        } else {
+          components[i] = newMenu;
+        }
+        break;
+      }
+      case 'inheritFromSavedEmbed': {
+        if (typeof j === 'number') {
+          components[i][j] = components[i][j].setDisabled(false);
+        } else {
+          components[i] = components[i].setDisabled(false);
+        }
+        break;
+      }
+      case 'deleteSavedEmbed': {
+        if (typeof j === 'number') {
+          components[i][j] = components[i][j].setDisabled(
+            !msg.member.permissions.has(module.exports.insideCommandPerm),
+          );
+        } else {
+          components[i] = components[i].setDisabled(
+            !msg.member.permissions.has(module.exports.insideCommandPerm),
+          );
+        }
+      }
+    }
+  };
+
+  components.forEach((c, i) => {
+    if (Array.isArray(c)) {
+      c.forEach((o, j) => {
+        enableButtons(o.customId, i, j);
+      });
+    } else if (c.customId === newMenu.customId) {
+      enableButtons(c.customId, i);
+    }
+  });
+
+  await replier({ msg, answer }, { embeds: [embed], components }, Objects);
+};
+
+const handleInherit = async ({ msg, answer }) => {
+  const menu = answer.message.components[0].components.find((c) => {
+    if (Array.isArray(c)) {
+      return c
+        .map((o) => {
+          if (o.customId === 'savedEmbedSelection') return o;
+          return null;
+        })
+        .filter((o) => !!o);
+    }
+    if (c.customId === 'savedEmbedSelection') return c;
+    return null;
+  });
+
+  const selectedValue = menu.options.find((o) => o.default === true);
+  const embeds = await getSavedEmbeds(msg);
+  const selectedEmbed = embeds.find((e) => e.uniquetimestamp === selectedValue.value);
+  const embed = msg.client.ch.getDiscordEmbed(selectedEmbed);
+
+  return module.exports.builder(msg, answer, embed, 4);
+};
+
+const handleDelete = async ({ msg, answer }) => {
+  const menu = answer.message.components[0].components.find((c) => {
+    if (Array.isArray(c)) {
+      return c
+        .map((o) => {
+          if (o.customId === 'savedEmbedSelection') return o;
+          return null;
+        })
+        .filter((o) => !!o);
+    }
+    if (c.customId === 'savedEmbedSelection') return c;
+    return null;
+  });
+
+  const selectedValue = menu.options.find((o) => o.default === true);
+
+  await msg.client.ch.query(
+    `DELETE FROM customembeds WHERE guildid = $1 AND uniquetimestamp = $2;`,
+    [msg.guild.id, selectedValue.value],
+  );
+
+  return module.exports.builder(msg, answer, null, 4);
+};
+
+const handlePage = async ({ msg, answer }, Objects, { embed }, increasePage) => {
+  const embeds = await getSavedEmbeds(msg);
+
+  const menu = answer.message.components[0].components.find((c) => {
+    if (Array.isArray(c)) {
+      return c
+        .map((o) => {
+          if (o.customId === 'savedEmbedSelection') return o;
+          return null;
+        })
+        .filter((o) => !!o);
+    }
+    if (c.customId === 'savedEmbedSelection') return c;
+    return null;
+  });
+
+  const Options = {
+    options: embeds.map((e) => {
+      return { name: e.name.slice(0, 100), value: e.uniquetimestamp };
+    }),
+  };
+  Options.page = Math.ceil(
+    embeds.findIndex((e) => e.uniquetimestamp === menu.options[10].value) / 25,
+  );
+
+  if (Options.page === 0) Options.page = 1;
+  if (increasePage) Options.page += 1;
+  else Options.page -= 1;
+
+  Options.take = Options.options
+    .map((option, i) =>
+      i < 25 * Options.page && i > 25 * Options.page - 26
+        ? { name: option.name, value: option.value }
+        : null,
+    )
+    .filter((r) => !!r);
+
+  const newMenu = new Discord.MessageSelectMenu()
+    .setCustomId('savedEmbedSelection')
+    .setMaxValues(1)
+    .setMinValues(1)
+    .setPlaceholder(msg.language.commands.embedbuilder.embedPlaceholder)
+    .setDisabled(
+      !Options.take.length || !msg.member.permissions.has(module.exports.insideCommandPerm),
+    )
+    .addOptions(
+      Options.take?.length
+        ? Options.take.map((e) => {
+            return {
+              label: e.name.slice(0, 100),
+              value: `${e.value}`,
+              default: e.default,
+            };
+          })
+        : { label: 'placeholder', value: 'placeholder' },
+    );
+
+  const baseLan = msg.language.commands.embedbuilder;
+
+  await replier(
+    { msg, answer },
+    {
+      embeds: [embed],
+      components: [
+        [newMenu],
+        getArrows(msg, Options.page, Math.ceil(embeds.length / 25)),
+        getOtherButtons(baseLan),
+        getNavigation(msg, 4),
+      ],
+    },
+    Objects,
+  );
+};
+
+const cantBeSent = (Objects) => {
+  return (
+    !Objects.embed.title &&
+    (!Objects.embed.author || !Objects.embed.author.name) &&
+    !Objects.embed.description &&
+    (!Objects.embed.thumbnail || !Objects.embed.thumbnail.url) &&
+    !Objects.embed.fields?.length &&
+    (!Objects.embed.image || !Objects.embed.image.url) &&
+    (!Objects.embed.footer || !Objects.embed.footer.text)
+  );
 };

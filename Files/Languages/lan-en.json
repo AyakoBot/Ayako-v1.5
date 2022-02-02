@@ -1028,6 +1028,7 @@
       "limit": "**{{name}}** can not exceed **{{limit}} Characters**",
       "placeholder": "This will be your Embed",
       "fieldsPlaceholder": "Select Fields you want to edit",
+      "embedPlaceholder": "Select an Embed",
       "otherPlaceholder": "Select anything (except Fields) you want to edit",
       "addField": "Add Field",
       "viewRaw": "View Raw Embed Code",
@@ -1054,6 +1055,8 @@
       "fieldValue": "Value",
       "fieldName": "Name",
       "fieldInline": "Inline",
+      "inheritFromSavedEmbed": "Inherit Code from Saved Embed",
+      "deleteSavedEmbed": "Delete Saved Embed",
       "edit": {
         "color": {
           "name": "Color",
@@ -3045,5 +3048,6 @@
   "Ban": "Ban",
   "Example": "Example",
   "Examples": "Examples",
-  "vanityUrl": "Vanity URL"
+  "vanityUrl": "Vanity URL",
+  "now": "now"
 }
