@@ -1016,6 +1016,13 @@
     }
   },
   "commands": {
+    "stp": {
+      "description": "Test what kind of stuff you can invoke using {{msg}}",
+      "usage": ["stp {{msg.[children]}}"],
+      "category": "Utility",
+      "button": "Click here to view all invokable Options",
+      "warn": "You can only invoke children marked as \"Properties\""
+    },
     "embedbuilder": {
       "author": "Ayako Embed Builder",
       "warns": {
@@ -2878,6 +2885,10 @@
       }
     },
     "help": {}
+  },
+  "replaceOptions": {
+    "msg": "Invoke any Object Children from here.\n([Click here to find out what you can access](https://discord.js.org/#/docs/discord.js/stable/class/Message))\nYou can test this by using the `h!stp` Command",
+    "member": "The Member that initiated this Message"
   },
   "featuresName": "Features",
   "none": "None",
