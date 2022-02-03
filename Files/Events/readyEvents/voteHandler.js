@@ -169,25 +169,23 @@ const announcement = async (voter, usedRole) => {
     'CMmKtjyPv1GHxUCbd3jLC2VWyzc1FkhRPk0tZMkdIY-tWjZhvasmtYuVu6WqPFkqbgt1',
   );
 
-  webhook
-    .send({
-      content: `Thanks ${voter} for [voting for Ayako](<https://top.gg/bot/650691698409734151/vote> "Click me to Vote too!")!${
-        usedRole ? `\nYou have been given ${usedRole} as gift for the next 12 Hours~` : ''
-      }`,
-      allowedMentions: {
-        users: [],
-        roles: [],
-      },
-      components: client.ch.buttonRower([
-        new Discord.MessageButton()
-          .setURL('https://top.gg/bot/650691698409734151/vote')
-          .setStyle('LINK')
-          .setLabel('Vote Here'),
-      ]),
-    })
-    .catch((e) => {
-      console.log(e);
-    });
+  webhook.send({
+    content: `Thanks ${
+      voter.tag
+    } for [voting for Ayako](<https://top.gg/bot/650691698409734151/vote> "Click me to Vote too!")!${
+      usedRole ? `\nYou have been given ${usedRole} as gift for the next 12 Hours~` : ''
+    }`,
+    allowedMentions: {
+      users: [],
+      roles: [],
+    },
+    components: client.ch.buttonRower([
+      new Discord.MessageButton()
+        .setURL('https://top.gg/bot/650691698409734151/vote')
+        .setStyle('LINK')
+        .setLabel('Vote Here'),
+    ]),
+  });
 };
 
 const reminder = async (voter) => {
