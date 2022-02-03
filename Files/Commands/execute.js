@@ -12,13 +12,5 @@ module.exports = {
   perm: 0n,
   dm: true,
   takesFirstArg: false,
-  async execute(msg) {
-    const options = [['msg', 'Message and every Child of the Message Option']];
-
-    const { embed, answer } = await msg.client.ch.embedBuilder(msg, null, options, null, 4);
-    const fin = msg.client.ch.dynamicToEmbed(embed, [
-      ['msg', new Discord.Message(msg.client, msg)],
-    ]);
-    answer.update({ embeds: [fin] });
-  },
+  async execute(msg) {},
 };
