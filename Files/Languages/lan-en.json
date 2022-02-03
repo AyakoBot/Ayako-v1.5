@@ -1057,6 +1057,8 @@
       "fieldInline": "Inline",
       "inheritFromSavedEmbed": "Inherit Code from Saved Embed",
       "deleteSavedEmbed": "Delete Saved Embed",
+      "replacedOptions": "Dynamically Replaced Options",
+      "replacedOptionsDescription": "Argument `{{{{option}}}}` will be replaced with {{value}}",
       "edit": {
         "color": {
           "name": "Color",

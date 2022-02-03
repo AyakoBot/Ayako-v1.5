@@ -26,7 +26,7 @@ module.exports = {
       }
     }
   },
-  async builder(msg, answer, existingEmbed, page) {
+  async builder(msg, answer, existingEmbed, page, options) {
     if (typeof page !== 'number') page = 1;
 
     const lan = msg.language.commands.embedbuilder;
@@ -34,8 +34,9 @@ module.exports = {
     const Objects = {
       edit: 'menu',
       category: null,
-      embed: new Discord.MessageEmbed(existingEmbed) || new Discord.MessageEmbed(),
+      embed: existingEmbed ? new Discord.MessageEmbed(existingEmbed) : new Discord.MessageEmbed(),
       page: page || 1,
+      options,
     };
 
     const embed = new Discord.MessageEmbed()
@@ -46,6 +47,18 @@ module.exports = {
       })
       .setDescription(lan.chooseTheEdit)
       .setColor(msg.client.ch.colorSelector(msg.guild.me));
+
+    if (Objects.options) {
+      embed.addField(
+        msg.language.commands.embedbuilder.replacedOptions,
+        `${Objects.options.map((o) =>
+          msg.client.ch.stp(msg.language.commands.embedbuilder.replacedOptionsDescription, {
+            option: o[0],
+            value: o[1],
+          }),
+        )}`,
+      );
+    }
 
     const components = await getComponents(msg, { page, Objects });
 
@@ -458,6 +471,17 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
       .setTitle(lang.name)
       .setDescription(lang.answers);
 
+    if (Objects.options) {
+      recommendedEmbed.addField(
+        msg.language.commands.embedbuilder.replacedOptions,
+        `${Objects.options.map((o) =>
+          msg.client.ch.stp(msg.language.commands.embedbuilder.replacedOptionsDescription, {
+            option: o[0],
+            value: o[1],
+          }),
+        )}`,
+      );
+    }
     if (lang.recommended) {
       recommendedEmbed.addField('\u200b', lang.recommended);
     }
@@ -1108,6 +1132,17 @@ const handleSave = async (msg, answer, Objects) => {
     iconURL: msg.client.constants.commands.embedbuilder.author,
     url: msg.client.constants.standard.invite,
   });
+  if (Objects.options) {
+    embed.addField(
+      msg.language.commands.embedbuilder.replacedOptions,
+      `${Objects.options.map((o) =>
+        msg.client.ch.stp(msg.language.commands.embedbuilder.replacedOptionsDescription, {
+          option: o[0],
+          value: o[1],
+        }),
+      )}`,
+    );
+  }
 
   await replier({ msg, answer }, { embeds: [embed], components: [save] }, Objects);
 
