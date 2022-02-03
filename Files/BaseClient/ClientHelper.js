@@ -941,4 +941,78 @@ module.exports = {
       },
     });
   },
+  /**
+   * Makes the Embed Builder easily globally Available
+   * @constructor
+   * @param {object} msg - The Message that initiated this
+   * @param {object} answer - An interaction if any
+   * @param {array} options - Array of options with arg 1 being the option name and arg 2 the language for the option name
+   * @param {object} embed - An existing embed which can be edited
+   * @param {number} page - An Page to instantly navigate to upon calling this
+   */
+  embedBuilder: (msg, answer, options, embed, page) => {
+    return msg.client.commands.get('embedbuilder').builder(msg, answer, embed, page, options);
+  },
+  /**
+   * Converts a DB embed and its Dynamic Options to a Discord Embed
+   * @constructor
+   * @param {object} embed - The Embed to replace from
+   * @param {array} options - Array of options with arg 1 being the option accessor and arg 2 the option value
+   */
+  dynamicToEmbed: (rawEmbed, options) => {
+    const embed = new Discord.MessageEmbed();
+    const mod = module.exports.stp;
+
+    const convert = (option) => {
+      return JSON.parse(`{"${option[0]}": ${JSON.stringify(option[1])}}`);
+    };
+
+    options.forEach((option) => {
+      embed.color = rawEmbed.color ? mod(rawEmbed.color, convert(option)) : null;
+      embed.title = rawEmbed.title ? mod(rawEmbed.title, convert(option)) : null;
+      embed.url = rawEmbed.url ? mod(rawEmbed.url, convert(option)) : null;
+
+      if (rawEmbed.author) {
+        embed.author = {
+          name: rawEmbed.author.name ? mod(rawEmbed.author.name, convert(option)) : null,
+          iconURL: rawEmbed.author.iconURL ? mod(rawEmbed.author.iconURL, convert(option)) : null,
+          url: rawEmbed.author.url ? mod(rawEmbed.author.url, convert(option)) : null,
+        };
+      }
+
+      embed.description = rawEmbed.description ? mod(rawEmbed.description, convert(option)) : null;
+      console.log(embed.description, rawEmbed.description);
+
+      embed.thumbnail =
+        rawEmbed.thumbnail && rawEmbed.thumbnail.url
+          ? mod(rawEmbed.thumbnail.url, convert(option))
+          : null;
+
+      embed.image =
+        rawEmbed.image && rawEmbed.image.url ? mod(rawEmbed.image.url, convert(option)) : null;
+
+      embed.timestamp = rawEmbed.timestamp
+        ? Number(mod(`${rawEmbed.timestamp}`, convert(option)))
+        : null;
+
+      if (rawEmbed.footer) {
+        embed.footer = {
+          name: rawEmbed.footer.text ? mod(rawEmbed.footer.text, convert(option)) : null,
+          iconURL: rawEmbed.footer.iconURL ? mod(rawEmbed.footer.iconURL, convert(option)) : null,
+        };
+      }
+
+      if (rawEmbed.fields && rawEmbed.fields.length) {
+        rawEmbed.fields.forEach(([name, value, inline]) => {
+          embed.fields.push({
+            name: name ? mod(name, convert(option)) : null,
+            value: value ? mod(value, convert(option)) : null,
+            inline,
+          });
+        });
+      }
+    });
+
+    return embed;
+  },
 };
