@@ -23,18 +23,18 @@ module.exports = {
   childOf: 'leveling',
   category: ['automation'],
   async displayEmbed(msg, r) {
-    let levelupmode;
+    let lvlupmode;
     switch (r.lvlupmode) {
       default: {
-        levelupmode = msg.lan.silent;
+        lvlupmode = msg.lan.silent;
         break;
       }
       case '1': {
-        levelupmode = msg.client.ch.stp(msg.lan.messages);
+        lvlupmode = msg.client.ch.stp(msg.lan.messages);
         break;
       }
       case '2': {
-        levelupmode = msg.client.ch.stp(msg.lan.reactions);
+        lvlupmode = msg.client.ch.stp(msg.lan.reactions);
         break;
       }
     }
@@ -77,20 +77,27 @@ module.exports = {
           inline: false,
         },
         {
-          name: `${msg.lan.levelupmode}`,
-          value: `${levelupmode}`,
+          name: `${msg.lan.lvlupmode}`,
+          value: `${lvlupmode}`,
           inline: true,
         },
       );
 
-    switch (r.levelupmode) {
+    switch (r.lvlupmode) {
       default: {
         break;
       }
       case '1': {
         const customEmbed = await embedName(msg, r);
 
-        embed.addField(msg.lan.embed, customEmbed ? customEmbed.name : msg.language.default);
+        embed.addField(msg.lan.embed, customEmbed ? customEmbed.name : msg.language.default, true);
+        embed.addFields({
+          name: msg.lan.lvlupdeltimeout,
+          value: Number(r.lvlupdeltimeout)
+            ? `\`${r.lvlupdeltimeout} ${msg.language.time.seconds}\``
+            : msg.language.none,
+          inline: true,
+        });
         embed.addFields({
           name: `${msg.lan.lvlupchannels}`,
           value: `${
@@ -98,17 +105,26 @@ module.exports = {
               ? r.lvlupchannels.map((id) => ` <#${id}>`)
               : msg.language.whereTriggered
           }`,
-          inline: true,
+          inline: false,
         });
+
         break;
       }
       case '2': {
         embed.addField(
           msg.lan.reactions,
           r.lvlupemotes && r.lvlupemotes.length
-            ? r.lvlupemotes.map((e) => e).join('')
+            ? r.lvlupemotes
+                .map((e) => {
+                  const emote = msg.client.emojis.cache.get(e);
+                  if (emote) return `${emote}`;
+                  return null;
+                })
+                .filter((e) => !!e)
+                .join('')
             : msg.client.constants.standard.levelupemotes.map((e) => e).join(''),
         );
+        break;
       }
     }
 
@@ -119,7 +135,7 @@ module.exports = {
         inline: false,
       },
       {
-        name: msg.lan.blchannels,
+        name: `${msg.lan.blchannels}`,
         value: `${
           r.blchannels && r.blchannels.length
             ? r.blchannels.map((id) => ` <#${id}>`)
@@ -128,14 +144,14 @@ module.exports = {
         inline: false,
       },
       {
-        name: msg.lan.blroles,
+        name: `${msg.lan.blroles}`,
         value: `${
           r.blroles && r.blroles.length ? r.blroles.map((id) => ` <@&${id}>`) : msg.language.none
         }`,
         inline: false,
       },
       {
-        name: msg.lan.blusers,
+        name: `${msg.lan.blusers}`,
         value: `${
           r.blusers && r.blusers.length ? r.blusers.map((id) => ` <@${id}>`) : msg.language.none
         }`,
@@ -147,7 +163,7 @@ module.exports = {
         inline: false,
       },
       {
-        name: msg.lan.wlchannels,
+        name: `${msg.lan.wlchannels}`,
         value: `${
           r.wlchannels && r.wlchannels.length
             ? r.wlchannels.map((id) => ` <#${id}>`)
@@ -156,14 +172,14 @@ module.exports = {
         inline: false,
       },
       {
-        name: msg.lan.wlroles,
+        name: `${msg.lan.wlroles}`,
         value: `${
           r.wlroles && r.wlroles.length ? r.wlroles.map((id) => ` <@&${id}>`) : msg.language.none
         }`,
         inline: false,
       },
       {
-        name: msg.lan.wlusers,
+        name: `${msg.lan.wlusers}`,
         value: `${
           r.wlusers && r.wlusers.length ? r.wlusers.map((id) => ` <@${id}>`) : msg.language.none
         }`,
@@ -173,61 +189,113 @@ module.exports = {
     return embed;
   },
   buttons(msg, r) {
-    const active = new Discord.MessageButton()
-      .setCustomId(msg.lan.edit.active.name)
-      .setLabel(msg.lanSettings.active)
-      .setStyle(r.active ? 'SUCCESS' : 'DANGER');
+    const components = [];
 
-    const rolemode = new Discord.MessageButton()
-      .setCustomId(msg.lan.edit.rolemode.name)
-      .setLabel(msg.lan.rolemode)
-      .setStyle(r.rolemode ? 'SECONDARY' : 'PRIMARY');
-    const xppermsg = new Discord.MessageButton()
-      .setCustomId(msg.lan.edit.xppermsg.name)
-      .setLabel(msg.lan.xppermsg.replace(/\*/g, ''))
-      .setStyle('SECONDARY');
-    const xpmultiplier = new Discord.MessageButton()
-      .setCustomId(msg.lan.edit.xpmultiplier.name)
-      .setLabel(msg.lan.xpmultiplier.replace(/\*/g, ''))
-      .setStyle('SECONDARY');
+    components.push([
+      new Discord.MessageButton()
+        .setCustomId(msg.lan.edit.active.name)
+        .setLabel(msg.lanSettings.active)
+        .setStyle(r.active ? 'SUCCESS' : 'DANGER'),
+    ]);
 
-    const blchannels = new Discord.MessageButton()
-      .setCustomId(msg.lan.edit.blchannels.name)
-      .setLabel(msg.lan.blchannels)
-      .setStyle('PRIMARY');
-    const blroles = new Discord.MessageButton()
-      .setCustomId(msg.lan.edit.blroles.name)
-      .setLabel(msg.lan.blroles)
-      .setStyle('PRIMARY');
-    const blusers = new Discord.MessageButton()
-      .setCustomId(msg.lan.edit.blusers.name)
-      .setLabel(msg.lan.blusers)
-      .setStyle('PRIMARY');
+    components.push([
+      new Discord.MessageButton()
+        .setCustomId(msg.lan.edit.rolemode.name)
+        .setLabel(msg.lan.rolemode)
+        .setStyle(r.rolemode ? 'SECONDARY' : 'PRIMARY'),
+      new Discord.MessageButton()
+        .setCustomId(msg.lan.edit.xppermsg.name)
+        .setLabel(msg.lan.xppermsg.replace(/\*/g, ''))
+        .setStyle('SECONDARY'),
+      new Discord.MessageButton()
+        .setCustomId(msg.lan.edit.xpmultiplier.name)
+        .setLabel(msg.lan.xpmultiplier.replace(/\*/g, ''))
+        .setStyle('SECONDARY'),
+    ]);
 
-    const wlchannels = new Discord.MessageButton()
-      .setCustomId(msg.lan.edit.wlchannels.name)
-      .setLabel(msg.lan.wlchannels)
-      .setStyle('PRIMARY');
-    const wlroles = new Discord.MessageButton()
-      .setCustomId(msg.lan.edit.wlroles.name)
-      .setLabel(msg.lan.wlroles)
-      .setStyle('PRIMARY');
-    const wlusers = new Discord.MessageButton()
-      .setCustomId(msg.lan.edit.wlusers.name)
-      .setLabel(msg.lan.wlusers)
-      .setStyle('PRIMARY');
+    switch (r.lvlupmode) {
+      default: {
+        components.push([
+          new Discord.MessageButton()
+            .setCustomId(msg.lan.edit.lvlupmode.name)
+            .setLabel(msg.lan.lvlupmode)
+            .setStyle('PRIMARY'),
+        ]);
+        break;
+      }
+      case '1': {
+        components.push([
+          new Discord.MessageButton()
+            .setCustomId(msg.lan.edit.lvlupmode.name)
+            .setLabel(msg.lan.lvlupmode)
+            .setStyle('PRIMARY'),
+          new Discord.MessageButton()
+            .setCustomId(msg.lan.edit.lvlupchannels.name)
+            .setLabel(msg.lan.lvlupchannels)
+            .setStyle('PRIMARY'),
+          new Discord.MessageButton()
+            .setCustomId(msg.lan.edit.embed.name)
+            .setLabel(msg.lan.embed)
+            .setStyle('PRIMARY'),
+          new Discord.MessageButton()
+            .setCustomId(msg.lan.edit.lvlupdeltimeout.name)
+            .setLabel(msg.lan.lvlupdeltimeout)
+            .setStyle('PRIMARY'),
+        ]);
 
-    return [
-      [active],
-      [rolemode, xppermsg, xpmultiplier],
-      [blchannels, blroles, blusers],
-      [wlchannels, wlroles, wlusers],
-    ];
+        break;
+      }
+      case '2': {
+        components.push([
+          new Discord.MessageButton()
+            .setCustomId(msg.lan.edit.lvlupmode.name)
+            .setLabel(msg.lan.lvlupmode)
+            .setStyle('PRIMARY'),
+          new Discord.MessageButton()
+            .setCustomId(msg.lan.edit.lvlupemotes.name)
+            .setLabel(msg.lan.lvlupemotes)
+            .setStyle('PRIMARY'),
+        ]);
+        break;
+      }
+    }
+
+    components.push([
+      new Discord.MessageButton()
+        .setCustomId(msg.lan.edit.blchannels.name)
+        .setLabel(msg.lan.blchannels)
+        .setStyle('PRIMARY'),
+      new Discord.MessageButton()
+        .setCustomId(msg.lan.edit.blroles.name)
+        .setLabel(msg.lan.blroles)
+        .setStyle('PRIMARY'),
+      new Discord.MessageButton()
+        .setCustomId(msg.lan.edit.blusers.name)
+        .setLabel(msg.lan.blusers)
+        .setStyle('PRIMARY'),
+    ]);
+
+    components.push([
+      new Discord.MessageButton()
+        .setCustomId(msg.lan.edit.wlchannels.name)
+        .setLabel(msg.lan.wlchannels)
+        .setStyle('PRIMARY'),
+      new Discord.MessageButton()
+        .setCustomId(msg.lan.edit.wlroles.name)
+        .setLabel(msg.lan.wlroles)
+        .setStyle('PRIMARY'),
+      new Discord.MessageButton()
+        .setCustomId(msg.lan.edit.wlusers.name)
+        .setLabel(msg.lan.wlusers)
+        .setStyle('PRIMARY'),
+    ]);
+
+    return components;
   },
 };
 
 const embedName = async (msg, r) => {
-  const res = await msg.client.db.query(
+  const res = await msg.client.ch.query(
     `SELECT * FROM customembeds WHERE uniquetimestamp = $1 AND guildid = $2;`,
     [r.embed, msg.guild.id],
   );

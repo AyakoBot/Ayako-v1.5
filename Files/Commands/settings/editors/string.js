@@ -21,13 +21,8 @@ module.exports = {
       .setLabel(msg.language.done)
       .setDisabled(doneDisabled)
       .setStyle('PRIMARY');
-    const back = new Discord.MessageButton()
-      .setCustomId('back')
-      .setLabel(msg.language.back)
-      .setEmoji(msg.client.constants.emotes.back)
-      .setStyle('DANGER');
 
-    return [[back, done]];
+    return [[done]];
   },
   messageHandler(msgData, insertedValues, required) {
     const { msg, message } = msgData;

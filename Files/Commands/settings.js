@@ -757,7 +757,7 @@ const singleRowEdit = async (msgData, resData, embed, comesFromMMR) => {
   if (!embed) {
     if (!row) return setup(msg, answer);
     if (typeof msg.file.displayEmbed === 'function') {
-      const returned = msg.file.displayEmbed(msg, row);
+      const returned = await msg.file.displayEmbed(msg, row);
       if (Array.isArray(returned)) {
         [embed, embed2] = returned;
       } else {
@@ -862,12 +862,12 @@ const editorInteractionHandler = async (msgData, editorData, row, res, comesFrom
 
   const passObject =
     typeof editor.dataPreparation === 'function'
-      ? editor.dataPreparation(msg, { insertedValues, required, Objects }, row, res)
+      ? await editor.dataPreparation(msg, { insertedValues, required, Objects }, row, res)
       : { Objects };
 
   const selected =
     typeof editor.getSelected === 'function'
-      ? editor.getSelected(msg, insertedValues, required, passObject)
+      ? await editor.getSelected(msg, insertedValues, required, passObject)
       : 'noSelect';
 
   const embed = new Discord.MessageEmbed();
@@ -875,9 +875,9 @@ const editorInteractionHandler = async (msgData, editorData, row, res, comesFrom
     embed
       .addField(
         '\u200b',
-        `\u200b${languageOfKey.recommended ? `${languageOfKey.recommended}\n` : ''}${
-          languageOfKey.desc ? languageOfKey.desc : ''
-        }`,
+        `\u200b**${msg.lanSettings.valid}**:\n${languageOfKey.answers}${
+          languageOfKey.recommended ? `\n\n${languageOfKey.recommended}\n` : ''
+        }${languageOfKey.desc ? languageOfKey.desc : ''}`,
       )
       .setTitle(msg.client.ch.stp(languageOfKey.name, { row: row || '--' }));
   } else {
@@ -966,6 +966,16 @@ const changing = async (msgData, editData, resData) => {
         : settings[usedKey].required,
   };
 
+  if (!editor) {
+    throw new Error(
+      `Cannot find Editor for key "${usedKey}" in \n${JSON.stringify(
+        msg.client.settingsEditors.map((e) => `${e.key}`),
+        null,
+        1,
+      )}`,
+    );
+  }
+
   const insertedValues = {};
 
   if (editor.requiresInteraction) {
@@ -1013,7 +1023,7 @@ const changing = async (msgData, editData, resData) => {
   let embed2;
 
   if (typeof msg.file.displayEmbed === 'function') {
-    const returned = msg.file.displayEmbed(msg, row);
+    const returned = await msg.file.displayEmbed(msg, row);
     if (Array.isArray(returned)) {
       [embed, embed2] = returned;
     } else {
@@ -1147,10 +1157,11 @@ const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
             embed
               .addField(
                 '\u200b',
-                `\u200b${languageOfKey.recommended ? `${languageOfKey.recommended}\n` : ''}${
-                  languageOfKey.desc ? languageOfKey.desc : ''
-                }`,
+                `\u200b${msg.lanSettings.valid}:\n${languageOfKey.answers}${
+                  languageOfKey.recommended ? `\n\n${languageOfKey.recommended}\n` : ''
+                }${languageOfKey.desc ? languageOfKey.desc : ''}`,
               )
+
               .setTitle(msg.client.ch.stp(languageOfKey.name, { row: row || '--' }));
           } else {
             embed.addField('\u200b', `${msg.language.select.id.desc}`).setTitle(msg.language.id);
@@ -1305,15 +1316,20 @@ const messageHandler = async (msgData, editData, languageData, Objects) => {
     if (message.author.id !== msg.author.id) return null;
     messageCollector.resetTimer();
     message.delete().catch(() => {});
+    if (editor.validator) {
+      const valid = editor.validator(msg, message);
+      if (!valid) return null;
+    }
     const { returnEmbed } = editor.messageHandler({ msg, message }, insertedValues, required);
 
     returnEmbed
       .addField(
         '\u200b',
-        `${languageOfKey.recommended ? `${languageOfKey.recommended}\n` : ''}${
-          languageOfKey.desc ? languageOfKey.desc : ''
-        }`,
+        `\u200b${msg.lanSettings.valid}:\n${languageOfKey.answers}${
+          languageOfKey.recommended ? `\n\n${languageOfKey.recommended}\n` : ''
+        }${languageOfKey.desc ? languageOfKey.desc : ''}`,
       )
+
       .setTitle(msg.client.ch.stp(languageOfKey.name, { row: row || '--' }))
       .setAuthor({
         name: msg.client.ch.stp(msg.lanSettings.authorEdit, {
@@ -1379,7 +1395,7 @@ const interactionHandler = async (msgData, preparedData, insertedValues, require
 
   const selected =
     typeof editor.getSelected === 'function'
-      ? editor.getSelected(msg, insertedValues, required, preparedData)
+      ? await editor.getSelected(msg, insertedValues, required, preparedData)
       : 'noSelect';
 
   const returnEmbed = new Discord.MessageEmbed().setDescription(
@@ -1387,7 +1403,10 @@ const interactionHandler = async (msgData, preparedData, insertedValues, require
   );
 
   Objects.options.forEach((option) => {
-    if (insertedValues[required.assinger]?.includes(option.value)) {
+    if (
+      Array.isArray(insertedValues[required.assinger]) &&
+      insertedValues[required.assinger]?.includes(option.value)
+    ) {
       option.emoji = msg.client.constants.emotes.minusBGID;
     } else {
       option.emoji = msg.client.constants.emotes.plusBGID;
@@ -1433,7 +1452,10 @@ const standardButtons = async (msg, preparedData, insertedValues, required, row,
 
     const menu = new Discord.MessageSelectMenu()
       .setCustomId(required.key)
-      .addOptions(Objects.take)
+      .addOptions(
+        Objects.take.length ? Objects.take : { name: 'placeholder', value: 'placeholder' },
+      )
+      .setDisabled(!Objects.take.length)
       .setMinValues(1)
       .setMaxValues(getMany ? Objects.take.length : 1)
       .setPlaceholder(msg.language.select[required.key].select);
