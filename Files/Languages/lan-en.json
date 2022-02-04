@@ -1214,7 +1214,7 @@
     "levelsettings": {
       "levelUp": {
         "author": "{{user.tag}} just advanced to level {{level}}",
-        "description": "Level Ups are indicated by me reacting to your message with {{emote1}}{{emote2}}",
+        "description": "Level-Ups are indicated by me reacting to your message with {{emote1}}{{emote2}}",
         "footer": "You will only be notified every 10 Levels."
       }
     },
@@ -2333,8 +2333,9 @@
         "silent": "Silent",
         "messages": "Message",
         "reactions": "Reactions",
-        "levelupmode": "Level Up Mode",
+        "levelupmode": "Level-Up Mode",
         "embed": "Embed",
+        "lvlupchannels": "Level-Up Channels",
         "edit": {
           "active": {
             "name": "Active",
@@ -2346,14 +2347,24 @@
             "answers": "Any Number lower than 5.0 or above 0.1",
             "recommended": "Recommended: `1.0`"
           },
+          "lvlupemotes": {
+            "name": "Level-Up Emotes",
+            "answers": "Any Discord Emote **I have access to**",
+            "recommended": "Emotes the Message will be reacted to with, if none are set the default Emotes will be used"
+          },
+          "lvlupchannels": {
+            "name": "Level-Up Channels",
+            "answers": "Channel IDs or Mentions",
+            "recommended": "Channels in which the Level-Up Message will be sent"
+          },
           "xpmultiplier": {
             "name": "XP Multiplier",
             "answers": "Any Number lower than 5.0 or above 0.1",
             "recommended": "Recommended: `1.0`"
           },
           "levelupmode": {
-            "name": "Level Up Mode",
-            "answers": "`Message`, `Reactions` or `Silent`"
+            "name": "Level-Up Mode",
+            "answers": "`0 = Silent`\n`1 = Message`\n`2 = Reactions`"
           },
           "blchannels": {
             "name": "Blacklisted Channels",
@@ -3078,5 +3089,6 @@
   "vanityUrl": "Vanity URL",
   "now": "now",
   "default": "Default",
-  "custom": "Custom"
+  "custom": "Custom",
+  "whereTriggered": "Wherever this is triggered"
 }

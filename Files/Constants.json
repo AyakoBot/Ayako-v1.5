@@ -1162,6 +1162,22 @@
           "rolemode": {
             "key": "boolean",
             "required": true
+          },
+          "lvlupmode": {
+            "key": "number",
+            "required": true
+          },
+          "lvlupdeltimeout": {
+            "key": "second",
+            "required": true
+          },
+          "lvlupemotes": {
+            "key": "emotes",
+            "required": false
+          },
+          "embed": {
+            "key": "customEmbed",
+            "required": true
           }
         },
         "levelroles": {
@@ -1373,8 +1389,8 @@
           "vals": null
         },
         "levelsettings": {
-          "cols": ["guildid, active, xppermsg, rolemode, xpmultiplier"],
-          "vals": [["{{msg.guild.id}}", true, 25, true, 1.0]]
+          "cols": ["guildid, active, xppermsg, rolemode, xpmultiplier, lvlupmode"],
+          "vals": [["{{msg.guild.id}}", true, 25, true, 1.0, 0]]
         },
         "logs": {
           "cols": ["guildid"],
