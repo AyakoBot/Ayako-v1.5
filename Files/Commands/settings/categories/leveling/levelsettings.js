@@ -21,20 +21,20 @@ module.exports = {
   finished: true,
   childOf: 'leveling',
   category: ['automation'],
-  displayEmbed(msg, r) {
+  async displayEmbed(msg, r) {
     let levelupmode;
     switch (msg.r.lvlupmode) {
       default: {
-        levelupmode = msg.client.ch.stp(msg.lan.reactions, {
-          emotes:
-            r.lvlupemotes && r.lvlupemotes.length
-              ? r.lvlupemotes.map((e) => e).join('')
-              : msg.client.constants.standard.levelupemotes.map((e) => e).join(''),
-        });
+        levelupmode = msg.lan.silent;
         break;
       }
       case '1': {
-        levelupmode = msg.lan.messages;
+        levelupmode = msg.client.ch.stp(msg.lan.messages);
+        break;
+      }
+      case '2': {
+        levelupmode = msg.client.ch.stp(msg.lan.reactions);
+        break;
       }
     }
 
@@ -76,62 +76,90 @@ module.exports = {
           inline: true,
         },
         {
-          name: '\u200b',
-          value: '\u200b',
-          inline: false,
-        },
-        {
-          name: msg.lan.blchannels,
-          value: `${
-            r.blchannels && r.blchannels.length
-              ? r.blchannels.map((id) => ` <#${id}>`)
-              : msg.language.none
-          }`,
-          inline: false,
-        },
-        {
-          name: msg.lan.blroles,
-          value: `${
-            r.blroles && r.blroles.length ? r.blroles.map((id) => ` <@&${id}>`) : msg.language.none
-          }`,
-          inline: false,
-        },
-        {
-          name: msg.lan.blusers,
-          value: `${
-            r.blusers && r.blusers.length ? r.blusers.map((id) => ` <@${id}>`) : msg.language.none
-          }`,
-          inline: false,
-        },
-        {
-          name: '\u200b',
-          value: '\u200b',
-          inline: false,
-        },
-        {
-          name: msg.lan.wlchannels,
-          value: `${
-            r.wlchannels && r.wlchannels.length
-              ? r.wlchannels.map((id) => ` <#${id}>`)
-              : msg.language.none
-          }`,
-          inline: false,
-        },
-        {
-          name: msg.lan.wlroles,
-          value: `${
-            r.wlroles && r.wlroles.length ? r.wlroles.map((id) => ` <@&${id}>`) : msg.language.none
-          }`,
-          inline: false,
-        },
-        {
-          name: msg.lan.wlusers,
-          value: `${
-            r.wlusers && r.wlusers.length ? r.wlusers.map((id) => ` <@${id}>`) : msg.language.none
-          }`,
-          inline: false,
+          name: msg.lan.levelupmode,
+          value: `${levelupmode}`,
+          inline: true,
         },
       );
+
+    switch (msg.r.levelupmode) {
+      default: {
+        break;
+      }
+      case '1': {
+        const customEmbed = await embedName(msg);
+
+        embed.addField(msg.lan.embed, customEmbed ? customEmbed.name : msg.language.default);
+        break;
+      }
+      case '2': {
+        embed.addField(
+          msg.lan.reactions,
+          r.lvlupemotes && r.lvlupemotes.length
+            ? r.lvlupemotes.map((e) => e).join('')
+            : msg.client.constants.standard.levelupemotes.map((e) => e).join(''),
+        );
+      }
+    }
+
+    embed.addFields(
+      {
+        name: '\u200b',
+        value: '\u200b',
+        inline: false,
+      },
+      {
+        name: msg.lan.blchannels,
+        value: `${
+          r.blchannels && r.blchannels.length
+            ? r.blchannels.map((id) => ` <#${id}>`)
+            : msg.language.none
+        }`,
+        inline: false,
+      },
+      {
+        name: msg.lan.blroles,
+        value: `${
+          r.blroles && r.blroles.length ? r.blroles.map((id) => ` <@&${id}>`) : msg.language.none
+        }`,
+        inline: false,
+      },
+      {
+        name: msg.lan.blusers,
+        value: `${
+          r.blusers && r.blusers.length ? r.blusers.map((id) => ` <@${id}>`) : msg.language.none
+        }`,
+        inline: false,
+      },
+      {
+        name: '\u200b',
+        value: '\u200b',
+        inline: false,
+      },
+      {
+        name: msg.lan.wlchannels,
+        value: `${
+          r.wlchannels && r.wlchannels.length
+            ? r.wlchannels.map((id) => ` <#${id}>`)
+            : msg.language.none
+        }`,
+        inline: false,
+      },
+      {
+        name: msg.lan.wlroles,
+        value: `${
+          r.wlroles && r.wlroles.length ? r.wlroles.map((id) => ` <@&${id}>`) : msg.language.none
+        }`,
+        inline: false,
+      },
+      {
+        name: msg.lan.wlusers,
+        value: `${
+          r.wlusers && r.wlusers.length ? r.wlusers.map((id) => ` <@${id}>`) : msg.language.none
+        }`,
+        inline: false,
+      },
+    );
     return embed;
   },
   buttons(msg, r) {
@@ -186,4 +214,14 @@ module.exports = {
       [wlchannels, wlroles, wlusers],
     ];
   },
+};
+
+const embedName = async (msg) => {
+  const res = await msg.client.db.query(
+    `SELECT * FROM customembeds WHERE uniquetimestamp = $1 AND guildid = $2;`,
+    [msg.r.embed, msg.guild.id],
+  );
+
+  if (res && res.rowCount) return res.rows[0];
+  return null;
 };

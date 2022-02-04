@@ -62,7 +62,7 @@ module.exports = {
 
           let usedInvite;
           if (cachedInvites) {
-            usedInvite = newInvites.find((inv) => cachedInvites.get(inv.code).uses < inv.uses);
+            usedInvite = newInvites.find((inv) => cachedInvites.get(inv?.code).uses < inv.uses);
           }
           client.invites.set(guild.id, newInvites);
 
