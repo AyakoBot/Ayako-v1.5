@@ -18,12 +18,13 @@ module.exports = {
     2.0, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3.0, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8,
     3.9, 4.0, 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8, 4.9, 5.0,
   ],
+  lvlupmode: [0, 1, 2],
   finished: true,
   childOf: 'leveling',
   category: ['automation'],
   async displayEmbed(msg, r) {
     let levelupmode;
-    switch (msg.r.lvlupmode) {
+    switch (r.lvlupmode) {
       default: {
         levelupmode = msg.lan.silent;
         break;
@@ -56,40 +57,49 @@ module.exports = {
           inline: false,
         },
         {
-          name: msg.lan.xpmultiplier,
+          name: `${msg.lan.xpmultiplier}`,
           value: `${r.xpmultiplier}`,
           inline: true,
         },
         {
-          name: msg.lan.xppermsg,
+          name: `${msg.lan.xppermsg}`,
           value: `${r.xppermsg}`,
           inline: true,
         },
         {
-          name: msg.lan.lvlupmode,
-          value: `${r.lvlupmode ? msg.lan.stack : msg.lan.replace}`,
+          name: `${msg.lan.rolemode}`,
+          value: `${r.rolemode ? msg.lan.replace : msg.lan.stack}`,
           inline: true,
         },
         {
-          name: msg.lan.rolemode,
-          value: `${r.rolemode ? msg.lan.stack : msg.lan.replace}`,
-          inline: true,
+          name: '\u200b',
+          value: '\u200b',
+          inline: false,
         },
         {
-          name: msg.lan.levelupmode,
+          name: `${msg.lan.levelupmode}`,
           value: `${levelupmode}`,
           inline: true,
         },
       );
 
-    switch (msg.r.levelupmode) {
+    switch (r.levelupmode) {
       default: {
         break;
       }
       case '1': {
-        const customEmbed = await embedName(msg);
+        const customEmbed = await embedName(msg, r);
 
         embed.addField(msg.lan.embed, customEmbed ? customEmbed.name : msg.language.default);
+        embed.addFields({
+          name: `${msg.lan.lvlupchannels}`,
+          value: `${
+            r.lvlupchannels && r.lvlupchannels.length
+              ? r.lvlupchannels.map((id) => ` <#${id}>`)
+              : msg.language.whereTriggered
+          }`,
+          inline: true,
+        });
         break;
       }
       case '2': {
@@ -216,10 +226,10 @@ module.exports = {
   },
 };
 
-const embedName = async (msg) => {
+const embedName = async (msg, r) => {
   const res = await msg.client.db.query(
     `SELECT * FROM customembeds WHERE uniquetimestamp = $1 AND guildid = $2;`,
-    [msg.r.embed, msg.guild.id],
+    [r.embed, msg.guild.id],
   );
 
   if (res && res.rowCount) return res.rows[0];

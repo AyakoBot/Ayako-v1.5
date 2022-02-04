@@ -146,7 +146,7 @@ module.exports = {
       let embed2;
 
       if (typeof msg.file.displayEmbed === 'function') {
-        const returned = msg.file.displayEmbed(msg, row);
+        const returned = await msg.file.displayEmbed(msg, row);
         if (Array.isArray(returned)) {
           [embed, embed2] = returned;
         } else {
