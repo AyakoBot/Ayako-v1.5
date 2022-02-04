@@ -2330,16 +2330,30 @@
         "rolemode": "Role Mode",
         "stack": "Stack",
         "replace": "Replace",
+        "silent": "Silent",
+        "messages": "Message",
+        "reactions": "Reactions",
+        "levelupmode": "Level Up Mode",
+        "embed": "Embed",
         "edit": {
           "active": {
             "name": "Active",
             "answers": "`True` or `False`",
             "recommended": "Recommended: `True`"
           },
+          "embed": {
+            "name": "XP Multiplier",
+            "answers": "Any Number lower than 5.0 or above 0.1",
+            "recommended": "Recommended: `1.0`"
+          },
           "xpmultiplier": {
             "name": "XP Multiplier",
             "answers": "Any Number lower than 5.0 or above 0.1",
             "recommended": "Recommended: `1.0`"
+          },
+          "levelupmode": {
+            "name": "Level Up Mode",
+            "answers": "`Message`, `Reactions` or `Silent`"
           },
           "blchannels": {
             "name": "Blacklisted Channels",
@@ -3062,5 +3076,7 @@
   "Example": "Example",
   "Examples": "Examples",
   "vanityUrl": "Vanity URL",
-  "now": "now"
+  "now": "now",
+  "default": "Default",
+  "custom": "Custom"
 }
