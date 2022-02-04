@@ -1176,8 +1176,12 @@
             "required": false
           },
           "embed": {
-            "key": "customEmbed",
+            "key": "embed",
             "required": true
+          },
+          "lvlupchannels": {
+            "key": "channels",
+            "required": false
           }
         },
         "levelroles": {

@@ -860,6 +860,10 @@
     "permission": {
       "select": "Select the Permission",
       "desc": "Select the Permission below"
+    },
+    "embed": {
+      "select": "Select the Embed",
+      "desc": "Select the Embed below"
     }
   },
   "mod": {
@@ -2333,9 +2337,12 @@
         "silent": "Silent",
         "messages": "Message",
         "reactions": "Reactions",
-        "levelupmode": "Level-Up Mode",
+        "lvlupmode": "Level-Up Mode",
         "embed": "Embed",
         "lvlupchannels": "Level-Up Channels",
+        "lvlupdeltimeout": "Level-Up Message Delete Timeout",
+        "lvlupemotes": "Level-Up Emotes",
+        "lackingAccess": "I'm lacking access to these emotes: {{emotes}}",
         "edit": {
           "active": {
             "name": "Active",
@@ -2343,9 +2350,8 @@
             "recommended": "Recommended: `True`"
           },
           "embed": {
-            "name": "XP Multiplier",
-            "answers": "Any Number lower than 5.0 or above 0.1",
-            "recommended": "Recommended: `1.0`"
+            "name": "Embed",
+            "answers": "Choose an Embed from the List below or create a new one"
           },
           "lvlupemotes": {
             "name": "Level-Up Emotes",
@@ -2357,12 +2363,17 @@
             "answers": "Channel IDs or Mentions",
             "recommended": "Channels in which the Level-Up Message will be sent"
           },
+          "lvlupdeltimeout": {
+            "name": "Level-Up Message Delete Timeout",
+            "answers": "The Time in Seconds after which the Level-Up Message will be deleted",
+            "recommended": "Select 0 to disable"
+          },
           "xpmultiplier": {
             "name": "XP Multiplier",
             "answers": "Any Number lower than 5.0 or above 0.1",
             "recommended": "Recommended: `1.0`"
           },
-          "levelupmode": {
+          "lvlupmode": {
             "name": "Level-Up Mode",
             "answers": "`0 = Silent`\n`1 = Message`\n`2 = Reactions`"
           },
@@ -3090,5 +3101,6 @@
   "now": "now",
   "default": "Default",
   "custom": "Custom",
-  "whereTriggered": "Wherever this is triggered"
+  "whereTriggered": "Wherever this is triggered",
+  "noAccess": "No Access"
 }
