@@ -249,7 +249,7 @@ const endReminder = async (voter, endTime) => {
 
   const dm = await voter.createDM();
   client.ch
-    .send(dm, { embeds: [embed], components: client.ch.buttonRower([disable, vote]) })
+    .send(dm, { embeds: [embed], components: client.ch.buttonRower([vote, disable]) })
     .catch(() => {});
 };
 

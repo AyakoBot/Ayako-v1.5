@@ -80,13 +80,14 @@ module.exports = {
                 ch.stp(lan.inviteInfoUses, {
                   invite: usedInvite,
                   mention:
-                    guild.id === usedInvite.inviter.id
+                    guild.id === usedInvite.inviter?.id
                       ? usedInvite.inviter.username
                       : `${usedInvite.inviter}`,
                 }),
               );
-            else
+            else {
               embed.addField(lan.inviteInfoTitle, ch.stp(lan.inviteInfo, { invite: usedInvite }));
+            }
           }
         }
         ch.send(channels, { embeds: [embed] });
