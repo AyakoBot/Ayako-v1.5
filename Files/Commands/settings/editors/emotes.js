@@ -1,5 +1,7 @@
 const Discord = require('discord.js');
 
+// TODO: fix standard emotes like 🔨
+
 module.exports = {
   key: ['emote', 'emotes'],
   requiresInteraction: true,

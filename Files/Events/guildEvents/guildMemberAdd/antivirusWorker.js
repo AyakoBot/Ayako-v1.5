@@ -455,11 +455,13 @@ const selfChecker = async (linkObject) => {
   const siteHTML = confusables.remove((await axios.get(linkObject.href).catch((e) => e))?.data);
   if (!siteHTML) return false;
   // eslint-disable-next-line no-useless-escape
-  const siteNameBad =
-    /property=["'`]og:site_name["'`](.*)content=["'`]discord["'`]>/gi.test(siteHTML) ||
-    /<title>(.*)Discord(.*)<\/title>/gi.test(siteHTML) ||
-    /<title>Redeem Promotion(.*)<\/title>/gi.test(siteHTML);
-  const embedNameBad = /property=["'`]og:title["'`](.*)content=["'`]discord/gi.test(siteHTML);
+  const siteNameBad = !!(
+    siteHTML.match(/property=["'`]og:site_name["'`](.*)content=["'`]discord["'`]>/gi)?.length ||
+    siteHTML.match(/<title>(.*)Discord(.*)<\/title>/gi)?.length ||
+    siteHTML.match(/<title>Redeem Promotion(.*)<\/title>/gi)?.length
+  );
+  const embedNameBad = !!siteHTML.match(/property=["'`]og:title["'`](.*)content=["'`]discord/gi)
+    ?.length;
 
   const args = siteHTML.split(/["'`]+/);
   const embedDescription = args[args.indexOf('og:description') + 2];
@@ -469,29 +471,32 @@ const selfChecker = async (linkObject) => {
   );
   const embedDescriptionBad = Math.round(similarity * 100) > 80;
 
-  const usesDiscordSlogan =
-    /we[`|'|´|"]re[\n|\s](.*)so[\n|\s](.*)excited[\n|\s](.*)to[\n|\s](.*)see[\n|\s](.*)you[\n|\s](.*)again/gi.test(
-      siteHTML,
-    );
-  const usesDiscordImage =
-    /property=["'`]og:image["'`](.*)content=["'`]https:\/\/discord\.com\/assets\/652f40427e1f5186ad54836074898279\.png["'`]>/gi.test(
-      siteHTML,
-    ) ||
-    /property=["'`]og:image["'`](.*)content=["'`]\/assets\/652f40427e1f5186ad54836074898279\.png["'`]>/gi.test(
-      siteHTML,
-    ) ||
-    /rel=["'`]icon["'`](.*)href=["'`]https:\/\/discord\.com\/assets\/847541504914fd33810e70a0ea73177e\.ico["'`]/gi.test(
-      siteHTML,
-    );
+  const usesDiscordSlogan = !!siteHTML.match(
+    /we[`|'|´|"]re[\n|\s](.*)so[\n|\s](.*)excited[\n|\s](.*)to[\n|\s](.*)see[\n|\s](.*)you[\n|\s](.*)again/gi,
+  )?.length;
 
-  const websiteProbablyAdvertisesNitro =
-    /(.*)3\smonths/gi.test(siteHTML) || /discord(.*)nitro(.*)free(.*)steam/gi.test(siteHTML);
+  const usesDiscordImage = !!(
+    siteHTML.match(
+      /property=["'`]og:image["'`](.*)content=["'`]https:\/\/discord\.com\/assets\/652f40427e1f5186ad54836074898279\.png["'`]>/gi,
+    )?.length ||
+    siteHTML.match(
+      /property=["'`]og:image["'`](.*)content=["'`]\/assets\/652f40427e1f5186ad54836074898279\.png["'`]>/gi,
+    )?.length ||
+    siteHTML.match(
+      /rel=["'`]icon["'`](.*)href=["'`]https:\/\/discord\.com\/assets\/847541504914fd33810e70a0ea73177e\.ico["'`]/gi,
+    )?.length
+  );
 
-  const wantsCCNumber = /(.*)credit\scard\s(Number|)/gi.test(siteHTML);
-  const wantsCCexpiry = /(.*)Expiration\sDate/gi.test(siteHTML);
-  const wantsCCcvc = /(.*)cvc/gi.test(siteHTML);
-  const wantsCCzip = /(.*)(Postcode|zip)/gi.test(siteHTML);
-  const wantsCCname = /[^_|^s]name[^=]/gi.test(siteHTML);
+  const websiteProbablyAdvertisesNitro = !!(
+    siteHTML.match(/(.*)3\smonths/gi)?.length ||
+    siteHTML.match(/discord(.*)nitro(.*)free(.*)steam/gi)?.length
+  );
+
+  const wantsCCNumber = !!siteHTML.match(/(.*)credit\scard\s(Number|)/gi)?.length;
+  const wantsCCexpiry = !!siteHTML.match(/(.*)Expiration\sDate/gi)?.length;
+  const wantsCCcvc = !!siteHTML.match(/(.*)cvc/gi)?.length;
+  const wantsCCzip = !!siteHTML.match(/(.*)(Postcode|zip)/gi)?.length;
+  const wantsCCname = !!siteHTML.match(/[^_|^s]name[^=]/gi)?.length;
 
   if (
     (siteNameBad && websiteProbablyAdvertisesNitro) ||
