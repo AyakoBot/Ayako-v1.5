@@ -433,13 +433,13 @@ const getArrows = (msg, currentPage, maxPage) => {
       .setCustomId('prev')
       .setStyle('DANGER')
       .setEmoji(msg.client.constants.emotes.back)
-      .setDisabled(currentPage === 1),
+      .setDisabled(currentPage === 1 || !maxPage),
     new Discord.MessageButton()
       .setLabel('\u200b')
       .setCustomId('next')
       .setStyle('SUCCESS')
       .setEmoji(msg.client.constants.emotes.forth)
-      .setDisabled(currentPage === maxPage),
+      .setDisabled(currentPage === maxPage || !maxPage),
   ];
 };
 

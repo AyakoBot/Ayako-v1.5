@@ -16,10 +16,14 @@ const Constants = require('../Constants.json');
 const DiscordEpoch = 1420070400000;
 
 module.exports = {
+  /**
+   * Various regexes
+   * If using tester regex with match(), !!filter output by length!!, as output can include 0 char strings
+   */
   regexes: {
     templateMatcher: /{{\s?([^{}\s]*)\s?}}/g,
     tester:
-      /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF]|[\u2580-\u27BF]|[\uFE0F\u20E3])/g,
+      /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF]|[\u2580-\u27BF])/g,
   },
   /**
    * Sends a Message to a channel.
