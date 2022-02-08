@@ -15,16 +15,12 @@ const Constants = require('../Constants.json');
 // const appDir = dirname(require.main.filename);
 const DiscordEpoch = 1420070400000;
 
-const regexes = {
-  templateMatcher: /{{\s?([^{}\s]*)\s?}}/g,
-  strReplacer1: /_/g,
-  strReplacer2: /\w\S*/g,
-  auditLogTransform: /~/g,
-  tester:
-    /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g,
-};
-
 module.exports = {
+  regexes: {
+    templateMatcher: /{{\s?([^{}\s]*)\s?}}/g,
+    tester:
+      /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF]|[\u2580-\u27BF]|[\uFE0F\u20E3])/g,
+  },
   /**
    * Sends a Message to a channel.
    * @constructor
@@ -87,7 +83,7 @@ module.exports = {
    */
   stp: (expression, Object) => {
     const replacer = (e) => {
-      const text = e.replace(regexes.templateMatcher, (substring, value) => {
+      const text = e.replace(module.exports.regexes.templateMatcher, (substring, value) => {
         const newValue = value.split('.');
         let decided;
         const Result = Object[newValue[0]];
@@ -595,7 +591,7 @@ module.exports = {
    * @param {string} text - The String to Test.
    */
   containsNonLatinCodepoints: (text) => {
-    return regexes.tester.test(text);
+    return module.exports.regexes.tester.test(text);
   },
   /**
    * Checks and returns Uniques of 2 Bitfields.
