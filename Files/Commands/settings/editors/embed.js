@@ -1,29 +1,33 @@
+const Discord = require('discord.js');
+
 module.exports = {
   key: ['embed'],
   requiresMenu: true,
   requiresInteraction: true,
-  async dataPreparation(msg, editorData) {
+  dataPreparation: async (msg, editorData) => {
     const { insertedValues, required, Objects } = editorData;
 
     const embeds = await getEmbeds(msg);
 
-    embeds.forEach((embed) => {
-      const inserted = {
-        label: `${embed.name}`,
-        value: `${embed.uniquetimestamp}`,
-      };
+    if (embeds.length) {
+      embeds.forEach((embed) => {
+        const inserted = {
+          label: `${embed.name}`,
+          value: `${embed.uniquetimestamp}`,
+        };
 
-      if (
-        Array.isArray(insertedValues[required.assinger]) &&
-        insertedValues[required.assinger].includes(embed.uniquetimestamp)
-      ) {
-        inserted.emoji = msg.client.constants.emotes.minusBGID;
-      } else {
-        inserted.emoji = msg.client.constants.emotes.plusBGID;
-      }
+        if (
+          Array.isArray(insertedValues[required.assinger]) &&
+          insertedValues[required.assinger].includes(embed.uniquetimestamp)
+        ) {
+          inserted.emoji = msg.client.constants.emotes.minusBGID;
+        } else {
+          inserted.emoji = msg.client.constants.emotes.plusBGID;
+        }
 
-      Objects.options.push(inserted);
-    });
+        Objects.options.push(inserted);
+      });
+    }
 
     for (let i = 0; i < 25 && i < Objects.options.length; i += 1) {
       Objects.take.push(Objects.options[i]);
@@ -31,7 +35,7 @@ module.exports = {
 
     return { Objects };
   },
-  async getSelected(msg, insertedValues, required) {
+  getSelected: async (msg, insertedValues, required) => {
     if (insertedValues[required.assinger]) {
       switch (required.key.endsWith('s')) {
         default: {
@@ -58,6 +62,84 @@ module.exports = {
     }
     return null;
   },
+  buttons: async (msg, preparedData, insertedValues, required, row) => {
+    const { Objects } = preparedData;
+    const returnedButtons = [];
+
+    let doneDisabled = false;
+    let isString = true;
+
+    if (required.assinger !== 'id' && Object.keys(row).includes(required.assinger)) {
+      const typeRes = await msg.client.ch.query(
+        `SELECT pg_typeof(${required.assinger}) FROM ${
+          msg.client.constants.commands.settings.tablenames[msg.file.name][0]
+        } LIMIT 1;`,
+      );
+      if (typeRes && typeRes.rowCount > 0) {
+        isString = !typeRes.rows[0].pg_typeof.endsWith('[]');
+      }
+    } else {
+      isString = true;
+    }
+
+    if (!isString) {
+      doneDisabled =
+        msg.client.ch.arrayEquals(insertedValues[required.assinger], row[required.assinger]) ||
+        (insertedValues[required.assinger] &&
+          !insertedValues[required.assinger].length &&
+          required.required);
+    } else {
+      doneDisabled =
+        !insertedValues[required.assinger] ||
+        insertedValues[required.assinger] === msg.language.none;
+    }
+
+    const menu = new Discord.MessageSelectMenu()
+      .setCustomId(required.key)
+      .addOptions(
+        Objects.take.length ? Objects.take : { label: 'placeholder', value: 'placeholder' },
+      )
+      .setDisabled(!Objects.take.length)
+      .setMinValues(1)
+      .setMaxValues(1)
+      .setPlaceholder(msg.language.select[required.key].select);
+    const next = new Discord.MessageButton()
+      .setCustomId('next')
+      .setLabel(msg.language.next)
+      .setDisabled(
+        Objects.page === Math.ceil(Objects.options.length / 25) || !Objects.options.length,
+      )
+      .setStyle('SUCCESS');
+    const prev = new Discord.MessageButton()
+      .setCustomId('prev')
+      .setLabel(msg.language.prev)
+      .setDisabled(Objects.page === 1 || !Objects.options.length)
+      .setStyle('DANGER');
+
+    returnedButtons.push([menu], [prev, next]);
+
+    const done = new Discord.MessageButton()
+      .setCustomId('done')
+      .setLabel(msg.language.done)
+      .setDisabled(doneDisabled)
+      .setStyle('PRIMARY');
+
+    const create = new Discord.MessageButton()
+      .setCustomId('create')
+      .setLabel(msg.language.createNew)
+      .setStyle('SUCCESS');
+
+    returnedButtons.push([done, create]);
+
+    return returnedButtons;
+  },
+  interactionHandler(msgData) {
+    const { msg, answer } = msgData;
+
+    
+
+    return null;
+  },
 };
 
 const getEmbedName = async (msg, uniquetimestamp) => {
@@ -74,5 +156,5 @@ const getEmbeds = async (msg) => {
     msg.guild.id,
   ]);
   if (res && res.rowCount) return res.rows;
-  return msg.language.none;
+  return [];
 };
