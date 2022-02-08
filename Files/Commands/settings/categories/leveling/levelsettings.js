@@ -116,7 +116,13 @@ module.exports = {
           r.lvlupemotes && r.lvlupemotes.length
             ? r.lvlupemotes
                 .map((e) => {
-                  const emote = msg.client.emojis.cache.get(e);
+                  let emote;
+                  if (msg.client.emojis.cache.get(e)) {
+                    emote = msg.client.emojis.cache.get(e);
+                  } else if (e.match(msg.client.ch.regexes.emojiTester)?.length) {
+                    emote = e;
+                  }
+
                   if (emote) return `${emote}`;
                   return null;
                 })
