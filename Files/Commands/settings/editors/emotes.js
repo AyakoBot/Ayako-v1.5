@@ -7,7 +7,7 @@ module.exports = {
   requiresInteraction: true,
   requiresMenu: false,
   interactionType: 'message',
-  buttons(msg, preparedData, insertedValues, required, row) {
+  buttons: (msg, preparedData, insertedValues, required, row) => {
     let doneDisabled = true;
 
     if (Array.isArray(insertedValues[required.assinger])) {
@@ -26,7 +26,7 @@ module.exports = {
 
     return [[done]];
   },
-  messageHandler(msgData, insertedValues, required) {
+  messageHandler: (msgData, insertedValues, required) => {
     const { msg, message } = msgData;
 
     const args = message.content
@@ -34,7 +34,13 @@ module.exports = {
       .map((arg) => arg.replace(/\D+/g, ''))
       .filter((arg) => !!arg.length);
 
-    const unicodeEmojis = 
+    const unicodeEmojis = message.content
+      .match(msg.client.ch.regexes.emojiTester)
+      .filter((e) => !!e.length);
+
+    if (unicodeEmojis?.length) {
+      args.push(...unicodeEmojis);
+    }
 
     switch (required.key) {
       default: {
@@ -60,7 +66,7 @@ module.exports = {
       }
     }
 
-    const selected = this.getSelected(msg, insertedValues, required, required.key);
+    const selected = module.exports.getSelected(msg, insertedValues, required, required.key);
 
     const returnEmbed = new Discord.MessageEmbed().setDescription(
       `**${msg.language.selected}:**\n${selected?.length ? selected : msg.language.none}`,
@@ -68,12 +74,19 @@ module.exports = {
 
     return { returnEmbed };
   },
-  getSelected(msg, insertedValues, required) {
+  getSelected: (msg, insertedValues, required) => {
     if (insertedValues[required.assinger]) {
       switch (required.key) {
         default: {
           if (insertedValues[required.assinger]) {
-            const emote = msg.client.emojis.cache.get(insertedValues[required.assinger]);
+            let emote;
+            if (msg.client.emojis.cache.get(insertedValues[required.assinger])) {
+              emote = msg.client.emojis.cache.get(insertedValues[required.assinger]);
+            } else if (
+              insertedValues[required.assinger].match(msg.client.ch.regexes.emojiTester)?.length
+            ) {
+              emote = insertedValues[required.assinger];
+            }
 
             if (emote) {
               return `${emote}`;
@@ -88,9 +101,16 @@ module.exports = {
             Array.isArray(insertedValues[required.assinger])
             ? insertedValues[required.assinger]
                 .map((value) => {
-                  const emote = msg.client.emojis.cache.get(value);
+                  let emote;
+                  if (msg.client.emojis.cache.get(value)) {
+                    emote = msg.client.emojis.cache.get(value);
+                  } else if (value.match(msg.client.ch.regexes.emojiTester)?.length) {
+                    emote = value;
+                  }
 
-                  if (emote) return `${emote}`;
+                  if (emote) {
+                    return `${emote}`;
+                  }
                   return msg.language.noAccess;
                 })
                 .join(', ')

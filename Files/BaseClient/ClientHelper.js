@@ -4,7 +4,6 @@ const http = require('http');
 const Discord = require('discord.js');
 const v8 = require('v8');
 const fs = require('fs');
-
 const SA = require('superagent');
 
 const auth = require('./auth.json');
@@ -18,12 +17,11 @@ const DiscordEpoch = 1420070400000;
 module.exports = {
   /**
    * Various regexes
-   * If using tester regex with match(), !!filter output by length!!, as output can include 0 char strings
+   * If using emojiTester regex with match(), !!filter output by length!!, as output can include 0 char strings
    */
   regexes: {
     templateMatcher: /{{\s?([^{}\s]*)\s?}}/g,
-    tester:
-      /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF]|[\u2580-\u27BF])/g,
+    emojiTester: require('./Other Client Files/EmojiRegex'),
   },
   /**
    * Sends a Message to a channel.
@@ -595,7 +593,7 @@ module.exports = {
    * @param {string} text - The String to Test.
    */
   containsNonLatinCodepoints: (text) => {
-    return module.exports.regexes.tester.test(text);
+    return module.exports.regexes.emojiTester.test(text);
   },
   /**
    * Checks and returns Uniques of 2 Bitfields.
