@@ -4,8 +4,10 @@ module.exports = {
   async execute(log) {
     // eslint-disable-next-line global-require
     const client = require('../BaseClient/DiscordClient');
-    if (`${log}`.includes('Tried to send packet')) {
-      client.destroy();
+    if (
+      `${log}`.includes('Tried to send packet' || `${log}`.includes('Destroying and reconnecting'))
+    ) {
+      client.destroy().catch(() => {});
       return client.login(auth.token);
     }
     if (log.includes('Heartbeat') && log.includes('latency'))
