@@ -133,12 +133,33 @@ module.exports = {
 
     return returnedButtons;
   },
-  interactionHandler(msgData) {
-    const { msg, answer } = msgData;
+  async interactionHandler(msgData, passObject, insertedValues, required) {
+    const { msg, interaction } = msgData;
 
-    
+    const options = Object.entries(msg.language.commands.settings[msg.file.name].options);
 
-    return null;
+    const { embed, answer, name } = await msg.client.ch.embedBuilder(msg, interaction, options);
+
+    if (!insertedValues[required.assinger]) {
+      insertedValues[required.assinger] = Number(answer.values[0]);
+      answer.values.shift();
+    }
+
+    const selected = module.exports.getSelected(msg, insertedValues, required);
+
+    const returnEmbed = new Discord.MessageEmbed().setDescription(
+      `**${msg.language.selected}:**\n${selected?.length ? selected : msg.language.none}`,
+    );
+
+    passObject.Objects.options.forEach((option) => {
+      if (new Discord.BitField(insertedValues[required.assinger]).has(Number(option.value))) {
+        option.emoji = msg.client.constants.emotes.minusBGID;
+      } else {
+        option.emoji = msg.client.constants.emotes.plusBGID;
+      }
+    });
+
+    return { returnEmbed };
   },
 };
 
