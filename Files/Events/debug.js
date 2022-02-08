@@ -8,12 +8,12 @@ module.exports = {
       `${log}`.includes('Tried to send packet' || `${log}`.includes('Destroying and reconnecting'))
     ) {
       client.destroy().catch(() => {});
-      return client.login(auth.token);
+      client.login(auth.token);
+      return;
     }
     if (log.includes('Heartbeat') && log.includes('latency'))
       client.ch.query('UPDATE stats SET heartbeat = $1;', [log.replace(/\D+/g, '')]);
     const res = await client.ch.query('SELECT * FROM stats;');
     if (res?.rows[0]?.verbosity) console.log(log);
-    return null;
   },
 };
