@@ -1237,7 +1237,7 @@ const handleSave = async (msg, answer, Objects) => {
         ],
       );
 
-      resolve({ embed: emb, answer: interaction });
+      resolve({ embed: emb, answer: interaction, name });
     });
     buttonsCollector.on('end', (collected, reason) => {
       if (reason === 'time') {
