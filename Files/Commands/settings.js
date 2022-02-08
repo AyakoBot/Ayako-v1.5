@@ -907,7 +907,7 @@ const editorInteractionHandler = async (msgData, editorData, row, res, comesFrom
       embeds: [embed],
       rawButtons:
         typeof editor.buttons === 'function'
-          ? editor.buttons(msg, passObject, insertedValues, required, row)
+          ? await editor.buttons(msg, passObject, insertedValues, required, row)
           : await standardButtons(msg, passObject, insertedValues, required, row, editor),
     },
   );
@@ -1131,7 +1131,7 @@ const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
         default: {
           const returnedObject =
             typeof editor.interactionHandler === 'function'
-              ? editor.interactionHandler(
+              ? await editor.interactionHandler(
                   { msg, answer: interaction },
                   passObject,
                   insertedValues,
@@ -1183,7 +1183,7 @@ const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
             {
               rawButtons:
                 typeof editor.buttons === 'function'
-                  ? editor.buttons(msg, passObject, insertedValues, required, row)
+                  ? await editor.buttons(msg, passObject, insertedValues, required, row)
                   : await standardButtons(msg, passObject, insertedValues, required, row, editor),
               embeds: [embed],
             },
@@ -1224,7 +1224,7 @@ const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
             {
               rawButtons:
                 typeof editor.buttons === 'function'
-                  ? editor.buttons(msg, passObject, insertedValues, required, row)
+                  ? await editor.buttons(msg, passObject, insertedValues, required, row)
                   : await standardButtons(msg, passObject, insertedValues, required, row, editor),
               embeds: [embed],
             },
@@ -1261,7 +1261,7 @@ const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
             {
               rawButtons:
                 typeof editor.buttons === 'function'
-                  ? editor.buttons(msg, passObject, insertedValues, required, row)
+                  ? await editor.buttons(msg, passObject, insertedValues, required, row)
                   : await standardButtons(msg, passObject, insertedValues, required, row, editor),
               embeds: [embed],
             },
@@ -1348,7 +1348,7 @@ const messageHandler = async (msgData, editData, languageData, Objects) => {
       {
         rawButtons:
           typeof editor.buttons === 'function'
-            ? editor.buttons(msg, passObject, insertedValues, required, row)
+            ? await editor.buttons(msg, passObject, insertedValues, required, row)
             : await standardButtons(msg, passObject, insertedValues, required, row, editor),
         embeds: [returnEmbed],
       },
@@ -1453,7 +1453,7 @@ const standardButtons = async (msg, preparedData, insertedValues, required, row,
     const menu = new Discord.MessageSelectMenu()
       .setCustomId(required.key)
       .addOptions(
-        Objects.take.length ? Objects.take : { name: 'placeholder', value: 'placeholder' },
+        Objects.take.length ? Objects.take : { label: 'placeholder', value: 'placeholder' },
       )
       .setDisabled(!Objects.take.length)
       .setMinValues(1)
@@ -1462,12 +1462,14 @@ const standardButtons = async (msg, preparedData, insertedValues, required, row,
     const next = new Discord.MessageButton()
       .setCustomId('next')
       .setLabel(msg.language.next)
-      .setDisabled(Objects.page === Math.ceil(Objects.options.length / 25))
+      .setDisabled(
+        Objects.page === Math.ceil(Objects.options.length / 25) || !Objects.options.length,
+      )
       .setStyle('SUCCESS');
     const prev = new Discord.MessageButton()
       .setCustomId('prev')
       .setLabel(msg.language.prev)
-      .setDisabled(Objects.page === 1)
+      .setDisabled(Objects.page === 1 || !Objects.options.length)
       .setStyle('DANGER');
 
     returnedButtons.push([menu], [prev, next]);
