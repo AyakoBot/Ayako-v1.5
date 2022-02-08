@@ -2343,6 +2343,13 @@
         "lvlupdeltimeout": "Level-Up Message Delete Timeout",
         "lvlupemotes": "Level-Up Emotes",
         "lackingAccess": "I'm lacking access to these emotes: {{emotes}}",
+        "options": {
+          "user": "The User who leveled up",
+          "newLevel": "The new Level",
+          "newXP": "The new XP",
+          "oldLevel": "The old Level",
+          "oldXP": "The old XP"
+        },
         "edit": {
           "active": {
             "name": "Active",
@@ -3102,5 +3109,6 @@
   "default": "Default",
   "custom": "Custom",
   "whereTriggered": "Wherever this is triggered",
-  "noAccess": "No Access"
+  "noAccess": "No Access",
+  "createNew": "Create New"
 }
