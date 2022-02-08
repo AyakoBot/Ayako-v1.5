@@ -34,6 +34,8 @@ module.exports = {
       .map((arg) => arg.replace(/\D+/g, ''))
       .filter((arg) => !!arg.length);
 
+    const unicodeEmojis = 
+
     switch (required.key) {
       default: {
         [insertedValues[required.assinger]] = args;
