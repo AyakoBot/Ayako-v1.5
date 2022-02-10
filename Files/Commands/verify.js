@@ -101,12 +101,14 @@ module.exports = {
       });
 
     if (!msg.m || !msg.m.id)
-      return msg.client.ch.send(msg.client.channels.cache.get(r.startchannel), {
-        content: msg.client.ch.stp(msg.lan.openDMs, {
-          user: msg.author,
-          prefix: msg.client.constants.standard.prefix,
-        }),
-      });
+      return msg.client.ch
+        .send(msg.client.channels.cache.get(r.startchannel), {
+          content: msg.client.ch.stp(msg.lan.openDMs, {
+            user: msg.author,
+            prefix: msg.client.constants.standard.prefix,
+          }),
+        })
+        .then((m) => setTimeout(() => m.delete().catch(() => {}), 10000));
 
     const buttonsCollector = msg.m.createMessageComponentCollector({ time: 120000 });
     const messageCollector = msg.DM.createMessageCollector({ time: 120000 });

@@ -67,6 +67,19 @@ module.exports = {
         value: r.startchannel ? `<#${r.startchannel}>` : msg.language.none,
         inline: true,
       },
+    );
+
+    if (msg.lan.startchannel) {
+      embed.addField(
+        msg.lan.deletestartchmsgs,
+        r.deletestartchmsgs
+          ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
+          : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
+        true,
+      );
+    }
+
+    embed.addFields(
       {
         name: '\u200b',
         value: '\u200b',
@@ -114,6 +127,10 @@ module.exports = {
       .setCustomId(msg.lan.edit.startchannel.name)
       .setLabel(msg.lan.startchannel)
       .setStyle(r.startchannel ? 'SUCCESS' : 'DANGER');
+    const deleteMsgs = new Discord.MessageButton()
+      .setCustomId(msg.lan.edit.deletestartchmsgs.name)
+      .setLabel(msg.lan.deletestartchmsgs)
+      .setStyle(r.deletestartchmsgs ? 'SUCCESS' : 'DANGER');
     const finishedrole = new Discord.MessageButton()
       .setCustomId(msg.lan.edit.finishedrole.name)
       .setLabel(msg.lan.finishedrole)
@@ -134,6 +151,7 @@ module.exports = {
       [active],
       [selfstart, kicktof, kickafter],
       [logchannel, finishedrole, pendingrole, startchannel],
+      [deleteMsgs],
       [greetdesc, finishdesc],
     ];
   },
