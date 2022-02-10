@@ -949,7 +949,7 @@ module.exports = {
    * @param {number} page - An Page to instantly navigate to upon calling this
    */
   embedBuilder: (msg, answer, options, embed, page) => {
-    options.push(msg.language.replaceOptions.msg[0]);
+    options.push(msg.language.replaceOptions.msg);
     return msg.client.commands.get('embedbuilder').builder(msg, answer, embed, page, options);
   },
   /**
