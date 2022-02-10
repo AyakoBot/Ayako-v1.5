@@ -486,6 +486,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           .join('\n')}`,
       );
     }
+
     if (lang.recommended) {
       recommendedEmbed.addField('\u200b', lang.recommended);
     }
@@ -525,16 +526,14 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           buttonsCollector.stop();
           messageCollector.stop();
 
-          resolve(await handleDelete({ msg, answer: interaction }, Objects, { embed, components }));
+          resolve(await handleDelete({ msg, answer: interaction }, Objects));
           break;
         }
         case 'inheritFromSavedEmbed': {
           buttonsCollector.stop();
           messageCollector.stop();
 
-          resolve(
-            await handleInherit({ msg, answer: interaction }, Objects, { embed, components }),
-          );
+          resolve(await handleInherit({ msg, answer: interaction }, Objects));
           break;
         }
         case 'next': {
@@ -563,7 +562,9 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           messageCollector.stop();
 
           const page = Objects.page - 1;
-          resolve(await module.exports.builder(msg, interaction, Objects.embed, page));
+          resolve(
+            await module.exports.builder(msg, interaction, Objects.embed, page, Objects.options),
+          );
           break;
         }
         case 'right': {
@@ -571,7 +572,9 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           messageCollector.stop();
 
           const page = Objects.page + 1;
-          resolve(await module.exports.builder(msg, interaction, Objects.embed, page));
+          resolve(
+            await module.exports.builder(msg, interaction, Objects.embed, page, Objects.options),
+          );
           break;
         }
         case 'viewRaw': {
@@ -613,7 +616,9 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
 
               Objects.embed = new Discord.MessageEmbed(code);
               inheritCodeEmbedMessageCollector.stop();
-              resolve(await module.exports.builder(msg, answer, Objects.embed));
+              resolve(
+                await module.exports.builder(msg, answer, Objects.embed, null, Objects.options),
+              );
             } catch (e) {
               msg.client.ch
                 .reply(msg, {
@@ -667,7 +672,9 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
             Objects,
           );
 
-          resolve(await module.exports.builder(msg, interaction, Objects.embed, 2));
+          resolve(
+            await module.exports.builder(msg, interaction, Objects.embed, 2, Objects.options),
+          );
           break;
         }
         case 'field-select': {
@@ -1111,7 +1118,9 @@ const postCode = (Objects, msg, answer, embed, noRemove) => {
 
         if (interaction.customId === 'back') {
           buttonsCollector.stop();
-          resolve(await module.exports.builder(msg, interaction, Objects.embed, 3));
+          resolve(
+            await module.exports.builder(msg, interaction, Objects.embed, 3, Objects.options),
+          );
         }
       });
 
@@ -1140,6 +1149,7 @@ const handleSave = async (msg, answer, Objects) => {
     iconURL: msg.client.constants.commands.embedbuilder.author,
     url: msg.client.constants.standard.invite,
   });
+
   if (Objects.options) {
     embed.addField(
       msg.language.commands.embedbuilder.replacedOptions,
@@ -1468,7 +1478,7 @@ const handleOtherMsgRaw = async (msg, answer, Objects) => {
       if (interaction.customId === 'back') {
         messageCollector.stop();
         buttonsCollector.stop();
-        resolve(await module.exports.builder(msg, interaction, Objects, 3));
+        resolve(await module.exports.builder(msg, interaction, Objects.embed, 3, Objects.options));
       }
     });
 
@@ -1628,13 +1638,29 @@ const fieldSelect = async (msg, answer, Objects) => {
   };
 
   const getEmbed = () => {
-    return new Discord.MessageEmbed()
+    const baseEmbed = new Discord.MessageEmbed()
       .setAuthor({
         name: msg.language.commands.embedbuilder.author,
         iconURL: msg.client.constants.commands.embedbuilder.author,
         url: msg.client.constants.standard.invite,
       })
       .setDescription(baseLan.chooseTheEdit);
+
+    if (Objects.options) {
+      baseEmbed.addField(
+        msg.language.commands.embedbuilder.replacedOptions,
+        `${Objects.options
+          .map((o) =>
+            msg.client.ch.stp(msg.language.commands.embedbuilder.replacedOptionsDescription, {
+              option: o[0],
+              value: o[1],
+            }),
+          )
+          .join('\n')}`,
+      );
+    }
+
+    return baseEmbed;
   };
 
   await replier(
@@ -1718,7 +1744,9 @@ const fieldSelect = async (msg, answer, Objects) => {
           Objects.embed.fields.splice(index, 1);
           buttonsCollector.stop();
           messageCollector.stop();
-          resolve(await module.exports.builder(msg, interaction, Objects.embed, 2));
+          resolve(
+            await module.exports.builder(msg, interaction, Objects.embed, 2, Objects.options),
+          );
           return;
         }
         case 'name': {
@@ -1732,7 +1760,9 @@ const fieldSelect = async (msg, answer, Objects) => {
         case 'back': {
           buttonsCollector.stop();
           messageCollector.stop();
-          resolve(await module.exports.builder(msg, interaction, Objects.embed, 2));
+          resolve(
+            await module.exports.builder(msg, interaction, Objects.embed, 2, Objects.options),
+          );
           break;
         }
       }
@@ -1847,7 +1877,7 @@ const handleEmbedSelection = async ({ msg, answer }, Objects, { embed, component
   await replier({ msg, answer }, { embeds: [embed], components }, Objects);
 };
 
-const handleInherit = async ({ msg, answer }) => {
+const handleInherit = async ({ msg, answer }, Objects) => {
   const menu = answer.message.components[0].components.find((c) => {
     if (Array.isArray(c)) {
       return c
@@ -1866,10 +1896,10 @@ const handleInherit = async ({ msg, answer }) => {
   const selectedEmbed = embeds.find((e) => e.uniquetimestamp === selectedValue.value);
   const embed = msg.client.ch.getDiscordEmbed(selectedEmbed);
 
-  return module.exports.builder(msg, answer, embed, 4);
+  return module.exports.builder(msg, answer, embed, 4, Objects.options);
 };
 
-const handleDelete = async ({ msg, answer }) => {
+const handleDelete = async ({ msg, answer }, Objects) => {
   const menu = answer.message.components[0].components.find((c) => {
     if (Array.isArray(c)) {
       return c
@@ -1890,7 +1920,7 @@ const handleDelete = async ({ msg, answer }) => {
     [msg.guild.id, selectedValue.value],
   );
 
-  return module.exports.builder(msg, answer, null, 4);
+  return module.exports.builder(msg, answer, null, 4, Objects.options);
 };
 
 const handlePage = async ({ msg, answer }, Objects, { embed }, increasePage) => {
