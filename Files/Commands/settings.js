@@ -892,7 +892,12 @@ const editorInteractionHandler = async (msgData, editorData, row, res, comesFrom
   });
 
   if (editor.requiresMenu) {
-    embed.addField(msg.language.page, `\`1/${Math.ceil(Objects.options.length / 25)}\``);
+    embed.addField(
+      msg.language.page,
+      `\`${
+        Math.ceil(passObject.Objects.options.length / 25) ? passObject.Objects.page : 0
+      }/${Math.ceil(Objects.options.length / 25)}\``,
+    );
   }
 
   if (selected !== 'noSelect') {
@@ -1179,7 +1184,12 @@ const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
           });
 
           if (editor.requiresMenu) {
-            embed.addField(msg.language.page, `\`1/${Math.ceil(Objects.options.length / 25)}\``);
+            embed.addField(
+              msg.language.page,
+              `\`${
+                Math.ceil(passObject.Objects.options.length / 25) ? passObject.Objects.page : 0
+              }/${Math.ceil(Objects.options.length / 25)}\``,
+            );
           }
 
           await replier(
@@ -1211,7 +1221,9 @@ const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
           if (editor.requiresMenu) {
             embed.addField(
               msg.language.page,
-              `\`${passObject.Objects.page}/${Math.ceil(passObject.Objects.options.length / 25)}\``,
+              `\`${
+                Math.ceil(passObject.Objects.options.length / 25) ? passObject.Objects.page : 0
+              }/${Math.ceil(passObject.Objects.options.length / 25)}\``,
             );
           }
 
@@ -1248,7 +1260,9 @@ const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
           if (editor.requiresMenu) {
             embed.addField(
               msg.language.page,
-              `\`${passObject.Objects.page}/${Math.ceil(passObject.Objects.options.length / 25)}\``,
+              `\`${
+                Math.ceil(passObject.Objects.options.length / 25) ? passObject.Objects.page : 0
+              }/${Math.ceil(passObject.Objects.options.length / 25)}\``,
             );
           }
 
@@ -1344,7 +1358,12 @@ const messageHandler = async (msgData, editData, languageData, Objects) => {
       });
 
     if (editor.requiresMenu) {
-      returnEmbed.addField(msg.language.page, `\`1/${Math.ceil(Objects.options.length / 25)}\``);
+      returnEmbed.addField(
+        msg.language.page,
+        `\`${
+          Math.ceil(passObject.Objects.options.length / 25) ? passObject.Objects.page : 0
+        }/${Math.ceil(Objects.options.length / 25)}\``,
+      );
     }
 
     return replier(
