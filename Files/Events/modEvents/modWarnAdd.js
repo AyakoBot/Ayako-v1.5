@@ -36,7 +36,7 @@ module.exports = {
     const warnEmbed = new Discord.MessageEmbed()
       .setTitle(msg.client.ch.stp(lan.DMtitle, { guild: msg.guild }))
       .setColor(con.color)
-      .setDescription(`${msg.language.reason}: \n${reason}`)
+      .setDescription(`${language.reason}: \n${reason}`)
       .setTimestamp();
     msg.client.ch.send(target, { embeds: [warnEmbed] });
     const WarnLogEmbed = new Discord.MessageEmbed()
