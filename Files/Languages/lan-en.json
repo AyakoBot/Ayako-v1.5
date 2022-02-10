@@ -2935,7 +2935,10 @@
     "help": {}
   },
   "replaceOptions": {
-    "msg": "any Object Children from Discord.js Message Object.\n([Click here to find out what you can access](https://discord.js.org/#/docs/discord.js/stable/class/Message))\nYou can test this by using the `h!stp` Command"
+    "msg": [
+      "{{msg.[children]}}",
+      "any Object Children from Discord.js Message Object.\n([Click here to find out what you can access](https://discord.js.org/#/docs/discord.js/stable/class/Message))\nYou can test this by using the `h!stp` Command"
+    ]
   },
   "featuresName": "Features",
   "none": "None",
