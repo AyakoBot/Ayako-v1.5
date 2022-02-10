@@ -31,11 +31,11 @@ module.exports = {
         em.setDescription(`${msg.client.constants.emotes.cross} ${lan.noMemberHint}`);
         const Yes = new Discord.MessageButton()
           .setCustomId('yes')
-          .setLabel(msg.language.Yes)
+          .setLabel(language.Yes)
           .setStyle('SUCCESS');
         const No = new Discord.MessageButton()
           .setCustomId('no')
-          .setLabel(msg.language.No)
+          .setLabel(language.No)
           .setStyle('DANGER');
         msg.m?.edit({ embeds: [em], components: msg.client.ch.buttonRower([[Yes, No]]) });
       }
