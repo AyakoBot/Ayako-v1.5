@@ -21,13 +21,17 @@ module.exports = {
         const con = Constants.messageDeleteBulk;
         const lan = language.messageDeleteBulk;
 
-        const arr = msgs.map(
-          (msg) =>
-            `${msg.author?.tag} (${msg.author?.id}) | ${msg.content}\n${msg.attachments.map(
-              (attachment) =>
-                `${attachment.description ? attachment.description : ''} ${attachment.url}\n`,
-            )}`,
-        );
+        const arr = msgs
+          .map((msg) => {
+            if (msg.author || msg.content || msg.attachment.size) {
+              return `${msg.author.tag} (${msg.author.id}) | ${msg.content}\n${msg.attachments.map(
+                (attachment) =>
+                  `${attachment.description ? attachment.description : ''} ${attachment.url}\n`,
+              )}`;
+            }
+            return null;
+          })
+          .filter((e) => !!e);
 
         const attachment = ch.txtFileWriter(arr);
         let audits = await guild.fetchAuditLogs({ limit: 5, type: 73 }).catch(() => {});
