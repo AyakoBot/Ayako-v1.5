@@ -4,6 +4,7 @@ module.exports = {
   key: ['embed'],
   requiresMenu: true,
   requiresInteraction: true,
+  endsCollector: true,
   dataPreparation: async (msg, editorData) => {
     const { insertedValues, required, Objects } = editorData;
 
@@ -133,17 +134,18 @@ module.exports = {
 
     return returnedButtons;
   },
-  async interactionHandler(msgData, passObject, insertedValues, required) {
-    const { msg, interaction } = msgData;
+  async interactionHandler(msgData, passObject, insertedValues, required, row, collectors) {
+    const { msg, answer: interaction } = msgData;
 
     const options = Object.entries(msg.language.commands.settings[msg.file.name].options);
 
-    const { embed, answer, name } = await msg.client.ch.embedBuilder(msg, interaction, options);
+    msg.m.reactions.removeAll().catch(() => {});
+    collectors.forEach((c) => c.stop());
 
-    if (!insertedValues[required.assinger]) {
-      insertedValues[required.assinger] = Number(answer.values[0]);
-      answer.values.shift();
-    }
+    const fin = await msg.client.ch.embedBuilder(msg, interaction, options);
+
+    if (!fin) return null;
+    const { answer, name, now } = fin;
 
     const selected = module.exports.getSelected(msg, insertedValues, required);
 
@@ -151,15 +153,9 @@ module.exports = {
       `**${msg.language.selected}:**\n${selected?.length ? selected : msg.language.none}`,
     );
 
-    passObject.Objects.options.forEach((option) => {
-      if (new Discord.BitField(insertedValues[required.assinger]).has(Number(option.value))) {
-        option.emoji = msg.client.constants.emotes.minusBGID;
-      } else {
-        option.emoji = msg.client.constants.emotes.plusBGID;
-      }
-    });
+    passObject.Objects.options.push({ label: name.slice(0, 100), value: `${now}` });
 
-    return { returnEmbed };
+    return { returnEmbed, answer };
   },
 };
 

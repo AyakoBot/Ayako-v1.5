@@ -1129,6 +1129,9 @@ const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
       if (messageCollector) messageCollector.resetTimer();
       switch (interaction.customId) {
         default: {
+          const collectors = [buttonsCollector];
+          if (messageCollector) collectors.push(messageCollector);
+
           const returnedObject =
             typeof editor.interactionHandler === 'function'
               ? await editor.interactionHandler(
@@ -1137,6 +1140,7 @@ const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
                   insertedValues,
                   required,
                   row,
+                  collectors,
                 )
               : await interactionHandler(
                   { msg, answer: interaction },
