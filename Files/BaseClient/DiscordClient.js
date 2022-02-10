@@ -138,12 +138,18 @@ const getClient = () => {
   const client = new Discord.Client({
     failIfNotExists: false,
     shards: 'auto',
-    partials: ['MESSAGE', 'REACTION', 'CHANNEL', 'USER', 'GUILD_MEMBER'],
+    partials: ['MESSAGE', 'REACTION', 'CHANNEL', 'USER', 'GUILD_MEMBER', 'GUILD_SCHEDULED_EVENT'],
     intents: new Discord.Intents(14335),
 
     allowedMentions: {
       parse: ['users', 'roles'],
       repliedUser: false,
+    },
+    sweepers: {
+      messages: {
+        interval: 60,
+        lifetime: 1209600,
+      },
     },
   });
 
