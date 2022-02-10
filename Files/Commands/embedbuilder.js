@@ -1150,20 +1150,6 @@ const handleSave = async (msg, answer, Objects) => {
     url: msg.client.constants.standard.invite,
   });
 
-  if (Objects.options) {
-    embed.addField(
-      msg.language.commands.embedbuilder.replacedOptions,
-      `${Objects.options
-        .map((o) =>
-          msg.client.ch.stp(msg.language.commands.embedbuilder.replacedOptionsDescription, {
-            option: o[0],
-            value: o[1],
-          }),
-        )
-        .join('\n')}`,
-    );
-  }
-
   await replier({ msg, answer }, { embeds: [embed], components: [save] }, Objects);
 
   return new Promise((resolve) => {
@@ -1920,7 +1906,7 @@ const handleDelete = async ({ msg, answer }, Objects) => {
     [msg.guild.id, selectedValue.value],
   );
 
-  return module.exports.builder(msg, answer, null, 4, Objects.options);
+  return module.exports.builder(msg, answer, Objects.embed, 4, Objects.options);
 };
 
 const handlePage = async ({ msg, answer }, Objects, { embed }, increasePage) => {

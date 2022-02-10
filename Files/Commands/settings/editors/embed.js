@@ -4,7 +4,6 @@ module.exports = {
   key: ['embed'],
   requiresMenu: true,
   requiresInteraction: true,
-  endsCollector: true,
   dataPreparation: async (msg, editorData) => {
     const { insertedValues, required, Objects } = editorData;
 
@@ -137,25 +136,31 @@ module.exports = {
   async interactionHandler(msgData, passObject, insertedValues, required, row, collectors) {
     const { msg, answer: interaction } = msgData;
 
-    const options = Object.entries(msg.language.commands.settings[msg.file.name].options);
+    switch (interaction.customId) {
+      default: {
+        const options = Object.entries(msg.language.commands.settings[msg.file.name].options);
 
-    msg.m.reactions.removeAll().catch(() => {});
-    collectors.forEach((c) => c.stop());
+        msg.m.reactions.removeAll().catch(() => {});
+        collectors.forEach((c) => c.stop());
 
-    const fin = await msg.client.ch.embedBuilder(msg, interaction, options);
+        const fin = await msg.client.ch.embedBuilder(msg, interaction, options);
 
-    if (!fin) return null;
-    const { answer, name, now } = fin;
+        if (!fin) return null;
+        const { answer } = fin;
 
-    const selected = module.exports.getSelected(msg, insertedValues, required);
+        return { answer, recall: true };
+      }
+      case 'embed': {
+        [insertedValues[required.assinger]] = interaction.values;
 
-    const returnEmbed = new Discord.MessageEmbed().setDescription(
-      `**${msg.language.selected}:**\n${selected?.length ? selected : msg.language.none}`,
-    );
+        const selected = await module.exports.getSelected(msg, insertedValues, required);
 
-    passObject.Objects.options.push({ label: name.slice(0, 100), value: `${now}` });
-
-    return { returnEmbed, answer };
+        const returnEmbed = new Discord.MessageEmbed().setDescription(
+          `**${msg.language.selected}:**\n${selected?.length ? selected : msg.language.none}`,
+        );
+        return { returnEmbed };
+      }
+    }
   },
 };
 

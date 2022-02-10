@@ -1122,7 +1122,7 @@ const log = async (msg, editData, logType) => {
 
 const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
   const { insertedValues, required, editor, passObject, Objects } = editData;
-  const { msg, row, messageCollector, res } = msgData;
+  const { msg, row, res, messageCollector } = msgData;
   let { embed } = msgData;
   const { languageOfKey, languageOfSetting } = languageData;
 
@@ -1160,13 +1160,29 @@ const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
             buttonsCollector.stop();
             break;
           }
+
+          if (returnedObject.recall) {
+            const newRes = await msg.client.ch.query(
+              `SELECT * FROM ${
+                msg.client.constants.commands.settings.tablenames[msg.file.name][0]
+              } WHERE guildid = $1;`,
+              [msg.guild.id],
+            );
+
+            return changing(
+              { msg, answer: returnedObject.answer },
+              { usedKey: required.key, comesFromMMR },
+              { row: newRes.rows[0], res: newRes },
+            );
+          }
+
           embed = returnedObject.returnEmbed;
 
           if (required.assinger !== 'id') {
             embed
               .addField(
                 '\u200b',
-                `\u200b${msg.lanSettings.valid}:\n${languageOfKey.answers}${
+                `\u200b**${msg.lanSettings.valid}**:\n${languageOfKey.answers}${
                   languageOfKey.recommended ? `\n\n${languageOfKey.recommended}\n` : ''
                 }${languageOfKey.desc ? languageOfKey.desc : ''}`,
               )
@@ -1193,7 +1209,7 @@ const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
           }
 
           await replier(
-            { msg, answer: interaction },
+            { msg, answer: returnedObject.answer ? returnedObject.answer : interaction },
             {
               rawButtons:
                 typeof editor.buttons === 'function'
@@ -1343,7 +1359,7 @@ const messageHandler = async (msgData, editData, languageData, Objects) => {
     returnEmbed
       .addField(
         '\u200b',
-        `\u200b${msg.lanSettings.valid}:\n${languageOfKey.answers}${
+        `\u200b**${msg.lanSettings.valid}**:\n${languageOfKey.answers}${
           languageOfKey.recommended ? `\n\n${languageOfKey.recommended}\n` : ''
         }${languageOfKey.desc ? languageOfKey.desc : ''}`,
       )
