@@ -51,12 +51,14 @@ module.exports = {
     if (Objects.options) {
       embed.addField(
         msg.language.commands.embedbuilder.replacedOptions,
-        `${Objects.options.map((o) =>
-          msg.client.ch.stp(msg.language.commands.embedbuilder.replacedOptionsDescription, {
-            option: o[0],
-            value: o[1],
-          }),
-        )}`,
+        `${Objects.options
+          .map((o) =>
+            msg.client.ch.stp(msg.language.commands.embedbuilder.replacedOptionsDescription, {
+              option: o[0],
+              value: o[1],
+            }),
+          )
+          .join('\n')}`,
       );
     }
 
@@ -474,12 +476,14 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
     if (Objects.options) {
       recommendedEmbed.addField(
         msg.language.commands.embedbuilder.replacedOptions,
-        `${Objects.options.map((o) =>
-          msg.client.ch.stp(msg.language.commands.embedbuilder.replacedOptionsDescription, {
-            option: o[0],
-            value: o[1],
-          }),
-        )}`,
+        `${Objects.options
+          .map((o) =>
+            msg.client.ch.stp(msg.language.commands.embedbuilder.replacedOptionsDescription, {
+              option: o[0],
+              value: o[1],
+            }),
+          )
+          .join('\n')}`,
       );
     }
     if (lang.recommended) {
@@ -624,6 +628,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           inheritCodeEmbedMessageCollector.on('end', (collected, reason) => {
             if (reason === 'time') {
               postCode(Objects, msg);
+              resolve();
             }
           });
           break;
@@ -1065,8 +1070,6 @@ const postCode = (Objects, msg, answer, embed, noRemove) => {
     ]);
   }
 
-  const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
-
   const rawCode = new Discord.MessageEmbed(Objects.embed).toJSON();
   if (rawCode.length > 4000) {
     const attachment = msg.client.ch.txtFileWriter([rawCode]);
@@ -1097,26 +1100,31 @@ const postCode = (Objects, msg, answer, embed, noRemove) => {
     );
   }
 
-  return new Promise((resolve) => {
-    buttonsCollector.on('collect', async (interaction) => {
-      if (interaction.user.id !== msg.author.id) {
-        msg.client.ch.notYours(interaction, msg);
-        return;
-      }
+  if (noRemove) {
+    const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
+    return new Promise((resolve) => {
+      buttonsCollector.on('collect', async (interaction) => {
+        if (interaction.user.id !== msg.author.id) {
+          msg.client.ch.notYours(interaction, msg);
+          return;
+        }
 
-      if (interaction.customId === 'back') {
-        buttonsCollector.stop();
-        resolve(await module.exports.builder(msg, interaction, Objects.embed, 3));
-      }
-    });
+        if (interaction.customId === 'back') {
+          buttonsCollector.stop();
+          resolve(await module.exports.builder(msg, interaction, Objects.embed, 3));
+        }
+      });
 
-    buttonsCollector.on('end', async (collected, reason) => {
-      if (reason === 'time') {
-        resolve(null);
-        await postCode(Objects, msg, answer);
-      }
+      buttonsCollector.on('end', async (collected, reason) => {
+        if (reason === 'time') {
+          resolve(null);
+          postCode(Objects, msg, answer);
+        }
+      });
     });
-  });
+  }
+
+  return null;
 };
 
 const handleSave = async (msg, answer, Objects) => {
@@ -1135,12 +1143,14 @@ const handleSave = async (msg, answer, Objects) => {
   if (Objects.options) {
     embed.addField(
       msg.language.commands.embedbuilder.replacedOptions,
-      `${Objects.options.map((o) =>
-        msg.client.ch.stp(msg.language.commands.embedbuilder.replacedOptionsDescription, {
-          option: o[0],
-          value: o[1],
-        }),
-      )}`,
+      `${Objects.options
+        .map((o) =>
+          msg.client.ch.stp(msg.language.commands.embedbuilder.replacedOptionsDescription, {
+            option: o[0],
+            value: o[1],
+          }),
+        )
+        .join('\n')}`,
     );
   }
 
@@ -1148,6 +1158,7 @@ const handleSave = async (msg, answer, Objects) => {
 
   return new Promise((resolve) => {
     let name;
+
     const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
     const messageCollector = msg.channel.createMessageCollector({ time: 60000 });
 
@@ -1166,12 +1177,6 @@ const handleSave = async (msg, answer, Objects) => {
         messageCollector.stop();
         buttonsCollector.stop();
         resolve(await module.exports.build({ msg, answer }, Objects, 3));
-      }
-    });
-
-    buttonsCollector.on('end', async (collected, reason) => {
-      if (reason === 'time') {
-        resolve(await postCode(Objects, msg, answer));
       }
     });
 
@@ -1208,6 +1213,7 @@ const handleSave = async (msg, answer, Objects) => {
       buttonsCollector.stop();
 
       const emb = Objects.embed;
+      const now = Date.now();
 
       msg.client.ch.query(
         `
@@ -1231,13 +1237,13 @@ const handleSave = async (msg, answer, Objects) => {
           emb.timestamp,
           emb.footer?.text,
           emb.footer?.iconURL,
-          Date.now(),
+          now,
           msg.guild.id,
           name,
         ],
       );
 
-      resolve({ embed: emb, answer: interaction, name });
+      resolve({ embed: emb, answer: interaction, name, now });
     });
     buttonsCollector.on('end', (collected, reason) => {
       if (reason === 'time') {
@@ -1468,7 +1474,9 @@ const handleOtherMsgRaw = async (msg, answer, Objects) => {
 
     buttonsCollector.on('end', async (collected, reason) => {
       if (reason === 'time') {
-        resolve(await postCode(Objects, msg, answer));
+        postCode(Objects, msg, answer);
+
+        resolve();
       }
     });
 
@@ -1647,6 +1655,7 @@ const fieldSelect = async (msg, answer, Objects) => {
       if (reason !== 'time') messageCollector.stop();
       else {
         resolve(null);
+
         postCode(Objects, msg, answer);
       }
     });

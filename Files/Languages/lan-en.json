@@ -2344,11 +2344,11 @@
         "lvlupemotes": "Level-Up Emotes",
         "lackingAccess": "I'm lacking access to these emotes: {{emotes}}",
         "options": {
-          "user": "The User who leveled up",
-          "newLevel": "The new Level",
-          "newXP": "The new XP",
-          "oldLevel": "The old Level",
-          "oldXP": "The old XP"
+          "user": "a mention of the User who leveled up",
+          "newLevel": "the new Level",
+          "newXP": "the new XP",
+          "oldLevel": "the old Level",
+          "oldXP": "the old XP"
         },
         "edit": {
           "active": {
@@ -2930,8 +2930,7 @@
     "help": {}
   },
   "replaceOptions": {
-    "msg": "Invoke any Object Children from here.\n([Click here to find out what you can access](https://discord.js.org/#/docs/discord.js/stable/class/Message))\nYou can test this by using the `h!stp` Command",
-    "member": "The Member that initiated this Message"
+    "msg": "any Object Children from Discord.js Message Object.\n([Click here to find out what you can access](https://discord.js.org/#/docs/discord.js/stable/class/Message))\nYou can test this by using the `h!stp` Command"
   },
   "featuresName": "Features",
   "none": "None",
