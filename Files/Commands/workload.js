@@ -11,7 +11,9 @@ module.exports = {
   async execute(msg) {
     const startMeasure = cpuAverage();
 
-    const m = await msg.client.ch.reply(msg, await msg.client.ch.loadingEmbed(msg.lan, msg.guild));
+    const m = await msg.client.ch.reply(msg, {
+      embeds: [await msg.client.ch.loadingEmbed(msg.lan, msg.guild)],
+    });
 
     const endMeasure = cpuAverage();
     const idleDifference = endMeasure.idle - startMeasure.idle;
