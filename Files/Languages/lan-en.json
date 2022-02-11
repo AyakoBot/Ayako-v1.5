@@ -2940,6 +2940,9 @@
       "any Object Children from Discord.js Message Object.\n([Click here to find out what you can access](https://discord.js.org/#/docs/discord.js/stable/class/Message))\nYou can test this by using the `h!stp` Command"
     ]
   },
+  "leveling": {
+    "author": "{{msg.author.tag}} has leveled up to Level {{newLevel}}"
+  },
   "featuresName": "Features",
   "none": "None",
   "before": "Before",
