@@ -1,14 +1,4 @@
 const Discord = require('discord.js');
-/*
-TODO: 
-finish levelupmote {
-  reactions: let ppl choose reactions (lvlupemotes)
-  message: implement own embed via embed builder
-  silent
-}
-lvlupdeltimeout
-lvlupchannels
-*/
 
 module.exports = {
   perm: 32n,
