@@ -452,6 +452,7 @@ const getSeverity = (VTresponse) => {
 };
 
 const selfChecker = async (linkObject) => {
+  return false;
   const siteHTML = confusables.remove((await axios.get(linkObject.href).catch((e) => e))?.data);
   if (!siteHTML) return false;
   // eslint-disable-next-line no-useless-escape
