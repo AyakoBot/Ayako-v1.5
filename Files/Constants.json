@@ -365,6 +365,7 @@
     "bigID": "756380855395549256",
     "bigLink": "https://cdn.discordapp.com/emojis/756380855395549256.png?v=1",
     "warning": "⚠",
+    "warningLink": "https://ayakobot.com/cdn/Ayako_Assets/Warning.png",
     "green": "🟢",
     "yellow": "🟡",
     "blue": "🔵",
@@ -552,6 +553,9 @@
     ]
   },
   "commands": {
+    "rank": {
+      "authorImage": ""
+    },
     "afk": "YELLOW",
     "toxicityCheck": "ff0000",
     "pardon": {
