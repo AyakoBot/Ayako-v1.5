@@ -111,8 +111,12 @@ module.exports = {
         let text = replacer(e);
         if (text === 'true') text = true;
         if (text === 'false') text = false;
-        if (`${text}`.replace(/\D+/g, '') === text && Number.MAX_SAFE_INTEGER > parseInt(text, 10))
+        if (
+          `${text}`.replace(/\D+/g, '') === text &&
+          Number.MAX_SAFE_INTEGER > parseInt(text, 10)
+        ) {
           text = Number(text);
+        }
         returned.push(text);
       });
       return returned;
@@ -956,58 +960,67 @@ module.exports = {
   /**
    * Converts a DB embed and its Dynamic Options to a Discord Embed
    * @constructor
-   * @param {object} embed - The Embed to replace from
+   * @param {object} rawEmbed - The Embed to replace from
    * @param {array} options - Array of options with arg 1 being the option accessor and arg 2 the option value
    */
   dynamicToEmbed: (rawEmbed, options) => {
-    const embed = new Discord.MessageEmbed();
+    const embeds = [rawEmbed];
+
     const mod = module.exports.stp;
 
     options.forEach((option) => {
-      embed.color = rawEmbed.color ? mod(rawEmbed.color, { [option[0]]: option[1] }) : null;
-      embed.title = rawEmbed.title ? mod(rawEmbed.title, { [option[0]]: option[1] }) : null;
-      embed.url = rawEmbed.url ? mod(rawEmbed.url, { [option[0]]: option[1] }) : null;
+      const embedToUse = embeds[embeds.length - 1];
+      const embed = new Discord.MessageEmbed();
 
-      if (rawEmbed.author) {
+      embed.color = embedToUse.color;
+      embed.title = embedToUse.title ? mod(embedToUse.title, { [option[0]]: option[1] }) : null;
+      embed.url = embedToUse.url ? mod(embedToUse.url, { [option[0]]: option[1] }) : null;
+
+      if (embedToUse.author) {
         embed.author = {
-          name: rawEmbed.author.name ? mod(rawEmbed.author.name, { [option[0]]: option[1] }) : null,
-          iconURL: rawEmbed.author.iconURL
-            ? mod(rawEmbed.author.iconURL, { [option[0]]: option[1] })
+          name: embedToUse.author.name
+            ? mod(embedToUse.author.name, { [option[0]]: option[1] })
             : null,
-          url: rawEmbed.author.url ? mod(rawEmbed.author.url, { [option[0]]: option[1] }) : null,
+          iconURL: embedToUse.author.iconURL
+            ? mod(embedToUse.author.iconURL, { [option[0]]: option[1] })
+            : null,
+          url: embedToUse.author.url
+            ? mod(embedToUse.author.url, { [option[0]]: option[1] })
+            : null,
         };
       }
 
-      embed.description = rawEmbed.description
-        ? mod(rawEmbed.description, { [option[0]]: option[1] })
+      embed.description = embedToUse.description
+        ? mod(embedToUse.description, { [option[0]]: option[1] })
         : null;
-      console.log(embed.description, rawEmbed.description);
 
       embed.thumbnail =
-        rawEmbed.thumbnail && rawEmbed.thumbnail.url
-          ? mod(rawEmbed.thumbnail.url, { [option[0]]: option[1] })
+        embedToUse.thumbnail && embedToUse.thumbnail.url
+          ? mod(embedToUse.thumbnail.url, { [option[0]]: option[1] })
           : null;
 
       embed.image =
-        rawEmbed.image && rawEmbed.image.url
-          ? mod(rawEmbed.image.url, { [option[0]]: option[1] })
+        embedToUse.image && embedToUse.image.url
+          ? mod(embedToUse.image.url, { [option[0]]: option[1] })
           : null;
 
-      embed.timestamp = rawEmbed.timestamp
-        ? Number(mod(`${rawEmbed.timestamp}`, { [option[0]]: option[1] }))
+      embed.timestamp = embedToUse.timestamp
+        ? Number(mod(`${embedToUse.timestamp}`, { [option[0]]: option[1] }))
         : null;
 
-      if (rawEmbed.footer) {
+      if (embedToUse.footer) {
         embed.footer = {
-          name: rawEmbed.footer.text ? mod(rawEmbed.footer.text, { [option[0]]: option[1] }) : null,
-          iconURL: rawEmbed.footer.iconURL
-            ? mod(rawEmbed.footer.iconURL, { [option[0]]: option[1] })
+          name: embedToUse.footer.text
+            ? mod(embedToUse.footer.text, { [option[0]]: option[1] })
+            : null,
+          iconURL: embedToUse.footer.iconURL
+            ? mod(embedToUse.footer.iconURL, { [option[0]]: option[1] })
             : null,
         };
       }
 
-      if (rawEmbed.fields && rawEmbed.fields.length) {
-        rawEmbed.fields.forEach(([name, value, inline]) => {
+      if (embedToUse.fields && embedToUse.fields.length) {
+        embedToUse.fields.forEach(([name, value, inline]) => {
           embed.fields.push({
             name: name ? mod(name, { [option[0]]: option[1] }) : null,
             value: value ? mod(value, { [option[0]]: option[1] }) : null,
@@ -1015,9 +1028,11 @@ module.exports = {
           });
         });
       }
+
+      embeds.push(embed);
     });
 
-    return embed;
+    return embeds.pop();
   },
   error: (msg, content) => {
     const embed = new Discord.MessageEmbed()
