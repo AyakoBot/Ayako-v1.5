@@ -61,12 +61,12 @@ module.exports = {
       .setColor(msg.client.ch.colorSelector(msg.guild.me))
       .addFields(
         { name: msg.lan.currentXP, value: `${xp}`, inline: true },
-        { name: msg.lan.nextXP, value: `${Math.floor(neededXP)}`, inline: true },
+        { name: msg.lan.nextXP, value: `${Math.ceil(neededXP)}`, inline: true },
         { name: msg.lan.diff, value: `${Math.round(neededXP - xp)}`, inline: true },
         {
           name: '\u200b',
           value: `${msg.client.ch.stp(msg.lan.duration, {
-            amount: `${Math.floor((neededXP - xp) / gain / (xpPerMsg + 10))}`,
+            amount: `${Math.ceil((neededXP - xp) / gain / (xpPerMsg + 10))}`,
             duration,
           })}`,
           inline: false,
