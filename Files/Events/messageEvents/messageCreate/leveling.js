@@ -8,13 +8,8 @@ const lastMessageGuild = new Map();
 const globalCooldown = new Set();
 const lastMessageGlobal = new Map();
 
-/*
-TODO: 
-ruleschannels
-*/
-
 module.exports = {
-  async execute(msg) {
+  execute: async (msg) => {
     if (!msg.author || msg.author.bot || msg.channel.type === 'DM') return;
 
     const language = await msg.client.ch.languageSelector(msg.guild);
@@ -28,7 +23,7 @@ const globalLeveling = async (msg) => {
   if (globalCooldown.has(msg.author.id)) return;
 
   const lastMessage = lastMessageGlobal.get(msg.author.id);
-  if (StringSimilarity.compareTwoStrings(msg.content, lastMessage) > 0.9) return;
+  if (lastMessage && StringSimilarity.compareTwoStrings(msg.content, lastMessage) > 0.9) return;
   lastMessageGlobal.set(msg.author.id, msg.content);
 
   globalCooldown.add(msg.author.id);
@@ -51,15 +46,21 @@ const guildLeveling = async (msg, language) => {
   const isEnabled = await checkEnabled(msg);
   if (isEnabled === false) return;
 
-  const rows = isEnabled.rows[0];
-  if (!rows.wlusers || !rows.wlusers.includes(msg.author.id)) {
-    if (rows.blusers && rows.blusers?.includes(msg.author.id)) return;
-    if (rows.blroles && msg.member.roles.cache.some((r) => rows.blroles.includes(r.id))) return;
+  const rows = isEnabled?.rows[0];
+  if (rows) {
+    if (!rows.wlusers || !rows.wlusers.includes(msg.author.id)) {
+      if (rows.blusers && rows.blusers?.includes(msg.author.id)) return;
+      if (rows.blroles && msg.member.roles.cache.some((r) => rows.blroles.includes(r.id))) return;
 
-    if (!rows.wlroles || !msg.member.roles.cache.some((r) => rows.wlroles.includes(r.id))) {
-      if (rows.blchannels && rows.blchannels.includes(msg.channel.id)) return;
-      if (rows.wlchannels && rows.wlchannels.length && !rows.wlchannels.includes(msg.channel.id)) {
-        return;
+      if (!rows.wlroles || !msg.member.roles.cache.some((r) => rows.wlroles.includes(r.id))) {
+        if (rows.blchannels && rows.blchannels.includes(msg.channel.id)) return;
+        if (
+          rows.wlchannels &&
+          rows.wlchannels.length &&
+          !rows.wlchannels.includes(msg.channel.id)
+        ) {
+          return;
+        }
       }
     }
   }
@@ -73,7 +74,7 @@ const guildLeveling = async (msg, language) => {
   if (guildCooldown.has(msg.author.id)) return;
 
   const lastMessage = lastMessageGuild.get(msg.author.id);
-  if (StringSimilarity.compareTwoStrings(msg.content, lastMessage) > 0.9) return;
+  if (lastMessage && StringSimilarity.compareTwoStrings(msg.content, lastMessage) > 0.9) return;
   lastMessageGuild.set(msg.author.id, msg.content);
 
   guildCooldown.add(msg.author.id);
@@ -91,12 +92,17 @@ const guildLeveling = async (msg, language) => {
       msg,
       res.rows[0],
       { res, language },
-      Number(rows.xppermsg) - 10,
+      rows ? Number(rows.xppermsg) - 10 : 15,
       'guild',
-      Number(rows.xpmultiplier),
+      rows ? Number(rows.xpmultiplier) : 1,
     );
   } else {
-    insertLevels(msg, 'guild', Number(rows.xppermsg) - 10, Number(rows.xpmultiplier));
+    insertLevels(
+      msg,
+      'guild',
+      rows ? Number(rows.xppermsg) - 10 : 15,
+      rows ? Number(rows.xpmultiplier) : 1,
+    );
   }
 };
 
@@ -104,7 +110,7 @@ const insertLevels = (msg, type, baseXP, xpMultiplier) => {
   const xp = Math.floor(Math.random() * xpMultiplier + baseXP);
 
   msg.client.ch.query(
-    `INSERT INTO levels (type, userid, xp, level, guildid) VALUES ($1, $2, $3, $4, $5);`,
+    `INSERT INTO level (type, userid, xp, level, guildid) VALUES ($1, $2, $3, $4, $5);`,
     [type, msg.author.id, xp, 0, type === 'guild' ? msg.guild.id : null],
   );
 };
@@ -124,7 +130,7 @@ const updateLevels = (msg, row, lvlupObj, baseXP, type, xpMultiplier) => {
   }
 
   msg.client.ch.query(
-    `UPDATE levels SET level = $1, xp = $2 WHERE type = $3 AND userid = $4 AND guildid = $5;`,
+    `UPDATE level SET level = $1, xp = $2 WHERE type = $3 AND userid = $4 AND guildid = $5;`,
     [newLevel, xp, type, msg.author.id, type === 'guild' ? msg.guild.id : null],
   );
 
@@ -138,8 +144,9 @@ const checkEnabled = async (msg) => {
 
   if (res && res.rowCount) {
     if (res.rows[0].active === false) return false;
+    return res;
   }
-  return res;
+  return null;
 };
 
 const levelUp = async (msg, levelData, { res, language }) => {
