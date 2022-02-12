@@ -158,11 +158,11 @@ const levelUp = async (msg, levelData, { res, language }, row) => {
       break;
     }
     case 1: {
-      await doEmbed(msg, res, language, levelData);
+      await doEmbed(msg, res, language, levelData, row);
       break;
     }
     case 2: {
-      doReact(msg, res);
+      doReact(msg, row);
       break;
     }
   }
@@ -233,11 +233,11 @@ const roleAssign = async (msg, rolemode, newLevel) => {
   await Promise.all(promises);
 };
 
-const doReact = async (msg, res) => {
+const doReact = async (msg, row) => {
   const reactions = [];
 
-  if (res.lvlupemotes?.length) {
-    res.lvlupemotes.forEach((emoteID) => {
+  if (row?.lvlupemotes?.length) {
+    row.lvlupemotes.forEach((emoteID) => {
       const emote = msg.client.emojis.cache.get(emoteID);
       if (emote) reactions.push(emote);
     });
@@ -249,7 +249,7 @@ const doReact = async (msg, res) => {
   await Promise.all(promises);
 };
 
-const doEmbed = async (msg, levelRes, language, levelData) => {
+const doEmbed = async (msg, levelRes, language, levelData, row) => {
   const getDefaultEmbed = () => {
     return new Discord.MessageEmbed()
       .setAuthor({ name: language.leveling.author })
@@ -267,11 +267,11 @@ const doEmbed = async (msg, levelRes, language, levelData) => {
     ['oldXP', levelData.oldXp],
   ];
 
-  if (!levelRes.rows[0].embed) embed = msg.client.ch.dynamicToEmbed(getDefaultEmbed(), options);
+  if (!row?.embed) embed = msg.client.ch.dynamicToEmbed(getDefaultEmbed(), options);
   else {
     const res = await msg.client.ch.query(
       `SELECT * FROM customembeds WHERE uniquetimestamp = $1 AND guildid = $2;`,
-      [levelRes.rows[0].embed, msg.guild.id],
+      [row.embed, msg.guild.id],
     );
 
     if (res && res.rowCount) {
