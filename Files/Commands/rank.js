@@ -5,15 +5,25 @@ require('moment-duration-format');
 module.exports = {
   name: 'rank',
   perm: null,
-  dm: false,
+  dm: true,
   takesFirstArg: false,
-  aliases: ['level'],
+  aliases: ['level', 'grank', 'glevel', 'lvl', 'glvl'],
   type: 'fun',
   execute: async (msg) => {
-    const guildRow = await getRow(msg);
-    if (guildRow && guildRow.active === false) {
-      msg.client.ch.error(msg, msg.lan.disabled);
-      return;
+    let isGuild =
+      msg.content.split(' ')[0].includes(module.exports.name) ||
+      msg.content.split(' ')[0].includes(module.exports.aliases[3]) ||
+      msg.content.split(' ')[0].includes(module.exports.aliases[0]);
+
+    if (msg.channel.type === 'DM') isGuild = false;
+
+    let guildRow;
+    if (isGuild) {
+      guildRow = await getRow(msg);
+      if (guildRow && guildRow.active === false) {
+        msg.client.ch.error(msg, msg.lan.disabled);
+        return;
+      }
     }
 
     const user = await msg.client.users.fetch(
@@ -24,7 +34,9 @@ module.exports = {
       return;
     }
 
-    const levelRow = await getLevelRow(msg, user);
+    let levelRow;
+    if (isGuild) levelRow = await getLevelRow(msg, user);
+    else levelRow = await getGlobalRow(msg, user);
 
     let level = 0;
     let xp = 0;
@@ -39,6 +51,9 @@ module.exports = {
       xpPerMsg = Number(guildRow.xppermsg) - 10;
       gain = Number(guildRow.xpmultiplier);
     }
+    if (!isGuild) {
+      xpPerMsg = 10;
+    }
 
     const newLevel = level + 1;
     const neededXP = (5 / 6) * +newLevel * (2 * +newLevel * +newLevel + 27 * +newLevel + 91);
@@ -51,14 +66,16 @@ module.exports = {
 
     const embed = new Discord.MessageEmbed()
       .setAuthor({
-        name: msg.lan.author,
+        name: isGuild ? msg.lan.author : msg.lan.globalAuthor,
         iconURL: msg.client.constants.commands.rank.authorImage,
         url: msg.client.constants.standard.invite,
       })
       .setDescription(
         msg.client.ch.makeBold(msg.client.ch.stp(msg.lan.currentLevel, { level: `${level}` })),
       )
-      .setColor(msg.client.ch.colorSelector(msg.guild.me))
+      .setColor(
+        isGuild ? msg.client.ch.colorSelector(msg.guild.me) : msg.client.constants.standard.color,
+      )
       .addFields(
         { name: msg.lan.currentXP, value: `${xp}`, inline: true },
         { name: msg.lan.nextXP, value: `${Math.ceil(neededXP)}`, inline: true },
@@ -86,10 +103,19 @@ const getRow = async (msg) => {
 };
 
 const getLevelRow = async (msg, user) => {
-  const res = await msg.client.ch.query(`SELECT * FROM level WHERE guildid = $1 AND userid = $2;`, [
-    msg.guild.id,
-    user.id,
-  ]);
+  const res = await msg.client.ch.query(
+    `SELECT * FROM level WHERE guildid = $1 AND userid = $2 AND type = 'guild';`,
+    [msg.guild.id, user.id],
+  );
+  if (res && res.rowCount) return res.rows[0];
+  return null;
+};
+
+const getGlobalRow = async (msg, user) => {
+  const res = await msg.client.ch.query(
+    `SELECT * FROM level WHERE type = 'global' AND userid = $1;`,
+    [user.id],
+  );
   if (res && res.rowCount) return res.rows[0];
   return null;
 };
