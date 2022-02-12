@@ -31,7 +31,7 @@ module.exports = {
   displayEmbed(msg, r) {
     const embed = new Discord.MessageEmbed()
       .setDescription(
-        `${msg.lan.rules}:\n${
+        `**${msg.lan.rules}**:\n${
           r.rules
             ? `\`${msg.client.ch.channelRuleCalc(r.rules, msg.language).join('`\n `')}\``
             : msg.language.none
@@ -39,7 +39,7 @@ module.exports = {
       )
       .addFields({
         name: msg.language.Channels,
-        value: `${r.channels?.length ? r.channels.map((id) => ` <@&${id}>`) : msg.language.none}`,
+        value: `${r.channels?.length ? r.channels.map((id) => ` <#${id}>`) : msg.language.none}`,
         inline: false,
       });
 
@@ -82,24 +82,28 @@ module.exports = {
     const ruleButtons = [[]];
     let i = 0;
 
-    msg.client.ch.channelRuleCalc(r.rules, msg.language).forEach((rule, j) => {
-      const [key] = Object.entries(msg.language.channelRules).find(([, v]) => v === rule);
-      const emote = msg.client.constants.emotes.numbers[(j % 5) + 1];
+    const channelRules = msg.client.ch.channelRuleCalc(r.rules, msg.language);
+    if (channelRules && channelRules.length) {
+      channelRules.forEach((rule, j) => {
+        const [key] = Object.entries(msg.language.channelRules).find(([, v]) => v === rule);
+        const emote = msg.client.constants.emotes.numbers[(j % 5) + 1];
 
-      const button = new Discord.MessageButton()
-        .setCustomId(lan.edit[key].name)
-        .setLabel(msg.language.channelRules[`${key}_SHORT`])
-        .setEmoji(emote)
-        .setStyle('SECONDARY');
+        const button = new Discord.MessageButton()
+          .setCustomId(lan.edit[key].name)
+          .setLabel(msg.language.channelRules[`${key}_SHORT`])
+          .setEmoji(emote)
+          .setStyle('SECONDARY');
 
-      if (ruleButtons[i].length <= 4) {
-        ruleButtons[i].push(button);
-      } else {
-        ruleButtons.push([button]);
-        i += 1;
-      }
-    });
+        if (ruleButtons[i].length <= 4) {
+          ruleButtons[i].push(button);
+        } else {
+          ruleButtons.push([button]);
+          i += 1;
+        }
+      });
+    }
 
-    return [[channels, rules], ...ruleButtons];
+    if (ruleButtons[0].length) return [[channels, rules], ...ruleButtons];
+    return [[channels, rules]];
   },
 };
