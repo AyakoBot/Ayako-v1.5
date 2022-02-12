@@ -163,11 +163,13 @@ const announcement = async (voter, usedRole) => {
     'owoDfJHBLZiD7NzuYPZ5m8jAoeGOHXUSa1o3YkLgDxKGsedip4xke_5aQSt66hks4zQF',
   );
 
+  /*
   // eslint-disable-next-line no-unused-vars
   const debugWebhook = await client.fetchWebhook(
-    '937575279411478588',
-    'CMmKtjyPv1GHxUCbd3jLC2VWyzc1FkhRPk0tZMkdIY-tWjZhvasmtYuVu6WqPFkqbgt1',
+    '941900464876818452',
+    'xEb6FpCGOZJTD-GSZZ35okCzkfWQXeiP4ibNpqCMQwC3SDqvepM8jv8SX9lRoX80D9R5',
   );
+  */
 
   webhook.send({
     content: `Thanks **${
