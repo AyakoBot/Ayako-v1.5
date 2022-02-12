@@ -53,7 +53,7 @@ module.exports = {
         },
         {
           name: `${msg.lan.xppermsg}`,
-          value: `${r.xppermsg}`,
+          value: `${Number(r.xppermsg) - 10} - ${r.xppermsg}`,
           inline: true,
         },
         {
