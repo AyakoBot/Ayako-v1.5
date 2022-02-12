@@ -1021,7 +1021,7 @@
   },
   "commands": {
     "rank": {
-      "description": "Display anyones current Server Rank",
+      "description": "Display anyones current Server/Global Rank",
       "usage": ["rank", "rank (user)"],
       "category": "Fun",
       "disabled": "Leveling is disabled on this Server",
@@ -1032,6 +1032,16 @@
       "nextXP": "Next Level's XP",
       "diff": "XP Difference",
       "duration": "This will take an average of about\n`{{amount}}` counted Messages\nor\n`{{duration}}`\nsince only 1 Message per Minute is counted"
+    },
+    "leaderboard": {
+      "description": "Displays the top 30 Users",
+      "usage": ["lvls"],
+      "category": "Fun",
+      "disabled": "Leveling is disabled on this Server",
+      "author": "Ayako Leveling",
+      "globalAuthor": "Ayako Global Leveling",
+      "yourPosition": "Your Position",
+      "toggle": "Toggle User Type"
     },
     "stp": {
       "description": "Test what kind of stuff you can invoke using {{msg}}",
@@ -3137,5 +3147,6 @@
   "custom": "Custom",
   "whereTriggered": "Wherever this is triggered",
   "noAccess": "No Access",
-  "createNew": "Create New"
+  "createNew": "Create New",
+  "rank": "Rank"
 }
