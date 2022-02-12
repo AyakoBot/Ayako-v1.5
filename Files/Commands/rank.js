@@ -11,9 +11,9 @@ module.exports = {
   type: 'fun',
   execute: async (msg) => {
     let isGuild =
-      msg.content.split(' ')[0].includes(module.exports.name) ||
-      msg.content.split(' ')[0].includes(module.exports.aliases[3]) ||
-      msg.content.split(' ')[0].includes(module.exports.aliases[0]);
+      !msg.content.split(' ')[0].includes(module.exports.aliases[1]) &&
+      !msg.content.split(' ')[0].includes(module.exports.aliases[2]) &&
+      !msg.content.split(' ')[0].includes(module.exports.aliases[4]);
 
     if (msg.channel.type === 'DM') isGuild = false;
 
