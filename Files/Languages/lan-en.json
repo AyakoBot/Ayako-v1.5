@@ -1026,6 +1026,7 @@
       "category": "Fun",
       "disabled": "Leveling is disabled on this Server",
       "author": "Ayako Leveling",
+      "globalAuthor": "Ayako Global Leveling",
       "currentLevel": "Current Level: {{level}}",
       "currentXP": "Current XP",
       "nextXP": "Next Level's XP",
