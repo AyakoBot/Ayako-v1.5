@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const StringSimilarity = require('string-similarity');
+const ChannelRules = require('../../../BaseClient/Other Client Files/ChannelRules');
 
 const guildCooldown = new Set();
 const lastMessageGuild = new Map();
@@ -9,16 +10,7 @@ const lastMessageGlobal = new Map();
 
 /*
 TODO: 
-xpmultiplier
-blchannels
-blroles
-blusers
-wlchannels
-wlroles
-xppermsg
-finish rolemode
-lvlupdeltimeout
-lvlupchannels
+ruleschannels
 */
 
 module.exports = {
@@ -44,37 +36,39 @@ const globalLeveling = async (msg) => {
     globalCooldown.delete(msg.author.id);
   }, 10000);
 
-  const newXp = Math.floor(Math.random() * 10 + 10);
-
   const res = await msg.client.ch.query(`SELECT * FROM level WHERE type = $1 AND userid = $2;`, [
     'global',
     msg.author.id,
   ]);
   if (res && res.rowCount) {
-    const oldLevel = Number(res.rows[0].level);
-    const oldXp = Number(res.rows[0].xp);
-    const xp = oldXp + newXp;
-    let newLevel = oldLevel;
-    const neededXP =
-      (5 / 6) * (newLevel + 1) * (2 * (newLevel + 1) * (newLevel + 1) + 27 * (newLevel + 1) + 91);
-
-    if (xp >= neededXP) newLevel += 1;
-
-    await msg.client.ch.query(
-      `UPDATE levels SET level = $1, xp = $2 WHERE type = $3 AND userid = $4;`,
-      [newLevel, xp, 'global', msg.author.id],
-    );
+    updateLevels(msg, res.rows[0], null, 10, 'global', 1);
   } else {
-    await msg.client.ch.query(
-      `INSERT INTO levels (type, userid, xp, level) VALUES ($1, $2, $3, $4);`,
-      ['global', msg.author.id, newXp, 0],
-    );
+    insertLevels(msg, 'global', 10, 1);
   }
 };
 
 const guildLeveling = async (msg, language) => {
   const isEnabled = await checkEnabled(msg);
   if (isEnabled === false) return;
+
+  const rows = isEnabled.rows[0];
+  if (!rows.wlusers || !rows.wlusers.includes(msg.author.id)) {
+    if (rows.blusers && rows.blusers?.includes(msg.author.id)) return;
+    if (rows.blroles && msg.member.roles.cache.some((r) => rows.blroles.includes(r.id))) return;
+
+    if (!rows.wlroles || !msg.member.roles.cache.some((r) => rows.wlroles.includes(r.id))) {
+      if (rows.blchannels && rows.blchannels.includes(msg.channel.id)) return;
+      if (rows.wlchannels && rows.wlchannels.length && !rows.wlchannels.includes(msg.channel.id)) {
+        return;
+      }
+    }
+  }
+
+  const rulesRows = await getRulesRes(msg);
+  if (rulesRows && rulesRows.length) {
+    const passesRules = checkPass(msg, rulesRows);
+    if (!passesRules) return;
+  }
 
   if (guildCooldown.has(msg.author.id)) return;
 
@@ -87,35 +81,54 @@ const guildLeveling = async (msg, language) => {
     guildCooldown.delete(msg.author.id);
   }, 10000);
 
-  const newXp = Math.floor(Math.random() * 10 + 15);
-
   const res = await msg.client.ch.query(`SELECT * FROM level WHERE type = $1 AND userid = $2;`, [
     'guild',
     msg.author.id,
   ]);
+
   if (res && res.rowCount) {
-    const oldLevel = Number(res.rows[0].level);
-    const oldXp = Number(res.rows[0].xp);
-    const xp = oldXp + newXp;
-    let newLevel = oldLevel;
-    const neededXP =
-      (5 / 6) * (newLevel + 1) * (2 * (newLevel + 1) * (newLevel + 1) + 27 * (newLevel + 1) + 91);
-
-    if (xp >= neededXP) {
-      newLevel += 1;
-      levelUp(msg, language, { oldXp, newXp: xp, newLevel, oldLevel }, isEnabled);
-    }
-
-    await msg.client.ch.query(
-      `UPDATE levels SET level = $1, xp = $2 WHERE type = $3 AND userid = $4 AND guildid = $5;`,
-      [newLevel, xp, 'guild', msg.author.id, msg.guild.id],
+    updateLevels(
+      msg,
+      res.rows[0],
+      { res, language },
+      Number(rows.xppermsg) - 10,
+      'guild',
+      Number(rows.xpmultiplier),
     );
   } else {
-    await msg.client.ch.query(
-      `INSERT INTO levels (type, userid, xp, level, guildid) VALUES ($1, $2, $3, $4, $5);`,
-      ['guild', msg.author.id, newXp, 0, msg.guild.id],
-    );
+    insertLevels(msg, 'guild', Number(rows.xppermsg) - 10, Number(rows.xpmultiplier));
   }
+};
+
+const insertLevels = (msg, type, baseXP, xpMultiplier) => {
+  const xp = Math.floor(Math.random() * xpMultiplier + baseXP);
+
+  msg.client.ch.query(
+    `INSERT INTO levels (type, userid, xp, level, guildid) VALUES ($1, $2, $3, $4, $5);`,
+    [type, msg.author.id, xp, 0, type === 'guild' ? msg.guild.id : null],
+  );
+};
+
+const updateLevels = (msg, row, lvlupObj, baseXP, type, xpMultiplier) => {
+  const newXp = Math.floor(Math.random() * xpMultiplier + baseXP);
+  const oldLevel = Number(row.level);
+  const oldXp = Number(row.xp);
+  const xp = oldXp + newXp;
+  let newLevel = oldLevel;
+  const neededXP =
+    (5 / 6) * (newLevel + 1) * (2 * (newLevel + 1) * (newLevel + 1) + 27 * (newLevel + 1) + 91);
+
+  if (xp >= neededXP && lvlupObj) {
+    newLevel += 1;
+    levelUp(msg, { oldXp, newXp: xp, newLevel, oldLevel }, lvlupObj);
+  }
+
+  msg.client.ch.query(
+    `UPDATE levels SET level = $1, xp = $2 WHERE type = $3 AND userid = $4 AND guildid = $5;`,
+    [newLevel, xp, type, msg.author.id, type === 'guild' ? msg.guild.id : null],
+  );
+
+  if (xp >= neededXP) newLevel += 1;
 };
 
 const checkEnabled = async (msg) => {
@@ -129,7 +142,7 @@ const checkEnabled = async (msg) => {
   return res;
 };
 
-const levelUp = async (msg, language, levelData, res) => {
+const levelUp = async (msg, levelData, { res, language }) => {
   switch (Number(res.rows[0].lvlupmode)) {
     default: {
       break;
@@ -144,23 +157,70 @@ const levelUp = async (msg, language, levelData, res) => {
     }
   }
 
-  roleAssign(msg, res, levelData.newLevel);
+  roleAssign(msg, res.rows[0].rolemode, levelData.newLevel);
 };
 
-const roleAssign = async (msg, res, newLevel) => {
-  switch (Number(res.rows[0].rolemode)) {
+const roleAssign = async (msg, rolemode, newLevel) => {
+  const res = await msg.client.ch.query(`SELECT * FROM levelingroles WHERE guildid = $1;`, [
+    msg.guild.id,
+  ]);
+
+  if (!res || !res.rowCount) return;
+  const { rows } = res;
+  let promises = [];
+
+  switch (Number(rolemode)) {
     default: {
       break;
     }
     case 0: {
       // stack
+      const thisLevelsRoleIDs = rows.find((r) => r.level === Number(newLevel));
+      promises = thisLevelsRoleIDs
+        .map((r) => {
+          const roleMap = r
+            .map((roleid) => {
+              if (!msg.member.roles.cache.has(roleid)) return roleid;
+              return null;
+            })
+            .filter((req) => !!req);
+
+          if (roleMap.length) {
+            return msg.author.roles.add([roleMap]).catch(() => {});
+          }
+          return null;
+        })
+        .filter((r) => !!r);
       break;
     }
     case 1: {
       // replace
+      const thisLevelsAndBelowRoleIDs = rows.find((r) => r.level >= Number(newLevel));
+      thisLevelsAndBelowRoleIDs.forEach((r) => {
+        const remove = [];
+        const add = [];
+        r.forEach((roleid) => {
+          if (r.level < Number(newLevel) && msg.member.roles.cache.has(roleid)) {
+            if (msg.guild.roles.cache.get(roleid)) remove.push(roleid);
+          }
+          if (r.level === Number(newLevel) && !msg.member.roles.cache.has(roleid)) {
+            if (msg.guild.roles.cache.get(roleid)) add.push(roleid);
+          }
+        });
+
+        if (add.length) {
+          promises.push(msg.member.roles.add(add).catch(() => {}));
+        }
+
+        if (remove.length) {
+          promises.push(msg.member.roles.remove(add).catch(() => {}));
+        }
+      });
       break;
     }
   }
+
+  await Promise.all(promises);
 };
 
 const doReact = async (msg, res) => {
@@ -211,5 +271,142 @@ const doEmbed = async (msg, levelRes, language, levelData) => {
     }
   }
 
-  msg.client.ch.send({ embeds: [embed] });
+  send(msg, { embeds: [embed] }, levelRes);
+};
+
+const send = async (msg, payload, res) => {
+  const channelIDs =
+    res.rows[0].lvlupchannels && res.rows[0].lvlupchannels.length
+      ? res.rows[0].lvlupchannels
+      : [msg.channel.id];
+
+  const channels = channelIDs.map((ch) => msg.guild.channels.cache.get(ch));
+  const msgs = await Promise.all(channels.map((c) => c.send(payload).catch(() => {})));
+
+  if (res.rows[0].lvlupdeltimeout) {
+    setTimeout(() => {
+      Promise.all(msgs.map((m) => m.delete()));
+    }, res.rows[0].lvlupdeltimeout);
+  }
+};
+
+const getRulesRes = async (msg) => {
+  const res = await msg.client.ch.query(
+    `SELECT * FROM levelingruleschannels WHERE channels @> ARRAY[$1]::varchar[];`,
+    [msg.guild.id],
+  );
+
+  if (res && res.rowCount) return res.rows;
+  return null;
+};
+
+const checkPass = (msg, rows) => {
+  if (!rows.rules) return true;
+  const rules = new ChannelRules(BigInt(rows.rules));
+  const appliedRules = {};
+
+  Object.entries(rules).forEach(([uppercaseKey, bool]) => {
+    const key = uppercaseKey.toLowerCase();
+    if (bool === true) {
+      appliedRules[key] = rows[key];
+    }
+  });
+
+  Object.entries(appliedRules).forEach(([key, num]) => {
+    switch (key) {
+      default: {
+        break;
+      }
+      case 'has_least_attachments': {
+        if (msg.attachments.size < num) return false;
+        break;
+      }
+      case 'has_most_attachments': {
+        if (msg.attachments.size > num) return false;
+        break;
+      }
+      case 'has_least_characters': {
+        if (msg.content.length < num) return false;
+        break;
+      }
+      case 'has_most_characters': {
+        if (msg.content.length > num) return false;
+        break;
+      }
+      case 'has_least_words': {
+        if (msg.content.split(' ').length < num) return false;
+        break;
+      }
+      case 'has_most_words': {
+        if (msg.content.split(' ').length > num) return false;
+        break;
+      }
+      case 'mentions_least_users': {
+        if (msg.mentions.users.size < num) return false;
+        break;
+      }
+      case 'mentions_most_users': {
+        if (msg.mentions.users.size > num) return false;
+        break;
+      }
+      case 'mentions_least_roles': {
+        if (msg.mentions.roles.size < num) return false;
+        break;
+      }
+      case 'mentions_most_roles': {
+        if (msg.mentions.roles.size > num) return false;
+        break;
+      }
+      case 'mentions_least_channels': {
+        if (msg.mentions.channels.size < num) return false;
+        break;
+      }
+      case 'mentions_most_channels': {
+        if (msg.mentions.channels.size > num) return false;
+        break;
+      }
+      case 'has_least_links': {
+        if (
+          msg.content.match(
+            /(http|https):\/\/(?:[a-z0-9]+(?:[-][a-z0-9]+)*\.)+[a-z]{2,}(?::\d+)?(?:\/\S*)?/gi,
+          )?.length < num
+        ) {
+          return false;
+        }
+        break;
+      }
+      case 'has_most_links': {
+        if (
+          msg.content.match(
+            /(http|https):\/\/(?:[a-z0-9]+(?:[-][a-z0-9]+)*\.)+[a-z]{2,}(?::\d+)?(?:\/\S*)?/gi,
+          )?.length > num
+        ) {
+          return false;
+        }
+        break;
+      }
+      case 'has_least_emotes': {
+        if (msg.content.match(/<(a)?:[a-zA-Z0-9_]+:[0-9]+>/gi)?.length < num) return false;
+        break;
+      }
+      case 'has_most_emotes': {
+        if (msg.content.match(/<(a)?:[a-zA-Z0-9_]+:[0-9]+>/gi)?.length > num) return false;
+        break;
+      }
+      case 'has_least_mentions': {
+        if (msg.mentions.users.size + msg.mentions.channels.size + msg.mentions.roles.size < num) {
+          return false;
+        }
+        break;
+      }
+      case 'has_most_mentions': {
+        if (msg.mentions.users.size + msg.mentions.channels.size + msg.mentions.roles.size > num) {
+          return false;
+        }
+        break;
+      }
+    }
+    return true;
+  });
+  return true;
 };
