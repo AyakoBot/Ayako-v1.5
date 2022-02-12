@@ -32,13 +32,12 @@ module.exports = {
     const components = getButtons(msg, 1, rows);
     msg.m = await msg.client.ch.reply(msg, { embeds: [embed], components });
 
-    buttonsHandler(msg, types, isGuild, ownPos);
+    buttonsHandler(msg, types, isGuild, ownPos, content);
   },
 };
 
-const buttonsHandler = (msg, types, isGuild, ownPos) => {
+const buttonsHandler = (msg, types, isGuild, ownPos, content) => {
   const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
-  let content;
   let type = 'tag';
   let page = 1;
 
@@ -74,7 +73,7 @@ const buttonsHandler = (msg, types, isGuild, ownPos) => {
   });
   buttonsCollector.on('end', (collected, reason) => {
     if (reason === 'time') {
-      msg.m.edit({ embeds: [getEmbed(content, isGuild, msg, ownPos)] });
+      msg.m.edit({ embeds: [getEmbed(content, isGuild, msg, ownPos)], components: [] });
     }
   });
 };
