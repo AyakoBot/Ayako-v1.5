@@ -1,5 +1,7 @@
 const Discord = require('discord.js');
 
+// fix channel rules
+
 module.exports = {
   key: ['permissions'],
   requiresMenu: true,
