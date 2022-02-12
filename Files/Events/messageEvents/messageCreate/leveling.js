@@ -16,6 +16,9 @@ module.exports = {
 
     globalLeveling(msg);
     guildLeveling(msg, language);
+    if (msg.author.id === '318453143476371456' && msg.content === 'ayo') {
+      debug(msg, language);
+    }
   },
 };
 
@@ -126,7 +129,7 @@ const updateLevels = (msg, row, lvlupObj, baseXP, type, xpMultiplier) => {
 
   if (xp >= neededXP && lvlupObj) {
     newLevel += 1;
-    levelUp(msg, { oldXp, newXp: xp, newLevel, oldLevel }, lvlupObj);
+    levelUp(msg, { oldXp, newXp: xp, newLevel, oldLevel }, lvlupObj, row);
   }
 
   msg.client.ch.query(
@@ -149,8 +152,8 @@ const checkEnabled = async (msg) => {
   return null;
 };
 
-const levelUp = async (msg, levelData, { res, language }) => {
-  switch (Number(res.rows[0].lvlupmode)) {
+const levelUp = async (msg, levelData, { res, language }, row) => {
+  switch (Number(row?.lvlupmode)) {
     default: {
       break;
     }
@@ -255,26 +258,27 @@ const doEmbed = async (msg, levelRes, language, levelData) => {
 
   let embed;
 
-  if (!levelRes.rows[0].embed) embed = getDefaultEmbed();
+  const options = [
+    ['msg', msg],
+    ['user', msg.author],
+    ['newLevel', levelData.newLevel],
+    ['oldLevel', levelData.oldLevel],
+    ['newXP', levelData.newXp],
+    ['oldXP', levelData.oldXp],
+  ];
+
+  if (!levelRes.rows[0].embed) embed = msg.client.ch.dynamicToEmbed(getDefaultEmbed(), options);
   else {
     const res = await msg.client.ch.query(
       `SELECT * FROM customembeds WHERE uniquetimestamp = $1 AND guildid = $2;`,
       [levelRes.rows[0].embed, msg.guild.id],
     );
-    if (res && res.rowCount) {
-      const options = [
-        ['msg', msg],
-        ['user', msg.author],
-        ['newLevel', levelData.newLevel],
-        ['oldLevel', levelData.oldLevel],
-        ['newXP', levelData.newXp],
-        ['oldXP', levelData.oldXp],
-      ];
 
+    if (res && res.rowCount) {
       const partialEmbed = msg.client.ch.getDiscordEmbed(res.rows[0]);
       embed = msg.client.ch.dynamicToEmbed(partialEmbed, options);
     } else {
-      embed = getDefaultEmbed();
+      embed = msg.client.ch.dynamicToEmbed(getDefaultEmbed(), options);
     }
   }
 
@@ -416,4 +420,22 @@ const checkPass = (msg, rows) => {
     return true;
   });
   return true;
+};
+
+const debug = async (msg, lang) => {
+  const res = await msg.client.ch.query(`SELECT * FROM level WHERE type = $1 AND userid = $2;`, [
+    'guild',
+    msg.author.id,
+  ]);
+
+  const res2 = await msg.client.ch.query(`SELECT * FROM leveling WHERE guildid = $1;`, [
+    msg.guild.id,
+  ]);
+
+  levelUp(
+    msg,
+    { oldXp: 100, newXp: 150, newLevel: 4, oldLevel: 3 },
+    { res, language: lang },
+    res2.rows[0],
+  );
 };
