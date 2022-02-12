@@ -57,6 +57,13 @@ module.exports = {
           inline: true,
         },
         {
+          name: `${msg.lan.actualXP}`,
+          value: `${(Number(r.xppermsg) - 10) * Number(r.xpmultiplier)} - ${
+            Number(r.xppermsg) * Number(r.xpmultiplier)
+          }`,
+          inline: true,
+        },
+        {
           name: `${msg.lan.rolemode}`,
           value: `${r.rolemode ? msg.lan.replace : msg.lan.stack}`,
           inline: true,
