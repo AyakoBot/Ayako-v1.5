@@ -209,6 +209,8 @@ module.exports = {
         msg.triedCMD = msg.command;
         msg.command = msg.client.commands.get('cmdhelp');
         this.thisGuildOnly(msg);
+      } else {
+        this.commandExe(msg);
       }
     } else return msg.client.ch.reply(msg, msg.language.commands.commandHandler.GuildOnly);
     return null;
