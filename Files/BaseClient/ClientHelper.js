@@ -48,7 +48,7 @@ module.exports = {
       channels = [channel];
     }
 
-    if (!channels.length) throw new Error('Invalid Channel');
+    if (!channels.length) return null;
 
     if (channels.length === 1) {
       return channels[0].send(payload).catch(() => null);
@@ -240,6 +240,7 @@ module.exports = {
    * @param {object} lan - The Language File the Bits will be Translated based off of.
    */
   channelRuleCalc: (bits, lan) => {
+    if (!bits) return [];
     const BitField = new ChannelRules(BigInt(bits));
     const Rules = [];
 
