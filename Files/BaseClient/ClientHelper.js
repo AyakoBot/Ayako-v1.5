@@ -1019,4 +1019,16 @@ module.exports = {
 
     return embed;
   },
+  error: (msg, content) => {
+    const embed = new Discord.MessageEmbed()
+      .setAuthor({
+        name: msg.language.error,
+        iconURL: msg.client.constants.emotes.warningLink,
+        url: msg.client.constants.standard.invite,
+      })
+      .setColor(msg.client.constants.error)
+      .setDescription(content);
+
+    return module.exports.reply(msg, { embeds: [embed] });
+  },
 };
