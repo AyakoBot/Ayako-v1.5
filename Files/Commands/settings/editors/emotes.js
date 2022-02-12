@@ -36,7 +36,7 @@ module.exports = {
 
     const unicodeEmojis = message.content
       .match(msg.client.ch.regexes.emojiTester)
-      .filter((e) => !!e.length);
+      ?.filter((e) => !!e.length);
 
     if (unicodeEmojis?.length) {
       args.push(...unicodeEmojis);
