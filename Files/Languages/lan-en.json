@@ -1020,6 +1020,18 @@
     }
   },
   "commands": {
+    "rank": {
+      "description": "Display anyones current Server Rank",
+      "usage": ["rank", "rank (user)"],
+      "category": "Fun",
+      "disabled": "Leveling is disabled on this Server",
+      "author": "Ayako Leveling",
+      "currentLevel": "Current Level: {{level}}",
+      "currentXP": "Current XP",
+      "nextXP": "Next Level's XP",
+      "diff": "XP Difference",
+      "duration": "This will take an average of about\n`{{amount}}` counted Messages\nor\n`{{duration}}`\nsince only 1 Message per Minute is counted"
+    },
     "stp": {
       "description": "Test what kind of stuff you can invoke using {{msg}}",
       "usage": ["stp {{msg.[children]}}"],
@@ -2943,6 +2955,9 @@
   },
   "leveling": {
     "author": "{{msg.author.tag}} has leveled up to Level {{newLevel}}"
+  },
+  "errors": {
+    "userNotFound": "The mentioned User does not exist"
   },
   "featuresName": "Features",
   "none": "None",
