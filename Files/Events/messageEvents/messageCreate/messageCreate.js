@@ -8,7 +8,7 @@ module.exports = {
     require('./commandHandler').execute(msg);
     require('./afk').execute(msg);
     require('./disboard').execute(msg);
-    // require('./leveling').execute(msg);
+    require('./leveling').execute(msg);
     require('./blacklist').execute(msg);
     require('./willis').execute(msg);
     require('./DMlog').execute(msg);
