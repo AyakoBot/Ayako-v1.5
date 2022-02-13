@@ -118,7 +118,13 @@ const insertLevels = (msg, type, baseXP, xpMultiplier) => {
   );
 };
 
-const updateLevels = (msg, row, lvlupObj, baseXP, type, xpMultiplier) => {
+const updateLevels = async (msg, row, lvlupObj, baseXP, type, xpMultiplier) => {
+  const roleMultiplier = await getRoleMultiplier(msg);
+  const channelMultiplier = await getChannelMultiplier(msg);
+
+  if (roleMultiplier) xpMultiplier = roleMultiplier;
+  if (channelMultiplier) xpMultiplier = channelMultiplier;
+
   const newXp = Math.floor(Math.random() * baseXP + 10) * xpMultiplier;
   const oldLevel = Number(lvlupObj.row.level);
   const oldXp = Number(lvlupObj.row.xp);
@@ -469,4 +475,36 @@ const debug = async (msg, lang) => {
     { res, language: lang },
     res2.rows[0],
   );
+};
+
+const getRoleMultiplier = async (msg) => {
+  const res = await msg.client.ch.query(
+    `SELECT * FROM levelingmultiplierroles WHERE guildid = $1 ORDER BY multiplier DESC;`,
+    [msg.guild.id],
+  );
+
+  if (res && res.rowCount) {
+    const rows = res.rows.filter((row) =>
+      msg.member.roles.cache.some((r) => row.roles.includes(r.id)),
+    );
+    if (!rows || !rows.length) return null;
+    const [row] = rows;
+    return Number(row.multiplier);
+  }
+  return null;
+};
+
+const getChannelMultiplier = async (msg) => {
+  const res = await msg.client.ch.query(
+    `SELECT * FROM levelingmultiplierchannels WHERE guildid = $1 ORDER BY multiplier DESC;`,
+    [msg.guild.id],
+  );
+
+  if (res && res.rowCount) {
+    const rows = res.rows.filter((row) => row.channels.includes(msg.channel.id));
+    if (!rows || !rows.length) return null;
+    const [row] = rows;
+    return Number(row.multiplier);
+  }
+  return null;
 };
