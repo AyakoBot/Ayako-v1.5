@@ -85,10 +85,10 @@ const guildLeveling = async (msg, language) => {
     guildCooldown.delete(msg.author.id);
   }, 10000);
 
-  const res = await msg.client.ch.query(`SELECT * FROM level WHERE type = $1 AND userid = $2;`, [
-    'guild',
-    msg.author.id,
-  ]);
+  const res = await msg.client.ch.query(
+    `SELECT * FROM level WHERE type = $1 AND userid = $2 AND guildid = $3;`,
+    ['guild', msg.author.id, msg.guild.id],
+  );
 
   if (res && res.rowCount) {
     updateLevels(
@@ -126,18 +126,24 @@ const updateLevels = (msg, row, lvlupObj, baseXP, type, xpMultiplier) => {
   let newLevel = oldLevel;
   const neededXP =
     (5 / 6) * (newLevel + 1) * (2 * (newLevel + 1) * (newLevel + 1) + 27 * (newLevel + 1) + 91);
-
   if (xp >= neededXP && lvlupObj) {
     newLevel += 1;
     levelUp(msg, { oldXp, newXp: xp, newLevel, oldLevel }, lvlupObj, row);
   }
 
-  msg.client.ch.query(
-    `UPDATE level SET level = $1, xp = $2 WHERE type = $3 AND userid = $4 AND guildid = $5;`,
-    [newLevel, xp, type, msg.author.id, type === 'guild' ? msg.guild.id : null],
-  );
-
-  if (xp >= neededXP) newLevel += 1;
+  if (type === 'guild') {
+    msg.client.ch.query(
+      `UPDATE level SET level = $1, xp = $2 WHERE type = $3 AND userid = $4 AND guildid = $5;`,
+      [newLevel, xp, type, msg.author.id, msg.guild.id],
+    );
+  } else {
+    msg.client.ch.query(`UPDATE level SET level = $1, xp = $2 WHERE type = $3 AND userid = $4;`, [
+      newLevel,
+      xp,
+      type,
+      msg.author.id,
+    ]);
+  }
 };
 
 const checkEnabled = async (msg) => {
