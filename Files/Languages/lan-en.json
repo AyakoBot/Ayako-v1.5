@@ -2544,40 +2544,78 @@
             "answers": "Select the Rules in the Select Menu below",
             "recommended": "The Rules a Message has to meet in order to gain XP"
           },
-          "HAS_LEAST_ATTACHMENTS": { "name": "Has at least [externally defined] Attachments" },
-          "HAS_MOST_ATTACHMENTS": { "name": "Has at most [externally defined] Attachments" },
+          "HAS_LEAST_ATTACHMENTS": {
+            "name": "Has at least [externally defined] Attachments",
+            "answers": "Any Number"
+          },
+          "HAS_MOST_ATTACHMENTS": {
+            "name": "Has at most [externally defined] Attachments",
+            "answers": "Any Number"
+          },
           "HAS_LEAST_CHARACTERS": {
-            "name": "Has at least [externally defined] Characters in Content"
+            "name": "Has at least [externally defined] Characters in Content",
+            "answers": "Any Number"
           },
           "HAS_MOST_CHARACTERS": {
-            "name": "Has at most [externally defined] Characters in Content"
+            "name": "Has at most [externally defined] Characters in Content",
+            "answers": "Any Number"
           },
-          "HAS_LEAST_WORDS": { "name": "Has at least [externally defined] Words in Content" },
-          "HAS_MOST_WORDS": { "name": "Has at most [externally defined] Words in Content" },
+          "HAS_LEAST_WORDS": {
+            "name": "Has at least [externally defined] Words in Content",
+            "answers": "Any Number"
+          },
+          "HAS_MOST_WORDS": {
+            "name": "Has at most [externally defined] Words in Content",
+            "answers": "Any Number"
+          },
           "MENTIONS_LEAST_USERS": {
-            "name": "Mentions at least [externally defined] Users in Content"
+            "name": "Mentions at least [externally defined] Users in Content",
+            "answers": "Any Number"
           },
           "MENTIONS_MOST_USERS": {
-            "name": "Mentions at most [externally defined] Users in Content"
+            "name": "Mentions at most [externally defined] Users in Content",
+            "answers": "Any Number"
           },
           "MENTIONS_LEAST_CHANNELS": {
-            "name": "Mentions at least [externally defined] Channels in Content"
+            "name": "Mentions at least [externally defined] Channels in Content",
+            "answers": "Any Number"
           },
           "MENTIONS_MOST_CHANNELS": {
-            "name": "Mentions at most [externally defined] Channels in Content"
+            "name": "Mentions at most [externally defined] Channels in Content",
+            "answers": "Any Number"
           },
           "MENTIONS_LEAST_ROLES": {
-            "name": "Mentions at least [externally defined] Roles in Content"
+            "name": "Mentions at least [externally defined] Roles in Content",
+            "answers": "Any Number"
           },
           "MENTIONS_MOST_ROLES": {
-            "name": "Mentions at most [externally defined] Roles in Content"
+            "name": "Mentions at most [externally defined] Roles in Content",
+            "answers": "Any Number"
           },
-          "HAS_LEAST_LINKS": { "name": "Has at least [externally defined] Links" },
-          "HAS_MOST_LINKS": { "name": "Has at most [externally defined] Links" },
-          "HAS_LEAST_EMOTES": { "name": "Has at least [externally defined] Emotes" },
-          "HAS_MOST_EMOTES": { "name": "Has at most [externally defined] Emotes" },
-          "HAS_LEAST_MENTIONS": { "name": "Has at least [externally defined] Mentions" },
-          "HAS_MOST_MENTIONS": { "name": "Has at most [externally defined] Mentions" }
+          "HAS_LEAST_LINKS": {
+            "name": "Has at least [externally defined] Links",
+            "answers": "Any Number"
+          },
+          "HAS_MOST_LINKS": {
+            "name": "Has at most [externally defined] Links",
+            "answers": "Any Number"
+          },
+          "HAS_LEAST_EMOTES": {
+            "name": "Has at least [externally defined] Emotes",
+            "answers": "Any Number"
+          },
+          "HAS_MOST_EMOTES": {
+            "name": "Has at most [externally defined] Emotes",
+            "answers": "Any Number"
+          },
+          "HAS_LEAST_MENTIONS": {
+            "name": "Has at least [externally defined] Mentions",
+            "answers": "Any Number"
+          },
+          "HAS_MOST_MENTIONS": {
+            "name": "Has at most [externally defined] Mentions",
+            "answers": "Any Number"
+          }
         },
         "otherEdits": {
           "add": {
