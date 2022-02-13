@@ -856,9 +856,15 @@ const editorInteractionHandler = async (msgData, editorData, row, res, comesFrom
     page: 1,
   };
 
-  insertedValues[required.assinger] = row[required.assinger]?.length
-    ? msg.client.ch.objectClone(row[required.assinger])
-    : null;
+  if (Array.isArray(row[required.assinger])) {
+    insertedValues[required.assinger] = row[required.assinger]?.length
+      ? msg.client.ch.objectClone(row[required.assinger])
+      : [];
+  } else {
+    insertedValues[required.assinger] = row[required.assinger]
+      ? msg.client.ch.objectClone(row[required.assinger])
+      : null;
+  }
 
   const passObject =
     typeof editor.dataPreparation === 'function'
