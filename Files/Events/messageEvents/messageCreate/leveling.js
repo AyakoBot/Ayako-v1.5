@@ -329,7 +329,7 @@ const getRulesRes = async (msg) => {
   ]);
 
   if (res && res.rowCount) {
-    const rows = res.rows.filter((r) => r.channels.includes(msg.channel.id));
+    const rows = res.rows.filter((r) => r.channels?.includes(msg.channel.id));
     return rows;
   }
   return null;
@@ -487,7 +487,7 @@ const getRoleMultiplier = async (msg) => {
 
   if (res && res.rowCount) {
     const rows = res.rows.filter((row) =>
-      msg.member.roles.cache.some((r) => row.roles.includes(r.id)),
+      msg.member.roles.cache.some((r) => row.roles?.includes(r.id)),
     );
     if (!rows || !rows.length) return null;
     const [row] = rows;
@@ -503,7 +503,7 @@ const getChannelMultiplier = async (msg) => {
   );
 
   if (res && res.rowCount) {
-    const rows = res.rows.filter((row) => row.channels.includes(msg.channel.id));
+    const rows = res.rows.filter((row) => row.channels?.includes(msg.channel.id));
     if (!rows || !rows.length) return null;
     const [row] = rows;
     return Number(row.multiplier);
