@@ -32,11 +32,11 @@ module.exports = {
     const components = getButtons(msg, 1, rows);
     msg.m = await msg.client.ch.reply(msg, { embeds: [embed], components });
 
-    buttonsHandler(msg, types, isGuild, ownPos, content);
+    buttonsHandler(msg, types, isGuild, ownPos, content, embed);
   },
 };
 
-const buttonsHandler = (msg, types, isGuild, ownPos, content) => {
+const buttonsHandler = (msg, types, isGuild, ownPos, content, oldEmbed) => {
   const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
   let type = 'tag';
   let page = 1;
@@ -45,6 +45,9 @@ const buttonsHandler = (msg, types, isGuild, ownPos, content) => {
     if (interaction.user.id !== msg.author.id) {
       msg.client.ch.notYours(msg);
     }
+    await disableComponents(msg, oldEmbed);
+    await interaction.deferUpdate();
+    buttonsCollector.resetTimer();
 
     switch (interaction.customId) {
       default: {
@@ -67,9 +70,11 @@ const buttonsHandler = (msg, types, isGuild, ownPos, content) => {
     const contentData = await getContent(msg, type, isGuild, page);
     const { rows } = contentData;
     ({ content, ownPos } = contentData);
+
     const embed = getEmbed(content, isGuild, msg, ownPos);
+    oldEmbed = embed;
     const components = getButtons(msg, page, rows);
-    interaction.update({ embeds: [embed], components });
+    interaction.editReply({ embeds: [embed], components });
   });
   buttonsCollector.on('end', (collected, reason) => {
     if (reason === 'time') {
@@ -204,4 +209,14 @@ const getGuildRow = async (msg) => {
 const spaces = (str, num) => {
   if (num < str.length) return str;
   return `${str}${' '.repeat(num - str.length)}`;
+};
+
+const disableComponents = async (msg, embed) => {
+  msg.m.components.forEach((componentRow, i) => {
+    componentRow.components.forEach((component, j) => {
+      msg.m.components[i].components[j].disabled = true;
+    });
+  });
+
+  await msg.m.edit({ embeds: [embed], components: msg.m.components });
 };
