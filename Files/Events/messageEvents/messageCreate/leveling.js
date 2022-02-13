@@ -308,123 +308,140 @@ const send = async (msg, payload, res) => {
 };
 
 const getRulesRes = async (msg) => {
-  const res = await msg.client.ch.query(
-    `SELECT * FROM levelingruleschannels WHERE channels @> ARRAY[$1]::varchar[];`,
-    [msg.guild.id],
-  );
+  const res = await msg.client.ch.query(`SELECT * FROM levelingruleschannels WHERE guildid = $1;`, [
+    msg.guild.id,
+  ]);
 
-  if (res && res.rowCount) return res.rows;
+  if (res && res.rowCount) {
+    const rows = res.rows.filter((r) => r.channels.includes(msg.channel.id));
+    return rows;
+  }
   return null;
 };
 
 const checkPass = (msg, rows) => {
-  if (!rows.rules) return true;
-  const rules = new ChannelRules(BigInt(rows.rules));
-  const appliedRules = {};
+  const passes = rows.map((row) => {
+    if (!row.rules) return true;
+    const rules = new ChannelRules(BigInt(row.rules)).toArray();
+    const appliedRules = {};
 
-  Object.entries(rules).forEach(([uppercaseKey, bool]) => {
-    const key = uppercaseKey.toLowerCase();
-    if (bool === true) {
-      appliedRules[key] = rows[key];
-    }
-  });
+    rules.forEach((uppercaseKey) => {
+      const key = uppercaseKey.toLowerCase();
+      appliedRules[key] = row[key];
+    });
 
-  Object.entries(appliedRules).forEach(([key, num]) => {
-    switch (key) {
-      default: {
-        break;
-      }
-      case 'has_least_attachments': {
-        if (msg.attachments.size < num) return false;
-        break;
-      }
-      case 'has_most_attachments': {
-        if (msg.attachments.size > num) return false;
-        break;
-      }
-      case 'has_least_characters': {
-        if (msg.content.length < num) return false;
-        break;
-      }
-      case 'has_most_characters': {
-        if (msg.content.length > num) return false;
-        break;
-      }
-      case 'has_least_words': {
-        if (msg.content.split(' ').length < num) return false;
-        break;
-      }
-      case 'has_most_words': {
-        if (msg.content.split(' ').length > num) return false;
-        break;
-      }
-      case 'mentions_least_users': {
-        if (msg.mentions.users.size < num) return false;
-        break;
-      }
-      case 'mentions_most_users': {
-        if (msg.mentions.users.size > num) return false;
-        break;
-      }
-      case 'mentions_least_roles': {
-        if (msg.mentions.roles.size < num) return false;
-        break;
-      }
-      case 'mentions_most_roles': {
-        if (msg.mentions.roles.size > num) return false;
-        break;
-      }
-      case 'mentions_least_channels': {
-        if (msg.mentions.channels.size < num) return false;
-        break;
-      }
-      case 'mentions_most_channels': {
-        if (msg.mentions.channels.size > num) return false;
-        break;
-      }
-      case 'has_least_links': {
-        if (
-          msg.content.match(
-            /(http|https):\/\/(?:[a-z0-9]+(?:[-][a-z0-9]+)*\.)+[a-z]{2,}(?::\d+)?(?:\/\S*)?/gi,
-          )?.length < num
-        ) {
-          return false;
+    const willLevel = [];
+
+    Object.entries(appliedRules).forEach(([key, num]) => {
+      switch (key) {
+        default: {
+          willLevel.push(true);
+          break;
         }
-        break;
-      }
-      case 'has_most_links': {
-        if (
-          msg.content.match(
-            /(http|https):\/\/(?:[a-z0-9]+(?:[-][a-z0-9]+)*\.)+[a-z]{2,}(?::\d+)?(?:\/\S*)?/gi,
-          )?.length > num
-        ) {
-          return false;
+        case 'has_least_attachments': {
+          if (msg.attachments.size < num) willLevel.push(false);
+          break;
         }
-        break;
-      }
-      case 'has_least_emotes': {
-        if (msg.content.match(/<(a)?:[a-zA-Z0-9_]+:[0-9]+>/gi)?.length < num) return false;
-        break;
-      }
-      case 'has_most_emotes': {
-        if (msg.content.match(/<(a)?:[a-zA-Z0-9_]+:[0-9]+>/gi)?.length > num) return false;
-        break;
-      }
-      case 'has_least_mentions': {
-        if (msg.mentions.users.size + msg.mentions.channels.size + msg.mentions.roles.size < num) {
-          return false;
+        case 'has_most_attachments': {
+          if (msg.attachments.size > num) willLevel.push(false);
+          break;
         }
-        break;
-      }
-      case 'has_most_mentions': {
-        if (msg.mentions.users.size + msg.mentions.channels.size + msg.mentions.roles.size > num) {
-          return false;
+        case 'has_least_characters': {
+          if (msg.content.length < num) willLevel.push(false);
+          break;
         }
-        break;
+        case 'has_most_characters': {
+          if (msg.content.length > num) willLevel.push(false);
+          break;
+        }
+        case 'has_least_words': {
+          if (msg.content.split(' ').length < num) willLevel.push(false);
+          break;
+        }
+        case 'has_most_words': {
+          if (msg.content.split(' ').length > num) willLevel.push(false);
+          break;
+        }
+        case 'mentions_least_users': {
+          if (msg.mentions.users.size < num) willLevel.push(false);
+          break;
+        }
+        case 'mentions_most_users': {
+          if (msg.mentions.users.size > num) willLevel.push(false);
+          break;
+        }
+        case 'mentions_least_roles': {
+          if (msg.mentions.roles.size < num) willLevel.push(false);
+          break;
+        }
+        case 'mentions_most_roles': {
+          if (msg.mentions.roles.size > num) willLevel.push(false);
+          break;
+        }
+        case 'mentions_least_channels': {
+          if (msg.mentions.channels.size < num) willLevel.push(false);
+          break;
+        }
+        case 'mentions_most_channels': {
+          if (msg.mentions.channels.size > num) willLevel.push(false);
+          break;
+        }
+        case 'has_least_links': {
+          if (
+            (msg.content.match(
+              /(http|https):\/\/(?:[a-z0-9]+(?:[-][a-z0-9]+)*\.)+[a-z]{2,}(?::\d+)?(?:\/\S*)?/gi,
+            )?.length || null) < num
+          ) {
+            willLevel.push(false);
+          }
+          break;
+        }
+        case 'has_most_links': {
+          if (
+            (msg.content.match(
+              /(http|https):\/\/(?:[a-z0-9]+(?:[-][a-z0-9]+)*\.)+[a-z]{2,}(?::\d+)?(?:\/\S*)?/gi,
+            )?.length || null) > num
+          ) {
+            willLevel.push(false);
+          }
+          break;
+        }
+        case 'has_least_emotes': {
+          if ((msg.content.match(/<(a)?:[a-zA-Z0-9_]+:[0-9]+>/gi)?.length || null) < num)
+            willLevel.push(false);
+          break;
+        }
+        case 'has_most_emotes': {
+          if ((msg.content.match(/<(a)?:[a-zA-Z0-9_]+:[0-9]+>/gi)?.length || null) > num)
+            willLevel.push(false);
+          break;
+        }
+        case 'has_least_mentions': {
+          if (
+            msg.mentions.users.size + msg.mentions.channels.size + msg.mentions.roles.size <
+            num
+          ) {
+            willLevel.push(false);
+          }
+          break;
+        }
+        case 'has_most_mentions': {
+          if (
+            msg.mentions.users.size + msg.mentions.channels.size + msg.mentions.roles.size >
+            num
+          ) {
+            willLevel.push(false);
+          }
+          break;
+        }
       }
-    }
+      willLevel.push(true);
+    });
+    if (willLevel.includes(false)) return false;
     return true;
   });
+
+  if (passes.includes(false)) return false;
   return true;
 };
 
