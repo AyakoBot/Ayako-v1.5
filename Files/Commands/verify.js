@@ -18,11 +18,10 @@ module.exports = {
       [msg.guild.id, true],
     );
     if (res && res.rowCount > 0) {
-      const r = res.rows[0];
+      const [r] = res.rows;
       let logchannel;
       if (r.startchannel !== msg.channel.id) return;
       if (r.pendingrole && !msg.member.roles.cache.has(r.pendingrole)) return;
-      if (r.logchannel) logchannel = msg.guild.channels.cache.get(r.logchannel);
       if (!msg.member.roles.cache.has(r.finishedrole)) {
         const DM = await msg.author.createDM().catch(() => {});
         if (DM && DM.id) {
@@ -36,22 +35,25 @@ module.exports = {
         msg.delete().catch(() => {});
         return;
       }
-      if (logchannel) {
-        const log = new Discord.MessageEmbed()
-          .setDescription(msg.client.ch.stp(msg.lan.log.start, { user: msg.author }))
-          .setAuthor({
-            name: msg.author.tag,
-            iconURL: msg.client.ch.displayAvatarURL(msg.author),
-          })
-          .setTimestamp()
-          .setColor();
-        msg.client.ch.send(logchannel, { embeds: [log] });
-      }
       msg.delete().catch(() => {});
     }
   },
   async startProcess(msg, answer, logchannel) {
     if (msg.m) await msg.m.removeAttachments();
+
+    if (msg.r.logchannel) logchannel = msg.guild.channels.cache.get(msg.r.logchannel);
+    if (logchannel) {
+      const log = new Discord.MessageEmbed()
+        .setDescription(msg.client.ch.stp(msg.lan.log.start, { user: msg.author }))
+        .setAuthor({
+          name: msg.author.tag,
+          iconURL: msg.client.ch.displayAvatarURL(msg.author),
+        })
+        .setTimestamp()
+        .setColor();
+      msg.client.ch.send(logchannel, { embeds: [log] });
+    }
+
     const file = this.generateImage();
     msg.client.verificationCodes.set(`${msg.DM.id}-${msg.guild.id}`, file.captcha.text);
     const { r } = msg;
