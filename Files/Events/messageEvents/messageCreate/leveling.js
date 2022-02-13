@@ -32,14 +32,14 @@ const globalLeveling = async (msg) => {
   globalCooldown.add(msg.author.id);
   setTimeout(() => {
     globalCooldown.delete(msg.author.id);
-  }, 10000);
+  }, 60000);
 
   const res = await msg.client.ch.query(`SELECT * FROM level WHERE type = $1 AND userid = $2;`, [
     'global',
     msg.author.id,
   ]);
   if (res && res.rowCount) {
-    updateLevels(msg, res.rows[0], null, 10, 'global', 1);
+    updateLevels(msg, null, { row: res.rows[0] }, 10, 'global', 1);
   } else {
     insertLevels(msg, 'global', 10, 1);
   }
@@ -83,7 +83,7 @@ const guildLeveling = async (msg, language) => {
   guildCooldown.add(msg.author.id);
   setTimeout(() => {
     guildCooldown.delete(msg.author.id);
-  }, 10000);
+  }, 60000);
 
   const res = await msg.client.ch.query(
     `SELECT * FROM level WHERE type = $1 AND userid = $2 AND guildid = $3;`,
@@ -93,8 +93,8 @@ const guildLeveling = async (msg, language) => {
   if (res && res.rowCount) {
     updateLevels(
       msg,
-      res.rows[0],
-      { res, language },
+      rows,
+      { row: res.rows[0], language },
       rows ? Number(rows.xppermsg) - 10 : 15,
       'guild',
       rows ? Number(rows.xpmultiplier) : 1,
@@ -110,7 +110,7 @@ const guildLeveling = async (msg, language) => {
 };
 
 const insertLevels = (msg, type, baseXP, xpMultiplier) => {
-  const xp = Math.floor(Math.random() * xpMultiplier + baseXP);
+  const xp = Math.floor(Math.random() * baseXP + 10) * xpMultiplier;
 
   msg.client.ch.query(
     `INSERT INTO level (type, userid, xp, level, guildid) VALUES ($1, $2, $3, $4, $5);`,
@@ -119,16 +119,19 @@ const insertLevels = (msg, type, baseXP, xpMultiplier) => {
 };
 
 const updateLevels = (msg, row, lvlupObj, baseXP, type, xpMultiplier) => {
-  const newXp = Math.floor(Math.random() * xpMultiplier + baseXP);
-  const oldLevel = Number(row.level);
-  const oldXp = Number(row.xp);
+  const newXp = Math.floor(Math.random() * baseXP + 10) * xpMultiplier;
+  const oldLevel = Number(lvlupObj.row.level);
+  const oldXp = Number(lvlupObj.row.xp);
   const xp = oldXp + newXp;
   let newLevel = oldLevel;
   const neededXP =
     (5 / 6) * (newLevel + 1) * (2 * (newLevel + 1) * (newLevel + 1) + 27 * (newLevel + 1) + 91);
-  if (xp >= neededXP && lvlupObj) {
+
+  if (xp >= neededXP) {
     newLevel += 1;
-    levelUp(msg, { oldXp, newXp: xp, newLevel, oldLevel }, lvlupObj, row);
+    if (row) {
+      levelUp(msg, { oldXp, newXp: xp, newLevel, oldLevel }, lvlupObj, row);
+    }
   }
 
   if (type === 'guild') {
@@ -158,22 +161,22 @@ const checkEnabled = async (msg) => {
   return null;
 };
 
-const levelUp = async (msg, levelData, { res, language }, row) => {
-  switch (Number(row?.lvlupmode)) {
+const levelUp = async (msg, levelData, { row, language }, settingsrow) => {
+  switch (Number(settingsrow?.lvlupmode)) {
     default: {
       break;
     }
     case 1: {
-      await doEmbed(msg, res, language, levelData, row);
+      await doEmbed(msg, row, language, levelData, settingsrow);
       break;
     }
     case 2: {
-      doReact(msg, row);
+      await doReact(msg, settingsrow);
       break;
     }
   }
 
-  roleAssign(msg, res.rows[0].rolemode, levelData.newLevel);
+  roleAssign(msg, settingsrow.rolemode, levelData.newLevel);
 };
 
 const roleAssign = async (msg, rolemode, newLevel) => {
@@ -183,7 +186,9 @@ const roleAssign = async (msg, rolemode, newLevel) => {
 
   if (!res || !res.rowCount) return;
   const { rows } = res;
-  let promises = [];
+
+  let add = [];
+  let rem = [];
 
   switch (Number(rolemode)) {
     default: {
@@ -191,52 +196,57 @@ const roleAssign = async (msg, rolemode, newLevel) => {
     }
     case 0: {
       // stack
-      const thisLevelsRoleIDs = rows.find((r) => r.level === Number(newLevel));
-      promises = thisLevelsRoleIDs
-        .map((r) => {
-          const roleMap = r
-            .map((roleid) => {
-              if (!msg.member.roles.cache.has(roleid)) return roleid;
-              return null;
-            })
-            .filter((req) => !!req);
+      const thisLevelsRows = rows.filter((r) => Number(r.level) <= Number(newLevel));
+      thisLevelsRows.forEach((r) => {
+        const roleMap = r.roles
+          .map((roleid) => {
+            if (!msg.member.roles.cache.has(roleid)) return roleid;
+            return null;
+          })
+          .filter((req) => !!req);
 
-          if (roleMap.length) {
-            return msg.author.roles.add([roleMap]).catch(() => {});
-          }
-          return null;
-        })
-        .filter((r) => !!r);
+        if (roleMap.length) {
+          add = [...new Set([...add, ...roleMap])];
+        }
+      });
       break;
     }
     case 1: {
       // replace
-      const thisLevelsAndBelowRoleIDs = rows.find((r) => r.level >= Number(newLevel));
-      thisLevelsAndBelowRoleIDs.forEach((r) => {
-        const remove = [];
-        const add = [];
-        r.forEach((roleid) => {
-          if (r.level < Number(newLevel) && msg.member.roles.cache.has(roleid)) {
-            if (msg.guild.roles.cache.get(roleid)) remove.push(roleid);
+      const thisLevelsAndBelowRows = rows.filter((r) => Number(r.level) <= Number(newLevel));
+
+      thisLevelsAndBelowRows.forEach((r) => {
+        const remr = [];
+        const addr = [];
+        r.roles.forEach((roleid) => {
+          if (Number(r.level) < Number(newLevel) && msg.member.roles.cache.has(roleid)) {
+            if (msg.guild.roles.cache.get(roleid)) remr.push(roleid);
           }
-          if (r.level === Number(newLevel) && !msg.member.roles.cache.has(roleid)) {
-            if (msg.guild.roles.cache.get(roleid)) add.push(roleid);
+
+          if (Number(r.level) === Number(newLevel) && !msg.member.roles.cache.has(roleid)) {
+            if (msg.guild.roles.cache.get(roleid)) addr.push(roleid);
           }
         });
 
-        if (add.length) {
-          promises.push(msg.member.roles.add(add).catch(() => {}));
+        if (addr.length) {
+          add = [...new Set([...add, ...addr])];
         }
 
-        if (remove.length) {
-          promises.push(msg.member.roles.remove(add).catch(() => {}));
+        if (remr.length) {
+          rem = [...new Set([...rem, ...remr])];
         }
       });
       break;
     }
   }
 
-  await Promise.all(promises);
+  if (add.length) {
+    await msg.member.roles.add(add).catch(() => {});
+  }
+
+  if (rem.length) {
+    await msg.member.roles.remove(rem).catch(() => {});
+  }
 };
 
 const doReact = async (msg, row) => {
@@ -255,7 +265,7 @@ const doReact = async (msg, row) => {
   await Promise.all(promises);
 };
 
-const doEmbed = async (msg, levelRes, language, levelData, row) => {
+const doEmbed = async (msg, settinsgrow, language, levelData, row) => {
   const getDefaultEmbed = () => {
     return new Discord.MessageEmbed()
       .setAuthor({ name: language.leveling.author })
@@ -288,22 +298,20 @@ const doEmbed = async (msg, levelRes, language, levelData, row) => {
     }
   }
 
-  send(msg, { embeds: [embed] }, levelRes);
+  send(msg, { embeds: [embed] }, settinsgrow);
 };
 
-const send = async (msg, payload, res) => {
+const send = async (msg, payload, row) => {
   const channelIDs =
-    res.rows[0].lvlupchannels && res.rows[0].lvlupchannels.length
-      ? res.rows[0].lvlupchannels
-      : [msg.channel.id];
+    row.lvlupchannels && row.lvlupchannels.length ? row.lvlupchannels : [msg.channel.id];
 
   const channels = channelIDs.map((ch) => msg.guild.channels.cache.get(ch));
   const msgs = await Promise.all(channels.map((c) => c.send(payload).catch(() => {})));
 
-  if (res.rows[0].lvlupdeltimeout) {
+  if (row.lvlupdeltimeout) {
     setTimeout(() => {
       Promise.all(msgs.map((m) => m.delete()));
-    }, res.rows[0].lvlupdeltimeout);
+    }, row.lvlupdeltimeout);
   }
 };
 
