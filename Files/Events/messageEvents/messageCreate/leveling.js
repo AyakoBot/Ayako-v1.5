@@ -119,11 +119,13 @@ const insertLevels = (msg, type, baseXP, xpMultiplier) => {
 };
 
 const updateLevels = async (msg, row, lvlupObj, baseXP, type, xpMultiplier) => {
-  const roleMultiplier = await getRoleMultiplier(msg);
-  const channelMultiplier = await getChannelMultiplier(msg);
+  if (row) {
+    const roleMultiplier = await getRoleMultiplier(msg);
+    const channelMultiplier = await getChannelMultiplier(msg);
 
-  if (roleMultiplier) xpMultiplier = roleMultiplier;
-  if (channelMultiplier) xpMultiplier = channelMultiplier;
+    if (roleMultiplier) xpMultiplier = roleMultiplier;
+    if (channelMultiplier) xpMultiplier = channelMultiplier;
+  }
 
   const newXp = Math.floor(Math.random() * baseXP + 10) * xpMultiplier;
   const oldLevel = Number(lvlupObj.row.level);
