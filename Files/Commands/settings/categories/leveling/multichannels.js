@@ -33,7 +33,7 @@ module.exports = {
     const embed = new Discord.MessageEmbed().addFields(
       {
         name: msg.lan.channels,
-        value: `${r.channels?.length ? r.channels.map((id) => ` <@&${id}>`) : msg.language.none}`,
+        value: `${r.channels?.length ? r.channels.map((id) => ` <#${id}>`) : msg.language.none}`,
         inline: false,
       },
       {
