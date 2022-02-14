@@ -1,73 +1,61 @@
 const Discord = require('discord.js');
 
-const cooldowns = new Discord.Collection();
-
 module.exports = {
-  async execute(users, guild, r) {
+  async execute(joins, guild, r) {
     const language = await guild.client.ch.languageSelector(guild.id);
     const con = guild.client.constants.antiraidMessage;
     const { client } = guild;
 
-    if (!cooldowns.has(guild.id)) {
-      cooldowns.set(guild.id, {
-        users,
-        now: Date.now(),
-        interval: executeInterval(guild, language, con, client, r),
-      });
-    } else {
-      const newUsers = [...new Set([...cooldowns.get(guild.id).users, ...users])];
+    const members = guild.members.cache
+      .filter((m) => {
+        console.log(m.joinedTimestamp - joins.time);
+        if (
+          m.joinedTimestamp > joins.time - Number(r.time) / 2 &&
+          m.joinedTimestamp < joins.time + Number(r.time) / 2
+        ) {
+          return m;
+        }
+        return null;
+      })
+      .filter((m) => !!m);
 
-      const object = {
-        now: cooldowns.get(guild.id).now,
-        users: newUsers,
-        interval: executeInterval(guild, language, con, client, r),
-      };
-
-      clearInterval(cooldowns.get(guild.id).interval);
-      cooldowns.set(guild.id, object);
+    if (members && members.size) {
+      executeInterval(guild, language, con, client, r, members);
     }
   },
 };
 
-const executeInterval = (guild, language, con, client, r) => {
+const executeInterval = (guild, language, con, client, r, members) => {
   const lan = language.commands.antiraidHandler;
 
-  setInterval(() => {
-    if (cooldowns.has(guild.id) && Date.now() - cooldowns.get(guild.id).now > 15000) {
-      clearInterval(cooldowns.get(guild.id).interval);
-
-      if (r.posttof) sendMessage(client, guild, lan, con, r);
-      if (r.punishmenttof) {
-        if (r.punishment) ban(client, guild, language);
-        if (!r.punishment) kick(client, guild, language);
-      }
-
-      cooldowns.delete(guild.id);
-    }
-  }, 1000);
+  if (r.posttof) sendMessage(client, lan, con, r, members);
+  if (r.punishmenttof) {
+    if (r.punishment) ban(client, guild, language, members);
+    if (!r.punishment) kick(client, guild, language, members);
+  }
 };
 
-const kick = (client, guild, language) => {
+const kick = (client, guild, language, members) => {
   client.emit(
     'antiraidKickAdd',
     client.user,
-    cooldowns.get(guild.id).users.map((u) => u.id),
+    members.map((u) => u.user.id),
     language.autotypes.antiraid,
     guild,
   );
 };
 
-const ban = (client, guild, language) => {
+const ban = (client, guild, language, members) => {
   client.emit(
     'antiraidBanAdd',
     client.user,
-    cooldowns.get(guild.id).users.map((u) => u.id),
+    members.map((u) => u.user.id),
     language.autotypes.antiraid,
     guild,
   );
 };
 
-const sendMessage = (client, guild, lan, con, r) => {
+const sendMessage = (client, lan, con, r, members) => {
   const embed = new Discord.MessageEmbed()
     .setAuthor({
       name: lan.debugMessage.author,
@@ -85,7 +73,7 @@ const sendMessage = (client, guild, lan, con, r) => {
     const payload = { embeds: [embed], content: `${pingRoles || ''}\n${pingUsers || ''}` };
     payload.files = [
       client.ch.txtFileWriter(
-        cooldowns.get(guild.id).users.map((u) => `${u.id}`),
+        members.map((u) => `${u.user.id}`),
         'antiraid',
       ),
     ];

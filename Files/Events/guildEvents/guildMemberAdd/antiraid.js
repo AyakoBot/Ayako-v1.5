@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 
 const antiraidCache = new Discord.Collection();
+const sendings = new Discord.Collection();
 
 module.exports = {
   async execute(member) {
@@ -13,68 +14,42 @@ module.exports = {
     if (!res || res.rowCount === 0) return;
 
     this.addMember(member, res.rows[0]);
-    const caches = this.check(member, res.rows[0]);
-
-    if (caches) member.client.emit('antiraidHandler', caches, member.guild, res.rows[0], member);
+    this.check(member, res.rows[0]);
   },
   addMember(member, r) {
-    if (!antiraidCache.get(member.guild.id)) {
-      antiraidCache.set(member.guild.id, []);
+    if (antiraidCache.has(member.guild.id)) {
+      clearTimeout(antiraidCache.get(member.guild.id).timeout);
     }
-    const guildJoins = antiraidCache.get(member.guild.id);
 
-    const memberObject = {
-      id: member.user.id,
-      joinedAt: Date.now(),
-      joinCount: 1,
-      idIdent: member.user.id.slice(0, 3),
-      guild: member.guild.id,
-      timeout: setTimeout(
-        () =>
-          guildJoins.length
-            ? antiraidCache.delete(member.guild.id)
-            : guildJoins.splice(
-                guildJoins.findIndex((m) => m.id === member.user.id),
-                1,
-              ),
-        r.time,
-      ),
-    };
-
-    const exists = guildJoins.findIndex((m) => m.id === member.user.id) !== -1;
-    if (exists) {
-      const existingMember = guildJoins[guildJoins.findIndex((m) => m.id === member.user.id)];
-
-      clearTimeout(existingMember.timeout);
-      existingMember.timeout = setTimeout(
-        () =>
-          guildJoins.length > 1
-            ? antiraidCache.delete(member.guild.id)
-            : guildJoins.splice(
-                guildJoins.findIndex((m) => m.id === member.user.id),
-                1,
-              ),
-        r.time,
-      );
-
-      existingMember.joinCount += 1;
-    } else guildJoins.push(memberObject);
+    const cache = antiraidCache.get(member.guild.id);
+    antiraidCache.set(member.guild.id, {
+      time: member.joinedTimestamp,
+      joins: (cache?.joins || 0) + 1,
+      timeout: setTimeout(() => {
+        antiraidCache.delete(member.guild.id);
+      }, r.time),
+    });
   },
   check(member, r) {
-    let caches = null;
-    const guildJoins = antiraidCache.get(member.guild.id);
-    if (guildJoins) {
-      if (guildJoins.length >= r.jointhreshold) caches = guildJoins;
-      else {
-        const findIndexEntries = guildJoins[guildJoins.findIndex((m) => m.id === member.user.id)];
-        if (findIndexEntries.joinCount >= r.jointhreshold) caches = [findIndexEntries];
-        else {
-          const filterEntries = guildJoins.filter((m) => m.idIdent === member.user.id.slice(0, 3));
-          if (filterEntries.length >= r.similaridthreshold) caches = filterEntries;
-        }
+    if (!antiraidCache.has(member.guild.id)) return null;
+
+    const cache = antiraidCache.get(member.guild.id);
+
+    if (cache.joins >= Number(r.jointhreshold)) {
+      if (sendings.has(member.guild.id)) {
+        clearTimeout(sendings.get(member.guild.id).timeout);
       }
+
+      sendings.set(member.guild.id, {
+        time: cache.time,
+        joins: cache.joins,
+        timeout: setTimeout(() => {
+          member.client.emit('antiraidHandler', sendings.get(member.guild.id), member.guild, r);
+          antiraidCache.delete(member.guild.id);
+        }, r.time),
+      });
     }
-    if (caches?.length) return caches;
+
     return null;
   },
 };
