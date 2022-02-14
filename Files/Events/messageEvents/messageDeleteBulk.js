@@ -23,7 +23,7 @@ module.exports = {
 
         const arr = msgs
           .map((msg) => {
-            if (msg.author || msg.content || msg.attachment.size) {
+            if (msg.author || msg.content || msg.attachments.size) {
               return `${msg.author.tag} (${msg.author.id}) | ${msg.content}\n${msg.attachments.map(
                 (attachment) =>
                   `${attachment.description ? attachment.description : ''} ${attachment.url}\n`,
