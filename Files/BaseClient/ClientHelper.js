@@ -1057,7 +1057,12 @@ module.exports = {
 
     return module.exports.reply(msg, { embeds: [embed] });
   },
-  permError: (msg, neededPerms) => {
+  permError: (msg, bits, me) => {
+    const [neededPerms] = msg.client.ch.bitUniques(
+      bits,
+      me ? msg.guild.me.permissions : msg.member.permissions,
+    );
+
     const embed = new Discord.MessageEmbed()
       .setAuthor({
         name: msg.language.error,
