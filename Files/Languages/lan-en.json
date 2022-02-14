@@ -2344,6 +2344,46 @@
           }
         }
       },
+      "nitrosettings": {
+        "type": "Nitro Monitoring",
+        "description": "Also check out:\n`{{prefix}}settings nitroroles` to add Roles Applied after boosting Days",
+        "roleid": "Nitro Role",
+        "logchannels": "Log Channels",
+        "edit": {
+          "active": {
+            "name": "Active",
+            "answers": "`True` or `False`",
+            "recommended": "Recommended: `True`"
+          },
+          "logchannels": {
+            "name": "Log Channels",
+            "answers": "Channels",
+            "recommended": "The Channels in which the Logs will be sent"
+          }
+        }
+      },
+      "nitroroles": {
+        "type": "Nitro Roles",
+        "days": "Days",
+        "roles": "Roles",
+        "edit": {
+          "active": {
+            "name": "Active",
+            "answers": "`True` or `False`",
+            "recommended": "Recommended: `True`"
+          },
+          "days": {
+            "name": "Boosting Days",
+            "answers": "Any Number",
+            "recommended": "The Boosting Days after which to apply the Roles"
+          },
+          "roles": {
+            "name": "Reward Roles",
+            "answers": "Roles",
+            "recommended": "The Roles to apply"
+          }
+        }
+      },
       "levelsettings": {
         "type": "Leveling",
         "description": "Also check out:\n`{{prefix}}settings levelroles` to add Roles Applied at Levels\n`{{prefix}}settings multiroles` to add Roles which grant XP Gain Multipliers\n`{{prefix}}settings levelchannels` to customize Ayako's Leveling behaviour on Channels",
@@ -2394,7 +2434,7 @@
           },
           "lvlupchannels": {
             "name": "Level-Up Channels",
-            "answers": "Channel IDs or Mentions",
+            "answers": "Channels",
             "recommended": "Channels in which the Level-Up Message will be sent"
           },
           "lvlupdeltimeout": {
@@ -2413,12 +2453,12 @@
           },
           "blchannels": {
             "name": "Blacklisted Channels",
-            "answers": "Channel IDs or Mentions",
+            "answers": "Channels",
             "recommended": "Channels in which no one gains any XP"
           },
           "blroles": {
             "name": "Blacklisted Roles",
-            "answers": "Role IDs or Mentions",
+            "answers": "Roles",
             "recommended": "Roles with which Members will not gain any XP"
           },
           "blusers": {
@@ -2428,12 +2468,12 @@
           },
           "wlchannels": {
             "name": "Whitelisted Channels",
-            "answers": "Channel IDs or Mentions",
+            "answers": "Channels",
             "recommended": "Channels in which XP gain will be activated (if a Whitelisted Channel is present, XP gain in every other non-listed Channel will be disabled)"
           },
           "wlroles": {
             "name": "Whitelisted Roles",
-            "answers": "Role IDs or Mentions",
+            "answers": "Roles",
             "recommended": "Roles which bypass Channel Blacklists"
           },
           "wlusers": {
@@ -2459,7 +2499,7 @@
         "edit": {
           "roles": {
             "name": "Roles",
-            "answers": "Role IDs or Mentions",
+            "answers": "Roles",
             "recommended": "Roles which will be assigned to a User who reached the defined Level"
           },
           "level": {
@@ -2490,7 +2530,7 @@
         "edit": {
           "roles": {
             "name": "Roles",
-            "answers": "Role IDs or Mentions",
+            "answers": "Roles",
             "recommended": "Roles which will increase the XP gained by a User"
           },
           "multiplier": {
@@ -2539,7 +2579,7 @@
         "edit": {
           "channels": {
             "name": "Channels",
-            "answers": "Channel IDs or Mentions",
+            "answers": "Channels",
             "recommended": "Channels which will only give XP if the Message meets the defined Rules"
           },
           "rules": {
@@ -2642,7 +2682,7 @@
         "edit": {
           "channels": {
             "name": "Channels",
-            "answers": "Channel IDs or Mentions",
+            "answers": "Channels",
             "recommended": "Roles which will be assigned to a User who reached the defined Level"
           },
           "multiplier": {

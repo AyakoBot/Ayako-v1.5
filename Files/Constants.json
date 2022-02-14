@@ -605,7 +605,8 @@
         "color": "YELLOW"
       },
       "baseSettings": {
-        "leveling": "levelsettings"
+        "leveling": "levelsettings",
+        "nitro": "nitrosettings"
       },
       "edit": {
         "active": {
@@ -1196,6 +1197,26 @@
             "required": false
           }
         },
+        "nitrosettings": {
+          "roleid": {
+            "key": "role",
+            "required": true
+          },
+          "logchannels": {
+            "key": "channels",
+            "required": false
+          }
+        },
+        "nitroroles": {
+          "days": {
+            "key": "number",
+            "required": true
+          },
+          "roles": {
+            "key": "roles",
+            "required": true
+          }
+        },
         "levelroles": {
           "level": {
             "key": "number",
@@ -1320,6 +1341,8 @@
         "disboard": ["disboard"],
         "forcecooldowns": [null],
         "levelsettings": ["leveling"],
+        "nitrosettings": ["nitrosettings"],
+        "nitroroles": ["nitroroles"],
         "levelroles": ["levelingroles"],
         "multiroles": ["levelingmultiplierroles"],
         "levelingchannels": ["levelingruleschannels"],
@@ -1407,6 +1430,21 @@
         "levelsettings": {
           "cols": ["guildid, active, xppermsg, rolemode, xpmultiplier, lvlupmode"],
           "vals": [["{{msg.guild.id}}", true, 25, true, 1.0, 0]]
+        },
+        "nitrosettings": {
+          "cols": ["guildid, active, logchannels"],
+          "vals": [["{{msg.guild.id}}", true, "{{values.logchannels}}"]]
+        },
+        "nitroroles": {
+          "cols": ["guildid, uniquetimestamp, days, roles"],
+          "vals": [
+            [
+              "{{msg.guild.id}}",
+              "{{values.uniquetimestamp}}",
+              "{{values.days}}",
+              "{{values.roles}}"
+            ]
+          ]
         },
         "logs": {
           "cols": ["guildid"],
