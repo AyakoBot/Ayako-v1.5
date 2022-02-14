@@ -68,31 +68,14 @@ const ban = (client, guild, language) => {
 };
 
 const sendMessage = (client, guild, lan, con, r) => {
-  let attachment;
   const embed = new Discord.MessageEmbed()
     .setAuthor({
       name: lan.debugMessage.author,
       iconURL: con.author.image,
       url: con.author.link,
     })
-    .setColor(con.color)
-    .setDescription(
-      `${lan.debugMessage.description}\n${lan.debugMessage.below}\n${guild.client.ch.makeCodeBlock(
-        cooldowns
-          .get(guild.id)
-          .users.map((u) => `User ID ${u.id} | User Tag: ${client.users.cache.get(u.id)?.tag}`)
-          .join(' '),
-      )}`,
-    );
-
-  if (embed.description.length > 2000) {
-    embed.setDescription(`${lan.debugMessage.description}\n${lan.debugMessage.file}`);
-
-    attachment = client.ch.txtFileWriter(
-      cooldowns.get(guild.id).users.map((u) => `${u.id}`),
-      'antiraid',
-    );
-  }
+    .setColor(con.color);
+  embed.setDescription(`${lan.debugMessage.description}\n${lan.debugMessage.file}`);
 
   const channel = client.channels.cache.get(r.postchannel);
   if (channel) {
@@ -100,7 +83,29 @@ const sendMessage = (client, guild, lan, con, r) => {
     const pingUsers = r.pingusers?.map((user) => `<@${user}>`);
 
     const payload = { embeds: [embed], content: `${pingRoles || ''}\n${pingUsers || ''}` };
-    if (attachment) payload.files = [attachment];
+    payload.files = [
+      client.ch.txtFileWriter(
+        cooldowns.get(guild.id).users.map((u) => `${u.id}`),
+        'antiraid',
+      ),
+    ];
+
+    const printIds = new Discord.MessageButton()
+      .setLabel(lan.debugMessage.printIDs)
+      .setCustomId('antiraid_print_ids')
+      .setStyle('SECONDARY')
+      .setDisabled(true);
+
+    if (payload.files?.length) {
+      printIds.setDisabled(false);
+    }
+
+    const massban = new Discord.MessageButton()
+      .setLabel(lan.debugMessage.massban)
+      .setCustomId('antiraid_massban')
+      .setStyle('DANGER');
+
+    payload.components = client.ch.buttonRower([[printIds, massban]]);
 
     client.ch.send(channel, payload);
   }

@@ -1225,7 +1225,9 @@
         "author": "Join Threshold Breached!",
         "description": "The join Threshold was breached",
         "below": "Every join within the last 20 Seconds:",
-        "file": "Every join within the last 20 Seconds can be found in the File attached"
+        "file": "Every join within the last 20 Seconds can be found in the File attached",
+        "printIDs": "Print User IDs",
+        "massban": "Massban Users"
       }
     },
     "afkHandler": {

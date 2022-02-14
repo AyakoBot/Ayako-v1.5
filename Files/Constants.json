@@ -306,7 +306,8 @@
     "discordUrl": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}",
     "discordUrlDB": "https://discord.com/channels/{{guildid}}/{{channelid}}/{{msgid}}",
     "permissionsViewer": "https://discordapi.com/permissions.html#{{permission}}",
-    "levelupemotes": ["🆙", "<:AMayakopeek:924071140257841162>"]
+    "levelupemotes": ["🆙", "<:AMayakopeek:924071140257841162>"],
+    "ephemeralColor": 3092790
   },
   "emotes": {
     "cross": "<:Cross:902269073805701211>",
