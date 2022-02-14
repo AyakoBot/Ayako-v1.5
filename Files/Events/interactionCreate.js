@@ -2,7 +2,6 @@ const Discord = require('discord.js');
 
 module.exports = {
   execute: async (interaction) => {
-    console.log(interaction.customId);
     switch (interaction.customId) {
       default: {
         break;
@@ -69,13 +68,24 @@ module.exports = {
       }
       case 'antiraid_massban': {
         const command = interaction.client.commands.get('massban');
-        if ((await interaction.member.fetch()).permissions.has(command.perm)) return;
+
+        const language = await interaction.client.ch.languageSelector(interaction.guild);
+        interaction.language = language;
+
+        if (!(await interaction.member.fetch()).permissions.has(command.perm)) {
+          interaction.client.ch.permError(
+            interaction,
+            new Discord.Permissions(command.perm),
+            false,
+          );
+          return;
+        }
+
         const rawContent = await interaction.client.ch.convertTxtFileLinkToString(
-          await interaction.message.fetch().attachments.first().url,
+          (await interaction.message.fetch()).attachments.first().url,
         );
 
         const args = rawContent.replace(new RegExp('\\n', 'g'), ' ').split(/ +/);
-        const language = await interaction.client.ch.languageSelector(interaction.guild);
 
         const msg = {
           client: interaction.client,
@@ -100,12 +110,8 @@ module.exports = {
             )
             .filter((c) => c !== null);
         }
-        interaction.reply({
-          ephemeral: true,
-          content: language.commands.antiraidHandler.debugMessage,
-        });
 
-        command.execute(msg);
+        command.execute(msg, interaction);
         break;
       }
       case 'antiraid_print_ids': {
