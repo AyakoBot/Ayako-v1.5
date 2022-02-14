@@ -91,8 +91,7 @@ module.exports = {
     const perms =
       typeof msg.command.perm === 'bigint' ? new Discord.Permissions(msg.command.perm) : undefined;
     if (perms && !msg.guild.me.permissions.has(perms)) {
-      const [neededPerms] = msg.client.ch.bitUniques(perms, msg.guild.me.permissions);
-      return msg.client.ch.permError(msg, neededPerms);
+      return msg.client.ch.permError(msg, perms, true);
     }
     if (msg.command.perm === 0) {
       if (msg.author.id !== auth.ownerID)
