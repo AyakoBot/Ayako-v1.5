@@ -1044,6 +1044,50 @@ module.exports = {
       .setColor(msg.client.constants.error)
       .setDescription(content);
 
+    if (
+      [
+        'PING',
+        'APPLICATION_COMMAND',
+        'MESSAGE_COMPONENT',
+        'APPLICATION_COMMAND_AUTOCOMPLETE',
+      ].includes(msg.type)
+    ) {
+      return msg.reply({ embeds: [embed], ephemeral: true });
+    }
+
+    return module.exports.reply(msg, { embeds: [embed] });
+  },
+  permError: (msg, neededPerms) => {
+    const embed = new Discord.MessageEmbed()
+      .setAuthor({
+        name: msg.language.error,
+        iconURL: msg.client.constants.standard.errorImage,
+        url: msg.client.constants.standard.invite,
+      })
+      .setColor(msg.client.constants.error)
+      .setDescription(module.exports.makeUnderlined(msg.language.permissions.error.msg))
+      .addField(
+        module.exports.makeBold(msg.language.permissions.error.needed),
+        `${
+          neededPerms.has(8n)
+            ? `${module.exports.makeInlineCode(msg.language.permissions.ADMINISTRATOR)}`
+            : neededPerms
+                .toArray()
+                .map((p) => `${module.exports.makeInlineCode(msg.language.permissions[p])}`)
+        }`,
+      );
+
+    if (
+      [
+        'PING',
+        'APPLICATION_COMMAND',
+        'MESSAGE_COMPONENT',
+        'APPLICATION_COMMAND_AUTOCOMPLETE',
+      ].includes(msg.type)
+    ) {
+      return msg.reply({ embeds: [embed], ephemeral: true });
+    }
+
     return module.exports.reply(msg, { embeds: [embed] });
   },
 };
