@@ -91,26 +91,8 @@ module.exports = {
     const perms =
       typeof msg.command.perm === 'bigint' ? new Discord.Permissions(msg.command.perm) : undefined;
     if (perms && !msg.guild.me.permissions.has(perms)) {
-      const [neededPerms1] = msg.client.ch.bitUniques(perms, msg.guild.me.permissions);
-      const embed = new Discord.MessageEmbed()
-        .setAuthor(
-          msg.language.error,
-          msg.client.constants.standard.errorImage,
-          msg.client.constants.standard.invite,
-        )
-        .setColor(msg.client.constants.error)
-        .setDescription(msg.client.ch.makeUnderlined(msg.language.permissions.error.msg))
-        .addField(
-          msg.client.ch.makeBold(msg.language.permissions.error.needed),
-          `${
-            neededPerms1.has(8n)
-              ? `${msg.client.ch.makeInlineCode(msg.language.permissions.ADMINISTRATOR)}`
-              : neededPerms1
-                  .toArray()
-                  .map((p) => `${msg.client.ch.makeInlineCode(msg.language.permissions[p])}`)
-          }`,
-        );
-      return msg.client.ch.reply(msg, { embeds: [embed] });
+      const [neededPerms] = msg.client.ch.bitUniques(perms, msg.guild.me.permissions);
+      return msg.client.ch.permError(msg, neededPerms);
     }
     if (msg.command.perm === 0) {
       if (msg.author.id !== auth.ownerID)
