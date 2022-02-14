@@ -5,7 +5,7 @@ module.exports = {
   perm: null,
   dm: false,
   takesFirstArg: false,
-  aliases: null,
+  aliases: ['s'],
   async execute(msg, answer) {
     const options = [];
 
