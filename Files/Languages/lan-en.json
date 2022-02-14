@@ -473,7 +473,8 @@
     "error": {
       "msg": "I'm missing Permissions to execute this Command",
       "needed": "Needed Permissions:",
-      "role": "I can't manage this Role"
+      "role": "I can't manage this Role",
+      "you": "You are missing Permissions to execute this Command"
     },
     "deniedPermissions": "Denied Permissions",
     "grantedPermissions": "Granted Permissions",
