@@ -822,10 +822,10 @@ module.exports = {
    * @param {string} url - The URL to convert
    */
   convertTxtFileLinkToString: async (url) => {
-    if (!URL(url).pathname.endsWith('.txt')) return null;
+    if (!new URL(url).pathname.endsWith('.txt')) return null;
 
     const res = await SA.get(url).catch((e) => e);
-    const buffer = res?.body;
+    const buffer = res?.text;
 
     if (!buffer) return null;
 
