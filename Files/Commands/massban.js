@@ -7,7 +7,7 @@ module.exports = {
   takesFirstArg: true,
   aliases: null,
   type: 'mod',
-  async execute(msg) {
+  async execute(msg, answer) {
     // eslint-disable-next-line global-require,import/no-unresolved
     const args = msg.args[0] === 'ids' ? require('../ids.json').ids : msg.args;
     if (msg.args[0] === 'ids' && !args[0]) return msg.client.ch.reply(msg, msg.lan.noRaidIDs);
@@ -93,7 +93,14 @@ module.exports = {
           url: msg.client.constants.standard.invite,
         })
         .setTimestamp();
-      const m = await msg.client.ch.reply(msg, { embeds: [replyEmbed] });
+
+      if (answer) msg.m = await answer.reply({ embeds: [replyEmbed] });
+      else msg.m = await msg.client.ch.reply({ embeds: [replyEmbed] });
+
+      if (!msg.m) {
+        msg.m = await answer.fetchReply();
+      }
+
       uniqueUsers.forEach(async (user, i) => {
         const ban = await msg.guild.bans
           .create(user, {
@@ -114,7 +121,7 @@ module.exports = {
         }
       });
       const editIntervalS = setInterval(async () => {
-        if (descS.length !== uniqueUsers.length) await m.edit({ embeds: [replyEmbed] });
+        if (descS.length !== uniqueUsers.length) await msg.m.edit({ embeds: [replyEmbed] });
       }, 5000);
       const intervalS = setInterval(async () => {
         if (descS.length === uniqueUsers.length) {
@@ -134,8 +141,8 @@ module.exports = {
             clearInterval(interval);
           }, 3600000);
           setTimeout(() => {
-            if (!descS.length) m.delete();
-            else m.edit({ embeds: [replyEmbed] });
+            if (!descS.length) msg.m.delete();
+            else msg.m.edit({ embeds: [replyEmbed] });
           }, 2000);
         }
       }, 1000);

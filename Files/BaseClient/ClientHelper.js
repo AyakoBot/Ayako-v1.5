@@ -1058,7 +1058,7 @@ module.exports = {
     return module.exports.reply(msg, { embeds: [embed] });
   },
   permError: (msg, bits, me) => {
-    const [neededPerms] = msg.client.ch.bitUniques(
+    const [neededPerms] = module.exports.bitUniques(
       bits,
       me ? msg.guild.me.permissions : msg.member.permissions,
     );
@@ -1070,10 +1070,14 @@ module.exports = {
         url: msg.client.constants.standard.invite,
       })
       .setColor(msg.client.constants.error)
-      .setDescription(module.exports.makeUnderlined(msg.language.permissions.error.msg))
+      .setDescription(
+        module.exports.makeUnderlined(
+          me ? msg.language.permissions.error.msg : msg.language.permissions.error.you,
+        ),
+      )
       .addField(
         module.exports.makeBold(msg.language.permissions.error.needed),
-        `${
+        `\u200b${
           neededPerms.has(8n)
             ? `${module.exports.makeInlineCode(msg.language.permissions.ADMINISTRATOR)}`
             : neededPerms
