@@ -27,11 +27,14 @@ module.exports = {
           entry = entry.first();
         }
         const embed = new Discord.MessageEmbed()
-          .setAuthor(
-            lan.author.title,
-            con.author.image,
-            ch.stp(con.author.link, { emoji: newEmoji, ending: newEmoji.animated ? 'gif' : 'png' }),
-          )
+          .setAuthor({
+            name: lan.author.title,
+            iconURL: con.author.image,
+            url: ch.stp(con.author.link, {
+              emoji: newEmoji,
+              ending: newEmoji.animated ? 'gif' : 'png',
+            }),
+          })
           .setThumbnail(
             ch.stp(con.author.link, { emoji: oldEmoji, ending: newEmoji.animated ? 'gif' : 'png' }),
           )

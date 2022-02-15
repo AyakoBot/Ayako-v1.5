@@ -96,15 +96,15 @@ module.exports = {
     if (unmute) {
       const embed = new Discord.MessageEmbed()
         .setColor(con.color)
-        .setAuthor(
-          msg.client.ch.stp(lan.author, { user: target }),
-          msg.client.ch.displayAvatarURL(target),
-          msg.client.constants.standard.invite,
-        )
+        .setAuthor({
+          name: msg.client.ch.stp(lan.author, { user: target }),
+          iconURL: msg.client.ch.displayAvatarURL(target),
+          url: msg.client.constants.standard.invite,
+        })
         .setDescription(msg.client.ch.stp(lan.description, { user: executor, target }))
         .setTimestamp()
         .addField(language.reason, `${reason}`)
-        .setFooter(msg.client.ch.stp(lan.footer, { user: executor, target }));
+        .setFooter({ text: msg.client.ch.stp(lan.footer, { user: executor, target }) });
       if (msg.logchannels && msg.logchannels.length)
         msg.client.ch.send(msg.logchannels, { embeds: [embed] });
       const dmChannel = await target.createDM().catch(() => {});
@@ -112,11 +112,11 @@ module.exports = {
         .setDescription(`**${language.reason}:** \n${reason}`)
         .setColor(con.color)
         .setTimestamp()
-        .setAuthor(
-          msg.client.ch.stp(lan.dm.author, { guild: msg.guild }),
-          lan.author.image,
-          msg.client.ch.stp(con.author.link, { guild: msg.guild }),
-        );
+        .setAuthor({
+          name: msg.client.ch.stp(lan.dm.author, { guild: msg.guild }),
+          iconURL: lan.author.image,
+          url: msg.client.ch.stp(con.author.link, { guild: msg.guild }),
+        });
       msg.client.ch.send(dmChannel, { embeds: [DMembed] });
     } else {
       if (mexisted) {
@@ -203,23 +203,23 @@ async function assingWarn(executor, target, reason, msg, answer, em, language, c
     .setDescription(`**${language.reason}:** \n${reason}`)
     .setColor(con.color)
     .setTimestamp()
-    .setAuthor(
-      msg.client.ch.stp(lan.dm.author, { guild: msg.guild }),
-      lan.author.image,
-      msg.client.ch.stp(con.author.link, { guild: msg.guild }),
-    );
+    .setAuthor({
+      name: msg.client.ch.stp(lan.dm.author, { guild: msg.guild }),
+      iconURL: lan.author.image,
+      url: msg.client.ch.stp(con.author.link, { guild: msg.guild }),
+    });
   msg.client.ch.send(dmChannel, { embeds: [DMembed] });
   const embed = new Discord.MessageEmbed()
     .setColor(con.color)
-    .setAuthor(
-      msg.client.ch.stp(lan.author, { user: target }),
-      msg.client.ch.displayAvatarURL(target),
-      msg.client.constants.standard.invite,
-    )
+    .setAuthor({
+      name: msg.client.ch.stp(lan.author, { user: target }),
+      iconURL: msg.client.ch.displayAvatarURL(target),
+      url: msg.client.constants.standard.invite,
+    })
     .setDescription(msg.client.ch.stp(lan.description, { user: executor, target }))
     .setTimestamp()
     .addField(language.reason, `${reason}`)
-    .setFooter(msg.client.ch.stp(lan.footer, { user: executor, target }));
+    .setFooter({ text: msg.client.ch.stp(lan.footer, { user: executor, target }) });
   if (msg.logchannels) msg.client.ch.send(msg.logchannels, { embeds: [embed] });
   em.setDescription(
     `${msg.client.constants.emotes.tick} ${msg.client.ch.stp(lan.success, { target })}`,

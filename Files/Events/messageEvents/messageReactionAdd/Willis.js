@@ -34,11 +34,12 @@ module.exports = {
               if (res.rows[0].willis) {
                 if (res.rows[0].willis.includes(msg.author.id)) {
                   const embed = new Discord.MessageEmbed()
-                    .setAuthor(
-                      'Childe Giveaway!',
-                      'https://cdn.discordapp.com/attachments/565221613507969024/829744594568740935/vctjdj0zvww51.png',
-                      'https://discord.com/api/oauth2/authorize?client_id=650691698409734151&permissions=1576396919&scope=bot',
-                    )
+                    .setAuthor({
+                      name: 'Childe Giveaway!',
+                      iconURL:
+                        'https://cdn.discordapp.com/attachments/565221613507969024/829744594568740935/vctjdj0zvww51.png',
+                      url: 'https://discord.com/api/oauth2/authorize?client_id=650691698409734151&permissions=1576396919&scope=bot',
+                    })
                     .setDescription('**You already entered the Giveaway!**')
                     .setColor('YELLOW')
                     // .addField('\u200b', '[Click here to get to the Giveaway](https://givelab.com/genshin10k/)')
@@ -52,11 +53,12 @@ module.exports = {
                   return;
                 }
                 const embed = new Discord.MessageEmbed()
-                  .setAuthor(
-                    'Childe Giveaway!',
-                    'https://cdn.discordapp.com/attachments/565221613507969024/829744594568740935/vctjdj0zvww51.png',
-                    'https://discord.com/api/oauth2/authorize?client_id=650691698409734151&permissions=1576396919&scope=bot',
-                  )
+                  .setAuthor({
+                    name: 'Childe Giveaway!',
+                    iconURL:
+                      'https://cdn.discordapp.com/attachments/565221613507969024/829744594568740935/vctjdj0zvww51.png',
+                    url: 'https://discord.com/api/oauth2/authorize?client_id=650691698409734151&permissions=1576396919&scope=bot',
+                  })
                   .setDescription('**Your submission was accepted!**\nGood Luck!')
                   .setColor('b0ff00')
                   // .addField('\u200b', '[Click here to get to the Giveaway](https://givelab.com/primogem/10k-primogem-giveaway)')
@@ -77,11 +79,12 @@ module.exports = {
                 ]);
               } else {
                 const embed = new Discord.MessageEmbed()
-                  .setAuthor(
-                    'Childe Giveaway!',
-                    'https://cdn.discordapp.com/attachments/565221613507969024/829744594568740935/vctjdj0zvww51.png',
-                    'https://discord.com/api/oauth2/authorize?client_id=650691698409734151&permissions=1576396919&scope=bot',
-                  )
+                  .setAuthor({
+                    name: 'Childe Giveaway!',
+                    iconURL:
+                      'https://cdn.discordapp.com/attachments/565221613507969024/829744594568740935/vctjdj0zvww51.png',
+                    url: 'https://discord.com/api/oauth2/authorize?client_id=650691698409734151&permissions=1576396919&scope=bot',
+                  })
                   .setDescription('**Your submission was accepted!**\nGood Luck!')
                   .setColor('b0ff00')
                   // .addField('\u200b', '[Click here to get to the Giveaway](https://givelab.com/primogem/10k-primogem-giveaway)')
@@ -110,11 +113,12 @@ module.exports = {
                 .setTimestamp();
               const log = await logchannel.send(embed2).catch(() => {});
               const embed = new Discord.MessageEmbed()
-                .setAuthor(
-                  'Childe Giveaway!',
-                  'https://cdn.discordapp.com/attachments/565221613507969024/829744594568740935/vctjdj0zvww51.png',
-                  'https://discord.com/api/oauth2/authorize?client_id=650691698409734151&permissions=1576396919&scope=bot',
-                )
+                .setAuthor({
+                  name: 'Childe Giveaway!',
+                  iconURL:
+                    'https://cdn.discordapp.com/attachments/565221613507969024/829744594568740935/vctjdj0zvww51.png',
+                  url: 'https://discord.com/api/oauth2/authorize?client_id=650691698409734151&permissions=1576396919&scope=bot',
+                })
                 .setDescription('**Your submission was rejected!**')
                 .addField(
                   'Please check back on the requirements',

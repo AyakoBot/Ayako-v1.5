@@ -28,11 +28,11 @@ module.exports = {
     const totalmem = os.totalmem() / 1024 / 1024;
 
     const embed = new Discord.MessageEmbed(m.embeds[0])
-      .setAuthor(
-        msg.lan.author,
-        msg.client.constants.emotes.workloadLink,
-        msg.client.constants.standard.invite,
-      )
+      .setAuthor({
+        name: msg.lan.author,
+        iconURL: msg.client.constants.emotes.workloadLink,
+        url: msg.client.constants.standard.invite,
+      })
       .addFields(
         {
           name: msg.lan.RAM.name,

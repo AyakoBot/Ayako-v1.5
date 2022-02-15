@@ -29,11 +29,11 @@ module.exports = {
         }
         if (entry && entry.id) {
           const embed = new Discord.MessageEmbed()
-            .setAuthor(
-              ch.stp(lan.author.title, { type: language.channels[channel.type] }),
-              con.author.image,
-              ch.stp(con.author.link, { channel }),
-            )
+            .setAuthor({
+              name: ch.stp(lan.author.title, { type: language.channels[channel.type] }),
+              iconURL: con.author.image,
+              url: ch.stp(con.author.link, { channel }),
+            })
             .setDescription(
               ch.stp(lan.description.withUser, {
                 user: entry.executor,

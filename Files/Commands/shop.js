@@ -54,7 +54,7 @@ module.exports = {
           'Send payment to a <@&360469415612907522> Member\n\n**For automatic role assignment type in this pattern: \n\n`.give [amount] [<@&360469415612907522> member] [role name]`**\n Example: | .give 500 <@267835618032222209> Kawaii Potato |\n',
         )
         .setColor(msg.client.ch.colorSelector(msg.guild.me))
-        .setFooter('If it doesnt work for some reason, wait for the Staff to reply');
+        .setFooter({ text: 'If it doesnt work for some reason, wait for the Staff to reply' });
       msg.client.ch.reply(msg, { embeds: [embed] });
     } else if (msg.guild.id === '266632338883084290') {
       const embed = new Discord.MessageEmbed()

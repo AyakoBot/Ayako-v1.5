@@ -352,11 +352,11 @@ module.exports = {
           const link = 'https://strms.net/888_WillisgamingtvDiscord';
 
           const e = new Discord.MessageEmbed()
-            .setAuthor(
-              'Childe Giveaway! [You can also click here]',
-              'https://i1.sndcdn.com/artworks-NbRgsD5ixh9PkxUR-t81Dyg-t500x500.jpg',
-              link,
-            )
+            .setAuthor({
+              name: 'Childe Giveaway! [You can also click here]',
+              iconURL: 'https://i1.sndcdn.com/artworks-NbRgsD5ixh9PkxUR-t81Dyg-t500x500.jpg',
+              url: link,
+            })
             .setColor('b0ff00')
             .setDescription(
               `2 <:Childe:829744615909228546> Childe Giveaways + 1 more at 360 Participants (or 8000 <:primo:785890007058612254>)\n${needed[0]} ${emote[0]}\n${loltext}\n`,
@@ -372,7 +372,7 @@ module.exports = {
             .setImage(
               'https://cdn.discordapp.com/attachments/768559225538084874/829753503513444362/1111111111.png',
             )
-            .setFooter('Gambling can be addictive. Participation from the age of 18')
+            .setFooter({ text: 'Gambling can be addictive. Participation from the age of 18' })
             .addField('Current Participants:', participants);
           if (m.embeds[0].fields[1]) {
             if (`${m.embeds[0].fields[2].value}` !== `${participants}`) {

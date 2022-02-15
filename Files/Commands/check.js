@@ -257,7 +257,7 @@ module.exports = {
                     inline: false,
                   },
                 )
-                .setFooter(msg.lan.warnID + warn.row_number);
+                .setFooter({ text: msg.lan.warnID + warn.row_number });
               embeds.push(warnEmbed);
             });
           }
@@ -335,7 +335,7 @@ module.exports = {
                     inline: false,
                   },
                 )
-                .setFooter(msg.lan.warnID + mute.row_number);
+                .setFooter({ text: msg.lan.warnID + mute.row_number });
               embeds.push(muteEmbed);
             });
           }
