@@ -542,13 +542,12 @@ module.exports = {
    * @constructor
    * @param {object} guild - The Guild the Language is Selected for.
    */
-  languageSelector: async (guild) => {
+  languageSelector: (guild) => {
     const guildid = guild?.id ? guild?.id : guild;
     if (guildid) {
-      const resLan = await module.exports.query(
-        'SELECT lan FROM guildsettings WHERE guildid = $1;',
-        [guildid],
-      );
+      const resLan = module.exports.query('SELECT lan FROM guildsettings WHERE guildid = $1;', [
+        guildid,
+      ]);
       let lang = 'en';
       if (resLan && resLan.rowCount > 0) lang = resLan.rows[0].lan;
       return require(`../Languages/lan-${lang}.json`);
@@ -668,7 +667,7 @@ module.exports = {
     const collector = m.createMessageComponentCollector({ time: 30000 });
     return new Promise((resolve) => {
       collector.on('collect', (answer) => {
-        if (answer.user.id !== msg.author.id) module.exports.notYours(answer, msg);
+        if (answer.user.id !== msg.author.id) module.exports.notYours(answer);
         else if (answer.customId === 'modProceedAction') {
           m.delete().catch(() => {});
           resolve(true);
@@ -689,17 +688,19 @@ module.exports = {
    * Sends an ephemeral Message to the triggering User, telling them module.exports Button/Select Menu was not meant for them.
    * @constructor
    * @param {object} interaction - The Interaction the triggering User sent.
-   * @param {object} msg - The Message module.exports Button/Select Menu triggered.
    */
-  notYours: (interaction, msg) => {
+  notYours: (interaction) => {
+    let language;
+    if (!language) language = module.exports.languageSelector(interaction.guild);
+
     const embed = new Discord.MessageEmbed()
       .setAuthor({
-        name: msg.language.error,
+        name: language.error,
         iconURL: Constants.standard.image,
         url: Constants.standard.invite,
       })
       .setColor(Constants.error)
-      .setDescription(msg.language.notYours);
+      .setDescription(language.notYours);
     interaction.reply({ embeds: [embed], ephemeral: true }).catch(() => {});
   },
   /**
@@ -765,7 +766,7 @@ module.exports = {
    * @param {object} lan - The Language which is to be used.
    * @param {object} guild - The Guild in which module.exports Command was called
    */
-  loadingEmbed: async (lan, guild) => {
+  loadingEmbed: (lan, guild) => {
     const embed = new Discord.MessageEmbed()
       .setAuthor({
         name: lan.author,
@@ -775,7 +776,7 @@ module.exports = {
       .setColor(module.exports.colorSelector(guild?.me))
       .setDescription(
         `${guild.client.constants.emotes.loading} ${
-          lan.loading ? lan.loading : (await module.exports.languageSelector(guild)).loading
+          lan.loading ? lan.loading : module.exports.languageSelector(guild).loading
         }`,
       );
     return embed;
@@ -868,7 +869,7 @@ module.exports = {
 
     if (guild.vanityURLCode) {
       const vanity = await guild.fetchVanityData();
-      const language = await module.exports.languageSelector(guild);
+      const language = module.exports.languageSelector(guild);
 
       invitesMap.set(vanity.code, {
         code: vanity.code,

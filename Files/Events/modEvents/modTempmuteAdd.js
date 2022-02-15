@@ -199,7 +199,7 @@ async function ask(executor, msg) {
   const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
   const resolved = new Promise((resolve) => {
     buttonsCollector.on('collect', async (button) => {
-      if (button.user.id !== executor.id) return msg.client.ch.notYours(button, msg.m);
+      if (button.user.id !== executor.id) return msg.client.ch.notYours(button);
       if (button.customId === 'yes') {
         buttonsCollector.stop();
         resolve([false, button]);

@@ -430,7 +430,7 @@ module.exports = {
         }
         if (responseBody) clickButton.update(responseBody);
         buttonsCollector.resetTimer();
-      } else msg.client.ch.notYours(clickButton, msg);
+      } else msg.client.ch.notYours(clickButton);
     });
     buttonsCollector.on('end', (collected, reason) => {
       if (reason === 'time') {

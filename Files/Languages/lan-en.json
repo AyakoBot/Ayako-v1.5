@@ -208,6 +208,13 @@
     "descriptionUser": "Executor {{user}} / `{{user.tag}}` / `{{user.id}}`\nupdated the Roles of\nTarget {{target}} / `{{target.tag}}` / `{{target.id}}`",
     "descriptionNoUser": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nupdated their own Roles"
   },
+  "guildMemberUpdateNitro": {
+    "author": {
+      "name": "Member Started Boosting"
+    },
+    "descriptionUser": "Executor {{user}} / `{{user.tag}}` / `{{user.id}}`\nupdated the Roles of\nTarget {{target}} / `{{target.tag}}` / `{{target.id}}`",
+    "descriptionNoUser": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nupdated their own Roles"
+  },
   "guildUpdate": {
     "author": {
       "name": "Server Updated"

@@ -184,7 +184,7 @@ module.exports = {
             buttonsCollector.stop();
             singleRowEdit({ msg, answer: interaction }, { row, res }, embed, comesFromMMR);
           }
-        } else msg.client.ch.notYours(interaction, msg);
+        } else msg.client.ch.notYours(interaction);
       });
       buttonsCollector.on('end', (collected, reason) => {
         if (reason === 'time') {
@@ -290,7 +290,7 @@ module.exports = {
 
       buttonsCollector.on('collect', async (interaction) => {
         if (interaction.user.id !== msg.author.id) {
-          return msg.client.ch.notYours(interaction, msg);
+          return msg.client.ch.notYours(interaction);
         }
         switch (interaction.customId) {
           default: {
@@ -365,7 +365,7 @@ const noEmbed = async (msg, answer, res) => {
   reactionHandler({ msg, answer }, buttonsCollector);
 
   buttonsCollector.on('collect', (interaction) => {
-    if (interaction.user.id !== msg.author.id) return msg.client.ch.notYours(interaction, msg);
+    if (interaction.user.id !== msg.author.id) return msg.client.ch.notYours(interaction);
     buttonsCollector.stop();
     if (msg.file.setupRequired === false) {
       return mmrEditList({ msg, answer: interaction }, { res, embed });
@@ -700,7 +700,7 @@ const mmrEditList = async (msgData, sendData) => {
 
   const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
   buttonsCollector.on('collect', async (interaction) => {
-    if (interaction.user.id !== msg.author.id) return msg.client.ch.notYours(interaction, msg);
+    if (interaction.user.id !== msg.author.id) return msg.client.ch.notYours(interaction);
     switch (interaction.customId) {
       default: {
         return null;
@@ -782,7 +782,7 @@ const singleRowEdit = async (msgData, resData, embed, comesFromMMR) => {
   const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
   buttonsCollector.on('collect', async (interaction) => {
     if (interaction.user.id !== msg.author.id) {
-      return msg.client.ch.notYours(interaction, msg);
+      return msg.client.ch.notYours(interaction);
     }
 
     let [editKey] = Object.entries(msg.lanSettings[msg.file.name].edit)
@@ -1135,7 +1135,7 @@ const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
   const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
   return new Promise((resolve) => {
     buttonsCollector.on('collect', async (interaction) => {
-      if (interaction.user.id !== msg.author.id) return msg.client.ch.notYours(interaction, msg);
+      if (interaction.user.id !== msg.author.id) return msg.client.ch.notYours(interaction);
       buttonsCollector.resetTimer();
       if (messageCollector) messageCollector.resetTimer();
       switch (interaction.customId) {
@@ -1554,7 +1554,7 @@ const setup = async (msg, answer) => {
 
   const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
   buttonsCollector.on('collect', async (interaction) => {
-    if (interaction.user.id !== msg.author.id) return msg.client.ch.notYours(interaction, msg);
+    if (interaction.user.id !== msg.author.id) return msg.client.ch.notYours(interaction);
     switch (interaction.customId) {
       default: {
         return null;
@@ -1698,7 +1698,7 @@ const categoryMenuHandler = async ({ msg, answer }, needsBack) => {
   const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
 
   buttonsCollector.on('collect', (interaction) => {
-    if (interaction.user.id !== msg.author.id) return msg.client.ch.notYours(interaction, msg);
+    if (interaction.user.id !== msg.author.id) return msg.client.ch.notYours(interaction);
     reassignMsg(
       `${msg.client.constants.standard.prefix}${module.exports.name} ${interaction.values[0]}`,
       msg,

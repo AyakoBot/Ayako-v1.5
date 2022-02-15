@@ -104,7 +104,7 @@ const doPunishment = async (punishment, executor, target, reason, msg, r) => {
             buttonsCollector.stop();
             resolve(false);
           }
-        } else msg.client.ch.notYours(button, msg);
+        } else msg.client.ch.notYours(button);
       });
       buttonsCollector.on('end', (collected, endReason) => {
         if (endReason === 'time') resolve(false);
