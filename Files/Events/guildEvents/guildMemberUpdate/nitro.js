@@ -2,14 +2,14 @@ const Discord = require('discord.js');
 
 module.exports = {
   execute: async (oldMember, newMember) => {
-    checkInserts(oldMember, newMember);
+    await checkInserts(oldMember, newMember);
 
     if (oldMember.premiumSinceTimestamp && newMember.premiumSinceTimestamp) {
       return;
     }
 
     if (newMember.premiumSinceTimestamp && !oldMember.premiumSinceTimestamp) {
-      newMember.client.ch.query(
+      await newMember.client.ch.query(
         `INSERT INTO nitrousers (guildid, userid, stillboosting, booststarts) VALUES ($1, $2, true, $3)
         ON CONFLICT (guildid, userid) DO
         UPDATE SET booststarts = array_append(nitrousers.booststarts, $4), stillboosting = false;`,
@@ -25,7 +25,7 @@ module.exports = {
     }
 
     if (oldMember.premiumSinceTimestamp && !newMember.premiumSinceTimestamp) {
-      newMember.client.ch.query(
+      await newMember.client.ch.query(
         `INSERT INTO nitrousers (guildid, userid, stillboosting, boostends, days) VALUES ($1, $2, false, $3, $4)
         ON CONFLICT (guildid, userid) DO
         UPDATE SET boostends = array_append(nitrousers.boostends, $5), days = nitrousers.days + $4;`,
@@ -43,13 +43,13 @@ module.exports = {
   },
 };
 
-const checkInserts = (oM, nM) => {
+const checkInserts = async (oM, nM) => {
   const timestamp = oM.premiumSinceTimestamp || nM.premiumSinceTimestamp;
 
-  const res = oM.client.ch.query(`SELECT * FROM nitrousers WHERE userid = $1 AND guildid = $2;`, [
-    nM.user.id,
-    nM.guild.id,
-  ]);
+  const res = await oM.client.ch.query(
+    `SELECT * FROM nitrousers WHERE userid = $1 AND guildid = $2;`,
+    [nM.user.id, nM.guild.id],
+  );
 
   if (res && res.rowCount) {
     const [row] = res.rows;
@@ -62,7 +62,7 @@ const checkInserts = (oM, nM) => {
       row.boostends.push(Date.now());
     }
 
-    oM.client.ch.query(
+    await oM.client.ch.query(
       `UPDATE nitrousers SET booststarts = $1, boostends = $2 WHERE userid = $3 AND guildid = $4;`,
       [row.booststarts, row.boostends, nM.user.id, nM.guild.id],
     );
@@ -134,8 +134,10 @@ const getSettings = async (member) => {
 };
 
 const getDays = async (member) => {
-  return member.client.ch.query(`SELECT * FROM nitrousers WHERE guildid = $1 AND userid = $2;`, [
-    member.guild.id,
-    member.user.id,
-  ])?.rows[0]?.days;
+  return (
+    await member.client.ch.query(`SELECT * FROM nitrousers WHERE guildid = $1 AND userid = $2;`, [
+      member.guild.id,
+      member.user.id,
+    ])
+  )?.rows[0]?.days;
 };

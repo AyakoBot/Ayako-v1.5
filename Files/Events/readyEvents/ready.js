@@ -18,6 +18,9 @@ module.exports = {
     setInterval(() => {
       // require('./websiteFetcher').execute();
       if (new Date().getHours() === 0) {
+        client.guilds.cache.forEach((g) => {
+          require('./nitro').execute(g);
+        });
         client.ch.query('DELETE FROM toxicitycheck;');
       }
     }, 3600000);
