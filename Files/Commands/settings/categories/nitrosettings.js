@@ -16,90 +16,27 @@ module.exports = {
         inline: false,
       },
       {
-        name: msg.lan.bpchannelid,
+        name: msg.lan.logchannels,
         value: `${
-          r.bpchannelid && r.bpchannelid.length
-            ? r.bpchannelid.map((id) => ` <#${id}>`)
+          r.logchannels && r.logchannels.length
+            ? r.logchannels.map((id) => ` <#${id}>`)
             : msg.language.none
         }`,
         inline: false,
-      },
-      {
-        name: msg.lan.bpuserid,
-        value: `${
-          r.bpuserid && r.bpuserid.length ? r.bpuserid.map((id) => ` <@${id}>`) : msg.language.none
-        }`,
-        inline: false,
-      },
-      {
-        name: msg.lan.bproleid,
-        value: `${
-          r.bproleid && r.bproleid.length ? r.bproleid.map((id) => ` <@&${id}>`) : msg.language.none
-        }`,
-        inline: false,
-      },
-      {
-        name: '\u200b',
-        value: '\u200b',
-        inline: false,
-      },
-      {
-        name: msg.language.punishments,
-        value:
-          `${msg.lan.readofwarnstof}\n${
-            r.readofwarnstof
-              ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-              : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
-          }\n\n` +
-          `${msg.client.ch.stp(msg.lan.muteafterwarnsamount, {
-            amount: r.muteafterwarnsamount ? r.muteafterwarnsamount : '--',
-          })}\n` +
-          `${msg.client.ch.stp(msg.lan.kickafterwarnsamount, {
-            amount: r.kickafterwarnsamount ? r.kickafterwarnsamount : '--',
-          })}\n` +
-          `${msg.client.ch.stp(msg.lan.banafterwarnsamount, {
-            amount: r.banafterwarnsamount ? r.banafterwarnsamount : '--',
-          })}`,
-        inline: false,
-      },
-      {
-        name: '\u200b',
-        value: '\u200b',
-        inline: false,
-      },
-      {
-        name: msg.lan.giveofficialwarnstof,
-        value: r.giveofficialwarnstof
-          ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-          : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
-        inline: true,
-      },
-      {
-        name: msg.lan.muteenabledtof,
-        value: r.muteenabledtof
-          ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-          : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
-        inline: true,
-      },
-      {
-        name: msg.lan.kickenabledtof,
-        value: r.kickenabledtof
-          ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-          : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
-        inline: true,
-      },
-      {
-        name: msg.lan.banenabledtof,
-        value: r.banenabledtof
-          ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-          : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
-        inline: true,
       },
     );
     return embed;
   },
   buttons(msg, r) {
+    const active = new Discord.MessageButton()
+      .setCustomId(msg.lan.edit.active.name)
+      .setLabel(msg.lanSettings.active)
+      .setStyle(r.active ? 'SUCCESS' : 'DANGER');
+    const logchannels = new Discord.MessageButton()
+      .setCustomId(msg.lan.edit.logchannels.name)
+      .setLabel(msg.lan.logchannels)
+      .setStyle('PRIMARY');
 
-    return [];
+    return [[active], [logchannels]];
   },
 };
