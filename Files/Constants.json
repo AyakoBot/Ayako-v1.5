@@ -1481,13 +1481,14 @@
           "identType": "role"
         },
         "autopunish": {
-          "cols": ["guildid, active, uniquetimestamp, punishment, confirmationreq"],
+          "cols": ["guildid, active, uniquetimestamp, warnamount, confirmationreq, sendtof"],
           "vals": [
             [
               "{{msg.guild.id}}",
               false,
               "{{values.uniquetimestamp}}",
-              "{{values.punishment}}",
+              "{{values.warnamount}}",
+              false,
               false
             ]
           ],

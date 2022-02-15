@@ -14,7 +14,7 @@ module.exports = {
     );
     for (let i = 0; i < res.length; i += 1) {
       const r = res[i];
-      const punishment = msg.language.autopunish[r.punishment];
+      const punishment = r.punishment ? msg.language.autopunish[r.punishment] : msg.language.none;
       embed.addFields({
         name: `${msg.language.number}: \`${r.id}\` | ${
           r.active
@@ -33,7 +33,7 @@ module.exports = {
     const embed = new Discord.MessageEmbed();
     embed.addFields(
       {
-        name: msg.lanSettings.active,
+        name: `${msg.lanSettings.active}\u200b`,
         value: r.active
           ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
           : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
@@ -46,16 +46,18 @@ module.exports = {
       },
       {
         name: '\u200b',
-        value: msg.client.ch.stp(msg.lan.warnamount, { warns: r.warnamount ? r.warnamount : '--' }),
+        value: msg.client.ch.stp(msg.lan.edit.warnamount.name, {
+          warnamount: r.warnamount ? r.warnamount : '--',
+        }),
         inline: false,
       },
       {
-        name: msg.lan.punishment,
-        value: msg.language.autopunish[r.punishment],
+        name: `${msg.lan.punishment}\u200b`,
+        value: r.punishment ? msg.language.autopunish[r.punishment] : msg.language.none,
         inline: false,
       },
       {
-        name: msg.lan.duration,
+        name: `${msg.lan.duration}\u200b`,
         value: moment
           .duration(+r.duration)
           .format(
@@ -77,14 +79,14 @@ module.exports = {
         inline: false,
       },
       {
-        name: msg.lan.addroles,
+        name: `${msg.lan.addroles}\u200b`,
         value: `${
           r.addroles && r.addroles.length ? r.addroles.map((id) => ` <@&${id}>`) : msg.language.none
         }`,
         inline: false,
       },
       {
-        name: msg.lan.removeroles,
+        name: `${msg.lan.removeroles}\u200b`,
         value: `${
           r.removeroles && r.removeroles.length
             ? r.removeroles.map((id) => ` <@&${id}>`)
@@ -98,14 +100,14 @@ module.exports = {
         inline: false,
       },
       {
-        name: msg.lan.confirmationreq,
+        name: `${msg.lan.confirmationreq}\u200b`,
         value: r.confirmationreq
           ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
           : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
         inline: true,
       },
       {
-        name: msg.lan.punishmentawaittime,
+        name: `${msg.lan.punishmentawaittime}\u200b`,
         value: moment
           .duration(+r.punishmentawaittime)
           .format(
@@ -133,7 +135,7 @@ module.exports = {
       .setCustomId(msg.lan.edit.warnamount.name)
       .setLabel(
         msg.client.ch
-          .stp(msg.lan.edit.warnamount.name, { warns: r.warnamount ? r.warnamount : '--' })
+          .stp(msg.lan.edit.warnamount.name, { warnamount: r.warnamount ? r.warnamount : '--' })
           .replace(/\**/g, ''),
       )
       .setStyle('SECONDARY');
