@@ -18,10 +18,6 @@ module.exports = {
     setInterval(() => {
       // require('./websiteFetcher').execute();
       if (new Date().getHours() === 0) {
-        client.guilds.cache.forEach((g) => {
-          require('../guildEvents/guildCreate/nitro').execute(g);
-        });
-        require('./nitro').execute();
         client.ch.query('DELETE FROM toxicitycheck;');
       }
     }, 3600000);
