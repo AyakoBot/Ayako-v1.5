@@ -2355,6 +2355,9 @@
         "description": "Also check out:\n`{{prefix}}settings nitroroles` to add Roles Applied after boosting Days",
         "roleid": "Nitro Role",
         "logchannels": "Log Channels",
+        "rolemode": "Role Mode",
+        "stack": "Stack",
+        "replace": "Replace",
         "edit": {
           "active": {
             "name": "Active",
@@ -2365,6 +2368,10 @@
             "name": "Log Channels",
             "answers": "Channels",
             "recommended": "The Channels in which the Logs will be sent"
+          },
+          "rolemode": {
+            "name": "Role Mode",
+            "answers": "`stack` or `replace`"
           }
         }
       },
@@ -2373,11 +2380,6 @@
         "days": "Days",
         "roles": "Roles",
         "edit": {
-          "active": {
-            "name": "Active",
-            "answers": "`True` or `False`",
-            "recommended": "Recommended: `True`"
-          },
           "days": {
             "name": "Boosting Days",
             "answers": "Any Number",
