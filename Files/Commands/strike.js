@@ -1,4 +1,3 @@
-
 module.exports = {
   name: 'strike',
   perm: 4n,
