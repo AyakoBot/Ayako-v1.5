@@ -1916,7 +1916,7 @@
             "recommended": "Recommended: `True`"
           },
           "warnamount": {
-            "name": "Apply this Punishment after **{{row.warnamount}}** Warns",
+            "name": "Apply this Punishment after -- Warns",
             "answers": "`Number`"
           },
           "removeroles": {
@@ -3046,7 +3046,8 @@
     ]
   },
   "leveling": {
-    "author": "{{msg.author.tag}} has leveled up to Level {{newLevel}}"
+    "author": "{{msg.author.tag}} has leveled up to Level {{newLevel}}",
+    "description": "On this Server, Level-Ups are indicated by reactions to your Message\nThe current Reactions are: {{reactions}}"
   },
   "errors": {
     "userNotFound": "The mentioned User does not exist"

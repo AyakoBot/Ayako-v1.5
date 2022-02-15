@@ -179,7 +179,7 @@ const levelUp = async (msg, levelData, { row, language }, settingsrow) => {
       break;
     }
     case 2: {
-      await doReact(msg, settingsrow);
+      await doReact(msg, settingsrow, levelData);
       break;
     }
   }
@@ -257,7 +257,7 @@ const roleAssign = async (msg, rolemode, newLevel) => {
   }
 };
 
-const doReact = async (msg, row) => {
+const doReact = async (msg, row, levelData) => {
   const reactions = [];
 
   if (row?.lvlupemotes?.length) {
@@ -269,8 +269,15 @@ const doReact = async (msg, row) => {
     msg.client.constants.standard.levelupemotes.forEach((emote) => reactions.push(emote));
   }
 
+  if (levelData.newLevel === 1) {
+    infoEmbed(msg, reactions);
+  }
+
   const promises = reactions.map((emote) => msg.react(emote).catch(() => {}));
   await Promise.all(promises);
+  setTimeout(() => {
+    msg.reactions.removeAll().catch(() => {});
+  }, 10000);
 };
 
 const doEmbed = async (msg, settinsgrow, language, levelData, row) => {
@@ -509,4 +516,14 @@ const getChannelMultiplier = async (msg) => {
     return Number(row.multiplier);
   }
   return null;
+};
+
+const infoEmbed = (msg, reactions) => {
+  const embed = new Discord.MessageEmbed()
+    .setColor(msg.client.ch.colorSelector(msg.guild.me))
+    .setDescription(
+      msg.client.ch.stp(msg.language.leveling.description, { reactions: reactions.join('') }),
+    );
+
+  msg.client.ch.reply(msg, { embeds: [embed] }).then((m) => setTimeout(() => m.delete(), 30000));
 };
