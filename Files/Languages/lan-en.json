@@ -1386,12 +1386,12 @@
     },
     "ping": {
       "category": "Info",
-      "description": "Calculates the Bots Ping",
+      "description": "Calculates Ayako's Ping",
       "usage": ["ping"]
     },
     "workload": {
       "category": "Info",
-      "description": "Shows the Bots current Workload on the Host System",
+      "description": "Shows Ayako's current Workload on the Host System",
       "usage": ["workload"],
       "author": "Ayako Workload",
       "RAM": {
@@ -1900,7 +1900,13 @@
         "punishmentSettings": "__**Punishment Settings**__",
         "roleSettings": "__**Role Settings**__",
         "confirmationSettings": "__**Confirmation Settings**__",
+        "punishmentawaittime": "Punishment await Timeout",
         "edit": {
+          "punishmentawaittime": {
+            "name": "Punishment await Timeout",
+            "answers": "The Timeout Ayako will wait for a confirmation from the executing Moderator, if none is received Ayako will apply the punishment anyways",
+            "recommended": "Recommended: `30s`"
+          },
           "punishment": {
             "name": "Punishment",
             "answers": "`Ban`, `Kick`, `Mute`, `Temp-Mute`, `Temp-Ban`"
@@ -1916,7 +1922,7 @@
             "recommended": "Recommended: `True`"
           },
           "warnamount": {
-            "name": "Apply this Punishment after -- Warns",
+            "name": "Apply this Punishment after {{warnamount}} Warns",
             "answers": "`Number`"
           },
           "removeroles": {
