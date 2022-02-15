@@ -105,7 +105,8 @@ module.exports = {
         .setTimestamp()
         .addField(language.reason, `${reason}`)
         .setFooter(msg.client.ch.stp(lan.footer, { user: executor, target }));
-      if (msg.logchannels && msg.logchannels.length) msg.client.ch.send(msg.logchannels, { embeds: [embed] });
+      if (msg.logchannels && msg.logchannels.length)
+        msg.client.ch.send(msg.logchannels, { embeds: [embed] });
       const dmChannel = await target.createDM().catch(() => {});
       const DMembed = new Discord.MessageEmbed()
         .setDescription(`**${language.reason}:** \n${reason}`)
