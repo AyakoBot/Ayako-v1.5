@@ -131,7 +131,7 @@ module.exports = {
    * @param {array} arr - The Array of Arguments passed to the DataBase for sanitizing, if any.
    * @param {boolean} debug - Wether the Query should be logged in the Console when arriving here.
    */
-  query: (query, arr, debug) => {
+  query: async (query, arr, debug) => {
     const { pool } = require('./DataBase');
 
     if (debug === true) console.log(query, arr);
@@ -542,12 +542,13 @@ module.exports = {
    * @constructor
    * @param {object} guild - The Guild the Language is Selected for.
    */
-  languageSelector: (guild) => {
+  languageSelector: async (guild) => {
     const guildid = guild?.id ? guild?.id : guild;
     if (guildid) {
-      const resLan = module.exports.query('SELECT lan FROM guildsettings WHERE guildid = $1;', [
-        guildid,
-      ]);
+      const resLan = await module.exports.query(
+        'SELECT lan FROM guildsettings WHERE guildid = $1;',
+        [guildid],
+      );
       let lang = 'en';
       if (resLan && resLan.rowCount > 0) lang = resLan.rows[0].lan;
       return require(`../Languages/lan-${lang}.json`);
