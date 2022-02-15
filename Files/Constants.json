@@ -1205,6 +1205,10 @@
           "logchannels": {
             "key": "channels",
             "required": false
+          },
+          "rolemode": {
+            "key": "boolean",
+            "required": true
           }
         },
         "nitroroles": {
@@ -1349,7 +1353,6 @@
         "multichannels": ["levelingmultiplierchannels"],
         "ruleschannels": ["levelingruleschannels"],
         "logs": ["logchannels"],
-        "reactionroles": ["reactionroles"],
         "selfroles": ["selfroles"],
         "separators": ["roleseparator", "roleseparatorsettings"],
         "autopunish": ["autopunish"],
@@ -1432,8 +1435,8 @@
           "vals": [["{{msg.guild.id}}", true, 25, true, 1.0, 0]]
         },
         "nitrosettings": {
-          "cols": ["guildid, active, logchannels"],
-          "vals": [["{{msg.guild.id}}", true, "{{values.logchannels}}"]]
+          "cols": ["guildid, active, rolemode"],
+          "vals": [["{{msg.guild.id}}", true, true]]
         },
         "nitroroles": {
           "cols": ["guildid, uniquetimestamp, days, roles"],
@@ -1447,10 +1450,6 @@
           ]
         },
         "logs": {
-          "cols": ["guildid"],
-          "vals": [["{{msg.guild.id}}"]]
-        },
-        "reactionroles": {
           "cols": ["guildid"],
           "vals": [["{{msg.guild.id}}"]]
         },
@@ -1494,18 +1493,6 @@
           ],
           "add": ["warnamount"],
           "ident": ""
-        },
-        "suggestions": {
-          "cols": ["guildid, active, anon"],
-          "vals": [["{{msg.guild.id}}", true, true]]
-        },
-        "ticketing": {
-          "cols": ["guildid, channelid"],
-          "vals": [["{{msg.guild.id}}", "{{channel.id}}"]]
-        },
-        "vcsettings": {
-          "cols": ["guildid, active, timeout"],
-          "vals": [["{{msg.guild.id}}", true, 1800000]]
         },
         "verification": {
           "cols": ["guildid, active, kickafter, kicktof, selfstart, deletestartchmsgs"],

@@ -24,6 +24,11 @@ module.exports = {
         }`,
         inline: false,
       },
+      {
+        name: `${msg.lan.rolemode}`,
+        value: `${r.rolemode ? msg.lan.replace : msg.lan.stack}`,
+        inline: true,
+      },
     );
     return embed;
   },
@@ -36,7 +41,10 @@ module.exports = {
       .setCustomId(msg.lan.edit.logchannels.name)
       .setLabel(msg.lan.logchannels)
       .setStyle('PRIMARY');
-
-    return [[active], [logchannels]];
+    const rolemode = new Discord.MessageButton()
+      .setCustomId(msg.lan.edit.rolemode.name)
+      .setLabel(msg.lan.rolemode)
+      .setStyle(r.rolemode ? 'SECONDARY' : 'PRIMARY');
+    return [[active, logchannels, rolemode]];
   },
 };
