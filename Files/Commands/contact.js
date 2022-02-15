@@ -10,10 +10,10 @@ module.exports = {
   execute(msg) {
     const tta = msg.args.slice(0).join(' ');
     const SuggestEmbed = new Discord.MessageEmbed()
-      .setAuthor(
-        `${msg.author.tag} / ${msg.author.id} / ${msg.guild.name}`,
-        msg.client.ch.displayAvatarURL(msg.author),
-      )
+      .setAuthor({
+        name: `${msg.author.tag} / ${msg.author.id} / ${msg.guild.name}`,
+        iconURL: msg.client.ch.displayAvatarURL(msg.author),
+      })
       .setDescription(tta)
       .addField('\u200B', `${msg.url}`);
     msg.attachments.map((o) => o);

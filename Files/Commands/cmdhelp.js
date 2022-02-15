@@ -68,11 +68,11 @@ module.exports = {
       ? reqcommand.aliases.map((t) => `\`${msg.client.constants.standard.prefix}${t}\``).join(', ')
       : language.none;
     const embed = new Discord.MessageEmbed()
-      .setAuthor(
-        `${language.command}: ${reqcommand.name}`,
-        msg.client.constants.standard.image,
-        msg.client.constants.standard.invite,
-      )
+      .setAuthor({
+        name: `${language.command}: ${reqcommand.name}`,
+        iconURL: msg.client.constants.standard.image,
+        url: msg.client.constants.standard.invite,
+      })
       .addFields(
         {
           name: `|${language.name}`,

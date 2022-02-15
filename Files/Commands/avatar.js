@@ -20,7 +20,7 @@ module.exports = {
       .setImage(msg.client.ch.displayAvatarURL(user))
       .setTimestamp()
       .setColor(msg.client.ch.colorSelector(msg.guild ? msg.guild.me : null))
-      .setFooter(msg.client.ch.stp(msg.language.requestedBy, { user: msg.author }));
+      .setFooter({ text: msg.client.ch.stp(msg.language.requestedBy, { user: msg.author }) });
     msg.channel.send(avatarEmbed);
   },
 };

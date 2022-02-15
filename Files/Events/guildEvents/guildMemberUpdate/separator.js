@@ -63,11 +63,11 @@ module.exports = {
     if (clickButton) await clickButton.deleteReply().catch(() => {});
     if (membersWithRoles === 'timeout') {
       embed
-        .setAuthor(
-          msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
-          msg.client.constants.emotes.settingsLink,
-          msg.client.constants.standard.invite,
-        )
+        .setAuthor({
+          name: msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
+          iconURL: msg.client.constants.emotes.settingsLink,
+          url: msg.client.constants.standard.invite,
+        })
         .setDescription(msg.lan.edit.oneTimeRunner.timeout);
       msg.m.edit({ embeds: [embed], components: [] }).catch(() => {});
       msg.client.ch.query(
@@ -79,20 +79,20 @@ module.exports = {
     if (!Array.isArray(membersWithRoles)) {
       if (!membersWithRoles) {
         embed
-          .setAuthor(
-            msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
-            msg.client.constants.emotes.settingsLink,
-            msg.client.constants.standard.invite,
-          )
+          .setAuthor({
+            name: msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
+            iconURL: msg.client.constants.emotes.settingsLink,
+            url: msg.client.constants.standard.invite,
+          })
           .setDescription(msg.lan.edit.oneTimeRunner.time);
         msg.m.edit({ embeds: [embed], components: [] }).catch(() => {});
       } else {
         embed
-          .setAuthor(
-            msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
-            msg.client.constants.emotes.settingsLink,
-            msg.client.constants.standard.invite,
-          )
+          .setAuthor({
+            name: msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
+            iconURL: msg.client.constants.emotes.settingsLink,
+            url: msg.client.constants.standard.invite,
+          })
           .setDescription(msg.lan.edit.oneTimeRunner.stillrunning);
         msg.m.edit({ embeds: [embed], components: [] }).catch(() => {});
       }
@@ -240,11 +240,11 @@ module.exports = {
           }
           if (index === membersWithRoles.length - 1 && msg.lastTime) {
             embed
-              .setAuthor(
-                msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
-                msg.client.constants.emotes.settingsLink,
-                msg.client.constants.standard.invite,
-              )
+              .setAuthor({
+                name: msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
+                iconURL: msg.client.constants.emotes.settingsLink,
+                url: msg.client.constants.standard.invite,
+              })
               .setDescription(msg.lan.edit.oneTimeRunner.finished);
             msg.m.edit({ embeds: [embed], components: [] }).catch(() => {});
             msg.client.ch.query(
@@ -263,11 +263,11 @@ module.exports = {
       });
     } else {
       embed
-        .setAuthor(
-          msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
-          msg.client.constants.emotes.settingsLink,
-          msg.client.constants.standard.invite,
-        )
+        .setAuthor({
+          name: msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
+          iconURL: msg.client.constants.emotes.settingsLink,
+          url: msg.client.constants.standard.invite,
+        })
         .setDescription(msg.lan.edit.oneTimeRunner.finished);
       msg.m.edit({ embeds: [embed], components: [] }).catch(() => {});
       msg.client.ch.query(

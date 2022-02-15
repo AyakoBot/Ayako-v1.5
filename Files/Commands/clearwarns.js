@@ -81,7 +81,7 @@ function log(msg, res, user, lan, con) {
       url: msg.client.constants.standard.invite,
     })
     .setColor(con.log.color)
-    .setFooter(msg.client.ch.stp(lan.log.footer, { author: msg.author }));
+    .setFooter({ text: msg.client.ch.stp(lan.log.footer, { author: msg.author }) });
 
   let description = null;
   res.rows.forEach((r) => {

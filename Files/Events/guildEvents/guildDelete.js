@@ -12,7 +12,7 @@ module.exports = {
       .addField(con.logEmbed.guildId, `${guild.id}`, true)
       .addField(con.logEmbed.memberCount, `${guild.memberCount}`, true)
       .addField(con.logEmbed.guildOwner, `${guild.ownerID}`, true)
-      .setFooter(ch.stp(con.logEmbed.currentGuildCount, { client }))
+      .setFooter({ text: ch.stp(con.logEmbed.currentGuildCount, { client }) })
       .setColor(con.logEmbed.color);
     ch.send(client.channels.cache.get(Constants.standard.guildLogChannel), { embeds: [logEmbed] });
   },

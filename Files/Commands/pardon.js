@@ -35,7 +35,7 @@ module.exports = {
     const embed = new Discord.MessageEmbed()
       .setDescription(msg.client.ch.stp(msg.lan.done, { number: warnNr, target: user }))
       .setColor(msg.client.constants.commands.pardon.success)
-      .setFooter(msg.lan.warnIssue)
+      .setFooter({ text: msg.lan.warnIssue })
       .setTimestamp(Number(warn.dateofwarn));
     msg.client.ch.reply(msg, { embeds: [embed] });
     const logEmbed = new Discord.MessageEmbed();
@@ -75,7 +75,7 @@ module.exports = {
           },
         )
         .setColor(con.log.color)
-        .setFooter(msg.lan.warnID + warn.row_number);
+        .setFooter({ text: msg.lan.warnID + warn.row_number });
     } else if (warn.type === 'Mute') {
       const member = await msg.guild.members.fetch(user.id).catch(() => {});
       let notClosed = msg.client.ch.stp(msg.lan.notClosed, {
@@ -95,15 +95,15 @@ module.exports = {
 
       logEmbed
         .setDescription(`**${msg.language.reason}:**\n${warn.reason}`)
-        .setAuthor(
-          msg.client.ch.stp(msg.lan.muteOf, { target: user }),
-          con.log.image,
-          msg.client.ch.stp(msg.client.constants.standard.discordUrlDB, {
+        .setAuthor({
+          name: msg.client.ch.stp(msg.lan.muteOf, { target: user }),
+          iconURL: con.log.image,
+          url: msg.client.ch.stp(msg.client.constants.standard.discordUrlDB, {
             guildid: msg.guild.id,
             channelid: msg.channel.id,
             msgid: warn.msgid,
           }),
-        )
+        })
         .addFields(
           {
             name: msg.lan.date,
@@ -145,7 +145,7 @@ module.exports = {
           },
         )
         .setColor(con.log.color)
-        .setFooter(msg.lan.warnID + warn.row_number);
+        .setFooter({ text: msg.lan.warnID + warn.row_number });
     }
     msg.client.ch.query(
       'DELETE FROM warns WHERE userid = $1 AND guildid = $2 AND dateofwarn = $3;',
