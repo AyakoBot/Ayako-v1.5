@@ -131,16 +131,16 @@ module.exports = {
    * @param {array} arr - The Array of Arguments passed to the DataBase for sanitizing, if any.
    * @param {boolean} debug - Wether the Query should be logged in the Console when arriving here.
    */
-  query: async (query, arr, debug) => {
+  query: (query, arr, debug) => {
     const { pool } = require('./DataBase');
 
     if (debug === true) console.log(query, arr);
-    const res = await pool.query(query, arr).catch((err) => {
+
+    return pool.query(query, arr).catch((err) => {
       console.log(query, arr);
       module.exports.logger('Pool Query Error', err);
+      return null;
     });
-    if (res) return res;
-    return null;
   },
   /**
    * Logs any incoming Messages to the Console and the Discord Error Channel.
