@@ -1,31 +1,44 @@
 const Discord = require('discord.js');
+const confusables = require('confusables');
 
 module.exports = {
-  async execute(joins, guild, r) {
+  execute: async (joins, guild, r) => {
     const language = await guild.client.ch.languageSelector(guild.id);
     const con = guild.client.constants.antiraidMessage;
     const { client } = guild;
 
-    const members = guild.members.cache
-      .filter((m) => {
-        console.log(m.joinedTimestamp - joins.time);
-        if (
-          m.joinedTimestamp > joins.time - Number(r.time) / 2 &&
-          m.joinedTimestamp < joins.time + Number(r.time) / 2
-        ) {
-          return m;
-        }
-        return null;
-      })
-      .filter((m) => !!m);
-
-    if (members && members.size) {
-      executeInterval(guild, language, con, client, r, members);
+    if (joins.members && joins.members.length) {
+      checkAll(guild, language, con, client, r, joins.members);
     }
   },
 };
 
-const executeInterval = (guild, language, con, client, r, members) => {
+const checkAll = async (guild, language, con, client, r, memberIDs) => {
+  const buffers = await Promise.all(
+    memberIDs.map(async (id) => {
+      return client.ch.convertImageURLtoBuffer([
+        client.ch.displayAvatarURL(client.users.cache.get(id)),
+      ]);
+    }),
+  );
+
+  const newIDs = memberIDs
+    .map((id, index) => {
+      const isSamePFP = checkPFP(memberIDs, buffers, index);
+      const isSameNick = checkNick(client, id, memberIDs);
+      const isSimilarID = checkID(id, memberIDs);
+
+      if (isSamePFP || isSameNick || isSimilarID) {
+        return id;
+      }
+      return null;
+    })
+    .filter((u) => !!u);
+
+  run(guild, language, con, client, r, newIDs);
+};
+
+const run = (guild, language, con, client, r, members) => {
   const lan = language.commands.antiraidHandler;
 
   if (r.posttof) sendMessage(client, lan, con, r, members);
@@ -36,23 +49,11 @@ const executeInterval = (guild, language, con, client, r, members) => {
 };
 
 const kick = (client, guild, language, members) => {
-  client.emit(
-    'antiraidKickAdd',
-    client.user,
-    members.map((u) => u.user.id),
-    language.autotypes.antiraid,
-    guild,
-  );
+  client.emit('antiraidKickAdd', client.user, members, language.autotypes.antiraid, guild);
 };
 
 const ban = (client, guild, language, members) => {
-  client.emit(
-    'antiraidBanAdd',
-    client.user,
-    members.map((u) => u.user.id),
-    language.autotypes.antiraid,
-    guild,
-  );
+  client.emit('antiraidBanAdd', client.user, members, language.autotypes.antiraid, guild);
 };
 
 const sendMessage = (client, lan, con, r, members) => {
@@ -73,7 +74,7 @@ const sendMessage = (client, lan, con, r, members) => {
     const payload = { embeds: [embed], content: `${pingRoles || ''}\n${pingUsers || ''}` };
     payload.files = [
       client.ch.txtFileWriter(
-        members.map((u) => `${u.user.id}`),
+        members.map((u) => `${u}`),
         'antiraid',
       ),
     ];
@@ -97,4 +98,49 @@ const sendMessage = (client, lan, con, r, members) => {
 
     client.ch.send(channel, payload);
   }
+};
+
+const checkNick = (client, id, ids) => {
+  const returns = ids
+    .map((checkedWithID) => {
+      const checkedWithUser = client.users.cache.get(checkedWithID);
+      const user = client.users.cache.get(id);
+
+      if (confusables.remove(checkedWithUser.username) === confusables.remove(user.username)) {
+        return true;
+      }
+      return false;
+    })
+    .filter((r) => !!r);
+
+  return returns.length >= 3;
+};
+
+const checkID = (id, ids) => {
+  const returns = ids
+    .map((checkedWithID) => {
+      if (checkedWithID.slice(0, 2) === id.slice(0, 2)) {
+        return true;
+      }
+      return false;
+    })
+    .filter((r) => !!r);
+
+  return returns.length >= 3;
+};
+
+const checkPFP = (ids, buffers, currentIndex) => {
+  const returns = ids
+    .map((_, i) => {
+      const thisIDbuffer = buffers[currentIndex][0].attachment;
+      const checkedIDbuffer = buffers[i][0].attachment;
+
+      if (thisIDbuffer.equals(checkedIDbuffer)) {
+        return true;
+      }
+      return false;
+    })
+    .filter((r) => !!r);
+
+  return returns.length >= 3;
 };
