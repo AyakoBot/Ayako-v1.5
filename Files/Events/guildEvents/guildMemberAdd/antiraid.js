@@ -23,6 +23,7 @@ module.exports = {
 
     const cache = antiraidCache.get(member.guild.id);
     antiraidCache.set(member.guild.id, {
+      members: cache ? [...new Set([...cache.members, member.user.id])] : [member.user.id],
       time: member.joinedTimestamp,
       joins: (cache?.joins || 0) + 1,
       timeout: setTimeout(() => {
@@ -40,7 +41,11 @@ module.exports = {
         clearTimeout(sendings.get(member.guild.id).timeout);
       }
 
+      const oldSettings = sendings.get(member.guild.id);
       sendings.set(member.guild.id, {
+        members: oldSettings
+          ? [...new Set([...oldSettings.members, ...cache.members])]
+          : cache.members,
         time: cache.time,
         joins: cache.joins,
         timeout: setTimeout(() => {
