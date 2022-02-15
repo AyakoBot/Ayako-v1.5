@@ -509,7 +509,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
 
     buttonsCollector.on('collect', async (interaction) => {
       if (interaction.user.id !== msg.author.id) {
-        msg.client.ch.notYours(interaction, msg);
+        msg.client.ch.notYours(interaction);
         return;
       }
 
@@ -1112,7 +1112,7 @@ const postCode = (Objects, msg, answer, embed, noRemove) => {
     return new Promise((resolve) => {
       buttonsCollector.on('collect', async (interaction) => {
         if (interaction.user.id !== msg.author.id) {
-          msg.client.ch.notYours(interaction, msg);
+          msg.client.ch.notYours(interaction);
           return;
         }
 
@@ -1166,7 +1166,7 @@ const handleSave = async (msg, answer, Objects) => {
 
     buttonsCollector.on('collect', async (interaction) => {
       if (interaction.user.id !== msg.author.id) {
-        msg.client.ch.notYours(interaction, msg);
+        msg.client.ch.notYours(interaction);
         return;
       }
       if (interaction.customId === 'back') {
@@ -1202,7 +1202,7 @@ const handleSave = async (msg, answer, Objects) => {
 
     buttonsCollector.on('collect', (interaction) => {
       if (interaction.user.id !== msg.author.id) {
-        msg.client.ch.notYours(interaction, msg);
+        msg.client.ch.notYours(interaction);
         return;
       }
       messageCollector.stop();
@@ -1335,7 +1335,7 @@ const handleSend = async (msg, answer, Objects) => {
   const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
   buttonsCollector.on('collect', async (interaction) => {
     if (interaction.user.id !== msg.author.id) {
-      msg.client.ch.notYours(interaction, msg);
+      msg.client.ch.notYours(interaction);
       return;
     }
     buttonsCollector.resetTimer();
@@ -1458,7 +1458,7 @@ const handleOtherMsgRaw = async (msg, answer, Objects) => {
   return new Promise((resolve) => {
     buttonsCollector.on('collect', async (interaction) => {
       if (interaction.user.id !== msg.author.id) {
-        msg.client.ch.notYours(interaction, msg);
+        msg.client.ch.notYours(interaction);
         return;
       }
       if (interaction.customId === 'back') {

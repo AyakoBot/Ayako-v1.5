@@ -63,7 +63,7 @@ module.exports = {
           msg.m.edit({ embeds: [embed], components: [] }).catch(() => {});
           collector.stop();
         }
-      } else msg.client.ch.notYours(button, msg);
+      } else msg.client.ch.notYours(button);
     });
     collector.on('end', (col, reason) => {
       if (reason === 'time') return msg.client.ch.collectorEnd(msg);
@@ -75,11 +75,11 @@ module.exports = {
 
 function log(msg, res, user, lan, con) {
   const logEmbed = new Discord.MessageEmbed()
-    .setAuthor(
-      msg.client.ch.stp(lan.log.author, { user }),
-      con.log.image,
-      msg.client.constants.standard.invite,
-    )
+    .setAuthor({
+      name: msg.client.ch.stp(lan.log.author, { user }),
+      iconURL: con.log.image,
+      url: msg.client.constants.standard.invite,
+    })
     .setColor(con.log.color)
     .setFooter(msg.client.ch.stp(lan.log.footer, { author: msg.author }));
 

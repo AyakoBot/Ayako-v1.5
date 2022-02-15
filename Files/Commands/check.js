@@ -92,7 +92,7 @@ module.exports = {
     const collector = msg.m.createMessageComponentCollector({ time: 60000 });
     const answered = { mutes: [], warns: [] };
     collector.on('collect', async (clickButton) => {
-      if (clickButton.user.id !== msg.author.id) return msg.client.ch.notYours(msg, clickButton);
+      if (clickButton.user.id !== msg.author.id) return msg.client.ch.notYours(clickButton);
       if (clickButton.customId === 'muteNext' || clickButton.customId === 'mutePrev') {
         let indexLast;
         let indexFirst;

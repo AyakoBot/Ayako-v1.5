@@ -43,7 +43,8 @@ const buttonsHandler = (msg, types, isGuild, ownPos, content, oldEmbed) => {
 
   buttonsCollector.on('collect', async (interaction) => {
     if (interaction.user.id !== msg.author.id) {
-      msg.client.ch.notYours(msg);
+      msg.client.ch.notYours(interaction);
+      return;
     }
     await disableComponents(msg, oldEmbed);
     await interaction.deferUpdate();
