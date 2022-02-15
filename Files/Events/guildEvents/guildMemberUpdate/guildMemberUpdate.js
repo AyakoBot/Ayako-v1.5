@@ -4,7 +4,7 @@ module.exports = {
   async execute(oldMember, newMember) {
     if (!oldMember || !newMember) return;
     require('./log').execute(oldMember, newMember);
-    if (oldMember.roles.cache !== newMember.roles.cache)
-      require('./separator').execute(oldMember, newMember);
+    require('./separator').execute(oldMember, newMember);
+    require('./nitro').execute(oldMember, newMember);
   },
 };
