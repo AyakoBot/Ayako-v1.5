@@ -637,7 +637,7 @@
     "field": "If you don't verify, you won't be able to use the server!",
     "finishDesc": "**Thank you for verifying!**\nVerification Finished!",
     "kickMsg": "You have been kicked from `{{guild.name}}` because you didn't verify.\nYou can rejoin anytime with a valid Invite Link",
-    "hintmsg": "Please type the letters you see on the image below, traced by a line\nExample: `DHION` \n**The captcha contains 5 Letters, no numbers**",
+    "hintmsg": "Please type the letters you see on the image below, traced by a line\nExample: `5H1ON` \n**The captcha contains 5 digits**",
     "kickReason": "Ayako Verification | Unverified for too long",
     "openDMs": "{{user}} **Please open your DM's** in order to verify as human. Then re-send the Command `{{prefix}}verify`.\n**You can close your DM's afterwards**.",
     "wrongInput": "That was wrong... Are you a robot?.\nThe solution was `{{solution}}`\nI added a new Image to the Embed above, try again!",
