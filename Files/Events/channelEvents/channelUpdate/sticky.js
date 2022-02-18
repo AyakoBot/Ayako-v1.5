@@ -3,8 +3,6 @@ module.exports = {
     const permDeleted = checkPermDeleted(oldChannel, newChannel);
     if (!permDeleted || !permDeleted.size) return;
 
-    console.log(permDeleted);
-
     setTimeout(async () => {
       const memberNotLeft = await checkMemberLeft(oldChannel, permDeleted);
       if (memberNotLeft) return;
