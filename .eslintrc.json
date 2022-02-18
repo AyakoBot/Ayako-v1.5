@@ -1,47 +1,45 @@
 {
-    "settings": {
+  "settings": {
     "import/resolver": {
-        "node": {
-            "extensions": [".js", ".jsx", ".ts", ".tsx"],
-                "paths": ["./"]
-        }
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"],
+        "paths": ["./"]
+      }
     }
-},
-    "env": {
+  },
+  "env": {
     "browser": true,
-        "es2021": true
-},
-    "extends": [
-    "airbnb-base",
-    "plugin:prettier/recommended"
-],
-    "parserOptions": {
+    "es2021": true
+  },
+  "extends": ["airbnb-base", "plugin:prettier/recommended"],
+  "parserOptions": {
     "ecmaVersion": 2021
-},
-    "rules": {
-        "linebreak-style": "off",
-        "import/extensions": [
-        "error",
-        "ignorePackages",
-        {
-            "js": "never",
-            "jsx": "never",
-            "ts": "never",
-            "tsx": "never"
-        }
+  },
+  "rules": {
+    "linebreak-style": "off",
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
     ],
-        "no-use-before-define": "off",
-        "no-bitwise": "off",
-        "no-param-reassign": "off",
-        "import/prefer-default-export": "off",
-        "global-require": "off",
-        "import/no-dynamic-require": "off",
-        "prettier/prettier": [
-            "warn",
-            {
-                "singleQuote": true,
-                "semi": true
-            }
-        ]
-    }
+    "no-use-before-define": "off",
+    "no-bitwise": "off",
+    "no-param-reassign": "off",
+    "import/prefer-default-export": "off",
+    "global-require": "off",
+    "import/no-dynamic-require": "off",
+    "no-underscore-dangle": "off",
+    "prettier/prettier": [
+      "warn",
+      {
+        "singleQuote": true,
+        "semi": true
+      }
+    ]
+  }
 }
