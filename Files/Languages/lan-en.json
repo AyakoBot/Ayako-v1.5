@@ -173,7 +173,7 @@
     "descriptionUser": "User {{user}} / `{{user.tag}}` / `{{user.id}}` has joined the Server",
     "descriptionBotNoAudit": "Bot {{bot}} / `{{bot.tag}}` / `{{bot.id}}`\nwas added to the Server",
     "inviteInfoTitle": "Invite Info",
-    "inviteInfoUses": "__Invite used:__ {{invite.url}} / `{{invite.code}}`\n__Inviter__: {{mention}} / `{{invite.inviter.tag}}` / `{{invite.inviter.id}}`\n__Invite uses:__ `{{invite.uses}}`",
+    "inviteInfoUses": "__Invite used:__ {{invite.url}} / `{{invite.code}}`\n__Inviter__: {{mention}} / `{{inviter.tag}}` / `{{inviter.id}}`\n__Invite uses:__ `{{invite.uses}}`",
     "inviteInfo": "__Invite used:__ {{invite.url}} / `{{invite.code}}`\n__Inviter__: {{mention}} / `{{invite.inviter.tag}}`"
   },
   "guildMemberAddWelcome": {
