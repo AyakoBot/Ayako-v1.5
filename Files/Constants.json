@@ -1003,6 +1003,14 @@
           "stickyrolesmode": {
             "key": "boolean",
             "required": true
+          },
+          "stickyrolesactive": {
+            "key": "boolean",
+            "required": true
+          },
+          "stickypermsactive": {
+            "key": "boolean",
+            "required": true
           }
         },
         "verification": {
@@ -1514,8 +1522,8 @@
           "vals": [["{{msg.guild.id}}", true]]
         },
         "sticky": {
-          "cols": ["guildid, stickyrolesactive, stickyrolesmode"],
-          "vals": [["{{msg.guild.id}}", true, true]]
+          "cols": ["guildid, stickyrolesactive, stickyrolesmode, stickypermsactive"],
+          "vals": [["{{msg.guild.id}}", true, true, true]]
         },
         "language": {
           "cols": ["guildid, language"],
