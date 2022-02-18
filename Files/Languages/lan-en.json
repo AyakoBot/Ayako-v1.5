@@ -2411,6 +2411,8 @@
         "roles": "Un-/Sticky Roles",
         "stickyrolesactive": "Sticky Roles Active",
         "stickypermsactive": "Sticky Perms Active",
+        "permReason": "Ayako Sticky Perms",
+        "roleReason": "Ayako Sticky Roles",
         "edit": {
           "roles": {
             "name": "Un-/Sticky Roles",
