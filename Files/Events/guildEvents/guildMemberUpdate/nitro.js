@@ -80,7 +80,7 @@ const logEnd = async (member, days) => {
   const row = await getSettings(member);
   const language = await member.client.ch.languageSelector(member.guild);
 
-  if (row.logchannels && row.logchannels.length) {
+  if (row && row.logchannels && row.logchannels.length) {
     const embed = new Discord.MessageEmbed()
       .setAuthor({
         name: language.guildMemberUpdateNitro.author.nameEnd,
@@ -127,10 +127,12 @@ const logStart = async (member, days) => {
 };
 
 const getSettings = async (member) => {
-  return member.client.ch.query(
-    `SELECT * FROM nitrosettings WHERE guildid = $1 AND active = true;`,
-    [member.guild.id],
-  ).rows[0];
+  return (
+    await member.client.ch.query(
+      `SELECT * FROM nitrosettings WHERE guildid = $1 AND active = true;`,
+      [member.guild.id],
+    )
+  )?.rows[0];
 };
 
 const getDays = async (member) => {
