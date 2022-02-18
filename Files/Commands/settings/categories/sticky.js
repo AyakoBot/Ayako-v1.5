@@ -49,7 +49,7 @@ module.exports = {
     const stickyrolesactive = new Discord.MessageButton()
       .setCustomId(msg.lan.edit.stickyrolesactive.name)
       .setLabel(msg.lan.stickyrolesactive)
-      .setStyle(r.active ? 'SUCCESS' : 'DANGER');
+      .setStyle(r.stickyrolesactive ? 'SUCCESS' : 'DANGER');
     const stickyrolesmode = new Discord.MessageButton()
       .setCustomId(msg.lan.edit.stickyrolesmode.name)
       .setLabel(msg.lan.stickyrolesmode)
@@ -61,7 +61,7 @@ module.exports = {
     const stickypermsactive = new Discord.MessageButton()
       .setCustomId(msg.lan.edit.stickypermsactive.name)
       .setLabel(msg.lan.stickypermsactive)
-      .setStyle(r.active ? 'SUCCESS' : 'DANGER');
+      .setStyle(r.stickypermsactive ? 'SUCCESS' : 'DANGER');
     return [[stickyrolesactive], [stickyrolesmode, roles], [stickypermsactive]];
   },
 };
