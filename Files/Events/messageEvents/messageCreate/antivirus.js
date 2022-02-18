@@ -74,7 +74,7 @@ const prepare = async (msg, lan, check, language) => {
   }
 
   fullLinks.forEach((linkObject, i) => {
-    const AVworker = new Worker('./Files/Events/guildEvents/guildMemberAdd/antivirusWorker.js');
+    const AVworker = new Worker('./Files/Events/messageEvents/messageCreate/antivirusWorker.js');
 
     AVworker.on('exit', () => {
       exited = true;
