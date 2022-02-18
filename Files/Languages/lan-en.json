@@ -2400,6 +2400,33 @@
           }
         }
       },
+      "stickyroles": {
+        "type": "Sticky Roles",
+        "description": "Sticky Roles are Roles that Stick to Members across re-joins",
+        "stickyRoles": "Roles that will be sticky",
+        "notStickyRoles": "Roles that will not be sticky",
+        "stickymode": "Sticky Mode",
+        "unsticky": "Roles defined here will __not__ be applied, every not defined Role will be",
+        "sticky": "Roles defined here will be applied, every not defined Role will __not__ be",
+        "roles": "Un-/Sticky Roles",
+        "edit": {
+          "roles": {
+            "name": "Un-/Sticky Roles",
+            "answers": "Roles",
+            "recommended": "The Roles to add"
+          },
+          "active": {
+            "name": "Active",
+            "answers": "`True` or `False`",
+            "recommended": "Recommended: `True`"
+          },
+          "stickymode": {
+            "name": "Sticky Mode",
+            "answers": "`True` or `False`",
+            "recommended": "Recommended: `True`"
+          }
+        }
+      },
       "levelsettings": {
         "type": "Leveling",
         "description": "Also check out:\n`{{prefix}}settings levelroles` to add Roles Applied at Levels\n`{{prefix}}settings multiroles` to add Roles which grant XP Gain Multipliers\n`{{prefix}}settings levelchannels` to customize Ayako's Leveling behaviour on Channels",
