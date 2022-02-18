@@ -129,8 +129,8 @@ const logStart = async (member, days) => {
 const getSettings = async (member) => {
   return member.client.ch.query(
     `SELECT * FROM nitrosettings WHERE guildid = $1 AND active = true;`,
-    [member.guild.id].rows[0],
-  );
+    [member.guild.id],
+  ).rows[0];
 };
 
 const getDays = async (member) => {

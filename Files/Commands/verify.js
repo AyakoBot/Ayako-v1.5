@@ -11,7 +11,7 @@ module.exports = {
   usage: ['verify'],
   aliases: [],
   type: 'auto',
-  async execute(msg) {
+  execute: async (msg) => {
     msg.lan = msg.language.verification;
     const res = await msg.client.ch.query(
       'SELECT * FROM verification WHERE guildid = $1 AND active = $2;',
@@ -27,7 +27,7 @@ module.exports = {
         if (DM && DM.id) {
           msg.DM = DM;
           msg.r = r;
-          this.startProcess(msg, null, logchannel);
+          module.exports.startProcess(msg, null, logchannel);
         }
       } else {
         const m = await msg.client.ch.reply(msg, msg.lan.alreadyVerified);
@@ -38,7 +38,7 @@ module.exports = {
       msg.delete().catch(() => {});
     }
   },
-  async startProcess(msg, answer, logchannel) {
+  startProcess: async (msg, answer, logchannel) => {
     if (msg.m) await msg.m.removeAttachments();
 
     if (msg.r.logchannel) logchannel = msg.guild.channels.cache.get(msg.r.logchannel);
@@ -54,7 +54,7 @@ module.exports = {
       msg.client.ch.send(logchannel, { embeds: [log] });
     }
 
-    const file = this.generateImage();
+    const file = await module.exports.generateImage();
     msg.client.verificationCodes.set(`${msg.DM.id}-${msg.guild.id}`, file.captcha.text);
     const { r } = msg;
 
@@ -121,7 +121,7 @@ module.exports = {
 
         msg.client.verificationCodes.delete(`${clickButton.channel.id}-${msg.guild.id}`);
 
-        return this.startProcess(msg, clickButton, logchannel);
+        return module.exports.startProcess(msg, clickButton, logchannel);
       }
       return null;
     });
@@ -153,7 +153,7 @@ module.exports = {
 
       if (message.content.toLowerCase() === captcha.toLowerCase()) {
         msg.client.verificationCodes.delete(`${message.channel.id}-${msg.guild.id}`);
-        this.finished(msg, logchannel);
+        module.exports.finished(msg, logchannel);
         return;
       }
       const ms = await msg.client.ch.send(msg.DM, {
@@ -163,7 +163,7 @@ module.exports = {
         ms.delete().catch(() => {});
       }, 10000);
       msg.client.verificationCodes.delete(`${message.channel.id}-${msg.guild.id}`);
-      this.startProcess(msg, null, logchannel);
+      module.exports.startProcess(msg, null, logchannel);
     });
 
     buttonsCollector.on('end', async (collected, reason) => {
@@ -187,17 +187,17 @@ module.exports = {
     });
     return null;
   },
-  generateImage() {
+  generateImage: async () => {
     const captcha = new CaptchaGenerator({ height: 200, width: 600 });
     captcha.setCaptcha({ characters: 5, size: 50 });
     captcha.setTrace({ size: 2, opacity: 3 });
-    const buffer = captcha.generateSync();
+    const buffer = await captcha.generate();
     const now = Date.now();
 
     const file = { attachment: buffer, name: `${now}.png`, captcha };
     return file;
   },
-  async finished(msg, logchannel) {
+  finished: async (msg, logchannel) => {
     msg.language = await msg.client.ch.languageSelector(msg.guild);
     if (logchannel) {
       const log = new Discord.MessageEmbed()
