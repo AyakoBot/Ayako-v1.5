@@ -126,7 +126,6 @@ module.exports = {
           const oldPerms = [];
           const newPerms = [];
 
-          console.log(oldChannel.permissionOverwrites.cache.entries());
           oldChannel.permissionOverwrites.cache.entries()?.forEach(([, overwrite]) => {
             const temp = {};
             temp.id = overwrite.id;

@@ -2402,14 +2402,15 @@
       },
       "sticky": {
         "type": "Sticky Roles",
-        "description": "Sticky Roles are Roles that Stick to Members across re-joins",
+        "description": "Sticky Roles are Roles that Stick to Members across re-joins\nSticky Perms are Channel Perms that stick to Channels across Member re-joins",
         "stickyRoles": "Roles that will be sticky",
         "notStickyRoles": "Roles that will not be sticky",
-        "stickymode": "Sticky Mode",
+        "stickyrolesmode": "Sticky Mode",
         "unsticky": "Roles defined here will __not__ be applied, every not defined Role will be",
         "sticky": "Roles defined here will be applied, every not defined Role will __not__ be",
         "roles": "Un-/Sticky Roles",
         "stickyrolesactive": "Sticky Roles Active",
+        "stickypermsactive": "Sticky Perms Active",
         "edit": {
           "roles": {
             "name": "Un-/Sticky Roles",
@@ -2421,7 +2422,12 @@
             "answers": "`True` or `False`",
             "recommended": "Recommended: `True`"
           },
-          "stickymode": {
+          "stickypermsactive": {
+            "name": "Sticky Perms Active",
+            "answers": "`True` or `False`",
+            "recommended": "Recommended: `True`"
+          },
+          "stickyrolesmode": {
             "name": "Sticky Mode",
             "answers": "`True` or `False`",
             "recommended": "Recommended: `True`"

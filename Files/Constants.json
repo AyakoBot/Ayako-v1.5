@@ -1000,7 +1000,7 @@
             "key": "roles",
             "required": false
           },
-          "stickymode": {
+          "stickyrolesmode": {
             "key": "boolean",
             "required": true
           }
@@ -1514,7 +1514,7 @@
           "vals": [["{{msg.guild.id}}", true]]
         },
         "sticky": {
-          "cols": ["guildid, stickyrolesactive, stickymode"],
+          "cols": ["guildid, stickyrolesactive, stickyrolesmode"],
           "vals": [["{{msg.guild.id}}", true, true]]
         },
         "language": {
