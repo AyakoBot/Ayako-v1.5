@@ -6,8 +6,8 @@ module.exports = {
     if (oldChannel.type === 'dm') return;
     if (newChannel.position !== oldChannel.position) return;
     if (newChannel.children !== oldChannel.children) return;
-    const ch = require('../../BaseClient/ClientHelper');
-    const Constants = require('../../Constants.json');
+    const ch = require('../../../BaseClient/ClientHelper');
+    const Constants = require('../../../Constants.json');
     const { guild } = newChannel;
     const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);
     if (res && res.rowCount > 0) {
@@ -312,6 +312,7 @@ module.exports = {
     }
   },
 };
+
 function send(logchannel, embed, language) {
   const { client } = logchannel;
   embed.fields.forEach((field) => {
