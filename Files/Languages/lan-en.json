@@ -2400,7 +2400,7 @@
           }
         }
       },
-      "stickyroles": {
+      "sticky": {
         "type": "Sticky Roles",
         "description": "Sticky Roles are Roles that Stick to Members across re-joins",
         "stickyRoles": "Roles that will be sticky",
@@ -2409,14 +2409,15 @@
         "unsticky": "Roles defined here will __not__ be applied, every not defined Role will be",
         "sticky": "Roles defined here will be applied, every not defined Role will __not__ be",
         "roles": "Un-/Sticky Roles",
+        "stickyrolesactive": "Sticky Roles Active",
         "edit": {
           "roles": {
             "name": "Un-/Sticky Roles",
             "answers": "Roles",
             "recommended": "The Roles to add"
           },
-          "active": {
-            "name": "Active",
+          "stickyrolesactive": {
+            "name": "Sticky Roles Active",
             "answers": "`True` or `False`",
             "recommended": "Recommended: `True`"
           },

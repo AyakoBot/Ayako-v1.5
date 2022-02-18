@@ -995,7 +995,7 @@
             "required": true
           }
         },
-        "stickyroles": {
+        "sticky": {
           "roles": {
             "key": "roles",
             "required": false
@@ -1369,7 +1369,7 @@
         "suggestions": ["suggestionsettings"],
         "ticketing": [null],
         "verification": ["verification"],
-        "stickyroles": ["stickyroles"],
+        "sticky": ["sticky"],
         "welcome": ["welcome"],
         "language": ["language"],
         "overview": ["guildsettings"],
@@ -1513,8 +1513,8 @@
           "cols": ["guildid, active"],
           "vals": [["{{msg.guild.id}}", true]]
         },
-        "stickyroles": {
-          "cols": ["guildid, active, stickymode"],
+        "sticky": {
+          "cols": ["guildid, stickyrolesactive, stickymode"],
           "vals": [["{{msg.guild.id}}", true, true]]
         },
         "language": {

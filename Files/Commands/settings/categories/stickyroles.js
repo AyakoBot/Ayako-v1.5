@@ -10,8 +10,8 @@ module.exports = {
 
     embed.addFields(
       {
-        name: msg.lanSettings.active,
-        value: r.active
+        name: msg.lan.stickyrolesactive,
+        value: r.stickyrolesactive
           ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
           : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
         inline: false,
@@ -39,9 +39,9 @@ module.exports = {
     return embed;
   },
   buttons(msg, r) {
-    const active = new Discord.MessageButton()
-      .setCustomId(msg.lan.edit.active.name)
-      .setLabel(msg.lanSettings.active)
+    const stickyrolesactive = new Discord.MessageButton()
+      .setCustomId(msg.lan.edit.stickyrolesactive.name)
+      .setLabel(msg.lan.stickyrolesactive)
       .setStyle(r.active ? 'SUCCESS' : 'DANGER');
     const stickymode = new Discord.MessageButton()
       .setCustomId(msg.lan.edit.stickymode.name)
@@ -51,6 +51,6 @@ module.exports = {
       .setCustomId(msg.lan.edit.roles.name)
       .setLabel(msg.lan.roles)
       .setStyle('PRIMARY');
-    return [[active], [stickymode, roles]];
+    return [[stickyrolesactive], [stickymode, roles]];
   },
 };
