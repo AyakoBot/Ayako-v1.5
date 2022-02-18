@@ -1,14 +1,14 @@
 module.exports = {
   execute: async (member, user) => {
     const memberRes = await member.client.ch.query(
-      `SELECT * FROM stickyrolemembers WHERE userid = $1 AND guildid = $2;`,
+      `SELECT * FROM stickymembers WHERE userid = $1 AND guildid = $2;`,
       [user.id, member.guild.id],
     );
 
     if (!memberRes || !memberRes.rowCount) return;
 
     const settingsRes = await member.client.ch.query(
-      `SELECT * FROM stickyroles WHERE guildid = $1 AND active = true;`,
+      `SELECT * FROM sticky WHERE guildid = $1 AND active = true;`,
       [member.guild.id],
     );
 
@@ -20,10 +20,10 @@ module.exports = {
       memberRes.rows[0].roles,
     );
 
-    await member.client.ch.query(
-      `DELETE FROM stickyrolemembers WHERE userid = $1 AND guildid = $2;`,
-      [user.id, member.guild.id],
-    );
+    await member.client.ch.query(`DELETE FROM stickymembers WHERE userid = $1 AND guildid = $2;`, [
+      user.id,
+      member.guild.id,
+    ]);
     if (rolesToAdd.length) await member.roles.add(rolesToAdd);
   },
 };
