@@ -767,7 +767,7 @@ module.exports = {
    * @param {object} lan - The Language which is to be used.
    * @param {object} guild - The Guild in which module.exports Command was called
    */
-  loadingEmbed: (lan, guild) => {
+  loadingEmbed: async (lan, guild) => {
     const embed = new Discord.MessageEmbed()
       .setAuthor({
         name: lan.author,
@@ -777,7 +777,7 @@ module.exports = {
       .setColor(module.exports.colorSelector(guild?.me))
       .setDescription(
         `${guild.client.constants.emotes.loading} ${
-          lan.loading ? lan.loading : module.exports.languageSelector(guild).loading
+          lan.loading ? lan.loading : (await module.exports.languageSelector(guild)).loading
         }`,
       );
     return embed;
