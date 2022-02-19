@@ -105,7 +105,7 @@ const logStart = async (member, days) => {
   const row = await getSettings(member);
   const language = await member.client.ch.languageSelector(member.guild);
 
-  if (row.logchannels && row.logchannels.length) {
+  if (row && row.logchannels && row.logchannels.length) {
     const embed = new Discord.MessageEmbed()
       .setAuthor({
         name: language.guildMemberUpdateNitro.author.nameStart,
