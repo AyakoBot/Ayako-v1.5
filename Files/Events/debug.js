@@ -5,12 +5,17 @@ module.exports = {
     // eslint-disable-next-line global-require
     const client = require('../BaseClient/DiscordClient');
     if (
-      `${log}`.includes('Tried to send packet' || `${log}`.includes('Destroying and reconnecting'))
+      `${log}`.includes(
+        'Tried to send packet' ||
+          `${log}`.includes('Destroying and reconnecting') ||
+          `${log}`.includes('No token available to identify a new session'),
+      )
     ) {
       client.destroy().catch(() => {});
       client.login(auth.token);
       return;
     }
+
     if (log.includes('Heartbeat') && log.includes('latency'))
       client.ch.query('UPDATE stats SET heartbeat = $1;', [log.replace(/\D+/g, '')]);
     const res = await client.ch.query('SELECT * FROM stats;');
