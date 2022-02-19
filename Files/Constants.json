@@ -1014,20 +1014,12 @@
           }
         },
         "verification": {
-          "greetdesc": {
-            "key": "string",
-            "required": false
-          },
           "logchannel": {
             "key": "channel",
             "required": false
           },
           "finishedrole": {
             "key": "role",
-            "required": false
-          },
-          "finishdesc": {
-            "key": "string",
             "required": false
           },
           "pendingrole": {

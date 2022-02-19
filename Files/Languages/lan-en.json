@@ -2878,10 +2878,8 @@
       },
       "verification": {
         "type": "Verification",
-        "greetdesc": "Greet Embed Description",
         "logchannel": "Log Channel",
         "finishedrole": "Verified Role",
-        "finishdesc": "Finished Embed Description",
         "pendingrole": "Pending Verification Role",
         "startchannel": "Command Channel",
         "selfstart": "Self Start",
@@ -2902,16 +2900,6 @@
             "name": "Log Channel",
             "answers": "`Mention or ID`",
             "recommended": "**This is not required**\n\nThe log Channel where verifications are logged"
-          },
-          "greetdesc": {
-            "name": "Greet Embed Description",
-            "answers": "Any String",
-            "recommended": "**This is not required**\n\n`{{user}}` will be replaced with a Mention of the User this Embed is made for"
-          },
-          "finishdesc": {
-            "name": "Finished Embed Description",
-            "answers": "Any String",
-            "recommended": "**This is not required**\n\n`{{user}}` will be replaced with a Mention of the User this Embed is made for"
           },
           "active": {
             "name": "Active",

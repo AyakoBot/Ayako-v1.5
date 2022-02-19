@@ -65,11 +65,7 @@ module.exports = {
         iconURL: msg.client.constants.standard.image,
         url: msg.client.constants.standard.invite,
       })
-      .setDescription(
-        r.greetdesc
-          ? msg.client.ch.stp(r.greetdesc, { user: msg.author })
-          : msg.client.ch.stp(msg.lan.description, { guild: msg.guild }),
-      )
+      .setDescription(msg.client.ch.stp(msg.lan.description, { guild: msg.guild }))
       .addField(msg.language.hint, msg.lan.hintmsg)
       .addField(msg.lan.field, '\u200b')
       .setColor(msg.client.constants.standard.color);
@@ -218,11 +214,7 @@ module.exports = {
         msg.client.constants.standard.image,
         msg.client.constants.standard.invite,
       )
-      .setDescription(
-        msg.r.finishdesc
-          ? msg.client.ch.stp(msg.r.finishdesc, { user: msg.author })
-          : msg.client.ch.stp(msg.lan.finishDesc, { guild: msg.guild }),
-      )
+      .setDescription(msg.client.ch.stp(msg.lan.finishDesc, { guild: msg.guild }))
       .setColor(msg.client.constants.standard.color);
     msg.client.ch.send(msg.DM, { embeds: [embed] });
     if (msg.guild.id === '298954459172700181') {
