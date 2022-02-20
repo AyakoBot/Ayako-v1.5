@@ -31,7 +31,7 @@ module.exports = {
           })
           .setTimestamp()
           .setColor(con.color);
-        const changedKey = [];
+        let changedKey = [];
         if (oldChannel.name !== newChannel.name) {
           changedKey.push(language.name);
           typeID = 11;
@@ -123,25 +123,53 @@ module.exports = {
           );
         }
         if (oldChannel.permissionOverwrites.cache !== newChannel.permissionOverwrites.cache) {
-          const oldPerms = [];
-          const newPerms = [];
+          const tempOP = [];
+          const tempNP = [];
 
-          oldChannel.permissionOverwrites.cache.entries()?.forEach(([, overwrite]) => {
-            const temp = {};
-            temp.id = overwrite.id;
-            temp.type = overwrite.type;
-            temp.allow = overwrite.allow;
-            temp.deny = overwrite.deny;
-            oldPerms.push(temp);
+          oldChannel.permissionOverwrites.cache
+            .map((o) => o)
+            .forEach((o) => {
+              const temp = {
+                id: o.id,
+                type: o.type,
+                allow: o.allow,
+                deny: o.deny,
+              };
+              tempOP.push(temp);
+            });
+          newChannel.permissionOverwrites.cache
+            .map((o) => o)
+            .forEach((o) => {
+              const temp = {
+                id: o.id,
+                type: o.type,
+                allow: o.allow,
+                deny: o.deny,
+              };
+              tempNP.push(temp);
+            });
+
+          const newPerms = [];
+          const oldPerms = [];
+
+          tempNP.forEach((np) => {
+            const op = tempOP.find((n) => n.id === np.id && n.type === np.type);
+            if (op) {
+              if (!np.allow.equals(op.allow) || !np.deny.equals(op.deny)) {
+                newPerms.push(np);
+              }
+            }
           });
-          newChannel.permissionOverwrites.cache.entries()?.forEach(([, overwrite]) => {
-            const temp = {};
-            temp.id = overwrite.id;
-            temp.type = overwrite.type;
-            temp.allow = overwrite.allow;
-            temp.deny = overwrite.deny;
-            newPerms.push(temp);
+
+          tempOP.forEach((op) => {
+            const np = tempNP.find((n) => n.id === op.id && n.type === op.type);
+            if (np) {
+              if (!op.allow.equals(np.allow) || !op.deny.equals(np.deny)) {
+                oldPerms.push(op);
+              }
+            }
           });
+
           if (oldPerms.length > newPerms.length) {
             changedKey.push(language.permission_overwrites);
             let deletedPerm;
@@ -159,6 +187,7 @@ module.exports = {
             if (deletedPerm.type === 'member') text = `${language.member} <@${deletedPerm.id}>`;
             else if (deletedPerm.type === 'role') text = `${language.role} <@&${deletedPerm.id}>`;
             else text = `${language.unknown} ${deletedPerm}`;
+
             embed.addField(language.permissions.removedPermissionsFor, text);
           } else if (oldPerms.length < newPerms.length) {
             changedKey.push(language.permission_overwrites);
@@ -190,25 +219,28 @@ module.exports = {
               const [tBit2, Bit2] = ch.bitUniques(oldPerm.allow, newPerm.allow);
               const tBit3 = tBit1.add([...tBit2]);
               const Bit3 = tBit3.remove([...Bit1]).remove([...Bit2]);
+
               let enable;
               let disable;
               let neutral;
+
               if (newPerm.type === 'member') {
-                disable = `<@${newPerm.id}>`;
-                enable = `<@${newPerm.id}>`;
+                disable = `<@${newPerm.id}>\n`;
+                enable = `<@${newPerm.id}>\n`;
               } else if (newPerm.type === 'role') {
-                disable = `<@&${newPerm.id}>`;
-                enable = `<@&${newPerm.id}>`;
+                disable = `<@&${newPerm.id}>\n`;
+                enable = `<@&${newPerm.id}>\n`;
               } else {
-                disable = `${language.unknown} ${newPerm}`;
-                enable = `${language.unknown} ${newPerm}`;
+                disable = `${language.unknown} ${newPerm}\n`;
+                enable = `${language.unknown} ${newPerm}\n`;
               }
+
               if (oldPerm.type === 'member') {
-                neutral = `<@${oldPerm.id}>`;
+                neutral = `<@${oldPerm.id}>\n`;
               } else if (oldPerm.type === 'role') {
-                neutral = `<@&${oldPerm.id}>`;
+                neutral = `<@&${oldPerm.id}>\n`;
               } else {
-                neutral = `${language.unknown} ${oldPerm}`;
+                neutral = `${language.unknown} ${oldPerm}\n`;
               }
 
               for (let j = 0; Bit1.toArray().length > j; j += 1) {
@@ -226,6 +258,7 @@ module.exports = {
                   language.permissions[Bit3.toArray()[j]]
                 }\`\n`;
               }
+
               if (neutral.includes('`')) {
                 embed.addField(
                   `${language.permissions.removedPermissionsFor} ${
@@ -290,8 +323,12 @@ module.exports = {
               }
             });
           }
-          if (embed.fields.length === 0) return;
-          if (entry)
+
+          if (!embed.fields.length) return;
+
+          if (changedKey.length) changedKey = [...new Set(changedKey)];
+
+          if (entry) {
             embed.setDescription(
               `${ch.stp(lan.description.withAudit, {
                 user: entry.executor,
@@ -299,22 +336,22 @@ module.exports = {
                 type: language.channels[newChannel.type],
               })}\n\n${language.changes}:${changedKey.map((o) => ` \`${o}\``)}`,
             );
-          else
+          } else {
             embed.setDescription(
               `${ch.stp(lan.description.withoutAudit, {
                 channel: newChannel,
                 type: language.channels[newChannel.type],
               })}\n\n${language.changes}:${changedKey.map((o) => ` \`${o}\``)}`,
             );
-          send(channels, embed, language);
+          }
+          send(channels, embed, language, oldChannel);
         }
       }
     }
   },
 };
 
-function send(logchannel, embed, language) {
-  const { client } = logchannel;
+function send(logchannel, embed, language, { client }) {
   embed.fields.forEach((field) => {
     if (field.value.length > 1024 || embed.length > 6000) {
       const re1 = new RegExp(client.constants.switch.disable, 'g');
