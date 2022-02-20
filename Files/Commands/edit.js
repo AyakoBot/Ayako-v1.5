@@ -3,7 +3,7 @@ const moment = require('moment');
 require('moment-duration-format');
 
 module.exports = {
-  name: 'pardon',
+  name: 'edit',
   perm: 8192n,
   dm: false,
   takesFirstArg: true,
@@ -13,8 +13,6 @@ module.exports = {
     const user = await msg.client.users.fetch(msg.args[0].replace(/\D+/g, '')).catch(() => {});
     if (!user) return msg.client.ch.reply(msg, msg.language.noUser);
     const warnNr = msg.args[1];
-    if (warnNr.toLowerCase() === msg.language.all)
-      return msg.client.commands.get('clearwarns').execute(msg);
     if (Number.isNaN(Number(warnNr)))
       return msg.client.ch.reply(
         msg,
@@ -34,15 +32,21 @@ module.exports = {
       return msg.client.ch.reply(msg, msg.client.ch.stp(msg.lan.noWarn, { number: warnNr }));
     const embed = new Discord.MessageEmbed()
       .setDescription(msg.client.ch.stp(msg.lan.done, { number: warnNr, target: user }))
-      .setColor(msg.client.constants.commands.pardon.success)
+      .setColor(msg.client.constants.commands.edit.success)
       .setFooter({ text: msg.lan.warnIssue })
       .setTimestamp(Number(warn.dateofwarn));
     msg.client.ch.reply(msg, { embeds: [embed] });
+
     const logEmbed = new Discord.MessageEmbed();
-    const con = msg.client.constants.commands.pardon;
+    const con = msg.client.constants.commands.edit;
+
     if (warn.type === 'Warn') {
       logEmbed
-        .setDescription(`**${msg.language.reason}:**\n${warn.reason}`)
+        .setDescription(
+          `**${msg.language.oldReason}:**\n${warn.reason}\n\n**${
+            msg.language.newReason
+          }:**\n${msg.args.slice(2).join(' ')}`,
+        )
         .setAuthor({
           name: msg.client.ch.stp(msg.lan.warnOf, { target: user }),
           iconURL: con.log.image,
@@ -69,7 +73,7 @@ module.exports = {
             inline: false,
           },
           {
-            name: msg.lan.pardonedBy,
+            name: msg.lan.editedBy,
             value: `<@${msg.author.id}>\n\`${msg.author.username}\` (\`${msg.author.id}\`)`,
             inline: false,
           },
@@ -77,22 +81,6 @@ module.exports = {
         .setColor(con.log.color)
         .setFooter({ text: msg.lan.warnID + warn.row_number });
     } else if (warn.type === 'Mute') {
-      const member = await msg.guild.members.fetch(user.id).catch(() => {});
-      let notClosed = msg.client.ch.stp(msg.lan.notClosed, {
-        time: `<t:${warn.duration.slice(0, -3)}:F> (<t:${warn.duration.slice(0, -3)}:R>)`,
-      });
-      if (member && member.isCommunicationDisabled())
-        notClosed = msg.client.ch.stp(msg.lan.abortedMute, {
-          time: `<t:${warn.duration.slice(0, -3)}:F> (<t:${warn.duration.slice(0, -3)}:R>)`,
-        });
-      let warnClosedText;
-      if (warn.closed === true) {
-        warnClosedText = msg.client.ch.stp(msg.lan.closed, {
-          time: `<t:${warn.duration.slice(0, -3)}:F> (<t:${warn.duration.slice(0, -3)}:R>)`,
-        });
-      } else if (warn.closed === false) warnClosedText = notClosed;
-      else warnClosedText = msg.language.never;
-
       logEmbed
         .setDescription(`**${msg.language.reason}:**\n${warn.reason}`)
         .setAuthor({
@@ -112,7 +100,7 @@ module.exports = {
           },
           {
             name: msg.lan.mutedIn,
-            value: `<#${warn.warnedinchannelid}>\n\`${warn.warnedinchannelname}\` (\`${warn.warnedinchannelid}\`)`,
+            value: `<#${warn.warnedinchannelid}>\n\`${warn.warnedinchannelname}\``,
             inline: false,
           },
           {
@@ -134,12 +122,7 @@ module.exports = {
             inline: false,
           },
           {
-            name: msg.lan.warnclosed,
-            value: warnClosedText,
-            inline: false,
-          },
-          {
-            name: msg.lan.pardonedBy,
+            name: msg.lan.editedBy,
             value: `<@${msg.author.id}>\n\`${msg.author.username}\` (\`${msg.author.id}\`)`,
             inline: false,
           },
@@ -148,8 +131,8 @@ module.exports = {
         .setFooter({ text: msg.lan.warnID + warn.row_number });
     }
     msg.client.ch.query(
-      'DELETE FROM warns WHERE userid = $1 AND guildid = $2 AND dateofwarn = $3;',
-      [user.id, msg.guild.id, warn.dateofwarn],
+      'UPDATE warns SET reason = $4 WHERE userid = $1 AND guildid = $2 AND dateofwarn = $3;',
+      [user.id, msg.guild.id, warn.dateofwarn, msg.args.slice(2).join(' ')],
     );
     if (msg.logchannels) {
       msg.logchannels.forEach((c) => msg.client.ch.send(c, { embeds: [logEmbed] }));

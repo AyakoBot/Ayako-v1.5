@@ -569,6 +569,13 @@
         "image": "https://ayakobot.com/cdn/Ayako_Assets/Warning.png"
       }
     },
+    "edit": {
+      "success": "1aff00",
+      "log": {
+        "color": "1aff00",
+        "image": "https://ayakobot.com/cdn/Ayako_Assets/Edit.png"
+      }
+    },
     "embedbuilder": {
       "error": "https://ayakobot.com/cdn/Ayako_Assets/Warning.png"
     },
