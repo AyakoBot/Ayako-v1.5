@@ -520,7 +520,7 @@
     "MUTE_MEMBERS": "Mute Members",
     "DEAFEN_MEMBERS": "Deafen Members",
     "MOVE_MEMBERS": "Move Members",
-    "USE_VAD": "Use Voice Activity",
+    "USE_VAD": "Use Voice Activity Detection",
     "CHANGE_NICKNAME": "Change Nickname",
     "MANAGE_NICKNAMES": "Manage Nicknames",
     "MANAGE_ROLES": "Manage Roles",
@@ -529,12 +529,15 @@
     "USE_APPLICATION_COMMANDS": "Use Application Commands",
     "REQUEST_TO_SPEAK": "Request to Speak",
     "MANAGE_THREADS": "Manage Threads",
-    "USE_AND_CREATE_PUBLIC_THREADS": "Use and Create Public Threads",
-    "USE_AND_CREATE_PRIVATE_THREADS": "Use and Create Private Threads",
+    "CREATE_PUBLIC_THREADS": "Create Public Threads",
+    "CREATE_PRIVATE_THREADS": "Create Private Threads",
     "USE_EXTERNAL_STICKERS": "Use External Stickers",
     "SEND_MESSAGES_IN_THREADS": "Send Messages in Threads",
     "START_EMBEDDED_ACTIVITIES": "Start Embedded Activities",
-    "MODERATE_MEMBERS": "Moderate Members"
+    "USE_PRIVATE_THREADS": "Use Private Threads",
+    "MODERATE_MEMBERS": "Moderate Members",
+    "MANAGE_EVENTS": "Manage Events",
+    "USE_PUBLIC_THREADS": "Use Public Threads"
   },
   "channelRules": {
     "HAS_LEAST_ATTACHMENTS": "Has at least [externally defined] Attachments",
