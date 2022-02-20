@@ -125,4 +125,25 @@ module.exports = {
       [deleteMsgs],
     ];
   },
+  doMoreThings(msg, r, name) {
+    if (name === 'startchannel') {
+      const channel = msg.guild.channels.cache.get(r.startchannel);
+      if (channel) {
+        const lan = msg.language.verification;
+        const embed = new Discord.MessageEmbed()
+          .setAuthor({
+            name: lan.author.name,
+            url: msg.client.constants.standard.invite,
+          })
+          .setDescription(
+            msg.client.ch.stp(lan.startchannelmessage, {
+              prefix: msg.client.constants.standard.prefix,
+            }),
+          )
+          .setColor(msg.client.constants.standard.color);
+
+        msg.client.ch.send(channel, { embeds: [embed] });
+      }
+    }
+  },
 };

@@ -636,6 +636,7 @@
     "author": {
       "name": "Ayako Verification"
     },
+    "startchannelmessage": "Please **open your DMs** so I can DM you a verification Captcha.\nAfter you opened them, type `{{prefix}}verify` __here__ to restart verification!.",
     "description": "<a:ToiletSpin:709805618030182510> **Welcome to {{guild.name}}!**",
     "field": "If you don't verify, you won't be able to use the server!",
     "finishDesc": "**Thank you for verifying!**\nVerification Finished!",

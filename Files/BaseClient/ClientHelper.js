@@ -690,9 +690,9 @@ module.exports = {
    * @constructor
    * @param {object} interaction - The Interaction the triggering User sent.
    */
-  notYours: (interaction) => {
+  notYours: async (interaction) => {
     let language;
-    if (!language) language = module.exports.languageSelector(interaction.guild);
+    if (!language) language = await module.exports.languageSelector(interaction.guild);
 
     const embed = new Discord.MessageEmbed()
       .setAuthor({

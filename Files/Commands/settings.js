@@ -1006,7 +1006,7 @@ const changing = async (msgData, editData, resData) => {
   const [tableName] = msg.client.constants.commands.settings.tablenames[msg.file.name];
 
   if (comesFromMMR) {
-    msg.client.ch.query(
+    await msg.client.ch.query(
       `UPDATE ${tableName} SET ${required.assinger} = $1 WHERE guildid = $2 AND uniquetimestamp = $3;`,
       [
         (insertedValues[required.assinger] && insertedValues[required.assinger].length) ||
@@ -1018,14 +1018,19 @@ const changing = async (msgData, editData, resData) => {
       ],
     );
   } else {
-    msg.client.ch.query(`UPDATE ${tableName} SET ${required.assinger} = $1 WHERE guildid = $2;`, [
-      (insertedValues[required.assinger] && insertedValues[required.assinger].length) ||
-      insertedValues[required.assinger] !== undefined
-        ? insertedValues[required.assinger]
-        : null,
-      msg.guild.id,
-    ]);
+    await msg.client.ch.query(
+      `UPDATE ${tableName} SET ${required.assinger} = $1 WHERE guildid = $2;`,
+      [
+        (insertedValues[required.assinger] && insertedValues[required.assinger].length) ||
+        insertedValues[required.assinger] !== undefined
+          ? insertedValues[required.assinger]
+          : null,
+        msg.guild.id,
+      ],
+    );
   }
+
+  if (msg.file.doMoreThings) msg.file.doMoreThings(msg, insertedValues, required.assinger);
 
   log(msg, { insertedValues, required, comesFromMMR, row }, 'update');
 
