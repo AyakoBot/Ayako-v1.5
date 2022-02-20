@@ -1047,7 +1047,7 @@
       "duration": "This will take an average of about\n`{{amount}}` counted Messages\nor\n`{{duration}}`\nsince only 1 Message per Minute is counted"
     },
     "leaderboard": {
-      "description": "Displays the top 30 Users",
+      "description": "Displays the top 30 Users by Levels",
       "usage": ["lvls"],
       "category": "Fun",
       "disabled": "Leveling is disabled on this Server",
@@ -1055,6 +1055,16 @@
       "globalAuthor": "Ayako Global Leveling",
       "yourPosition": "Your Position",
       "toggle": "Toggle User Type"
+    },
+    "disboardleaderboard": {
+      "description": "Displays the top 30 Users by DISBOARD Bumps",
+      "usage": ["lvls"],
+      "category": "Fun",
+      "disabled": "Disboard is disabled on this Server",
+      "author": "Ayako DISBOARD Leaderboards",
+      "yourPosition": "Your Position",
+      "toggle": "Toggle User Type",
+      "noBumps": "No one Bumped the Server yet"
     },
     "stp": {
       "description": "Test what kind of stuff you can invoke using {{msg}}",
@@ -3274,5 +3284,6 @@
   "whereTriggered": "Wherever this is triggered",
   "noAccess": "No Access",
   "createNew": "Create New",
-  "rank": "Rank"
+  "rank": "Rank",
+  "bumps": "Bumps"
 }
