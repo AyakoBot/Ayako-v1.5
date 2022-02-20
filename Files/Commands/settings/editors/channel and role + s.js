@@ -6,26 +6,34 @@ module.exports = {
     const { insertedValues, required, Objects } = editorData;
 
     const cacheName = required.key.endsWith('s') ? required.key : `${required.key}s`;
-    const cache = msg.guild[cacheName].cache.filter((value) => {
-      if (cacheName === 'roles') {
-        return value;
-      }
-
-      if (cacheName === 'channels') {
-        const validChannelTypes = [
-          'GUILD_TEXT',
-          'GUILD_NEWS',
-          'GUILD_NEWS_THREAD',
-          'GUILD_PUBLIC_THREAD',
-          'GUILD_PRIVATE_THREAD',
-        ];
-
-        if (validChannelTypes.includes(value.type)) {
+    const cache = msg.guild[cacheName].cache
+      .filter((r) => !r.managed)
+      .sort((o, i) => {
+        if (cacheName === 'roles') {
+          return Number(i.rawPosition) - Number(o.rawPosition);
+        }
+        return Number(o.rawPosition) - Number(i.rawPosition);
+      })
+      .filter((value) => {
+        if (cacheName === 'roles') {
           return value;
         }
-      }
-      return null;
-    });
+
+        if (cacheName === 'channels') {
+          const validChannelTypes = [
+            'GUILD_TEXT',
+            'GUILD_NEWS',
+            'GUILD_NEWS_THREAD',
+            'GUILD_PUBLIC_THREAD',
+            'GUILD_PRIVATE_THREAD',
+          ];
+
+          if (validChannelTypes.includes(value.type)) {
+            return value;
+          }
+        }
+        return null;
+      });
 
     cache.forEach((element) => {
       const inserted = {
@@ -34,9 +42,10 @@ module.exports = {
       };
 
       if (
-        Array.isArray(insertedValues[required.assinger]) &&
-        insertedValues &&
-        insertedValues[required.assinger].includes(element.id)
+        (Array.isArray(insertedValues[required.assinger]) &&
+          insertedValues &&
+          insertedValues[required.assinger].includes(element.id)) ||
+        insertedValues[required.assinger] === element.id
       ) {
         inserted.emoji = msg.client.constants.emotes.minusBGID;
       } else {

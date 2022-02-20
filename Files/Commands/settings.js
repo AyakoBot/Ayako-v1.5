@@ -1434,7 +1434,15 @@ const interactionHandler = async (msgData, preparedData, insertedValues, require
       isString = true;
     }
     if (answer.values) {
-      insertedValues[required.assinger] = isString ? answer.values[0] : answer.values;
+      if (isString) {
+        if (insertedValues[required.assinger] === answer.values[0]) {
+          insertedValues[required.assinger] = null;
+        } else {
+          [insertedValues[required.assinger]] = answer.values;
+        }
+      } else {
+        insertedValues[required.assinger] = answer.values;
+      }
     }
   }
 
@@ -1449,8 +1457,9 @@ const interactionHandler = async (msgData, preparedData, insertedValues, require
 
   Objects.options.forEach((option) => {
     if (
-      Array.isArray(insertedValues[required.assinger]) &&
-      insertedValues[required.assinger]?.includes(option.value)
+      (Array.isArray(insertedValues[required.assinger]) &&
+        insertedValues[required.assinger]?.includes(option.value)) ||
+      insertedValues[required.assinger] === option.value
     ) {
       option.emoji = msg.client.constants.emotes.minusBGID;
     } else {
@@ -1489,7 +1498,9 @@ const standardButtons = async (msg, preparedData, insertedValues, required, row,
         required.required);
   } else {
     doneDisabled =
-      !insertedValues[required.assinger] || insertedValues[required.assinger] === msg.language.none;
+      required.required &&
+      (!insertedValues[required.assinger] ||
+        insertedValues[required.assinger] === msg.language.none);
   }
 
   if (editor.requiresMenu) {

@@ -79,27 +79,6 @@ module.exports = {
       );
     }
 
-    embed.addFields(
-      {
-        name: '\u200b',
-        value: '\u200b',
-        inline: false,
-      },
-      {
-        name: msg.lan.greetdesc,
-        value: r.greetdesc
-          ? `${msg.client.ch.stp(r.greetdesc, { user: msg.author })}`
-          : msg.language.none,
-        inline: false,
-      },
-      {
-        name: msg.lan.finishdesc,
-        value: r.finishdesc
-          ? `${msg.client.ch.stp(r.finishdesc, { user: msg.author })}`
-          : msg.language.none,
-        inline: false,
-      },
-    );
     return embed;
   },
   buttons(msg, r) {
@@ -139,20 +118,11 @@ module.exports = {
       .setCustomId(msg.lan.edit.pendingrole.name)
       .setLabel(msg.lan.pendingrole)
       .setStyle('SECONDARY');
-    const greetdesc = new Discord.MessageButton()
-      .setCustomId(msg.lan.edit.greetdesc.name)
-      .setLabel(msg.lan.greetdesc)
-      .setStyle('SECONDARY');
-    const finishdesc = new Discord.MessageButton()
-      .setCustomId(msg.lan.edit.finishdesc.name)
-      .setLabel(msg.lan.finishdesc)
-      .setStyle('SECONDARY');
     return [
       [active],
       [selfstart, kicktof, kickafter],
       [logchannel, finishedrole, pendingrole, startchannel],
       [deleteMsgs],
-      [greetdesc, finishdesc],
     ];
   },
 };
