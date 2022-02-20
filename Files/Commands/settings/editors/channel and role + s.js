@@ -6,28 +6,26 @@ module.exports = {
     const { insertedValues, required, Objects } = editorData;
 
     const cacheName = required.key.endsWith('s') ? required.key : `${required.key}s`;
-    const cache = msg.guild[cacheName].cache
-      .sort((a, b) => a.position - b.position)
-      .filter((value) => {
-        if (cacheName === 'roles') {
+    const cache = msg.guild[cacheName].cache.filter((value) => {
+      if (cacheName === 'roles') {
+        return value;
+      }
+
+      if (cacheName === 'channels') {
+        const validChannelTypes = [
+          'GUILD_TEXT',
+          'GUILD_NEWS',
+          'GUILD_NEWS_THREAD',
+          'GUILD_PUBLIC_THREAD',
+          'GUILD_PRIVATE_THREAD',
+        ];
+
+        if (validChannelTypes.includes(value.type)) {
           return value;
         }
-
-        if (cacheName === 'channels') {
-          const validChannelTypes = [
-            'GUILD_TEXT',
-            'GUILD_NEWS',
-            'GUILD_NEWS_THREAD',
-            'GUILD_PUBLIC_THREAD',
-            'GUILD_PRIVATE_THREAD',
-          ];
-
-          if (validChannelTypes.includes(value.type)) {
-            return value;
-          }
-        }
-        return null;
-      });
+      }
+      return null;
+    });
 
     cache.forEach((element) => {
       const inserted = {
