@@ -2,7 +2,6 @@ const Discord = require('discord.js');
 
 module.exports = {
   async execute() {
-    // eslint-disable-next-line global-require
     const client = require('../../BaseClient/DiscordClient');
     const { ch } = client;
     const Constants = client.constants;
