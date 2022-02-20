@@ -21,7 +21,7 @@ module.exports = {
         const audits = await ban.guild.fetchAuditLogs({ limit: 3, type: 22 });
         let entry;
         if (audits && audits.entries) {
-          const audit = audits.entries.filter((a) => a.target.id === ban.guild.id);
+          const audit = audits.entries.filter((a) => a.target.id === ban.user.id);
           entry = audit.sort((a, b) => b.id - a.id);
           entry = entry.first();
         }
@@ -34,11 +34,11 @@ module.exports = {
           .setTimestamp();
         if (entry && entry.id) {
           embed.setDescription(
-            ch.stp(lan.description.withUser, { user: entry.executor, target: ban.guild }),
+            ch.stp(lan.description.withUser, { user: entry.executor, target: ban.user }),
           );
           embed.addField(language.reason, entry.reason ? `\n${entry.reason}` : language.none);
         } else {
-          embed.setDescription(ch.stp(lan.description.withoutUser, { target: ban.guild }));
+          embed.setDescription(ch.stp(lan.description.withoutUser, { target: ban.user }));
           embed.addField(language.reason, ban.reason ? ban.reason : language.unknown);
         }
         ch.send(channels, { embeds: [embed] });
