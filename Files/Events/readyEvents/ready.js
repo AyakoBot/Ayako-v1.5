@@ -35,7 +35,10 @@ module.exports = {
 
     setInterval(() => require('./TimedManagers/TimedManagerSplitter').execute(), 2000);
     setInterval(() => require('./prunelog').execute(), 120000);
-    setInterval(() => require('./presence').execute(), 60000);
+    setInterval(() => {
+      require('./presence').execute();
+      require('./verification').execute();
+    }, 60000);
     setInterval(() => require('./antivirusBlocklistCacher').execute(), 1800000);
     setInterval(() => console.log(new Date().toLocaleString()), 600000);
   },
