@@ -1046,6 +1046,7 @@
       "diff": "XP Difference",
       "duration": "This will take an average of about\n`{{amount}}` counted Messages\nor\n`{{duration}}`\nsince only 1 Message per Minute is counted"
     },
+
     "leaderboard": {
       "description": "Displays the top 30 Users by Levels",
       "usage": ["lvls"],
@@ -1516,6 +1517,25 @@
       "warnclosed": "Warn Closed",
       "pardonedBy": "Pardoned by",
       "warnID": "Warn ID: "
+    },
+    "edit": {
+      "category": "Moderation",
+      "description": "Edit the Warn Reason of a User",
+      "usage": ["edit [user ID or mention] [warn ID] [new Reason]"],
+      "done": "Edited Warn with ID {{number}} of {{target}}",
+      "warnIssue": "Warn was issued at",
+      "warnOf": "Warn of {{target.tag}} was edited",
+      "muteOf": "Mute of {{target.tag}} was edited",
+      "date": "Date of Warn",
+      "noWarn": "There is no Warn with ID `{{number}}`",
+      "warnedIn": "Warned in",
+      "warnedBy": "Warned by",
+      "mutedIn": "Muted in",
+      "mutedBy": "Muted by",
+      "duration": "Mute Duration",
+      "editedBy": "Edited by",
+      "warnID": "Warn ID: ",
+      "newReason": "New Reason"
     },
     "check": {
       "category": "Moderation",
@@ -3285,5 +3305,7 @@
   "noAccess": "No Access",
   "createNew": "Create New",
   "rank": "Rank",
-  "bumps": "Bumps"
+  "bumps": "Bumps",
+  "oldReason": "Old Reason",
+  "newReason": "New Reason"
 }
