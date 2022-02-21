@@ -962,6 +962,23 @@
       "selfBan": "You can't ban yourself",
       "meBan": "I won't ban myself"
     },
+    "softbanAdd": {
+      "author": "{{user}} was Soft-Banned",
+      "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas soft-banned by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
+      "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
+      "dm": {
+        "author": "You have been soft-banned from {{guild.name}}"
+      },
+      "exeNoPerms": "You can't soft-ban this User",
+      "permissionError": "I don't have enough permissions to soft-ban this User",
+      "error": "I wasn't able to soft-ban this User!",
+      "alreadyBanned": "User {{target}} is already banned",
+      "success": "User {{target}} was soft-banned",
+      "loading": "Soft-Banning User...",
+      "selfBan": "You can't soft-ban yourself",
+      "meBan": "I won't soft-ban myself",
+      "unbanReason": "Soft-Ban"
+    },
     "tempbanAdd": {
       "author": "{{user}} was Temp-Banned",
       "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas Temp-Banned by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
@@ -1349,6 +1366,12 @@
     "ban": {
       "description": "Bans a User from the Server",
       "usage": ["ban [user ID or mention] (reason)"],
+      "category": "Moderation",
+      "reason": "No Reason given"
+    },
+    "softban": {
+      "description": "Soft-Bans a User from the Server",
+      "usage": ["softban [user ID or mention] (delete message days 0-7) (reason)"],
       "category": "Moderation",
       "reason": "No Reason given"
     },
