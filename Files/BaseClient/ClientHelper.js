@@ -238,6 +238,112 @@ module.exports = {
     return filePath;
   },
   /**
+   * A translator for User Flags into the given Language.
+   * @constructor
+   * @param {object} client - The Base Client.
+   * @param {number} bits - The Bits the Language will be translated from.
+   * @param {object} lan - The Language File the Bits will be Translated based off of.
+   * @param {boolean} emotes - Whether to add Emotes to the Translated Flags.
+   */
+  userFlagCalc: (client, bits, lan, emotes) => {
+    if (!bits) return [];
+    const BitField = new Discord.UserFlags(Number(bits));
+    const Flags = [];
+
+    if (BitField.has(1)) {
+      Flags.push(
+        `${emotes ? client.constants.emotes.userFlags.DISCORD_EMPLOYEE : ''} ${
+          lan.userFlags.DISCORD_EMPLOYEE
+        }`,
+      );
+    }
+    if (BitField.has(2)) {
+      Flags.push(
+        `${emotes ? client.constants.emotes.userFlags.PARTNERED_SERVER_OWNER : ''} ${
+          lan.userFlags.PARTNERED_SERVER_OWNER
+        }`,
+      );
+    }
+    if (BitField.has(4)) {
+      Flags.push(
+        `${emotes ? client.constants.emotes.userFlags.HYPESQUAD_EVENTS : ''} ${
+          lan.userFlags.HYPESQUAD_EVENTS
+        }`,
+      );
+    }
+    if (BitField.has(8)) {
+      Flags.push(
+        `${emotes ? client.constants.emotes.userFlags.BUGHUNTER_LEVEL_1 : ''} ${
+          lan.userFlags.BUGHUNTER_LEVEL_1
+        }`,
+      );
+    }
+    if (BitField.has(64)) {
+      Flags.push(
+        `${emotes ? client.constants.emotes.userFlags.HOUSE_BRAVERY : ''} ${
+          lan.userFlags.HOUSE_BRAVERY
+        }`,
+      );
+    }
+    if (BitField.has(128)) {
+      Flags.push(
+        `${emotes ? client.constants.emotes.userFlags.HOUSE_BRILLIANCE : ''} ${
+          lan.userFlags.HOUSE_BRILLIANCE
+        }`,
+      );
+    }
+    if (BitField.has(256)) {
+      Flags.push(
+        `${emotes ? client.constants.emotes.userFlags.HOUSE_BALANCE : ''} ${
+          lan.userFlags.HOUSE_BALANCE
+        }`,
+      );
+    }
+    if (BitField.has(512)) {
+      Flags.push(
+        `${emotes ? client.constants.emotes.userFlags.EARLY_SUPPORTER : ''} ${
+          lan.userFlags.EARLY_SUPPORTER
+        }`,
+      );
+    }
+    if (BitField.has(1024)) {
+      Flags.push(`${lan.userFlags.TEAM_USER}`);
+    }
+    if (BitField.has(16384)) {
+      Flags.push(
+        `${emotes ? client.constants.emotes.userFlags.BUGHUNTER_LEVEL_2 : ''} ${
+          lan.userFlags.BUGHUNTER_LEVEL_2
+        }`,
+      );
+    }
+    if (BitField.has(65536)) {
+      Flags.push(
+        `${emotes ? client.constants.emotes.userFlags.VERIFIED_BOT : ''} ${
+          lan.userFlags.VERIFIED_BOT
+        }`,
+      );
+    }
+    if (BitField.has(131072)) {
+      Flags.push(
+        `${emotes ? client.constants.emotes.userFlags.EARLY_VERIFIED_BOT_DEVELOPER : ''} ${
+          lan.userFlags.EARLY_VERIFIED_BOT_DEVELOPER
+        }`,
+      );
+    }
+    if (BitField.has(262144)) {
+      Flags.push(
+        `${emotes ? client.constants.emotes.userFlags.DISCORD_CERTIFIED_MODERATOR : ''} ${
+          lan.userFlags.DISCORD_CERTIFIED_MODERATOR
+        }`,
+      );
+    }
+    if (BitField.has(524288)) {
+      Flags.push(`${lan.userFlags.BOT_HTTP_INTERACTIONS}`);
+    }
+
+    return Flags;
+  },
+  /**
    * A translator for Channel Rules into the given Language.
    * @constructor
    * @param {number} bits - The Bits the Language will be translated from.
@@ -472,6 +578,24 @@ module.exports = {
       user = rawUser;
     }
     return user.displayAvatarURL({
+      dynamic: true,
+      size: 2048,
+      format: 'png',
+    });
+  },
+  /**
+   * Extracts a Dynamic Banner URL from a Discord User.
+   * @constructor
+   * @param {object} rawUser - The User Object the Banner URL is extracted from.
+   */
+  displayBannerURL: (rawUser) => {
+    let user = {};
+    if (rawUser.user) {
+      user = rawUser.user;
+    } else {
+      user = rawUser;
+    }
+    return user.bannerURL({
       dynamic: true,
       size: 2048,
       format: 'png',
