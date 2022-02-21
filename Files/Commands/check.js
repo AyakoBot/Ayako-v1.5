@@ -345,8 +345,8 @@ module.exports = {
       }
       return null;
     });
-    collector.on('end', () => {
-      msg.m.edit({ embeds: msg.m.embeds, components: [] });
+    collector.on('end', (collected, reason) => {
+      if (reason === 'time') msg.m.edit({ embeds: msg.m.embeds, components: [] });
     });
 
     const ban = await msg.guild.bans.fetch(user.id).catch(() => {});
