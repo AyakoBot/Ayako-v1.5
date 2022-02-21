@@ -2,9 +2,7 @@ const { parentPort } = require('worker_threads');
 
 const SA = require('superagent');
 const axios = require('axios');
-const stringSimilarity = require('string-similarity');
 const fs = require('fs');
-const confusables = require('confusables');
 
 const ch = require('../../../BaseClient/ClientHelper');
 const constants = require('../../../Constants.json');
@@ -155,27 +153,6 @@ const run = async ({
   if (attributes && `${+attributes.creation_date}000` > Date.now() - 604800000) {
     if (!check) {
       includedBadLink = true;
-    }
-
-    parentPort.postMessage({ msgData, lan, linkObject, check, type: 'newUrl' });
-    return;
-  }
-
-  const selfCheckCatched = await selfChecker(linkObject);
-  if (selfCheckCatched) {
-    if (!check) {
-      includedBadLink = true;
-    }
-
-    if (selfCheckCatched === 'ccscam') {
-      parentPort.postMessage({
-        msgData,
-        lan,
-        linkObject,
-        check,
-        type: 'ccscam',
-      });
-      return;
     }
 
     parentPort.postMessage({ msgData, lan, linkObject, check, type: 'newUrl' });
@@ -449,65 +426,6 @@ const getSeverity = (VTresponse) => {
     severity += VTresponse.malicious * 2;
   }
   return severity;
-};
-
-const selfChecker = async (linkObject) => {
-  return false;
-  const siteHTML = confusables.remove((await axios.get(linkObject.href).catch((e) => e))?.data);
-  if (!siteHTML) return false;
-  // eslint-disable-next-line no-useless-escape
-  const siteNameBad = !!(
-    siteHTML.match(/property=["'`]og:site_name["'`](.*)content=["'`]discord["'`]>/gi)?.length ||
-    siteHTML.match(/<title>(.*)Discord(.*)<\/title>/gi)?.length ||
-    siteHTML.match(/<title>Redeem Promotion(.*)<\/title>/gi)?.length
-  );
-  const embedNameBad = !!siteHTML.match(/property=["'`]og:title["'`](.*)content=["'`]discord/gi)
-    ?.length;
-
-  const args = siteHTML.split(/["'`]+/);
-  const embedDescription = args[args.indexOf('og:description') + 2];
-  const similarity = stringSimilarity.compareTwoStrings(
-    embedDescription,
-    'Discord is the easiest way to talk over voice, video, and text. Talk, chat, hang out, and stay close with your friends and communities.',
-  );
-  const embedDescriptionBad = Math.round(similarity * 100) > 80;
-
-  const usesDiscordSlogan = !!siteHTML.match(
-    /we[`|'|´|"]re[\n|\s](.*)so[\n|\s](.*)excited[\n|\s](.*)to[\n|\s](.*)see[\n|\s](.*)you[\n|\s](.*)again/gi,
-  )?.length;
-
-  const usesDiscordImage = !!(
-    siteHTML.match(
-      /property=["'`]og:image["'`](.*)content=["'`]https:\/\/discord\.com\/assets\/652f40427e1f5186ad54836074898279\.png["'`]>/gi,
-    )?.length ||
-    siteHTML.match(
-      /property=["'`]og:image["'`](.*)content=["'`]\/assets\/652f40427e1f5186ad54836074898279\.png["'`]>/gi,
-    )?.length ||
-    siteHTML.match(
-      /rel=["'`]icon["'`](.*)href=["'`]https:\/\/discord\.com\/assets\/847541504914fd33810e70a0ea73177e\.ico["'`]/gi,
-    )?.length
-  );
-
-  const websiteProbablyAdvertisesNitro = !!(
-    siteHTML.match(/(.*)3\smonths/gi)?.length ||
-    siteHTML.match(/discord(.*)nitro(.*)free(.*)steam/gi)?.length
-  );
-
-  const wantsCCNumber = !!siteHTML.match(/(.*)credit\scard\s(Number|)/gi)?.length;
-  const wantsCCexpiry = !!siteHTML.match(/(.*)Expiration\sDate/gi)?.length;
-  const wantsCCcvc = !!siteHTML.match(/(.*)cvc/gi)?.length;
-  const wantsCCzip = !!siteHTML.match(/(.*)(Postcode|zip)/gi)?.length;
-  const wantsCCname = !!siteHTML.match(/[^_|^s]name[^=]/gi)?.length;
-
-  if (
-    (siteNameBad && websiteProbablyAdvertisesNitro) ||
-    (embedNameBad && embedDescriptionBad && usesDiscordImage) ||
-    usesDiscordSlogan
-  ) {
-    if (wantsCCNumber && wantsCCexpiry && wantsCCcvc && wantsCCzip && wantsCCname) return 'ccscam';
-    return 'nitroscam';
-  }
-  return false;
 };
 
 // https://phish.sinking.yachts/
