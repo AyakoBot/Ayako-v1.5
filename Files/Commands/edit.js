@@ -74,7 +74,7 @@ module.exports = {
           },
           {
             name: msg.lan.editedBy,
-            value: `<@${msg.author.tag}>\n\`${msg.author.username}\` (\`${msg.author.id}\`)`,
+            value: `${msg.author.tag}\n\`${msg.author.username}\` (\`${msg.author.id}\`)`,
             inline: false,
           },
         )
@@ -123,7 +123,7 @@ module.exports = {
           },
           {
             name: msg.lan.editedBy,
-            value: `<@${msg.author.tag}>\n\`${msg.author.username}\` (\`${msg.author.id}\`)`,
+            value: `${msg.author.tag}\n\`${msg.author.username}\` (\`${msg.author.id}\`)`,
             inline: false,
           },
         )
