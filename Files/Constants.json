@@ -310,6 +310,20 @@
     "ephemeralColor": 3092790
   },
   "emotes": {
+    "userFlags": {
+      "DISCORD_EMPLOYEE": "<:DiscordStaff:945409713661706292>",
+      "PARTNERED_SERVER_OWNER": "<:ParteneredServerOwner:945409713762365460>",
+      "HYPESQUAD_EVENTS": "<:HypeSquadEventCoordinator:945409713653313617>",
+      "BUGHUNTER_LEVEL_1": "<:BugHunterLevel1:945409713737199636>",
+      "HOUSE_BRAVERY": "<:Bravery:945409713745559652>",
+      "HOUSE_BRILLIANCE": "<:Brilliance:945409713615540235>",
+      "HOUSE_BALANCE": "<:Balance:945409713678450710>",
+      "EARLY_SUPPORTER": "<:EarlySupporter:945409713422602241>",
+      "BUGHUNTER_LEVEL_2": "<:BugHunterLevel2:945409713716199434>",
+      "VERIFIED_BOT": "<:VerifiedBot:945436609237635182>",
+      "EARLY_VERIFIED_BOT_DEVELOPER": "<:EarlyVerifiedDev:945411681679462511>",
+      "DISCORD_CERTIFIED_MODERATOR": "<:DiscordModerator:945409713661677608>"
+    },
     "cross": "<:Cross:902269073805701211>",
     "crossID": "902269073805701211",
     "crossLink": "https://cdn.discordapp.com/emojis/902269073805701211.png?size=96",
@@ -337,6 +351,7 @@
     "enabled": "<:enabled:831360855018962944>",
     "enabledID": "831360855018962944",
     "enabledLink": "https://cdn.discordapp.com/emojis/831360826048774176.png?size=96",
+    "bot": "<:Bot:945436608621060097>",
     "up": "🆙",
     "back": "⬅",
     "forth": "➡",
@@ -568,6 +583,9 @@
     }
   },
   "commands": {
+    "userinfo": {
+      "authorImage": ""
+    },
     "leaderboard": {
       "authorImage": ""
     },

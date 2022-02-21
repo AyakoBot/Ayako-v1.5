@@ -1051,6 +1051,17 @@
     }
   },
   "commands": {
+    "userinfo": {
+      "description": "Display a lot of Information about a User",
+      "usage": ["whois", "whois (user)"],
+      "category": "Info",
+      "authorUser": "Ayako User-Info",
+      "authorBot": "Ayako Bot-Info",
+      "userInfo": "**User:** {{user}}\n**Tag:** `{{user.tag}}`\n**Discriminator:** `{{user.discriminator}}`\n**ID:** `{{user.id}}`\n**Username:** `{{user.username}}`\n**Accent Color:** `{{user.accentColor}}`/`{{user.hexAccentColor}}`",
+      "flags": "Badges",
+      "createdAt": "Created At",
+      "footer": "⬅️ Accent Color"
+    },
     "rank": {
       "description": "Display anyones current Server/Global Rank",
       "usage": ["rank", "rank (user)"],
@@ -1064,7 +1075,6 @@
       "diff": "XP Difference",
       "duration": "This will take an average of about\n`{{amount}}` counted Messages\nor\n`{{duration}}`\nsince only 1 Message per Minute is counted"
     },
-
     "leaderboard": {
       "description": "Displays the top 30 Users by Levels",
       "usage": ["lvls"],
@@ -3203,6 +3213,22 @@
     "warnID": "Warn ID: ",
     "expired": "This Warn has expired"
   },
+  "userFlags": {
+    "DISCORD_EMPLOYEE": "Discord Employee",
+    "PARTNERED_SERVER_OWNER": "Partnered Server Owner",
+    "HYPESQUAD_EVENTS": "HypeSquad Events Coordinator",
+    "BUGHUNTER_LEVEL_1": "Bug Hunter Level 1",
+    "HOUSE_BRAVERY": "House Bravery Member",
+    "HOUSE_BRILLIANCE": "House Brilliance Member",
+    "HOUSE_BALANCE": "House Balance Member",
+    "EARLY_SUPPORTER": "Early Nitro Supporter",
+    "TEAM_USER": "User is a [Team](https://discord.com/developers/docs/topics/teams \"Click to find out what a Team is\")",
+    "BUGHUNTER_LEVEL_2": "Bug Hunter Level 2",
+    "VERIFIED_BOT": "Verified Bot",
+    "EARLY_VERIFIED_BOT_DEVELOPER": "Early Verified Bot Developer",
+    "DISCORD_CERTIFIED_MODERATOR": "Discord Certified Moderator",
+    "BOT_HTTP_INTERACTIONS": "Bot uses only HTTP Interactions and is shown in the online Member List"
+  },
   "featuresName": "Features",
   "none": "None",
   "before": "Before",
@@ -3384,5 +3410,6 @@
   "rank": "Rank",
   "bumps": "Bumps",
   "oldReason": "Old Reason",
-  "newReason": "New Reason"
+  "newReason": "New Reason",
+  "bot": "Bot"
 }

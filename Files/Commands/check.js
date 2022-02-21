@@ -324,6 +324,7 @@ module.exports = {
                             .duration(+mute.duration - +mute.dateofwarn)
                             .format(
                               `d [${msg.language.time.days}], h [${msg.language.time.hours}], m [${msg.language.time.minutes}], s [${msg.language.time.seconds}]`,
+                              { trim: 'all' },
                             )
                         : '∞'
                     }`,
