@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const jobs = require('node-schedule');
 
 module.exports = {
   async execute(executor, target, reason, msg, duration) {
@@ -29,7 +30,11 @@ module.exports = {
           em.addField('\u200b', `${msg.client.constants.emotes.cross} ${lan.exeNoPerms}`);
         } else em.setDescription(`${msg.client.constants.emotes.cross} ${lan.exeNoPerms}`);
         msg.m?.edit({ embeds: [em] });
-        if (mexisted) setTimeout(() => msg.m?.delete().catch(() => {}), 10000);
+        if (mexisted) {
+          jobs.scheduleJob(new Date(Date.now() + 10000), () => {
+            msg.m?.delete().catch(() => {});
+          });
+        }
         return false;
       }
       if (executor.id === target.id) {
@@ -38,7 +43,11 @@ module.exports = {
           em.addField('\u200b', `${msg.client.constants.emotes.cross} ${lan.selfBan}`);
         } else em.setDescription(`${msg.client.constants.emotes.cross} ${lan.selfBan}`);
         msg.m?.edit({ embeds: [em] });
-        if (mexisted) setTimeout(() => msg.m?.delete().catch(() => {}), 10000);
+        if (mexisted) {
+          jobs.scheduleJob(new Date(Date.now() + 10000), () => {
+            msg.m?.delete().catch(() => {});
+          });
+        }
         return false;
       }
       if (target.id === msg.client.user.id) {
@@ -47,7 +56,11 @@ module.exports = {
           em.addField('\u200b', `${msg.client.constants.emotes.cross} ${lan.meBan}`);
         } else em.setDescription(`${msg.client.constants.emotes.cross} ${lan.meBan}`);
         msg.m?.edit({ embeds: [em] });
-        if (mexisted) setTimeout(() => msg.m?.delete().catch(() => {}), 10000);
+        if (mexisted) {
+          jobs.scheduleJob(new Date(Date.now() + 10000), () => {
+            msg.m?.delete().catch(() => {});
+          });
+        }
         return false;
       }
       if (member?.bannable === false) {
@@ -56,7 +69,11 @@ module.exports = {
           em.addField('\u200b', `${msg.client.constants.emotes.cross} ${lan.permissionError}`);
         } else em.setDescription(`${msg.client.constants.emotes.cross} ${lan.permissionError}`);
         msg.m?.edit({ embeds: [em] });
-        if (mexisted) setTimeout(() => msg.m?.delete().catch(() => {}), 10000);
+        if (mexisted) {
+          jobs.scheduleJob(new Date(Date.now() + 10000), () => {
+            msg.m?.delete().catch(() => {});
+          });
+        }
         return false;
       }
       const banned = await msg.guild.bans.fetch(target).catch(() => {});
@@ -76,7 +93,11 @@ module.exports = {
             })}`,
           );
         msg.m?.edit({ embeds: [em] });
-        if (mexisted) setTimeout(() => msg.m?.delete().catch(() => {}), 10000);
+        if (mexisted) {
+          jobs.scheduleJob(new Date(Date.now() + 10000), () => {
+            msg.m?.delete().catch(() => {});
+          });
+        }
         return false;
       }
     }
@@ -141,7 +162,11 @@ module.exports = {
           `${msg.client.constants.emotes.cross + lan.error} ${msg.client.ch.makeCodeBlock(err)}`,
         );
       msg.m?.edit({ embeds: [em] });
-      if (mexisted) setTimeout(() => msg.m?.delete().catch(() => {}), 10000);
+      if (mexisted) {
+        jobs.scheduleJob(new Date(Date.now() + 10000), () => {
+          msg.m?.delete().catch(() => {});
+        });
+      }
       return false;
     }
     if (mexisted) {
@@ -165,17 +190,15 @@ module.exports = {
       [msg.r] = res2.rows;
       msg.client.bans.set(
         `${msg.guild.id}-${target.id}`,
-        setTimeout(
-          () =>
-            msg.client.emit(
-              'modBanRemove',
-              msg.client.user,
-              target,
-              language.ready.unmute.reason,
-              msg,
-            ),
-          duration,
-        ),
+        jobs.scheduleJob(`${msg.guild.id}-${target.id}`, new Date(Date.now() + duration), () => {
+          msg.client.emit(
+            'modBanRemove',
+            msg.client.user,
+            target,
+            language.ready.unmute.reason,
+            msg,
+          );
+        }),
       );
       if (msg.source) msg.client.emit('modSourceHandler', msg, em);
       return true;

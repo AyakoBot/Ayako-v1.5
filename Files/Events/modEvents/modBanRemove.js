@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const jobs = require('node-schedule');
 
 module.exports = {
   async execute(executor, target, reason, msg) {
@@ -63,7 +64,11 @@ module.exports = {
             `${msg.client.constants.emotes.cross + lan.error} ${msg.client.ch.makeCodeBlock(err)}`,
           );
         msg.m?.edit({ embeds: [em] });
-        if (mexisted) setTimeout(() => msg.m?.delete().catch(() => {}), 10000);
+        if (mexisted) {
+          jobs.scheduleJob(new Date(Date.now() + 10000), () => {
+            msg.m?.delete().catch(() => {});
+          });
+        }
         return false;
       }
     } else {
@@ -72,7 +77,11 @@ module.exports = {
         em.addField('\u200b', `${msg.client.constants.emotes.cross} ${lan.notBanned}`);
       } else em.setDescription(`${msg.client.constants.emotes.cross} ${lan.notBanned}`);
       msg.m?.edit({ embeds: [em] });
-      if (mexisted) setTimeout(() => msg.m?.delete().catch(() => {}), 10000);
+      if (mexisted) {
+        jobs.scheduleJob(new Date(Date.now() + 10000), () => {
+          msg.m?.delete().catch(() => {});
+        });
+      }
       return false;
     }
     if (mexisted) {

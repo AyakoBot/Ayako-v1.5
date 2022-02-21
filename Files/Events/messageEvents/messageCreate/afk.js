@@ -1,5 +1,6 @@
 const moment = require('moment');
 require('moment-duration-format');
+const jobs = require('node-schedule');
 
 module.exports = {
   async execute(msg) {
@@ -26,10 +27,11 @@ module.exports = {
               .replace(/-/g, ''),
           }),
         );
-        if (m)
-          setTimeout(() => {
+        if (m) {
+          jobs.scheduleJob(new Date(Date.now() + 10000), async () => {
             m.delete().catch(() => {});
-          }, 10000);
+          });
+        }
         msg.client.ch.query('DELETE FROM afk WHERE userid = $1;', [msg.author.id]);
       }
     }

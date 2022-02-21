@@ -1,3 +1,5 @@
+const jobs = require('node-schedule');
+
 module.exports = {
   async execute() {
     // eslint-disable-next-line global-require
@@ -23,16 +25,14 @@ module.exports = {
         if (timeLeft <= 0) timeLeft = 100;
         client.bans.set(
           `${row.guildid}-${row.userid}`,
-          setTimeout(
-            () =>
-              client.emit(
-                'modBanRemove',
-                client.user,
-                client.users.cache.get(row.userid),
-                language.ready.unban.reason,
-                msg,
-              ),
-            timeLeft,
+          jobs.scheduleJob(`${row.guildid}-${row.userid}`, new Date() + timeLeft, () =>
+            client.emit(
+              'modBanRemove',
+              client.user,
+              client.users.cache.get(row.userid),
+              language.ready.unban.reason,
+              msg,
+            ),
           ),
         );
       });

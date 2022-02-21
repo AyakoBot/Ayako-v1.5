@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const jobs = require('node-schedule');
 
 module.exports = {
   async execute(msg) {
@@ -13,9 +14,9 @@ module.exports = {
             msg.client.ch
               .send(msg.channel, `${msg.author} **Do not send Discord Links in this Channel**`)
               .then((m) => {
-                setTimeout(() => {
+                jobs.scheduleJob(new Date(Date.now() + 10000), () => {
                   m.delete().catch(() => {});
-                }, 10000);
+                });
               });
           } else if (!member.permissions.has('MANAGE_GUILD')) msg.delete().catch(() => {});
         }
@@ -41,9 +42,9 @@ module.exports = {
               `${msg.author} You are not allowed to post links yet. \`Needed role: Level 30 | VIP | Nobles\``,
             )
             .then((send) => {
-              setTimeout(() => {
+              jobs.scheduleJob(new Date(Date.now() + 10000), () => {
                 send.delete().catch(() => {});
-              }, 10000);
+              });
             })
             .catch(() => {});
         } else msg.delete().catch(() => {});
@@ -69,9 +70,9 @@ module.exports = {
               `${msg.author} You are not allowed to post links yet. \`Needed level: Donut [40]\`\n Please use <#298954962699026432> and <#348601610244587531> instead.`,
             )
             .then((send) => {
-              setTimeout(() => {
+              jobs.scheduleJob(new Date(Date.now() + 10000), () => {
                 send.delete().catch(() => {});
-              }, 10000);
+              });
             })
             .catch();
         }
@@ -86,9 +87,9 @@ module.exports = {
               `${msg.author} You are not allowed to post links yet. \`Needed level: Cookie [40]\``,
             )
             .then((send) => {
-              setTimeout(() => {
+              jobs.scheduleJob(new Date(Date.now() + 10000), () => {
                 send.delete().catch(() => {});
-              }, 10000);
+              });
             })
             .catch();
         }
@@ -99,16 +100,16 @@ module.exports = {
         msg.guild.id === '298954459172700181' &&
         msg.content.split(/ +/)[4].replace(/!/g, '') < 40
       )
-        setTimeout(() => {
+        jobs.scheduleJob(new Date(Date.now() + 10000), () => {
           msg.delete().catch(() => {});
-        }, 10000);
+        });
       if (
         msg.content.includes(' leveled up!') &&
         (msg.author.id === '172002275412279296' || msg.author.id === '453643070181867561')
       )
-        setTimeout(() => {
+        jobs.scheduleJob(new Date(Date.now() + 10000), () => {
           msg.delete().catch(() => {});
-        }, 10000);
+        });
     }
     if (
       (msg.channel.id === '554487212276842534' || msg.channel.id === '791390835916537906') &&
@@ -133,9 +134,9 @@ module.exports = {
                 `${msg.author} You are not allowed to post links yet. \`Needed level: Cookie [20]\`\n Please use <#298954962699026432> and <#348601610244587531> instead.`,
               )
               .then((send) => {
-                setTimeout(() => {
+                jobs.scheduleJob(new Date(Date.now() + 10000), () => {
                   send.delete().catch(() => {});
-                }, 10000);
+                });
               })
               .catch(() => {});
           }
@@ -168,14 +169,14 @@ module.exports = {
         msg.guild.id === '298954459172700181' &&
         msg.content.split(/ +/)[4].replace(/!/g, '') < 40
       )
-        setTimeout(() => {
+        jobs.scheduleJob(new Date(Date.now() + 10000), () => {
           msg.delete().catch(() => {});
-        }, 10000);
+        });
       if (msg.content.includes(' leveled up!')) {
         if (msg.author.id === '172002275412279296' || msg.author.id === '453643070181867561') {
-          setTimeout(() => {
+          jobs.scheduleJob(new Date(Date.now() + 10000), () => {
             msg.delete().catch(() => {});
-          }, 10000);
+          });
         }
       }
       if (msg.author.id === '172002275412279296') {
@@ -184,9 +185,9 @@ module.exports = {
           msg.channel.id !== '756502435572219915' &&
           msg.channel.id !== '315517616447946763'
         ) {
-          setTimeout(() => {
+          jobs.scheduleJob(new Date(Date.now() + 10000), () => {
             msg.delete().catch(() => {});
-          }, 10000);
+          });
         }
       }
       if (

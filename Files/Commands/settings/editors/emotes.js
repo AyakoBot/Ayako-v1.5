@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const jobs = require('node-schedule');
 
 // TODO: fix standard emotes like 🔨
 
@@ -142,7 +143,11 @@ module.exports = {
         .reply(message, {
           content: msg.client.ch.stp(msg.lan.lackingAccess, { emotes: noAccessEmotes.join(', ') }),
         })
-        .then((m) => setTimeout(() => m.delete(), 10000));
+        .then((m) => {
+          jobs.scheduleJob(new Date(Date.now() + 10000), async () => {
+            m.delete().catch(() => {});
+          });
+        });
       return false;
     }
     return true;

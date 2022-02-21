@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const jobs = require('node-schedule');
 
 module.exports = {
   async execute(executor, target, reason, msg) {
@@ -27,7 +28,11 @@ module.exports = {
         em.addField('\u200b', `${msg.client.constants.emotes.cross} ${lan.noMember}`);
       } else em.setDescription(`${msg.client.constants.emotes.cross} ${lan.noMember}`);
       msg.m?.edit({ embeds: [em] });
-      if (mexisted) setTimeout(() => msg.m?.delete().catch(() => {}), 10000);
+      if (mexisted) {
+        jobs.scheduleJob(new Date(Date.now() + 10000), () => {
+          msg.m?.delete().catch(() => {});
+        });
+      }
       return false;
     }
     if (
@@ -39,7 +44,11 @@ module.exports = {
         em.addField('\u200b', `${msg.client.constants.emotes.cross} ${lan.exeNoPerms}`);
       } else em.setDescription(`${msg.client.constants.emotes.cross} ${lan.exeNoPerms}`);
       msg.m?.edit({ embeds: [em] });
-      if (mexisted) setTimeout(() => msg.m?.delete().catch(() => {}), 10000);
+      if (mexisted) {
+        jobs.scheduleJob(new Date(Date.now() + 10000), () => {
+          msg.m?.delete().catch(() => {});
+        });
+      }
       return false;
     }
     if (!member.kickable) {
@@ -48,7 +57,11 @@ module.exports = {
         em.addField('\u200b', `${msg.client.constants.emotes.cross} ${lan.permissionError}`);
       } else em.setDescription(`${msg.client.constants.emotes.cross} ${lan.permissionError}`);
       msg.m?.edit({ embeds: [em] });
-      if (mexisted) setTimeout(() => msg.m?.delete().catch(() => {}), 10000);
+      if (mexisted) {
+        jobs.scheduleJob(new Date(Date.now() + 10000), () => {
+          msg.m?.delete().catch(() => {});
+        });
+      }
       return false;
     }
 
@@ -79,14 +92,19 @@ module.exports = {
         .setTimestamp()
         .addField(language.reason, `${reason}`)
         .setFooter({ text: msg.client.ch.stp(lan.footer, { user: executor, target }) });
-      if (msg.logchannels && msg.logchannels.length) msg.client.ch.send(msg.logchannels, { embeds: [embed] });
+      if (msg.logchannels && msg.logchannels.length)
+        msg.client.ch.send(msg.logchannels, { embeds: [embed] });
     } else if (!member) {
       if (mexisted) {
         em.fields.pop();
         em.addField('\u200b', `${msg.client.constants.emotes.cross} ${lan.noMember}`);
       } else em.setDescription(`${msg.client.constants.emotes.cross} ${lan.noMember}`);
       msg.m?.edit({ embeds: [em] });
-      if (mexisted) setTimeout(() => msg.m?.delete().catch(() => {}), 10000);
+      if (mexisted) {
+        jobs.scheduleJob(new Date(Date.now() + 10000), () => {
+          msg.m?.delete().catch(() => {});
+        });
+      }
       return false;
     } else {
       m?.delete().catch(() => {});
@@ -101,7 +119,11 @@ module.exports = {
           `${msg.client.constants.emotes.cross + lan.error} ${msg.client.ch.makeCodeBlock(err)}`,
         );
       msg.m?.edit({ embeds: [em] });
-      if (mexisted) setTimeout(() => msg.m?.delete().catch(() => {}), 10000);
+      if (mexisted) {
+        jobs.scheduleJob(new Date(Date.now() + 10000), () => {
+          msg.m?.delete().catch(() => {});
+        });
+      }
       return false;
     }
 

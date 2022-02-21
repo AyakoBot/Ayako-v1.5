@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const jobs = require('node-schedule');
 
 const antiraidCache = new Discord.Collection();
 const sendings = new Discord.Collection();
@@ -18,7 +19,7 @@ module.exports = {
   },
   addMember(member, r) {
     if (antiraidCache.has(member.guild.id)) {
-      clearTimeout(antiraidCache.get(member.guild.id).timeout);
+      antiraidCache.get(member.guild.id).timeout.cancel();
     }
 
     const cache = antiraidCache.get(member.guild.id);
@@ -26,9 +27,9 @@ module.exports = {
       members: cache ? [...new Set([...cache.members, member.user.id])] : [member.user.id],
       time: member.joinedTimestamp,
       joins: (cache?.joins || 0) + 1,
-      timeout: setTimeout(() => {
+      timeout: jobs.scheduleJob(new Date(Date.now() + Number(r.time)), () => {
         antiraidCache.delete(member.guild.id);
-      }, r.time),
+      }),
     });
   },
   check(member, r) {
@@ -38,7 +39,7 @@ module.exports = {
 
     if (cache.joins >= Number(r.jointhreshold)) {
       if (sendings.has(member.guild.id)) {
-        clearTimeout(sendings.get(member.guild.id).timeout);
+        sendings.get(member.guild.id).timeout.cancel();
       }
 
       const oldSettings = sendings.get(member.guild.id);
@@ -48,10 +49,10 @@ module.exports = {
           : cache.members,
         time: cache.time,
         joins: cache.joins,
-        timeout: setTimeout(() => {
+        timeout: jobs.scheduleJob(new Date(Date.now() + Number(r.time)), () => {
           member.client.emit('antiraidHandler', sendings.get(member.guild.id), member.guild, r);
           antiraidCache.delete(member.guild.id);
-        }, r.time),
+        }),
       });
     }
 

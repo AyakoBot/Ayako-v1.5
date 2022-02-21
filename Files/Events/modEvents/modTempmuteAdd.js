@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const jobs = require('node-schedule');
 
 module.exports = {
   async execute(executor, target, reason, msg, duration) {
@@ -41,8 +42,11 @@ module.exports = {
           .setStyle('DANGER');
         msg.m?.edit({ embeds: [em], components: msg.client.ch.buttonRower([[Yes, No]]) });
       }
-      if (mexisted) setTimeout(() => msg.m?.delete().catch(() => {}), 10000);
-      else {
+      if (mexisted) {
+        jobs.scheduleJob(new Date(Date.now() + 10000), () => {
+          msg.m?.delete().catch(() => {});
+        });
+      } else {
         const [aborted, answer] = await ask(executor, msg);
         if (aborted) {
           em.setDescription(`${msg.client.constants.emotes.cross} ${lan.noMember}`);
@@ -74,7 +78,11 @@ module.exports = {
         em.addField('\u200b', `${msg.client.constants.emotes.cross} ${lan.exeNoPerms}`);
       } else em.setDescription(`${msg.client.constants.emotes.cross} ${lan.exeNoPerms}`);
       msg.m?.edit({ embeds: [em] });
-      if (mexisted) setTimeout(() => msg.m?.delete().catch(() => {}), 10000);
+      if (mexisted) {
+        jobs.scheduleJob(new Date(Date.now() + 10000), () => {
+          msg.m?.delete().catch(() => {});
+        });
+      }
       return false;
     }
     if (
@@ -87,7 +95,11 @@ module.exports = {
         em.addField('\u200b', `${msg.client.constants.emotes.cross} ${lan.meNoPerms}`);
       } else em.setDescription(`${msg.client.constants.emotes.cross} ${lan.meNoPerms}`);
       msg.m?.edit({ embeds: [em] });
-      if (mexisted) setTimeout(() => msg.m?.delete().catch(() => {}), 10000);
+      if (mexisted) {
+        jobs.scheduleJob(new Date(Date.now() + 10000), () => {
+          msg.m?.delete().catch(() => {});
+        });
+      }
       return false;
     }
     let warnnr;
@@ -104,7 +116,11 @@ module.exports = {
         em.addField('\u200b', `${msg.client.constants.emotes.cross} ${lan.hasRole}`);
       } else em.setDescription(`${msg.client.constants.emotes.cross} ${lan.hasRole}`);
       msg.m?.edit({ embeds: [em] });
-      if (mexisted) setTimeout(() => msg.m?.delete().catch(() => {}), 10000);
+      if (mexisted) {
+        jobs.scheduleJob(new Date(Date.now() + 10000), () => {
+          msg.m?.delete().catch(() => {});
+        });
+      }
       return false;
     }
 
@@ -170,7 +186,11 @@ module.exports = {
           `${msg.client.constants.emotes.cross + lan.error} ${msg.client.ch.makeCodeBlock(err)}`,
         );
       msg.m?.edit({ embeds: [em] });
-      if (mexisted) setTimeout(() => msg.m?.delete().catch(() => {}), 10000);
+      if (mexisted) {
+        jobs.scheduleJob(new Date(Date.now() + 10000), () => {
+          msg.m?.delete().catch(() => {});
+        });
+      }
       return false;
     }
     if (mexisted) {

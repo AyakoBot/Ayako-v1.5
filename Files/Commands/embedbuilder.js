@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const jobs = require('node-schedule');
 
 const testReg = /discord\.com\/channels\//gi;
 const colorReg = /[0-9A-Fa-f]{6}/g;
@@ -625,7 +626,9 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
                   content: `${e}\n${lan.warns.resolveAndRetry}`,
                 })
                 .then((m) => {
-                  setTimeout(() => m.delete().catch(() => {}), 10000);
+                  jobs.scheduleJob(new Date(Date.now() + 10000), () => {
+                    m.delete().catch(() => {});
+                  });
                 });
             }
           });
@@ -1577,10 +1580,10 @@ const errorVal = async (msg, lan, valid, Objects, error, answer) => {
   const reaction = await msg.m.react(msg.client.constants.emotes.timers[3]);
 
   return new Promise((resolve) => {
-    setTimeout(() => {
+    jobs.scheduleJob(new Date(Date.now() + 3000), () => {
       resolve(true);
       reaction.remove(msg.client.user.id).catch(() => {});
-    }, 3000);
+    });
   });
 };
 
@@ -1690,7 +1693,11 @@ const fieldSelect = async (msg, answer, Objects) => {
               .reply(msg, {
                 content: `${e}\n${baseLan.warns.resolveAndRetry}`,
               })
-              .then((m) => setTimeout(() => m.delete().catch(() => {}), 10000));
+              .then((m) => {
+                jobs.scheduleJob(new Date(Date.now() + 10000), () => {
+                  m.delete().catch(() => {});
+                });
+              });
           }
           break;
         }
@@ -1703,7 +1710,11 @@ const fieldSelect = async (msg, answer, Objects) => {
               .reply(msg, {
                 content: `${e}\n${baseLan.warns.resolveAndRetry}`,
               })
-              .then((m) => setTimeout(() => m.delete().catch(() => {}), 10000));
+              .then((m) => {
+                jobs.scheduleJob(new Date(Date.now() + 10000), () => {
+                  m.delete().catch(() => {});
+                });
+              });
           }
           break;
         }

@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const jobs = require('node-schedule');
 const client = require('../../../BaseClient/DiscordClient');
 
 module.exports = {
@@ -11,7 +12,7 @@ module.exports = {
       if (client.separatorAssigner) {
         if (client.separatorAssigner[guild.id]) {
           Object.entries(client.separatorAssigner[guild.id]).forEach((_, index) => {
-            clearTimeout(client.separatorAssigner[guild.id][index]);
+            client.separatorAssigner[guild.id][index].cancel();
           });
         }
         client.separatorAssigner[guild.id] = undefined;
@@ -31,12 +32,12 @@ module.exports = {
         msg.channel = client.channels.cache.get(row.channelid);
         if (row.index === row.length) msg.lastRun = true;
         // eslint-disable-next-line global-require
-        setTimeout(() => {
+        jobs.scheduleJob(new Date(Date.now() + 300000), () => {
           require('../../guildEvents/guildMemberUpdate/separator').oneTimeRunner(
             msg,
             new Discord.MessageEmbed(),
           );
-        }, 300000);
+        });
       }
     });
   },

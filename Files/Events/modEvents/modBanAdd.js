@@ -1,3 +1,4 @@
+const jobs = require('node-schedule');
 const Discord = require('discord.js');
 
 module.exports = {
@@ -27,7 +28,11 @@ module.exports = {
           em.addField('\u200b', `${msg.client.constants.emotes.cross} ${lan.exeNoPerms}`);
         } else em.setDescription(`${msg.client.constants.emotes.cross} ${lan.exeNoPerms}`);
         msg.m?.edit({ embeds: [em] });
-        if (mexisted) setTimeout(() => msg.m?.delete().catch(() => {}), 10000);
+        if (mexisted) {
+          jobs.scheduleJob(new Date(Date.now() + 10000), () => {
+            msg.m?.delete().catch(() => {});
+          });
+        }
         return false;
       }
       if (executor.id === target.id) {
@@ -36,7 +41,11 @@ module.exports = {
           em.addField('\u200b', `${msg.client.constants.emotes.cross} ${lan.selfBan}`);
         } else em.setDescription(`${msg.client.constants.emotes.cross} ${lan.selfBan}`);
         msg.m?.edit({ embeds: [em] });
-        if (mexisted) setTimeout(() => msg.m?.delete().catch(() => {}), 10000);
+        if (mexisted) {
+          jobs.scheduleJob(new Date(Date.now() + 10000), () => {
+            msg.m?.delete().catch(() => {});
+          });
+        }
         return false;
       }
       if (target.id === msg.client.user.id) {
@@ -45,7 +54,11 @@ module.exports = {
           em.addField('\u200b', `${msg.client.constants.emotes.cross} ${lan.meBan}`);
         } else em.setDescription(`${msg.client.constants.emotes.cross} ${lan.meBan}`);
         msg.m?.edit({ embeds: [em] });
-        if (mexisted) setTimeout(() => msg.m?.delete().catch(() => {}), 10000);
+        if (mexisted) {
+          jobs.scheduleJob(new Date(Date.now() + 10000), () => {
+            msg.m?.delete().catch(() => {});
+          });
+        }
         return false;
       }
       if (member?.bannable === false) {
@@ -54,7 +67,11 @@ module.exports = {
           em.addField('\u200b', `${msg.client.constants.emotes.cross} ${lan.permissionError}`);
         } else em.setDescription(`${msg.client.constants.emotes.cross} ${lan.permissionError}`);
         msg.m?.edit({ embeds: [em] });
-        if (mexisted) setTimeout(() => msg.m?.delete().catch(() => {}), 10000);
+        if (mexisted) {
+          jobs.scheduleJob(new Date(Date.now() + 10000), () => {
+            msg.m?.delete().catch(() => {});
+          });
+        }
         return false;
       }
       const banned = await msg.guild.bans.fetch(target).catch(() => {});
@@ -74,7 +91,11 @@ module.exports = {
             })}`,
           );
         msg.m?.edit({ embeds: [em] });
-        if (mexisted) setTimeout(() => msg.m?.delete().catch(() => {}), 10000);
+        if (mexisted) {
+          jobs.scheduleJob(new Date(Date.now() + 10000), () => {
+            msg.m?.delete().catch(() => {});
+          });
+        }
         return false;
       }
     }
@@ -105,7 +126,8 @@ module.exports = {
         .setTimestamp()
         .addField(language.reason, `${reason}`)
         .setFooter({ text: msg.client.ch.stp(lan.footer, { user: executor, target }) });
-      if (msg.logchannels && msg.logchannels.length) msg.client.ch.send(msg.logchannels, { embeds: [embed] });
+      if (msg.logchannels && msg.logchannels.length)
+        msg.client.ch.send(msg.logchannels, { embeds: [embed] });
     } else {
       m?.delete().catch(() => {});
       if (mexisted) {
@@ -119,7 +141,11 @@ module.exports = {
           `${msg.client.constants.emotes.cross + lan.error} ${msg.client.ch.makeCodeBlock(err)}`,
         );
       msg.m?.edit({ embeds: [em] });
-      if (mexisted) setTimeout(() => msg.m?.delete().catch(() => {}), 10000);
+      if (mexisted) {
+        jobs.scheduleJob(new Date(Date.now() + 10000), () => {
+          msg.m?.delete().catch(() => {});
+        });
+      }
       return false;
     }
     if (mexisted) {

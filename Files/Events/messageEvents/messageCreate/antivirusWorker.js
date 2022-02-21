@@ -3,6 +3,7 @@ const { parentPort } = require('worker_threads');
 const SA = require('superagent');
 const axios = require('axios');
 const fs = require('fs');
+const jobs = require('node-schedule');
 
 const ch = require('../../../BaseClient/ClientHelper');
 const constants = require('../../../Constants.json');
@@ -370,7 +371,7 @@ const getNewVTUrlsTimeouted = async (id, i) => {
   }
 
   const timeoutRes = await new Promise((timeoutResolve) => {
-    setTimeout(async () => {
+    jobs.scheduleJob(new Date(Date.now() + timeout * i), async () => {
       const res = await new Promise((resolve) => {
         SA.get(`https://www.virustotal.com/api/v3/analyses/${id}`)
           .set('x-apikey', auth.VTtoken)
@@ -391,7 +392,7 @@ const getNewVTUrlsTimeouted = async (id, i) => {
         timeoutResolve(null);
         timeoutResolve(await getNewVTUrlsTimeouted(id, i));
       }
-    }, timeout * i);
+    });
   });
 
   if (timeoutRes) {

@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const jobs = require('node-schedule');
 const StringSimilarity = require('string-similarity');
 const ChannelRules = require('../../../BaseClient/Other Client Files/ChannelRules');
 
@@ -30,9 +31,11 @@ const globalLeveling = async (msg) => {
   lastMessageGlobal.set(msg.author.id, msg.content);
 
   globalCooldown.add(msg.author.id);
-  setTimeout(() => {
+
+  const date = new Date(Date.now() + 60000);
+  jobs.scheduleJob(date, () => {
     globalCooldown.delete(msg.author.id);
-  }, 60000);
+  });
 
   const res = await msg.client.ch.query(`SELECT * FROM level WHERE type = $1 AND userid = $2;`, [
     'global',
@@ -81,9 +84,11 @@ const guildLeveling = async (msg, language) => {
   lastMessageGuild.set(msg.author.id, msg.content);
 
   guildCooldown.add(msg.author.id);
-  setTimeout(() => {
+
+  const date = new Date(Date.now() + 60000);
+  jobs.scheduleJob(date, () => {
     guildCooldown.delete(msg.author.id);
-  }, 60000);
+  });
 
   const res = await msg.client.ch.query(
     `SELECT * FROM level WHERE type = $1 AND userid = $2 AND guildid = $3;`,
@@ -275,9 +280,11 @@ const doReact = async (msg, row, levelData, language) => {
 
   const promises = reactions.map((emote) => msg.react(emote).catch(() => {}));
   await Promise.all(promises);
-  setTimeout(() => {
+
+  const date = new Date(Date.now() + 10000);
+  jobs.scheduleJob(date, () => {
     msg.reactions.removeAll().catch(() => {});
-  }, 10000);
+  });
 };
 
 const doEmbed = async (msg, settinsgrow, language, levelData, row) => {
@@ -324,9 +331,10 @@ const send = async (msg, payload, row) => {
   const msgs = await Promise.all(channels.map((c) => c.send(payload).catch(() => {})));
 
   if (row.lvlupdeltimeout) {
-    setTimeout(() => {
+    const date = new Date(Date.now() + row.lvlupdeltimeoutF);
+    jobs.scheduleJob(date, () => {
       Promise.all(msgs.map((m) => m.delete()));
-    }, row.lvlupdeltimeout);
+    });
   }
 };
 
@@ -525,5 +533,10 @@ const infoEmbed = (msg, reactions, language) => {
       msg.client.ch.stp(language.leveling.description, { reactions: reactions.join('') }),
     );
 
-  msg.client.ch.reply(msg, { embeds: [embed] }).then((m) => setTimeout(() => m.delete(), 30000));
+  msg.client.ch.reply(msg, { embeds: [embed] }).then((m) => {
+    const date = new Date(Date.now() + 30000);
+    jobs.scheduleJob(date, () => {
+      m.delete();
+    });
+  });
 };

@@ -1,5 +1,6 @@
 const regex = new RegExp('/[^ w]+/', 'g');
 const Discord = require('discord.js');
+const jobs = require('node-schedule');
 
 module.exports = {
   async execute(msg) {
@@ -37,11 +38,11 @@ module.exports = {
           msg.client.ch.stp(language.commands.toxicityCheck.warning, { user: msg.author }),
         );
 
-        if (m)
-          setTimeout(() => {
+        if (m) {
+          jobs.scheduleJob(new Date(Date.now() + 10000), async () => {
             m.delete().catch(() => {});
-          }, 10000);
-
+          });
+        }
         const embed = new Discord.MessageEmbed()
           .setAuthor({
             name: msg.client.constants.standard.image,

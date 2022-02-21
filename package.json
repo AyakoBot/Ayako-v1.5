@@ -26,6 +26,7 @@
     "moment": "^2.29.1",
     "moment-duration-format": "^2.3.2",
     "ms": "^2.1.2",
+    "node-schedule": "^2.1.0",
     "npm": "^8.1.4",
     "os": "^0.1.2",
     "pg": "^8.6.0",
