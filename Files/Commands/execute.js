@@ -14,16 +14,5 @@ module.exports = {
   perm: 0n,
   dm: true,
   takesFirstArg: false,
-  execute: async (msg) => {
-    
-    const job = jobs.scheduleJob('*/1 * * * * *', () => {
-      console.log('something happened');
-    });
-
-
-    setTimeout(() => {
-      job.cancel();
-
-    }, 10000)
-  },
+  execute: async (msg) => {},
 };
