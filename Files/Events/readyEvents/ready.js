@@ -16,7 +16,7 @@ module.exports = {
 
     // statcord.autopost();
 
-    jobs.scheduleJob('* * */1 * * *', () => {
+    jobs.scheduleJob('*/1 */1 */1 * * *', () => {
       // require('./websiteFetcher').execute();
       if (new Date().getHours() === 0) {
         client.guilds.cache.forEach((g) => {
@@ -37,17 +37,18 @@ module.exports = {
     jobs.scheduleJob('*/2 * * * * *', () => {
       require('./TimedManagers/TimedManagerSplitter').execute();
     });
-    jobs.scheduleJob('* */2 * * * *', () => {
+    jobs.scheduleJob('*/1 */2 * * * *', () => {
       require('./prunelog').execute();
     });
-    jobs.scheduleJob('* */1 * * * *', () => {
+    jobs.scheduleJob('*/1 */1 * * * *', () => {
       require('./presence').execute();
       require('./verification').execute();
     });
-    jobs.scheduleJob('* */30 * * * *', () => {
+    jobs.scheduleJob('*/1 */30 * * * *', () => {
       require('./antivirusBlocklistCacher').execute();
     });
-    jobs.scheduleJob('* */10 * * * *', () => {
+    jobs.scheduleJob('*/1 */10 * * * *', (job) => {
+      console.log(job);
       console.log(new Date().toLocaleString());
     });
   },
