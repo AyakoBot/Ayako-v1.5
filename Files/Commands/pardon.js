@@ -48,7 +48,7 @@ module.exports = {
           iconURL: con.log.image,
           url: msg.client.ch.stp(msg.client.constants.standard.discordUrlDB, {
             guildid: msg.guild.id,
-            channelid: msg.channel.id,
+            channelid: msg.warnedinchannelid,
             msgid: warn.msgid,
           }),
         })
@@ -70,7 +70,7 @@ module.exports = {
           },
           {
             name: msg.lan.pardonedBy,
-            value: `<@${msg.author.id}>\n\`${msg.author.username}\` (\`${msg.author.id}\`)`,
+            value: `<@${msg.author.tag}>\n\`${msg.author.username}\` (\`${msg.author.id}\`)`,
             inline: false,
           },
         )
@@ -100,7 +100,7 @@ module.exports = {
           iconURL: con.log.image,
           url: msg.client.ch.stp(msg.client.constants.standard.discordUrlDB, {
             guildid: msg.guild.id,
-            channelid: msg.channel.id,
+            channelid: warn.warnedinchannelid,
             msgid: warn.msgid,
           }),
         })
@@ -140,7 +140,7 @@ module.exports = {
           },
           {
             name: msg.lan.pardonedBy,
-            value: `<@${msg.author.id}>\n\`${msg.author.username}\` (\`${msg.author.id}\`)`,
+            value: `<@${msg.author.tag}>\n\`${msg.author.username}\` (\`${msg.author.id}\`)`,
             inline: false,
           },
         )
