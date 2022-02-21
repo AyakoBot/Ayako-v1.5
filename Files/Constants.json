@@ -560,6 +560,13 @@
       "footer-text"
     ]
   },
+  "expire": {
+    "success": "1aff00",
+    "log": {
+      "color": "1aff00",
+      "image": "https://ayakobot.com/cdn/Ayako_Assets/Warning.png"
+    }
+  },
   "commands": {
     "leaderboard": {
       "authorImage": ""

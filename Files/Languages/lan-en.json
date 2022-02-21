@@ -3184,6 +3184,25 @@
   "errors": {
     "userNotFound": "The mentioned User does not exist"
   },
+  "expire": {
+    "warnIssue": "Warn was issued at",
+    "warnOf": "Warn of {{target.tag}} has expired",
+    "muteOf": "Mute of {{target.tag}} has expired",
+    "date": "Date of Warn",
+    "warnedIn": "Warned in",
+    "warnedBy": "Warned by",
+    "mutedIn": "Muted in",
+    "mutedBy": "Muted by",
+    "notClosed": "Mute would have ended {{time}}",
+    "abortedMute": "Mute would have ended {{time}}\nBut it was manually aborted",
+    "duration": "Mute Duration",
+    "closed": "Mute ended {{time}}",
+    "muteclosed": "Mute Closed",
+    "warnclosed": "Warn Closed",
+    "pardonedBy": "Pardoned by",
+    "warnID": "Warn ID: ",
+    "expired": "This Warn has expired"
+  },
   "featuresName": "Features",
   "none": "None",
   "before": "Before",
