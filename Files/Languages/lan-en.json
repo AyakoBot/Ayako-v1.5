@@ -728,7 +728,8 @@
     "statschannel": "Ayako Stats-Channel",
     "separators": "Ayako Separators",
     "autopunish": "Ayako Auto-Punish",
-    "selfroles": "Ayako Self-Roles"
+    "selfroles": "Ayako Self-Roles",
+    "muteban": "Member left with an active Mute"
   },
   "statschanneltypes": {
     "member": {
@@ -1801,6 +1802,40 @@
           }
         }
       },
+      "modsettings": {
+        "type": "Mod Settings",
+        "expirewarns": "Warns expire",
+        "expirewarnsafter": "Warns expire after",
+        "expiremutes": "Mutes expire",
+        "expiremutesafter": "Mutes expire after",
+        "muteban": "Ban Members that left with an active Mute",
+        "edit": {
+          "expirewarns": {
+            "name": "Warns expire",
+            "answers": "`True` or `False`",
+            "recommended": "Recommended: `True`"
+          },
+          "expirewarnsafter": {
+            "name": "Warns expire after",
+            "answers": "`years` `year` `yrs` `yr` `y`\n`weeks` `week` `w`\n`days` `day` `d`\n`hours` `hour` `hrs` `hr` `h`\n`minutes` `minute` `mins` `min` `m`\n`seconds` `second` `secs` `sec` `s`\n`milliseconds` `millisecond` `msecs` `msec` `ms`"
+          },
+          "expiremutes": {
+            "name": "Mutes expire",
+            "answers": "`True` or `False`",
+            "recommended": "Recommended: `True`"
+          },
+          "expiremutesafter": {
+            "name": "Mutes expire after",
+            "answers": "`years` `year` `yrs` `yr` `y`\n`weeks` `week` `w`\n`days` `day` `d`\n`hours` `hour` `hrs` `hr` `h`\n`minutes` `minute` `mins` `min` `m`\n`seconds` `second` `secs` `sec` `s`\n`milliseconds` `millisecond` `msecs` `msec` `ms`",
+            "recommended": "Examples: `4w 15d`, `4 weeks 15 days`"
+          },
+          "muteban": {
+            "name": "Ban Members that left with an active Mute",
+            "answers": "`True` or `False`",
+            "recommended": "Recommended: `False`"
+          }
+        }
+      },
       "antispam": {
         "type": "Anti-Spam",
         "banenabledtof": "Ban Members",
@@ -1978,8 +2013,8 @@
           },
           "duration": {
             "name": "Duration",
-            "answers": "Duration of Punishment",
-            "recommended": "Examples: `2 hours 15 min`, `2h 15m`"
+            "answers": "Duration of Punishment\nExamples: `2 hours 15 min`, `2h 15m`",
+            "recommended": "`years` `year` `yrs` `yr` `y`\n`weeks` `week` `w`\n`days` `day` `d`\n`hours` `hour` `hrs` `hr` `h`\n`minutes` `minute` `mins` `min` `m`\n`seconds` `second` `secs` `sec` `s`\n`milliseconds` `millisecond` `msecs` `msec` `ms`"
           },
           "active": {
             "name": "Active",
