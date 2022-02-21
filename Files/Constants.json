@@ -927,6 +927,28 @@
             "required": true
           }
         },
+        "modsettings": {
+          "expirewarns": {
+            "key": "boolean",
+            "required": true
+          },
+          "expiremutes": {
+            "key": "boolean",
+            "required": true
+          },
+          "expiremutesafter": {
+            "key": "time",
+            "required": true
+          },
+          "expirewarnsafter": {
+            "key": "time",
+            "required": true
+          },
+          "muteban": {
+            "key": "boolean",
+            "required": true
+          }
+        },
         "antivirus": {
           "bantof": {
             "key": "boolean",
@@ -1380,6 +1402,7 @@
         "selfroles": ["selfroles"],
         "separators": ["roleseparator", "roleseparatorsettings"],
         "autopunish": ["autopunish"],
+        "modsettings": ["modsettings"],
         "suggestions": ["suggestionsettings"],
         "ticketing": [null],
         "verification": ["verification"],
@@ -1503,6 +1526,10 @@
           "add": ["separator"],
           "ident": "separator",
           "identType": "role"
+        },
+        "modsettings": {
+          "cols": ["guildid, expirewarns, expiremutes, muteban"],
+          "vals": [["{{msg.guild.id}}", false, false, false]]
         },
         "autopunish": {
           "cols": ["guildid, active, uniquetimestamp, warnamount, confirmationreq, sendtof"],
