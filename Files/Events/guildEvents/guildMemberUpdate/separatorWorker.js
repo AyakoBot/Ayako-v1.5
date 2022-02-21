@@ -1,4 +1,5 @@
 const { parentPort, workerData } = require('worker_threads');
+const jobs = require('node-schedule');
 
 start(workerData);
 
@@ -79,7 +80,8 @@ async function start(wd) {
       if (indexMember === obj.members.length - 1) resolve(true);
     });
   });
-  setInterval(() => {
+
+  jobs.scheduleJob('*/1 * * * * *', () => {
     if (resolved) parentPort.postMessage(membersWithRoles);
-  }, 1000);
+  });
 }

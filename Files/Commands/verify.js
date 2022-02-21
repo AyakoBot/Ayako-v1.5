@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const jobs = require('node-schedule');
 const { CaptchaGenerator } = require('captcha-canvas');
 
 module.exports = {
@@ -31,7 +32,9 @@ module.exports = {
         }
       } else {
         const m = await msg.client.ch.reply(msg, msg.lan.alreadyVerified);
-        setTimeout(() => m.delete().catch(() => {}), 5000);
+        jobs.scheduleJob(new Date(Date.now() + 5000), () => {
+          m.delete().catch(() => {});
+        });
         msg.delete().catch(() => {});
         return;
       }
@@ -106,7 +109,11 @@ module.exports = {
             prefix: msg.client.constants.standard.prefix,
           }),
         })
-        .then((m) => setTimeout(() => m.delete().catch(() => {}), 10000));
+        .then((m) => {
+          jobs.scheduleJob(new Date(Date.now() + 10000), () => {
+            m.delete().catch(() => {});
+          });
+        });
 
     const buttonsCollector = msg.m.createMessageComponentCollector({ time: 120000 });
     const messageCollector = msg.DM.createMessageCollector({ time: 120000 });
@@ -155,9 +162,9 @@ module.exports = {
       const ms = await msg.client.ch.send(msg.DM, {
         content: msg.client.ch.stp(msg.lan.wrongInput, { solution: captcha }),
       });
-      setTimeout(() => {
+      jobs.scheduleJob(new Date(Date.now() + 10000), () => {
         ms.delete().catch(() => {});
-      }, 10000);
+      });
       msg.client.verificationCodes.delete(`${message.channel.id}-${msg.guild.id}`);
       module.exports.startProcess(msg, null, logchannel);
     });

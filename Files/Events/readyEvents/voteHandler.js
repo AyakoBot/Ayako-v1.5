@@ -1,5 +1,6 @@
 const io = require('socket.io-client');
 const Discord = require('discord.js');
+const jobs = require('node-schedule');
 const client = require('../../BaseClient/DiscordClient');
 
 const timeouts = new Map();
@@ -49,12 +50,12 @@ const roleReward = async (voteData) => {
       voteData.user,
     ]);
 
-    clearTimeout(timeouts.get(voteData.user));
+    timeouts.get(voteData.user).cancel();
     timeouts.set(
       voteData.user,
-      setTimeout(() => {
+      jobs.scheduleJob(new Date(Date.now() + 43200000), () => {
         removeRoles(voteData.user, Date.now() + 43200000, member, guild);
-      }, 43200000),
+      }),
     );
     announcement(voter, guild.roles.cache.get(res.rows[0].roleid));
     return;
@@ -92,9 +93,9 @@ const roleReward = async (voteData) => {
 
   timeouts.set(
     voteData.user,
-    setTimeout(() => {
+    jobs.scheduleJob(new Date(Date.now() + 43200000), () => {
       removeRoles(voteData.user, delTime, member, guild);
-    }, 43200000),
+    }),
   );
 };
 
@@ -112,14 +113,14 @@ const queryCheck = async () => {
       } else {
         timeouts.set(
           row.userid,
-          setTimeout(async () => {
+          jobs.scheduleJob(new Date(Date.now() + Number(row.removetime) - Date.now()), async () => {
             removeRoles(
               row.userid,
               row.removetime,
               await client.guilds.cache.get('298954459172700181').members.fetch(row.userid),
               client.guilds.cache.get('298954459172700181'),
             );
-          }, row.removetime - Date.now()),
+          }),
         );
       }
     });
@@ -131,9 +132,9 @@ const queryCheck = async () => {
       if (row.removetime < Date.now()) {
         client.ch.query(`DELETE FROM votereminder WHERE userid = $1;`, [row.userid]);
       } else {
-        setTimeout(() => {
+        jobs.scheduleJob(new Date(Date.now() + Number(row.removetime) - Date.now()), async () => {
           endReminder(client.users.cache.get(row.userid), row.removetime);
-        }, row.removetime - Date.now());
+        });
       }
     });
   }
@@ -214,9 +215,9 @@ const reminder = async (voter) => {
     endTime,
   ]);
 
-  setTimeout(() => {
+  jobs.scheduleJob(new Date(Date.now() + 43200000), async () => {
     endReminder(voter, endTime);
-  }, 43200000);
+  });
 };
 
 const endReminder = async (voter, endTime) => {

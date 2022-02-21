@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const jobs = require('node-schedule');
 
 module.exports = {
   async execute(msg, embed) {
@@ -14,13 +15,20 @@ module.exports = {
         deleteTimeout = Number(msg.r.delete);
 
         if (deleteTimeout <= minimizeTimeout) {
-          setTimeout(() => msg.m.delete().catch(() => {}), deleteTimeout);
+          jobs.scheduleJob(new Date(Date.now() + deleteTimeout), () => {
+            msg.m?.delete().catch(() => {});
+          });
         } else {
           embed = new Discord.MessageEmbed(embed).setDescription(embed.fields[0].value);
           embed.fields = [];
 
-          setTimeout(() => msg.m.edit({ embeds: [embed] }).catch(() => {}), minimizeTimeout);
-          setTimeout(() => msg.m.delete().catch(() => {}), deleteTimeout);
+          jobs.scheduleJob(new Date(Date.now() + deleteTimeout), () => {
+            msg.m.edit({ embeds: [embed] }).catch(() => {});
+          });
+
+          jobs.scheduleJob(new Date(Date.now() + deleteTimeout), () => {
+            msg.m?.delete().catch(() => {});
+          });
         }
 
         break;

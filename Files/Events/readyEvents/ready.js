@@ -1,4 +1,5 @@
 // const { statcord } = require('../../BaseClient/Statcord');
+const jobs = require('node-schedule');
 
 module.exports = {
   once: true,
@@ -15,7 +16,7 @@ module.exports = {
 
     // statcord.autopost();
 
-    setInterval(() => {
+    jobs.scheduleJob('* * */1 * * *', () => {
       // require('./websiteFetcher').execute();
       if (new Date().getHours() === 0) {
         client.guilds.cache.forEach((g) => {
@@ -23,7 +24,7 @@ module.exports = {
         });
         client.ch.query('DELETE FROM toxicitycheck;');
       }
-    }, 3600000);
+    });
 
     require('./slashcommands').execute();
     require('./reminder').execute();
@@ -33,13 +34,21 @@ module.exports = {
     require('./antivirusBlocklistCacher').execute();
     require('./voteHandler').execute();
 
-    setInterval(() => require('./TimedManagers/TimedManagerSplitter').execute(), 2000);
-    setInterval(() => require('./prunelog').execute(), 120000);
-    setInterval(() => {
+    jobs.scheduleJob('*/2 * * * * *', () => {
+      require('./TimedManagers/TimedManagerSplitter').execute();
+    });
+    jobs.scheduleJob('* */2 * * * *', () => {
+      require('./prunelog').execute();
+    });
+    jobs.scheduleJob('* */1 * * * *', () => {
       require('./presence').execute();
       require('./verification').execute();
-    }, 60000);
-    setInterval(() => require('./antivirusBlocklistCacher').execute(), 1800000);
-    setInterval(() => console.log(new Date().toLocaleString()), 600000);
+    });
+    jobs.scheduleJob('* */30 * * * *', () => {
+      require('./antivirusBlocklistCacher').execute();
+    });
+    jobs.scheduleJob('* */10 * * * *', () => {
+      console.log(new Date().toLocaleString());
+    });
   },
 };

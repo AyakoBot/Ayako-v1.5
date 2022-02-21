@@ -68,7 +68,7 @@ module.exports = {
       //	if (now < expirationTime) {
       //		const timeLeft = (expirationTime - now) / 1000;
       //		const m = await msg.client.ch.reply(msg, msg.client.ch.stp(msg.language.commands.commandHandler.PleaseWait, {time: timeLeft.toFixed(1)}), {allowedMentions: {repliedUser: true}});
-      //		setTimeout(() => {
+      //	/* cron this*/	setTimeout(() => {
       //			m.delete().catch(() => {});
       //			msg.delete().catch(() => {});
       //		}, 5000);

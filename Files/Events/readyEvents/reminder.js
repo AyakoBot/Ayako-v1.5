@@ -17,7 +17,7 @@ module.exports = {
           if (user && user.id) {
             const timeLeft = duration - Date.now();
             if (timeLeft <= 0) end(guild, channel, user, text, duration);
-            else setTimeout(() => end(guild, channel, user, text, duration), timeLeft);
+            else /* cron this */ setTimeout(() => end(guild, channel, user, text, duration), timeLeft);
           }
         }
       });

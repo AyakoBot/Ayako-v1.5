@@ -1,14 +1,16 @@
+const jobs = require('node-schedule');
+
 module.exports = {
   execute: async (oldChannel, newChannel) => {
     const permDeleted = checkPermDeleted(oldChannel, newChannel);
     if (!permDeleted || !permDeleted.size) return;
 
-    setTimeout(async () => {
+    jobs.scheduleJob(new Date(Date.now() + 1000), async () => {
       const memberNotLeft = await checkMemberLeft(oldChannel, permDeleted);
       if (memberNotLeft) return;
 
       logPerms(permDeleted, newChannel);
-    }, 1000);
+    });
   },
 };
 

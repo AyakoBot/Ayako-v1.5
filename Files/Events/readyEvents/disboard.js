@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const jobs = require('node-schedule');
 
 module.exports = {
   async execute() {
@@ -18,7 +19,11 @@ module.exports = {
 
         if (guild && guild.id && channel && channel.id) {
           if (timeLeft <= 0) end(ch, guild, Constants, channel, res.rows[i]);
-          else setTimeout(() => end(ch, guild, Constants, channel, res.rows[i]), timeLeft);
+          else {
+            jobs.scheduleJob(new Date(Date.now() + timeLeft), async () => {
+              end(ch, guild, Constants, channel, res.rows[i]);
+            });
+          }
         }
       }
     }

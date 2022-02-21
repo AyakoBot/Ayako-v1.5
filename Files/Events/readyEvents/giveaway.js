@@ -47,7 +47,7 @@ module.exports = {
             if (timeLeft <= 0 && ended === false)
               end(r, channel, guild, description, endat, language, winnercount, abort);
             else if (timeLeft > 0 && ended === false)
-              setTimeout(
+              /* cron this */ setTimeout(
                 () => end(r, channel, guild, description, endat, language, winnercount, abort),
                 timeLeft,
               );

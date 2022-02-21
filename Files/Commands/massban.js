@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const jobs = require('node-schedule');
 
 module.exports = {
   name: 'massban',
@@ -120,10 +121,11 @@ module.exports = {
           else replyEmbed.setDescription(`\u200b${descS.join(' ')}`);
         }
       });
-      const editIntervalS = setInterval(async () => {
-        if (descS.length !== uniqueUsers.length) await msg.m.edit({ embeds: [replyEmbed] });
-      }, 5000);
-      const intervalS = setInterval(async () => {
+      const editIntervalS = jobs.scheduleJob('*/5 * * * * *', () => {
+        if (descS.length !== uniqueUsers.length) msg.m.edit({ embeds: [replyEmbed] });
+      });
+
+      const intervalS = jobs.scheduleJob('*/1 * * * * *', () => {
         if (descS.length === uniqueUsers.length) {
           if (`${descS}`.length > 2048)
             replyEmbed.setDescription(
@@ -135,17 +137,17 @@ module.exports = {
             iconURL: msg.client.constants.emotes.tickLink,
             url: msg.client.constants.standard.invite,
           });
-          clearInterval(intervalS);
-          clearInterval(editIntervalS);
-          setTimeout(() => {
-            clearInterval(interval);
-          }, 3600000);
-          setTimeout(() => {
+          intervalS.cancel();
+          editIntervalS.cancel();
+          jobs.scheduleJob(new Date(Date.now() + 3600000), () => {
+            interval.cancel();
+          });
+          jobs.scheduleJob(new Date(Date.now() + 2000), () => {
             if (!descS.length) msg.m.delete();
             else msg.m.edit({ embeds: [replyEmbed] });
-          }, 2000);
+          });
         }
-      }, 1000);
+      });
     }
 
     if (uniqueFails.length !== 0) {
@@ -169,11 +171,11 @@ module.exports = {
         else replyEmbed.setDescription(`\u200b${descF.join('')}`);
       });
 
-      const editintervalF = setInterval(async () => {
-        if (descF.length !== uniqueFails.length) await m.edit({ embeds: [replyEmbed] });
-      }, 5000);
+      const editintervalF = jobs.scheduleJob('*/5 * * * * *', () => {
+        if (descF.length !== uniqueFails.length) m.edit({ embeds: [replyEmbed] });
+      });
 
-      const intervalF = setInterval(async () => {
+      const intervalF = jobs.scheduleJob('*/1 * * * * *', () => {
         if (descF.length === uniqueFails.length) {
           if (`${descF}`.length > 2048)
             replyEmbed.setDescription(
@@ -186,21 +188,21 @@ module.exports = {
             url: msg.client.constants.standard.invite,
           });
 
-          clearInterval(intervalF);
-          setTimeout(() => {
-            clearInterval(interval);
-          }, 3600000);
+          intervalF.cancel();
+          editintervalF.cancel();
 
-          clearInterval(editintervalF);
-          setTimeout(() => {
+          jobs.scheduleJob(new Date(Date.now() + 3600000), () => {
+            interval.cancel();
+          });
+          jobs.scheduleJob(new Date(Date.now() + 2000), () => {
             if (!descF.length) m.delete();
             else m.edit({ embeds: [replyEmbed] });
-          }, 2000);
+          });
         }
-      }, 1000);
+      });
     }
 
-    const interval = setInterval(async () => {
+    const interval = jobs.scheduleJob('*/1 * * * * *', () => {
       if (uniqueUsers.length === descS.length && uniqueFails.length === descF.length) {
         const logembed = new Discord.MessageEmbed()
           .setAuthor({
@@ -228,9 +230,10 @@ module.exports = {
             });
           } else msg.logchannels.forEach((c) => msg.client.ch.send(c, { embeds: [logembed] }));
         }
-        clearInterval(interval);
+        interval.cancel();
       }
-    }, 1000);
+    });
+
     return null;
   },
 };

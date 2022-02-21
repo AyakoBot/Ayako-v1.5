@@ -1,5 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 const { Worker } = require('worker_threads');
+const jobs = require('node-schedule');
 const ch = require('../../../BaseClient/ClientHelper');
 
 const UpdateWorker = new Worker('./Files/Events/guildevents/guildMemberUpdate/separatorUpdater.js');
@@ -221,45 +222,49 @@ module.exports = {
       membersWithRoles.forEach((raw, index) => {
         if (!msg.client.separatorAssigner[msg.guild.id])
           msg.client.separatorAssigner[msg.guild.id] = {};
-        msg.client.separatorAssigner[msg.guild.id][index] = setTimeout(async () => {
-          const giveRoles = raw.giveTheseRoles;
-          const takeRoles = raw.takeTheseRoles;
-          const member = await msg.guild.members.fetch(raw.id).catch(() => {});
-          if (member) {
-            const roles = giveRoles ? [...member._roles, ...giveRoles] : member._roles;
-            if (takeRoles) takeRoles.forEach((r) => roles.splice(roles.indexOf(r), 1));
-            if ((giveRoles && giveRoles.length) || (takeRoles && takeRoles.length))
-              await msg.client.eris
-                .editGuildMember(
-                  msg.guild.id,
-                  member.user.id,
-                  { roles },
-                  msg.language.autotypes.separators,
-                )
-                .catch(() => {});
-          }
-          if (index === membersWithRoles.length - 1 && msg.lastTime) {
-            embed
-              .setAuthor({
-                name: msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
-                iconURL: msg.client.constants.emotes.settingsLink,
-                url: msg.client.constants.standard.invite,
-              })
-              .setDescription(msg.lan.edit.oneTimeRunner.finished);
-            msg.m.edit({ embeds: [embed], components: [] }).catch(() => {});
-            msg.client.ch.query(
-              'UPDATE roleseparatorsettings SET stillrunning = $1, duration = $3, startat = $4 WHERE guildid = $2;',
-              [false, msg.guild.id, null, null],
-            );
-          } else if (index === membersWithRoles.length - 1) {
-            msg.lastTime = true;
-            this.oneTimeRunner(msg, embed);
-          } else
-            msg.client.ch.query(
-              'UPDATE roleseparatorsettings SET index = $1, length = $3 WHERE guildid = $2;',
-              [index, msg.guild.id, membersWithRoles.length - 1],
-            );
-        }, index * 3000);
+
+        msg.client.separatorAssigner[msg.guild.id][index] = jobs.scheduleJob(
+          new Date(Date.now() + index * 3000),
+          async () => {
+            const giveRoles = raw.giveTheseRoles;
+            const takeRoles = raw.takeTheseRoles;
+            const member = await msg.guild.members.fetch(raw.id).catch(() => {});
+            if (member) {
+              const roles = giveRoles ? [...member._roles, ...giveRoles] : member._roles;
+              if (takeRoles) takeRoles.forEach((r) => roles.splice(roles.indexOf(r), 1));
+              if ((giveRoles && giveRoles.length) || (takeRoles && takeRoles.length))
+                await msg.client.eris
+                  .editGuildMember(
+                    msg.guild.id,
+                    member.user.id,
+                    { roles },
+                    msg.language.autotypes.separators,
+                  )
+                  .catch(() => {});
+            }
+            if (index === membersWithRoles.length - 1 && msg.lastTime) {
+              embed
+                .setAuthor({
+                  name: msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
+                  iconURL: msg.client.constants.emotes.settingsLink,
+                  url: msg.client.constants.standard.invite,
+                })
+                .setDescription(msg.lan.edit.oneTimeRunner.finished);
+              msg.m.edit({ embeds: [embed], components: [] }).catch(() => {});
+              msg.client.ch.query(
+                'UPDATE roleseparatorsettings SET stillrunning = $1, duration = $3, startat = $4 WHERE guildid = $2;',
+                [false, msg.guild.id, null, null],
+              );
+            } else if (index === membersWithRoles.length - 1) {
+              msg.lastTime = true;
+              this.oneTimeRunner(msg, embed);
+            } else
+              msg.client.ch.query(
+                'UPDATE roleseparatorsettings SET index = $1, length = $3 WHERE guildid = $2;',
+                [index, msg.guild.id, membersWithRoles.length - 1],
+              );
+          },
+        );
       });
     } else {
       embed

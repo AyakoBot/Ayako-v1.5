@@ -2,6 +2,7 @@ const urlCheck = require('valid-url');
 const request = require('request');
 const fs = require('fs');
 const Discord = require('discord.js');
+const jobs = require('node-schedule');
 
 const { Worker } = require('worker_threads');
 
@@ -156,12 +157,12 @@ const prepare = async (msg, lan, check, language) => {
       badLinks,
     });
 
-    setTimeout(() => {
+    jobs.scheduleJob(new Date(Date.now() + 120000), () => {
       if (!exited) {
         AVworker.terminate();
         timedOut({ msg, lan, check, linkObject, language });
       }
-    }, 120000);
+    });
   });
 };
 
