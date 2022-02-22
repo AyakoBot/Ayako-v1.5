@@ -13,27 +13,36 @@ UpdateWorker.on('error', (error) => {
   throw error;
 });
 
+const isWaiting = new Set();
+
 module.exports = {
-  async execute(oldMember, newMember) {
+  execute(oldMember, newMember) {
     if (oldMember._roles.sort().join(',') === newMember._roles.sort().join(',')) return;
-    const ress = await newMember.client.ch.query(
-      'SELECT stillrunning FROM roleseparatorsettings WHERE guildid = $1;',
-      [newMember.guild.id],
-    );
-    if (ress && ress.rowCount > 0 && ress.rows[0].stillrunning) return;
-    const res = await newMember.client.ch.query(
-      'SELECT * FROM roleseparator WHERE active = true AND guildid = $1;',
-      [newMember.guild.id],
-    );
-    const language = await newMember.client.ch.languageSelector(newMember.guild);
-    UpdateWorker.postMessage({
-      roles: newMember._roles,
-      guildid: newMember.guild.id,
-      userid: newMember.user.id,
-      guildroles: new Map(newMember.guild.roles.cache),
-      highest: newMember.guild.roles.highest,
-      res: res?.rows,
-      language,
+
+    if (isWaiting.has(`${newMember.user.id}-${newMember.guild.id}`)) return;
+    isWaiting.add(`${newMember.user.id}-${newMember.guild.id}`);
+    jobs.scheduleJob(new Date(Date.now() + 2000), async () => {
+      isWaiting.delete(`${newMember.user.id}-${newMember.guild.id}`);
+
+      const ress = await newMember.client.ch.query(
+        'SELECT stillrunning FROM roleseparatorsettings WHERE guildid = $1;',
+        [newMember.guild.id],
+      );
+      if (ress && ress.rowCount > 0 && ress.rows[0].stillrunning) return;
+      const res = await newMember.client.ch.query(
+        'SELECT * FROM roleseparator WHERE active = true AND guildid = $1;',
+        [newMember.guild.id],
+      );
+      const language = await newMember.client.ch.languageSelector(newMember.guild);
+      UpdateWorker.postMessage({
+        roles: newMember._roles,
+        guildid: newMember.guild.id,
+        userid: newMember.user.id,
+        guildroles: new Map(newMember.guild.roles.cache),
+        highest: newMember.guild.roles.highest,
+        res: res?.rows,
+        language,
+      });
     });
   },
   async oneTimeRunner(msg, embed, clickButton) {
