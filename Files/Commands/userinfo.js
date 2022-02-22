@@ -20,10 +20,10 @@ module.exports = {
     }
 
     const flags = await user.fetchFlags(true);
-    const userflags = msg.client.ch.userFlagCalc(msg.client, flags.bitfield, msg.language, true);
     if (user.bot && !flags.has(65536)) {
-      userflags.push(`${msg.client.constants.emotes.bot} ${msg.language.bot}`);
+      flags.add(2048);
     }
+    const userflags = msg.client.ch.userFlagCalc(msg.client, flags.bitfield, msg.language, true);
     const con = msg.client.constants.commands[this.name];
 
     const userEmbed = new Discord.MessageEmbed()

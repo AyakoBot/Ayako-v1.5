@@ -12,7 +12,7 @@ module.exports = {
           `${log}`.includes('Manager was destroyed'),
       )
     ) {
-      client.destroy().catch(() => {});
+      client.destroy();
       client.login(auth.token).catch(() => {});
       return;
     }
