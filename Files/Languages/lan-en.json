@@ -3227,7 +3227,8 @@
     "VERIFIED_BOT": "Verified Bot",
     "EARLY_VERIFIED_BOT_DEVELOPER": "Early Verified Bot Developer",
     "DISCORD_CERTIFIED_MODERATOR": "Discord Certified Moderator",
-    "BOT_HTTP_INTERACTIONS": "Bot uses only HTTP Interactions and is shown in the online Member List"
+    "BOT_HTTP_INTERACTIONS": "Bot uses only HTTP Interactions and is shown in the online Member List",
+    "BOT": "Unverified Bot"
   },
   "featuresName": "Features",
   "none": "None",

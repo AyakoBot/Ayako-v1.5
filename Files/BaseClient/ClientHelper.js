@@ -309,6 +309,9 @@ module.exports = {
     if (BitField.has(1024)) {
       Flags.push(`${lan.userFlags.TEAM_USER}`);
     }
+    if (BitField.has(2048)) {
+      Flags.push(`${emotes ? client.constants.emotes.userFlags.BOT : ''} ${lan.userFlags.BOT}`);
+    }
     if (BitField.has(16384)) {
       Flags.push(
         `${emotes ? client.constants.emotes.userFlags.BUGHUNTER_LEVEL_2 : ''} ${
