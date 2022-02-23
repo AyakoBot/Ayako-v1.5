@@ -79,7 +79,7 @@ module.exports = {
                 lan.inviteInfoTitle,
                 ch.stp(lan.inviteInfoUses, {
                   invite: usedInvite,
-                  inviter: usedInvite.inviter.tag
+                  inviter: usedInvite.inviter?.tag
                     ? usedInvite.inviter
                     : { tag: language.unknown, id: usedInvite.inviter },
                   mention:
