@@ -25,8 +25,11 @@ module.exports = {
 
       const voter = await client.users.fetch(voteData.user);
       console.log(`User ${voteData.user} has voted`);
-      roleReward(voteData);
-      reminder(voter);
+
+      jobs.scheduleJob(new Date(Date.now() + 1000), () => {
+        roleReward(voteData);
+        reminder(voter);
+      });
     });
   },
 };
