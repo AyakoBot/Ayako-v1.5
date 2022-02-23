@@ -4,14 +4,14 @@ module.exports = {
   execute: async (guild) => {
     await guild.members.fetch().catch(() => {});
 
-    const res = await guild.client.ch.query(`SELECT * FROM nitrousers WHERE guild = $1;`, [
+    const res = await guild.client.ch.query(`SELECT * FROM nitrousers WHERE guildid = $1;`, [
       guild.id,
     ]);
 
     if (!res || !res.rowCount) return;
     res.rows.forEach(async (row) => {
       if (
-        row.booststarts.length > row.boostends.length &&
+        row.booststarts?.length > row.boostends?.length &&
         !guild.members.cache.get(row.userid)?.premiumSinceTimestamp
       ) {
         await guild.client.ch.query(
@@ -26,7 +26,7 @@ module.exports = {
       }
 
       if (
-        row.booststarts.length === row.boostends.length &&
+        row.booststarts?.length === row.boostends?.length &&
         guild.members.cache.get(row.userid)?.premiumSinceTimestamp
       ) {
         await guild.client.ch.query(

@@ -19,6 +19,8 @@ module.exports = {
     const returnEmbed = new Discord.MessageEmbed();
 
     answer.deferReply();
+    msg.m.reactions.removeAll().catch(() => {});
+    disableComponents(msg, msg.m.embeds[0]);
 
     require('../../../Events/guildEvents/guildMemberUpdate/separator').oneTimeRunner(
       msg,
@@ -28,4 +30,14 @@ module.exports = {
 
     return null;
   },
+};
+
+const disableComponents = async (msg, embed) => {
+  msg.m.components.forEach((componentRow, i) => {
+    componentRow.components.forEach((component, j) => {
+      msg.m.components[i].components[j].disabled = true;
+    });
+  });
+
+  await msg.m.edit({ embeds: [embed], components: msg.m.components });
 };
