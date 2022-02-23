@@ -75,6 +75,7 @@ module.exports = {
     if (user.accentColor) userEmbed.setFooter({ text: msg.lan.footer });
 
     const embeds = [userEmbed];
+    const components = [];
     const member = await msg.guild.members.fetch(user.id).catch(() => {});
     if (member) {
       const memberEmbed = new Discord.MessageEmbed()
@@ -126,12 +127,94 @@ module.exports = {
       if (msg.client.ch.displayAvatarURL(member) !== msg.client.ch.displayAvatarURL(user)) {
         memberEmbed.setThumbnail(msg.client.ch.displayAvatarURL(member));
       }
+
       embeds.push(memberEmbed);
+      components.push(
+        [
+          new Discord.MessageButton()
+            .setLabel('viewRoles')
+            .setDisabled(member.roles.cache.size <= 1)
+            .setStyle('SECONDARY')
+            .setCustomId('roles'),
+        ],
+        [
+          new Discord.MessageButton()
+            .setLabel('viewBasicPermissions')
+            .setCustomId('basicPerms')
+            .setStyle('SECONDARY'),
+        ],
+        [
+          new Discord.MessageSelectMenu()
+            .setPlaceholder('viewChannelPermissions')
+            .setMaxValues(1)
+            .setMinValues(1)
+            .setCustomId('perms')
+            .setOptions(getChannelOptions(msg).slice(0, 25)),
+        ],
+      );
     }
 
-    msg.client.ch.reply(msg, { embeds });
+    msg.client.ch.reply(msg, { embeds, components: msg.client.ch.buttonRower(components) });
   },
 };
+
+const getChannelOptions = (msg) => {
+  const options = [];
+
+  const validTypes = [
+    'GUILD_VOICE',
+    'GUILD_TEXT',
+    'GUILD_CATEGORY',
+    'GUILD_NEWS',
+    'GUILD_NEWS_THREAD',
+    'GUILD_PUBLIC_THREAD',
+    'GUILD_PRIVATE_THREAD',
+    'GUILD_STAGE_VOICE',
+  ];
+
+  const categories = new Discord.Collection();
+
+  msg.guild.channels.cache
+    .sort((a, b) => Number(a.rawPosition) - Number(b.rawPosition))
+    .forEach((channel) => {
+      if (channel.type === 'GUILD_CATEGORY') {
+        categories.set(
+          channel.id,
+          msg.guild.channels.cache.filter((c) => c.parentId === channel.id),
+        );
+      } else if (!channel.parent) {
+        categories.set(channel.id, channel);
+      }
+    });
+
+  categories.forEach((category) => {
+    if (category.id) return;
+    category.sort((a, b) => a.rawPosition - b.rawPosition);
+  });
+  categories.sort((a, b) => {
+    if (!a.type) {
+      const channel = a.first().parent;
+      return channel.rawPosition - b.rawPosition;
+    }
+    if (!b.type) {
+      const channel = b.first().parent;
+      return a.rawPosition - channel.rawPosition;
+    }
+    return a.rawPosition - b.rawPosition;
+  });
+
+  console.log(categories);
+
+  return options;
+};
+
+/*
+        options.push({
+          label: `${channel.name}`,
+          value: `${channel.id}`,
+          emoji: msg.client.constants.emotes.channelTypes[channel.type],
+        });
+        */
 
 const getBoostEmote = (member) => {
   const time = Math.abs(member.premiumSinceTimestamp - Date.now());
