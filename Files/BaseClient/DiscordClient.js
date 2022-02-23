@@ -139,7 +139,7 @@ const getClient = () => {
     failIfNotExists: false,
     shards: 'auto',
     partials: ['MESSAGE', 'REACTION', 'CHANNEL', 'USER', 'GUILD_MEMBER', 'GUILD_SCHEDULED_EVENT'],
-    intents: new Discord.Intents(14335),
+    intents: new Discord.Intents(14079),
 
     allowedMentions: {
       parse: ['users', 'roles'],
