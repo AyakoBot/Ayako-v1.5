@@ -133,7 +133,7 @@ const queryCheck = async () => {
         client.ch.query(`DELETE FROM votereminder WHERE userid = $1;`, [row.userid]);
       } else {
         jobs.scheduleJob(new Date(Date.now() + Number(row.removetime) - Date.now()), async () => {
-          endReminder(client.users.cache.get(row.userid), row.removetime);
+          endReminder(await client.users.fetch(row.userid), row.removetime);
         });
       }
     });
