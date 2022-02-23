@@ -312,6 +312,9 @@ module.exports = {
     if (BitField.has(2048)) {
       Flags.push(`${emotes ? client.constants.emotes.userFlags.BOT : ''} ${lan.userFlags.BOT}`);
     }
+    if (BitField.has(4096)) {
+      Flags.push(`${emotes ? client.constants.emotes.userFlags.NITRO : ''} ${lan.userFlags.NITRO}`);
+    }
     if (BitField.has(16384)) {
       Flags.push(
         `${emotes ? client.constants.emotes.userFlags.BUGHUNTER_LEVEL_2 : ''} ${
@@ -342,6 +345,51 @@ module.exports = {
     }
     if (BitField.has(524288)) {
       Flags.push(`${lan.userFlags.BOT_HTTP_INTERACTIONS}`);
+    }
+    if (BitField.has(1048576)) {
+      Flags.push(
+        `${emotes ? client.constants.emotes.userFlags.BOOST1 : ''} ${lan.userFlags.BOOST1}`,
+      );
+    }
+    if (BitField.has(2097152)) {
+      Flags.push(
+        `${emotes ? client.constants.emotes.userFlags.BOOST2 : ''} ${lan.userFlags.BOOST2}`,
+      );
+    }
+    if (BitField.has(4194304)) {
+      Flags.push(
+        `${emotes ? client.constants.emotes.userFlags.BOOST3 : ''} ${lan.userFlags.BOOST3}`,
+      );
+    }
+    if (BitField.has(8388608)) {
+      Flags.push(
+        `${emotes ? client.constants.emotes.userFlags.BOOST6 : ''} ${lan.userFlags.BOOST6}`,
+      );
+    }
+    if (BitField.has(16777216)) {
+      Flags.push(
+        `${emotes ? client.constants.emotes.userFlags.BOOST9 : ''} ${lan.userFlags.BOOST9}`,
+      );
+    }
+    if (BitField.has(33554432)) {
+      Flags.push(
+        `${emotes ? client.constants.emotes.userFlags.BOOST12 : ''} ${lan.userFlags.BOOST12}`,
+      );
+    }
+    if (BitField.has(67108864)) {
+      Flags.push(
+        `${emotes ? client.constants.emotes.userFlags.BOOST15 : ''} ${lan.userFlags.BOOST15}`,
+      );
+    }
+    if (BitField.has(134217728)) {
+      Flags.push(
+        `${emotes ? client.constants.emotes.userFlags.BOOST18 : ''} ${lan.userFlags.BOOST18}`,
+      );
+    }
+    if (BitField.has(268435456)) {
+      Flags.push(
+        `${emotes ? client.constants.emotes.userFlags.BOOST24 : ''} ${lan.userFlags.BOOST24}`,
+      );
     }
 
     return Flags;
@@ -571,15 +619,9 @@ module.exports = {
   /**
    * Extracts a Dynamic Avatar URL from a Discord User.
    * @constructor
-   * @param {object} rawUser - The User Object the Avatar URL is extracted from.
+   * @param {object} user - The User/Member Object the Avatar URL is extracted from.
    */
-  displayAvatarURL: (rawUser) => {
-    let user = {};
-    if (rawUser.user) {
-      user = rawUser.user;
-    } else {
-      user = rawUser;
-    }
+  displayAvatarURL: (user) => {
     return user.displayAvatarURL({
       dynamic: true,
       size: 2048,
