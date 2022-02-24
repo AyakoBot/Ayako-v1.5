@@ -1069,7 +1069,10 @@
       "permissions": "Permissions",
       "boosting": "Boosting",
       "boostingSince": "Boosting Since",
-      "communicationDisabledUntil": "Timed out until: "
+      "communicationDisabledUntil": "Timed out until: ",
+      "viewRoles": "View Roles",
+      "viewBasicPermissions": "View Basic Permissions",
+      "viewChannelPermissions": "View Channel Permissions"
     },
     "rank": {
       "description": "Display anyones current Server/Global Rank",
