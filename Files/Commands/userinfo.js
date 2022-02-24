@@ -75,7 +75,7 @@ module.exports = {
     if (user.accentColor) userEmbed.setFooter({ text: msg.lan.footer });
 
     const embeds = [userEmbed];
-    const components = [];
+    let components = [];
     const member = await msg.guild.members.fetch(user.id).catch(() => {});
     if (member) {
       const memberEmbed = new Discord.MessageEmbed()
@@ -129,92 +129,128 @@ module.exports = {
       }
 
       embeds.push(memberEmbed);
-      components.push(
-        [
-          new Discord.MessageButton()
-            .setLabel('viewRoles')
-            .setDisabled(member.roles.cache.size <= 1)
-            .setStyle('SECONDARY')
-            .setCustomId('roles'),
-        ],
-        [
-          new Discord.MessageButton()
-            .setLabel('viewBasicPermissions')
-            .setCustomId('basicPerms')
-            .setStyle('SECONDARY'),
-        ],
-        [
-          new Discord.MessageSelectMenu()
-            .setPlaceholder('viewChannelPermissions')
-            .setMaxValues(1)
-            .setMinValues(1)
-            .setCustomId('perms')
-            .setOptions(getChannelOptions(msg).slice(0, 25)),
-        ],
-      );
+      components = getComponents(msg, member, 1);
     }
 
-    msg.client.ch.reply(msg, { embeds, components: msg.client.ch.buttonRower(components) });
+    const m = await msg.client.ch.reply(msg, {
+      embeds,
+      components: msg.client.ch.buttonRower(components),
+    });
+
+    if (components) {
+      interactionHandler(msg, m, embeds, member);
+    }
   },
 };
 
-const getChannelOptions = (msg) => {
-  const options = [];
-
-  const validTypes = [
-    'GUILD_VOICE',
-    'GUILD_TEXT',
-    'GUILD_CATEGORY',
-    'GUILD_NEWS',
-    'GUILD_NEWS_THREAD',
-    'GUILD_PUBLIC_THREAD',
-    'GUILD_PRIVATE_THREAD',
-    'GUILD_STAGE_VOICE',
-  ];
-
-  const categories = new Discord.Collection();
-
-  msg.guild.channels.cache
-    .sort((a, b) => Number(a.rawPosition) - Number(b.rawPosition))
-    .forEach((channel) => {
-      if (channel.type === 'GUILD_CATEGORY') {
-        categories.set(
-          channel.id,
-          msg.guild.channels.cache.filter((c) => c.parentId === channel.id),
-        );
-      } else if (!channel.parent) {
-        categories.set(channel.id, channel);
+const interactionHandler = (msg, m, embeds, member) => {
+  let page = 1;
+  const collector = m.createMessageComponentCollector({ time: 60000 });
+  collector.on('collect', (interaction) => {
+    switch (interaction.customId) {
+      default: {
+        break;
       }
-    });
-
-  categories.forEach((category) => {
-    if (category.id) return;
-    category.sort((a, b) => a.rawPosition - b.rawPosition);
-  });
-  categories.sort((a, b) => {
-    if (!a.type) {
-      const channel = a.first().parent;
-      return channel.rawPosition - b.rawPosition;
+      case 'roles': {
+        rolesHandler(interaction, msg, member);
+        break;
+      }
+      case 'basicPerms': {
+        basicPermsHandler(interaction, msg, member);
+        break;
+      }
+      case 'perms': {
+        permsHandler(interaction, msg, member);
+        break;
+      }
+      case 'back': {
+        page -= 1;
+        interaction
+          .update({
+            embeds,
+            components: msg.client.ch.buttonRower(getComponents(msg, member, page)),
+          })
+          .catch(() => {});
+        break;
+      }
+      case 'next': {
+        page += 1;
+        interaction
+          .update({
+            embeds,
+            components: msg.client.ch.buttonRower(getComponents(msg, member, page)),
+          })
+          .catch(() => {});
+        break;
+      }
     }
-    if (!b.type) {
-      const channel = b.first().parent;
-      return a.rawPosition - channel.rawPosition;
-    }
-    return a.rawPosition - b.rawPosition;
+  });
+};
+
+const getComponents = (msg, member, page) => {
+  return [
+    [
+      new Discord.MessageButton()
+        .setLabel(msg.lan.viewRoles)
+        .setDisabled(member.roles.cache.size <= 1)
+        .setStyle('SECONDARY')
+        .setCustomId('roles'),
+      new Discord.MessageButton()
+        .setLabel(msg.lan.viewBasicPermissions)
+        .setCustomId('basicPerms')
+        .setStyle('SECONDARY'),
+    ],
+    [
+      new Discord.MessageSelectMenu()
+        .setPlaceholder(msg.lan.viewChannelPermissions)
+        .setMaxValues(1)
+        .setMinValues(1)
+        .setCustomId('perms')
+        .setOptions(getChannelOptions(msg).slice((page - 1) * 25, page * 25)),
+    ],
+    [
+      new Discord.MessageButton()
+        .setCustomId('back')
+        .setEmoji(msg.client.constants.emotes.back)
+        .setStyle('SECONDARY')
+        .setDisabled(page === 1),
+      new Discord.MessageButton()
+        .setCustomId('next')
+        .setEmoji(msg.client.constants.emotes.forth)
+        .setStyle('SECONDARY')
+        .setDisabled(page === Math.ceil(msg.guild.channels.cache.size / 25)),
+    ],
+  ];
+};
+
+const getChannelOptions = (msg) => {
+  const channelsWithoutCategory = msg.guild.channels.cache.filter(
+    (c) => !c.parent && c.type !== 'GUILD_CATEGORY',
+  );
+  const categories = msg.guild.channels.cache.filter((c) => c.type === 'GUILD_CATEGORY');
+  const channels = msg.guild.channels.cache.filter((c) => c.type !== 'GUILD_CATEGORY' && c.parent);
+
+  channelsWithoutCategory.sort((a, b) => a.rawPosition - b.rawPosition);
+  categories.sort((a, b) => a.rawPosition - b.rawPosition);
+  channels.sort((a, b) => a.rawPosition - b.rawPosition);
+
+  const sorted = [...channelsWithoutCategory, ...categories].map((a) => a[1]);
+
+  channels.forEach((channel) => {
+    const index = sorted.findIndex((c) => c.id === channel.parent.id);
+    sorted.splice(index + 1, 0, channel);
   });
 
-  console.log(categories);
+  const options = sorted.map((c) => {
+    return {
+      label: c.name,
+      value: c.id,
+      emoji: msg.client.constants.emotes.channelTypes[c.type],
+    };
+  });
 
   return options;
 };
-
-/*
-        options.push({
-          label: `${channel.name}`,
-          value: `${channel.id}`,
-          emoji: msg.client.constants.emotes.channelTypes[channel.type],
-        });
-        */
 
 const getBoostEmote = (member) => {
   const time = Math.abs(member.premiumSinceTimestamp - Date.now());
@@ -262,13 +298,33 @@ const getBoosting = (flags, user) => {
 };
 
 /*
-        .setDescription(
-          `**${msg.language.roles}**:\n${member.roles.cache
-            .sort((a, b) => b.rawPosition - a.rawPosition)
-            .map((r) => `${r}`)
-            .join('\n')}`,
-        )
+
 
 
         permissions
         */
+const rolesHandler = async (interaction, msg, member) => {
+  const res = await msg.client.ch.query(
+    `SELECT * FROM roleseparator WHERE guildid = $1 AND active = true;`,
+    [msg.guild.id],
+  );
+
+  if (res && res.rowCount) {
+
+    interaction.reply({ embeds: [embed], ephemeral: true });
+    return;
+  }
+
+  const embed = new Discord.MessageEmbed().setDescription(
+    `**${msg.language.roles}**:\n${member.roles.cache
+      .sort((a, b) => b.rawPosition - a.rawPosition)
+      .map((r) => `${r}`)
+      .join('\n')}`,
+  );
+
+  interaction.reply({ embeds: [embed], ephemeral: true });
+};
+
+const basicPermsHandler = (interaction, msg, member) => {};
+
+const permsHandler = (interaction, msg, member) => {};
