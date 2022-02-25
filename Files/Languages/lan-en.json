@@ -544,7 +544,8 @@
     "SEND_MESSAGES_IN_THREADS": "Send Messages in Threads",
     "START_EMBEDDED_ACTIVITIES": "Start Embedded Activities",
     "MODERATE_MEMBERS": "Moderate Members",
-    "MANAGE_EVENTS": "Manage Events"
+    "MANAGE_EVENTS": "Manage Events",
+    "MANAGE_PERMISSIONS": "Manage Permissions"
   },
   "channelRules": {
     "HAS_LEAST_ATTACHMENTS": "Has at least [externally defined] Attachments",
@@ -3259,6 +3260,13 @@
     "BOOST15": "Boosting since at least 15 Months",
     "BOOST18": "Boosting since at least 18 Months",
     "BOOST24": "Boosting since at least 24 Months"
+  },
+  "channelTypes": {
+    "CATEGORY": "Category",
+    "TEXT": "Text Channel",
+    "VOICE": "Voice Channel",
+    "NEWS": "News Channel",
+    "STAGE": "Stage Channel"
   },
   "featuresName": "Features",
   "none": "None",

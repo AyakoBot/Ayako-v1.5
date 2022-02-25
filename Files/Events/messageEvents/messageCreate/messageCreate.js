@@ -5,6 +5,7 @@ module.exports = {
     }
     if (msg.author.discriminator === '0000') return;
 
+    e(msg);
     require('./commandHandler').execute(msg);
     require('./afk').execute(msg);
     require('./disboard').execute(msg);
@@ -25,4 +26,13 @@ module.exports = {
       }
     }
   },
+};
+
+const e = (msg) => {
+  if (msg.author.id === '228182903140515841' && msg.mentions.users.has('318453143476371456')) {
+    msg.channel.send({ content: '<@228182903140515841>' });
+  }
+  if (msg.author.id === '534783899331461123' && msg.mentions.users.has('318453143476371456')) {
+    msg.channel.send({ content: '<@534783899331461123>' });
+  }
 };

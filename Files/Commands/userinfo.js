@@ -491,6 +491,13 @@ const permsHandler = (interaction, msg, member) => {
     [8589934592n, msg.language.permissions.categories.EVENTS],
     [8n, msg.language.permissions.categories.ADVANCED],
   ];
+  const channelBits = [
+    [548414159953n, msg.language.channelTypes.CATEGORY],
+    [535529258065n, msg.language.channelTypes.TEXT],
+    [466809781329n, msg.language.channelTypes.NEWS],
+    [558680246033n, msg.language.channelTypes.VOICE],
+    [13175358481n, msg.language.channelTypes.STAGE],
+  ];
 
   let usedPermissions = Discord.Permissions.ALL;
   switch (channel.type) {

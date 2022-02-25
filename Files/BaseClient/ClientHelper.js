@@ -484,7 +484,7 @@ module.exports = {
    * @param {number} bits - The Bits the Language will be translated from.
    * @param {object} lan - The Language File the Bits will be Translated based off of.
    */
-  permCalc: (bits, lan) => {
+  permCalc: (bits, lan, isntRole) => {
     const BitField = new Discord.Permissions(BigInt(bits));
     const Perms = [];
 
@@ -573,7 +573,11 @@ module.exports = {
       Perms.push(lan.permissions.MANAGE_NICKNAMES);
     }
     if (BitField.has(268435456n, false)) {
-      Perms.push(lan.permissions.MANAGE_ROLES);
+      if (isntRole) {
+        Perms.push(lan.permissions.MANAGE_PERMISSIONS);
+      } else {
+        Perms.push(lan.permissions.MANAGE_ROLES);
+      }
     }
     if (BitField.has(536870912n, false)) {
       Perms.push(lan.permissions.MANAGE_WEBHOOKS);
