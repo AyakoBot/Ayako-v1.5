@@ -30,9 +30,8 @@ module.exports = {
       flags.add(4096);
     }
 
-    getBoosting(flags, user);
-
     const userflags = msg.client.ch.userFlagCalc(msg.client, flags.bitfield, msg.language, true);
+    getBoosting(userflags, user, msg);
     const con = msg.client.constants.commands[this.name];
 
     const userEmbed = new Discord.MessageEmbed()
@@ -185,6 +184,12 @@ const interactionHandler = (msg, m, embeds, member) => {
       }
     }
   });
+
+  collector.on('end', (collected, reason) => {
+    if (reason === 'time') {
+      disableComponents(m, embeds);
+    }
+  });
 };
 
 const getComponents = (msg, member, page) => {
@@ -253,8 +258,10 @@ const getChannelOptions = (msg) => {
 };
 
 const getBoostEmote = (member) => {
+  if (!member.premiumSinceTimestamp) return '';
   const time = Math.abs(member.premiumSinceTimestamp - Date.now());
   const month = 2629743000;
+
   if (time < month * 2) return member.client.constants.emotes.userFlags.BOOST1;
   if (time < month * 3) return member.client.constants.emotes.userFlags.BOOST2;
   if (time < month * 6) return member.client.constants.emotes.userFlags.BOOST3;
@@ -266,7 +273,7 @@ const getBoostEmote = (member) => {
   return member.client.constants.emotes.userFlags.BOOST24;
 };
 
-const getBoosting = (flags, user) => {
+const getBoosting = (flags, user, msg) => {
   const guilds = user.client.guilds.cache.filter((g) => g.members.cache.has(user.id));
 
   const premiums = guilds
@@ -283,18 +290,27 @@ const getBoosting = (flags, user) => {
   if (!premiums.length) return;
 
   const longestPrem = Math.min(...premiums);
-
+  const boostFlags = new Discord.BitField();
   const time = Math.abs(longestPrem - Date.now());
   const month = 2629743000;
-  if (time < month * 2) flags.add(1048576);
-  else if (time < month * 3) flags.add(2097152);
-  else if (time < month * 6) flags.add(4194304);
-  else if (time < month * 9) flags.add(8388608);
-  else if (time < month * 12) flags.add(16777216);
-  else if (time < month * 15) flags.add(33554432);
-  else if (time < month * 18) flags.add(67108864);
-  else if (time < month * 24) flags.add(134217728);
-  else flags.add(268435456);
+
+  if (time < month * 2) boostFlags.add(1);
+  else if (time < month * 3) boostFlags.add(2);
+  else if (time < month * 6) boostFlags.add(4);
+  else if (time < month * 9) boostFlags.add(8);
+  else if (time < month * 12) boostFlags.add(16);
+  else if (time < month * 15) boostFlags.add(32);
+  else if (time < month * 18) boostFlags.add(64);
+  else if (time < month * 24) boostFlags.add(128);
+  else boostFlags.add(256);
+
+  const translatedBoostFlags = msg.client.ch.memberBoostCalc(
+    user.client,
+    boostFlags,
+    msg.language,
+    true,
+  );
+  flags.push(...translatedBoostFlags);
 };
 
 /*
@@ -310,6 +326,73 @@ const rolesHandler = async (interaction, msg, member) => {
   );
 
   if (res && res.rowCount) {
+    const separators = new Discord.Collection();
+    const { rows } = res;
+
+    member.roles.cache.forEach((role) => {
+      const isSeparator = rows.findIndex((row) => row.separator === role.id);
+      const separator = isSeparator !== -1 ? role : null;
+
+      if (separator) {
+        separator.stopRole = msg.guild.roles.cache.get(rows[isSeparator].stoprole);
+        separators.set(role.id, separator);
+      }
+    });
+
+    separators.forEach((sep) => {
+      const row = rows.find((r) => r.separator === sep.id);
+
+      if (!row.isvarying) {
+        const roles = row.roles.map((r) => member.roles.cache.get(r.id)).filter((r) => !!r);
+        sep.roles = roles;
+      } else {
+        const roles = member.roles.cache.filter((r) => {
+          if (sep.stopRole) {
+            if (sep.rawPosition > sep.stopRole.rawPosition) {
+              return r.rawPosition < sep.rawPosition && r.rawPosition > sep.stopRole.rawPosition;
+            }
+            return r.rawPosition > sep.rawPosition && r.rawPosition < sep.stopRole.rawPosition;
+          }
+          return r.rawPosition > sep.rawPosition;
+        });
+
+        sep.roles = roles;
+      }
+    });
+
+    separators.sort((a, b) => b.rawPosition - a.rawPosition);
+    const rolesWithSep = [].concat(...separators.map((s) => s.roles.map((r) => r.id)));
+    const rolesWithoutSep = member.roles.cache.filter((role) => !rolesWithSep.includes(role.id));
+    rolesWithoutSep.sort((a, b) => b.rawPosition - a.rawPosition);
+
+    const embed = new Discord.MessageEmbed();
+    separators.forEach((sep, key) => {
+      if (!sep.stopRole) {
+        embed.addField('\u200b', sep.roles.map((r) => r).join('\n'), false);
+
+        const index = separators.map((s) => s).findIndex((s) => s.id === key);
+        const nextSep = separators.map((s) => s)[index + 1];
+
+        if (!nextSep || (nextSep.stopRole && nextSep.rawPosition > nextSep.stopRole.rawPosition)) {
+          embed.addField(sep.name, '\u200b', false);
+        }
+      } else if (sep.rawPosition > sep.stopRole.rawPosition) {
+        embed.addField(sep.name, sep.roles.map((r) => r).join('\n'), false);
+      } else if (sep.rawPosition < sep.stopRole.rawPosition) {
+        const index = separators.map((s) => s).findIndex((s) => s.id === key);
+        const lastSep = separators.map((s) => s)[index - 1];
+
+        embed.addField(lastSep.name, sep.roles.map((r) => r).join('\n'), false);
+
+        if (key === separators.lastKey()) {
+          embed.addField(sep.name, '\u200b', false);
+        }
+      }
+    });
+
+    if (rolesWithoutSep.size) {
+      embed.addField(msg.lan.rolesWithoutSep, rolesWithoutSep.map((r) => r).join('\n'), false);
+    }
 
     interaction.reply({ embeds: [embed], ephemeral: true });
     return;
@@ -325,6 +408,161 @@ const rolesHandler = async (interaction, msg, member) => {
   interaction.reply({ embeds: [embed], ephemeral: true });
 };
 
-const basicPermsHandler = (interaction, msg, member) => {};
+const basicPermsHandler = (interaction, msg, member) => {
+  const allPerms = new Discord.Permissions(Discord.Permissions.ALL).toArray();
+  const allowedBits = [];
+  const deniedBits = [];
 
-const permsHandler = (interaction, msg, member) => {};
+  allPerms.forEach((perm, i) => {
+    const p = Object.entries(member.permissions.serialize())[i];
+    if (p[1]) {
+      allowedBits.push(new Discord.Permissions(p[0]).bitfield);
+    }
+    if (!p[1]) {
+      deniedBits.push(new Discord.Permissions(p[0]).bitfield);
+    }
+  });
+
+  const categories = new Discord.Collection();
+  const categoryBits = [
+    [1879573680n, msg.language.permissions.categories.GENERAL],
+    [1099712954375n, msg.language.permissions.categories.MEMBER],
+    [534723950656n, msg.language.permissions.categories.TEXT],
+    [554116842240n, msg.language.permissions.categories.VOICE],
+    [4294967296n, msg.language.permissions.categories.STAGE],
+    [8589934592n, msg.language.permissions.categories.EVENTS],
+    [8n, msg.language.permissions.categories.ADVANCED],
+  ];
+
+  categoryBits.forEach(([bit, name]) => {
+    categories.set(name, [
+      ...new Set([
+        ...allowedBits
+          .map((perm) =>
+            new Discord.Permissions(bit).has(perm, false)
+              ? `${msg.client.constants.emotes.enabled} ${msg.client.ch.permCalc(
+                  perm,
+                  msg.language,
+                )}`
+              : null,
+          )
+          .filter((r) => !!r),
+        ...deniedBits
+          .map((perm) =>
+            new Discord.Permissions(bit).has(perm, false)
+              ? `${msg.client.constants.emotes.disabled} ${msg.client.ch.permCalc(
+                  perm,
+                  msg.language,
+                )}`
+              : null,
+          )
+          .filter((r) => !!r),
+      ]),
+    ]);
+  });
+
+  const embed = new Discord.MessageEmbed();
+  categories.forEach((perms, name) => {
+    embed.addField(`${name}`, ` ${perms.join(`\n`)}\u200b`, false);
+  });
+
+  interaction.reply({ embeds: [embed], ephemeral: true });
+};
+
+const disableComponents = async (m, embeds) => {
+  m.components.forEach((componentRow, i) => {
+    componentRow.components.forEach((component, j) => {
+      m.components[i].components[j].disabled = true;
+    });
+  });
+
+  await m.edit({ embeds, components: m.components });
+};
+
+const permsHandler = (interaction, msg, member) => {
+  const channel = msg.guild.channels.cache.get(interaction.values[0]);
+  const permissions = channel.permissionsFor(member);
+  const categoryBits = [
+    [1879573680n, msg.language.permissions.categories.GENERAL],
+    [1099712954375n, msg.language.permissions.categories.MEMBER],
+    [534723950656n, msg.language.permissions.categories.TEXT],
+    [549821874944n, msg.language.permissions.categories.VOICE],
+    [4294967296n, msg.language.permissions.categories.STAGE],
+    [8589934592n, msg.language.permissions.categories.EVENTS],
+    [8n, msg.language.permissions.categories.ADVANCED],
+  ];
+
+  let usedPermissions = Discord.Permissions.ALL;
+  switch (channel.type) {
+    default: {
+      usedPermissions = Discord.Permissions.ALL;
+      break;
+    }
+    case 'GUILD_TEXT' ||
+      'GUILD_NEWS' ||
+      'GUILD_NEWS_THREAD' ||
+      'GUILD_PUBLIC_THREAD' ||
+      'GUILD_PRIVATE_THREAD': {
+      break;
+    }
+    case 'GUILD_VOICE': {
+      break;
+    }
+    case 'GUILD_CATEGORY': {
+      break;
+    }
+    case 'GUILD_STAGE_VOICE': {
+      break;
+    }
+  }
+
+  const allPerms = new Discord.Permissions(usedPermissions).toArray();
+  const allowedBits = [];
+  const deniedBits = [];
+
+  allPerms.forEach((perm, i) => {
+    const p = Object.entries(permissions.serialize())[i];
+    if (p[1]) {
+      allowedBits.push(new Discord.Permissions(p[0]).bitfield);
+    }
+    if (!p[1]) {
+      deniedBits.push(new Discord.Permissions(p[0]).bitfield);
+    }
+  });
+
+  const categories = new Discord.Collection();
+
+  categoryBits.forEach(([bit, name]) => {
+    categories.set(name, [
+      ...new Set([
+        ...allowedBits
+          .map((perm) =>
+            new Discord.Permissions(bit).has(perm, false)
+              ? `${msg.client.constants.emotes.enabled} ${msg.client.ch.permCalc(
+                  perm,
+                  msg.language,
+                )}`
+              : null,
+          )
+          .filter((r) => !!r),
+        ...deniedBits
+          .map((perm) =>
+            new Discord.Permissions(bit).has(perm, false)
+              ? `${msg.client.constants.emotes.disabled} ${msg.client.ch.permCalc(
+                  perm,
+                  msg.language,
+                )}`
+              : null,
+          )
+          .filter((r) => !!r),
+      ]),
+    ]);
+  });
+
+  const embed = new Discord.MessageEmbed();
+  categories.forEach((perms, name) => {
+    embed.addField(`${name}`, ` ${perms.join(`\n`)}\u200b`, false);
+  });
+
+  interaction.reply({ embeds: [embed], ephemeral: true });
+};
