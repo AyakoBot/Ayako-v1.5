@@ -238,6 +238,67 @@ module.exports = {
     return filePath;
   },
   /**
+   * A translator for Member Boost Flags into the given Language.
+   * @constructor
+   * @param {object} client - The Base Client.
+   * @param {number} bits - The Bits the Language will be translated from.
+   * @param {object} lan - The Language File the Bits will be Translated based off of.
+   * @param {boolean} emotes - Whether to add Emotes to the Translated Flags.
+   */
+  memberBoostCalc: (client, bits, lan, emotes) => {
+    if (!bits) return [];
+    const BitField = new Discord.BitField(Number(bits));
+    const Flags = [];
+
+    if (BitField.has(1)) {
+      Flags.push(
+        `${emotes ? client.constants.emotes.userFlags.BOOST1 : ''} ${lan.userFlags.BOOST1}`,
+      );
+    }
+    if (BitField.has(2)) {
+      Flags.push(
+        `${emotes ? client.constants.emotes.userFlags.BOOST2 : ''} ${lan.userFlags.BOOST2}`,
+      );
+    }
+    if (BitField.has(4)) {
+      Flags.push(
+        `${emotes ? client.constants.emotes.userFlags.BOOST3 : ''} ${lan.userFlags.BOOST3}`,
+      );
+    }
+    if (BitField.has(8)) {
+      Flags.push(
+        `${emotes ? client.constants.emotes.userFlags.BOOST6 : ''} ${lan.userFlags.BOOST6}`,
+      );
+    }
+    if (BitField.has(16)) {
+      Flags.push(
+        `${emotes ? client.constants.emotes.userFlags.BOOST9 : ''} ${lan.userFlags.BOOST9}`,
+      );
+    }
+    if (BitField.has(32)) {
+      Flags.push(
+        `${emotes ? client.constants.emotes.userFlags.BOOST12 : ''} ${lan.userFlags.BOOST12}`,
+      );
+    }
+    if (BitField.has(64)) {
+      Flags.push(
+        `${emotes ? client.constants.emotes.userFlags.BOOST15 : ''} ${lan.userFlags.BOOST15}`,
+      );
+    }
+    if (BitField.has(128)) {
+      Flags.push(
+        `${emotes ? client.constants.emotes.userFlags.BOOST18 : ''} ${lan.userFlags.BOOST18}`,
+      );
+    }
+    if (BitField.has(256)) {
+      Flags.push(
+        `${emotes ? client.constants.emotes.userFlags.BOOST24 : ''} ${lan.userFlags.BOOST24}`,
+      );
+    }
+
+    return Flags;
+  },
+  /**
    * A translator for User Flags into the given Language.
    * @constructor
    * @param {object} client - The Base Client.
@@ -346,51 +407,6 @@ module.exports = {
     if (BitField.has(524288)) {
       Flags.push(`${lan.userFlags.BOT_HTTP_INTERACTIONS}`);
     }
-    if (BitField.has(1048576)) {
-      Flags.push(
-        `${emotes ? client.constants.emotes.userFlags.BOOST1 : ''} ${lan.userFlags.BOOST1}`,
-      );
-    }
-    if (BitField.has(2097152)) {
-      Flags.push(
-        `${emotes ? client.constants.emotes.userFlags.BOOST2 : ''} ${lan.userFlags.BOOST2}`,
-      );
-    }
-    if (BitField.has(4194304)) {
-      Flags.push(
-        `${emotes ? client.constants.emotes.userFlags.BOOST3 : ''} ${lan.userFlags.BOOST3}`,
-      );
-    }
-    if (BitField.has(8388608)) {
-      Flags.push(
-        `${emotes ? client.constants.emotes.userFlags.BOOST6 : ''} ${lan.userFlags.BOOST6}`,
-      );
-    }
-    if (BitField.has(16777216)) {
-      Flags.push(
-        `${emotes ? client.constants.emotes.userFlags.BOOST9 : ''} ${lan.userFlags.BOOST9}`,
-      );
-    }
-    if (BitField.has(33554432)) {
-      Flags.push(
-        `${emotes ? client.constants.emotes.userFlags.BOOST12 : ''} ${lan.userFlags.BOOST12}`,
-      );
-    }
-    if (BitField.has(67108864)) {
-      Flags.push(
-        `${emotes ? client.constants.emotes.userFlags.BOOST15 : ''} ${lan.userFlags.BOOST15}`,
-      );
-    }
-    if (BitField.has(134217728)) {
-      Flags.push(
-        `${emotes ? client.constants.emotes.userFlags.BOOST18 : ''} ${lan.userFlags.BOOST18}`,
-      );
-    }
-    if (BitField.has(268435456)) {
-      Flags.push(
-        `${emotes ? client.constants.emotes.userFlags.BOOST24 : ''} ${lan.userFlags.BOOST24}`,
-      );
-    }
 
     return Flags;
   },
@@ -472,124 +488,127 @@ module.exports = {
     const BitField = new Discord.Permissions(BigInt(bits));
     const Perms = [];
 
-    if (BitField.has(1n) && BitField.bitfield !== 8n) {
+    if (BitField.has(1n, false)) {
       Perms.push(lan.permissions.CREATE_INSTANT_INVITE);
     }
-    if (BitField.has(2n) && BitField.bitfield !== 8n) {
+    if (BitField.has(2n, false)) {
       Perms.push(lan.permissions.KICK_MEMBERS);
     }
-    if (BitField.has(4n) && BitField.bitfield !== 8n) {
+    if (BitField.has(4n, false)) {
       Perms.push(lan.permissions.BAN_MEMBERS);
     }
-    if (BitField.has(8n)) {
+    if (BitField.has(8n, false)) {
       Perms.push(lan.permissions.ADMINISTRATOR);
     }
-    if (BitField.has(16n) && BitField.bitfield !== 8n) {
+    if (BitField.has(16n, false)) {
       Perms.push(lan.permissions.MANAGE_CHANNELS);
     }
-    if (BitField.has(32n) && BitField.bitfield !== 8n) {
+    if (BitField.has(32n, false)) {
       Perms.push(lan.permissions.MANAGE_GUILD);
     }
-    if (BitField.has(64n) && BitField.bitfield !== 8n) {
+    if (BitField.has(64n, false)) {
       Perms.push(lan.permissions.ADD_REACTIONS);
     }
-    if (BitField.has(128n) && BitField.bitfield !== 8n) {
+    if (BitField.has(128n, false)) {
       Perms.push(lan.permissions.VIEW_AUDIT_LOG);
     }
-    if (BitField.has(256n) && BitField.bitfield !== 8n) {
+    if (BitField.has(256n, false)) {
       Perms.push(lan.permissions.PRIORITY_SPEAKER);
     }
-    if (BitField.has(512n) && BitField.bitfield !== 8n) {
+    if (BitField.has(512n, false)) {
       Perms.push(lan.permissions.STREAM);
     }
-    if (BitField.has(1024n) && BitField.bitfield !== 8n) {
+    if (BitField.has(1024n, false)) {
       Perms.push(lan.permissions.VIEW_CHANNEL);
     }
-    if (BitField.has(2048n) && BitField.bitfield !== 8n) {
+    if (BitField.has(2048n, false)) {
       Perms.push(lan.permissions.SEND_MESSAGES);
     }
-    if (BitField.has(4096n) && BitField.bitfield !== 8n) {
+    if (BitField.has(4096n, false)) {
       Perms.push(lan.permissions.SEND_TTS_MESSAGES);
     }
-    if (BitField.has(8192n) && BitField.bitfield !== 8n) {
+    if (BitField.has(8192n, false)) {
       Perms.push(lan.permissions.MANAGE_MESSAGES);
     }
-    if (BitField.has(16384n) && BitField.bitfield !== 8n) {
+    if (BitField.has(16384n, false)) {
       Perms.push(lan.permissions.EMBED_LINKS);
     }
-    if (BitField.has(32768n) && BitField.bitfield !== 8n) {
+    if (BitField.has(32768n, false)) {
       Perms.push(lan.permissions.ATTACH_FILES);
     }
-    if (BitField.has(65536n) && BitField.bitfield !== 8n) {
+    if (BitField.has(65536n, false)) {
       Perms.push(lan.permissions.READ_MESSAGE_HISTORY);
     }
-    if (BitField.has(131072n) && BitField.bitfield !== 8n) {
+    if (BitField.has(131072n, false)) {
       Perms.push(lan.permissions.MENTION_EVERYONE);
     }
-    if (BitField.has(262144n) && BitField.bitfield !== 8n) {
+    if (BitField.has(262144n, false)) {
       Perms.push(lan.permissions.USE_EXTERNAL_EMOJIS);
     }
-    if (BitField.has(524288n) && BitField.bitfield !== 8n) {
+    if (BitField.has(524288n, false)) {
       Perms.push(lan.permissions.VIEW_GUILD_INSIGHTS);
     }
-    if (BitField.has(1048576n) && BitField.bitfield !== 8n) {
+    if (BitField.has(1048576n, false)) {
       Perms.push(lan.permissions.CONNECT);
     }
-    if (BitField.has(2097152n) && BitField.bitfield !== 8n) {
+    if (BitField.has(2097152n, false)) {
       Perms.push(lan.permissions.SPEAK);
     }
-    if (BitField.has(4194304n) && BitField.bitfield !== 8n) {
+    if (BitField.has(4194304n, false)) {
       Perms.push(lan.permissions.MUTE_MEMBERS);
     }
-    if (BitField.has(8388608n) && BitField.bitfield !== 8n) {
+    if (BitField.has(8388608n, false)) {
       Perms.push(lan.permissions.DEAFEN_MEMBERS);
     }
-    if (BitField.has(16777216n) && BitField.bitfield !== 8n) {
+    if (BitField.has(16777216n, false)) {
       Perms.push(lan.permissions.MOVE_MEMBERS);
     }
-    if (BitField.has(33554432n) && BitField.bitfield !== 8n) {
+    if (BitField.has(33554432n, false)) {
       Perms.push(lan.permissions.USE_VAD);
     }
-    if (BitField.has(67108864n) && BitField.bitfield !== 8n) {
+    if (BitField.has(67108864n, false)) {
       Perms.push(lan.permissions.CHANGE_NICKNAME);
     }
-    if (BitField.has(134217728n) && BitField.bitfield !== 8n) {
+    if (BitField.has(134217728n, false)) {
       Perms.push(lan.permissions.MANAGE_NICKNAMES);
     }
-    if (BitField.has(268435456n) && BitField.bitfield !== 8n) {
+    if (BitField.has(268435456n, false)) {
       Perms.push(lan.permissions.MANAGE_ROLES);
     }
-    if (BitField.has(536870912n) && BitField.bitfield !== 8n) {
+    if (BitField.has(536870912n, false)) {
       Perms.push(lan.permissions.MANAGE_WEBHOOKS);
     }
-    if (BitField.has(1073741824n) && BitField.bitfield !== 8n) {
+    if (BitField.has(1073741824n, false)) {
       Perms.push(lan.permissions.MANAGE_EMOJIS_AND_STICKERS);
     }
-    if (BitField.has(2147483648n) && BitField.bitfield !== 8n) {
+    if (BitField.has(2147483648n, false)) {
       Perms.push(lan.permissions.USE_APPLICATION_COMMANDS);
     }
-    if (BitField.has(4294967296n) && BitField.bitfield !== 8n) {
+    if (BitField.has(4294967296n, false)) {
       Perms.push(lan.permissions.REQUEST_TO_SPEAK);
     }
-    if (BitField.has(17179869184n) && BitField.bitfield !== 8n) {
+    if (BitField.has(8589934592n, false)) {
+      Perms.push(lan.permissions.MANAGE_EVENTS);
+    }
+    if (BitField.has(17179869184n, false)) {
       Perms.push(lan.permissions.MANAGE_THREADS);
     }
-    if (BitField.has(34359738368n) && BitField.bitfield !== 8n) {
+    if (BitField.has(34359738368n, false)) {
       Perms.push(lan.permissions.USE_AND_CREATE_PUBLIC_THREADS);
     }
-    if (BitField.has(68719476736n) && BitField.bitfield !== 8n) {
+    if (BitField.has(68719476736n, false)) {
       Perms.push(lan.permissions.USE_AND_CREATE_PRIVATE_THREADS);
     }
-    if (BitField.has(137438953472n) && BitField.bitfield !== 8n) {
+    if (BitField.has(137438953472n, false)) {
       Perms.push(lan.permissions.USE_EXTERNAL_STICKERS);
     }
-    if (BitField.has(274877906944n) && BitField.bitfield !== 8n) {
+    if (BitField.has(274877906944n, false)) {
       Perms.push(lan.permissions.SEND_MESSAGES_IN_THREADS);
     }
-    if (BitField.has(549755813888n) && BitField.bitfield !== 8n) {
+    if (BitField.has(549755813888n, false)) {
       Perms.push(lan.permissions.START_EMBEDDED_ACTIVITIES);
     }
-    if (BitField.has(1099511627776n) && BitField.bitfield !== 8n) {
+    if (BitField.has(1099511627776n, false)) {
       Perms.push(lan.permissions.MODERATE_MEMBERS);
     }
 

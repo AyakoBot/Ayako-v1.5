@@ -478,6 +478,15 @@
     "timeIn": "in {{time}}"
   },
   "permissions": {
+    "categories": {
+      "GENERAL": "General Server Permissions",
+      "MEMBER": "Membership Permissions",
+      "TEXT": "Text Channel Permissions",
+      "VOICE": "Voice Channel Permissions",
+      "STAGE": "Stage Channel Permissions",
+      "EVENTS": "Events Permissions",
+      "ADVANCED": "Advanced Permissions"
+    },
     "error": {
       "msg": "I'm missing Permissions to execute this Command",
       "needed": "Needed Permissions:",
@@ -529,15 +538,13 @@
     "USE_APPLICATION_COMMANDS": "Use Application Commands",
     "REQUEST_TO_SPEAK": "Request to Speak",
     "MANAGE_THREADS": "Manage Threads",
-    "CREATE_PUBLIC_THREADS": "Create Public Threads",
-    "CREATE_PRIVATE_THREADS": "Create Private Threads",
+    "USE_AND_CREATE_PUBLIC_THREADS": "Use and Create Public Threads",
+    "USE_AND_CREATE_PRIVATE_THREADS": "Use and Create Private Threads",
     "USE_EXTERNAL_STICKERS": "Use External Stickers",
     "SEND_MESSAGES_IN_THREADS": "Send Messages in Threads",
     "START_EMBEDDED_ACTIVITIES": "Start Embedded Activities",
-    "USE_PRIVATE_THREADS": "Use Private Threads",
     "MODERATE_MEMBERS": "Moderate Members",
-    "MANAGE_EVENTS": "Manage Events",
-    "USE_PUBLIC_THREADS": "Use Public Threads"
+    "MANAGE_EVENTS": "Manage Events"
   },
   "channelRules": {
     "HAS_LEAST_ATTACHMENTS": "Has at least [externally defined] Attachments",
@@ -1072,7 +1079,8 @@
       "communicationDisabledUntil": "Timed out until: ",
       "viewRoles": "View Roles",
       "viewBasicPermissions": "View Basic Permissions",
-      "viewChannelPermissions": "View Channel Permissions"
+      "viewChannelPermissions": "View Channel Permissions",
+      "rolesWithoutSep": "Roles without Separator"
     },
     "rank": {
       "description": "Display anyones current Server/Global Rank",
