@@ -243,19 +243,37 @@ module.exports = {
                 neutral = `${language.unknown} ${oldPerm}\n`;
               }
 
-              for (let j = 0; Bit1.toArray().length > j; j += 1) {
+              const [useArray1, useArray2, useArray3] = [
+                Bit1.toArray(),
+                Bit2.toArray(),
+                Bit3.toArray(),
+              ].map((arr) => {
+                return [
+                  ...new Set(
+                    arr.map((name) => {
+                      if (name === 'USE_PUBLIC_THREADS' || name === 'CREATE_PUBLIC_THREADS') {
+                        return 'USE_AND_CREATE_PUBLIC_THREADS';
+                      }
+                      if (name === 'USE_PRIVATE_THREADS' || name === 'CREATE_PRIVATE_THREADS') {
+                        return 'USE_AND_CREATE_PRIVATE_THREADS';
+                      }
+                      return name;
+                    }),
+                  ),
+                ];
+              });
+
+              for (let j = 0; useArray1.length > j; j += 1) {
                 disable += `${Constants.switch.disable} \`${
-                  language.permissions[Bit1.toArray()[j]]
+                  language.permissions[useArray1[j]]
                 }\`\n`;
               }
-              for (let j = 0; Bit2.toArray().length > j; j += 1) {
-                enable += `${Constants.switch.enable} \`${
-                  language.permissions[Bit2.toArray()[j]]
-                }\`\n`;
+              for (let j = 0; useArray2.length > j; j += 1) {
+                enable += `${Constants.switch.enable} \`${language.permissions[useArray2[j]]}\`\n`;
               }
-              for (let j = 0; Bit3.toArray().length > j; j += 1) {
+              for (let j = 0; useArray3.length > j; j += 1) {
                 neutral += `${Constants.switch.neutral} \`${
-                  language.permissions[Bit3.toArray()[j]]
+                  language.permissions[useArray3[j]]
                 }\`\n`;
               }
 
