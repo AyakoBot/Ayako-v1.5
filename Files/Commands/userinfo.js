@@ -482,7 +482,7 @@ const disableComponents = async (m, embeds) => {
 const permsHandler = (interaction, msg, member) => {
   const channel = msg.guild.channels.cache.get(interaction.values[0]);
   const permissions = channel.permissionsFor(member);
-  const categoryBits = [
+  let categoryBits = [
     [1879573680n, msg.language.permissions.categories.GENERAL],
     [1099712954375n, msg.language.permissions.categories.MEMBER],
     [534723950656n, msg.language.permissions.categories.TEXT],
@@ -491,13 +491,6 @@ const permsHandler = (interaction, msg, member) => {
     [8589934592n, msg.language.permissions.categories.EVENTS],
     [8n, msg.language.permissions.categories.ADVANCED],
   ];
-  const channelBits = [
-    [548414159953n, msg.language.channelTypes.CATEGORY],
-    [535529258065n, msg.language.channelTypes.TEXT],
-    [466809781329n, msg.language.channelTypes.NEWS],
-    [558680246033n, msg.language.channelTypes.VOICE],
-    [13175358481n, msg.language.channelTypes.STAGE],
-  ];
 
   let usedPermissions = Discord.Permissions.ALL;
   switch (channel.type) {
@@ -505,39 +498,58 @@ const permsHandler = (interaction, msg, member) => {
       usedPermissions = Discord.Permissions.ALL;
       break;
     }
-    case 'GUILD_TEXT' ||
-      'GUILD_NEWS' ||
-      'GUILD_NEWS_THREAD' ||
-      'GUILD_PUBLIC_THREAD' ||
-      'GUILD_PRIVATE_THREAD': {
+    case 'GUILD_TEXT' || 'GUILD_PUBLIC_THREAD' || 'GUILD_PRIVATE_THREAD': {
+      usedPermissions = new Discord.Permissions(535529258065n);
+      categoryBits = [categoryBits[0], categoryBits[1], categoryBits[2]];
+      break;
+    }
+    case 'GUILD_NEWS' || 'GUILD_NEWS_THREAD': {
+      usedPermissions = new Discord.Permissions(466809781329n);
+      categoryBits = [categoryBits[0], categoryBits[1], categoryBits[2]];
       break;
     }
     case 'GUILD_VOICE': {
+      usedPermissions = new Discord.Permissions(558680246033n);
+      categoryBits = [categoryBits[0], categoryBits[1], categoryBits[3]];
       break;
     }
     case 'GUILD_CATEGORY': {
+      usedPermissions = new Discord.Permissions(1098236034897n);
+      categoryBits = [
+        categoryBits[0],
+        categoryBits[1],
+        categoryBits[2],
+        categoryBits[3],
+        categoryBits[4],
+      ];
       break;
     }
     case 'GUILD_STAGE_VOICE': {
+      usedPermissions = new Discord.Permissions(13175358481n);
+      categoryBits = [
+        categoryBits[0],
+        categoryBits[1],
+        categoryBits[3],
+        categoryBits[4],
+        categoryBits[5],
+      ];
       break;
     }
   }
 
-  const allPerms = new Discord.Permissions(usedPermissions).toArray();
+  const categories = new Discord.Collection();
   const allowedBits = [];
   const deniedBits = [];
 
-  allPerms.forEach((perm, i) => {
-    const p = Object.entries(permissions.serialize())[i];
-    if (p[1]) {
-      allowedBits.push(new Discord.Permissions(p[0]).bitfield);
+  Object.entries(permissions.serialize()).forEach(([name, has]) => {
+    if (!usedPermissions.has(name, false)) return;
+    if (has) {
+      allowedBits.push(new Discord.Permissions(name).bitfield);
     }
-    if (!p[1]) {
-      deniedBits.push(new Discord.Permissions(p[0]).bitfield);
+    if (!has) {
+      deniedBits.push(new Discord.Permissions(name).bitfield);
     }
   });
-
-  const categories = new Discord.Collection();
 
   categoryBits.forEach(([bit, name]) => {
     categories.set(name, [
