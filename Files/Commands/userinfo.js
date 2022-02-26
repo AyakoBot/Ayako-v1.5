@@ -1,6 +1,8 @@
 const Discord = require('discord.js');
 const moment = require('moment');
 require('moment-duration-format');
+const axios = require('axios');
+const auth = require('../BaseClient/auth.json');
 
 module.exports = {
   name: 'userinfo',
@@ -10,19 +12,76 @@ module.exports = {
   aliases: ['whois'],
   type: 'info',
   async execute(msg) {
-    const user = await msg.client.users
+    let user = await msg.client.users
       .fetch(msg.args[0] ? msg.args[0].replace(/\D+/g, '') : msg.author.id, { force: true })
       .catch(() => {});
 
+    let m;
+    let answer;
+
     if (!user) {
-      msg.client.ch.error(msg, msg.language.errors.userNotFound);
-      return;
+      m = await msg.client.ch.reply(msg, {
+        embeds: [await msg.client.ch.loadingEmbed({ author: msg.lan.authorUser }, msg.guild)],
+      });
+
+      const users = [
+        ...new Set([
+          ...msg.client.users.cache
+            .filter(
+              (u) =>
+                u.username.toLowerCase() === msg.args.slice(0).join(' ').toLowerCase() ||
+                u.tag.toLowerCase() === msg.args.slice(0).join(' ').toLowerCase(),
+            )
+            .map((u) => u.id),
+          ...msg.guild.members.cache
+            .filter(
+              (member) =>
+                member.displayName.toLowerCase() === msg.args.slice(0).join(' ').toLowerCase(),
+            )
+            .map((member) => member.user.id),
+          ...(
+            await msg.guild.members.search({
+              query: msg.args.slice(0).join(' ').toLowerCase(),
+              limit: 30,
+            })
+          ).map((member) => member.user.id),
+        ]),
+      ].map((id) => msg.client.users.cache.get(id));
+
+      if (users.length === 1) {
+        user = await msg.client.users.fetch(users.first().id, { force: true });
+      } else if (users.length) {
+        const res = await decideUser(msg, users, m);
+
+        if (res) {
+          user = await msg.client.users.fetch(res.user, { force: true });
+          ({ answer } = res);
+        }
+      }
+
+      if (!user) {
+        msg.client.ch.error(
+          msg,
+          msg.args.slice(0).join(' ').replace(/\D+/g, '').length ===
+            msg.args.slice(0).join(' ').length
+            ? msg.language.errors.userNotExist
+            : msg.language.errors.userNotFound,
+          m,
+        );
+        return;
+      }
     }
 
     const flags = await user.fetchFlags(true);
     if (user.bot && !flags.has(65536)) {
       flags.add(2048);
     }
+
+    let botInfo;
+    if (user.bot) {
+      botInfo = await getBotInfo(msg, user);
+    }
+
     if (
       new URL(msg.client.ch.displayAvatarURL(user)).pathname.endsWith('.gif') ||
       msg.client.ch.displayBannerURL(user)
@@ -41,16 +100,19 @@ module.exports = {
         url: msg.client.constants.standard.invite,
       })
       .setThumbnail(msg.client.ch.displayAvatarURL(user))
-      .setImage(msg.client.ch.displayBannerURL(user))
+      .setImage(msg.client.ch.displayBannerURL(user) || botInfo?.bannerURL)
       .setColor(user.accentColor)
       .setDescription(
-        msg.client.ch.stp(msg.lan.userInfo, {
+        `${msg.client.ch.stp(msg.lan.userInfo, {
           user,
           accentColor: user.accentColor ? user.accentColor : msg.language.default,
           hexAccentColor: user.hexAccentColor ? user.hexAccentColor : msg.language.default,
-        }),
+        })}${botInfo ? `\n${botInfo.info}` : ''}`,
       );
 
+    if (botInfo) {
+      userEmbed.addField(msg.language.description, botInfo.description);
+    }
     if (userflags.length) {
       userEmbed.addFields({
         name: msg.lan.flags,
@@ -131,10 +193,24 @@ module.exports = {
       components = getComponents(msg, member, 1);
     }
 
-    const m = await msg.client.ch.reply(msg, {
-      embeds,
-      components: msg.client.ch.buttonRower(components),
-    });
+    if (answer) {
+      answer
+        .update({
+          embeds,
+          components: msg.client.ch.buttonRower(components),
+        })
+        .catch(() => {});
+    } else if (m) {
+      m.edit({
+        embeds,
+        components: msg.client.ch.buttonRower(components),
+      }).catch(() => {});
+    } else {
+      m = await msg.client.ch.reply(msg, {
+        embeds,
+        components: msg.client.ch.buttonRower(components),
+      });
+    }
 
     if (components) {
       interactionHandler(msg, m, embeds, member);
@@ -147,9 +223,6 @@ const interactionHandler = (msg, m, embeds, member) => {
   const collector = m.createMessageComponentCollector({ time: 60000 });
   collector.on('collect', (interaction) => {
     switch (interaction.customId) {
-      default: {
-        break;
-      }
       case 'roles': {
         rolesHandler(interaction, msg, member);
         break;
@@ -182,6 +255,9 @@ const interactionHandler = (msg, m, embeds, member) => {
           .catch(() => {});
         break;
       }
+      default: {
+        break;
+      }
     }
   });
 
@@ -192,41 +268,39 @@ const interactionHandler = (msg, m, embeds, member) => {
   });
 };
 
-const getComponents = (msg, member, page) => {
-  return [
-    [
-      new Discord.MessageButton()
-        .setLabel(msg.lan.viewRoles)
-        .setDisabled(member.roles.cache.size <= 1)
-        .setStyle('SECONDARY')
-        .setCustomId('roles'),
-      new Discord.MessageButton()
-        .setLabel(msg.lan.viewBasicPermissions)
-        .setCustomId('basicPerms')
-        .setStyle('SECONDARY'),
-    ],
-    [
-      new Discord.MessageSelectMenu()
-        .setPlaceholder(msg.lan.viewChannelPermissions)
-        .setMaxValues(1)
-        .setMinValues(1)
-        .setCustomId('perms')
-        .setOptions(getChannelOptions(msg).slice((page - 1) * 25, page * 25)),
-    ],
-    [
-      new Discord.MessageButton()
-        .setCustomId('back')
-        .setEmoji(msg.client.constants.emotes.back)
-        .setStyle('SECONDARY')
-        .setDisabled(page === 1),
-      new Discord.MessageButton()
-        .setCustomId('next')
-        .setEmoji(msg.client.constants.emotes.forth)
-        .setStyle('SECONDARY')
-        .setDisabled(page === Math.ceil(msg.guild.channels.cache.size / 25)),
-    ],
-  ];
-};
+const getComponents = (msg, member, page) => [
+  [
+    new Discord.MessageButton()
+      .setLabel(msg.lan.viewRoles)
+      .setDisabled(member.roles.cache.size <= 1)
+      .setStyle('SECONDARY')
+      .setCustomId('roles'),
+    new Discord.MessageButton()
+      .setLabel(msg.lan.viewBasicPermissions)
+      .setCustomId('basicPerms')
+      .setStyle('SECONDARY'),
+  ],
+  [
+    new Discord.MessageSelectMenu()
+      .setPlaceholder(msg.lan.viewChannelPermissions)
+      .setMaxValues(1)
+      .setMinValues(1)
+      .setCustomId('perms')
+      .setOptions(getChannelOptions(msg).slice((page - 1) * 25, page * 25)),
+  ],
+  [
+    new Discord.MessageButton()
+      .setCustomId('back')
+      .setEmoji(msg.client.constants.emotes.back)
+      .setStyle('SECONDARY')
+      .setDisabled(page === 1),
+    new Discord.MessageButton()
+      .setCustomId('next')
+      .setEmoji(msg.client.constants.emotes.forth)
+      .setStyle('SECONDARY')
+      .setDisabled(page === Math.ceil(msg.guild.channels.cache.size / 25)),
+  ],
+];
 
 const getChannelOptions = (msg) => {
   const channelsWithoutCategory = msg.guild.channels.cache.filter(
@@ -246,13 +320,11 @@ const getChannelOptions = (msg) => {
     sorted.splice(index + 1, 0, channel);
   });
 
-  const options = sorted.map((c) => {
-    return {
-      label: c.name,
-      value: c.id,
-      emoji: msg.client.constants.emotes.channelTypes[c.type],
-    };
-  });
+  const options = sorted.map((c) => ({
+    label: c.name,
+    value: c.id,
+    emoji: msg.client.constants.emotes.channelTypes[c.type],
+  }));
 
   return options;
 };
@@ -313,15 +385,9 @@ const getBoosting = (flags, user, msg) => {
   flags.push(...translatedBoostFlags);
 };
 
-/*
-
-
-
-        permissions
-        */
 const rolesHandler = async (interaction, msg, member) => {
   const res = await msg.client.ch.query(
-    `SELECT * FROM roleseparator WHERE guildid = $1 AND active = true;`,
+    'SELECT * FROM roleseparator WHERE guildid = $1 AND active = true;',
     [msg.guild.id],
   );
 
@@ -463,7 +529,7 @@ const basicPermsHandler = (interaction, msg, member) => {
 
   const embed = new Discord.MessageEmbed();
   categories.forEach((perms, name) => {
-    embed.addField(`${name}`, ` ${perms.join(`\n`)}\u200b`, false);
+    embed.addField(`${name}`, ` ${perms.join('\n')}\u200b`, false);
   });
 
   interaction.reply({ embeds: [embed], ephemeral: true });
@@ -494,10 +560,6 @@ const permsHandler = (interaction, msg, member) => {
 
   let usedPermissions = Discord.Permissions.ALL;
   switch (channel.type) {
-    default: {
-      usedPermissions = Discord.Permissions.ALL;
-      break;
-    }
     case 'GUILD_TEXT' || 'GUILD_PUBLIC_THREAD' || 'GUILD_PRIVATE_THREAD': {
       usedPermissions = new Discord.Permissions(535529258065n);
       categoryBits = [categoryBits[0], categoryBits[1], categoryBits[2]];
@@ -533,6 +595,10 @@ const permsHandler = (interaction, msg, member) => {
         categoryBits[4],
         categoryBits[5],
       ];
+      break;
+    }
+    default: {
+      usedPermissions = Discord.Permissions.ALL;
       break;
     }
   }
@@ -580,8 +646,118 @@ const permsHandler = (interaction, msg, member) => {
 
   const embed = new Discord.MessageEmbed();
   categories.forEach((perms, name) => {
-    embed.addField(`${name}`, ` ${perms.join(`\n`)}\u200b`, false);
+    embed.addField(`${name}`, ` ${perms.join('\n')}\u200b`, false);
   });
 
   interaction.reply({ embeds: [embed], ephemeral: true });
+};
+
+const getBotInfo = async (msg, bot) => {
+  const res = await axios
+    .get(`https://top.gg/api/bots/${bot.id}`, { headers: { Authorization: auth.topGGtoken } })
+    .catch(() => {});
+
+  if (!res || !res.data) return null;
+
+  const botInfo = msg.client.ch.stp(msg.lan.botInfo, {
+    res: res.data,
+    website: res.data.website ? res.data.website : msg.language.none,
+    support: res.data.support ? `https://discord.gg/${res.data.support}` : msg.language.none,
+    invite: res.data.invite,
+    github: res.data.github ? res.data.github : msg.language.none,
+  });
+
+  return { bannerURL: res.data.bannerURL, info: botInfo, description: res.data.shortdesc };
+};
+
+const decideUser = async (msg, users, m) => {
+  await m.edit({
+    content: '\u200b',
+    embeds: [],
+    components: msg.client.ch.buttonRower(getUserComponents(msg, 1, users)),
+  });
+
+  let page = 1;
+  const buttonsCollector = m.createMessageComponentCollector({ time: 60000 });
+  return new Promise((resolve) => {
+    buttonsCollector.on('collect', async (interaction) => {
+      if (interaction.user.id !== msg.author.id) {
+        msg.client.ch.notYours(interaction);
+        return;
+      }
+
+      buttonsCollector.resetTimer();
+
+      switch (interaction.customId) {
+        case 'back': {
+          page -= 1;
+
+          await interaction.update({
+            content: '\u200b',
+            components: msg.client.ch.buttonRower(getUserComponents(msg, page, users)),
+          });
+          break;
+        }
+        case 'next': {
+          page += 1;
+
+          await interaction.update({
+            content: '\u200b',
+            components: msg.client.ch.buttonRower(getUserComponents(msg, page, users)),
+          });
+          break;
+        }
+        default: {
+          const user = interaction.values[0];
+          buttonsCollector.stop();
+          resolve({ user, answer: interaction });
+          break;
+        }
+      }
+    });
+
+    buttonsCollector.on('end', (collected, reason) => {
+      if (reason === 'time') {
+        msg.client.ch.collectorEnd(msg, m);
+        resolve(null);
+      }
+    });
+  });
+};
+
+const getUserComponents = (msg, page, users) => {
+  const menu = [
+    new Discord.MessageSelectMenu()
+      .setPlaceholder(msg.lan.selectUser)
+      .setMaxValues(1)
+      .setMinValues(1)
+      .setCustomId('userSelection')
+      .setOptions(
+        users
+          .map((user) => ({
+            label: `${user.tag}`,
+            description: `${user.id}`,
+            value: `${user.id}`,
+          }))
+          .slice((page - 1) * 25, page * 25),
+      ),
+  ];
+
+  if (users.length > 25) {
+    const back = new Discord.MessageButton()
+      .setEmoji(msg.client.constants.emotes.back)
+      .setDisabled(page === 1)
+      .setCustomId('back')
+      .setStyle('SECONDARY');
+
+    const next = new Discord.MessageButton()
+      .setEmoji(msg.client.constants.emotes.forth)
+      .setCustomId('next')
+      .setDisabled(page === Math.ceil(users.length / 25))
+      .setStyle('SECONDARY');
+
+    return [menu, [back, next]];
+  }
+
+  return [menu];
 };

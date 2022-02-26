@@ -1083,7 +1083,9 @@
       "viewRoles": "View Roles",
       "viewBasicPermissions": "View Basic Permissions",
       "viewChannelPermissions": "View Channel Permissions",
-      "rolesWithoutSep": "Roles without Separator"
+      "rolesWithoutSep": "Roles without Separator",
+      "botInfo": "**Website:** {{website}}\n**Support Server:** {{support}}\n**Invite Link:** [Click to Invite]({{invite}})\n**GitHub:** {{github}}\n**Prefix:** `{{res.prefix}}`\n**Server Count:** {{res.server_count}}",
+      "selectUser": "Select the User you want to view"
     },
     "rank": {
       "description": "Display anyones current Server/Global Rank",
@@ -3215,7 +3217,8 @@
     "description": "On this Server, Level-Ups are indicated by reactions to your Message\nThe current Reactions are: {{reactions}}"
   },
   "errors": {
-    "userNotFound": "The mentioned User does not exist"
+    "userNotExist": "The mentioned User does not exist",
+    "userNotFound": "The mentioned User could not be found"
   },
   "expire": {
     "warnIssue": "Warn was issued at",
