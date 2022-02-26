@@ -499,7 +499,11 @@ module.exports = {
       Perms.push(lan.permissions.ADMINISTRATOR);
     }
     if (BitField.has(16n, false)) {
-      Perms.push(lan.permissions.MANAGE_CHANNELS);
+      if (isntRole) {
+        Perms.push(lan.permissions.MANAGE_CHANNEL);
+      } else {
+        Perms.push(lan.permissions.MANAGE_CHANNELS);
+      }
     }
     if (BitField.has(32n, false)) {
       Perms.push(lan.permissions.MANAGE_GUILD);
@@ -517,7 +521,11 @@ module.exports = {
       Perms.push(lan.permissions.STREAM);
     }
     if (BitField.has(1024n, false)) {
-      Perms.push(lan.permissions.VIEW_CHANNEL);
+      if (isntRole) {
+        Perms.push(lan.permissions.VIEW_CHANNEL);
+      } else {
+        Perms.push(lan.permissions.VIEW_CHANNELS);
+      }
     }
     if (BitField.has(2048n, false)) {
       Perms.push(lan.permissions.SEND_MESSAGES);
