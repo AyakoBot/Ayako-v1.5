@@ -907,11 +907,14 @@ module.exports = {
    * @constructor
    * @param {object} msg - The Message module.exports Function replies to.
    */
-  collectorEnd: (msg) => {
+  collectorEnd: (msg, m) => {
     const embed = new Discord.MessageEmbed()
       .setDescription(msg.language.timeError)
       .setColor(Constants.error);
-    msg.m.edit({ embeds: [embed], components: [] }).catch(() => {});
+
+    m
+      ? m.edit({ embeds: [embed], components: [] }).catch(() => {})
+      : msg.m.edit({ embeds: [embed], components: [] }).catch(() => {});
     return embed;
   },
   /**
@@ -1234,7 +1237,7 @@ module.exports = {
 
     return embeds.pop();
   },
-  error: (msg, content) => {
+  error: (msg, content, m) => {
     const embed = new Discord.MessageEmbed()
       .setAuthor({
         name: msg.language.error,
@@ -1255,6 +1258,7 @@ module.exports = {
       return msg.reply({ embeds: [embed], ephemeral: true });
     }
 
+    if (m) return m.edit({ embeds: [embed] }).catch(() => {});
     return module.exports.reply(msg, { embeds: [embed] });
   },
   permError: (msg, bits, me) => {
