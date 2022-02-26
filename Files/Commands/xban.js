@@ -15,11 +15,9 @@ module.exports = {
     const Gameverse = msg.client.guilds.cache.get('366219406776336385');
     const Animekos = msg.client.guilds.cache.get('298954459172700181');
     const banReason = msg.args[1] ? msg.args.slice(1).join(' ') : 'No Reason given';
-    // eslint-disable-next-line no-param-reassign
-    msg.guild = Gameverse;
+        msg.guild = Gameverse;
     msg.client.emit('modBanAdd', msg.author, user, banReason, msg);
-    // eslint-disable-next-line no-param-reassign
-    msg.guild = Animekos;
+        msg.guild = Animekos;
     msg.client.emit('modBanAdd', msg.author, user, banReason, msg);
     return null;
   },

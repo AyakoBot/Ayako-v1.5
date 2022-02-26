@@ -6,7 +6,6 @@ module.exports = {
   aliases: [],
   type: 'info',
   async execute(msg) {
-    // eslint-disable-next-line global-require
     if (msg.author.id !== require('../BaseClient/auth.json').ownerID) return;
     msg.client.ch.send(
       msg.client.channels.cache.get('706691541833351171'),

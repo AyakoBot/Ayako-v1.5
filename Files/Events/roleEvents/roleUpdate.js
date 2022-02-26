@@ -110,8 +110,7 @@ module.exports = {
 };
 
 function int2RGB2Hex(num) {
-  // eslint-disable-next-line no-param-reassign
-  num >>>= 0;
+    num >>>= 0;
   const b = num & 0xff;
   const g = (num & 0xff00) >>> 8;
   const r = (num & 0xff0000) >>> 16;

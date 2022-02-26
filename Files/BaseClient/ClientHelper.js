@@ -10,8 +10,6 @@ const auth = require('./auth.json');
 const ChannelRules = require('./Other Client Files/ChannelRules');
 const Constants = require('../Constants.json');
 
-// const { dirname } = require('path');
-// const appDir = dirname(require.main.filename);
 const DiscordEpoch = 1420070400000;
 
 module.exports = {

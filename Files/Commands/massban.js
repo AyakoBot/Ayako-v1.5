@@ -9,7 +9,6 @@ module.exports = {
   aliases: null,
   type: 'mod',
   async execute(msg, answer) {
-    // eslint-disable-next-line global-require,import/no-unresolved
     const args = msg.args[0] === 'ids' ? require('../ids.json').ids : msg.args;
     if (msg.args[0] === 'ids' && !args[0]) return msg.client.ch.reply(msg, msg.lan.noRaidIDs);
     const users = [];

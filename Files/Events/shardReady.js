@@ -1,6 +1,5 @@
 module.exports = {
   async execute(id, unavailableGuilds) {
-    // eslint-disable-next-line global-require
     const client = require('../BaseClient/DiscordClient');
     if (unavailableGuilds)
       client.ch.logger(
