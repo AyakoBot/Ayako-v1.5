@@ -30,7 +30,7 @@ module.exports = {
       msg.args[0] ? msg.args[0].replace(/\D+/g, '') : msg.author.id,
     );
     if (!user) {
-      msg.client.ch.error(msg, msg.language.errors.userNotFound);
+      msg.client.ch.error(msg, msg.language.errors.userNotExist);
       return;
     }
 
