@@ -11,7 +11,7 @@
     "browser": true,
     "es2021": true
   },
-  "extends": ["airbnb-base", "plugin:prettier/recommended"],
+  "extends": ["airbnb-base", "plugin:prettier/recommended", "airbnb"],
   "parserOptions": {
     "ecmaVersion": 2021
   },
@@ -34,6 +34,13 @@
     "global-require": "off",
     "import/no-dynamic-require": "off",
     "no-underscore-dangle": "off",
+    "no-confusing-arrow": "off",
+    "implicit-arrow-linebreak": "off",
+    "indent": "off",
+    "function-paren-newline": "off",
+    "operator-linebreak": "off",
+    "nonblock-statement-body-position": "off",
+    "padded-blocks": "off",
     "prettier/prettier": [
       "warn",
       {

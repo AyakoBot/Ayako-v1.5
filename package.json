@@ -7,6 +7,7 @@
     "confusables": "^1.1.0",
     "discord.js": "^13.6.0",
     "eris": "^0.16.1",
+    "eslint-config-airbnb-base": "^15.0.0",
     "express": "^4.17.3",
     "imgur": "^2.1.4",
     "moment": "^2.29.1",
@@ -26,5 +27,18 @@
     "util": "^0.12.4",
     "v8": "^0.1.0",
     "valid-url": "^1.0.9"
+  },
+  "devDependencies": {
+    "eslint": "^8.2.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.4.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-react-hooks": "^4.3.0"
+  },
+  "scripts": {
+    "lint": "S:/bots/ayako-v1.5/node_modules/.bin/eslint"
   }
 }
