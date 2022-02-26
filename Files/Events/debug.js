@@ -2,7 +2,6 @@ const auth = require('../BaseClient/auth.json');
 
 module.exports = {
   async execute(log) {
-    // eslint-disable-next-line global-require
     const client = require('../BaseClient/DiscordClient');
     if (
       `${log}`.includes(

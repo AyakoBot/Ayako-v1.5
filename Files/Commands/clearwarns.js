@@ -38,8 +38,7 @@ module.exports = {
       .setCustomId('no')
       .setLabel(msg.language.No)
       .setStyle('DANGER');
-    // eslint-disable-next-line no-param-reassign
-    msg.m = await msg.client.ch.reply(msg, {
+        msg.m = await msg.client.ch.reply(msg, {
       embeds: [embed],
       components: msg.client.ch.buttonRower([[yes, no]]),
     });

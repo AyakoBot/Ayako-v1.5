@@ -6,7 +6,6 @@ module.exports = {
   execute(msg) {
     const { args } = msg;
     if (!args[0]) return msg.client.ch.reply(msg, 'Please enter a valid command');
-    // eslint-disable-next-line import/no-dynamic-require,global-require
     const newCommand = require(`./${args[0]}.js`);
     try {
       msg.client.commands.set(newCommand.name, newCommand);

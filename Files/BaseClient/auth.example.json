@@ -1,0 +1,17 @@
+{
+    "token": "Discord Application Token",
+    "ownerID": "Owner Discord User ID",
+    "pSQLpw": "pSQL Database Password",
+    "Imgur": {
+        "clientID": "Imgur Client ID",
+        "clientSecret": "Imgur Client Secret"
+    },
+    "tenor": {
+        "key1": "Tenor API Key 1",
+        "key2": "Tenor API Key 2"
+    },
+    "VTtoken": "https://www.virustotal.com/ API Token",
+    "spamhausToken": "https://www.spamhaus.org/ API Token", 
+    "ip2whoisToken": "https://ip2whois.com/ API Token",
+    "promptAPIToken": "https://promptapi.com API Token"
+}

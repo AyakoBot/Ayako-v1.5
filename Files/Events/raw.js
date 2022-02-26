@@ -1,6 +1,5 @@
 module.exports = {
   async execute(event) {
-    // eslint-disable-next-line global-require
     const client = require('../BaseClient/DiscordClient');
     const { ch } = client;
     if (event.t === 'MESSAGE_REACTION_ADD') {
