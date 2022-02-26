@@ -49,7 +49,7 @@ module.exports = {
       ].map((id) => msg.client.users.cache.get(id));
 
       if (users.length === 1) {
-        user = await msg.client.users.fetch(users.first().id, { force: true });
+        user = await msg.client.users.fetch(users[0].id, { force: true });
       } else if (users.length) {
         const res = await decideUser(msg, users, m);
 
