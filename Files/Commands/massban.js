@@ -9,7 +9,7 @@ module.exports = {
   aliases: null,
   type: 'mod',
   async execute(msg, answer) {
-    const args = msg.args[0] === 'ids' ? require('../ids.json').ids : msg.args;
+    const args = msg.args[0] === 'ids' ? null : msg.args;
     if (msg.args[0] === 'ids' && !args[0]) return msg.client.ch.reply(msg, msg.lan.noRaidIDs);
     const users = [];
     const failed = [];
@@ -94,8 +94,8 @@ module.exports = {
         })
         .setTimestamp();
 
-      if (answer) msg.m = await answer.reply({ embeds: [replyEmbed] });
-      else msg.m = await msg.client.ch.reply({ embeds: [replyEmbed] });
+      if (answer) msg.m = await answer.followUp({ embeds: [replyEmbed] });
+      else msg.m = await msg.client.ch.reply(msg, { embeds: [replyEmbed] });
 
       if (!msg.m) {
         msg.m = await answer.fetchReply();
@@ -113,11 +113,11 @@ module.exports = {
           });
         if (ban) {
           descS.push(`<@${user.id ? user.id : user}>`);
-          if (`${descS}`.length > 2048)
+          if (`${descS}`.length > 2048) {
             replyEmbed.setDescription(
               msg.client.ch.stp(msg.lan.sBannedUsers, { amount: descS.length }),
             );
-          else replyEmbed.setDescription(`\u200b${descS.join(' ')}`);
+          } else replyEmbed.setDescription(`\u200b${descS.join(' ')}`);
         }
       });
       const editIntervalS = jobs.scheduleJob('*/5 * * * * *', () => {
@@ -126,11 +126,11 @@ module.exports = {
 
       const intervalS = jobs.scheduleJob('*/1 * * * * *', () => {
         if (descS.length === uniqueUsers.length) {
-          if (`${descS}`.length > 2048)
+          if (`${descS}`.length > 2048) {
             replyEmbed.setDescription(
               msg.client.ch.stp(msg.lan.sBannedUsers, { amount: descS.length }),
             );
-          else replyEmbed.setDescription(`\u200b${descS.join(' ')}`);
+          } else replyEmbed.setDescription(`\u200b${descS.join(' ')}`);
           replyEmbed.setAuthor({
             name: msg.lan.finish,
             iconURL: msg.client.constants.emotes.tickLink,
@@ -163,11 +163,11 @@ module.exports = {
 
       uniqueFails.forEach(async (fail) => {
         descF.push(`${fail}\n`);
-        if (`${descF}`.length > 2048)
+        if (`${descF}`.length > 2048) {
           replyEmbed.setDescription(
             msg.client.ch.stp(msg.lan.fBannedUsers, { amount: descF.length }),
           );
-        else replyEmbed.setDescription(`\u200b${descF.join('')}`);
+        } else replyEmbed.setDescription(`\u200b${descF.join('')}`);
       });
 
       const editintervalF = jobs.scheduleJob('*/5 * * * * *', () => {
@@ -176,11 +176,11 @@ module.exports = {
 
       const intervalF = jobs.scheduleJob('*/1 * * * * *', () => {
         if (descF.length === uniqueFails.length) {
-          if (`${descF}`.length > 2048)
+          if (`${descF}`.length > 2048) {
             replyEmbed.setDescription(
               msg.client.ch.stp(msg.lan.fBannedUsers, { amount: descF.length }),
             );
-          else replyEmbed.setDescription(`\u200b${descF.join('')}`);
+          } else replyEmbed.setDescription(`\u200b${descF.join('')}`);
           replyEmbed.setAuthor({
             name: msg.lan.failed,
             iconURL: msg.client.constants.emotes.crossLink,
@@ -205,12 +205,16 @@ module.exports = {
       if (uniqueUsers.length === descS.length && uniqueFails.length === descF.length) {
         const logembed = new Discord.MessageEmbed()
           .setAuthor({
-            name: msg.client.ch.stp(msg.lan.log.author, {
+            name: msg.client.ch.stp(msg.lan.log.desc, { amount: uniqueUsers.length }),
+            iconURL: msg.client.constants.guildBanAdd.author.image,
+            url: msg.client.constants.standard.invite,
+          })
+          .setDescription(
+            msg.client.ch.stp(msg.lan.log.author, {
               user: msg.author,
               amount: uniqueUsers.length,
             }),
-          })
-          .setDescription(msg.client.ch.stp(msg.lan.log.desc, { amount: uniqueUsers.length }))
+          )
           .addField(msg.language.reason, banreason)
           .setColor(con.log.color)
           .setTimestamp();

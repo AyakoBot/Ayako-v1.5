@@ -15,11 +15,9 @@ module.exports = {
 
 const checkAll = async (guild, language, con, client, r, memberIDs) => {
   const buffers = await Promise.all(
-    memberIDs.map(async (id) => {
-      return client.ch.convertImageURLtoBuffer([
-        client.ch.displayAvatarURL(client.users.cache.get(id)),
-      ]);
-    }),
+    memberIDs.map(async (id) =>
+      client.ch.convertImageURLtoBuffer([client.ch.displayAvatarURL(client.users.cache.get(id))]),
+    ),
   );
 
   const newIDs = memberIDs
@@ -35,7 +33,9 @@ const checkAll = async (guild, language, con, client, r, memberIDs) => {
     })
     .filter((u) => !!u);
 
-  run(guild, language, con, client, r, newIDs);
+  const similarUsers = getSimilarUsers(newIDs, guild);
+
+  run(guild, language, con, client, r, [...new Set([...newIDs, ...similarUsers])]);
 };
 
 const run = (guild, language, con, client, r, members) => {
@@ -143,4 +143,17 @@ const checkPFP = (ids, buffers, currentIndex) => {
     .filter((r) => !!r);
 
   return returns.length >= 3;
+};
+
+const getSimilarUsers = (ids, guild) => {
+  let otherUsers = [];
+
+  ids.forEach((id) => {
+    const { user } = guild.members.cache.get(id);
+    const otherUsersFilter = guild.members.cache.filter((m) => m.user.username === user.username);
+
+    otherUsers = [...otherUsers, ...otherUsersFilter];
+  });
+
+  return otherUsers;
 };

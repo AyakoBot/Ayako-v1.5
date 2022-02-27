@@ -3,9 +3,6 @@ const Discord = require('discord.js');
 module.exports = {
   execute: async (interaction) => {
     switch (interaction.customId) {
-      default: {
-        break;
-      }
       case 'vote_reminder_disable': {
         interaction.client.ch.query(
           `INSERT INTO users (userid, votereminders) VALUES ($1, $2)
@@ -67,6 +64,7 @@ module.exports = {
         break;
       }
       case 'antiraid_massban': {
+        interaction.deferReply();
         const command = interaction.client.commands.get('massban');
 
         const language = await interaction.client.ch.languageSelector(interaction.guild);
@@ -85,7 +83,7 @@ module.exports = {
           (await interaction.message.fetch()).attachments.first().url,
         );
 
-        const args = rawContent.replace(new RegExp('\\n', 'g'), ' ').split(/ +/);
+        const args = rawContent.replace(/\\n/g, ' ').split(/ +/);
 
         const msg = {
           client: interaction.client,
@@ -144,6 +142,9 @@ module.exports = {
           });
         });
 
+        break;
+      }
+      default: {
         break;
       }
     }
