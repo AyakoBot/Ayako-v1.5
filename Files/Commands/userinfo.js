@@ -448,7 +448,11 @@ const rolesHandler = async (interaction, msg, member) => {
         const index = separators.map((s) => s).findIndex((s) => s.id === key);
         const lastSep = separators.map((s) => s)[index - 1];
 
-        embed.addField(lastSep.name, sep.roles.map((r) => r).join('\n'), false);
+        embed.addField(
+          `${lastSep ? lastSep.name : '\u200b'}`,
+          sep.roles.map((r) => r).join('\n'),
+          false,
+        );
 
         if (key === separators.lastKey()) {
           embed.addField(sep.name, '\u200b', false);
