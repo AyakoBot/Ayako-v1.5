@@ -1087,6 +1087,17 @@
       "botInfo": "**Website:** {{website}}\n**Support Server:** {{support}}\n**Invite Link:** [Click to Invite]({{invite}})\n**GitHub:** {{github}}\n**Prefix:** `{{res.prefix}}`\n**Server Count:** {{res.server_count}}",
       "selectUser": "Select the User you want to view"
     },
+    "resetlevels": {
+      "description": "Reset the XP of one or all Users",
+      "usage": ["resetlevels all", "resetlevels [user]"],
+      "category": "Leveling",
+      "success": "User {{target}}'s XP was reset",
+      "loading": "Resetting User's XP...",
+      "sureAll": "Are you sure you want to reset __ALL__ XP and Levels of __EVERY__ Member on this Server?",
+      "sureUser": "Are you sure you want to reset __ALL__ XP and Levels of {{user}}?",
+      "author": "Ayako Leveling-Settings",
+      "reset": "Reset Levels of {{amount}} User(s)"
+    },
     "rank": {
       "description": "Display anyones current Server/Global Rank",
       "usage": ["rank", "rank (user)"],
@@ -1108,7 +1119,8 @@
       "author": "Ayako Leveling",
       "globalAuthor": "Ayako Global Leveling",
       "yourPosition": "Your Position",
-      "toggle": "Toggle User Type"
+      "toggle": "Toggle User Type",
+      "noLevels": "There are no Levels on this Server yet"
     },
     "disboardleaderboard": {
       "description": "Displays the top 30 Users by DISBOARD Bumps",
