@@ -292,6 +292,10 @@
     "https://ptb.discord.com/channels/[Guild ID]/[Channel ID]/[Message ID]",
     "https://canary.discord.com/channels/[Guild ID]/[Channel ID]/[Message ID]"
   ],
+  "colors": {
+    "warning": "#FF0000",
+    "success": "#00FF00"
+  },
   "standard": {
     "color": "#b0ff00",
     "name": "Ayako",
