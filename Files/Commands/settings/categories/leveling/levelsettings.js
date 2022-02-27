@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 
 module.exports = {
   perm: 32n,
-  type: 2,
+  type: 0,
   xpmultiplier: [
     0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9,
     2.0, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3.0, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8,
@@ -15,16 +15,16 @@ module.exports = {
   async displayEmbed(msg, r) {
     let lvlupmode;
     switch (r.lvlupmode) {
-      default: {
-        lvlupmode = msg.lan.silent;
-        break;
-      }
       case '1': {
         lvlupmode = msg.client.ch.stp(msg.lan.messages);
         break;
       }
       case '2': {
         lvlupmode = msg.client.ch.stp(msg.lan.reactions);
+        break;
+      }
+      default: {
+        lvlupmode = msg.lan.silent;
         break;
       }
     }
@@ -81,9 +81,6 @@ module.exports = {
       );
 
     switch (r.lvlupmode) {
-      default: {
-        break;
-      }
       case '1': {
         const customEmbed = await embedName(msg, r);
 
@@ -127,6 +124,9 @@ module.exports = {
                 .join('')
             : msg.client.constants.standard.levelupemotes.map((e) => e).join(''),
         );
+        break;
+      }
+      default: {
         break;
       }
     }
@@ -217,15 +217,6 @@ module.exports = {
     ]);
 
     switch (r.lvlupmode) {
-      default: {
-        components.push([
-          new Discord.MessageButton()
-            .setCustomId(msg.lan.edit.lvlupmode.name)
-            .setLabel(msg.lan.lvlupmode)
-            .setStyle('PRIMARY'),
-        ]);
-        break;
-      }
       case '1': {
         components.push([
           new Discord.MessageButton()
@@ -257,6 +248,15 @@ module.exports = {
           new Discord.MessageButton()
             .setCustomId(msg.lan.edit.lvlupemotes.name)
             .setLabel(msg.lan.lvlupemotes)
+            .setStyle('PRIMARY'),
+        ]);
+        break;
+      }
+      default: {
+        components.push([
+          new Discord.MessageButton()
+            .setCustomId(msg.lan.edit.lvlupmode.name)
+            .setLabel(msg.lan.lvlupmode)
             .setStyle('PRIMARY'),
         ]);
         break;
@@ -299,7 +299,7 @@ module.exports = {
 
 const embedName = async (msg, r) => {
   const res = await msg.client.ch.query(
-    `SELECT * FROM customembeds WHERE uniquetimestamp = $1 AND guildid = $2;`,
+    'SELECT * FROM customembeds WHERE uniquetimestamp = $1 AND guildid = $2;',
     [r.embed, msg.guild.id],
   );
 

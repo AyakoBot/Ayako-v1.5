@@ -15,7 +15,8 @@ const DiscordEpoch = 1420070400000;
 module.exports = {
   /**
    * Various regexes
-   * If using emojiTester regex with match(), !!filter output by length!!, as output can include 0 char strings
+   * If using emojiTester regex with match(), !!filter output by length!!,
+   * as output can include 0 char strings
    */
   regexes: {
     templateMatcher: /{{\s?([^{}\s]*)\s?}}/g,
@@ -24,7 +25,8 @@ module.exports = {
   /**
    * Sends a Message to a channel.
    * @constructor
-   * @param {object} channel - The Channel the Messages will be sent in (supports Array of Channels).
+   * @param {object} channel - The Channel the Messages will be sent in
+   *                           (supports Array of Channels).
    * @param {object|string} rawPayload - The Payload or String sent
    */
   send: async (channel, rawPayload) => {
@@ -75,10 +77,12 @@ module.exports = {
     });
   },
   /**
-   * Places Objects or Strings of the Objects Option into the Expressions option, replacing same named variables marked by "{{variable Name}}".
+   * Places Objects or Strings of the Objects Option into the Expressions option,
+   * replacing same named variables marked by "{{variable Name}}".
    * @constructor
    * @param {string} expression - The String following Strings/Objects will be put into.
-   * @param {object} Object - The Object containing all Strings/Objects that will be put into the expression.
+   * @param {object} Object - The Object containing all Strings/Objects
+   *                          that will be put into the expression.
    * @returns {string} The finished String with replaced variables
    */
   stp: (expression, Object) => {
@@ -155,9 +159,9 @@ module.exports = {
         .catch(() => {});
       if (channel && channel.id) {
         if (log) {
-          if (log.stack)
+          if (log.stack) {
             channel.send(`${type}${module.exports.makeCodeBlock(log.stack)}`).catch(() => {});
-          else channel.send(`${type}${module.exports.makeCodeBlock(log)}`).catch(() => {});
+          } else channel.send(`${type}${module.exports.makeCodeBlock(log)}`).catch(() => {});
           console.error(type, log);
         } else {
           channel.send(`${type}`).catch(() => {});
@@ -642,21 +646,18 @@ module.exports = {
    * @param {array} array1 - The first Array.
    * @param {array} array2 - The second Array.
    */
-  getDifference: (array1, array2) => {
-    return array1.filter((i) => array2.indexOf(i) < 0);
-  },
+  getDifference: (array1, array2) => array1.filter((i) => array2.indexOf(i) < 0),
   /**
    * Extracts a Dynamic Avatar URL from a Discord User.
    * @constructor
    * @param {object} user - The User/Member Object the Avatar URL is extracted from.
    */
-  displayAvatarURL: (user) => {
-    return user.displayAvatarURL({
+  displayAvatarURL: (user) =>
+    user.displayAvatarURL({
       dynamic: true,
       size: 2048,
       format: 'png',
-    });
-  },
+    }),
   /**
    * Extracts a Dynamic Banner URL from a Discord User.
    * @constructor
@@ -680,63 +681,59 @@ module.exports = {
    * @constructor
    * @param {object} guild - The Guild Object the Icon URL is extracted from.
    */
-  iconURL: (guild) => {
-    return guild.iconURL({
+  iconURL: (guild) =>
+    guild.iconURL({
       dynamic: true,
       size: 2048,
       format: 'png',
-    });
-  },
+    }),
   /**
    * Extracts a Dynamic Banner URL from a Discord Guild.
    * @constructor
    * @param {object} guild - The Guild Object the Banner URL is extracted from.
    */
-  bannerURL: (guild) => {
-    return guild.bannerURL({
+  bannerURL: (guild) =>
+    guild.bannerURL({
       dynamic: true,
       size: 2048,
       format: 'png',
-    });
-  },
+    }),
   /**
    * Extracts a Dynamic Splash URL from a Discord Guild.
    * @constructor
    * @param {object} guild - The Guild Object the Splash URL is extracted from.
    */
-  splashURL: (guild) => {
-    return guild.splashURL({
+  splashURL: (guild) =>
+    guild.splashURL({
       dynamic: true,
       size: 2048,
       format: 'png',
-    });
-  },
+    }),
   /**
    * Extracts a Dynamic discovery Splash URL from a Discord Guild.
    * @constructor
    * @param {object} guild - The Guild Object the discovery Splash URL is extracted from.
    */
-  discoverySplashURL: (guild) => {
-    return guild.discoverySplashURL({
+  discoverySplashURL: (guild) =>
+    guild.discoverySplashURL({
       dynamic: true,
       size: 2048,
       format: 'png',
-    });
-  },
+    }),
   /**
    * Extracts a Dynamic Avatar URL from a Discord Webhook.
    * @constructor
    * @param {object} webhook - The Webhook Object the Avatar URL is extracted from.
    */
-  avatarURL: (webhook) => {
-    return webhook.avatarURL({
+  avatarURL: (webhook) =>
+    webhook.avatarURL({
       dynamic: true,
       size: 2048,
       format: 'png',
-    });
-  },
+    }),
   /**
-   * Selects the Language for a Guild if it previously set a specific Language, if not it selects English.
+   * Selects the Language for a Guild if it previously set a specific Language,
+   * if not it selects English.
    * @constructor
    * @param {object} guild - The Guild the Language is Selected for.
    */
@@ -758,7 +755,8 @@ module.exports = {
    * @constructor
    * @param {msg} object - A reference Message.
    * @param {array} array - The Array of Strings to convert.
-   * @param {source} string - The Source of module.exports function call for sorting in correct Folders.
+   * @param {source} string - The Source of module.exports function
+   *                          call for sorting in correct Folders.
    */
   txtFileWriter: (array, source) => {
     if (!array.length) return null;
@@ -768,13 +766,13 @@ module.exports = {
     const split = '\n';
 
     switch (source) {
-      default: {
-        break;
-      }
       case 'antiraid': {
         array.forEach((element, i) => {
           content += `${element}${i % 3 === 2 ? split : ' '}`;
         });
+        break;
+      }
+      default: {
         break;
       }
     }
@@ -795,9 +793,7 @@ module.exports = {
    * @constructor
    * @param {string} text - The String to Test.
    */
-  containsNonLatinCodepoints: (text) => {
-    return module.exports.regexes.emojiTester.test(text);
-  },
+  containsNonLatinCodepoints: (text) => module.exports.regexes.emojiTester.test(text),
   /**
    * Checks and returns Uniques of 2 Bitfields.
    * @constructor
@@ -815,35 +811,28 @@ module.exports = {
    * @constructor
    * @param {string} text - The Text to turn into a Codeblock.
    */
-  makeCodeBlock: (text) => {
-    return `\`\`\`${text}\`\`\``;
-  },
+  makeCodeBlock: (text) => `\`\`\`${text}\`\`\``,
   /**
    * Converts a String into a Discord One-Line-Code.
    * @constructor
    * @param {string} text - The Text to turn into a One-Line-Code.
    */
-  makeInlineCode: (text) => {
-    return `\`${text}\``;
-  },
+  makeInlineCode: (text) => `\`${text}\``,
   /**
    * Converts a String to a Bold String.
    * @constructor
    * @param {string} text - The Text to turn Bold.
    */
-  makeBold: (text) => {
-    return `**${text}**`;
-  },
+  makeBold: (text) => `**${text}**`,
   /**
    * Converts a String to a underlined String.
    * @constructor
    * @param {string} text - The Text to turn Underlined.
    */
-  makeUnderlined: (text) => {
-    return `__${text}__`;
-  },
+  makeUnderlined: (text) => `__${text}__`,
   /**
-   * Awaits a reply of the Executor of a Moderation Command when the Command is used on another Moderator.
+   * Awaits a reply of the Executor of a Moderation Command when the
+   * Command is used on another Moderator.
    * @constructor
    * @param {object} msg - The triggering Message of module.exports Awaiter.
    */
@@ -884,7 +873,8 @@ module.exports = {
     });
   },
   /**
-   * Sends an ephemeral Message to the triggering User, telling them module.exports Button/Select Menu was not meant for them.
+   * Sends an ephemeral Message to the triggering User,
+   * telling them this Button/Select Menu was not meant for them.
    * @constructor
    * @param {object} interaction - The Interaction the triggering User sent.
    */
@@ -912,13 +902,14 @@ module.exports = {
       .setDescription(msg.language.timeError)
       .setColor(Constants.error);
 
-    m
-      ? m.edit({ embeds: [embed], components: [] }).catch(() => {})
-      : msg.m.edit({ embeds: [embed], components: [] }).catch(() => {});
+    if (m) {
+      m.edit({ embeds: [embed], components: [] }).catch(() => {});
+    } else msg.m.edit({ embeds: [embed], components: [] }).catch(() => {});
     return embed;
   },
   /**
-   * Converts Button Arrays into Action Rows usable by Discord.js. Multiple Action Rows are separated by nested Arrays.
+   * Converts Button Arrays into Action Rows usable by Discord.js.
+   * Multiple Action Rows are separated by nested Arrays.
    * @constructor
    * @param {array} buttonArrays - The Buttons that will be put into the Action Rows.
    */
@@ -951,17 +942,14 @@ module.exports = {
    * @constructor
    * @param {object} member - The Client User Member of module.exports Guild.
    */
-  colorSelector: (member) => {
-    return member && member.displayHexColor !== 0 ? member.displayHexColor : 'b0ff00';
-  },
+  colorSelector: (member) =>
+    member && member.displayHexColor !== 0 ? member.displayHexColor : 'b0ff00',
   /**
    * Capitalizes the first Letter of a String.
    * @constructor
    * @param {string} string - The String of which to capitalize the first Letter.
    */
-  CFL: (string) => {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  },
+  CFL: (string) => string.charAt(0).toUpperCase() + string.slice(1),
   /**
    * Creates a sample Loading Embed.
    * @constructor
@@ -1016,9 +1004,7 @@ module.exports = {
    * @constructor
    * @param {object} obj - The Object to clone
    */
-  objectClone: (obj) => {
-    return v8.deserialize(v8.serialize(obj));
-  },
+  objectClone: (obj) => v8.deserialize(v8.serialize(obj)),
   /**
    * Converts a File URL into a string if URL leads to a .txt File
    * @constructor
@@ -1117,8 +1103,8 @@ module.exports = {
    * @constructor
    * @param {object} DBembed - The Embed Data from the Database
    */
-  getDiscordEmbed: (DBembed) => {
-    return new Discord.MessageEmbed({
+  getDiscordEmbed: (DBembed) =>
+    new Discord.MessageEmbed({
       color: Number(DBembed.color),
       title: DBembed.title,
       url: DBembed.url,
@@ -1145,14 +1131,14 @@ module.exports = {
         text: DBembed.footertext,
         icon_url: DBembed.footericonurl,
       },
-    });
-  },
+    }),
   /**
    * Makes the Embed Builder easily globally Available
    * @constructor
    * @param {object} msg - The Message that initiated this
    * @param {object} answer - An interaction if any
-   * @param {array} options - Array of options with arg 1 being the option name and arg 2 the language for the option name
+   * @param {array} options - Array of options with arg 1 being the option name and
+   *                         arg 2 the language for the option name
    * @param {object} embed - An existing embed which can be edited
    * @param {number} page - An Page to instantly navigate to upon calling this
    */
@@ -1164,7 +1150,8 @@ module.exports = {
    * Converts a DB embed and its Dynamic Options to a Discord Embed
    * @constructor
    * @param {object} rawEmbed - The Embed to replace from
-   * @param {array} options - Array of options with arg 1 being the option accessor and arg 2 the option value
+   * @param {array} options - Array of options with arg 1 being the
+   *                          option accessor and arg 2 the option value
    */
   dynamicToEmbed: (rawEmbed, options) => {
     const embeds = [rawEmbed];

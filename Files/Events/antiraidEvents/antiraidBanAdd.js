@@ -5,9 +5,7 @@ module.exports = {
     const banPromises = targets.map((target) =>
       guild.bans
         .create(target, { days: 7, reason: `${executor.username} | ${reason}` })
-        .catch((e) => {
-          return `${target} | ${e}`;
-        }),
+        .catch((e) => `${target} | ${e}`),
     );
 
     const bans = await Promise.all(banPromises);
@@ -22,7 +20,7 @@ module.exports = {
       ),
     );
 
-    const res = await guild.client.ch.query(`SELECT modlogs FROM logchannels WHERE guildid = $1;`, [
+    const res = await guild.client.ch.query('SELECT modlogs FROM logchannels WHERE guildid = $1;', [
       guild.id,
     ]);
 
