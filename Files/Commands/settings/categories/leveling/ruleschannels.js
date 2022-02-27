@@ -3,7 +3,7 @@ const ChannelRules = require('../../../../BaseClient/Other Client Files/ChannelR
 
 module.exports = {
   perm: 32n,
-  type: 2,
+  type: 4,
   finished: true,
   setupRequired: false,
   rules: ChannelRules,
