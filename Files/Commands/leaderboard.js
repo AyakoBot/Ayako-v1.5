@@ -51,9 +51,6 @@ const buttonsHandler = (msg, types, isGuild, ownPos, content, oldEmbed) => {
     buttonsCollector.resetTimer();
 
     switch (interaction.customId) {
-      default: {
-        break;
-      }
       case 'tt': {
         type = types[(types.indexOf(type) + 1) % types.length];
         break;
@@ -64,6 +61,9 @@ const buttonsHandler = (msg, types, isGuild, ownPos, content, oldEmbed) => {
       }
       case 'back': {
         page -= 1;
+        break;
+      }
+      default: {
         break;
       }
     }
@@ -89,7 +89,7 @@ const getEmbed = (content, isGuild, msg, ownPos) => {
     .setColor(
       isGuild ? msg.client.ch.colorSelector(msg.guild.me) : msg.client.constants.standard.color,
     )
-    .setDescription(content)
+    .setDescription(content || msg.lan.noLevels)
     .setAuthor({
       name: isGuild ? msg.lan.author : msg.lan.globalAuthor,
       iconURL: msg.client.constants.commands.leaderboard.authorImage,
@@ -109,7 +109,7 @@ const getButtons = (msg, page, rows) => {
     .setCustomId('next')
     .setEmoji(msg.client.constants.emotes.forth)
     .setStyle('SECONDARY')
-    .setDisabled(page === Math.ceil(rows.length / 30));
+    .setDisabled(rows ? page === Math.ceil(rows.length / 30) : true);
 
   const back = new Discord.MessageButton()
     .setCustomId('back')
@@ -121,7 +121,7 @@ const getButtons = (msg, page, rows) => {
 };
 
 const getRow = async (msg) => {
-  const res = await msg.client.ch.query(`SELECT * FROM leveling WHERE guildid = $1;`, [
+  const res = await msg.client.ch.query('SELECT * FROM leveling WHERE guildid = $1;', [
     msg.guild.id,
   ]);
   if (res && res.rowCount) return res.rows[0];
@@ -139,60 +139,62 @@ const getContent = async (msg, type, isGuild, page) => {
 
   const ownPos = {};
 
-  const index = rows.findIndex((row) => row.userid === msg.author.id);
-  if (index !== -1) {
-    ownPos.name = msg.lan.yourPosition;
-    ownPos.value = `\`${spaces(`${index + 1}`, 6)} | ${spaces(`${rows[index].level}`, 6)} | \`${
-      msg.author
-    }`;
-  }
+  const index = rows?.findIndex((row) => row.userid === msg.author.id);
+  if (rows) {
+    if (index !== -1) {
+      ownPos.name = msg.lan.yourPosition;
+      ownPos.value = `\`${spaces(`${index + 1}`, 6)} | ${spaces(`${rows[index].level}`, 6)} | \`${
+        msg.author
+      }`;
 
-  rows.splice(30 * page, rows.length - 1);
-  rows.splice(0, 30 * (page - 1));
-
-  let content = `\`${spaces(msg.language.rank, 7)}| ${spaces(msg.language.level, 7)}| ${
-    msg.language.user
-  }\`\n`;
-
-  const users = await Promise.all(
-    rows.map((r) => {
-      if (msg.client.users.cache.get(r.userid)) return msg.client.users.cache.get(r.userid);
-      return msg.client.users.fetch(r.userid).catch(() => {});
-    }),
-  );
-
-  rows.forEach((row, i) => {
-    let user;
-
-    switch (type) {
-      default: {
-        break;
-      }
-      case 'tag': {
-        user = `${users[i].tag}\``;
-        break;
-      }
-      case 'id': {
-        user = `${users[i].id}\``;
-        break;
-      }
-      case 'mention': {
-        user = `\`${users[i]}`;
-      }
+      rows.splice(30 * page, rows.length - 1);
+      rows.splice(0, 30 * (page - 1));
     }
 
-    content += `\`${spaces(`${i + 1 + 30 * (page - 1)}`, 6)} | ${spaces(
-      `${row.level}`,
-      6,
-    )} | ${user}\n`;
-  });
+    const users = await Promise.all(
+      rows.map((r) => {
+        if (msg.client.users.cache.get(r.userid)) return msg.client.users.cache.get(r.userid);
+        return msg.client.users.fetch(r.userid).catch(() => {});
+      }),
+    );
+    let content = `\`${spaces(msg.language.rank, 7)}| ${spaces(msg.language.level, 7)}| ${
+      msg.language.user
+    }\`\n`;
 
-  return { content, rows: returnedRow, ownPos };
+    rows?.forEach((row, i) => {
+      let user;
+
+      switch (type) {
+        case 'tag': {
+          user = `${users[i].tag}\``;
+          break;
+        }
+        case 'id': {
+          user = `${users[i].id}\``;
+          break;
+        }
+        case 'mention': {
+          user = `\`${users[i]}`;
+          break;
+        }
+        default: {
+          break;
+        }
+      }
+
+      content += `\`${spaces(`${i + 1 + 30 * (page - 1)}`, 6)} | ${spaces(
+        `${row.level}`,
+        6,
+      )} | ${user}\n`;
+    });
+    return { content, rows: returnedRow, ownPos };
+  }
+  return { rows: returnedRow, ownPos };
 };
 
 const getGlobalRow = async (msg) => {
   const res = await msg.client.ch.query(
-    `SELECT * FROM level WHERE type = 'global' ORDER BY xp DESC;`,
+    "SELECT * FROM level WHERE type = 'global' ORDER BY xp DESC;",
   );
   if (res && res.rowCount) return res.rows;
   return null;
@@ -200,7 +202,7 @@ const getGlobalRow = async (msg) => {
 
 const getGuildRow = async (msg) => {
   const res = await msg.client.ch.query(
-    `SELECT * FROM level WHERE type = 'guild' AND guildid = $1 ORDER BY xp DESC;`,
+    "SELECT * FROM level WHERE type = 'guild' AND guildid = $1 ORDER BY xp DESC;",
     [msg.guild.id],
   );
   if (res && res.rowCount) return res.rows;
