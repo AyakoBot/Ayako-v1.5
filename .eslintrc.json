@@ -41,6 +41,7 @@
     "operator-linebreak": "off",
     "nonblock-statement-body-position": "off",
     "padded-blocks": "off",
+    "quotes": "off",
     "prettier/prettier": [
       "warn",
       {
