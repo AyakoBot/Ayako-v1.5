@@ -58,7 +58,7 @@ const checkInserts = async (oM, nM) => {
       row.booststarts.push(timestamp);
     }
 
-    if (!timestamp && row.booststarts.length !== row.boostends.length) {
+    if (!timestamp && row.booststarts.length !== row.boostends?.length) {
       row.boostends.push(Date.now());
     }
 
@@ -126,20 +126,13 @@ const logStart = async (member, days) => {
   }
 };
 
-const getSettings = async (member) => {
-  return (
-    await member.client.ch.query(
-      `SELECT * FROM nitrosettings WHERE guildid = $1 AND active = true;`,
-      [member.guild.id],
-    )
-  )?.rows[0];
-};
+const getSettings = async (member) =>
+  member.client.ch.query(`SELECT * FROM nitrosettings WHERE guildid = $1 AND active = true;`, [
+    member.guild.id,
+  ])?.rows[0];
 
-const getDays = async (member) => {
-  return (
-    await member.client.ch.query(`SELECT * FROM nitrousers WHERE guildid = $1 AND userid = $2;`, [
-      member.guild.id,
-      member.user.id,
-    ])
-  )?.rows[0]?.days;
-};
+const getDays = async (member) =>
+  member.client.ch.query(`SELECT * FROM nitrousers WHERE guildid = $1 AND userid = $2;`, [
+    member.guild.id,
+    member.user.id,
+  ])?.rows[0]?.days;
