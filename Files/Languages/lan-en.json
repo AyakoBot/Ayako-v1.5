@@ -1541,8 +1541,14 @@
     "avatar": {
       "category": "User",
       "description": "Display the Avatar of you or someone else in full size",
-      "usage": ["avatar (user ID or mention)"],
+      "usage": ["avatar (user ID or mention)", "serveravatar (user ID or mention)"],
       "avatarOf": "Avatar of {{user.tag}}"
+    },
+    "banner": {
+      "category": "User",
+      "description": "Display the Banner of you or someone else in full size",
+      "usage": ["banner (user ID or mention)", "serverbanner (user ID or mention)"],
+      "bannerOf": "Banner of {{user.tag}}"
     },
     "contact": {
       "category": "Info",
@@ -3249,7 +3255,8 @@
     "userNotFound": "The mentioned User could not be found",
     "numTooLarge": "Number too large",
     "guildCommand": "This Command is only available in Servers",
-    "memberNotFound": "Member not found"
+    "memberNotFound": "Member not found",
+    "notAvailableAPI": "This Command is not yet available due to Discord API limitations"
   },
   "expire": {
     "warnIssue": "Warn was issued at",

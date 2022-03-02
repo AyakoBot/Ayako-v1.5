@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 
 module.exports = {
   name: 'avatar',
-  aliases: ['av', 'pfp', 'spfp', 'sav', 'serveravatar'],
+  aliases: ['av', 'pfp', 'spfp', 'sav', 'serveravatar', 'savatar'],
   perm: null,
   dm: true,
   takesFirstArg: false,
@@ -15,7 +15,8 @@ module.exports = {
     const isGlobal =
       !msg.content.split(' ')[0].includes(module.exports.aliases[2]) &&
       !msg.content.split(' ')[0].includes(module.exports.aliases[3]) &&
-      !msg.content.split(' ')[0].includes(module.exports.aliases[4]);
+      !msg.content.split(' ')[0].includes(module.exports.aliases[4]) &&
+      !msg.content.split(' ')[0].includes(module.exports.aliases[5]);
 
     if (!isGlobal && msg.channel.type === 'DM') {
       msg.client.ch.error(msg, msg.language.errors.guildCommand);
