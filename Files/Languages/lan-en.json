@@ -3247,7 +3247,9 @@
   "errors": {
     "userNotExist": "The mentioned User does not exist",
     "userNotFound": "The mentioned User could not be found",
-    "numTooLarge": "Number too large"
+    "numTooLarge": "Number too large",
+    "guildCommand": "This Command is only available in Servers",
+    "memberNotFound": "Member not found"
   },
   "expire": {
     "warnIssue": "Warn was issued at",
