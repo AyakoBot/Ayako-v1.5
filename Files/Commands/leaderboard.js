@@ -79,7 +79,7 @@ const buttonsHandler = (msg, types, isGuild, ownPos, content, oldEmbed) => {
   });
   buttonsCollector.on('end', (collected, reason) => {
     if (reason === 'time') {
-      msg.m.edit({ embeds: [getEmbed(content, isGuild, msg, ownPos)], components: [] });
+      disableComponents(msg, getEmbed(content, isGuild, msg, ownPos));
     }
   });
 };
