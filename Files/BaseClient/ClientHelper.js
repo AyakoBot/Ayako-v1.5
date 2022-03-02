@@ -1290,4 +1290,13 @@ module.exports = {
 
     return module.exports.reply(msg, { embeds: [embed] });
   },
+  disableComponents: async (msg, embed) => {
+    msg.m.components.forEach((componentRow, i) => {
+      componentRow.components.forEach((component, j) => {
+        msg.m.components[i].components[j].disabled = true;
+      });
+    });
+
+    await msg.m.edit({ embeds: [embed], components: msg.m.components });
+  },
 };
