@@ -131,8 +131,11 @@ const getSettings = async (member) =>
     member.guild.id,
   ])?.rows[0];
 
-const getDays = async (member) =>
-  member.client.ch.query(`SELECT * FROM nitrousers WHERE guildid = $1 AND userid = $2;`, [
-    member.guild.id,
-    member.user.id,
-  ])?.rows[0]?.days;
+const getDays = async (member) => {
+  const res = await member.client.ch.query(
+    `SELECT * FROM nitrousers WHERE guildid = $1 AND userid = $2;`,
+    [member.guild.id, member.user.id],
+  );
+  if (res && res.rowCount) return res.rows[0].days;
+  return null;
+};
