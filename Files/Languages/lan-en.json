@@ -1091,12 +1091,28 @@
       "description": "Reset the XP of one or all Users",
       "usage": ["resetlevels all", "resetlevels [user]"],
       "category": "Leveling",
-      "success": "User {{target}}'s XP was reset",
-      "loading": "Resetting User's XP...",
       "sureAll": "Are you sure you want to reset __ALL__ XP and Levels of __EVERY__ Member on this Server?",
       "sureUser": "Are you sure you want to reset __ALL__ XP and Levels of {{user}}?",
       "author": "Ayako Leveling-Settings",
       "reset": "Reset Levels of {{amount}} User(s)"
+    },
+    "setlevel": {
+      "description": "Add XP or Levels to one or all Users",
+      "usage": ["addlevels"],
+      "category": "Leveling",
+      "success": "Added {{amountAdded}} {{type}} to {{targets}}",
+      "author": "Ayako Leveling-Settings",
+      "selectUser": "Reply with a User ID or Mention",
+      "resetLevel": "Reset Level",
+      "resetXP": "Reset XP",
+      "remove": "Remove 0",
+      "add": "Add 0",
+      "oldLvl": "Old Level",
+      "oldXP": "Old XP",
+      "newLvl": "New Level",
+      "newXP": "New XP",
+      "selectInfo": "New Level: {{selection.newLvl}}\nNew XP: {{selection.newXP}}\n\nCurrent Level: {{selection.curLvl}}\nCurrent XP: {{selection.curXP}}",
+      "updated": "Level and XP of {{user}} were Updated"
     },
     "rank": {
       "description": "Display anyones current Server/Global Rank",
@@ -3230,7 +3246,8 @@
   },
   "errors": {
     "userNotExist": "The mentioned User does not exist",
-    "userNotFound": "The mentioned User could not be found"
+    "userNotFound": "The mentioned User could not be found",
+    "numTooLarge": "Number too large"
   },
   "expire": {
     "warnIssue": "Warn was issued at",
