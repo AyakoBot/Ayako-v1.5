@@ -21,7 +21,7 @@ module.exports = {
     else return;
     if (!prefix) return;
     msg.language = await msg.client.ch.languageSelector(msg.guild);
-    const args = msg.content.replace(new RegExp('\\n', 'g'), ' ').slice(prefix.length).split(/ +/);
+    const args = msg.content.replace(/\\n/g, ' ').slice(prefix.length).split(/ +/);
     const commandName = args.shift().toLowerCase();
     let command =
       msg.client.commands.get(commandName) ||
