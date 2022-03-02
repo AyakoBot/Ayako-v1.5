@@ -54,6 +54,13 @@ const guildLeveling = async (msg, language) => {
 
   const rows = isEnabled?.rows[0];
   if (rows) {
+    if (rows.ignoreprefixes && rows.prefixes.length) {
+      const startsWith = rows.prefixes.some((w) =>
+        msg.content.toLowerCase().startsWith(w.toLowerCase()),
+      );
+      if (startsWith) return;
+    }
+
     if (!rows.wlusers || !rows.wlusers.includes(msg.author.id)) {
       if (rows.blusers && rows.blusers?.includes(msg.author.id)) return;
       if (rows.blroles && msg.member.roles.cache.some((r) => rows.blroles.includes(r.id))) return;
@@ -143,7 +150,17 @@ const updateLevels = async (msg, row, lvlupObj, baseXP, type, xpMultiplier) => {
   if (xp >= neededXP) {
     newLevel += 1;
     if (row) {
-      levelUp(msg, { oldXp, newXp: xp, newLevel, oldLevel }, lvlupObj, row);
+      levelUp(
+        msg,
+        {
+          oldXp,
+          newXp: xp,
+          newLevel,
+          oldLevel,
+        },
+        lvlupObj,
+        row,
+      );
     }
   }
 
@@ -176,15 +193,15 @@ const checkEnabled = async (msg) => {
 
 const levelUp = async (msg, levelData, { row, language }, settingsrow) => {
   switch (Number(settingsrow?.lvlupmode)) {
-    default: {
-      break;
-    }
     case 1: {
       await doEmbed(msg, row, language, levelData, settingsrow);
       break;
     }
     case 2: {
       await doReact(msg, settingsrow, levelData, language);
+      break;
+    }
+    default: {
       break;
     }
   }
@@ -204,9 +221,6 @@ const roleAssign = async (msg, rolemode, newLevel) => {
   let rem = [];
 
   switch (Number(rolemode)) {
-    default: {
-      break;
-    }
     case 0: {
       // stack
       const thisLevelsRows = rows.filter((r) => Number(r.level) <= Number(newLevel));
@@ -251,6 +265,9 @@ const roleAssign = async (msg, rolemode, newLevel) => {
       });
       break;
     }
+    default: {
+      break;
+    }
   }
 
   if (add.length) {
@@ -288,11 +305,10 @@ const doReact = async (msg, row, levelData, language) => {
 };
 
 const doEmbed = async (msg, settinsgrow, language, levelData, row) => {
-  const getDefaultEmbed = () => {
-    return new Discord.MessageEmbed()
+  const getDefaultEmbed = () =>
+    new Discord.MessageEmbed()
       .setAuthor({ name: language.leveling.author })
       .setColor(msg.client.ch.colorSelector(msg.member));
-  };
 
   let embed;
 
@@ -365,10 +381,6 @@ const checkPass = (msg, rows) => {
 
     Object.entries(appliedRules).forEach(([key, num]) => {
       switch (key) {
-        default: {
-          willLevel.push(true);
-          break;
-        }
         case 'has_least_attachments': {
           if (msg.attachments.size < num) willLevel.push(false);
           break;
@@ -438,13 +450,15 @@ const checkPass = (msg, rows) => {
           break;
         }
         case 'has_least_emotes': {
-          if ((msg.content.match(/<(a)?:[a-zA-Z0-9_]+:[0-9]+>/gi)?.length || null) < num)
+          if ((msg.content.match(/<(a)?:[a-zA-Z0-9_]+:[0-9]+>/gi)?.length || null) < num) {
             willLevel.push(false);
+          }
           break;
         }
         case 'has_most_emotes': {
-          if ((msg.content.match(/<(a)?:[a-zA-Z0-9_]+:[0-9]+>/gi)?.length || null) > num)
+          if ((msg.content.match(/<(a)?:[a-zA-Z0-9_]+:[0-9]+>/gi)?.length || null) > num) {
             willLevel.push(false);
+          }
           break;
         }
         case 'has_least_mentions': {
@@ -463,6 +477,10 @@ const checkPass = (msg, rows) => {
           ) {
             willLevel.push(false);
           }
+          break;
+        }
+        default: {
+          willLevel.push(true);
           break;
         }
       }
@@ -488,7 +506,12 @@ const debug = async (msg, lang) => {
 
   levelUp(
     msg,
-    { oldXp: 100, newXp: 150, newLevel: 4, oldLevel: 3 },
+    {
+      oldXp: 100,
+      newXp: 150,
+      newLevel: 4,
+      oldLevel: 3,
+    },
     { res, language: lang },
     res2.rows[0],
   );

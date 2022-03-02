@@ -1291,6 +1291,14 @@
           "lvlupchannels": {
             "key": "channels",
             "required": false
+          },
+          "ignoreprefixes": {
+            "key": "boolean",
+            "required": true
+          },
+          "prefixes": {
+            "key": "stringArray",
+            "required": false
           }
         },
         "nitrosettings": {
@@ -1529,8 +1537,8 @@
           "vals": null
         },
         "levelsettings": {
-          "cols": ["guildid, active, xppermsg, rolemode, xpmultiplier, lvlupmode"],
-          "vals": [["{{msg.guild.id}}", true, 25, true, 1.0, 0]]
+          "cols": ["guildid, active, xppermsg, rolemode, xpmultiplier, lvlupmode, ignoreprefixes"],
+          "vals": [["{{msg.guild.id}}", true, 25, true, 1.0, 0, false]]
         },
         "nitrosettings": {
           "cols": ["guildid, active, rolemode"],

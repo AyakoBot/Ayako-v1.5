@@ -2623,6 +2623,8 @@
         "lvlupemotes": "Level-Up Emotes",
         "lackingAccess": "I'm lacking access to these emotes: {{emotes}}",
         "actualXP": "Actual XP per message (with multiplier)",
+        "prefixes": "Prefixes",
+        "ignoreprefixes": "Ignore Prefixes",
         "options": {
           "user": "a mention of the User who leveled up",
           "newLevel": "the new Level",
@@ -2633,6 +2635,15 @@
         "edit": {
           "active": {
             "name": "Active",
+            "answers": "`True` or `False`",
+            "recommended": "Recommended: `True`"
+          },
+          "prefixes": {
+            "name": "Prefixes",
+            "answers": "Prefixes to Ignore"
+          },
+          "ignoreprefixes": {
+            "name": "Ignore Prefixes",
             "answers": "`True` or `False`",
             "recommended": "Recommended: `True`"
           },

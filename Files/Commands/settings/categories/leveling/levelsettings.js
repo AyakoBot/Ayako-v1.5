@@ -188,6 +188,26 @@ module.exports = {
         }`,
         inline: false,
       },
+      {
+        name: '\u200b',
+        value: '\u200b',
+        inline: false,
+      },
+      {
+        name: msg.lan.ignoreprefixes,
+        value: r.ignoreprefixes
+          ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
+          : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
+        inline: false,
+      },
+      {
+        name: msg.lan.prefixes,
+        value: `${
+          r.prefixes && r.prefixes.length
+            ? r.prefixes.map((w) => `\`${w}\``).join(', ')
+            : msg.language.none
+        }`,
+      },
     );
     return embed;
   },
@@ -290,6 +310,14 @@ module.exports = {
       new Discord.MessageButton()
         .setCustomId(msg.lan.edit.wlusers.name)
         .setLabel(msg.lan.wlusers)
+        .setStyle('PRIMARY'),
+      new Discord.MessageButton()
+        .setCustomId(msg.lan.edit.ignoreprefixes.name)
+        .setLabel(msg.lan.ignoreprefixes)
+        .setStyle(r.ignoreprefixes ? 'SUCCESS' : 'SECONDARY'),
+      new Discord.MessageButton()
+        .setCustomId(msg.lan.edit.prefixes.name)
+        .setLabel(msg.lan.prefixes)
         .setStyle('PRIMARY'),
     ]);
 
