@@ -136,11 +136,12 @@ const getContent = async (msg, type, isGuild, page) => {
   else rows = await getGlobalRow(msg);
 
   const returnedRow = msg.client.ch.objectClone(rows);
-
   const ownPos = {};
-
   const index = rows?.findIndex((row) => row.userid === msg.author.id);
+
   if (rows) {
+    const longestLevel = Math.max(...rows.map((row) => String(row.level).length));
+
     if (index !== -1) {
       ownPos.name = msg.lan.yourPosition;
       ownPos.value = `\`${spaces(`${index + 1}`, 6)} | ${spaces(`${rows[index].level}`, 6)} | \`${
@@ -157,9 +158,11 @@ const getContent = async (msg, type, isGuild, page) => {
         return msg.client.users.fetch(r.userid).catch(() => {});
       }),
     );
-    let content = `\`${spaces(msg.language.rank, 7)}| ${spaces(msg.language.level, 7)}| ${
-      msg.language.user
-    }\`\n`;
+
+    let content = `\`${spaces(msg.language.rank, 7)}| ${spaces(
+      msg.language.level,
+      longestLevel + 1,
+    )}| ${msg.language.user}\`\n`;
 
     rows?.forEach((row, i) => {
       let user;
@@ -184,7 +187,7 @@ const getContent = async (msg, type, isGuild, page) => {
 
       content += `\`${spaces(`${i + 1 + 30 * (page - 1)}`, 6)} | ${spaces(
         `${row.level}`,
-        6,
+        longestLevel,
       )} | ${user}\n`;
     });
     return { content, rows: returnedRow, ownPos };
