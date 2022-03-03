@@ -134,48 +134,54 @@ const getEvents = () => {
   return events;
 };
 
-const getClient = () => {
-  const client = new Discord.Client({
-    failIfNotExists: false,
-    shards: 'auto',
-    partials: [
-      Discord.Partials.Message,
-      Discord.Partials.Reaction,
-      Discord.Partials.Channel,
-      Discord.Partials.User,
-      Discord.Partials.GuildMember,
-      Discord.Partials.GuildScheduledEvent,
-    ],
-    intents: new Discord.IntentsBitField(79615),
+class Client extends Discord.Client {
+  constructor() {
+    super({
+      failIfNotExists: false,
+      shards: 'auto',
+      partials: [
+        Discord.Partials.Message,
+        Discord.Partials.Reaction,
+        Discord.Partials.Channel,
+        Discord.Partials.User,
+        Discord.Partials.GuildMember,
+        Discord.Partials.GuildScheduledEvent,
+      ],
+      intents: new Discord.IntentsBitField(79615),
 
-    allowedMentions: {
-      parse: ['users', 'roles'],
-      repliedUser: false,
-    },
-    sweepers: {
-      messages: {
-        interval: 60,
-        lifetime: 1209600,
+      allowedMentions: {
+        parse: ['users', 'roles'],
+        repliedUser: false,
       },
-    },
-  });
+      sweepers: {
+        messages: {
+          interval: 60,
+          lifetime: 1209600,
+        },
+      },
+    });
 
-  client.commands = getCommands();
-  client.events = getEvents();
-  client.languages = getLanguages();
-  client.settingsEditors = getSettingsEditors();
-  client.settings = getSettings();
+    this.commands = getCommands();
+    this.events = getEvents();
+    this.languages = getLanguages();
+    this.settingsEditors = getSettingsEditors();
+    this.settings = getSettings();
 
-  client.mutes = new Discord.Collection();
-  client.bans = new Discord.Collection();
+    this.mutes = new Discord.Collection();
+    this.bans = new Discord.Collection();
 
-  client.invites = new Map();
-  client.verificationCodes = new Map();
+    this.invites = new Map();
+    this.verificationCodes = new Map();
 
-  client.eris = Eris;
-  client.constants = Constants;
+    this.eris = Eris;
+    this.constants = Constants;
 
-  client.setMaxListeners(client.events.size);
+    this.setMaxListeners(this.events.size);
+  }
+}
+
+const getClient = () => {
+  const client = new Client();
 
   return client;
 };
