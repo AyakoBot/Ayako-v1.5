@@ -145,8 +145,8 @@ module.exports = {
                 embed.addFields({
                   name: language.moved,
                   value: ch.stp(lan.movedAudit, {
-                    newType: language.channels[newState.channel.type],
-                    oldType: language.channels[oldState.channel.type],
+                    newType: language.channelTypes[newState.channel.type],
+                    oldType: language.channelTypes[oldState.channel.type],
                     user: entry.executor,
                     oldChannel: oldState.channel,
                     newChannel: newState.channel,
@@ -156,8 +156,8 @@ module.exports = {
                 embed.addFields({
                   name: language.moved,
                   value: ch.stp(lan.moved, {
-                    newType: language.channels[newState.channel.type],
-                    oldType: language.channels[oldState.channel.type],
+                    newType: language.channelTypes[newState.channel.type],
+                    oldType: language.channelTypes[oldState.channel.type],
                     oldChannel: oldState.channel,
                     newChannel: newState.channel,
                   }),
@@ -167,8 +167,8 @@ module.exports = {
               embed.addFields({
                 name: language.moved,
                 value: ch.stp(lan.movedNoAudit, {
-                  newType: language.channels[newState.channel.type],
-                  oldType: language.channels[oldState.channel.type],
+                  newType: language.channelTypes[newState.channel.type],
+                  oldType: language.channelTypes[oldState.channel.type],
                   oldChannel: oldState.channel,
                   newChannel: newState.channel,
                 }),
@@ -182,7 +182,7 @@ module.exports = {
                 embed.addFields({
                   name: language.disconnected,
                   value: ch.stp(lan.disconnectedAudit, {
-                    oldType: language.channels[oldState.channel.type],
+                    oldType: language.channelTypes[oldState.channel.type],
                     user: entry.executor,
                     oldChannel: oldState.channel,
                   }),
@@ -191,7 +191,7 @@ module.exports = {
                 embed.addFields({
                   name: language.disconnected,
                   value: ch.stp(lan.disconnected, {
-                    oldType: language.channels[oldState.channel.type],
+                    oldType: language.channelTypes[oldState.channel.type],
                     oldChannel: oldState.channel,
                   }),
                 });
@@ -200,7 +200,7 @@ module.exports = {
               embed.addFields({
                 name: language.disconnected,
                 value: ch.stp(lan.disconnected, {
-                  oldType: language.channels[oldState.channel.type],
+                  oldType: language.channelTypes[oldState.channel.type],
                   oldChannel: oldState.channel,
                 }),
               });
@@ -209,7 +209,7 @@ module.exports = {
             embed.addFields({
               name: language.connected,
               value: ch.stp(lan.connected, {
-                newType: language.channels[newState.channel.type],
+                newType: language.channelTypes[newState.channel.type],
                 newChannel: newState.channel,
               }),
             });

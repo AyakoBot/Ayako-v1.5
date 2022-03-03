@@ -587,19 +587,6 @@
     "HAS_MOST_MENTIONS": "Has at most [externally defined] Mentions",
     "HAS_MOST_MENTIONS_SHORT": "most Mentions count"
   },
-  "channels": {
-    "0": "Text Channel",
-    "1": "DM Channel",
-    "2": "Voice Channel",
-    "3": "Group DM Channel",
-    "4": "Category",
-    "5": "Announcements Channel",
-    "6": "Store Channel",
-    "13": "Stage Channel",
-    "10": "News Channels public Thread Channel",
-    "11": "Channels public Thread Channel",
-    "12": "Channels private Thread Channel"
-  },
   "channelsNrSorted": {
     "0": "Text Channel",
     "1": "DM Channel",
@@ -3323,11 +3310,17 @@
     "BOOST24": "Boosting since at least 24 Months"
   },
   "channelTypes": {
-    "4": "Category",
     "0": "Text Channel",
+    "1": "DM Channel",
     "2": "Voice Channel",
-    "5": "News Channel",
-    "13": "Stage Channel"
+    "3": "Group DM Channel",
+    "4": "Category",
+    "5": "Announcements Channel",
+    "6": "Store Channel",
+    "13": "Stage Channel",
+    "10": "News Channels public Thread Channel",
+    "11": "Channels public Thread Channel",
+    "12": "Channels private Thread Channel"
   },
   "featuresName": "Features",
   "none": "None",

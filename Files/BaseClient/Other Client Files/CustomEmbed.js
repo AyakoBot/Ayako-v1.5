@@ -4,9 +4,9 @@ class CustomEmbed extends Discord.UnsafeEmbed {
   constructor(guild, oldEmbed) {
     super();
 
-    this.data = oldEmbed.data;
-
     if (oldEmbed) {
+      this.data = oldEmbed.data;
+
       if (oldEmbed.author && !oldEmbed.author.link) {
         this.setAuthor({
           url: guild.client.constants.standard.invite,

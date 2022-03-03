@@ -22,7 +22,7 @@ module.exports = {
           name: `${msg.language.number}: \`${r.id}\` | ${r.multiplier ? r.multiplier : '1.0'}x`,
           value: `${msg.language.affected}: ${
             r.channels && r.channels.length
-              ? `${r.channels.length} ${msg.language.Channels}`
+              ? `${r.channels.length} ${msg.language.channelTypes}`
               : msg.language.none
           }`,
           inline: true,
