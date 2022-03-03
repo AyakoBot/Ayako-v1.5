@@ -29,14 +29,14 @@ module.exports = {
         if (entry && entry.id) {
           const embed = new Discord.UnsafeEmbed()
             .setAuthor({
-              name: ch.stp(lan.author.title, { type: language.channels[channel.type] }),
+              name: ch.stp(lan.author.title, { type: language.channelTypes[channel.type] }),
               iconURL: con.author.image,
             })
             .setDescription(
               ch.stp(lan.description.withUser, {
                 user: entry.executor,
                 channel,
-                type: language.channels[channel.type],
+                type: language.channelTypes[channel.type],
               }),
             )
             .setColor(con.color)
@@ -50,7 +50,7 @@ module.exports = {
             })
             .setDescription(lan.description.withoutUser, {
               channel,
-              type: language.channels[channel.type],
+              type: language.channelTypes[channel.type],
             })
             .setColor(con.color)
             .setTimestamp();

@@ -30,7 +30,7 @@ module.exports = {
         if (entry && entry.id) {
           const embed = new Discord.UnsafeEmbed()
             .setAuthor({
-              name: ch.stp(lan.author.title, { type: language.channels[channel.type] }),
+              name: ch.stp(lan.author.title, { type: language.channelTypes[channel.type] }),
               iconURL: con.author.image,
               url: ch.stp(con.author.link, { channel }),
             })
@@ -38,7 +38,7 @@ module.exports = {
               ch.stp(lan.description.withUser, {
                 user: entry.executor,
                 channel,
-                type: language.channels[channel.type],
+                type: language.channelTypes[channel.type],
               }),
             )
             .setColor(con.color)
@@ -91,13 +91,13 @@ module.exports = {
             if (before === undefined) before = language.none;
             if (after === undefined) after = language.none;
             if (entry.changes[i].key === 'type') {
-              if (entry.changes[i].old === 0) entry.changes[i].old = language.channels.text;
-              else if (entry.changes[i].old === 2) entry.changes[i].old = language.channels.voice;
-              else if (entry.changes[i].old === 5) entry.changes[i].old = language.channels.news;
+              if (entry.changes[i].old === 0) entry.changes[i].old = language.channelTypes.text;
+              else if (entry.changes[i].old === 2) entry.changes[i].old = language.channelTypes.voice;
+              else if (entry.changes[i].old === 5) entry.changes[i].old = language.channelTypes.news;
               else entry.changes[i].old = language.unknown;
-              if (entry.changes[i].new === 0) entry.changes[i].new = language.channels.text;
-              else if (entry.changes[i].new === 2) entry.changes[i].new = language.channels.voice;
-              else if (entry.changes[i].new === 5) entry.changes[i].new = language.channels.news;
+              if (entry.changes[i].new === 0) entry.changes[i].new = language.channelTypes.text;
+              else if (entry.changes[i].new === 2) entry.changes[i].new = language.channelTypes.voice;
+              else if (entry.changes[i].new === 5) entry.changes[i].new = language.channelTypes.news;
               else entry.changes[i].new = language.unknown;
             }
             if (Array.isArray(before)) {
@@ -123,7 +123,7 @@ module.exports = {
             })
             .setDescription(lan.description.withoutUser, {
               channel,
-              type: language.channels[channel.type],
+              type: language.channelTypes[channel.type],
             })
             .setColor(con.color)
             .setTimestamp();

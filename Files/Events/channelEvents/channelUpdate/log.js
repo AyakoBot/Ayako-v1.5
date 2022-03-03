@@ -25,7 +25,7 @@ module.exports = {
         let typeID;
         const embed = new Discord.UnsafeEmbed()
           .setAuthor({
-            name: ch.stp(lan.author.title, { type: `${language.channels[newChannel.type]}` }),
+            name: ch.stp(lan.author.title, { type: `${language.channelTypes[newChannel.type]}` }),
             iconURL: con.author.image,
             url: ch.stp(con.author.link, { channel: newChannel }),
           })
@@ -88,9 +88,9 @@ module.exports = {
           typeID = 11;
           embed.addFields({
             name: language.type,
-            value: `${language.before}: \`${language.channels[oldChannel.type]}\`\n${
+            value: `${language.before}: \`${language.channelTypes[oldChannel.type]}\`\n${
               language.after
-            }: \`${language.channels[newChannel.type]}\``,
+            }: \`${language.channelTypes[newChannel.type]}\``,
           });
         }
         if (oldChannel.bitrate !== newChannel.bitrate) {
@@ -350,14 +350,14 @@ module.exports = {
               `${ch.stp(lan.description.withAudit, {
                 user: entry.executor,
                 channel: newChannel,
-                type: language.channels[newChannel.type],
+                type: language.channelTypes[newChannel.type],
               })}\n\n${language.changes}:${changedKey.map((o) => ` \`${o}\``)}`,
             );
           } else {
             embed.setDescription(
               `${ch.stp(lan.description.withoutAudit, {
                 channel: newChannel,
-                type: language.channels[newChannel.type],
+                type: language.channelTypes[newChannel.type],
               })}\n\n${language.changes}:${changedKey.map((o) => ` \`${o}\``)}`,
             );
           }

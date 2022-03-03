@@ -21,7 +21,7 @@ module.exports = {
           } ${msg.language.ChannelRules}`,
           value: `${msg.language.affected}: ${
             r.channels && r.channels.length
-              ? `${r.channels.length} ${msg.language.Channels}`
+              ? `${r.channels.length} ${msg.language.channelTypes}`
               : msg.language.none
           }`,
           inline: true,
@@ -41,7 +41,7 @@ module.exports = {
       )
       .addFields([
         {
-          name: msg.language.Channels,
+          name: msg.language.channelTypes,
           value: `${r.channels?.length ? r.channels.map((id) => ` <#${id}>`) : msg.language.none}`,
           inline: false,
         },
