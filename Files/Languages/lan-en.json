@@ -1114,6 +1114,14 @@
       "selectInfo": "New Level: {{selection.newLvl}}\nNew XP: {{selection.newXP}}\n\nCurrent Level: {{selection.curLvl}}\nCurrent XP: {{selection.curXP}}",
       "updated": "Level and XP of {{user}} were Updated"
     },
+    "synclevel": {
+      "description": "Sync Levels with other Bots, via Level-Roles or Leaderboards",
+      "usage": ["synclevels"],
+      "category": "Leveling",
+      "author": "Ayako Leveling-Settings",
+      "method": "Choose a Method to transfer Levels",
+      "methods": ["API", "Leaderboards", "Level-Roles"]
+    },
     "rank": {
       "description": "Display anyones current Server/Global Rank",
       "usage": ["rank", "rank (user)"],
@@ -3458,6 +3466,7 @@
   "streaming": "Streaming",
   "suppress": "Suppressed",
   "cancel": "cancel",
+  "Cancel": "Cancel",
   "requestToSpeak": "Request To Speak",
   "moved": "Moved",
   "disconnected": "Disconnected",

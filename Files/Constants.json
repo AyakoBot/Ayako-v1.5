@@ -608,6 +608,9 @@
     }
   },
   "commands": {
+    "synclevel": {
+      "methods": ["api", "lb", "lr"]
+    },
     "userinfo": {
       "authorImage": ""
     },
