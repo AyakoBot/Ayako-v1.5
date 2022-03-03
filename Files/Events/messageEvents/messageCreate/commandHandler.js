@@ -12,7 +12,7 @@ module.exports = {
     let prefix;
     const prefixStandard = Constants.standard.prefix;
     let prefixCustom;
-    if (msg.channel.type !== 'DM' && msg.guild) {
+    if (msg.channel.type !== 1 && msg.guild) {
       const res = await ch.query('SELECT * FROM guildsettings WHERE guildid = $1;', [msg.guild.id]);
       if (res && res.rowCount > 0) prefixCustom = res.rows[0].prefix;
     }
@@ -40,7 +40,7 @@ module.exports = {
   async execute(rawmsg) {
     const msg = await this.prefix(rawmsg);
     if (!msg) return;
-    if (msg.channel.type === 'DM') {
+    if (msg.channel.type === 1) {
       this.DMcommand(msg);
       return;
     }
@@ -206,7 +206,7 @@ module.exports = {
   },
   async commandExe(msg) {
     msg.logchannels = [];
-    if (msg.channel.type !== 'DM') {
+    if (msg.channel.type !== 1) {
       const res = await msg.client.ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [
         msg.guild.id,
       ]);

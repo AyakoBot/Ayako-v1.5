@@ -12,7 +12,7 @@ module.exports = {
     if (r.prefix && r.prefix.startsWith('{"') && r.prefix.endsWith('"}')) {
       r.prefix = r.prefix.slice(2, r.prefix.length - 2);
     }
-    const embed = new Discord.UnsafeEmbed().addFieldss([
+    const embed = new Discord.UnsafeEmbed().addFields([
       {
         name: msg.lan.prefix,
         value: `\`${msg.client.constants.standard.prefix}\` ${r.prefix ? `/ \`${r.prefix}\`` : ''}`,
@@ -41,15 +41,15 @@ module.exports = {
     return embed;
   },
   buttons(msg) {
-    const prefix = new Discord.Button()
+    const prefix = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.prefix.name)
       .setLabel(msg.lan.prefix)
       .setStyle(Discord.ButtonStyle.Primary);
-    const interactionsmode = new Discord.Button()
+    const interactionsmode = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.interactionsmode.name)
       .setLabel(msg.lan.interactionsmode)
       .setStyle(Discord.ButtonStyle.Secondary);
-    const language = new Discord.Button()
+    const language = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.lan.name)
       .setLabel(msg.lan.lan)
       .setStyle(Discord.ButtonStyle.Secondary);

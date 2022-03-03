@@ -8,7 +8,7 @@ module.exports = {
   finished: true,
   category: ['auto-moderation'],
   displayEmbed(msg, r) {
-    const embed = new Discord.UnsafeEmbed().addFieldss([
+    const embed = new Discord.UnsafeEmbed().addFields([
       {
         name: msg.lanSettings.active,
         value: `${
@@ -98,43 +98,43 @@ module.exports = {
     return embed;
   },
   buttons(msg, r) {
-    const active = new Discord.Button()
+    const active = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.active.name)
       .setLabel(msg.lanSettings.active)
       .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const punishmenttof = new Discord.Button()
+    const punishmenttof = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.punishmenttof.name)
       .setLabel(msg.lan.punishmenttof)
       .setStyle(r.punishmenttof ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const punishment = new Discord.Button()
+    const punishment = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.punishment.name)
       .setLabel(msg.lan.punishment)
       .setStyle(r.punishment ? Discord.ButtonStyle.Secondary : Discord.ButtonStyle.Primary);
-    const post = new Discord.Button()
+    const post = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.posttof.name)
       .setLabel(msg.lan.posttof)
       .setStyle(r.posttof ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Secondary);
-    const postchannel = new Discord.Button()
+    const postchannel = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.postchannel.name)
       .setLabel(msg.lan.postchannel)
       .setStyle(Discord.ButtonStyle.Primary);
-    const pingusers = new Discord.Button()
+    const pingusers = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.pingusers.name)
       .setLabel(msg.lan.pingusers)
       .setStyle(Discord.ButtonStyle.Secondary);
-    const pingroles = new Discord.Button()
+    const pingroles = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.pingroles.name)
       .setLabel(msg.lan.pingroles)
       .setStyle(Discord.ButtonStyle.Secondary);
-    const time = new Discord.Button()
+    const time = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.time.name)
       .setLabel(msg.lan.time)
       .setStyle(Discord.ButtonStyle.Primary);
-    const jointhreshold = new Discord.Button()
+    const jointhreshold = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.jointhreshold.name)
       .setLabel(msg.lan.jointhreshold)
       .setStyle(Discord.ButtonStyle.Primary);
-    const similaridthreshold = new Discord.Button()
+    const similaridthreshold = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.similaridthreshold.name)
       .setLabel(msg.lan.similaridthreshold)
       .setStyle(Discord.ButtonStyle.Primary);

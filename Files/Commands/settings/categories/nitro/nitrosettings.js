@@ -7,7 +7,7 @@ module.exports = {
   category: ['automation'],
   childOf: 'nitro',
   displayEmbed(msg, r) {
-    const embed = new Discord.UnsafeEmbed().addFieldss([
+    const embed = new Discord.UnsafeEmbed().addFields([
       {
         name: msg.lanSettings.active,
         value: r.active
@@ -33,15 +33,15 @@ module.exports = {
     return embed;
   },
   buttons(msg, r) {
-    const active = new Discord.Button()
+    const active = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.active.name)
       .setLabel(msg.lanSettings.active)
       .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const logchannels = new Discord.Button()
+    const logchannels = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.logchannels.name)
       .setLabel(msg.lan.logchannels)
       .setStyle(Discord.ButtonStyle.Primary);
-    const rolemode = new Discord.Button()
+    const rolemode = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.rolemode.name)
       .setLabel(msg.lan.rolemode)
       .setStyle(r.rolemode ? Discord.ButtonStyle.Secondary : Discord.ButtonStyle.Primary);

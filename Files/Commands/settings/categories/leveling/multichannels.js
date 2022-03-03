@@ -17,7 +17,7 @@ module.exports = {
     for (let i = 0; i < res.length; i += 1) {
       const r = res[i];
 
-      embed.addFieldss([
+      embed.addFields([
         {
           name: `${msg.language.number}: \`${r.id}\` | ${r.multiplier ? r.multiplier : '1.0'}x`,
           value: `${msg.language.affected}: ${
@@ -32,7 +32,7 @@ module.exports = {
     return embed;
   },
   displayEmbed(msg, r) {
-    const embed = new Discord.UnsafeEmbed().addFieldss([
+    const embed = new Discord.UnsafeEmbed().addFields([
       {
         name: msg.lan.channels,
         value: `${r.channels?.length ? r.channels.map((id) => ` <#${id}>`) : msg.language.none}`,
@@ -47,12 +47,12 @@ module.exports = {
     return embed;
   },
   buttons(msg) {
-    const channels = new Discord.Button()
+    const channels = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.channels.name)
       .setLabel(msg.lan.channels)
       .setStyle(Discord.ButtonStyle.Primary);
 
-    const multiplier = new Discord.Button()
+    const multiplier = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.multiplier.name)
       .setLabel(msg.lan.multiplier.replace(/\*/g, ''))
       .setStyle(Discord.ButtonStyle.Secondary);

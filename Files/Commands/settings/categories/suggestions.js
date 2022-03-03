@@ -6,7 +6,7 @@ module.exports = {
   finished: false,
   category: ['automation'],
   displayEmbed(msg, r) {
-    const embed = new Discord.UnsafeEmbed().addFieldss([
+    const embed = new Discord.UnsafeEmbed().addFields([
       {
         name: msg.lanSettings.active,
         value: r.active
@@ -58,23 +58,23 @@ module.exports = {
     return embed;
   },
   buttons(msg, r) {
-    const active = new Discord.Button()
+    const active = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.active.name)
       .setLabel(msg.lanSettings.active)
       .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const channelid = new Discord.Button()
+    const channelid = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.channelid.name)
       .setLabel(msg.lan.channelid)
       .setStyle(Discord.ButtonStyle.Primary);
-    const bluserid = new Discord.Button()
+    const bluserid = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.bluserid.name)
       .setLabel(msg.lan.bluserid)
       .setStyle(Discord.ButtonStyle.Primary);
-    const blroleid = new Discord.Button()
+    const blroleid = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.blroleid.name)
       .setLabel(msg.lan.blroleid)
       .setStyle(Discord.ButtonStyle.Primary);
-    const approverroleid = new Discord.Button()
+    const approverroleid = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.approverroleid.name)
       .setLabel(msg.lan.approverroleid)
       .setStyle(Discord.ButtonStyle.Primary);

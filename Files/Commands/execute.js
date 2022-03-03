@@ -20,8 +20,6 @@ module.exports = {
   dm: true,
   takesFirstArg: false,
   execute: async (msg) => {
-    const embed = new Discord.Embed().addFields({ name: 'ae', value: 'ae' });
-
-    console.log(embed.fields.length);
+    console.log(msg.channel.type);
   },
 };

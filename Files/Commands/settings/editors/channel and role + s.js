@@ -20,13 +20,7 @@ module.exports = {
         }
 
         if (cacheName === 'channels') {
-          const validChannelTypes = [
-            'GUILD_TEXT',
-            'GUILD_NEWS',
-            'GUILD_NEWS_THREAD',
-            'GUILD_PUBLIC_THREAD',
-            'GUILD_PRIVATE_THREAD',
-          ];
+          const validChannelTypes = [0, 5, 10, 11, 12];
 
           if (validChannelTypes.includes(value.type)) {
             return value;

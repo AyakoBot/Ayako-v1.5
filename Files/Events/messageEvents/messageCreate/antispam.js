@@ -27,7 +27,7 @@ let data = {
 
 module.exports = {
   async execute(msg) {
-    if (msg.channel.type === 'DM' || msg.author.id === msg.client.user.id || msg.author.bot) return;
+    if (msg.channel.type === 1 || msg.author.id === msg.client.user.id || msg.author.bot) return;
     let warnnr;
     let guildSettings;
 
@@ -62,26 +62,28 @@ module.exports = {
     const banUser = async () => {
       data.messageCache = data.messageCache.filter((m) => m.author !== msg.author.id);
       data.bannedUsers.push(msg.author.id);
-      if (!msg.member.bannable)
+      if (!msg.member.bannable) {
         return msg.client.ch.send(
           msg.channel,
           msg.client.ch.stp(msg.language.commands.antispamHandler.banErrorMessage, {
             user: msg.author,
           }),
         );
+      }
       return msg.client.emit('antispamBanAdd', msg);
     };
 
     const kickUser = async () => {
       data.messageCache = data.messageCache.filter((m) => m.author !== msg.author.id);
       data.kickedUsers.push(msg.author.id);
-      if (!msg.member.kickable)
+      if (!msg.member.kickable) {
         return msg.client.ch.send(
           msg.channel,
           msg.client.ch.stp(msg.language.commands.antispamHandler.kickErrorMessage, {
             user: msg.author,
           }),
         );
+      }
       return msg.client.emit('antispamKickAdd', msg);
     };
 
@@ -98,19 +100,19 @@ module.exports = {
     const ofwarnUser = async () => {
       data.ofwarnedUsers.push(msg.author.id);
       if (guildSettings.readofwarnstof === true) {
-        if (warnnr === guildSettings.banafterwarnsamount && guildSettings.banenabledtof === true)
+        if (warnnr === guildSettings.banafterwarnsamount && guildSettings.banenabledtof === true) {
           await kickUser(msg);
-        else if (
+        } else if (
           warnnr === guildSettings.kickafterwarnsamount &&
           guildSettings.kickenabledtof === true
-        )
+        ) {
           await banUser(msg);
-        else if (
+        } else if (
           warnnr === guildSettings.muteafterwarnsamount &&
           guildSettings.muteenabledtof === true
-        )
+        ) {
           await muteUser(msg);
-        else msg.client.emit('antispamOfwarnAdd', msg);
+        } else msg.client.emit('antispamOfwarnAdd', msg);
       }
       if (guildSettings.readofwarnstof === false) msg.client.emit('ofwarnAdd', msg);
     };

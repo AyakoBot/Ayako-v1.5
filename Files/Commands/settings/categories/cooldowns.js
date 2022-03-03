@@ -12,7 +12,7 @@ module.exports = {
     const embed = new Discord.UnsafeEmbed();
     for (let i = 0; i < res.length; i += 1) {
       const r = res[i];
-      embed.addFieldss([
+      embed.addFields([
         {
           name: `${msg.language.number}: \`${r.id}\` | ${msg.language.command}: \`${
             r.command
@@ -31,7 +31,7 @@ module.exports = {
     return embed;
   },
   displayEmbed(msg, r) {
-    const embed = new Discord.UnsafeEmbed().addFieldss([
+    const embed = new Discord.UnsafeEmbed().addFields([
       {
         name: msg.lanSettings.active,
         value: r.active
@@ -100,11 +100,11 @@ module.exports = {
     return embed;
   },
   buttons(msg, r) {
-    const active = new Discord.Button()
+    const active = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.active.name)
       .setLabel(msg.lanSettings.active)
       .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const command = new Discord.Button()
+    const command = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.command.name)
       .setLabel(
         msg.client.ch.stp(msg.lan.command.replace(/\*/g, ''), {
@@ -112,7 +112,7 @@ module.exports = {
         }),
       )
       .setStyle(Discord.ButtonStyle.Secondary);
-    const cooldown = new Discord.Button()
+    const cooldown = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.cooldown.name)
       .setLabel(
         msg.client.ch.stp(msg.lan.cooldown.replace(/\*/g, ''), {
@@ -120,19 +120,19 @@ module.exports = {
         }),
       )
       .setStyle(Discord.ButtonStyle.Secondary);
-    const achannel = new Discord.Button()
+    const achannel = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.activechannelid.name)
       .setLabel(msg.lan.activechannelid)
       .setStyle(Discord.ButtonStyle.Primary);
-    const bchannel = new Discord.Button()
+    const bchannel = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.bpchannelid.name)
       .setLabel(msg.lan.bpchannelid)
       .setStyle(Discord.ButtonStyle.Primary);
-    const user = new Discord.Button()
+    const user = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.bpuserid.name)
       .setLabel(msg.lan.bpuserid)
       .setStyle(Discord.ButtonStyle.Primary);
-    const role = new Discord.Button()
+    const role = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.bproleid.name)
       .setLabel(msg.lan.bproleid)
       .setStyle(Discord.ButtonStyle.Primary);

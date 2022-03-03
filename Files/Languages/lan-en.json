@@ -588,18 +588,17 @@
     "HAS_MOST_MENTIONS_SHORT": "most Mentions count"
   },
   "channels": {
-    "GUILD_TEXT": "Text Channel",
-    "DM": "DM Channel",
-    "GUILD_VOICE": "Voice Channel",
-    "GROUP_DM": "Group DM Channel",
-    "GUILD_CATEGORY": "Category",
-    "GUILD_NEWS": "Announcements Channel",
-    "GUILD_STORE": "Store Channel",
-    "GUILD_STAGE_VOICE": "Stage Channel",
-    "GUILD_NEWS_THREAD": "News Channels public Thread Channel",
-    "GUILD_PUBLIC_THREAD": "Channels public Thread Channel",
-    "GUILD_PRIVATE_THREAD": "Channels private Thread Channel",
-    "UNKNOWN": "A generic Channel of unknown Type"
+    "0": "Text Channel",
+    "1": "DM Channel",
+    "2": "Voice Channel",
+    "3": "Group DM Channel",
+    "4": "Category",
+    "5": "Announcements Channel",
+    "6": "Store Channel",
+    "13": "Stage Channel",
+    "10": "News Channels public Thread Channel",
+    "11": "Channels public Thread Channel",
+    "12": "Channels private Thread Channel"
   },
   "channelsNrSorted": {
     "0": "Text Channel",
@@ -3324,11 +3323,11 @@
     "BOOST24": "Boosting since at least 24 Months"
   },
   "channelTypes": {
-    "CATEGORY": "Category",
-    "TEXT": "Text Channel",
-    "VOICE": "Voice Channel",
-    "NEWS": "News Channel",
-    "STAGE": "Stage Channel"
+    "4": "Category",
+    "0": "Text Channel",
+    "2": "Voice Channel",
+    "5": "News Channel",
+    "13": "Stage Channel"
   },
   "featuresName": "Features",
   "none": "None",

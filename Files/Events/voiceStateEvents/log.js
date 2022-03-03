@@ -111,7 +111,7 @@ module.exports = {
         if (
           oldState.channel &&
           newState.channel &&
-          (oldState.channel.type === 'stage' || newState.channel.type === 'stage')
+          (oldState.channel.type === 13 || newState.channel.type === 13)
         ) {
           if (oldState.suppress !== newState.suppress) {
             changedKey.push(language.suppress);

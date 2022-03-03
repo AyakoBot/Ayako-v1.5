@@ -14,7 +14,7 @@ module.exports = {
       !msg.content.split(' ')[0].includes(module.exports.aliases[5]) &&
       !msg.content.split(' ')[0].includes(module.exports.aliases[6]);
 
-    if (msg.channel.type === 'DM') isGuild = false;
+    if (msg.channel.type === 1) isGuild = false;
 
     let guildRow;
     if (isGuild) {
@@ -95,23 +95,23 @@ const getEmbed = (content, isGuild, msg, ownPos) => {
       iconURL: msg.client.constants.commands.leaderboard.authorImage,
       url: msg.client.constants.standard.invite,
     });
-  if (ownPos.name) embed.addFieldss([ownPos]);
+  if (ownPos.name) embed.addFields([ownPos]);
   return embed;
 };
 
 const getButtons = (msg, page, rows) => {
-  const toggleType = new Discord.Button()
+  const toggleType = new Discord.ButtonComponent()
     .setLabel(msg.lan.toggle)
     .setCustomId('tt')
     .setStyle(Discord.ButtonStyle.Primary);
 
-  const next = new Discord.Button()
+  const next = new Discord.ButtonComponent()
     .setCustomId('next')
     .setEmoji(msg.client.constants.emotes.forth)
     .setStyle(Discord.ButtonStyle.Secondary)
     .setDisabled(rows ? page === Math.ceil(rows.length / 30) : true);
 
-  const back = new Discord.Button()
+  const back = new Discord.ButtonComponent()
     .setCustomId('back')
     .setEmoji(msg.client.constants.emotes.back)
     .setStyle(Discord.ButtonStyle.Secondary)

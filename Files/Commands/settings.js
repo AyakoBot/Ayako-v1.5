@@ -87,7 +87,7 @@ module.exports = {
       });
 
       const rawButtons = [
-        new Discord.MessageSelectMenu()
+        new Discord.SelectMenuComponent()
           .addOptions(options)
           .setCustomId('menu')
           .setMaxValues(1)
@@ -160,7 +160,7 @@ module.exports = {
         url: msg.client.constants.standard.invite,
       });
 
-      const edit = new Discord.Button()
+      const edit = new Discord.ButtonComponent()
         .setCustomId('edit')
         .setStyle(Discord.ButtonStyle.Primary)
         .setLabel(msg.language.Edit);
@@ -354,7 +354,7 @@ const noEmbed = async (msg, answer, res) => {
       }),
     );
 
-  const edit = new Discord.Button()
+  const edit = new Discord.ButtonComponent()
     .setCustomId('edit')
     .setStyle(Discord.ButtonStyle.Primary)
     .setLabel(msg.language.Edit);
@@ -418,17 +418,17 @@ const replier = async (msgData, sendData) => {
 };
 
 const getMMRListButtons = (msg, options, editView) => {
-  const next = new Discord.Button()
+  const next = new Discord.ButtonComponent()
     .setCustomId('next')
     .setLabel(msg.language.next)
     .setDisabled(options.allOptions.length < 25)
     .setStyle(Discord.ButtonStyle.Primary);
-  const prev = new Discord.Button()
+  const prev = new Discord.ButtonComponent()
     .setCustomId('prev')
     .setLabel(msg.language.prev)
     .setDisabled(true)
     .setStyle(Discord.ButtonStyle.Danger);
-  const list = new Discord.MessageSelectMenu()
+  const list = new Discord.SelectMenuComponent()
     .setCustomId('list')
     .setDisabled(!options.allOptions.length)
     .setMaxValues(1)
@@ -437,11 +437,11 @@ const getMMRListButtons = (msg, options, editView) => {
     .setOptions(options.take.length ? options.take : { label: '--', value: '0' });
 
   if (editView) {
-    const add = new Discord.Button()
+    const add = new Discord.ButtonComponent()
       .setCustomId('add')
       .setStyle(Discord.ButtonStyle.Primary)
       .setLabel(msg.language.add);
-    const remove = new Discord.Button()
+    const remove = new Discord.ButtonComponent()
       .setCustomId('remove')
       .setStyle(Discord.ButtonStyle.Danger)
       .setLabel(msg.language.remove)
@@ -450,7 +450,7 @@ const getMMRListButtons = (msg, options, editView) => {
     return { next, prev, list, add, remove };
   }
   if (!editView) {
-    const edit = new Discord.Button()
+    const edit = new Discord.ButtonComponent()
       .setCustomId('edit')
       .setStyle(Discord.ButtonStyle.Primary)
       .setLabel(msg.language.Edit);
@@ -1522,7 +1522,7 @@ const standardButtons = async (msg, preparedData, insertedValues, required, row,
   if (editor.requiresMenu) {
     const getMany = required.key.endsWith('s');
 
-    const menu = new Discord.MessageSelectMenu()
+    const menu = new Discord.SelectMenuComponent()
       .setCustomId(required.key)
       .addOptions(
         Objects.take.length ? Objects.take : { label: 'placeholder', value: 'placeholder' },
@@ -1531,14 +1531,14 @@ const standardButtons = async (msg, preparedData, insertedValues, required, row,
       .setMinValues(1)
       .setMaxValues(getMany ? Objects.take.length : 1)
       .setPlaceholder(msg.language.select[required.key].select);
-    const next = new Discord.Button()
+    const next = new Discord.ButtonComponent()
       .setCustomId('next')
       .setLabel(msg.language.next)
       .setDisabled(
         Objects.page === Math.ceil(Objects.options.length / 25) || !Objects.options.length,
       )
       .setStyle(Discord.ButtonStyle.Primary);
-    const prev = new Discord.Button()
+    const prev = new Discord.ButtonComponent()
       .setCustomId('prev')
       .setLabel(msg.language.prev)
       .setDisabled(Objects.page === 1 || !Objects.options.length)
@@ -1547,7 +1547,7 @@ const standardButtons = async (msg, preparedData, insertedValues, required, row,
     returnedButtons.push([menu], [prev, next]);
   }
 
-  const done = new Discord.Button()
+  const done = new Discord.ButtonComponent()
     .setCustomId('done')
     .setLabel(msg.language.done)
     .setDisabled(doneDisabled)
@@ -1568,11 +1568,11 @@ const setup = async (msg, answer) => {
     })
     .setDescription(msg.client.ch.stp(lan.question, { type: msg.lanSettings[msg.file.name].type }));
 
-  const yes = new Discord.Button()
+  const yes = new Discord.ButtonComponent()
     .setLabel(msg.language.Yes)
     .setCustomId('yes')
     .setStyle(Discord.ButtonStyle.Primary);
-  const no = new Discord.Button()
+  const no = new Discord.ButtonComponent()
     .setLabel(msg.language.No)
     .setCustomId('no')
     .setStyle(Discord.ButtonStyle.Danger);
@@ -1709,7 +1709,7 @@ const categoryDisplay = async (msg, answer, needsBack) => {
     );
 
   const rawButtons = [
-    new Discord.MessageSelectMenu()
+    new Discord.SelectMenuComponent()
       .addOptions(options)
       .setCustomId('menu')
       .setMaxValues(1)

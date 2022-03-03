@@ -3,7 +3,7 @@ const jobs = require('node-schedule');
 
 module.exports = {
   async execute(msg) {
-    if (!msg.channel || msg.channel.type === 'DM' || !msg.author || !msg.guild) return;
+    if (!msg.channel || msg.channel.type === 1 || !msg.author || !msg.guild) return;
     const { member } = msg;
     if (msg.channel.id === '805315908406870044') msg.delete();
     if (msg.guild.id === '366219406776336385' && msg.channel.id !== '801804774759727134') {

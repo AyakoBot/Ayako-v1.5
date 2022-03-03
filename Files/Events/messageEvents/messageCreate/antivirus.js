@@ -17,7 +17,7 @@ module.exports = {
       return;
     }
 
-    if (msg.channel.type === 'DM') {
+    if (msg.channel.type === 1) {
       check = true;
     }
 

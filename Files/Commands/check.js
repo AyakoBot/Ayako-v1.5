@@ -251,7 +251,7 @@ module.exports = {
                     msgid: warn.msgid,
                   }),
                 })
-                .addFieldss([
+                .addFields([
                   {
                     name: msg.lan.date,
                     value: `<t:${warn.dateofwarn.slice(0, -3)}:F> (<t:${warn.dateofwarn.slice(
@@ -309,7 +309,7 @@ module.exports = {
                     msgid: mute.msgid,
                   }),
                 })
-                .addFieldss([
+                .addFields([
                   {
                     name: msg.lan.date,
                     value: `<t:${mute.dateofwarn.slice(0, -3)}:F> (<t:${mute.dateofwarn.slice(
@@ -382,7 +382,7 @@ module.exports = {
 function buttonOrder(take, msg, options, answered) {
   const rawRows = [];
   if (take.warns.length) {
-    const warnMenu = new Discord.MessageSelectMenu()
+    const warnMenu = new Discord.SelectMenuComponent()
       .setCustomId('warnMenu')
       .addOptions(take.warns)
       .setMinValues(1)
@@ -390,12 +390,12 @@ function buttonOrder(take, msg, options, answered) {
       .setPlaceholder(
         `${answered.warns.length ? answered.warns.sort((a, b) => a - b) : msg.lan.selWarns}`,
       );
-    const warnNext = new Discord.Button()
+    const warnNext = new Discord.ButtonComponent()
       .setCustomId('warnNext')
       .setLabel(msg.language.next)
       .setDisabled(options.warns.length < msg.pages.warn * 25 + 26)
       .setStyle(Discord.ButtonStyle.Primary);
-    const warnPrev = new Discord.Button()
+    const warnPrev = new Discord.ButtonComponent()
       .setCustomId('warnPrev')
       .setLabel(msg.language.prev)
       .setDisabled(msg.pages.warn === 1)
@@ -407,7 +407,7 @@ function buttonOrder(take, msg, options, answered) {
     else warnPrev.setDisabled(true);
   }
   if (take.mutes.length) {
-    const muteMenu = new Discord.MessageSelectMenu()
+    const muteMenu = new Discord.SelectMenuComponent()
       .setCustomId('muteMenu')
       .addOptions(take.mutes)
       .setMinValues(1)
@@ -415,12 +415,12 @@ function buttonOrder(take, msg, options, answered) {
       .setPlaceholder(
         `${answered.mutes.length ? answered.mutes.sort((a, b) => a - b) : msg.lan.selMutes}`,
       );
-    const muteNext = new Discord.Button()
+    const muteNext = new Discord.ButtonComponent()
       .setCustomId('muteNext')
       .setLabel(msg.language.next)
       .setDisabled(options.mutes.length < msg.pages.mute * 25 + 26)
       .setStyle(Discord.ButtonStyle.Primary);
-    const mutePrev = new Discord.Button()
+    const mutePrev = new Discord.ButtonComponent()
       .setCustomId('mutePrev')
       .setLabel(msg.language.prev)
       .setDisabled(msg.pages.mute === 1)
@@ -432,7 +432,7 @@ function buttonOrder(take, msg, options, answered) {
     else mutePrev.setDisabled(true);
   }
   if (take.warns.length || take.mutes.length) {
-    const done = new Discord.Button()
+    const done = new Discord.ButtonComponent()
       .setCustomId('done')
       .setLabel(msg.language.done)
       .setStyle(Discord.ButtonStyle.Primary);

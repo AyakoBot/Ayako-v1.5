@@ -23,13 +23,13 @@ module.exports = {
       )}`,
     });
 
-    const warn = new Discord.Button()
+    const warn = new Discord.ButtonComponent()
       .setCustomId('uselessbutton')
       .setLabel(msg.lan.warn)
       .setStyle(Discord.ButtonStyle.Danger)
       .setDisabled(true);
 
-    const link = new Discord.Button()
+    const link = new Discord.ButtonComponent()
       .setURL('https://discord.js.org/#/docs/discord.js/stable/class/Message')
       .setLabel(msg.lan.button)
       .setStyle(Discord.ButtonStyle.Link);

@@ -15,7 +15,7 @@ module.exports = {
       !msg.content.split(' ')[0].includes(module.exports.aliases[2]) &&
       !msg.content.split(' ')[0].includes(module.exports.aliases[4]);
 
-    if (msg.channel.type === 'DM') isGuild = false;
+    if (msg.channel.type === 1) isGuild = false;
 
     let guildRow;
     if (isGuild) {
@@ -76,7 +76,7 @@ module.exports = {
       .setColor(
         isGuild ? msg.client.ch.colorSelector(msg.guild.me) : msg.client.constants.standard.color,
       )
-      .addFieldss([
+      .addFields([
         { name: msg.lan.currentXP, value: `${xp}`, inline: true },
         { name: msg.lan.nextXP, value: `${Math.ceil(neededXP)}`, inline: true },
         { name: msg.lan.diff, value: `${Math.round(neededXP - xp)}`, inline: true },

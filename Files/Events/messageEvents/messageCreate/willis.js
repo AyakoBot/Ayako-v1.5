@@ -1,6 +1,6 @@
 module.exports = {
   async execute(msg) {
-    if (!msg.channel || msg.channel.type === 'DM') return;
+    if (!msg.channel || msg.channel.type === 1) return;
     if (msg.channel.id !== '805839305377447936' || !msg.author) return;
     if (msg.attachments.size === 0) {
       if (msg.member) {

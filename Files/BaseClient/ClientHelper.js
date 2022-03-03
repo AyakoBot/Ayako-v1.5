@@ -35,7 +35,7 @@ module.exports = {
     const payload =
       typeof rawPayload === 'string' ? { failIfNotExists: false, content: rawPayload } : rawPayload;
 
-    if (channel.type === 'DM') {
+    if (channel.type === 1) {
       return channel.send(payload).catch(() => null);
     }
 
@@ -753,12 +753,12 @@ module.exports = {
    * @param {object} msg - The triggering Message of module.exports Awaiter.
    */
   modRoleWaiter: async (msg) => {
-    const SUCCESS = new Discord.Button()
+    const SUCCESS = new Discord.ButtonComponent()
       .setCustomId('modProceedAction')
       .setLabel(msg.language.mod.warning.proceed)
       .setStyle(Discord.ButtonStyle.Primary)
       .setEmoji(Constants.emotes.tickBGID);
-    const DANGER = new Discord.Button()
+    const DANGER = new Discord.ButtonComponent()
       .setCustomId('modAbortAction')
       .setLabel(msg.language.mod.warning.abort)
       .setEmoji(Constants.emotes.crossBGID)
@@ -832,7 +832,7 @@ module.exports = {
   buttonRower: (buttonArrays) => {
     const actionRows = [];
     buttonArrays.forEach((buttonRow) => {
-      const row = new Discord.MessageActionRow();
+      const row = new Discord.ActionRow();
       if (Array.isArray(buttonRow)) {
         buttonRow.forEach((button) => {
           row.addComponents(button);
@@ -1218,4 +1218,5 @@ module.exports = {
 
     await msg.m.edit({ embeds: [embed], components: msg.m.components });
   },
+  Embed: require('./Other Client Files/CustomEmbed'),
 };

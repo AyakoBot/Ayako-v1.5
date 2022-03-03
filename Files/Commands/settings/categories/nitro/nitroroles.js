@@ -12,7 +12,7 @@ module.exports = {
     for (let i = 0; i < res.length; i += 1) {
       const r = res[i];
 
-      embed.addFieldss([
+      embed.addFields([
         {
           name: `${msg.language.number}: \`${r.id}\` | ${r.days ? r.days : '--'} ${
             msg.language.time.days
@@ -27,7 +27,7 @@ module.exports = {
     return embed;
   },
   displayEmbed(msg, r) {
-    const embed = new Discord.UnsafeEmbed().addFieldss([
+    const embed = new Discord.UnsafeEmbed().addFields([
       {
         name: msg.lan.roles,
         value: `${r.roles?.length ? r.roles.map((id) => ` <@&${id}>`) : msg.language.none}`,
@@ -42,12 +42,12 @@ module.exports = {
     return embed;
   },
   buttons(msg) {
-    const roles = new Discord.Button()
+    const roles = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.roles.name)
       .setLabel(msg.lan.roles)
       .setStyle(Discord.ButtonStyle.Primary);
 
-    const days = new Discord.Button()
+    const days = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.days.name)
       .setLabel(msg.lan.days.replace(/\*/g, ''))
       .setStyle(Discord.ButtonStyle.Secondary);

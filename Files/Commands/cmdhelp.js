@@ -73,7 +73,7 @@ module.exports = {
         iconURL: msg.client.constants.standard.image,
         url: msg.client.constants.standard.invite,
       })
-      .addFieldss([
+      .addFields([
         {
           name: `|${language.name}`,
           value: `\u200b${commandLan.name ? commandLan.name : reqcommand.name}`,

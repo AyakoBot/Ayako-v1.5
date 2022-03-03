@@ -264,61 +264,61 @@ const getEmbed = (msg, selection) =>
   new Discord.UnsafeEmbed().setDescription(msg.client.ch.stp(msg.lan.selectInfo, { selection }));
 
 const getComponents = (msg, selection) => {
-  const addZeroXP = new Discord.Button()
+  const addZeroXP = new Discord.ButtonComponent()
     .setCustomId('addZeroXP')
     .setLabel(msg.lan.add)
     .setStyle(Discord.ButtonStyle.Primary);
 
-  const delZeroXP = new Discord.Button()
+  const delZeroXP = new Discord.ButtonComponent()
     .setCustomId('delZeroXP')
     .setLabel(msg.lan.remove)
     .setStyle(Discord.ButtonStyle.Primary)
     .setDisabled(selection.xpZeros === 0);
 
-  const addZeroLvl = new Discord.Button()
+  const addZeroLvl = new Discord.ButtonComponent()
     .setCustomId('addZeroLvl')
     .setLabel(msg.lan.add)
     .setStyle(Discord.ButtonStyle.Primary);
 
-  const delZeroLvl = new Discord.Button()
+  const delZeroLvl = new Discord.ButtonComponent()
     .setCustomId('delZeroLvl')
     .setLabel(msg.lan.remove)
     .setStyle(Discord.ButtonStyle.Primary)
     .setDisabled(selection.lvlZeros === 0);
 
-  const resetXP = new Discord.Button()
+  const resetXP = new Discord.ButtonComponent()
     .setCustomId('resetXP')
     .setLabel(msg.lan.resetXP)
     .setStyle(Discord.ButtonStyle.Secondary)
     .setDisabled(selection.curXP === selection.newXP);
 
-  const resetLvl = new Discord.Button()
+  const resetLvl = new Discord.ButtonComponent()
     .setCustomId('resetLvl')
     .setLabel(msg.lan.resetLevel)
     .setStyle(Discord.ButtonStyle.Secondary)
     .setDisabled(selection.curLvl === selection.newLvl);
 
-  const increaseXP = new Discord.Button()
+  const increaseXP = new Discord.ButtonComponent()
     .setCustomId('increaseXP')
     .setLabel(`+1${'0'.repeat(selection.xpZeros)}`)
     .setStyle(Discord.ButtonStyle.Primary);
 
-  const decreaseXP = new Discord.Button()
+  const decreaseXP = new Discord.ButtonComponent()
     .setCustomId('decreaseXP')
     .setLabel(`-1${'0'.repeat(selection.xpZeros)}`)
     .setStyle(Discord.ButtonStyle.Primary);
 
-  const increaseLvl = new Discord.Button()
+  const increaseLvl = new Discord.ButtonComponent()
     .setCustomId('increaseLvl')
     .setLabel(`+1${'0'.repeat(selection.lvlZeros)}`)
     .setStyle(Discord.ButtonStyle.Primary);
 
-  const decreaseLvl = new Discord.Button()
+  const decreaseLvl = new Discord.ButtonComponent()
     .setCustomId('decreaseLvl')
     .setLabel(`-1${'0'.repeat(selection.lvlZeros)}`)
     .setStyle(Discord.ButtonStyle.Primary);
 
-  const done = new Discord.Button()
+  const done = new Discord.ButtonComponent()
     .setCustomId('done')
     .setLabel(msg.language.done)
     .setStyle(Discord.ButtonStyle.Primary)
@@ -327,7 +327,7 @@ const getComponents = (msg, selection) => {
         Number(selection.newLvl) === Number(selection.curLvl),
     );
 
-  const cancel = new Discord.Button()
+  const cancel = new Discord.ButtonComponent()
     .setCustomId('cancel')
     .setLabel(msg.language.Cancel)
     .setStyle(Discord.ButtonStyle.Danger);

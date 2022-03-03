@@ -53,12 +53,12 @@ module.exports = {
 };
 
 const areYouSure = async (msg, all, user) => {
-  const tick = new Discord.Button()
+  const tick = new Discord.ButtonComponent()
     .setEmoji(msg.client.constants.emotes.tick)
     .setCustomId('yes')
     .setStyle(Discord.ButtonStyle.Danger);
 
-  const cross = new Discord.Button()
+  const cross = new Discord.ButtonComponent()
     .setEmoji(msg.client.constants.emotes.cross)
     .setCustomId('no')
     .setStyle(Discord.ButtonStyle.Primary);

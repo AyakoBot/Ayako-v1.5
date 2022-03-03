@@ -14,12 +14,12 @@ module.exports = {
         const msg = await interaction.message.fetch().catch(() => {});
         if (!msg) break;
 
-        const enable = new Discord.Button()
+        const enable = new Discord.ButtonComponent()
           .setCustomId('vote_reminder_enable')
           .setStyle(Discord.ButtonStyle.Primary)
           .setLabel('Enable Vote Reminder');
 
-        const vote = new Discord.Button()
+        const vote = new Discord.ButtonComponent()
           .setStyle(Discord.ButtonStyle.Link)
           .setURL('https://top.gg/bot/650691698409734151/vote')
           .setLabel('Vote for Ayako');
@@ -44,12 +44,12 @@ module.exports = {
         const msg = await interaction.message.fetch().catch(() => {});
         if (!msg) break;
 
-        const disable = new Discord.Button()
+        const disable = new Discord.ButtonComponent()
           .setCustomId('vote_reminder_disable')
           .setStyle(Discord.ButtonStyle.Danger)
           .setLabel('Disable Vote Reminder');
 
-        const vote = new Discord.Button()
+        const vote = new Discord.ButtonComponent()
           .setStyle(Discord.ButtonStyle.Link)
           .setURL('https://top.gg/bot/650691698409734151/vote')
           .setLabel('Vote for Ayako');
