@@ -22,9 +22,9 @@ module.exports = {
         reason: msg.client.ch.stp(lan.reason, { user: msg.author }),
       })
       .catch(() => {});
-    const embed = new Discord.MessageEmbed()
+    const embed = new Discord.UnsafeEmbed()
       .setDescription(msg.client.ch.stp(lan.created, { role }))
-      .setColor(color);
+      .setColor(parseInt(color, 16));
     return msg.client.ch.reply(msg, { embeds: [embed] });
   },
 };

@@ -17,7 +17,9 @@ module.exports = {
           if (user && user.id) {
             const timeLeft = duration - Date.now();
             if (timeLeft <= 0) end(guild, channel, user, text, duration);
-            else /* cron this */ setTimeout(() => end(guild, channel, user, text, duration), timeLeft);
+            /* cron this */ else {
+              setTimeout(() => end(guild, channel, user, text, duration), timeLeft);
+            }
           }
         }
       });
@@ -27,22 +29,23 @@ module.exports = {
         const member = await guild.members.fetch(user.id).catch(() => {});
         if (member) {
           const language = await ch.languageSelector(guild);
-          const embed = new Discord.MessageEmbed()
+          const embed = new Discord.UnsafeEmbed()
             .setDescription(`${language.ready.reminder.description}\n${text}`)
             .setColor(guild.me.displayHexColor)
             .setTimestamp();
           const m = await ch.send(channel, `${user}`, { embeds: [embed] });
-          if (!m || !m.id)
+          if (!m || !m.id) {
             ch.send(user, ch.stp(language.ready.reminder.failedMsg, { channel }), {
               embeds: [embed],
             });
+          }
           ch.query('DELETE FROM reminders WHERE userid = $1 AND duration = $2;', [
             user.id,
             duration,
           ]);
         } else {
           const language = await ch.languageSelector('en');
-          const embed = new Discord.MessageEmbed()
+          const embed = new Discord.UnsafeEmbed()
             .setDescription(`${language.ready.reminder.description}\n${text}`)
             .setColor(guild.me.displayHexColor)
             .setTimestamp();

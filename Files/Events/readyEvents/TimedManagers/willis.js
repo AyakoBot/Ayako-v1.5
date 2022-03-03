@@ -342,38 +342,35 @@ module.exports = {
           }
           let loltext = `${360 - +participants} Spots left!`;
           if (participants > needed - 1) {
-            // channel.updateOverwrite(channel.guild.roles.everyone, {
-            //	SEND_MESSAGES: true,
-            //	VIEW_CHANNEL: true
-            // });
-            // channel.send('This channel was closed since 360 users have entered the Giveaway.\nGood Luck!');
             loltext = 'More entries WOOH!';
           }
           const link = 'https://strms.net/888_WillisgamingtvDiscord';
 
-          const e = new Discord.MessageEmbed()
+          const e = new Discord.UnsafeEmbed()
             .setAuthor({
               name: 'Childe Giveaway! [You can also click here]',
               iconURL: 'https://i1.sndcdn.com/artworks-NbRgsD5ixh9PkxUR-t81Dyg-t500x500.jpg',
               url: link,
             })
-            .setColor('b0ff00')
+            .setColor(client.constants.standard.color)
             .setDescription(
               `2 <:Childe:829744615909228546> Childe Giveaways + 1 more at 360 Participants (or 8000 <:primo:785890007058612254>)\n${needed[0]} ${emote[0]}\n${loltext}\n`,
             )
-            .addField(
-              'How to enter:',
-              '- Simply just download and sign up **(18+)**\n- Post a screenshot of the screen shown below\n- Wait for a <@&293928278845030410> to approve your submission',
-            )
-            .addField(
-              '\u200b',
-              'You can check if you are participating by sending \n`h!amiin` in <#336976743984267275>! \n(If you make a typo, just edit your message. I will still respond)',
-            )
+            .addFields({
+              name: 'How to enter:',
+              value:
+                '- Simply just download and sign up **(18+)**\n- Post a screenshot of the screen shown below\n- Wait for a <@&293928278845030410> to approve your submission',
+            })
+            .addFields({
+              name: '\u200b',
+              value:
+                'You can check if you are participating by sending \n`h!amiin` in <#336976743984267275>! \n(If you make a typo, just edit your message. I will still respond)',
+            })
             .setImage(
               'https://cdn.discordapp.com/attachments/768559225538084874/829753503513444362/1111111111.png',
             )
             .setFooter({ text: 'Gambling can be addictive. Participation from the age of 18' })
-            .addField('Current Participants:', participants);
+            .addFields({ name: 'Current Participants:', value: participants });
           if (m.embeds[0].fields[1]) {
             if (`${m.embeds[0].fields[2].value}` !== `${participants}`) {
               m.edit(e);

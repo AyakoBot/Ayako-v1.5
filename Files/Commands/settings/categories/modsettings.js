@@ -8,7 +8,7 @@ module.exports = {
   finished: true,
   category: ['moderation'],
   displayEmbed: (msg, r) => {
-    const embed = new Discord.MessageEmbed().addFields(
+    const embed = new Discord.UnsafeEmbed().addFieldss([
       {
         name: msg.lan.expirewarns,
         value: r.expirewarns
@@ -74,30 +74,30 @@ module.exports = {
           : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
         inline: true,
       },
-    );
+    ]);
     return embed;
   },
   buttons: (msg, r) => {
-    const expirewarns = new Discord.MessageButton()
+    const expirewarns = new Discord.Button()
       .setCustomId(msg.lan.edit.expirewarns.name)
       .setLabel(msg.lan.expirewarns)
-      .setStyle(r.expirewarns ? 'SUCCESS' : 'DANGER');
-    const expiremutes = new Discord.MessageButton()
+      .setStyle(r.expirewarns ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
+    const expiremutes = new Discord.Button()
       .setCustomId(msg.lan.edit.expiremutes.name)
       .setLabel(msg.lan.expiremutes)
-      .setStyle(r.expiremutes ? 'SUCCESS' : 'DANGER');
-    const expirewarnsafter = new Discord.MessageButton()
+      .setStyle(r.expiremutes ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
+    const expirewarnsafter = new Discord.Button()
       .setCustomId(msg.lan.edit.expirewarnsafter.name)
       .setLabel(msg.lan.expirewarnsafter)
-      .setStyle(r.expirewarnsafter ? 'SUCCESS' : 'DANGER');
-    const expiremutesafter = new Discord.MessageButton()
+      .setStyle(r.expirewarnsafter ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
+    const expiremutesafter = new Discord.Button()
       .setCustomId(msg.lan.edit.expiremutesafter.name)
       .setLabel(msg.lan.expiremutesafter)
-      .setStyle(r.expiremutesafter ? 'SUCCESS' : 'DANGER');
-    const muteban = new Discord.MessageButton()
+      .setStyle(r.expiremutesafter ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
+    const muteban = new Discord.Button()
       .setCustomId(msg.lan.edit.muteban.name)
       .setLabel(msg.lan.muteban)
-      .setStyle(r.muteban ? 'SUCCESS' : 'DANGER');
+      .setStyle(r.muteban ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
 
     return [[expirewarns, expirewarnsafter], [expiremutes, expiremutesafter], [muteban]];
   },

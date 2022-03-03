@@ -27,7 +27,7 @@ module.exports = {
           entry = entry.first();
         }
 
-        const embed = new Discord.MessageEmbed()
+        const embed = new Discord.UnsafeEmbed()
           .setAuthor({
             name: lan.author.title,
             iconURL: con.author.image,

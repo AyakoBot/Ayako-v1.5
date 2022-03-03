@@ -20,7 +20,7 @@ module.exports = {
       if (channels && channels.length) {
         const language = await ch.languageSelector(guild);
         const con = Constants.guildMemberUpdate;
-        const embed = new Discord.MessageEmbed().setTimestamp().setColor(con.color);
+        const embed = new Discord.UnsafeEmbed().setTimestamp().setColor(con.color);
         if (oldMember && member.nickname !== oldMember.nickname) {
           const lan = language.guildMemberUpdateNickname;
           embed.setAuthor({
@@ -36,19 +36,20 @@ module.exports = {
             entry = entry.first();
           }
           if (entry) {
-            if (entry.executor.id === user.id)
+            if (entry.executor.id === user.id) {
               embed.setDescription(ch.stp(lan.descriptionNoUser, { user: entry.executor }));
-            else
+            } else {
               embed.setDescription(
                 ch.stp(lan.descriptionUser, { user: entry.executor, target: entry.target }),
               );
+            }
           } else embed.setDescription(ch.stp(lan.descriptionNoAudit, { user }));
-          embed.addField(
-            language.nickname,
-            `${language.before}: \`${oldMember.nickname ? oldMember.nickname : user.username}\`\n${
-              language.after
-            }: \`${member.nickname ? member.nickname : user.username}\``,
-          );
+          embed.addFields({
+            name: language.nickname,
+            value: `${language.before}: \`${
+              oldMember.nickname ? oldMember.nickname : user.username
+            }\`\n${language.after}: \`${member.nickname ? member.nickname : user.username}\``,
+          });
           ch.send(channels, { embeds: [embed] });
           return;
         }
@@ -81,22 +82,25 @@ module.exports = {
             const removed = [];
             if (entry.changes) {
               for (let i = 0; i < entry.changes.length; i += 1) {
-                if (entry.changes[i].key === '$add')
+                if (entry.changes[i].key === '$add') {
                   entry.changes[i].new.forEach((r) => added.push(r));
-                if (entry.changes[i].key === '$remove')
+                }
+                if (entry.changes[i].key === '$remove') {
                   entry.changes[i].new.forEach((r) => removed.push(r));
+                }
               }
             }
             const lan = language.guildMemberUpdateRoles;
-            if (entry.executor.id === entry.target.id)
+            if (entry.executor.id === entry.target.id) {
               embed.setDescription(ch.stp(lan.descriptionNoUser, { user: entry.executor }));
-            else
+            } else {
               embed.setDescription(
                 ch.stp(lan.descriptionUser, { user: entry.executor, target: entry.target }),
               );
-            embed.addField(
-              language.changes,
-              `${added
+            }
+            embed.addFields({
+              name: language.changes,
+              value: `${added
                 .map((role) => `<:Add:834262756013113354>  <@&${role.id}>`)
                 .join('\n')}\n${removed
                 .map(
@@ -106,7 +110,7 @@ module.exports = {
                     }\n<:Remove:834262790180306964>  <@&${role.id}>`,
                 )
                 .join('\n')}`,
-            );
+            });
             embed.setAuthor({
               name: lan.author.name,
               iconURL: con.author.image,

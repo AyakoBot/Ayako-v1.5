@@ -12,12 +12,12 @@ module.exports = {
   type: 'info',
   async execute(msg) {
     if (msg.guild.id === '298954459172700181') {
-      const embed = new Discord.MessageEmbed()
+      const embed = new Discord.UnsafeEmbed()
         .setAuthor({
           name: 'Server Role Shop',
           url: msg.client.constants.standard.invite,
         })
-        .addFields(
+        .addFieldss([
           {
             name: '**#1 - 15000<a:NadekoFlower:746420831390793899>**',
             value: '<@&330766391999463424>',
@@ -49,7 +49,7 @@ module.exports = {
             value: 'Earn Flowers by voting for Nadeko',
             inline: false,
           },
-        )
+        ])
         .setDescription(
           'Send payment to a <@&360469415612907522> Member\n\n**For automatic role assignment type in this pattern: \n\n`.give [amount] [<@&360469415612907522> member] [role name]`**\n Example: | .give 500 <@267835618032222209> Kawaii Potato |\n',
         )
@@ -57,7 +57,7 @@ module.exports = {
         .setFooter({ text: 'If it doesnt work for some reason, wait for the Staff to reply' });
       msg.client.ch.reply(msg, { embeds: [embed] });
     } else if (msg.guild.id === '266632338883084290') {
-      const embed = new Discord.MessageEmbed()
+      const embed = new Discord.UnsafeEmbed()
         .setAuthor({
           name: 'Server Role Shop',
           url: msg.client.constants.standard.invite,
@@ -66,7 +66,7 @@ module.exports = {
         .setDescription(
           'To buy these Roles visit `t!shop` number `3` i. e. `Server Shop`\n View this message anytime by typing `h!shop`',
         )
-        .addFields(
+        .addFieldss([
           {
             name: '2.500 <a:TatsuCoins:800684425582477392>',
             value: '<@&800159175836827719> <a:DogDance:800685678958608404> ',
@@ -93,12 +93,12 @@ module.exports = {
             inline: true,
           },
           { name: '\u200b', value: '\u200b', inline: false },
-        )
-        .addField(
-          'How to get Tatsu Server Coins',
-          'Just be active in chat, you get 5 Server Coins per message',
-          false,
-        );
+        ])
+        .addFields({
+          name: 'How to get Tatsu Server Coins',
+          value: 'Just be active in chat, you get 5 Server Coins per message',
+          inline: false,
+        });
       msg.client.ch.reply(msg, { embeds: [embed] });
     }
   },

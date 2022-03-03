@@ -48,7 +48,7 @@ const logEnd = async (member, days) => {
   const language = await member.client.ch.languageSelector(member.guild);
 
   if (row.logchannels && row.logchannels.length) {
-    const embed = new Discord.MessageEmbed()
+    const embed = new Discord.UnsafeEmbed()
       .setAuthor({
         name: language.guildMemberUpdateNitro.author.nameEnd,
       })
@@ -73,7 +73,7 @@ const logStart = async (member, days) => {
   const language = await member.client.ch.languageSelector(member.guild);
 
   if (row.logchannels && row.logchannels.length) {
-    const embed = new Discord.MessageEmbed()
+    const embed = new Discord.UnsafeEmbed()
       .setAuthor({
         name: language.guildMemberUpdateNitro.author.nameStart,
       })
@@ -93,18 +93,17 @@ const logStart = async (member, days) => {
   }
 };
 
-const getSettings = async (member) => {
-  return member.client.ch.query(
+const getSettings = async (member) =>
+  member.client.ch.query(
     `SELECT * FROM nitrosettings WHERE guildid = $1 AND active = true;`,
     [member.guild.id].rows[0],
   );
-};
 
 const getDays = async (member) => {
-  return (
-    await member.client.ch.query(`SELECT * FROM nitrousers WHERE guildid = $1 AND userid = $2;`, [
-      member.guild.id,
-      member.user.id,
-    ])
-  )?.rows[0]?.days;
+  const res = await member.client.ch.query(
+    `SELECT * FROM nitrousers WHERE guildid = $1 AND userid = $2;`,
+    [member.guild.id, member.user.id],
+  );
+  if (res && res.rowCount) return res.rows[0]?.days;
+  return 0;
 };

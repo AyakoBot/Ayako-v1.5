@@ -56,8 +56,9 @@ module.exports = {
       }
       cooldowns.set(msg.command.name, new Discord.Collection());
     } else {
-      if (!cooldowns.has(msg.command.name))
+      if (!cooldowns.has(msg.command.name)) {
         cooldowns.set(msg.command.name, new Discord.Collection());
+      }
       const now = Date.now();
       const timestamps = cooldowns.get(msg.command.name);
       // let cooldownAmount = (msg.command.cooldown || 0);
@@ -89,18 +90,22 @@ module.exports = {
   },
   async permissionCheck(msg) {
     const perms =
-      typeof msg.command.perm === 'bigint' ? new Discord.Permissions(msg.command.perm) : undefined;
+      typeof msg.command.perm === 'bigint'
+        ? new Discord.PermissionsBitField(msg.command.perm)
+        : undefined;
     if (perms && !msg.guild.me.permissions.has(perms)) {
       return msg.client.ch.permError(msg, perms, true);
     }
     if (msg.command.perm === 0) {
-      if (msg.author.id !== auth.ownerID)
+      if (msg.author.id !== auth.ownerID) {
         return msg.client.ch.reply(msg, msg.language.commands.commandHandler.creatorOnly);
+      }
       return this.editCheck(msg);
     }
     if (msg.command.perm === 1) {
-      if (msg.guild.ownerID !== msg.author.id)
+      if (msg.guild.ownerID !== msg.author.id) {
         return msg.client.ch.reply(msg, msg.language.commands.commandHandler.ownerOnly);
+      }
       return this.editCheck(msg);
     }
     if (typeof msg.command.perm === 'bigint') {
@@ -116,15 +121,18 @@ module.exports = {
           const roles = [];
           res.rows.forEach((r) => roles.push(r.roleid));
           if (msg.member.roles.cache.some((r) => roles.includes(r.id))) return this.editCheck(msg);
-          if (!msg.member.permissions.has(msg.command.perm))
+          if (!msg.member.permissions.has(msg.command.perm)) {
             return msg.client.ch.reply(
               msg,
               msg.language.commands.commandHandler.missingPermissions,
             );
-        } else if (!msg.member.permissions.has(msg.command.perm))
+          }
+        } else if (!msg.member.permissions.has(msg.command.perm)) {
           return msg.client.ch.reply(msg, msg.language.commands.commandHandler.missingPermissions);
-      } else if (!msg.member.permissions.has(msg.command.perm))
+        }
+      } else if (!msg.member.permissions.has(msg.command.perm)) {
         return msg.client.ch.reply(msg, msg.language.commands.commandHandler.missingPermissions);
+      }
     }
     return this.editCheck(msg);
   },
@@ -202,7 +210,7 @@ module.exports = {
       const res = await msg.client.ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [
         msg.guild.id,
       ]);
-      if (res && res.rowCount > 0)
+      if (res && res.rowCount > 0) {
         msg.logchannels = res.rows[0].modlogs
           ?.map((id) =>
             typeof msg.client.channels.cache.get(id)?.send === 'function'
@@ -210,6 +218,7 @@ module.exports = {
               : null,
           )
           .filter((c) => c !== null);
+      }
       if (!msg.logchannels) msg.logchannels = [];
     }
     if (msg.author.id === msg.client.user.id) msg.delete();
@@ -219,7 +228,7 @@ module.exports = {
       msg.command.execute(msg);
     } catch (e) {
       const channel = msg.client.channels.cache.get(msg.client.constants.errorchannel);
-      const embed = new Discord.MessageEmbed()
+      const embed = new Discord.UnsafeEmbed()
         .setAuthor({
           name: 'Command Error',
           iconURL: msg.client.constants.emotes.crossLink,
@@ -227,11 +236,11 @@ module.exports = {
         })
         .setTimestamp()
         .setDescription(`${msg.client.ch.makeCodeBlock(e.stack)}`)
-        .addField('Message', `${msg.client.ch.makeCodeBlock(msg)}`)
-        .addField('Guild', `${msg.guild?.name} | ${msg.guild?.id}`)
-        .addField('Channel', `${msg.channel?.name} | ${msg.channel?.id}`)
-        .addField('Message Link', msg.url)
-        .setColor('ff0000');
+        .addFields({ name: 'Message', value: `${msg.client.ch.makeCodeBlock(msg)}` })
+        .addFields({ name: 'Guild', value: `${msg.guild?.name} | ${msg.guild?.id}` })
+        .addFields({ name: 'Channel', value: `${msg.channel?.name} | ${msg.channel?.id}` })
+        .addFields({ name: 'Message Link', value: msg.url })
+        .setColor(16711680);
       if (channel) msg.client.ch.send(msg.channel, { embeds: [embed] });
     }
   },

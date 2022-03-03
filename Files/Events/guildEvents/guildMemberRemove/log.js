@@ -29,9 +29,9 @@ module.exports = {
           entry = audit.sort((a, b) => b.id - a.id);
           entry = entry.first();
         }
-        const embed = new Discord.MessageEmbed()
+        const embed = new Discord.UnsafeEmbed()
           .setColor(con.color)
-          .setThumbnail(ch.displayAvatarURL(user))
+          .setThumbnail(user.displayAvatarURL())
           .setTimestamp();
         const roles = member.roles.cache.sort((a, b) => b.position - a.position);
         const letters = 27 * roles.size;
@@ -40,10 +40,18 @@ module.exports = {
           if (letters > maxFieldSize) {
             const chunks = chunker(roles, 37);
             for (let i = 0; i < chunks.length; i += 1) {
-              if (i === 0) embed.addField(language.roles, chunks[i]);
-              else embed.addField('\u200b', chunks[i]);
+              if (i === 0) embed.addFields({ name: language.roles, value: chunks[i] });
+              else embed.addFields({ name: '\u200b', value: chunks[i] });
             }
-          } else embed.addField(language.roles, roles.map((r) => `${r}`).join(' | '));
+          } else {
+            embed.addFieldss([
+              {
+                name: language.roles,
+                value: roles.map((r) => `${r}`).join(' | '),
+                inline: false,
+              },
+            ]);
+          }
         }
         if (entry && entry.id && +ch.getUnix(entry.id) > Date.now() - 1000) {
           embed
@@ -62,19 +70,22 @@ module.exports = {
             url: ch.stp(con.author.link, { user }),
           });
         }
-        embed.addField(
-          language.joinedAt,
-          `<t:${`${member.joinedTimestamp}`.slice(0, -3)}> <t:${`${member.joinedTimestamp}`.slice(
+        embed.addFields({
+          name: language.joinedAt,
+          value: `<t:${`${member.joinedTimestamp}`.slice(
             0,
             -3,
-          )}:R>\n(\`${ch.stp(language.time.timeAgo, {
-            time: moment
-              .duration(Date.now() - member.joinedTimestamp)
-              .format(
-                `Y [${language.time.years}], M [${language.time.months}], W [${language.time.weeks}], D [${language.time.days}], H [${language.time.hours}], m [${language.time.minutes}], s [${language.time.seconds}]`,
-              ),
-          })}\`)`,
-        );
+          )}> <t:${`${member.joinedTimestamp}`.slice(0, -3)}:R>\n(\`${ch.stp(
+            language.time.timeAgo,
+            {
+              time: moment
+                .duration(Date.now() - member.joinedTimestamp)
+                .format(
+                  `Y [${language.time.years}], M [${language.time.months}], W [${language.time.weeks}], D [${language.time.days}], H [${language.time.hours}], m [${language.time.minutes}], s [${language.time.seconds}]`,
+                ),
+            },
+          )}\`)`,
+        });
         ch.send(channels, { embeds: [embed] });
       }
     }

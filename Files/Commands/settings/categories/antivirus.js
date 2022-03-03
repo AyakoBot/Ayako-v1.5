@@ -8,7 +8,7 @@ module.exports = {
   finished: true,
   category: ['auto-moderation'],
   displayEmbed(msg, r) {
-    const embed = new Discord.MessageEmbed().addFields(
+    const embed = new Discord.UnsafeEmbed().addFieldss([
       {
         name: msg.lanSettings.active,
         value: r.active
@@ -112,74 +112,74 @@ module.exports = {
           : msg.language.none,
         inline: false,
       },
-    );
+    ]);
     return embed;
   },
   buttons(msg, r) {
-    const active = new Discord.MessageButton()
+    const active = new Discord.Button()
       .setCustomId(msg.lan.edit.active.name)
       .setLabel(msg.lanSettings.active)
-      .setStyle(r.active ? 'SUCCESS' : 'DANGER');
-    const ban = new Discord.MessageButton()
+      .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
+    const ban = new Discord.Button()
       .setCustomId(msg.lan.edit.bantof.name)
       .setLabel(msg.lan.bantof)
-      .setStyle(r.bantof ? 'SUCCESS' : 'DANGER');
-    const kick = new Discord.MessageButton()
+      .setStyle(r.bantof ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
+    const kick = new Discord.Button()
       .setCustomId(msg.lan.edit.kicktof.name)
       .setLabel(msg.lan.kicktof)
-      .setStyle(r.kicktof ? 'SUCCESS' : 'DANGER');
-    const mute = new Discord.MessageButton()
+      .setStyle(r.kicktof ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
+    const mute = new Discord.Button()
       .setCustomId(msg.lan.edit.mutetof.name)
       .setLabel(msg.lan.mutetof)
-      .setStyle(r.mutetof ? 'SUCCESS' : 'DANGER');
-    const warn = new Discord.MessageButton()
+      .setStyle(r.mutetof ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
+    const warn = new Discord.Button()
       .setCustomId(msg.lan.edit.warntof.name)
       .setLabel(msg.lan.warntof)
-      .setStyle(r.warntof ? 'SUCCESS' : 'DANGER');
-    const verbal = new Discord.MessageButton()
+      .setStyle(r.warntof ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
+    const verbal = new Discord.Button()
       .setCustomId(msg.lan.edit.verbaltof.name)
       .setLabel(msg.lan.verbaltof)
-      .setStyle(r.verbaltof ? 'SUCCESS' : 'DANGER');
-    const waw = new Discord.MessageButton()
+      .setStyle(r.verbaltof ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
+    const waw = new Discord.Button()
       .setCustomId(msg.lan.edit.warnafterwarnsamount.name)
       .setLabel(
         msg.client.ch.stp(msg.lan.warnafterwarnsamount.replace(/\*/g, ''), {
           amount: r.warnafterwarnsamount ? r.warnafterwarnsamount : '--',
         }),
       )
-      .setStyle(!r.readofwarnstof ? 'DANGER' : 'SECONDARY');
-    const maw = new Discord.MessageButton()
+      .setStyle(!r.readofwarnstof ? Discord.ButtonStyle.Danger : Discord.ButtonStyle.Secondary);
+    const maw = new Discord.Button()
       .setCustomId(msg.lan.edit.muteafterwarnsamount.name)
       .setLabel(
         msg.client.ch.stp(msg.lan.muteafterwarnsamount.replace(/\*/g, ''), {
           amount: r.muteafterwarnsamount ? r.muteafterwarnsamount : '--',
         }),
       )
-      .setStyle(!r.readofwarnstof ? 'DANGER' : 'SECONDARY');
-    const kaw = new Discord.MessageButton()
+      .setStyle(!r.readofwarnstof ? Discord.ButtonStyle.Danger : Discord.ButtonStyle.Secondary);
+    const kaw = new Discord.Button()
       .setCustomId(msg.lan.edit.kickafterwarnsamount.name)
       .setLabel(
         msg.client.ch.stp(msg.lan.kickafterwarnsamount.replace(/\*/g, ''), {
           amount: r.kickafterwarnsamount ? r.kickafterwarnsamount : '--',
         }),
       )
-      .setStyle(!r.readofwarnstof ? 'DANGER' : 'SECONDARY');
-    const baw = new Discord.MessageButton()
+      .setStyle(!r.readofwarnstof ? Discord.ButtonStyle.Danger : Discord.ButtonStyle.Secondary);
+    const baw = new Discord.Button()
       .setCustomId(msg.lan.edit.banafterwarnsamount.name)
       .setLabel(
         msg.client.ch.stp(msg.lan.banafterwarnsamount.replace(/\*/g, ''), {
           amount: r.banafterwarnsamount ? r.banafterwarnsamount : '--',
         }),
       )
-      .setStyle(!r.readofwarnstof ? 'DANGER' : 'SECONDARY');
-    const minimize = new Discord.MessageButton()
+      .setStyle(!r.readofwarnstof ? Discord.ButtonStyle.Danger : Discord.ButtonStyle.Secondary);
+    const minimize = new Discord.Button()
       .setCustomId(msg.lan.edit.minimize.name)
       .setLabel(msg.lan.minimize)
-      .setStyle('SECONDARY');
-    const del = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Secondary);
+    const del = new Discord.Button()
       .setCustomId(msg.lan.edit.delete.name)
       .setLabel(msg.lan.delete)
-      .setStyle('SECONDARY');
+      .setStyle(Discord.ButtonStyle.Secondary);
     return [[active], [verbal, warn, mute, kick, ban], [waw, maw, kaw, baw], [minimize, del]];
   },
 };

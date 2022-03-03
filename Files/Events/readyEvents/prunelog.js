@@ -21,7 +21,7 @@ module.exports = {
             entry = audits.entries.sort((a, b) => b.id - a.id);
             entry = entry.first();
             if (entry && ch.getUnix(entry.id) > Date.now() - 120000) {
-              const embed = new Discord.MessageEmbed()
+              const embed = new Discord.UnsafeEmbed()
                 .setAuthor({
                   name: lan.author,
                   iconURL: con.author.image,
@@ -35,7 +35,7 @@ module.exports = {
                 )
                 .setTimestamp()
                 .setColor(con.color);
-              if (entry.reason) embed.addField(language.reason, entry.reason);
+              if (entry.reason) embed.addFields({ name: language.reason, value: entry.reason });
               ch.send(logchannel, { embeds: [embed] });
             }
           }

@@ -26,7 +26,7 @@ module.exports = {
     }
     if (!role) return msg.client.ch.reply(msg, lan.noRoleFound);
 
-    const embed = new Discord.MessageEmbed();
+    const embed = new Discord.UnsafeEmbed();
     if (role.managed) {
       embed
         .setAuthor({
@@ -36,8 +36,14 @@ module.exports = {
         })
         .setColor(msg.client.constants.error)
         .setDescription(msg.client.ch.makeUnderlined(msg.language.permissions.error.msg))
-        .addField(language.problem, msg.client.ch.makeCodeBlock(lan.error.roleManagedProblem))
-        .addField(language.solution, msg.client.ch.makeCodeBlock(lan.error.roleManagedSolution));
+        .addFields({
+          name: language.problem,
+          value: msg.client.ch.makeCodeBlock(lan.error.roleManagedProblem),
+        })
+        .addFields({
+          name: language.solution,
+          value: msg.client.ch.makeCodeBlock(lan.error.roleManagedSolution),
+        });
       return msg.client.ch.reply(msg, { embeds: [embed] });
     }
     if (msg.guild.me.roles.highest.position <= role.position) {
@@ -49,8 +55,14 @@ module.exports = {
         })
         .setColor(msg.client.constants.error)
         .setDescription(msg.client.ch.makeUnderlined(msg.language.permissions.error.msg))
-        .addField(language.problem, msg.client.ch.makeCodeBlock(lan.error.rolePosProblem))
-        .addField(language.solution, msg.client.ch.makeCodeBlock(lan.error.rolePosSolution));
+        .addFields({
+          name: language.problem,
+          value: msg.client.ch.makeCodeBlock(lan.error.rolePosProblem),
+        })
+        .addFields({
+          name: language.solution,
+          value: msg.client.ch.makeCodeBlock(lan.error.rolePosSolution),
+        });
       return msg.client.ch.reply(msg, { embeds: [embed] });
     }
     await role.delete().catch(() => {});

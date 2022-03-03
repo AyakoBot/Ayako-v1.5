@@ -310,7 +310,7 @@ module.exports = {
    */
   userFlagCalc: (client, bits, lan, emotes) => {
     if (!bits) return [];
-    const BitField = new Discord.UserFlags(Number(bits));
+    const BitField = new Discord.UserFlagsBitField(Number(bits));
     const Flags = [];
 
     if (BitField.has(1)) {
@@ -487,7 +487,7 @@ module.exports = {
    * @param {object} lan - The Language File the Bits will be Translated based off of.
    */
   permCalc: (bits, lan, isntRole) => {
-    const BitField = new Discord.Permissions(BigInt(bits));
+    const BitField = new Discord.PermissionsBitField(BigInt(bits));
     const Perms = [];
 
     if (BitField.has(1n, false)) {
@@ -648,90 +648,6 @@ module.exports = {
    */
   getDifference: (array1, array2) => array1.filter((i) => array2.indexOf(i) < 0),
   /**
-   * Extracts a Dynamic Avatar URL from a Discord User.
-   * @constructor
-   * @param {object} user - The User/Member Object the Avatar URL is extracted from.
-   */
-  displayAvatarURL: (user) =>
-    user.displayAvatarURL({
-      dynamic: true,
-      size: 2048,
-      format: 'png',
-    }),
-  /**
-   * Extracts a Dynamic Banner URL from a Discord User.
-   * @constructor
-   * @param {object} rawUser - The User Object the Banner URL is extracted from.
-   */
-  displayBannerURL: (rawUser) => {
-    let user = {};
-    if (rawUser.user) {
-      user = rawUser.user;
-    } else {
-      user = rawUser;
-    }
-    return user.bannerURL({
-      dynamic: true,
-      size: 2048,
-      format: 'png',
-    });
-  },
-  /**
-   * Extracts a Dynamic Icon URL from a Discord Guild.
-   * @constructor
-   * @param {object} guild - The Guild Object the Icon URL is extracted from.
-   */
-  iconURL: (guild) =>
-    guild.iconURL({
-      dynamic: true,
-      size: 2048,
-      format: 'png',
-    }),
-  /**
-   * Extracts a Dynamic Banner URL from a Discord Guild.
-   * @constructor
-   * @param {object} guild - The Guild Object the Banner URL is extracted from.
-   */
-  bannerURL: (guild) =>
-    guild.bannerURL({
-      dynamic: true,
-      size: 2048,
-      format: 'png',
-    }),
-  /**
-   * Extracts a Dynamic Splash URL from a Discord Guild.
-   * @constructor
-   * @param {object} guild - The Guild Object the Splash URL is extracted from.
-   */
-  splashURL: (guild) =>
-    guild.splashURL({
-      dynamic: true,
-      size: 2048,
-      format: 'png',
-    }),
-  /**
-   * Extracts a Dynamic discovery Splash URL from a Discord Guild.
-   * @constructor
-   * @param {object} guild - The Guild Object the discovery Splash URL is extracted from.
-   */
-  discoverySplashURL: (guild) =>
-    guild.discoverySplashURL({
-      dynamic: true,
-      size: 2048,
-      format: 'png',
-    }),
-  /**
-   * Extracts a Dynamic Avatar URL from a Discord Webhook.
-   * @constructor
-   * @param {object} webhook - The Webhook Object the Avatar URL is extracted from.
-   */
-  avatarURL: (webhook) =>
-    webhook.avatarURL({
-      dynamic: true,
-      size: 2048,
-      format: 'png',
-    }),
-  /**
    * Selects the Language for a Guild if it previously set a specific Language,
    * if not it selects English.
    * @constructor
@@ -801,7 +717,7 @@ module.exports = {
    * @param {object} bit2 - The second BitField.
    */
   bitUniques: (bit1, bit2) => {
-    const bit = new Discord.Permissions(bit1.bitfield & bit2.bitfield);
+    const bit = new Discord.PermissionsBitField(bit1.bitfield & bit2.bitfield);
     const newBit1 = bit1.remove([...bit]);
     const newBit2 = bit2.remove([...bit]);
     return [newBit1, newBit2];
@@ -837,16 +753,16 @@ module.exports = {
    * @param {object} msg - The triggering Message of module.exports Awaiter.
    */
   modRoleWaiter: async (msg) => {
-    const SUCCESS = new Discord.MessageButton()
+    const SUCCESS = new Discord.Button()
       .setCustomId('modProceedAction')
       .setLabel(msg.language.mod.warning.proceed)
-      .setStyle('SUCCESS')
+      .setStyle(Discord.ButtonStyle.Primary)
       .setEmoji(Constants.emotes.tickBGID);
-    const DANGER = new Discord.MessageButton()
+    const DANGER = new Discord.Button()
       .setCustomId('modAbortAction')
       .setLabel(msg.language.mod.warning.abort)
       .setEmoji(Constants.emotes.crossBGID)
-      .setStyle('DANGER');
+      .setStyle(Discord.ButtonStyle.Danger);
     const m = await module.exports.reply(msg, {
       content: msg.language.mod.warning.text,
       components: module.exports.buttonRower([SUCCESS, DANGER]),
@@ -882,7 +798,7 @@ module.exports = {
     let language;
     if (!language) language = await module.exports.languageSelector(interaction.guild);
 
-    const embed = new Discord.MessageEmbed()
+    const embed = new Discord.UnsafeEmbed()
       .setAuthor({
         name: language.error,
         iconURL: Constants.standard.image,
@@ -898,7 +814,7 @@ module.exports = {
    * @param {object} msg - The Message module.exports Function replies to.
    */
   collectorEnd: (msg, m) => {
-    const embed = new Discord.MessageEmbed()
+    const embed = new Discord.UnsafeEmbed()
       .setDescription(msg.language.timeError)
       .setColor(Constants.error);
 
@@ -943,7 +859,9 @@ module.exports = {
    * @param {object} member - The Client User Member of module.exports Guild.
    */
   colorSelector: (member) =>
-    member && member.displayHexColor !== 0 ? member.displayHexColor : 'b0ff00',
+    member && member.displayColor !== 0
+      ? member.displayColor
+      : member.client.constants.standard.color,
   /**
    * Capitalizes the first Letter of a String.
    * @constructor
@@ -957,7 +875,7 @@ module.exports = {
    * @param {object} guild - The Guild in which module.exports Command was called
    */
   loadingEmbed: async (lan, guild) => {
-    const embed = new Discord.MessageEmbed()
+    const embed = new Discord.UnsafeEmbed()
       .setAuthor({
         name: lan.author,
         iconURL: guild.client.constants.emotes.loadingLink,
@@ -1041,8 +959,8 @@ module.exports = {
         expiresAt: inv.maxAge ? new Date(inv.maxAge) : null,
         expiresTimestamp: inv.maxAge ? new Date(inv.maxAge).getTime() : null,
         guild,
-        inviter: client.users.cache.get(inv.inviter.id),
-        inviterId: inv.inviter.id,
+        inviter: client.users.cache.get(inv.inviter?.id),
+        inviterId: inv.inviter?.id,
         maxAge: inv.maxAge,
         maxUses: inv.maxUses,
         memberCount: inv.memberCount,
@@ -1104,7 +1022,7 @@ module.exports = {
    * @param {object} DBembed - The Embed Data from the Database
    */
   getDiscordEmbed: (DBembed) =>
-    new Discord.MessageEmbed({
+    new Discord.Embed({
       color: Number(DBembed.color),
       title: DBembed.title,
       url: DBembed.url,
@@ -1160,7 +1078,7 @@ module.exports = {
 
     options.forEach((option) => {
       const embedToUse = embeds[embeds.length - 1];
-      const embed = new Discord.MessageEmbed();
+      const embed = new Discord.UnsafeEmbed();
 
       embed.color = embedToUse.color;
       embed.title = embedToUse.title ? mod(embedToUse.title, { [option[0]]: option[1] }) : null;
@@ -1225,7 +1143,7 @@ module.exports = {
     return embeds.pop();
   },
   error: (msg, content, m) => {
-    const embed = new Discord.MessageEmbed()
+    const embed = new Discord.UnsafeEmbed()
       .setAuthor({
         name: msg.language.error,
         iconURL: msg.client.constants.emotes.warningLink,
@@ -1254,7 +1172,7 @@ module.exports = {
       me ? msg.guild.me.permissions : msg.member.permissions,
     );
 
-    const embed = new Discord.MessageEmbed()
+    const embed = new Discord.UnsafeEmbed()
       .setAuthor({
         name: msg.language.error,
         iconURL: msg.client.constants.standard.errorImage,
@@ -1266,16 +1184,17 @@ module.exports = {
           me ? msg.language.permissions.error.msg : msg.language.permissions.error.you,
         ),
       )
-      .addField(
-        module.exports.makeBold(msg.language.permissions.error.needed),
-        `\u200b${
+      .addFields({
+        name: module.exports.makeBold(msg.language.permissions.error.needed),
+        value: `\u200b${
           neededPerms.has(8n)
             ? `${module.exports.makeInlineCode(msg.language.permissions.ADMINISTRATOR)}`
             : neededPerms
                 .toArray()
                 .map((p) => `${module.exports.makeInlineCode(msg.language.permissions[p])}`)
         }`,
-      );
+        inline: false,
+      });
 
     if (
       [

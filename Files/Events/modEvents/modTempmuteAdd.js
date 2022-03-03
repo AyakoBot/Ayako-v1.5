@@ -12,11 +12,12 @@ module.exports = {
     const now = Date.now();
     let em;
     if (mexisted) {
-      em = new Discord.MessageEmbed(msg.m.embeds[0])
-        .setColor(con.color)
-        .addField('\u200b', `${msg.client.constants.emotes.loading} ${lan.loading}`);
+      em = new Discord.Embed(msg.m.embeds[0]).setColor(con.color).addFields({
+        name: '\u200b',
+        value: `${msg.client.constants.emotes.loading} ${lan.loading}`,
+      });
     } else {
-      em = new Discord.MessageEmbed()
+      em = new Discord.UnsafeEmbed()
         .setColor(con.color)
         .setDescription(`${msg.client.constants.emotes.loading} ${lan.loading}`);
     }
@@ -28,18 +29,21 @@ module.exports = {
     if (!member) {
       if (mexisted) {
         em.fields.pop();
-        em.addField('\u200b', `${msg.client.constants.emotes.cross} ${lan.noMember}`);
+        em.addFields({
+          name: '\u200b',
+          value: `${msg.client.constants.emotes.cross} ${lan.noMember}`,
+        });
         msg.m?.edit({ embeds: [em] });
       } else {
         em.setDescription(`${msg.client.constants.emotes.cross} ${lan.noMemberHint}`);
-        const Yes = new Discord.MessageButton()
+        const Yes = new Discord.Button()
           .setCustomId('yes')
           .setLabel(language.Yes)
-          .setStyle('SUCCESS');
-        const No = new Discord.MessageButton()
+          .setStyle(Discord.ButtonStyle.Primary);
+        const No = new Discord.Button()
           .setCustomId('no')
           .setLabel(language.No)
-          .setStyle('DANGER');
+          .setStyle(Discord.ButtonStyle.Danger);
         msg.m?.edit({ embeds: [em], components: msg.client.ch.buttonRower([[Yes, No]]) });
       }
       if (mexisted) {
@@ -75,7 +79,10 @@ module.exports = {
     ) {
       if (mexisted) {
         em.fields.pop();
-        em.addField('\u200b', `${msg.client.constants.emotes.cross} ${lan.exeNoPerms}`);
+        em.addFields({
+          name: '\u200b',
+          value: `${msg.client.constants.emotes.cross} ${lan.exeNoPerms}`,
+        });
       } else em.setDescription(`${msg.client.constants.emotes.cross} ${lan.exeNoPerms}`);
       msg.m?.edit({ embeds: [em] });
       if (mexisted) {
@@ -92,7 +99,10 @@ module.exports = {
     ) {
       if (mexisted) {
         em.fields.pop();
-        em.addField('\u200b', `${msg.client.constants.emotes.cross} ${lan.meNoPerms}`);
+        em.addFields({
+          name: '\u200b',
+          value: `${msg.client.constants.emotes.cross} ${lan.meNoPerms}`,
+        });
       } else em.setDescription(`${msg.client.constants.emotes.cross} ${lan.meNoPerms}`);
       msg.m?.edit({ embeds: [em] });
       if (mexisted) {
@@ -113,7 +123,10 @@ module.exports = {
     if (member?.communicationDisabledUntil) {
       if (mexisted) {
         em.fields.pop();
-        em.addField('\u200b', `${msg.client.constants.emotes.cross} ${lan.hasRole}`);
+        em.addFields({
+          name: '\u200b',
+          value: `${msg.client.constants.emotes.cross} ${lan.hasRole}`,
+        });
       } else em.setDescription(`${msg.client.constants.emotes.cross} ${lan.hasRole}`);
       msg.m?.edit({ embeds: [em] });
       if (mexisted) {
@@ -133,8 +146,8 @@ module.exports = {
       if (!msg.source) {
         await msg.client.ch.query(
           `INSERT INTO warns 
-					(guildid, userid, reason, type, duration, closed, dateofwarn, warnedinchannelid, warnedbyuserid, warnedinchannelname, warnedbyusername) VALUES 
-					($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);`,
+          (guildid, userid, reason, type, duration, closed, dateofwarn, warnedinchannelid, warnedbyuserid, warnedinchannelname, warnedbyusername) VALUES 
+          ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);`,
           [
             msg.guild.id,
             target.id,
@@ -151,7 +164,7 @@ module.exports = {
         );
       }
       const dmChannel = await target.createDM().catch(() => {});
-      const DMembed = new Discord.MessageEmbed()
+      const DMembed = new Discord.UnsafeEmbed()
         .setDescription(`**${language.reason}:** \n${reason}`)
         .setColor(con.color)
         .setTimestamp()
@@ -161,30 +174,34 @@ module.exports = {
           url: msg.client.ch.stp(con.author.link, { guild: msg.guild }),
         });
       msg.client.ch.send(dmChannel, { embeds: [DMembed] });
-      const embed = new Discord.MessageEmbed()
+      const embed = new Discord.UnsafeEmbed()
         .setColor(con.color)
         .setAuthor({
           name: msg.client.ch.stp(lan.author, { user: target }),
-          iconURL: msg.client.ch.displayAvatarURL(target),
+          iconURL: target.displayAvatarURL(),
           url: msg.client.constants.standard.invite,
         })
         .setDescription(msg.client.ch.stp(lan.description, { user: executor, target }))
         .setTimestamp()
-        .addField(language.reason, `${reason}`)
+        .addFields({ name: language.reason, value: `${reason}` })
         .setFooter({ text: msg.client.ch.stp(lan.footer, { user: executor, target }) });
-      if (msg.logchannels && msg.logchannels.length)
+      if (msg.logchannels && msg.logchannels.length) {
         msg.client.ch.send(msg.logchannels, { embeds: [embed] });
+      }
     } else {
       if (mexisted) {
         em.fields.pop();
-        em.addField(
-          '\u200b',
-          `${msg.client.constants.emotes.cross + lan.error} ${msg.client.ch.makeCodeBlock(err)}`,
-        );
-      } else
+        em.addFields({
+          name: '\u200b',
+          value: `${msg.client.constants.emotes.cross + lan.error} ${msg.client.ch.makeCodeBlock(
+            err,
+          )}`,
+        });
+      } else {
         em.setDescription(
           `${msg.client.constants.emotes.cross + lan.error} ${msg.client.ch.makeCodeBlock(err)}`,
         );
+      }
       msg.m?.edit({ embeds: [em] });
       if (mexisted) {
         jobs.scheduleJob(new Date(Date.now() + 10000), () => {
@@ -195,20 +212,21 @@ module.exports = {
     }
     if (mexisted) {
       em.fields.pop();
-      em.addField(
-        '\u200b',
-        `${msg.client.constants.emotes.tick} ${msg.client.ch.stp(lan.success, {
+      em.addFields({
+        name: '\u200b',
+        value: `${msg.client.constants.emotes.tick} ${msg.client.ch.stp(lan.success, {
           target,
           nr: warnnr,
         })}`,
-      );
-    } else
+      });
+    } else {
       em.setDescription(
         `${msg.client.constants.emotes.tick} ${msg.client.ch.stp(lan.success, {
           target,
           nr: warnnr,
         })}`,
       );
+    }
     await msg.m?.edit({ embeds: [em] });
     return false;
   },
@@ -256,10 +274,9 @@ async function assingWarn(
   const dmChannel = await target.createDM().catch(() => {});
   if (!msg.source || msg.source !== 'guildMemberAdd') {
     await msg.client.ch.query(
-      `
-					INSERT INTO warns 
-					(guildid, userid, reason, type, duration, closed, dateofwarn, warnedinchannelid, warnedbyuserid, warnedinchannelname, warnedbyusername) VALUES 
-					($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);`,
+      `INSERT INTO warns 
+       (guildid, userid, reason, type, duration, closed, dateofwarn, warnedinchannelid, warnedbyuserid, warnedinchannelname, warnedbyusername) VALUES 
+       ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);`,
       [
         msg.guild.id,
         target.id,
@@ -275,7 +292,7 @@ async function assingWarn(
       ],
     );
   }
-  const DMembed = new Discord.MessageEmbed()
+  const DMembed = new Discord.UnsafeEmbed()
     .setDescription(`**${language.reason}:** \n${reason}`)
     .setColor(con.color)
     .setTimestamp()
@@ -285,23 +302,22 @@ async function assingWarn(
       url: msg.client.ch.stp(con.author.link, { guild: msg.guild }),
     });
   msg.client.ch.send(dmChannel, { embeds: [DMembed] });
-  const embed = new Discord.MessageEmbed()
+  const embed = new Discord.UnsafeEmbed()
     .setColor(con.color)
     .setAuthor({
       name: msg.client.ch.stp(lan.author, { user: target }),
-      iconURL: msg.client.ch.displayAvatarURL(target),
+      iconURL: target.displayAvatarURL(),
       url: msg.client.constants.standard.invite,
     })
     .setDescription(msg.client.ch.stp(lan.description, { user: executor, target }))
     .setTimestamp()
-    .addField(language.reason, `${reason}`)
+    .addFields({ name: language.reason, value: `${reason}` })
     .setFooter({ text: msg.client.ch.stp(lan.footer, { user: executor, target }) });
   if (msg.logchannels) msg.client.ch.send(msg.logchannels, { embeds: [embed] });
   await msg.client.ch.query(
-    `
-				INSERT INTO warns 
-				(guildid, userid, reason, type, duration, closed, dateofwarn, warnedinchannelid, warnedbyuserid, warnedinchannelname, warnedbyusername) VALUES 
-				($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);`,
+    `INSERT INTO warns 
+     (guildid, userid, reason, type, duration, closed, dateofwarn, warnedinchannelid, warnedbyuserid, warnedinchannelname, warnedbyusername) VALUES 
+     ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);`,
     [
       msg.guild.id,
       target.id,

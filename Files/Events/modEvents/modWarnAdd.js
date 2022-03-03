@@ -10,11 +10,12 @@ module.exports = {
     const lan = language.mod.warnAdd;
     let em;
     if (mexisted) {
-      em = new Discord.MessageEmbed(msg.m.embeds[0])
-        .setColor(con.color)
-        .addField('\u200b', `${msg.client.constants.emotes.loading} ${lan.loading}`);
+      em = new Discord.Embed(msg.m.embeds[0]).setColor(con.color).addFields({
+        name: '\u200b',
+        value: `${msg.client.constants.emotes.loading} ${lan.loading}`,
+      });
     } else {
-      em = new Discord.MessageEmbed()
+      em = new Discord.UnsafeEmbed()
         .setColor(con.color)
         .setDescription(`${msg.client.constants.emotes.loading} ${lan.loading}`);
     }
@@ -28,7 +29,10 @@ module.exports = {
     ) {
       if (mexisted) {
         em.fields.pop();
-        em.addField('\u200b', `${msg.client.constants.emotes.cross} ${lan.exeNoPerms}`);
+        em.addFields({
+          name: '\u200b',
+          value: `${msg.client.constants.emotes.cross} ${lan.exeNoPerms}`,
+        });
       } else em.setDescription(`${msg.client.constants.emotes.cross} ${lan.exeNoPerms}`);
       msg.m?.edit({ embeds: [em] });
       if (mexisted) {
@@ -38,24 +42,25 @@ module.exports = {
       }
       return false;
     }
-    const warnEmbed = new Discord.MessageEmbed()
+    const warnEmbed = new Discord.UnsafeEmbed()
       .setTitle(msg.client.ch.stp(lan.DMtitle, { guild: msg.guild }))
       .setColor(con.color)
       .setDescription(`${language.reason}: \n${reason}`)
       .setTimestamp();
     msg.client.ch.send(target, { embeds: [warnEmbed] });
-    const WarnLogEmbed = new Discord.MessageEmbed()
+    const WarnLogEmbed = new Discord.UnsafeEmbed()
       .setAuthor({
         name: msg.client.ch.stp(lan.log.author, { target }),
-        iconURL: msg.client.ch.displayAvatarURL(target),
+        iconURL: target.displayAvatarURL(),
         url: msg.url,
       })
       .setDescription(msg.client.ch.stp(lan.log.description, { target, user: executor }))
-      .addField(language.reason, `${reason}`)
+      .addFields({ name: language.reason, value: `${reason}` })
       .setColor(con.color)
       .setTimestamp();
-    if (msg.logchannels && msg.logchannels.length)
+    if (msg.logchannels && msg.logchannels.length) {
       msg.client.ch.send(msg.logchannels, { embeds: [WarnLogEmbed] });
+    }
     let warnnr;
     const res = await msg.client.ch.query(
       'SELECT * FROM warns WHERE guildid = $1 AND userid = $2;',
@@ -80,20 +85,21 @@ module.exports = {
     );
     if (mexisted) {
       em.fields.pop();
-      em.addField(
-        '\u200b',
-        `${msg.client.constants.emotes.tick} ${msg.client.ch.stp(lan.success, {
+      em.addFields({
+        name: '\u200b',
+        value: `${msg.client.constants.emotes.tick} ${msg.client.ch.stp(lan.success, {
           target,
           nr: warnnr,
         })}`,
-      );
-    } else
+      });
+    } else {
       em.setDescription(
         `${msg.client.constants.emotes.tick} ${msg.client.ch.stp(lan.success, {
           target,
           nr: warnnr,
         })}`,
       );
+    }
     await msg.m?.edit({ embeds: [em] });
     if (msg.source) msg.client.emit('modSourceHandler', msg, em);
     return true;

@@ -12,7 +12,7 @@ module.exports = {
     const con = msg.client.constants.commands.clearwarns;
     const user = await msg.client.users.fetch(msg.args[0].replace(/\D+/g, '')).catch(() => {});
 
-    const embed = new Discord.MessageEmbed().setColor(con.loading);
+    const embed = new Discord.UnsafeEmbed().setColor(con.loading);
 
     if (!user) {
       embed.setDescription(lan.noUser);
@@ -30,15 +30,15 @@ module.exports = {
     }
 
     embed.setDescription(msg.client.ch.stp(lan.sure, { user }));
-    const yes = new Discord.MessageButton()
+    const yes = new Discord.Button()
       .setCustomId('yes')
       .setLabel(msg.language.Yes)
-      .setStyle('SUCCESS');
-    const no = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary);
+    const no = new Discord.Button()
       .setCustomId('no')
       .setLabel(msg.language.No)
-      .setStyle('DANGER');
-        msg.m = await msg.client.ch.reply(msg, {
+      .setStyle(Discord.ButtonStyle.Danger);
+    msg.m = await msg.client.ch.reply(msg, {
       embeds: [embed],
       components: msg.client.ch.buttonRower([[yes, no]]),
     });
@@ -73,7 +73,7 @@ module.exports = {
 };
 
 function log(msg, res, user, lan, con) {
-  const logEmbed = new Discord.MessageEmbed()
+  const logEmbed = new Discord.UnsafeEmbed()
     .setAuthor({
       name: msg.client.ch.stp(lan.log.author, { user }),
       iconURL: con.log.image,
@@ -91,17 +91,17 @@ function log(msg, res, user, lan, con) {
         msgid: r.msgid,
       }),
     });
-    logEmbed.addField(
-      msg.client.ch.stp(lan.log.title, {
+    logEmbed.addFields({
+      name: msg.client.ch.stp(lan.log.title, {
         type: r.type,
         user: r.warnedbyusername,
         channel: r.warnedinchannelname,
       }),
-      msg.client.ch.stp(lan.log.value, {
+      value: msg.client.ch.stp(lan.log.value, {
         time: `<t:${r.dateofwarn.slice(0, -3)}:F> (<t:${r.dateofwarn.slice(0, -3)}:R>)`,
         reason: r.reason,
       }),
-    );
+    });
     if (description !== null) {
       description += ` | ${msgLink}`;
     } else {

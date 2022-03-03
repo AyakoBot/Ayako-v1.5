@@ -1,4 +1,4 @@
-const regex = new RegExp('/[^ w]+/', 'g');
+const regex = /\/[^ w]+\//g;
 const Discord = require('discord.js');
 const jobs = require('node-schedule');
 
@@ -43,7 +43,7 @@ module.exports = {
             m.delete().catch(() => {});
           });
         }
-        const embed = new Discord.MessageEmbed()
+        const embed = new Discord.UnsafeEmbed()
           .setAuthor({
             name: msg.client.constants.standard.image,
             iconURL: language.commands.toxicityCheck.author,

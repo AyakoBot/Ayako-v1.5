@@ -7,7 +7,7 @@ module.exports = {
   category: ['automation'],
   childOf: 'nitro',
   displayEmbed(msg, r) {
-    const embed = new Discord.MessageEmbed().addFields(
+    const embed = new Discord.UnsafeEmbed().addFieldss([
       {
         name: msg.lanSettings.active,
         value: r.active
@@ -29,22 +29,22 @@ module.exports = {
         value: `${r.rolemode ? msg.lan.replace : msg.lan.stack}`,
         inline: true,
       },
-    );
+    ]);
     return embed;
   },
   buttons(msg, r) {
-    const active = new Discord.MessageButton()
+    const active = new Discord.Button()
       .setCustomId(msg.lan.edit.active.name)
       .setLabel(msg.lanSettings.active)
-      .setStyle(r.active ? 'SUCCESS' : 'DANGER');
-    const logchannels = new Discord.MessageButton()
+      .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
+    const logchannels = new Discord.Button()
       .setCustomId(msg.lan.edit.logchannels.name)
       .setLabel(msg.lan.logchannels)
-      .setStyle('PRIMARY');
-    const rolemode = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary);
+    const rolemode = new Discord.Button()
       .setCustomId(msg.lan.edit.rolemode.name)
       .setLabel(msg.lan.rolemode)
-      .setStyle(r.rolemode ? 'SECONDARY' : 'PRIMARY');
+      .setStyle(r.rolemode ? Discord.ButtonStyle.Secondary : Discord.ButtonStyle.Primary);
     return [[active, logchannels, rolemode]];
   },
 };

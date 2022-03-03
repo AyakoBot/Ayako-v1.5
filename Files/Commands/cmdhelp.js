@@ -32,7 +32,7 @@ module.exports = {
     } else if (reqcommand.perm === 1) {
       reqperms = language.ServerOwner;
     } else if (reqcommand.perm) {
-      reqperms = new Discord.Permissions(reqcommand.perm).toArray();
+      reqperms = new Discord.PermissionsBitField(reqcommand.perm).toArray();
     } else {
       reqperms = language.none;
     }
@@ -67,13 +67,13 @@ module.exports = {
     const aliases = reqcommand.aliases
       ? reqcommand.aliases.map((t) => `\`${msg.client.constants.standard.prefix}${t}\``).join(', ')
       : language.none;
-    const embed = new Discord.MessageEmbed()
+    const embed = new Discord.UnsafeEmbed()
       .setAuthor({
         name: `${language.command}: ${reqcommand.name}`,
         iconURL: msg.client.constants.standard.image,
         url: msg.client.constants.standard.invite,
       })
-      .addFields(
+      .addFieldss([
         {
           name: `|${language.name}`,
           value: `\u200b${commandLan.name ? commandLan.name : reqcommand.name}`,
@@ -109,21 +109,21 @@ module.exports = {
           value: `\u200b${reqcommand.dm ? lan.dmsTrue : lan.dmsFalse}`,
           inline: false,
         },
-      )
+      ])
       .setColor(msg.client.ch.colorSelector(msg.guild ? msg.guild.me : null))
       .setTimestamp();
     if (commandLan.usage && commandLan.usage.length) {
-      embed.addField(
-        `|${language.usage}`,
-        `
+      embed.addFields({
+        name: `|${language.usage}`,
+        value: `
           \u200b${msg.client.ch.makeCodeBlock(
             `${msg.client.constants.standard.prefix}${commandLan.usage.join(
               `\n${msg.client.constants.standard.prefix}`,
             )}`,
           )}\n\`[ ] = ${language.required}\`\n\`( ) = ${language.optional}\`
           `,
-        false,
-      );
+        inline: false,
+      });
     }
     return msg.client.ch.reply(msg, { embeds: [embed] });
   },

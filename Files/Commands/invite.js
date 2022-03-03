@@ -8,7 +8,7 @@ module.exports = {
   aliases: ['support'],
   type: 'info',
   async execute(msg) {
-    const embed = new Discord.MessageEmbed()
+    const embed = new Discord.UnsafeEmbed()
       .setAuthor({
         name: msg.lan.author,
         iconURL: msg.client.constants.commands.invite.author.image,

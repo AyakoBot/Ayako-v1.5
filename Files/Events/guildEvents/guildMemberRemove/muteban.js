@@ -13,7 +13,7 @@ module.exports = {
 
     member.guild.bans
       .create(member.user.id, {
-        days: 7,
+        deleteMessageDays: 7,
         reason: `${language.autotypes.autopunish} | ${language.autotypes.muteban}`,
       })
       .catch(() => {});

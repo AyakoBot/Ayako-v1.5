@@ -59,7 +59,9 @@ const checkInserts = async (oM, nM) => {
     }
 
     if (!timestamp && row.booststarts.length !== row.boostends?.length) {
-      row.boostends.push(Date.now());
+      if (row.boostends?.length) {
+        row.boostends.push(Date.now());
+      } else row.boostends = [Date.now()];
     }
 
     await oM.client.ch.query(
@@ -81,7 +83,7 @@ const logEnd = async (member, days) => {
   const language = await member.client.ch.languageSelector(member.guild);
 
   if (row && row.logchannels && row.logchannels.length) {
-    const embed = new Discord.MessageEmbed()
+    const embed = new Discord.UnsafeEmbed()
       .setAuthor({
         name: language.guildMemberUpdateNitro.author.nameEnd,
       })
@@ -106,7 +108,7 @@ const logStart = async (member, days) => {
   const language = await member.client.ch.languageSelector(member.guild);
 
   if (row && row.logchannels && row.logchannels.length) {
-    const embed = new Discord.MessageEmbed()
+    const embed = new Discord.UnsafeEmbed()
       .setAuthor({
         name: language.guildMemberUpdateNitro.author.nameStart,
       })

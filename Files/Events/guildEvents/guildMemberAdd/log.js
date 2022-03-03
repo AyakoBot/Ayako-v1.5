@@ -22,21 +22,24 @@ module.exports = {
         const language = await ch.languageSelector(guild);
         const lan = language.guildMemberAddLog;
         const con = Constants.guildMemberAddLog;
-        const embed = new Discord.MessageEmbed()
+        const embed = new Discord.UnsafeEmbed()
           .setTimestamp()
-          .addField(
-            language.createdAt,
-            `<t:${`${user.createdTimestamp}`.slice(0, -3)}> <t:${`${user.createdTimestamp}`.slice(
+          .addFields({
+            name: language.createdAt,
+            value: `<t:${`${user.createdTimestamp}`.slice(
               0,
               -3,
-            )}:R>\n(\`${ch.stp(language.time.timeAgo, {
-              time: moment
-                .duration(Date.now() - user.createdTimestamp)
-                .format(
-                  `Y [${language.time.years}], M [${language.time.months}], W [${language.time.weeks}], D [${language.time.days}], H [${language.time.hours}], m [${language.time.minutes}], s [${language.time.seconds}]`,
-                ),
-            })}\`)`,
-          )
+            )}> <t:${`${user.createdTimestamp}`.slice(0, -3)}:R>\n(\`${ch.stp(
+              language.time.timeAgo,
+              {
+                time: moment
+                  .duration(Date.now() - user.createdTimestamp)
+                  .format(
+                    `Y [${language.time.years}], M [${language.time.months}], W [${language.time.weeks}], D [${language.time.days}], H [${language.time.hours}], m [${language.time.minutes}], s [${language.time.seconds}]`,
+                  ),
+              },
+            )}\`)`,
+          })
           .setColor(con.color);
         const cachedInvites = client.invites.get(guild.id);
 
@@ -53,10 +56,10 @@ module.exports = {
             iconURL: con.author.image,
             url: ch.stp(con.author.link, { user }),
           });
-          embed.setThumbnail(ch.displayAvatarURL(user));
-          if (entry)
+          embed.setThumbnail(user.displayAvatarURL());
+          if (entry) {
             embed.setDescription(ch.stp(lan.descriptionBot, { user: entry.executor, bot: user }));
-          else embed.setDescription(ch.stp(lan.descriptionBotNoAudit, { bot: user }));
+          } else embed.setDescription(ch.stp(lan.descriptionBotNoAudit, { bot: user }));
         } else {
           const newInvites = await client.ch.getErisInvites(guild);
 
@@ -71,25 +74,28 @@ module.exports = {
             iconURL: con.author.image,
             url: ch.stp(con.author.link, { user }),
           });
-          embed.setThumbnail(ch.displayAvatarURL(member.user));
+          embed.setThumbnail(member.user.displayAvatarURL());
           embed.setDescription(ch.stp(lan.descriptionUser, { user }));
           if (usedInvite) {
-            if (usedInvite.uses)
-              embed.addField(
-                lan.inviteInfoTitle,
-                ch.stp(lan.inviteInfoUses, {
+            if (usedInvite.uses) {
+              embed.addFields({
+                name: lan.inviteInfoTitle,
+                value: ch.stp(lan.inviteInfoUses, {
                   invite: usedInvite,
                   inviter: usedInvite.inviter?.tag
                     ? usedInvite.inviter
-                    : { tag: language.unknown, id: usedInvite.inviter },
+                    : { tag: language.unknown, id: usedInvite.inviter?.id || usedInvite.inviter },
                   mention:
-                    guild.id === usedInvite.inviter?.id
-                      ? usedInvite.inviter.username
-                      : `${usedInvite.inviter}`,
+                    guild.id === (usedInvite.inviter?.id || usedInvite.inviter)
+                      ? `${usedInvite.inviter}`
+                      : usedInvite.inviter?.username,
                 }),
-              );
-            else {
-              embed.addField(lan.inviteInfoTitle, ch.stp(lan.inviteInfo, { invite: usedInvite }));
+              });
+            } else {
+              embed.addFields({
+                name: lan.inviteInfoTitle,
+                value: ch.stp(lan.inviteInfo, { invite: usedInvite }),
+              });
             }
           }
         }

@@ -45,9 +45,6 @@ const buttonsHandler = (msg, types, ownPos, content, oldEmbed) => {
     buttonsCollector.resetTimer();
 
     switch (interaction.customId) {
-      default: {
-        break;
-      }
       case 'tt': {
         type = types[(types.indexOf(type) + 1) % types.length];
         break;
@@ -58,6 +55,9 @@ const buttonsHandler = (msg, types, ownPos, content, oldEmbed) => {
       }
       case 'back': {
         page -= 1;
+        break;
+      }
+      default: {
         break;
       }
     }
@@ -79,7 +79,7 @@ const buttonsHandler = (msg, types, ownPos, content, oldEmbed) => {
 };
 
 const getEmbed = (content, msg, ownPos) => {
-  const embed = new Discord.MessageEmbed()
+  const embed = new Discord.UnsafeEmbed()
     .setColor(msg.client.ch.colorSelector(msg.guild.me))
     .setDescription(content)
     .setAuthor({
@@ -87,26 +87,26 @@ const getEmbed = (content, msg, ownPos) => {
       iconURL: msg.client.constants.commands.leaderboard.authorImage,
       url: msg.client.constants.standard.invite,
     });
-  if (ownPos?.name) embed.addFields(ownPos);
+  if (ownPos?.name) embed.addFieldss([ownPos]);
   return embed;
 };
 
 const getButtons = (msg, page, rows) => {
-  const toggleType = new Discord.MessageButton()
+  const toggleType = new Discord.Button()
     .setLabel(msg.lan.toggle)
     .setCustomId('tt')
-    .setStyle('PRIMARY');
+    .setStyle(Discord.ButtonStyle.Primary);
 
-  const next = new Discord.MessageButton()
+  const next = new Discord.Button()
     .setCustomId('next')
     .setEmoji(msg.client.constants.emotes.forth)
-    .setStyle('SECONDARY')
+    .setStyle(Discord.ButtonStyle.Secondary)
     .setDisabled(page === Math.ceil(rows.length / 30));
 
-  const back = new Discord.MessageButton()
+  const back = new Discord.Button()
     .setCustomId('back')
     .setEmoji(msg.client.constants.emotes.back)
-    .setStyle('SECONDARY')
+    .setStyle(Discord.ButtonStyle.Secondary)
     .setDisabled(page === 1);
 
   return msg.client.ch.buttonRower([[toggleType], [back, next]]);
@@ -156,9 +156,6 @@ const getContent = async (msg, type, page) => {
     let user;
 
     switch (type) {
-      default: {
-        break;
-      }
       case 'tag': {
         user = `${users[i].tag}\``;
         break;
@@ -169,6 +166,10 @@ const getContent = async (msg, type, page) => {
       }
       case 'mention': {
         user = `\`${users[i]}`;
+        break;
+      }
+      default: {
+        break;
       }
     }
 

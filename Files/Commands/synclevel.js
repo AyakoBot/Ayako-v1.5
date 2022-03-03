@@ -25,7 +25,7 @@ const getMethod = (msg) => {
 };
 
 /*
-  const embed = new Discord.MessageEmbed()
+  const embed = new Discord.UnsafeEmbed()
     .setAuthor({
       name: msg.lan.author,
       iconURL: msg.client.constants.emotes.settingsLink,

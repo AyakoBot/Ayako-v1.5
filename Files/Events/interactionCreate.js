@@ -14,17 +14,17 @@ module.exports = {
         const msg = await interaction.message.fetch().catch(() => {});
         if (!msg) break;
 
-        const enable = new Discord.MessageButton()
+        const enable = new Discord.Button()
           .setCustomId('vote_reminder_enable')
-          .setStyle('SUCCESS')
+          .setStyle(Discord.ButtonStyle.Primary)
           .setLabel('Enable Vote Reminder');
 
-        const vote = new Discord.MessageButton()
-          .setStyle('LINK')
+        const vote = new Discord.Button()
+          .setStyle(Discord.ButtonStyle.Link)
           .setURL('https://top.gg/bot/650691698409734151/vote')
           .setLabel('Vote for Ayako');
 
-        const embed = new Discord.MessageEmbed(msg.embeds[0]);
+        const embed = new Discord.Embed(msg.embeds[0]);
 
         interaction.update({
           embeds: [embed],
@@ -44,17 +44,17 @@ module.exports = {
         const msg = await interaction.message.fetch().catch(() => {});
         if (!msg) break;
 
-        const disable = new Discord.MessageButton()
+        const disable = new Discord.Button()
           .setCustomId('vote_reminder_disable')
-          .setStyle('DANGER')
+          .setStyle(Discord.ButtonStyle.Danger)
           .setLabel('Disable Vote Reminder');
 
-        const vote = new Discord.MessageButton()
-          .setStyle('LINK')
+        const vote = new Discord.Button()
+          .setStyle(Discord.ButtonStyle.Link)
           .setURL('https://top.gg/bot/650691698409734151/vote')
           .setLabel('Vote for Ayako');
 
-        const embed = new Discord.MessageEmbed(msg.embeds[0]);
+        const embed = new Discord.Embed(msg.embeds[0]);
 
         interaction.update({
           embeds: [embed],
@@ -73,7 +73,7 @@ module.exports = {
         if (!(await interaction.member.fetch()).permissions.has(command.perm)) {
           interaction.client.ch.permError(
             interaction,
-            new Discord.Permissions(command.perm),
+            new Discord.PermissionsBitField(command.perm),
             false,
           );
           return;
@@ -122,7 +122,7 @@ module.exports = {
 
         interaction.reply({
           embeds: [
-            new Discord.MessageEmbed()
+            new Discord.UnsafeEmbed()
               .setColor(interaction.client.constants.standard.ephemeralColor)
               .setDescription(interaction.client.ch.makeCodeBlock(splitContent[0])),
           ],
@@ -134,7 +134,7 @@ module.exports = {
         splitContent.forEach((content) => {
           interaction.followUp({
             embeds: [
-              new Discord.MessageEmbed()
+              new Discord.UnsafeEmbed()
                 .setColor(interaction.client.constants.standard.ephemeralColor)
                 .setDescription(interaction.client.ch.makeCodeBlock(content)),
             ],

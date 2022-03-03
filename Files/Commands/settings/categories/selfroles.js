@@ -7,25 +7,27 @@ module.exports = {
   finished: true,
   category: ['automation'],
   mmrEmbed(msg, res) {
-    const embed = new Discord.MessageEmbed();
+    const embed = new Discord.UnsafeEmbed();
     for (let i = 0; i < res.length; i += 1) {
       const r = res[i];
-      embed.addFields({
-        name: `${msg.language.number}: \`${r.id}\` | ${
-          r.active
-            ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-            : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
-        }`,
-        value: `${msg.language.affected}: ${r.roles ? r.roles.length : 0}\n${msg.language.name}: ${
-          r.name
-        }`,
-        inline: true,
-      });
+      embed.addFieldss([
+        {
+          name: `${msg.language.number}: \`${r.id}\` | ${
+            r.active
+              ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
+              : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
+          }`,
+          value: `${msg.language.affected}: ${r.roles ? r.roles.length : 0}\n${
+            msg.language.name
+          }: ${r.name}`,
+          inline: true,
+        },
+      ]);
     }
     return embed;
   },
   displayEmbed(msg, r) {
-    const embed = new Discord.MessageEmbed().addFields(
+    const embed = new Discord.UnsafeEmbed().addFieldss([
       {
         name: msg.lanSettings.active,
         value: r.active
@@ -88,42 +90,42 @@ module.exports = {
         }`,
         inline: false,
       },
-    );
+    ]);
     return embed;
   },
   buttons(msg, r) {
-    const active = new Discord.MessageButton()
+    const active = new Discord.Button()
       .setCustomId(msg.lan.edit.active.name)
       .setLabel(msg.lanSettings.active)
-      .setStyle(r.active ? 'SUCCESS' : 'DANGER');
-    const name = new Discord.MessageButton()
+      .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
+    const name = new Discord.Button()
       .setCustomId(msg.lan.edit.name.name)
       .setLabel(msg.lan.name)
-      .setStyle('SUCCESS');
-    const onlyone = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary);
+    const onlyone = new Discord.Button()
       .setCustomId(msg.lan.edit.onlyone.name)
       .setLabel(msg.lan.onlyone)
-      .setStyle(r.onlyone ? 'SUCCESS' : 'DANGER');
-    const blacklistedusers = new Discord.MessageButton()
+      .setStyle(r.onlyone ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
+    const blacklistedusers = new Discord.Button()
       .setCustomId(msg.lan.edit.blacklistedusers.name)
       .setLabel(msg.lan.blacklistedusers)
-      .setStyle('PRIMARY');
-    const blacklistedroles = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary);
+    const blacklistedroles = new Discord.Button()
       .setCustomId(msg.lan.edit.blacklistedroles.name)
       .setLabel(msg.lan.blacklistedroles)
-      .setStyle('PRIMARY');
-    const whitelistedusers = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary);
+    const whitelistedusers = new Discord.Button()
       .setCustomId(msg.lan.edit.whitelistedusers.name)
       .setLabel(msg.lan.whitelistedusers)
-      .setStyle('PRIMARY');
-    const whitelistedroles = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary);
+    const whitelistedroles = new Discord.Button()
       .setCustomId(msg.lan.edit.whitelistedroles.name)
       .setLabel(msg.lan.whitelistedroles)
-      .setStyle('PRIMARY');
-    const roles = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary);
+    const roles = new Discord.Button()
       .setCustomId(msg.lan.edit.roles.name)
       .setLabel(msg.lan.roles)
-      .setStyle('PRIMARY');
+      .setStyle(Discord.ButtonStyle.Primary);
     return [
       [active],
       [onlyone, name, roles],

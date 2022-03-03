@@ -24,40 +24,40 @@ module.exports = {
         const language = await ch.languageSelector(guild);
         const lan = language.roleUpdate;
         const con = Constants.roleUpdate;
-        const embed = new Discord.MessageEmbed().setTimestamp().setColor(con.color).setAuthor({
+        const embed = new Discord.UnsafeEmbed().setTimestamp().setColor(con.color).setAuthor({
           name: lan.author.name,
           iconURL: con.author.image,
         });
         const ChangedKey = [];
         if (oldRole.name !== newRole.name) {
           ChangedKey.push(language.name);
-          embed.addField(
-            language.name,
-            `${language.before}: \`${oldRole.name}\`\n${language.after}: \`${newRole.name}\``,
-          );
+          embed.addFields({
+            name: language.name,
+            value: `${language.before}: \`${oldRole.name}\`\n${language.after}: \`${newRole.name}\``,
+          });
         }
         if (oldRole.color !== newRole.color) {
           const oldColor = int2RGB2Hex(oldRole.color);
           const newColor = int2RGB2Hex(newRole.color);
           ChangedKey.push(language.color);
-          embed.addField(
-            language.color,
-            `${language.before}: \`${oldColor}\`\n${language.after}: \`${newColor}\``,
-          );
+          embed.addFields({
+            name: language.color,
+            value: `${language.before}: \`${oldColor}\`\n${language.after}: \`${newColor}\``,
+          });
         }
         if (oldRole.hoist !== newRole.hoist) {
           ChangedKey.push(language.hoisted);
-          embed.addField(
-            language.hoisted,
-            `${language.before}: \`${oldRole.hoist}\`\n${language.after}: \`${newRole.hoist}\``,
-          );
+          embed.addFields({
+            name: language.hoisted,
+            value: `${language.before}: \`${oldRole.hoist}\`\n${language.after}: \`${newRole.hoist}\``,
+          });
         }
         if (oldRole.mentionable !== newRole.mentionable) {
           ChangedKey.push(language.mentionable);
-          embed.addField(
-            language.mentionable,
-            `${language.before}: \`${oldRole.mentionable}\`\n${language.after}: \`${newRole.mentionable}\``,
-          );
+          embed.addFields({
+            name: language.mentionable,
+            value: `${language.before}: \`${oldRole.mentionable}\`\n${language.after}: \`${newRole.mentionable}\``,
+          });
         }
         if (oldRole.permissions.bitfield !== newRole.permissions.bitfield) {
           ChangedKey.push(language.permissions.Permissions);
@@ -83,7 +83,7 @@ module.exports = {
           if (content !== '') {
             if (content.length > 1024) content = content.replace(regexes.revoke, language.revoked);
             if (content.length > 1024) content = content.replace(regexes.allow, language.granted);
-            embed.addField(language.permissions.updatedPermissions, content);
+            embed.addFields({ name: language.permissions.updatedPermissions, value: content });
           }
         }
         const audits = await guild.fetchAuditLogs({ limit: 3, type: 31 });
@@ -93,24 +93,25 @@ module.exports = {
           entry = audit.sort((a, b) => b.id - a.id);
           entry = entry.first();
         }
-        if (entry)
+        if (entry) {
           embed.setDescription(
             ch.stp(lan.descriptionWithAudit, { user: entry.executor, role: newRole }) +
               ChangedKey.map((o) => ` \`${o}\``),
           );
-        else
+        } else {
           embed.setDescription(
             ch.stp(lan.descriptionWithoutAudit, { role: newRole }) +
               ChangedKey.map((o) => ` \`${o}\``),
           );
-        if (embed.fields.length) ch.send(channels, { embeds: [embed] });
+        }
+        if (embed.fields?.length) ch.send(channels, { embeds: [embed] });
       }
     }
   },
 };
 
 function int2RGB2Hex(num) {
-    num >>>= 0;
+  num >>>= 0;
   const b = num & 0xff;
   const g = (num & 0xff00) >>> 8;
   const r = (num & 0xff0000) >>> 16;

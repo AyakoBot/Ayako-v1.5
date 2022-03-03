@@ -22,12 +22,15 @@ module.exports = {
         let entryCreate;
         let entryUpdate;
         let entryDelete;
-        if (auditsCreate && auditsCreate.entries)
+        if (auditsCreate && auditsCreate.entries) {
           entryCreate = auditsCreate.entries.sort((a, b) => b.id - a.id);
-        if (auditsUpdate && auditsUpdate.entries)
+        }
+        if (auditsUpdate && auditsUpdate.entries) {
           entryUpdate = auditsUpdate.entries.sort((a, b) => b.id - a.id);
-        if (auditsDelete && auditsDelete.entries)
+        }
+        if (auditsDelete && auditsDelete.entries) {
           entryDelete = auditsDelete.entries.sort((a, b) => b.id - a.id);
+        }
         if (entryCreate && entryCreate.entries) entryCreate = entryCreate.first();
         if (entryUpdate && entryUpdate.entries) entryUpdate = entryUpdate.first();
         if (entryDelete && entryDelete.entries) entryDelete = entryDelete.first();
@@ -68,7 +71,7 @@ module.exports = {
           if (entryCreate) entry = entryCreate;
           if (entryUpdate) entry = entryUpdate;
         }
-        const embed = new Discord.MessageEmbed().setTimestamp();
+        const embed = new Discord.UnsafeEmbed().setTimestamp();
         if (entry.actionType === 'DELETE') {
           let botBan = await guild.fetchAuditLogs({ limit: 3, type: 20 });
           botBan = botBan.entries.filter(
@@ -124,28 +127,38 @@ module.exports = {
             iconURL: con.author.image,
           });
           embed.setColor(con.color);
-          if (entry.name) embed.addField(language.name, entry.name);
-          if (entry.type) embed.addField(language.type, entry.type);
-          if (entry.enabled !== undefined) embed.addField(language.enabled, entry.enabled);
-          if (entry.syncing !== undefined) embed.addField(language.syncing, entry.syncing);
-          if (entry.user) embed.addField(language.user, entry.user);
-          if (entry.account) embed.addField(language.account, entry.account.name);
-          if (entry.application)
-            embed.addField(
-              language.application,
-              `**${entry.application.name}**\n${entry.application.description}`,
-            );
-          if (entry.expireBehavior)
-            embed.addField(
-              language.expireBehavior.name,
-              entry.expireBehavior === 0
-                ? ch.stp(language.expireBehavior.zero, { role: entry.role })
-                : language.expireBehavior.one,
-              entry.expireBehavior,
-            );
-          if (entry.expireGracePeriod)
-            embed.addField(language.expireGracePeriod, entry.expireGracePeriod);
-          if (entry.subscriber_count) embed.addField(language.subscribers, entry.subscriber_count);
+          if (entry.name) embed.addFields({ name: language.name, value: entry.name });
+          if (entry.type) embed.addFields({ name: language.type, value: entry.type });
+          if (entry.enabled !== undefined) {
+            embed.addFields({ name: language.enabled, value: entry.enabled });
+          }
+          if (entry.syncing !== undefined) {
+            embed.addFields({ name: language.syncing, value: entry.syncing });
+          }
+          if (entry.user) embed.addFields({ name: language.user, value: entry.user });
+          if (entry.account) embed.addFields({ name: language.account, value: entry.account.name });
+          if (entry.application) {
+            embed.addFields({
+              name: language.application,
+              value: `**${entry.application.name}**\n${entry.application.description}`,
+            });
+          }
+          if (entry.expireBehavior) {
+            embed.addFields({
+              name: language.expireBehavior.name,
+              value:
+                entry.expireBehavior === 0
+                  ? ch.stp(language.expireBehavior.zero, { role: entry.role })
+                  : language.expireBehavior.one,
+              inline: entry.expireBehavior,
+            });
+          }
+          if (entry.expireGracePeriod) {
+            embed.addFields({ name: language.expireGracePeriod, value: entry.expireGracePeriod });
+          }
+          if (entry.subscriber_count) {
+            embed.addFields({ name: language.subscribers, value: entry.subscriber_count });
+          }
         }
         if (entry.actionType === 'CREATE') {
           const con = Constants.guildIntegrationsCreate;
@@ -158,31 +171,41 @@ module.exports = {
             iconURL: con.author.image,
           });
           embed.setColor(con.color);
-          if (entry.name) embed.addField(language.name, entry.name);
-          if (entry.type) embed.addField(language.type, entry.type);
-          if (entry.enabled !== undefined) embed.addField(language.enabled, entry.enabled);
-          if (entry.syncing !== undefined) embed.addField(language.syncing, entry.syncing);
-          if (entry.user) embed.addField(language.user, entry.user);
-          if (entry.account) embed.addField(language.account, entry.account.name);
-          if (entry.application)
-            embed.addField(
-              language.application,
-              `**${entry.application.name}**\n${entry.application.description}`,
-            );
-          if (entry.expireBehavior)
-            embed.addField(
-              language.expireBehavior.name,
-              entry.expireBehavior === 0
-                ? ch.stp(language.expireBehavior.zero, { role: entry.role })
-                : language.expireBehavior.one,
-              entry.expireBehavior,
-            );
-          if (entry.expireGracePeriod)
-            embed.addField(
-              language.expireGracePeriod,
-              `${entry.expireGracePeriod} ${language.time.minutes}`,
-            );
-          if (entry.subscriber_count) embed.addField(language.subscribers, entry.subscriber_count);
+          if (entry.name) embed.addFields({ name: language.name, value: entry.name });
+          if (entry.type) embed.addFields({ name: language.type, value: entry.type });
+          if (entry.enabled !== undefined) {
+            embed.addFields({ name: language.enabled, value: entry.enabled });
+          }
+          if (entry.syncing !== undefined) {
+            embed.addFields({ name: language.syncing, value: entry.syncing });
+          }
+          if (entry.user) embed.addFields({ name: language.user, value: entry.user });
+          if (entry.account) embed.addFields({ name: language.account, value: entry.account.name });
+          if (entry.application) {
+            embed.addFields({
+              name: language.application,
+              value: `**${entry.application.name}**\n${entry.application.description}`,
+            });
+          }
+          if (entry.expireBehavior) {
+            embed.addFields({
+              name: language.expireBehavior.name,
+              value:
+                entry.expireBehavior === 0
+                  ? ch.stp(language.expireBehavior.zero, { role: entry.role })
+                  : language.expireBehavior.one,
+              inline: entry.expireBehavior,
+            });
+          }
+          if (entry.expireGracePeriod) {
+            embed.addFields({
+              name: language.expireGracePeriod,
+              value: `${entry.expireGracePeriod} ${language.time.minutes}`,
+            });
+          }
+          if (entry.subscriber_count) {
+            embed.addFields({ name: language.subscribers, value: entry.subscriber_count });
+          }
           ch.logger(`Integration Update Check console at ${new Date().toUTCString()}`);
         }
         if (entry.actionType === 'UPDATE') {
@@ -197,44 +220,44 @@ module.exports = {
           });
           embed.setColor(con.color);
           entry.changes.forEach((change) => {
-            if (change.key === 'type')
-              embed.addField(
-                language.type,
-                `**${language.before}:**\n${change.old}\n\n**${language.after}:**\n${change.new}`,
-              );
-            else if (change.key === 'enabled')
-              embed.addField(
-                language.enabled,
-                `**${language.before}:**\n${change.old}\n\n**${language.after}:**\n${change.new}`,
-              );
-            else if (change.key === 'syncing')
-              embed.addField(
-                language.syncing,
-                `**${language.before}:**\n${change.old}\n\n**${language.after}:**\n${change.new}`,
-              );
-            else if (change.key === 'role_id')
-              embed.addField(
-                language.role,
-                `**${language.before}:**\n${
+            if (change.key === 'type') {
+              embed.addFields({
+                name: language.type,
+                value: `**${language.before}:**\n${change.old}\n\n**${language.after}:**\n${change.new}`,
+              });
+            } else if (change.key === 'enabled') {
+              embed.addFields({
+                name: language.enabled,
+                value: `**${language.before}:**\n${change.old}\n\n**${language.after}:**\n${change.new}`,
+              });
+            } else if (change.key === 'syncing') {
+              embed.addFields({
+                name: language.syncing,
+                value: `**${language.before}:**\n${change.old}\n\n**${language.after}:**\n${change.new}`,
+              });
+            } else if (change.key === 'role_id') {
+              embed.addFields({
+                name: language.role,
+                value: `**${language.before}:**\n${
                   guild.roles.cache.get(change.old) ? guild.roles.cache.get(change.old) : ''
                 }\n\n**${language.after}:**\n${change.new} ${
                   guild.roles.cache.get(change.new) ? guild.roles.cache.get(change.new) : ''
                 }`,
-              );
-            else if (change.key === 'enable_emoticons')
-              embed.addField(
-                language.enlableEmotes,
-                `**${language.before}:**\n${change.old}\n\n**${language.after}:**\n${change.new}`,
-              );
-            else if (change.key === 'user')
-              embed.addField(
-                language.user,
-                `**${language.before}:**\n${change.old}\n\n**${language.after}:**\n${change.new}`,
-              );
-            else if (change.key === 'expire_behavior')
-              embed.addField(
-                language.expireBehavior,
-                `**${language.before}:**\n${
+              });
+            } else if (change.key === 'enable_emoticons') {
+              embed.addFields({
+                name: language.enlableEmotes,
+                value: `**${language.before}:**\n${change.old}\n\n**${language.after}:**\n${change.new}`,
+              });
+            } else if (change.key === 'user') {
+              embed.addFields({
+                name: language.user,
+                value: `**${language.before}:**\n${change.old}\n\n**${language.after}:**\n${change.new}`,
+              });
+            } else if (change.key === 'expire_behavior') {
+              embed.addFields({
+                name: language.expireBehavior,
+                value: `**${language.before}:**\n${
                   change.old === 0
                     ? ch.stp(language.expireBehavior.zero, { role: entry.role })
                     : language.expireBehavior.one
@@ -243,42 +266,43 @@ module.exports = {
                     ? ch.stp(language.expireBehavior.zero, { role: entry.role })
                     : language.expireBehavior.one
                 }`,
-              );
-            else if (change.key === 'account')
-              embed.addField(
-                language.account,
-                `**${language.before}:**\n${change.old}\n\n**${language.after}:**\n${change.new}`,
-              );
-            else if (change.key === 'synced_at')
-              embed.addField(
-                language.syncedAt,
-                `**${language.before}:**\n${change.old}\n\n**${language.after}:**\n${change.new}`,
-              );
-            else if (change.key === 'subscriber_count')
-              embed.addField(
-                language.subscribers,
-                `**${language.before}:**\n${change.old}\n\n**${language.after}:**\n${change.new}`,
-              );
-            else if (change.key === 'revoked')
-              embed.addField(
-                language.revoked,
-                `**${language.before}:**\n${change.old}\n\n**${language.after}:**\n${change.new}`,
-              );
-            else if (change.key === 'application')
-              embed.addField(
-                language.application,
-                `**${language.before}:**\n${change.old}\n\n**${language.after}:**\n${change.new}`,
-              );
-            else if (change.key === 'name')
-              embed.addField(
-                language.name,
-                `**${language.before}:**\n${change.old}\n\n**${language.after}:**\n${change.new}`,
-              );
-            else
-              embed.addField(
-                language.unknown,
-                `**${language.before}:**\n${change.old}\n\n**${language.after}:**\n${change.new}`,
-              );
+              });
+            } else if (change.key === 'account') {
+              embed.addFields({
+                name: language.account,
+                value: `**${language.before}:**\n${change.old}\n\n**${language.after}:**\n${change.new}`,
+              });
+            } else if (change.key === 'synced_at') {
+              embed.addFields({
+                name: language.syncedAt,
+                value: `**${language.before}:**\n${change.old}\n\n**${language.after}:**\n${change.new}`,
+              });
+            } else if (change.key === 'subscriber_count') {
+              embed.addFields({
+                name: language.subscribers,
+                value: `**${language.before}:**\n${change.old}\n\n**${language.after}:**\n${change.new}`,
+              });
+            } else if (change.key === 'revoked') {
+              embed.addFields({
+                name: language.revoked,
+                value: `**${language.before}:**\n${change.old}\n\n**${language.after}:**\n${change.new}`,
+              });
+            } else if (change.key === 'application') {
+              embed.addFields({
+                name: language.application,
+                value: `**${language.before}:**\n${change.old}\n\n**${language.after}:**\n${change.new}`,
+              });
+            } else if (change.key === 'name') {
+              embed.addFields({
+                name: language.name,
+                value: `**${language.before}:**\n${change.old}\n\n**${language.after}:**\n${change.new}`,
+              });
+            } else {
+              embed.addFields({
+                name: language.unknown,
+                value: `**${language.before}:**\n${change.old}\n\n**${language.after}:**\n${change.new}`,
+              });
+            }
           });
           ch.logger(`Integration Update Check console at ${new Date().toUTCString()}`);
         }

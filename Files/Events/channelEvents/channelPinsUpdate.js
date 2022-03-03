@@ -31,7 +31,7 @@ module.exports = {
           auditsUnPin = auditsUnPin.sort((a, b) => b.id - a.id);
           entryUnPin = auditsUnPin.first();
         }
-        const embed = new Discord.MessageEmbed().setTimestamp();
+        const embed = new Discord.UnsafeEmbed().setTimestamp();
         if (entryPin && entryUnPin) {
           if (ch.getUnix(entryPin.id) > ch.getUnix(entryUnPin.id)) {
             casePin(entryPin, embed, language, channels);
@@ -50,15 +50,15 @@ module.exports = {
       const lan = language.channelPin;
       const con = Constants.channelPin;
       if (pinned.content) {
-        embed.addField(language.content, pinned.content);
+        embed.addFields({ name: language.content, value: pinned.content });
       }
       for (let i = 0; pinned.embeds.length > i; i += 1) {
         if (pinned.embeds[i].title) {
-          embed.addField(language.embedTitle, pinned.embeds[i].title);
+          embed.addFields({ name: language.embedTitle, value: pinned.embeds[i].title });
         } else if (pinned.embeds[i].description) {
-          embed.addField(language.embedDescription, pinned.embeds[i].description);
+          embed.addFields({ name: language.embedDescription, value: pinned.embeds[i].description });
         } else {
-          embed.addField(language.embed, language.unknownEmbed);
+          embed.addFields({ name: language.embed, value: language.unknownEmbed });
         }
       }
 
@@ -115,15 +115,15 @@ module.exports = {
       const lan = language.channelUnPin;
       const con = Constants.channelUnPin;
       if (pinned.content) {
-        embed.addField(language.content, pinned.content);
+        embed.addFields({ name: language.content, value: pinned.content });
       }
       for (let i = 0; pinned.embeds.length > i; i += 1) {
         if (pinned.embeds[i].title) {
-          embed.addField(language.embedTitle, pinned.embeds[i].title);
+          embed.addFields({ name: language.embedTitle, value: pinned.embeds[i].title });
         } else if (pinned.embeds[i].description) {
-          embed.addField(language.embedDescription, pinned.embeds[i].description);
+          embed.addFields({ name: language.embedDescription, value: pinned.embeds[i].description });
         } else {
-          embed.addField(language.embed, language.unknownEmbed);
+          embed.addFields({ name: language.embed, value: language.unknownEmbed });
         }
       }
 

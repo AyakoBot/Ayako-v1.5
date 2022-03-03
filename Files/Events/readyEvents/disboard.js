@@ -36,11 +36,11 @@ async function end(ch, guild, Constants, channel) {
     const [row] = res.rows;
     const language = await ch.languageSelector(guild);
 
-    const embed = new Discord.MessageEmbed()
+    const embed = new Discord.UnsafeEmbed()
       .setDescription(language.ready.disboard.bumpMsg)
       .setColor(Constants.standard.color)
       .setTimestamp()
-      .setThumbnail(ch.iconURL(guild))
+      .setThumbnail(guild.iconURL())
       .setAuthor({
         name: language.ready.disboard.title,
         iconURL: Constants.standard.image,

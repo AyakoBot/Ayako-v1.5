@@ -19,7 +19,7 @@ module.exports = {
             msg.m?.delete().catch(() => {});
           });
         } else {
-          embed = new Discord.MessageEmbed(embed).setDescription(embed.fields[0].value);
+          embed = new Discord.Embed(embed).setDescription(embed.fields[0].value);
           embed.fields = [];
 
           jobs.scheduleJob(new Date(Date.now() + deleteTimeout), () => {

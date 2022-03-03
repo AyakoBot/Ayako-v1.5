@@ -28,7 +28,7 @@ module.exports = {
         msg.channel = client.channels.cache.get(row.channelid);
         require('../guildevents/guildMemberUpdate/separator').oneTimeRunner(
           msg,
-          new Discord.MessageEmbed(),
+          new Discord.UnsafeEmbed(),
         );
       }
     });

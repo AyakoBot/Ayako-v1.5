@@ -7,7 +7,7 @@ module.exports = {
   finished: true,
   category: ['automation'],
   mmrEmbed(msg, res) {
-    const embed = new Discord.MessageEmbed();
+    const embed = new Discord.UnsafeEmbed();
     for (let i = 0; i < res.length; i += 1) {
       const r = res[i];
       const sep = msg.guild.roles.cache.get(r.separator);
@@ -26,11 +26,11 @@ module.exports = {
 
         affected = r.stoprole
           ? (sep?.position > stop?.position
-              ? sep?.position - stop?.position
-              : stop?.position - sep?.position) - 1
+              ? (sep?.position || 0) - (stop?.position || 0)
+              : (stop?.position || 0) - (sep?.position || 0)) - 1
           : (sep?.position >= msg.guild.roles.highest.position
-              ? sep?.position - msg.guild.roles.highest.position
-              : msg.guild.roles.highest.position - sep?.position) - 1;
+              ? (sep?.position || 0) - msg.guild.roles.highest.position
+              : msg.guild.roles.highest.position - (sep?.position || 0)) - 1;
       } else {
         sepMention = `${msg.client.constants.emotes.warning} ${msg.lan.deletedRole}`;
 
@@ -46,17 +46,19 @@ module.exports = {
 
       if (Number.isNaN(+affected)) affected = '--';
 
-      embed.addFields({
-        name: `${msg.language.number}: \`${r.id}\` | ${
-          r.active
-            ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-            : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
-        }`,
-        value: `${msg.lan.separator}: ${sepMention}\n${msg.lan.stoprole}: ${
-          r.stoprole ? stopMention : msg.language.none
-        }\n${msg.language.affected}: ${affected} ${msg.language.roles}${affectedText || ''}`,
-        inline: true,
-      });
+      embed.addFieldss([
+        {
+          name: `${msg.language.number}: \`${r.id}\` | ${
+            r.active
+              ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
+              : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
+          }`,
+          value: `${msg.lan.separator}: ${sepMention}\n${msg.lan.stoprole}: ${
+            r.stoprole ? stopMention : msg.language.none
+          }\n${msg.language.affected}: ${affected} ${msg.language.roles}${affectedText || ''}`,
+          inline: true,
+        },
+      ]);
     }
     return embed;
   },
@@ -67,39 +69,44 @@ module.exports = {
     let affected;
     if (r.stoprole) {
       if (sep?.position > stop?.position) {
-        affected = sep?.position - stop?.position;
+        affected = (sep?.position || 0) - (stop?.position || 0);
       } else {
-        affected = stop?.position - sep?.position - 1;
+        affected = (stop?.position || 0) - (sep?.position || 0) - 1;
       }
     } else {
-      affected = msg.guild.roles.highest.position - sep?.position - 1;
+      affected = msg.guild.roles.highest.position - (sep?.position || 0) - 1;
     }
 
     const affectedRoles = [];
     if (r.stoprole) {
-      if (sep?.position > stop?.position)
+      if (sep?.position > stop?.position) {
         for (
-          let i = stop?.position + 1;
+          let i = (stop?.position || 0) + 1;
           i < msg.guild.roles.highest.position && i < sep?.position;
           i += 1
-        )
+        ) {
           affectedRoles.push(msg.guild.roles.cache.find((role) => role.position === i));
-      else
+        }
+      } else {
         for (
-          let i = sep?.position + 1;
+          let i = (sep?.position || 0) + 1;
           i < msg.guild.roles.highest.position && i < stop?.position;
           i += 1
-        )
+        ) {
           affectedRoles.push(msg.guild.roles.cache.find((role) => role.position === i));
-    } else if (sep?.position < msg.guild.roles.highest.position)
+        }
+      }
+    } else if (sep?.position < msg.guild.roles.highest.position) {
       for (
-        let i = sep?.position + 1;
+        let i = (sep?.position || 0) + 1;
         i < msg.guild.roles.highest.position && i < msg.guild.roles.highest.position;
         i += 1
-      )
+      ) {
         affectedRoles.push(msg.guild.roles.cache.find((role) => role.position === i));
+      }
+    }
 
-    const embed = new Discord.MessageEmbed();
+    const embed = new Discord.UnsafeEmbed();
 
     if (r.isvarying === true) {
       let affectedRoleText;
@@ -132,7 +139,7 @@ module.exports = {
         affectedNumber = affected;
       }
 
-      embed.addFields(
+      embed.addFieldss([
         {
           name: msg.lanSettings.active,
           value: r.active
@@ -185,9 +192,9 @@ module.exports = {
           value: `${affectedRoleText}\u200b`,
           inline: false,
         },
-      );
+      ]);
     } else {
-      embed.addFields(
+      embed.addFieldss([
         {
           name: msg.lanSettings.active,
           value: r.active
@@ -232,56 +239,56 @@ module.exports = {
           value: !Number.isNaN(+r.id) ? `\`${r.id}\`` : msg.language.none,
           inline: false,
         },
-      );
+      ]);
     }
     return embed;
   },
   buttons(msg, r) {
     if (r.isvarying === true) {
-      const active = new Discord.MessageButton()
+      const active = new Discord.Button()
         .setCustomId(msg.lan.edit.active.name)
         .setLabel(msg.lanSettings.active)
-        .setStyle(r.active ? 'SUCCESS' : 'DANGER');
-      const separator = new Discord.MessageButton()
+        .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
+      const separator = new Discord.Button()
         .setCustomId(msg.lan.edit.separator.name)
         .setLabel(msg.lan.separator)
-        .setStyle('SECONDARY');
-      const stoprole = new Discord.MessageButton()
+        .setStyle(Discord.ButtonStyle.Secondary);
+      const stoprole = new Discord.Button()
         .setCustomId(msg.lan.edit.stoprole.name)
         .setLabel(msg.lan.stoprole)
-        .setStyle('SECONDARY');
-      const isvarying = new Discord.MessageButton()
+        .setStyle(Discord.ButtonStyle.Secondary);
+      const isvarying = new Discord.Button()
         .setCustomId(msg.lan.edit.isvarying.name)
         .setLabel(msg.lan.isvarying)
-        .setStyle(r.isvarying ? 'SUCCESS' : 'SECONDARY');
-      const oneTimeRunner = new Discord.MessageButton()
+        .setStyle(r.isvarying ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Secondary);
+      const oneTimeRunner = new Discord.Button()
         .setCustomId(msg.lan.edit.oneTimeRunner.name)
         .setLabel(msg.lan.oneTimeRunner)
         .setEmoji(msg.client.constants.emotes.warning)
-        .setStyle('DANGER');
+        .setStyle(Discord.ButtonStyle.Danger);
       return [[active], [separator, stoprole], [isvarying], [oneTimeRunner]];
     }
-    const active = new Discord.MessageButton()
+    const active = new Discord.Button()
       .setCustomId(msg.lan.edit.active.name)
       .setLabel(msg.lanSettings.active)
-      .setStyle(r.active ? 'SUCCESS' : 'DANGER');
-    const separator = new Discord.MessageButton()
+      .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
+    const separator = new Discord.Button()
       .setCustomId(msg.lan.edit.separator.name)
       .setLabel(msg.lan.separator)
-      .setStyle('SECONDARY');
-    const isvarying = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Secondary);
+    const isvarying = new Discord.Button()
       .setCustomId(msg.lan.edit.isvarying.name)
       .setLabel(msg.lan.isvarying)
-      .setStyle(r.isvarying ? 'SUCCESS' : 'SECONDARY');
-    const roles = new Discord.MessageButton()
+      .setStyle(r.isvarying ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Secondary);
+    const roles = new Discord.Button()
       .setCustomId(msg.lan.edit.roles.name)
       .setLabel(msg.lan.roles)
-      .setStyle('PRIMARY');
-    const oneTimeRunner = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary);
+    const oneTimeRunner = new Discord.Button()
       .setCustomId(msg.lan.edit.oneTimeRunner.name)
       .setLabel(msg.lan.oneTimeRunner)
       .setEmoji(msg.client.constants.emotes.warning)
-      .setStyle('DANGER');
+      .setStyle(Discord.ButtonStyle.Danger);
     return [[active], [separator, roles], [isvarying], [oneTimeRunner]];
   },
 };

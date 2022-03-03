@@ -27,7 +27,7 @@ module.exports = {
           entry = entry.first();
         }
         if (entry && entry.id) {
-          const embed = new Discord.MessageEmbed()
+          const embed = new Discord.UnsafeEmbed()
             .setAuthor({
               name: ch.stp(lan.author.title, { type: language.channels[channel.type] }),
               iconURL: con.author.image,
@@ -43,7 +43,7 @@ module.exports = {
             .setTimestamp();
           ch.send(channels, { embeds: [embed] });
         } else {
-          const embed = new Discord.MessageEmbed()
+          const embed = new Discord.UnsafeEmbed()
             .setAuthor({
               name: con.author.title,
               iconURL: con.author.image,

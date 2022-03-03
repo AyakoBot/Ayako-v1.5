@@ -5,7 +5,7 @@ module.exports = {
     const lan = msg.language.mod.strike;
     const con = msg.client.constants.mod.strike;
     if (!msg.res) {
-      const em = new Discord.MessageEmbed()
+      const em = new Discord.UnsafeEmbed()
         .setColor(con.color)
         .setDescription(
           msg.client.ch.stp(lan.notEnabled, { prefix: msg.client.constants.standard.prefix }),
@@ -68,10 +68,10 @@ const doPunishment = async (punishment, executor, target, reason, msg, r) => {
   const lan = msg.language.mod.strike;
   const con = msg.client.constants.mod.strike;
   await doRoles(r, msg);
-  if (punishment === 'modWarnAdd')
+  if (punishment === 'modWarnAdd') {
     msg.client.emit(punishment, executor, target, reason, msg, r.duration ? r.duration : 3600000);
-  else {
-    const embed = new Discord.MessageEmbed()
+  } else {
+    const embed = new Discord.UnsafeEmbed()
       .setAuthor({
         name: lan.confirmEmbed.author,
       })
@@ -82,13 +82,13 @@ const doPunishment = async (punishment, executor, target, reason, msg, r) => {
         }),
       )
       .setColor(con.confirmEmbed.color);
-    const yes = new Discord.MessageButton()
+    const yes = new Discord.Button()
       .setLabel(msg.language.Yes)
-      .setStyle('primary')
+      .setStyle(Discord.ButtonStyle.Primary)
       .setCustomId('yes');
-    const no = new Discord.MessageButton()
+    const no = new Discord.Button()
       .setLabel(msg.language.No)
-      .setStyle('danger')
+      .setStyle(Discord.ButtonStyle.Danger)
       .setCustomId('no');
     msg.m = await msg.client.ch.reply(msg, {
       embeds: [embed],
@@ -110,9 +110,9 @@ const doPunishment = async (punishment, executor, target, reason, msg, r) => {
         if (endReason === 'time') resolve(false);
       });
     });
-    if (agreed)
+    if (agreed) {
       msg.client.emit(punishment, executor, target, reason, msg, r.duration ? r.duration : 3600000);
-    else msg.client.emit('modWarnAdd', executor, target, reason, msg);
+    } else msg.client.emit('modWarnAdd', executor, target, reason, msg);
   }
 };
 

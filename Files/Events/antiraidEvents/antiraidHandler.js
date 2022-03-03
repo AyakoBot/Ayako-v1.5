@@ -16,7 +16,7 @@ module.exports = {
 const checkAll = async (guild, language, con, client, r, memberIDs) => {
   const buffers = await Promise.all(
     memberIDs.map(async (id) =>
-      client.ch.convertImageURLtoBuffer([client.ch.displayAvatarURL(client.users.cache.get(id))]),
+      client.ch.convertImageURLtoBuffer([client.users.cache.get(id).displayAvatarURL()]),
     ),
   );
 
@@ -57,7 +57,7 @@ const ban = (client, guild, language, members) => {
 };
 
 const sendMessage = (client, lan, con, r, members) => {
-  const embed = new Discord.MessageEmbed()
+  const embed = new Discord.UnsafeEmbed()
     .setAuthor({
       name: lan.debugMessage.author,
       iconURL: con.author.image,
@@ -79,20 +79,20 @@ const sendMessage = (client, lan, con, r, members) => {
       ),
     ];
 
-    const printIds = new Discord.MessageButton()
+    const printIds = new Discord.Button()
       .setLabel(lan.debugMessage.printIDs)
       .setCustomId('antiraid_print_ids')
-      .setStyle('SECONDARY')
+      .setStyle(Discord.ButtonStyle.Secondary)
       .setDisabled(true);
 
     if (payload.files?.length) {
       printIds.setDisabled(false);
     }
 
-    const massban = new Discord.MessageButton()
+    const massban = new Discord.Button()
       .setLabel(lan.debugMessage.massban)
       .setCustomId('antiraid_massban')
-      .setStyle('DANGER');
+      .setStyle(Discord.ButtonStyle.Danger);
 
     payload.components = client.ch.buttonRower([[printIds, massban]]);
 

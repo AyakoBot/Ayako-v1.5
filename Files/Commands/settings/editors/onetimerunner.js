@@ -4,19 +4,19 @@ module.exports = {
   key: ['onetimerunner'],
   requiresInteraction: true,
   buttons(msg) {
-    const yes = new Discord.MessageButton()
+    const yes = new Discord.Button()
       .setCustomId('yes')
       .setLabel(msg.language.Yes)
-      .setStyle('SUCCESS');
-    const no = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary);
+    const no = new Discord.Button()
       .setCustomId('no')
       .setLabel(msg.language.No)
-      .setStyle('SECONDARY');
+      .setStyle(Discord.ButtonStyle.Secondary);
     return [[yes, no]];
   },
   interactionHandler(msgData) {
     const { msg, answer } = msgData;
-    const returnEmbed = new Discord.MessageEmbed();
+    const returnEmbed = new Discord.UnsafeEmbed();
 
     answer.deferReply();
     msg.m.reactions.removeAll().catch(() => {});

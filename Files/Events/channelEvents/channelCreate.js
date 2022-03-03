@@ -28,7 +28,7 @@ module.exports = {
           entry = entry.first();
         }
         if (entry && entry.id) {
-          const embed = new Discord.MessageEmbed()
+          const embed = new Discord.UnsafeEmbed()
             .setAuthor({
               name: ch.stp(lan.author.title, { type: language.channels[channel.type] }),
               iconURL: con.author.image,
@@ -58,28 +58,32 @@ module.exports = {
               disable = `${language.unknown} ${perm}`;
               enable = `${language.unknown} ${perm}`;
             }
-            for (let j = 0; perm.deny.toArray().length > j; j += 1)
+            for (let j = 0; perm.deny.toArray().length > j; j += 1) {
               disable += `${Constants.switch.disable} \`${
                 language.permissions[perm.deny.toArray()[j]]
               }\`\n`;
-            for (let j = 0; perm.allow.toArray().length > j; j += 1)
+            }
+            for (let j = 0; perm.allow.toArray().length > j; j += 1) {
               enable += `${Constants.switch.enable} \`${
                 language.permissions[perm.allow.toArray()[j]]
               }\`\n`;
-            if (disable.includes('`'))
-              embed.addField(
-                `${language.permissions.deniedPermissionsFor} ${
+            }
+            if (disable.includes('`')) {
+              embed.addFields({
+                name: `${language.permissions.deniedPermissionsFor} ${
                   perm.type === 'member' ? language.member : language.role
                 }`,
-                disable,
-              );
-            if (enable.includes('`'))
-              embed.addField(
-                `${language.permissions.grantedPermissionFor} ${
+                value: disable,
+              });
+            }
+            if (enable.includes('`')) {
+              embed.addFields({
+                name: `${language.permissions.grantedPermissionFor} ${
                   perm.type === 'member' ? language.member : language.role
                 }`,
-                enable,
-              );
+                value: enable,
+              });
+            }
           }
           for (let i = 0; entry.changes.length > i; i += 1) {
             let before = entry.changes[i].old;
@@ -102,15 +106,16 @@ module.exports = {
             if (Array.isArray(after)) {
               after = after.map((e) => `${e}\n`);
             }
-            if (entry.changes[i].key !== 'permission_overwrites')
-              embed.addField(
-                `${language[entry.changes[i].key.toLowerCase()]}\u200b`,
-                `${language.before}: \`${before}\`\n${language.after}: \`${after}\``,
-              );
+            if (entry.changes[i].key !== 'permission_overwrites') {
+              embed.addFields({
+                name: `${language[entry.changes[i].key.toLowerCase()]}\u200b`,
+                value: `${language.before}: \`${before}\`\n${language.after}: \`${after}\``,
+              });
+            }
           }
           ch.send(channels, { embeds: [embed] });
         } else {
-          const embed = new Discord.MessageEmbed()
+          const embed = new Discord.UnsafeEmbed()
             .setAuthor({
               name: con.author.title,
               url: ch.stp(con.author.link, { channel }),

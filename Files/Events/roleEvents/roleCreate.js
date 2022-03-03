@@ -26,7 +26,7 @@ module.exports = {
           entry = audit.sort((a, b) => b.id - a.id);
           entry = entry.first();
         }
-        const embed = new Discord.MessageEmbed()
+        const embed = new Discord.UnsafeEmbed()
           .setTimestamp()
           .setAuthor({
             name: lan.author.name,

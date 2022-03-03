@@ -9,34 +9,36 @@ module.exports = {
   category: ['moderation'],
   async mmrEmbed(msg, res) {
     res.sort((a, b) => a.uniquetimestamp - b.uniquetimestamp);
-    const embed = new Discord.MessageEmbed();
+    const embed = new Discord.UnsafeEmbed();
     for (let i = 0; i < res.length; i += 1) {
       const r = res[i];
 
-      embed.addFields({
-        name: `${msg.language.number}: \`${r.id}\` | ${
-          r.active
-            ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-            : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
-        }`,
-        value: `${msg.lan.roleid}: <@&${r.roleid}>\n${msg.lan.perms}: ${
-          r.perms
-            ? `[\`${BigInt(r.perms)}\`](${msg.client.ch.stp(
-                msg.client.constants.standard.permissionsViewer,
-                {
-                  permission: `${BigInt(r.perms)}`,
-                },
-              )} "${msg.lan.clickview}")`
-            : msg.language.none
-        }`,
-        inline: true,
-      });
+      embed.addFieldss([
+        {
+          name: `${msg.language.number}: \`${r.id}\` | ${
+            r.active
+              ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
+              : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
+          }`,
+          value: `${msg.lan.roleid}: <@&${r.roleid}>\n${msg.lan.perms}: ${
+            r.perms
+              ? `[\`${BigInt(r.perms)}\`](${msg.client.ch.stp(
+                  msg.client.constants.standard.permissionsViewer,
+                  {
+                    permission: `${BigInt(r.perms)}`,
+                  },
+                )} "${msg.lan.clickview}")`
+              : msg.language.none
+          }`,
+          inline: true,
+        },
+      ]);
     }
     return embed;
   },
   displayEmbed(msg, r) {
-    const embed = new Discord.MessageEmbed();
-    embed.addFields(
+    const embed = new Discord.UnsafeEmbed();
+    embed.addFieldss([
       {
         name: msg.lanSettings.active,
         value: r.active
@@ -115,54 +117,54 @@ module.exports = {
         }`,
         inline: false,
       },
-    );
+    ]);
     return embed;
   },
   buttons(msg, r) {
-    const active = new Discord.MessageButton()
+    const active = new Discord.Button()
       .setCustomId(msg.lan.edit.active.name)
       .setLabel(msg.lanSettings.active)
-      .setStyle(r.active ? 'SUCCESS' : 'DANGER');
+      .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
 
-    const roleid = new Discord.MessageButton()
+    const roleid = new Discord.Button()
       .setCustomId(msg.lan.edit.roleid.name)
       .setLabel(msg.lan.roleid)
-      .setStyle('SECONDARY');
+      .setStyle(Discord.ButtonStyle.Secondary);
 
-    const perms = new Discord.MessageButton()
+    const perms = new Discord.Button()
       .setCustomId(msg.lan.edit.perms.name)
       .setLabel(msg.lan.perms)
-      .setStyle(r.perms ? 'SUCCESS' : 'SECONDARY');
+      .setStyle(r.perms ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Secondary);
 
-    const whitelistedcommands = new Discord.MessageButton()
+    const whitelistedcommands = new Discord.Button()
       .setCustomId(msg.lan.edit.whitelistedcommands.name)
       .setLabel(msg.lan.whitelistedcommands)
-      .setStyle('PRIMARY');
+      .setStyle(Discord.ButtonStyle.Primary);
 
-    const blacklistedcommands = new Discord.MessageButton()
+    const blacklistedcommands = new Discord.Button()
       .setCustomId(msg.lan.edit.blacklistedcommands.name)
       .setLabel(msg.lan.blacklistedcommands)
-      .setStyle('PRIMARY');
+      .setStyle(Discord.ButtonStyle.Primary);
 
-    const whitelistedusers = new Discord.MessageButton()
+    const whitelistedusers = new Discord.Button()
       .setCustomId(msg.lan.edit.whitelistedusers.name)
       .setLabel(msg.lan.whitelistedusers)
-      .setStyle('PRIMARY');
+      .setStyle(Discord.ButtonStyle.Primary);
 
-    const blacklistedusers = new Discord.MessageButton()
+    const blacklistedusers = new Discord.Button()
       .setCustomId(msg.lan.edit.blacklistedusers.name)
       .setLabel(msg.lan.blacklistedusers)
-      .setStyle('PRIMARY');
+      .setStyle(Discord.ButtonStyle.Primary);
 
-    const whitelistedroles = new Discord.MessageButton()
+    const whitelistedroles = new Discord.Button()
       .setCustomId(msg.lan.edit.whitelistedroles.name)
       .setLabel(msg.lan.whitelistedroles)
-      .setStyle('PRIMARY');
+      .setStyle(Discord.ButtonStyle.Primary);
 
-    const blacklistedroles = new Discord.MessageButton()
+    const blacklistedroles = new Discord.Button()
       .setCustomId(msg.lan.edit.blacklistedroles.name)
       .setLabel(msg.lan.blacklistedroles)
-      .setStyle('PRIMARY');
+      .setStyle(Discord.ButtonStyle.Primary);
 
     return [
       [active, roleid, perms],

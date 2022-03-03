@@ -6,12 +6,16 @@ module.exports = {
     const { ch } = client;
     const Constants = client.constants;
     const con = Constants.guildCreate;
-    const logEmbed = new Discord.MessageEmbed()
+    const logEmbed = new Discord.UnsafeEmbed()
       .setDescription(con.logEmbed.joinedAGuild)
-      .addField(con.logEmbed.guildName, `\u200b${guild.name}`, true)
-      .addField(con.logEmbed.guildId, `\u200b${guild.id}`, true)
-      .addField(con.logEmbed.memberCount, `\u200b${guild.memberCount}`, true)
-      .addField(con.logEmbed.guildOwner, `\u200b${guild.ownerID}`, true)
+      .addFields({ name: con.logEmbed.guildName, value: `\u200b${guild.name}`, inline: true })
+      .addFields({ name: con.logEmbed.guildId, value: `\u200b${guild.id}`, inline: true })
+      .addFields({
+        name: con.logEmbed.memberCount,
+        value: `\u200b${guild.memberCount}`,
+        inline: true,
+      })
+      .addFields({ name: con.logEmbed.guildOwner, value: `\u200b${guild.ownerID}`, inline: true })
       .setFooter({ text: ch.stp(con.logEmbed.currentGuildCount, { client }) })
       .setColor(con.logEmbed.color);
     ch.send(client.channels.cache.get(Constants.standard.guildLogChannel), { embeds: [logEmbed] });

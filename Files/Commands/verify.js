@@ -46,11 +46,11 @@ module.exports = {
 
     if (msg.r.logchannel) logchannel = msg.guild.channels.cache.get(msg.r.logchannel);
     if (logchannel) {
-      const log = new Discord.MessageEmbed()
+      const log = new Discord.UnsafeEmbed()
         .setDescription(msg.client.ch.stp(msg.lan.log.start, { user: msg.author }))
         .setAuthor({
           name: msg.author.tag,
-          iconURL: msg.client.ch.displayAvatarURL(msg.author),
+          iconURL: msg.author.displayAvatarURL(),
         })
         .setTimestamp()
         .setColor();
@@ -61,7 +61,7 @@ module.exports = {
     msg.client.verificationCodes.set(`${msg.DM.id}-${msg.guild.id}`, file.captcha.text);
     const { r } = msg;
 
-    const embed = new Discord.MessageEmbed()
+    const embed = new Discord.UnsafeEmbed()
       .setImage(`attachment://${file.name}`)
       .setAuthor({
         name: msg.lan.author.name,
@@ -69,16 +69,16 @@ module.exports = {
         url: msg.client.constants.standard.invite,
       })
       .setDescription(msg.client.ch.stp(msg.lan.description, { guild: msg.guild }))
-      .addField(msg.language.hint, msg.lan.hintmsg)
-      .addField(msg.lan.field, '\u200b')
+      .addFields({ name: msg.language.hint, value: msg.lan.hintmsg })
+      .addFields({ name: msg.lan.field, value: '\u200b' })
       .setColor(msg.client.constants.standard.color);
 
-    const regenerate = new Discord.MessageButton()
+    const regenerate = new Discord.Button()
       .setCustomId('regenerate')
       .setLabel(msg.language.regenerate)
-      .setStyle('SECONDARY');
+      .setStyle(Discord.ButtonStyle.Secondary);
 
-    if (answer)
+    if (answer) {
       answer
         .update({
           embeds: [embed],
@@ -86,7 +86,7 @@ module.exports = {
           files: [file],
         })
         .catch(() => {});
-    else if (msg.m)
+    } else if (msg.m) {
       msg.m
         .edit({
           embeds: [embed],
@@ -94,14 +94,14 @@ module.exports = {
           files: [file],
         })
         .catch(() => {});
-    else
+    } else {
       msg.m = await msg.client.ch.send(msg.DM, {
         embeds: [embed],
         components: msg.client.ch.buttonRower([regenerate]),
         files: [file],
       });
-
-    if (!msg.m || !msg.m.id)
+    }
+    if (!msg.m || !msg.m.id) {
       return msg.client.ch
         .send(msg.client.channels.cache.get(r.startchannel), {
           content: msg.client.ch.stp(msg.lan.openDMs, {
@@ -114,7 +114,7 @@ module.exports = {
             m.delete().catch(() => {});
           });
         });
-
+    }
     const buttonsCollector = msg.m.createMessageComponentCollector({ time: 120000 });
     const messageCollector = msg.DM.createMessageCollector({ time: 120000 });
     buttonsCollector.on('collect', (clickButton) => {
@@ -203,19 +203,19 @@ module.exports = {
   finished: async (msg, logchannel) => {
     msg.language = await msg.client.ch.languageSelector(msg.guild);
     if (logchannel) {
-      const log = new Discord.MessageEmbed()
+      const log = new Discord.UnsafeEmbed()
         .setDescription(
           msg.client.ch.stp(msg.language.verification?.log?.end, { user: msg.author }),
         )
         .setAuthor({
           name: msg.author.tag,
-          iconURL: msg.client.ch.displayAvatarURL(msg.author),
+          iconURL: msg.author.displayAvatarURL(),
         })
         .setTimestamp()
         .setColor();
       msg.client.ch.send(logchannel, { embeds: [log] });
     }
-    const embed = new Discord.MessageEmbed()
+    const embed = new Discord.UnsafeEmbed()
       .setTitle(
         msg.lan.author.name,
         msg.client.constants.standard.image,

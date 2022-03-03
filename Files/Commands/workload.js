@@ -27,13 +27,13 @@ module.exports = {
     const used = process.memoryUsage().heapUsed / 1024 / 1024;
     const totalmem = os.totalmem() / 1024 / 1024;
 
-    const embed = new Discord.MessageEmbed(m.embeds[0])
+    const embed = new Discord.Embed(m.embeds[0])
       .setAuthor({
         name: msg.lan.author,
         iconURL: msg.client.constants.emotes.workloadLink,
         url: msg.client.constants.standard.invite,
       })
-      .addFields(
+      .addFieldss([
         {
           name: msg.lan.RAM.name,
           value: msg.client.ch.stp(msg.lan.RAM.value, {
@@ -46,7 +46,7 @@ module.exports = {
           name: 'Host OS Runtime',
           value: `${Math.round(os.uptime() / 60 / 60) / 1} ${msg.language.time.hours}`,
         },
-      );
+      ]);
     embed.description = null;
 
     m.edit({ embeds: [embed] }).catch(() => {});

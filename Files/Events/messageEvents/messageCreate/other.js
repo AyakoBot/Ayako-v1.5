@@ -33,8 +33,9 @@ module.exports = {
             msg.channel.id === '367403201646952450' ||
             msg.channel.id === '777660259200270376' ||
             msg.channel.id === '851779578846117888'
-          )
+          ) {
             return;
+          }
           msg.delete().catch(() => {});
           msg.client.ch
             .send(
@@ -99,17 +100,19 @@ module.exports = {
         msg.author.id === '159985870458322944' &&
         msg.guild.id === '298954459172700181' &&
         msg.content.split(/ +/)[4].replace(/!/g, '') < 40
-      )
+      ) {
         jobs.scheduleJob(new Date(Date.now() + 10000), () => {
           msg.delete().catch(() => {});
         });
+      }
       if (
         msg.content.includes(' leveled up!') &&
         (msg.author.id === '172002275412279296' || msg.author.id === '453643070181867561')
-      )
+      ) {
         jobs.scheduleJob(new Date(Date.now() + 10000), () => {
           msg.delete().catch(() => {});
         });
+      }
     }
     if (
       (msg.channel.id === '554487212276842534' || msg.channel.id === '791390835916537906') &&
@@ -117,8 +120,9 @@ module.exports = {
       !member.roles.cache.has('366238244775657472') &&
       !member.roles.cache.has('776248679363248168') &&
       msg.author.id !== msg.client.user.id
-    )
+    ) {
       msg.delete().catch(() => {});
+    }
     if (msg.guild.id === '298954459172700181') {
       if (
         msg.content.toLocaleLowerCase().includes('http://') ||
@@ -152,8 +156,8 @@ module.exports = {
                 link = args[i];
               }
             }
-            const embed = new Discord.MessageEmbed()
-              .setColor('b0ff00')
+            const embed = new Discord.UnsafeEmbed()
+              .setColor(msg.client.constants.standard.color)
               .setDescription(
                 `${msg.author} killed ${killedUser} while being too retarded to use the proper commands`,
               )
@@ -168,10 +172,11 @@ module.exports = {
         msg.author.id === '159985870458322944' &&
         msg.guild.id === '298954459172700181' &&
         msg.content.split(/ +/)[4].replace(/!/g, '') < 40
-      )
+      ) {
         jobs.scheduleJob(new Date(Date.now() + 10000), () => {
           msg.delete().catch(() => {});
         });
+      }
       if (msg.content.includes(' leveled up!')) {
         if (msg.author.id === '172002275412279296' || msg.author.id === '453643070181867561') {
           jobs.scheduleJob(new Date(Date.now() + 10000), () => {
@@ -207,12 +212,12 @@ module.exports = {
               if (content === 'y') {
                 msg.guild.members
                   .ban(msg.author, {
-                    days: 1,
+                    deleteMessageDays: 1,
                     reason: 'Executor: Lars_und_so#0666 | no reason specified',
                   })
                   .catch(() => {});
-                const embed = new Discord.MessageEmbed()
-                  .setColor('#ff0000')
+                const embed = new Discord.UnsafeEmbed()
+                  .setColor(16711680)
                   .setDescription(`${msg.author} was banned from the server`)
                   .setTimestamp();
                 msg.client.ch.send(msg.channel, { embeds: [embed] });

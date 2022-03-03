@@ -85,7 +85,7 @@ const buttonsHandler = (msg, types, isGuild, ownPos, content, oldEmbed) => {
 };
 
 const getEmbed = (content, isGuild, msg, ownPos) => {
-  const embed = new Discord.MessageEmbed()
+  const embed = new Discord.UnsafeEmbed()
     .setColor(
       isGuild ? msg.client.ch.colorSelector(msg.guild.me) : msg.client.constants.standard.color,
     )
@@ -95,26 +95,26 @@ const getEmbed = (content, isGuild, msg, ownPos) => {
       iconURL: msg.client.constants.commands.leaderboard.authorImage,
       url: msg.client.constants.standard.invite,
     });
-  if (ownPos.name) embed.addFields(ownPos);
+  if (ownPos.name) embed.addFieldss([ownPos]);
   return embed;
 };
 
 const getButtons = (msg, page, rows) => {
-  const toggleType = new Discord.MessageButton()
+  const toggleType = new Discord.Button()
     .setLabel(msg.lan.toggle)
     .setCustomId('tt')
-    .setStyle('PRIMARY');
+    .setStyle(Discord.ButtonStyle.Primary);
 
-  const next = new Discord.MessageButton()
+  const next = new Discord.Button()
     .setCustomId('next')
     .setEmoji(msg.client.constants.emotes.forth)
-    .setStyle('SECONDARY')
+    .setStyle(Discord.ButtonStyle.Secondary)
     .setDisabled(rows ? page === Math.ceil(rows.length / 30) : true);
 
-  const back = new Discord.MessageButton()
+  const back = new Discord.Button()
     .setCustomId('back')
     .setEmoji(msg.client.constants.emotes.back)
-    .setStyle('SECONDARY')
+    .setStyle(Discord.ButtonStyle.Secondary)
     .setDisabled(page === 1);
 
   return msg.client.ch.buttonRower([[toggleType], [back, next]]);

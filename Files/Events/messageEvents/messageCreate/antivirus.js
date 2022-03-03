@@ -55,8 +55,9 @@ const prepare = async (msg, lan, check, language) => {
       arg.toLowerCase() !== 'http://' &&
       arg.toLowerCase() !== 'https://' &&
       new URL(arg).hostname
-    )
+    ) {
       links.push(arg);
+    }
   });
   const blocklist = getBlocklist();
   const whitelist = getWhitelist();
@@ -95,8 +96,6 @@ const prepare = async (msg, lan, check, language) => {
       }
 
       switch (data.type) {
-        default:
-          break;
         case 'doesntExist': {
           doesntExist(data);
           break;
@@ -134,6 +133,8 @@ const prepare = async (msg, lan, check, language) => {
           VTfail(data);
           break;
         }
+        default:
+          break;
       }
     });
 
@@ -263,43 +264,43 @@ const makeFullLinks = async (links) => {
 };
 
 const doesntExist = async ({ msg, lan, linkObject, check, language }) => {
-  const embed = new Discord.MessageEmbed()
+  const embed = new Discord.UnsafeEmbed()
     .setDescription(
       `**${language.result}**\n${client.ch.stp(lan.notexistent, {
         url: linkObject.baseURLhostname,
       })}`,
     )
-    .setColor('#00ff00');
+    .setColor(65280);
 
-  if (check) embed.addField(lan.checking, linkObject.href);
+  if (check) embed.addFields({ name: lan.checking, value: linkObject.href });
 
   client.ch.reply(msg, { embeds: [embed] });
 };
 
 const blacklisted = async ({ msg, lan, linkObject, note, check, language }) => {
   if (note && note !== false) {
-    const embed = new Discord.MessageEmbed()
+    const embed = new Discord.UnsafeEmbed()
       .setDescription(
         `**${language.result}**\n${client.ch.stp(lan.malicious, {
           cross: client.constants.emotes.cross,
         })}`,
       )
-      .addField(language.attention, note.split(/\|+/)[1])
-      .setColor('#ff0000');
+      .addFields({ name: language.attention, value: note.split(/\|+/)[1] })
+      .setColor(16711680);
 
-    if (check) embed.addField(lan.checking, linkObject.href);
+    if (check) embed.addFields(lan.checking, linkObject.href);
 
     msg.m = await client.ch.reply(msg, { embeds: [embed] });
   } else {
-    const embed = new Discord.MessageEmbed()
+    const embed = new Discord.UnsafeEmbed()
       .setDescription(
         `**${language.result}**\n${client.ch.stp(lan.malicious, {
           cross: client.constants.emotes.cross,
         })}`,
       )
-      .setColor('#ff0000');
+      .setColor(16711680);
 
-    if (check) embed.addField(lan.checking, linkObject.href);
+    if (check) embed.addFields({ name: lan.checking, value: linkObject.href });
 
     msg.m = await client.ch.reply(msg, { embeds: [embed] });
 
@@ -316,15 +317,15 @@ const blacklisted = async ({ msg, lan, linkObject, note, check, language }) => {
 const severeLink = async ({ msg, lan, linkObject, check, language, hrefLogging }) => {
   saveToBadLink(linkObject, msg, hrefLogging);
 
-  const embed = new Discord.MessageEmbed()
+  const embed = new Discord.UnsafeEmbed()
     .setDescription(
       `**${language.result}**\n${client.ch.stp(lan.malicious, {
         cross: client.constants.emotes.cross,
       })}`,
     )
-    .setColor('#ff0000');
+    .setColor(16711680);
 
-  if (check) embed.addField(lan.checking, linkObject.href);
+  if (check) embed.addFields({ name: lan.checking, value: linkObject.href });
 
   msg.m = await client.ch.reply(msg, { embeds: [embed] });
 
@@ -338,15 +339,15 @@ const severeLink = async ({ msg, lan, linkObject, check, language, hrefLogging }
 
 const ccscam = async ({ msg, lan, linkObject, check, language }) => {
   saveToBadLink(linkObject, msg);
-  const embed = new Discord.MessageEmbed()
+  const embed = new Discord.UnsafeEmbed()
     .setDescription(
       `**${language.result}**\n${client.ch.stp(lan.ccscam, {
         cross: client.constants.emotes.cross,
       })}`,
     )
-    .setColor('#ff0000');
+    .setColor(16711680);
 
-  if (check) embed.addField(lan.checking, linkObject.href);
+  if (check) embed.addFields({ name: lan.checking, value: linkObject.href });
 
   msg.m = await client.ch.reply(msg, { embeds: [embed] }).catch(() => {});
   client.ch.send(client.channels.cache.get(client.constants.standard.trashLogChannel), {
@@ -360,15 +361,15 @@ const ccscam = async ({ msg, lan, linkObject, check, language }) => {
 const newUrl = async ({ msg, lan, linkObject, check, language }) => {
   saveToBadLink(linkObject, msg);
 
-  const embed = new Discord.MessageEmbed()
+  const embed = new Discord.UnsafeEmbed()
     .setDescription(
       `**${language.result}**\n${client.ch.stp(lan.newLink, {
         cross: client.constants.emotes.cross,
       })}`,
     )
-    .setColor('#ff0000');
+    .setColor(16711680);
 
-  if (check) embed.addField(lan.checking, linkObject.href);
+  if (check) embed.addFields({ name: lan.checking, value: linkObject.href });
 
   msg.m = await client.ch.reply(msg, { embeds: [embed] });
 
@@ -405,31 +406,31 @@ const saveToBadLink = async (linkObject, msg, hrefLogging) => {
 };
 
 const whitelisted = async ({ msg, lan, check, linkObject, language }) => {
-  const embed = new Discord.MessageEmbed()
+  const embed = new Discord.UnsafeEmbed()
     .setDescription(
       `**${language.result}**\n${client.ch.stp(lan.whitelisted, {
         tick: client.constants.emotes.tick,
       })}`,
     )
-    .setColor('#00ff00');
+    .setColor(65280);
 
   if (check) {
-    embed.addField(lan.checking, linkObject.href);
+    embed.addFields({ name: lan.checking, value: linkObject.href });
     client.ch.reply(msg, { embeds: [embed] });
   }
   return true;
 };
 
 const cloudFlare = async ({ msg, lan, linkObject, check, language }) => {
-  const embed = new Discord.MessageEmbed()
+  const embed = new Discord.UnsafeEmbed()
     .setDescription(
       `**${language.result}**\n${client.ch.stp(lan.cfProtected, {
         tick: client.constants.emotes.cross,
       })}`,
     )
-    .setColor('#ffff00');
+    .setColor(16776960);
 
-  if (check) embed.addField(lan.checking, linkObject.href);
+  if (check) embed.addFields({ name: lan.checking, value: linkObject.href });
 
   client.ch.reply(msg, { embeds: [embed] });
 
@@ -440,15 +441,15 @@ const cloudFlare = async ({ msg, lan, linkObject, check, language }) => {
 };
 
 const VTfail = ({ msg, lan, check, linkObject, language }) => {
-  const embed = new Discord.MessageEmbed()
+  const embed = new Discord.UnsafeEmbed()
     .setDescription(
       `**${language.result}**\n${client.ch.stp(lan.VTfail, {
         cross: msg.client.constants.emotes.cross,
       })}`,
     )
-    .setColor('#ffff00');
+    .setColor(16776960);
 
-  if (check) embed.addField(lan.checking, linkObject.href);
+  if (check) embed.addFields({ name: lan.checking, value: linkObject.href });
 
   msg.client.ch.reply(msg, { embeds: [embed] });
 };
@@ -457,15 +458,15 @@ const timedOut = ({ msg, lan, check, linkObject, language }) => {
   msg.client.ch.send(msg.client.channels.cache.get('726252103302905907'), {
     content: `${linkObject.href}\n${msg.url}\nTimed Out`,
   });
-  const embed = new Discord.MessageEmbed()
+  const embed = new Discord.UnsafeEmbed()
     .setDescription(
       `**${language.result}**\n${client.ch.stp(lan.timedOut, {
         cross: msg.client.constants.emotes.cross,
       })}`,
     )
-    .setColor('#ffff00');
+    .setColor(16776960);
 
-  if (check) embed.addField(lan.checking, linkObject.href);
+  if (check) embed.addFields({ name: lan.checking, value: linkObject.href });
 
   msg.client.ch.reply(msg, { embeds: [embed] });
 };

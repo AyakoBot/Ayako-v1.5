@@ -221,26 +221,10 @@ const checkIfWebsiteExists = async (linkObject) => {
   const hostname = `${new URL(linkObject.url).protocol}//${linkObject.hostname}`;
 
   const [hrefRes, urlRes, baseUrlRes, hostnameRes] = await Promise.all([
-    linkObject.href
-      ? axios.get(linkObject.href).catch((e) => {
-          return e;
-        })
-      : null,
-    linkObject.url
-      ? axios.get(linkObject.url).catch((e) => {
-          return e;
-        })
-      : null,
-    linkObject.baseURL
-      ? axios.get(linkObject.baseURL).catch((e) => {
-          return e;
-        })
-      : null,
-    hostname
-      ? axios.get(hostname).catch((e) => {
-          return e;
-        })
-      : null,
+    linkObject.href ? axios.get(linkObject.href).catch((e) => e) : null,
+    linkObject.url ? axios.get(linkObject.url).catch((e) => e) : null,
+    linkObject.baseURL ? axios.get(linkObject.baseURL).catch((e) => e) : null,
+    hostname ? axios.get(hostname).catch((e) => e) : null,
   ]);
 
   let exists = false;

@@ -29,13 +29,13 @@ module.exports = {
       return;
     }
 
-    const embed = new Discord.MessageEmbed()
+    const embed = new Discord.UnsafeEmbed()
       .setAuthor({
         name: msg.client.ch.stp(msg.lan.bannerOf, { user }),
         iconURL: msg.client.constants.standard.image,
-        url: msg.client.ch.displayBannerURL(isGlobal ? user : member),
+        url: isGlobal ? user.displayBannerURL() : member.displayBannerURL(),
       })
-      .setImage(msg.client.ch.displayBannerURL(isGlobal ? user : member))
+      .setImage(isGlobal ? user.displayBannerURL() : member.displayBannerURL())
       .setTimestamp()
       .setColor(msg.client.ch.colorSelector(msg.guild ? msg.guild.me : null))
       .setFooter({ text: msg.client.ch.stp(msg.language.requestedBy, { user: msg.author }) });

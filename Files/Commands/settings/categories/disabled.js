@@ -7,25 +7,27 @@ module.exports = {
   finished: false,
   category: ['automation', 'none'],
   mmrEmbed(msg, res) {
-    const embed = new Discord.MessageEmbed();
+    const embed = new Discord.UnsafeEmbed();
     for (let i = 0; i < res.length; i += 1) {
       const r = res[i];
-      embed.addFields({
-        name: `${msg.language.number}: \`${r.id}\` | ${msg.lan.commands}: ${r.commands.map(
-          (c) => ` \`${c}\``,
-        )} | ${
-          r.active
-            ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-            : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
-        }`,
-        value: `${msg.lan.channels}: ${r.channels.map((c) => ` <#${c}>`)}`,
-        inline: true,
-      });
+      embed.addFieldss([
+        {
+          name: `${msg.language.number}: \`${r.id}\` | ${msg.lan.commands}: ${r.commands.map(
+            (c) => ` \`${c}\``,
+          )} | ${
+            r.active
+              ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
+              : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
+          }`,
+          value: `${msg.lan.channels}: ${r.channels.map((c) => ` <#${c}>`)}`,
+          inline: true,
+        },
+      ]);
     }
     return embed;
   },
   displayEmbed(msg, r) {
-    const embed = new Discord.MessageEmbed().addFields(
+    const embed = new Discord.UnsafeEmbed().addFieldss([
       {
         name: msg.lanSettings.active,
         value: r.active
@@ -90,38 +92,38 @@ module.exports = {
         }`,
         inline: false,
       },
-    );
+    ]);
     return embed;
   },
   buttons(msg, r) {
-    const active = new Discord.MessageButton()
+    const active = new Discord.Button()
       .setCustomId(msg.lan.edit.active.name)
       .setLabel(msg.lanSettings.active)
-      .setStyle(r.active ? 'SUCCESS' : 'DANGER');
-    const commands = new Discord.MessageButton()
+      .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
+    const commands = new Discord.Button()
       .setCustomId(msg.lan.edit.commands.name)
       .setLabel(msg.lan.commands)
-      .setStyle('SECONDARY');
-    const channels = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Secondary);
+    const channels = new Discord.Button()
       .setCustomId(msg.lan.edit.channels.name)
       .setLabel(msg.lan.channels)
-      .setStyle('SECONDARY');
-    const bpuserid = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Secondary);
+    const bpuserid = new Discord.Button()
       .setCustomId(msg.lan.edit.bpuserid.name)
       .setLabel(msg.lan.bpuserid)
-      .setStyle('PRIMARY');
-    const bluserid = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary);
+    const bluserid = new Discord.Button()
       .setCustomId(msg.lan.edit.bluserid.name)
       .setLabel(msg.lan.bluserid)
-      .setStyle('PRIMARY');
-    const bproleid = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary);
+    const bproleid = new Discord.Button()
       .setCustomId(msg.lan.edit.bproleid.name)
       .setLabel(msg.lan.bproleid)
-      .setStyle('PRIMARY');
-    const blroleid = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary);
+    const blroleid = new Discord.Button()
       .setCustomId(msg.lan.edit.blroleid.name)
       .setLabel(msg.lan.blroleid)
-      .setStyle('PRIMARY');
+      .setStyle(Discord.ButtonStyle.Primary);
     return [[active], [commands, channels], [bpuserid, bluserid, bproleid, blroleid]];
   },
 };

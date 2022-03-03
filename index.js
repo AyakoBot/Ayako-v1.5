@@ -29,5 +29,17 @@ process.on('uncaughtException', (error) => {
   client.ch.logger('Unhandled Exception', error);
 });
 
+client.rest.on('request', (request) => {
+  require('./Files/Events/REST Events/request')(request);
+});
+
+client.rest.on('response', (request, response) => {
+  require('./Files/Events/REST Events/response')(request, response);
+});
+
+client.rest.on('rateLimited', (rateLimitInfo) => {
+  require('./Files/Events/REST Events/rateLimited')(rateLimitInfo);
+});
+
 // AP.on('posted', () => {console.log('Posted stats to Top.gg!')})
 // const { AP } = require('./Files/BaseClient/DBL');
