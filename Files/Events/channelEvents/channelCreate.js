@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 
 module.exports = {
   async execute(channel) {
-    if (channel.type === 'dm' || channel.type === 'group_dm') return;
+    if (channel.type === 1 || channel.type === 3) return;
     const { client } = channel;
     const { ch } = client;
     const Constants = client.constants;

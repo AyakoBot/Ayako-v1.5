@@ -46,7 +46,7 @@ module.exports = {
 
       if (Number.isNaN(+affected)) affected = '--';
 
-      embed.addFieldss([
+      embed.addFields([
         {
           name: `${msg.language.number}: \`${r.id}\` | ${
             r.active
@@ -139,7 +139,7 @@ module.exports = {
         affectedNumber = affected;
       }
 
-      embed.addFieldss([
+      embed.addFields([
         {
           name: msg.lanSettings.active,
           value: r.active
@@ -194,7 +194,7 @@ module.exports = {
         },
       ]);
     } else {
-      embed.addFieldss([
+      embed.addFields([
         {
           name: msg.lanSettings.active,
           value: r.active
@@ -245,46 +245,46 @@ module.exports = {
   },
   buttons(msg, r) {
     if (r.isvarying === true) {
-      const active = new Discord.Button()
+      const active = new Discord.ButtonComponent()
         .setCustomId(msg.lan.edit.active.name)
         .setLabel(msg.lanSettings.active)
         .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-      const separator = new Discord.Button()
+      const separator = new Discord.ButtonComponent()
         .setCustomId(msg.lan.edit.separator.name)
         .setLabel(msg.lan.separator)
         .setStyle(Discord.ButtonStyle.Secondary);
-      const stoprole = new Discord.Button()
+      const stoprole = new Discord.ButtonComponent()
         .setCustomId(msg.lan.edit.stoprole.name)
         .setLabel(msg.lan.stoprole)
         .setStyle(Discord.ButtonStyle.Secondary);
-      const isvarying = new Discord.Button()
+      const isvarying = new Discord.ButtonComponent()
         .setCustomId(msg.lan.edit.isvarying.name)
         .setLabel(msg.lan.isvarying)
         .setStyle(r.isvarying ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Secondary);
-      const oneTimeRunner = new Discord.Button()
+      const oneTimeRunner = new Discord.ButtonComponent()
         .setCustomId(msg.lan.edit.oneTimeRunner.name)
         .setLabel(msg.lan.oneTimeRunner)
         .setEmoji(msg.client.constants.emotes.warning)
         .setStyle(Discord.ButtonStyle.Danger);
       return [[active], [separator, stoprole], [isvarying], [oneTimeRunner]];
     }
-    const active = new Discord.Button()
+    const active = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.active.name)
       .setLabel(msg.lanSettings.active)
       .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const separator = new Discord.Button()
+    const separator = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.separator.name)
       .setLabel(msg.lan.separator)
       .setStyle(Discord.ButtonStyle.Secondary);
-    const isvarying = new Discord.Button()
+    const isvarying = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.isvarying.name)
       .setLabel(msg.lan.isvarying)
       .setStyle(r.isvarying ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Secondary);
-    const roles = new Discord.Button()
+    const roles = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.roles.name)
       .setLabel(msg.lan.roles)
       .setStyle(Discord.ButtonStyle.Primary);
-    const oneTimeRunner = new Discord.Button()
+    const oneTimeRunner = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.oneTimeRunner.name)
       .setLabel(msg.lan.oneTimeRunner)
       .setEmoji(msg.client.constants.emotes.warning)

@@ -11,7 +11,7 @@ const lastMessageGlobal = new Map();
 
 module.exports = {
   execute: async (msg) => {
-    if (!msg.author || msg.author.bot || msg.channel.type === 'DM') return;
+    if (!msg.author || msg.author.bot || msg.channel.type === 1) return;
 
     const language = await msg.client.ch.languageSelector(msg.guild);
 

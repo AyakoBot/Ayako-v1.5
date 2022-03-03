@@ -30,11 +30,11 @@ module.exports = {
     }
 
     embed.setDescription(msg.client.ch.stp(lan.sure, { user }));
-    const yes = new Discord.Button()
+    const yes = new Discord.ButtonComponent()
       .setCustomId('yes')
       .setLabel(msg.language.Yes)
       .setStyle(Discord.ButtonStyle.Primary);
-    const no = new Discord.Button()
+    const no = new Discord.ButtonComponent()
       .setCustomId('no')
       .setLabel(msg.language.No)
       .setStyle(Discord.ButtonStyle.Danger);

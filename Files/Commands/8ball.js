@@ -17,7 +17,7 @@ module.exports = {
         iconURL: msg.client.constants.standard.image,
         url: msg.client.constants.standard.invite,
       })
-      .addFieldss([
+      .addFields([
         { name: msg.lan.question, value: `${question}\u200b`, inline: false },
         { name: msg.lan.answer, value: `${answer}\u200b`, inline: false },
       ]);

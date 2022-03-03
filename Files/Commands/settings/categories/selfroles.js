@@ -10,7 +10,7 @@ module.exports = {
     const embed = new Discord.UnsafeEmbed();
     for (let i = 0; i < res.length; i += 1) {
       const r = res[i];
-      embed.addFieldss([
+      embed.addFields([
         {
           name: `${msg.language.number}: \`${r.id}\` | ${
             r.active
@@ -27,7 +27,7 @@ module.exports = {
     return embed;
   },
   displayEmbed(msg, r) {
-    const embed = new Discord.UnsafeEmbed().addFieldss([
+    const embed = new Discord.UnsafeEmbed().addFields([
       {
         name: msg.lanSettings.active,
         value: r.active
@@ -94,35 +94,35 @@ module.exports = {
     return embed;
   },
   buttons(msg, r) {
-    const active = new Discord.Button()
+    const active = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.active.name)
       .setLabel(msg.lanSettings.active)
       .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const name = new Discord.Button()
+    const name = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.name.name)
       .setLabel(msg.lan.name)
       .setStyle(Discord.ButtonStyle.Primary);
-    const onlyone = new Discord.Button()
+    const onlyone = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.onlyone.name)
       .setLabel(msg.lan.onlyone)
       .setStyle(r.onlyone ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const blacklistedusers = new Discord.Button()
+    const blacklistedusers = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.blacklistedusers.name)
       .setLabel(msg.lan.blacklistedusers)
       .setStyle(Discord.ButtonStyle.Primary);
-    const blacklistedroles = new Discord.Button()
+    const blacklistedroles = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.blacklistedroles.name)
       .setLabel(msg.lan.blacklistedroles)
       .setStyle(Discord.ButtonStyle.Primary);
-    const whitelistedusers = new Discord.Button()
+    const whitelistedusers = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.whitelistedusers.name)
       .setLabel(msg.lan.whitelistedusers)
       .setStyle(Discord.ButtonStyle.Primary);
-    const whitelistedroles = new Discord.Button()
+    const whitelistedroles = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.whitelistedroles.name)
       .setLabel(msg.lan.whitelistedroles)
       .setStyle(Discord.ButtonStyle.Primary);
-    const roles = new Discord.Button()
+    const roles = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.roles.name)
       .setLabel(msg.lan.roles)
       .setStyle(Discord.ButtonStyle.Primary);

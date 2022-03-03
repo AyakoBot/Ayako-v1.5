@@ -6,7 +6,7 @@ module.exports = {
   finished: true,
   category: ['automation'],
   displayEmbed(msg, r) {
-    const embed = new Discord.UnsafeEmbed().addFieldss([
+    const embed = new Discord.UnsafeEmbed().addFields([
       {
         name: `${msg.lanSettings.active}`,
         value: `${
@@ -47,19 +47,19 @@ module.exports = {
     return embed;
   },
   buttons(msg, r) {
-    const active = new Discord.Button()
+    const active = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.active.name)
       .setLabel(msg.lanSettings.active)
       .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const bot = new Discord.Button()
+    const bot = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.botRole.name)
       .setLabel(msg.lan.botRole)
       .setStyle(Discord.ButtonStyle.Primary);
-    const user = new Discord.Button()
+    const user = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.userRole.name)
       .setLabel(msg.lan.userRole)
       .setStyle(Discord.ButtonStyle.Primary);
-    const all = new Discord.Button()
+    const all = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.allRole.name)
       .setLabel(msg.lan.allRole)
       .setStyle(Discord.ButtonStyle.Primary);

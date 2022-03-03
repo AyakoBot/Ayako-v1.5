@@ -5,7 +5,7 @@ const jobs = require('node-schedule');
 module.exports = {
   async execute(msg) {
     if (!msg.channel) return;
-    if (!msg.channel.type || msg.channel.type === 'DM') return;
+    if (!msg.channel.type || msg.channel.type === 1) return;
     if (!msg.author || msg.author.bot) return;
     if (!msg.member?.manageable) return;
     const result = await msg.client.ch.query(

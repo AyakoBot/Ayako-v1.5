@@ -6,7 +6,7 @@ module.exports = {
   finished: true,
   category: ['automation'],
   displayEmbed(msg, r) {
-    const embed = new Discord.UnsafeEmbed().addFieldss([
+    const embed = new Discord.UnsafeEmbed().addFields([
       {
         name: '\u200b',
         value: `**${msg.lan.discordLogs}**`,
@@ -154,63 +154,63 @@ module.exports = {
     return embed;
   },
   buttons(msg) {
-    const guildevents = new Discord.Button()
+    const guildevents = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.guildevents.name)
       .setLabel(msg.lan.guildevents)
       .setStyle(Discord.ButtonStyle.Primary);
-    const emojievents = new Discord.Button()
+    const emojievents = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.emojievents.name)
       .setLabel(msg.lan.emojievents)
       .setStyle(Discord.ButtonStyle.Primary);
-    const inviteevents = new Discord.Button()
+    const inviteevents = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.inviteevents.name)
       .setLabel(msg.lan.inviteevents)
       .setStyle(Discord.ButtonStyle.Primary);
-    const messageevents = new Discord.Button()
+    const messageevents = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.messageevents.name)
       .setLabel(msg.lan.messageevents)
       .setStyle(Discord.ButtonStyle.Primary);
-    const roleevents = new Discord.Button()
+    const roleevents = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.roleevents.name)
       .setLabel(msg.lan.roleevents)
       .setStyle(Discord.ButtonStyle.Primary);
-    const userevents = new Discord.Button()
+    const userevents = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.userevents.name)
       .setLabel(msg.lan.userevents)
       .setStyle(Discord.ButtonStyle.Primary);
-    const voiceevents = new Discord.Button()
+    const voiceevents = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.voiceevents.name)
       .setLabel(msg.lan.voiceevents)
       .setStyle(Discord.ButtonStyle.Primary);
-    const webhookevents = new Discord.Button()
+    const webhookevents = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.webhookevents.name)
       .setLabel(msg.lan.webhookevents)
       .setStyle(Discord.ButtonStyle.Primary);
-    const channelevents = new Discord.Button()
+    const channelevents = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.channelevents.name)
       .setLabel(msg.lan.channelevents)
       .setStyle(Discord.ButtonStyle.Primary);
-    const stageinstanceevents = new Discord.Button()
+    const stageinstanceevents = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.stageinstanceevents.name)
       .setLabel(msg.lan.stageinstanceevents)
       .setStyle(Discord.ButtonStyle.Primary);
-    const stickerevents = new Discord.Button()
+    const stickerevents = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.stickerevents.name)
       .setLabel(msg.lan.stickerevents)
       .setStyle(Discord.ButtonStyle.Primary);
-    const threadevents = new Discord.Button()
+    const threadevents = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.threadevents.name)
       .setLabel(msg.lan.threadevents)
       .setStyle(Discord.ButtonStyle.Primary);
-    const guildmemberevents = new Discord.Button()
+    const guildmemberevents = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.guildmemberevents.name)
       .setLabel(msg.lan.guildmemberevents)
       .setStyle(Discord.ButtonStyle.Primary);
-    const modlogs = new Discord.Button()
+    const modlogs = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.modlogs.name)
       .setLabel(msg.lan.modlogs)
       .setStyle(Discord.ButtonStyle.Primary);
-    const settingslog = new Discord.Button()
+    const settingslog = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.settingslog.name)
       .setLabel(msg.lan.settingslog)
       .setStyle(Discord.ButtonStyle.Primary);

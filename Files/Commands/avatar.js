@@ -18,7 +18,7 @@ module.exports = {
       !msg.content.split(' ')[0].includes(module.exports.aliases[4]) &&
       !msg.content.split(' ')[0].includes(module.exports.aliases[5]);
 
-    if (!isGlobal && msg.channel.type === 'DM') {
+    if (!isGlobal && msg.channel.type === 1) {
       msg.client.ch.error(msg, msg.language.errors.guildCommand);
       return;
     }

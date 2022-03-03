@@ -14,7 +14,7 @@ module.exports = {
     for (let i = 0; i < res.length; i += 1) {
       const r = res[i];
 
-      embed.addFieldss([
+      embed.addFields([
         {
           name: `${msg.language.number}: \`${r.id}\` | ${
             r.rules ? msg.client.ch.channelRuleCalc(r.rules, msg.language).length : '--'
@@ -39,7 +39,7 @@ module.exports = {
             : msg.language.none
         }`,
       )
-      .addFieldss([
+      .addFields([
         {
           name: msg.language.Channels,
           value: `${r.channels?.length ? r.channels.map((id) => ` <#${id}>`) : msg.language.none}`,
@@ -48,7 +48,7 @@ module.exports = {
       ]);
 
     if (r.rules) {
-      embed.addFieldss([
+      embed.addFields([
         {
           name: '\u200b',
           value: '\u200b',
@@ -60,7 +60,7 @@ module.exports = {
         const [key] = Object.entries(msg.language.channelRules).find(([, v]) => v === rule);
         const emote = msg.client.constants.emotes.numbers[(i % 5) + 1];
 
-        embed.addFieldss([
+        embed.addFields([
           {
             name: `${emote} ${rule}`,
             value: `${msg.language.amountDefinition}: ${
@@ -77,12 +77,12 @@ module.exports = {
   buttons(msg, r) {
     const lan = msg.language.commands.settings[msg.file.name];
 
-    const channels = new Discord.Button()
+    const channels = new Discord.ButtonComponent()
       .setCustomId(lan.edit.channels.name)
       .setLabel(lan.channels)
       .setStyle(Discord.ButtonStyle.Primary);
 
-    const rules = new Discord.Button()
+    const rules = new Discord.ButtonComponent()
       .setCustomId(lan.edit.rules.name)
       .setLabel(lan.rules)
       .setStyle(Discord.ButtonStyle.Secondary);
@@ -96,7 +96,7 @@ module.exports = {
         const [key] = Object.entries(msg.language.channelRules).find(([, v]) => v === rule);
         const emote = msg.client.constants.emotes.numbers[(j % 5) + 1];
 
-        const button = new Discord.Button()
+        const button = new Discord.ButtonComponent()
           .setCustomId(lan.edit[key].name)
           .setLabel(msg.language.channelRules[`${key}_SHORT`])
           .setEmoji(emote)

@@ -111,7 +111,7 @@ module.exports = {
       userEmbed.addFields({ name: msg.language.description, value: botInfo.description });
     }
     if (userflags.length) {
-      userEmbed.addFieldss([
+      userEmbed.addFields([
         {
           name: msg.lan.flags,
           value: userflags.join('\n'),
@@ -120,7 +120,7 @@ module.exports = {
       ]);
     }
 
-    userEmbed.addFieldss([
+    userEmbed.addFields([
       {
         name: `${msg.client.constants.emotes.plusBG} ${msg.lan.createdAt}`,
         value: `<t:${String(user.createdTimestamp).slice(0, -3)}:F> (<t:${String(
@@ -146,7 +146,7 @@ module.exports = {
           iconURL: con.authorImage,
           url: msg.client.constants.standard.invite,
         })
-        .addFieldss([
+        .addFields([
           {
             name: msg.lan.nickname,
             value: msg.client.ch.makeInlineCode(member.displayName),
@@ -271,18 +271,18 @@ const interactionHandler = (msg, m, embeds, member) => {
 
 const getComponents = (msg, member, page) => [
   [
-    new Discord.Button()
+    new Discord.ButtonComponent()
       .setLabel(msg.lan.viewRoles)
       .setDisabled(member.roles.cache.size <= 1)
       .setStyle(Discord.ButtonStyle.Secondary)
       .setCustomId('roles'),
-    new Discord.Button()
+    new Discord.ButtonComponent()
       .setLabel(msg.lan.viewBasicPermissions)
       .setCustomId('basicPerms')
       .setStyle(Discord.ButtonStyle.Secondary),
   ],
   [
-    new Discord.MessageSelectMenu()
+    new Discord.SelectMenuComponent()
       .setPlaceholder(msg.lan.viewChannelPermissions)
       .setMaxValues(1)
       .setMinValues(1)
@@ -290,12 +290,12 @@ const getComponents = (msg, member, page) => [
       .setOptions(getChannelOptions(msg).slice((page - 1) * 25, page * 25)),
   ],
   [
-    new Discord.Button()
+    new Discord.ButtonComponent()
       .setCustomId('back')
       .setEmoji(msg.client.constants.emotes.back)
       .setStyle(Discord.ButtonStyle.Secondary)
       .setDisabled(page === 1),
-    new Discord.Button()
+    new Discord.ButtonComponent()
       .setCustomId('next')
       .setEmoji(msg.client.constants.emotes.forth)
       .setStyle(Discord.ButtonStyle.Secondary)
@@ -577,22 +577,22 @@ const permsHandler = (interaction, msg, member) => {
 
   let usedPermissions = Discord.Permissions.ALL;
   switch (channel.type) {
-    case 'GUILD_TEXT' || 'GUILD_PUBLIC_THREAD' || 'GUILD_PRIVATE_THREAD': {
+    case 0 || 11 || 12: {
       usedPermissions = new Discord.PermissionsBitField(535529258065n);
       categoryBits = [categoryBits[0], categoryBits[1], categoryBits[2]];
       break;
     }
-    case 'GUILD_NEWS' || 'GUILD_NEWS_THREAD': {
+    case 5 || 10: {
       usedPermissions = new Discord.PermissionsBitField(466809781329n);
       categoryBits = [categoryBits[0], categoryBits[1], categoryBits[2]];
       break;
     }
-    case 'GUILD_VOICE': {
+    case 2: {
       usedPermissions = new Discord.PermissionsBitField(558680246033n);
       categoryBits = [categoryBits[0], categoryBits[1], categoryBits[3]];
       break;
     }
-    case 'GUILD_CATEGORY': {
+    case 4: {
       usedPermissions = new Discord.PermissionsBitField(1098236034897n);
       categoryBits = [
         categoryBits[0],
@@ -603,7 +603,7 @@ const permsHandler = (interaction, msg, member) => {
       ];
       break;
     }
-    case 'GUILD_STAGE_VOICE': {
+    case 13: {
       usedPermissions = new Discord.PermissionsBitField(13175358481n);
       categoryBits = [
         categoryBits[0],
@@ -744,7 +744,7 @@ const decideUser = async (msg, users, m) => {
 
 const getUserComponents = (msg, page, users) => {
   const menu = [
-    new Discord.MessageSelectMenu()
+    new Discord.SelectMenuComponent()
       .setPlaceholder(msg.lan.selectUser)
       .setMaxValues(1)
       .setMinValues(1)
@@ -761,13 +761,13 @@ const getUserComponents = (msg, page, users) => {
   ];
 
   if (users.length > 25) {
-    const back = new Discord.Button()
+    const back = new Discord.ButtonComponent()
       .setEmoji(msg.client.constants.emotes.back)
       .setDisabled(page === 1)
       .setCustomId('back')
       .setStyle(Discord.ButtonStyle.Secondary);
 
-    const next = new Discord.Button()
+    const next = new Discord.ButtonComponent()
       .setEmoji(msg.client.constants.emotes.forth)
       .setCustomId('next')
       .setDisabled(page === Math.ceil(users.length / 25))

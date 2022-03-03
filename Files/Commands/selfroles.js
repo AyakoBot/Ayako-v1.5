@@ -42,20 +42,20 @@ module.exports = {
     const getComponents = () => {
       const buttons = [];
 
-      const categoryMenu = new Discord.MessageSelectMenu()
+      const categoryMenu = new Discord.SelectMenuComponent()
         .setCustomId('categoryMenu')
         .addOptions(Data.cTake)
         .setMinValues(1)
         .setMaxValues(1)
         .setPlaceholder(msg.language.select.selfroles.select);
 
-      const prevCategory = new Discord.Button()
+      const prevCategory = new Discord.ButtonComponent()
         .setCustomId('prevCategory')
         .setLabel(msg.lan.prevCategory)
         .setDisabled(Data.cPage === 1)
         .setStyle(Discord.ButtonStyle.Danger);
 
-      const nextCategory = new Discord.Button()
+      const nextCategory = new Discord.ButtonComponent()
         .setCustomId('nextCategory')
         .setLabel(msg.lan.nextCategory)
         .setDisabled(Data.cPage === Math.ceil(res.rowCount / 25))
@@ -64,7 +64,7 @@ module.exports = {
       buttons.push([categoryMenu], [prevCategory, nextCategory]);
 
       if (Data.currentRow) {
-        const roleMenu = new Discord.MessageSelectMenu()
+        const roleMenu = new Discord.SelectMenuComponent()
           .setCustomId('roleMenu')
           .addOptions(Data.rTake)
           .setMinValues(1)
@@ -76,19 +76,19 @@ module.exports = {
           )
           .setDisabled(Data.currentRow.isBlacklisted);
 
-        const prevRoles = new Discord.Button()
+        const prevRoles = new Discord.ButtonComponent()
           .setCustomId('prevRoles')
           .setLabel(msg.lan.prevRoles)
           .setDisabled(Data.rPage === 1)
           .setStyle(Discord.ButtonStyle.Danger);
 
-        const nextRoles = new Discord.Button()
+        const nextRoles = new Discord.ButtonComponent()
           .setCustomId('nextRoles')
           .setLabel(msg.lan.nextRoles)
           .setDisabled(Data.rPage === Math.ceil(Data.rOptions.length / 25))
           .setStyle(Discord.ButtonStyle.Primary);
 
-        const back = new Discord.Button()
+        const back = new Discord.ButtonComponent()
           .setCustomId('back')
           .setLabel(msg.language.back)
           .setEmoji(msg.client.constants.emotes.back)

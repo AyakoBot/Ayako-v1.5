@@ -188,102 +188,131 @@ const getComponents = async (msg, { page, Objects }, editing) => {
 
   switch (page) {
     case 1: {
-      let authorNameStyle = Objects.embed.author?.name ? Discord.ButtonStyle.Secondary : Discord.ButtonStyle.Primary;
+      let authorNameStyle = Objects.embed.author?.name
+        ? Discord.ButtonStyle.Secondary
+        : Discord.ButtonStyle.Primary;
       authorNameStyle = validate('author-name', Objects.embed, msg.client.constants)
         ? Discord.ButtonStyle.Danger
         : authorNameStyle;
       if (editing === 'author-name') authorNameStyle = Discord.ButtonStyle.Success;
 
-      let titleStyle = Objects.embed.title ? Discord.ButtonStyle.Secondary : Discord.ButtonStyle.Primary;
-      titleStyle = validate('title', Objects.embed, msg.client.constants) ? Discord.ButtonStyle.Danger : titleStyle;
+      let titleStyle = Objects.embed.title
+        ? Discord.ButtonStyle.Secondary
+        : Discord.ButtonStyle.Primary;
+      titleStyle = validate('title', Objects.embed, msg.client.constants)
+        ? Discord.ButtonStyle.Danger
+        : titleStyle;
       if (editing === 'title') titleStyle = Discord.ButtonStyle.Success;
 
-      let descriptionStyle = Objects.embed.description ? Discord.ButtonStyle.Secondary : Discord.ButtonStyle.Primary;
+      let descriptionStyle = Objects.embed.description
+        ? Discord.ButtonStyle.Secondary
+        : Discord.ButtonStyle.Primary;
       descriptionStyle = validate('description', Objects.embed, msg.client.constants)
         ? Discord.ButtonStyle.Danger
         : descriptionStyle;
       if (editing === 'description') descriptionStyle = Discord.ButtonStyle.Success;
 
-      let footerTextStyle = Objects.embed.footer?.text ? Discord.ButtonStyle.Secondary : Discord.ButtonStyle.Primary;
+      let footerTextStyle = Objects.embed.footer?.text
+        ? Discord.ButtonStyle.Secondary
+        : Discord.ButtonStyle.Primary;
       footerTextStyle = validate('footer-text', Objects.embed, msg.client.constants)
         ? Discord.ButtonStyle.Danger
         : footerTextStyle;
       if (editing === 'footer-text') footerTextStyle = Discord.ButtonStyle.Success;
 
-      let authorIconUrlStyle = Objects.embed.author?.iconURL ? Discord.ButtonStyle.Secondary : Discord.ButtonStyle.Primary;
+      let authorIconUrlStyle = Objects.embed.author?.iconURL
+        ? Discord.ButtonStyle.Secondary
+        : Discord.ButtonStyle.Primary;
       if (editing === 'author-iconURL') authorIconUrlStyle = Discord.ButtonStyle.Success;
 
-      let authorUrlStyle = Objects.embed.author?.url ? Discord.ButtonStyle.Secondary : Discord.ButtonStyle.Primary;
+      let authorUrlStyle = Objects.embed.author?.url
+        ? Discord.ButtonStyle.Secondary
+        : Discord.ButtonStyle.Primary;
       if (editing === 'author-url') authorUrlStyle = Discord.ButtonStyle.Success;
 
-      let urlStyle = Objects.embed.url ? Discord.ButtonStyle.Secondary : Discord.ButtonStyle.Primary;
+      let urlStyle = Objects.embed.url
+        ? Discord.ButtonStyle.Secondary
+        : Discord.ButtonStyle.Primary;
       if (editing === 'url') urlStyle = Discord.ButtonStyle.Success;
 
-      let thumbnailStyle = Objects.embed.thumbnail?.url ? Discord.ButtonStyle.Secondary : Discord.ButtonStyle.Primary;
+      let thumbnailStyle = Objects.embed.thumbnail?.url
+        ? Discord.ButtonStyle.Secondary
+        : Discord.ButtonStyle.Primary;
       if (editing === 'thumbnail') thumbnailStyle = Discord.ButtonStyle.Success;
 
-      let imageStyle = Objects.embed.image?.url ? Discord.ButtonStyle.Secondary : Discord.ButtonStyle.Primary;
+      let imageStyle = Objects.embed.image?.url
+        ? Discord.ButtonStyle.Secondary
+        : Discord.ButtonStyle.Primary;
       if (editing === 'image') imageStyle = Discord.ButtonStyle.Success;
 
-      let footerIconUrlStyle = Objects.embed.footer?.iconURL ? Discord.ButtonStyle.Secondary : Discord.ButtonStyle.Primary;
+      let footerIconUrlStyle = Objects.embed.footer?.iconURL
+        ? Discord.ButtonStyle.Secondary
+        : Discord.ButtonStyle.Primary;
       if (editing === 'footer-iconURL') footerIconUrlStyle = Discord.ButtonStyle.Success;
 
-      let colorStyle = Objects.embed.color ? Discord.ButtonStyle.Secondary : Discord.ButtonStyle.Primary;
+      let colorStyle = Objects.embed.color
+        ? Discord.ButtonStyle.Secondary
+        : Discord.ButtonStyle.Primary;
       if (editing === 'color') colorStyle = Discord.ButtonStyle.Success;
 
-      let timestampStyle = Objects.embed.timestamp ? Discord.ButtonStyle.Secondary : Discord.ButtonStyle.Primary;
+      let timestampStyle = Objects.embed.timestamp
+        ? Discord.ButtonStyle.Secondary
+        : Discord.ButtonStyle.Primary;
       if (editing === 'timestamp') timestampStyle = Discord.ButtonStyle.Success;
 
       components.push(
         [
-          new Discord.Button()
+          new Discord.ButtonComponent()
             .setCustomId('author-name')
             .setLabel(lan['author-name'].name)
             .setStyle(authorNameStyle),
-          new Discord.Button()
+          new Discord.ButtonComponent()
             .setCustomId('author-iconURL')
             .setLabel(lan['author-iconURL'].name)
             .setStyle(authorIconUrlStyle),
-          new Discord.Button()
+          new Discord.ButtonComponent()
             .setCustomId('author-url')
             .setLabel(lan['author-url'].name)
             .setStyle(authorUrlStyle),
         ],
         [
-          new Discord.Button()
+          new Discord.ButtonComponent()
             .setCustomId('title')
             .setLabel(lan.title.name)
             .setStyle(titleStyle),
-          new Discord.Button().setCustomId('url').setLabel(lan.url.name).setStyle(urlStyle),
-          new Discord.Button()
+          new Discord.ButtonComponent()
+            .setCustomId('url')
+            .setLabel(lan.url.name)
+            .setStyle(urlStyle),
+          new Discord.ButtonComponent()
             .setCustomId('description')
             .setLabel(lan.description.name)
             .setStyle(descriptionStyle),
         ],
         [
-          new Discord.Button()
+          new Discord.ButtonComponent()
             .setCustomId('thumbnail')
             .setLabel(lan.thumbnail.name)
             .setStyle(thumbnailStyle),
-          new Discord.Button()
+          new Discord.ButtonComponent()
             .setCustomId('image')
             .setLabel(lan.image.name)
             .setStyle(imageStyle),
-          new Discord.Button()
+          new Discord.ButtonComponent()
             .setCustomId('color')
             .setLabel(lan.color.name)
             .setStyle(colorStyle),
         ],
         [
-          new Discord.Button()
+          new Discord.ButtonComponent()
             .setCustomId('footer-text')
             .setLabel(lan['footer-text'].name)
             .setStyle(footerTextStyle),
-          new Discord.Button()
+          new Discord.ButtonComponent()
             .setCustomId('footer-iconURL')
             .setLabel(lan['footer-iconURL'].name)
             .setStyle(footerIconUrlStyle),
-          new Discord.Button()
+          new Discord.ButtonComponent()
             .setCustomId('timestamp')
             .setLabel(lan.timestamp.name)
             .setStyle(timestampStyle),
@@ -294,7 +323,7 @@ const getComponents = async (msg, { page, Objects }, editing) => {
     case 2: {
       components.push(
         [
-          new Discord.MessageSelectMenu()
+          new Discord.SelectMenuComponent()
             .setCustomId('field-select')
             .setMaxValues(1)
             .setMinValues(1)
@@ -312,7 +341,7 @@ const getComponents = async (msg, { page, Objects }, editing) => {
             ),
         ],
         [
-          new Discord.Button()
+          new Discord.ButtonComponent()
             .setCustomId('add-field')
             .setLabel(baseLan.addFields)
             .setStyle(Discord.ButtonStyle.Primary)
@@ -324,23 +353,23 @@ const getComponents = async (msg, { page, Objects }, editing) => {
     case 3: {
       components.push(
         [
-          new Discord.Button()
+          new Discord.ButtonComponent()
             .setCustomId('inheritCode')
             .setLabel(baseLan.inheritCode)
             .setStyle(Discord.ButtonStyle.Primary),
-          new Discord.Button()
+          new Discord.ButtonComponent()
             .setCustomId('viewRaw')
             .setLabel(baseLan.viewRaw)
             .setStyle(Discord.ButtonStyle.Primary),
         ],
         [
-          new Discord.Button()
+          new Discord.ButtonComponent()
             .setCustomId('viewRawOtherMsg')
             .setLabel(baseLan.viewRawOtherMsg)
             .setStyle(Discord.ButtonStyle.Secondary),
         ],
         [
-          new Discord.Button()
+          new Discord.ButtonComponent()
             .setCustomId('save')
             .setLabel(baseLan.save)
             .setStyle(Discord.ButtonStyle.Primary)
@@ -349,7 +378,7 @@ const getComponents = async (msg, { page, Objects }, editing) => {
                 msg.member.permissions.has(module.exports.insideCommandPerm) && !cantBeSent(Objects)
               ),
             ),
-          new Discord.Button()
+          new Discord.ButtonComponent()
             .setCustomId('send')
             .setLabel(baseLan.send)
             .setStyle(Discord.ButtonStyle.Primary)
@@ -378,7 +407,7 @@ const getComponents = async (msg, { page, Objects }, editing) => {
 };
 
 const getMenu = (savedEmbeds, baseLan, msg) => [
-  new Discord.MessageSelectMenu()
+  new Discord.SelectMenuComponent()
     .setCustomId('savedEmbedSelection')
     .setMaxValues(1)
     .setMinValues(1)
@@ -404,18 +433,18 @@ const getMenu = (savedEmbeds, baseLan, msg) => [
 ];
 
 const getNavigation = (msg, page) => [
-  new Discord.Button()
+  new Discord.ButtonComponent()
     .setLabel('\u200b')
     .setCustomId('left')
     .setStyle(Discord.ButtonStyle.Secondary)
     .setEmoji(msg.client.constants.emotes.back)
     .setDisabled(page === 1),
-  new Discord.Button()
+  new Discord.ButtonComponent()
     .setLabel('\u200b')
     .setCustomId('cross')
     .setStyle(Discord.ButtonStyle.Danger)
     .setEmoji(msg.client.constants.emotes.cross),
-  new Discord.Button()
+  new Discord.ButtonComponent()
     .setLabel('\u200b')
     .setCustomId('right')
     .setStyle(Discord.ButtonStyle.Secondary)
@@ -424,13 +453,13 @@ const getNavigation = (msg, page) => [
 ];
 
 const getArrows = (msg, currentPage, maxPage) => [
-  new Discord.Button()
+  new Discord.ButtonComponent()
     .setLabel('\u200b')
     .setCustomId('prev')
     .setStyle(Discord.ButtonStyle.Danger)
     .setEmoji(msg.client.constants.emotes.back)
     .setDisabled(currentPage === 1 || !maxPage),
-  new Discord.Button()
+  new Discord.ButtonComponent()
     .setLabel('\u200b')
     .setCustomId('next')
     .setStyle(Discord.ButtonStyle.Primary)
@@ -439,12 +468,12 @@ const getArrows = (msg, currentPage, maxPage) => [
 ];
 
 const getOtherButtons = (baseLan) => [
-  new Discord.Button()
+  new Discord.ButtonComponent()
     .setCustomId('inheritFromSavedEmbed')
     .setLabel(baseLan.inheritFromSavedEmbed)
     .setStyle(Discord.ButtonStyle.Primary)
     .setDisabled(true),
-  new Discord.Button()
+  new Discord.ButtonComponent()
     .setCustomId('deleteSavedEmbed')
     .setLabel(baseLan.deleteSavedEmbed)
     .setStyle(Discord.ButtonStyle.Primary)
@@ -1061,7 +1090,7 @@ const postCode = (Objects, msg, answer, embed, noRemove) => {
   if (noRemove) {
     components = msg.client.ch.buttonRower([
       [
-        new Discord.Button()
+        new Discord.ButtonComponent()
           .setLabel('\u200b')
           .setStyle(Discord.ButtonStyle.Primary)
           .setEmoji(msg.client.constants.emotes.back)
@@ -1131,7 +1160,7 @@ const postCode = (Objects, msg, answer, embed, noRemove) => {
 
 const handleSave = async (msg, answer, Objects) => {
   const lan = msg.language.commands.embedbuilder;
-  const save = new Discord.Button()
+  const save = new Discord.ButtonComponent()
     .setCustomId('save')
     .setLabel(lan.save)
     .setStyle(Discord.ButtonStyle.Primary)
@@ -1151,7 +1180,7 @@ const handleSave = async (msg, answer, Objects) => {
     const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
     const messageCollector = msg.channel.createMessageCollector({ time: 60000 });
 
-    const back = new Discord.Button()
+    const back = new Discord.ButtonComponent()
       .setLabel('\u200b')
       .setEmoji(msg.client.constants.emotes.back)
       .setStyle(Discord.ButtonStyle.Primary)
@@ -1174,7 +1203,7 @@ const handleSave = async (msg, answer, Objects) => {
 
       name = message.content.slice(0, 1024);
 
-      const newSave = new Discord.Button()
+      const newSave = new Discord.ButtonComponent()
         .setCustomId('save')
         .setLabel(lan.save)
         .setStyle(Discord.ButtonStyle.Primary)
@@ -1254,23 +1283,23 @@ const handleSave = async (msg, answer, Objects) => {
 
 const handleSend = async (msg, answer, Objects) => {
   const getButtons = (options) => {
-    const next = new Discord.Button()
+    const next = new Discord.ButtonComponent()
       .setCustomId('next')
       .setLabel(msg.language.next)
       .setDisabled(
         options.options.length > 25 && options.page === Math.ceil(options.options.length / 25),
       )
       .setStyle(Discord.ButtonStyle.Primary);
-    const prev = new Discord.Button()
+    const prev = new Discord.ButtonComponent()
       .setCustomId('prev')
       .setLabel(msg.language.prev)
       .setDisabled(options.page === 1)
       .setStyle(Discord.ButtonStyle.Danger);
-    const send = new Discord.Button()
+    const send = new Discord.ButtonComponent()
       .setCustomId('send')
       .setLabel(msg.language.commands.embedbuilder.send)
       .setStyle(Discord.ButtonStyle.Primary);
-    const channels = new Discord.MessageSelectMenu()
+    const channels = new Discord.SelectMenuComponent()
       .setCustomId('channels')
       .addOptions(options.take)
       .setPlaceholder(msg.language.select.channels.select)
@@ -1305,15 +1334,7 @@ const handleSend = async (msg, answer, Objects) => {
   const options = {
     page: 1,
     options: msg.guild.channels.cache
-      .filter((c) =>
-        [
-          'GUILD_TEXT',
-          'GUILD_NEWS',
-          'GUILD_NEWS_THREAD',
-          'GUILD_PUBLIC_THEAD',
-          'GUILD_PRIVATE_THREAD',
-        ].includes(c.type),
-      )
+      .filter((c) => [0, 5, 10, 11, 12].includes(c.type))
       .sort((a, b) => a.rawPosition - b.rawPosition)
       .map((c) => ({ label: `${c.name}`, value: `${c.id}` })),
     selected: [],
@@ -1447,7 +1468,7 @@ const handleOtherMsgRaw = async (msg, answer, Objects) => {
       value: msg.client.constants.discordMsgUrls.map((url) => `\`${url}\``).join('\n'),
     });
 
-  const back = new Discord.Button()
+  const back = new Discord.ButtonComponent()
     .setLabel('\u200b')
     .setEmoji(msg.client.constants.emotes.back)
     .setStyle(Discord.ButtonStyle.Primary)
@@ -1595,27 +1616,29 @@ const fieldSelect = async (msg, answer, Objects) => {
 
   const getFieldComponents = () => [
     [
-      new Discord.Button()
+      new Discord.ButtonComponent()
         .setCustomId('remove-field')
         .setLabel(baseLan.removeField)
         .setStyle(Discord.ButtonStyle.Danger),
     ],
     [
-      new Discord.Button()
+      new Discord.ButtonComponent()
         .setCustomId('name')
         .setLabel(baseLan.fieldName)
         .setStyle(editing === 'name' ? Discord.ButtonStyle.Primary : Discord.ButtonStyle.Secondary),
-      new Discord.Button()
+      new Discord.ButtonComponent()
         .setCustomId('value')
         .setLabel(baseLan.fieldValue)
-        .setStyle(editing === 'value' ? Discord.ButtonStyle.Primary : Discord.ButtonStyle.Secondary),
-      new Discord.Button()
+        .setStyle(
+          editing === 'value' ? Discord.ButtonStyle.Primary : Discord.ButtonStyle.Secondary,
+        ),
+      new Discord.ButtonComponent()
         .setCustomId('inline')
         .setLabel(baseLan.fieldInline)
         .setStyle(selected.inline ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Secondary),
     ],
     [
-      new Discord.Button()
+      new Discord.ButtonComponent()
         .setLabel('\u200b')
         .setStyle(Discord.ButtonStyle.Primary)
         .setEmoji(msg.client.constants.emotes.back)
@@ -1801,7 +1824,7 @@ const handleEmbedSelection = async ({ msg, answer }, Objects, { embed, component
     else Options.take[i].default = false;
   });
 
-  const newMenu = new Discord.MessageSelectMenu()
+  const newMenu = new Discord.SelectMenuComponent()
     .setCustomId('savedEmbedSelection')
     .setMaxValues(1)
     .setMinValues(1)
@@ -1949,7 +1972,7 @@ const handlePage = async ({ msg, answer }, Objects, { embed }, increasePage) => 
     )
     .filter((r) => !!r);
 
-  const newMenu = new Discord.MessageSelectMenu()
+  const newMenu = new Discord.SelectMenuComponent()
     .setCustomId('savedEmbedSelection')
     .setMaxValues(1)
     .setMinValues(1)

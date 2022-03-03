@@ -15,7 +15,7 @@ module.exports = {
     for (let i = 0; i < res.length; i += 1) {
       const r = res[i];
       const punishment = r.punishment ? msg.language.autopunish[r.punishment] : msg.language.none;
-      embed.addFieldss([
+      embed.addFields([
         {
           name: `${msg.language.number}: \`${r.id}\` | ${
             r.active
@@ -33,7 +33,7 @@ module.exports = {
   },
   displayEmbed(msg, r) {
     const embed = new Discord.UnsafeEmbed();
-    embed.addFieldss([
+    embed.addFields([
       {
         name: `${msg.lanSettings.active}\u200b`,
         value: r.active
@@ -129,11 +129,11 @@ module.exports = {
     return embed;
   },
   buttons(msg, r) {
-    const active = new Discord.Button()
+    const active = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.active.name)
       .setLabel(msg.lanSettings.active)
       .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const warnamount = new Discord.Button()
+    const warnamount = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.warnamount.name)
       .setLabel(
         msg.client.ch
@@ -141,27 +141,27 @@ module.exports = {
           .replace(/\**/g, ''),
       )
       .setStyle(Discord.ButtonStyle.Secondary);
-    const punishment = new Discord.Button()
+    const punishment = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.punishment.name)
       .setLabel(msg.lan.punishment)
       .setStyle(r.isvarying ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Secondary);
-    const duration = new Discord.Button()
+    const duration = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.duration.name)
       .setLabel(msg.lan.edit.duration.name)
       .setStyle(Discord.ButtonStyle.Primary);
-    const addroles = new Discord.Button()
+    const addroles = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.addroles.name)
       .setLabel(msg.lan.addroles)
       .setStyle(Discord.ButtonStyle.Primary);
-    const removeroles = new Discord.Button()
+    const removeroles = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.removeroles.name)
       .setLabel(msg.lan.removeroles)
       .setStyle(Discord.ButtonStyle.Primary);
-    const confirmationreq = new Discord.Button()
+    const confirmationreq = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.confirmationreq.name)
       .setLabel(msg.lan.confirmationreq)
       .setStyle(r.confirmationreq ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Secondary);
-    const punishmentawaittime = new Discord.Button()
+    const punishmentawaittime = new Discord.ButtonComponent()
       .setCustomId(msg.lan.edit.punishmentawaittime.name)
       .setLabel(msg.lan.punishmentawaittime)
       .setStyle(r.isvarying ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Secondary);

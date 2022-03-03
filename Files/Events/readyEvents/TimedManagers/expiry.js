@@ -101,7 +101,7 @@ const logExpire = async (rows, client, guildid) => {
             msgid: warn.msgid,
           }),
         })
-        .addFieldss([
+        .addFields([
           {
             name: lan.date,
             value: `<t:${warn.dateofwarn.slice(0, -3)}:F> (<t:${warn.dateofwarn.slice(0, -3)}:R>)`,
@@ -154,7 +154,7 @@ const logExpire = async (rows, client, guildid) => {
             msgid: warn.msgid,
           }),
         })
-        .addFieldss([
+        .addFields([
           {
             name: lan.date,
             value: `<t:${warn.dateofwarn.slice(0, -3)}:F> (<t:${warn.dateofwarn.slice(0, -3)}:R>)`,
