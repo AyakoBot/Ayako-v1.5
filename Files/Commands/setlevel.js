@@ -267,8 +267,7 @@ const getComponents = (msg, selection) => {
   const addZeroXP = new Discord.MessageButton()
     .setCustomId('addZeroXP')
     .setLabel(msg.lan.add)
-    .setStyle('PRIMARY')
-    .setDisabled(selection.xpZeros === 25);
+    .setStyle('PRIMARY');
 
   const delZeroXP = new Discord.MessageButton()
     .setCustomId('delZeroXP')
@@ -279,8 +278,7 @@ const getComponents = (msg, selection) => {
   const addZeroLvl = new Discord.MessageButton()
     .setCustomId('addZeroLvl')
     .setLabel(msg.lan.add)
-    .setStyle('PRIMARY')
-    .setDisabled(selection.lvlZeros === 25);
+    .setStyle('PRIMARY');
 
   const delZeroLvl = new Discord.MessageButton()
     .setCustomId('delZeroLvl')
@@ -331,7 +329,7 @@ const getComponents = (msg, selection) => {
 
   const cancel = new Discord.MessageButton()
     .setCustomId('cancel')
-    .setLabel(msg.language.cancel)
+    .setLabel(msg.language.Cancel)
     .setStyle('DANGER');
 
   return msg.client.ch.buttonRower([
@@ -354,11 +352,7 @@ const doMath = (selection, updated) => {
         break;
       }
 
-      if (String(selection.newXP).length > 25) break;
-
-      for (let i = 0; selection.newXP >= (5 / 6) * i * (2 * i * i + 27 * i + 91); i += 1) {
-        selection.newLvl = i;
-      }
+      selection.newLvl = getLevel(selection.newXP);
       break;
     }
     case 'lvl': {
@@ -440,3 +434,13 @@ const handleDone = async (answer, msg, m, selection) => {
 
   answer.update({ embeds: [embed], components: [] }).catch(() => {});
 };
+
+const getLevel = (y) =>
+  Math.round(
+    (3 ** 0.5 * (3888 * y ** 2 + 233280 * y - 3366425) ** 0.5 + 108 * y + 3240) ** (1 / 3) /
+      (2 * 3 ** (2 / 3) * 5 ** (1 / 3)) +
+      (65 * (5 / 3) ** (1 / 3)) /
+        (2 *
+          (3 ** 0.5 * (3888 * y ** 2 + 233280 * y - 3366425) ** 0.5 + 108 * y + 3240) ** (1 / 3)) -
+      9 / 2,
+  );
