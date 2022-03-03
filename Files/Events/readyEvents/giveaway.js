@@ -74,17 +74,17 @@ module.exports = {
                   guild.members.cache.get(u.id).roles.cache.has(role.id),
                 );
               else {
-                const embed = new Discord.MessageEmbed()
+                const embed = new Discord.UnsafeEmbed()
                   .setDescription(description)
                   .setTimestamp(new Date(+endat).toUTCString())
-                  .setColor(guild.me.displayHexColor)
+                  .setColor(guild.me.displayColor)
                   .setAuthor(
                     language.ready.giveaway.name,
                     Constants.standard.image,
                     Constants.standard.link,
                   )
                   .setFooter(language.ready.giveaway.endedAt)
-                  .addField(language.ready.giveaway.roleInaccessible, '\u200b');
+                  .addFields(language.ready.giveaway.roleInaccessible, '\u200b');
                 msg.edit(embed).catch(() => {});
                 ch.query('UPDATE giveawaysettings SET ended = $1 WHERE messageid = $2;', [
                   true,
@@ -98,7 +98,7 @@ module.exports = {
               if (reqGuild && reqGuild.id)
                 users = users.filter(async (u) => guild.members.fetch(u.id));
               else {
-                const embed = new Discord.MessageEmbed()
+                const embed = new Discord.UnsafeEmbed()
                   .setDescription(description)
                   .setTimestamp(new Date(+endat).toUTCString())
                   .setColor(guild.me.displayHexColor)
@@ -108,7 +108,7 @@ module.exports = {
                     Constants.standard.link,
                   )
                   .setFooter(language.ready.giveaway.endedAt)
-                  .addField(language.ready.giveaway.leftServer, '\u200b');
+                  .addFields(language.ready.giveaway.leftServer, '\u200b');
                 msg.edit(embed).catch(() => {});
                 ch.query('UPDATE giveawaysettings SET ended = $1 WHERE messageid = $2;', [
                   true,
@@ -124,7 +124,7 @@ module.exports = {
             .map((u) => msg.guild.members.fetch(u.id));
         }
         if (abort === false) {
-          const embed = new Discord.MessageEmbed()
+          const embed = new Discord.UnsafeEmbed()
             .setDescription(description)
             .setTimestamp(new Date(+endat).toUTCString())
             .setColor(guild.me.displayHexColor)
@@ -135,11 +135,11 @@ module.exports = {
             )
             .setFooter(language.ready.giveaway.endedAt);
           if (users && users.length) {
-            embed.addField(
+            embed.addFields(
               language.ready.giveaway.winners,
               users.map((w) => `<@${w.id}>`).join(', '),
             );
-            const winnerembed = new Discord.MessageEmbed()
+            const winnerembed = new Discord.UnsafeEmbed()
               .setColor(guild.me.displayHexColor)
               .setDescription(description)
               .setFooter(language.ready.giveaway.endAt)
@@ -149,7 +149,7 @@ module.exports = {
               ch.stp(language.ready.giveaway.congraz, { usermap: users.map((w) => `<@${w.id}>`) }),
               winnerembed,
             );
-          } else embed.addField(language.ready.giveaway.noparticipants, '\u200b');
+          } else embed.addFields(language.ready.giveaway.noparticipants, '\u200b');
           msg.edit(embed).catch(() => {});
         }
         ch.query('UPDATE giveawaysettings SET ended = $1 WHERE messageid = $2;', [

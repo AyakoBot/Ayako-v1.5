@@ -13,31 +13,34 @@ module.exports = {
     const user = await msg.client.users.fetch(msg.args[0].replace(/\D+/g, '')).catch(() => {});
     if (!user) return msg.client.ch.reply(msg, msg.language.noUser);
     const warnNr = msg.args[1];
-    if (Number.isNaN(Number(warnNr)))
+    if (Number.isNaN(Number(warnNr))) {
       return msg.client.ch.reply(
         msg,
         msg.client.ch.stp(msg.language.noNumber, { arg: msg.args[1] ? msg.args[1] : '-' }),
       );
+    }
     const res = await msg.client.ch.query(
       'SELECT * FROM warns WHERE userid = $1 AND guildid = $2 ORDER BY dateofwarn ASC;',
       [user.id, msg.guild.id],
     );
-    if (!res || res.rowCount === 0)
+    if (!res || res.rowCount === 0) {
       return msg.client.ch.reply(msg, msg.client.ch.stp(msg.lan.noWarn, { number: warnNr }));
+    }
     res.rows.forEach((r, i) => {
       res.rows[i].row_number = i;
     });
     const warn = res.rows[warnNr];
-    if (!warn)
+    if (!warn) {
       return msg.client.ch.reply(msg, msg.client.ch.stp(msg.lan.noWarn, { number: warnNr }));
-    const embed = new Discord.MessageEmbed()
+    }
+    const embed = new Discord.UnsafeEmbed()
       .setDescription(msg.client.ch.stp(msg.lan.done, { number: warnNr, target: user }))
       .setColor(msg.client.constants.commands.edit.success)
       .setFooter({ text: msg.lan.warnIssue })
       .setTimestamp(Number(warn.dateofwarn));
     msg.client.ch.reply(msg, { embeds: [embed] });
 
-    const logEmbed = new Discord.MessageEmbed();
+    const logEmbed = new Discord.UnsafeEmbed();
     const con = msg.client.constants.commands.edit;
 
     if (warn.type === 'Warn') {
@@ -56,7 +59,7 @@ module.exports = {
             msgid: warn.msgid,
           }),
         })
-        .addFields(
+        .addFieldss([
           {
             name: msg.lan.date,
             value: `<t:${warn.dateofwarn.slice(0, -3)}:F> (<t:${warn.dateofwarn.slice(0, -3)}:R>)`,
@@ -77,7 +80,7 @@ module.exports = {
             value: `${msg.author.tag}\n\`${msg.author.username}\` (\`${msg.author.id}\`)`,
             inline: false,
           },
-        )
+        ])
         .setColor(con.log.color)
         .setFooter({ text: msg.lan.warnID + warn.row_number });
     } else if (warn.type === 'Mute') {
@@ -92,7 +95,7 @@ module.exports = {
             msgid: warn.msgid,
           }),
         })
-        .addFields(
+        .addFieldss([
           {
             name: msg.lan.date,
             value: `<t:${warn.dateofwarn.slice(0, -3)}:F> (<t:${warn.dateofwarn.slice(0, -3)}:R>)`,
@@ -126,7 +129,7 @@ module.exports = {
             value: `${msg.author.tag}\n\`${msg.author.username}\` (\`${msg.author.id}\`)`,
             inline: false,
           },
-        )
+        ])
         .setColor(con.log.color)
         .setFooter({ text: msg.lan.warnID + warn.row_number });
     }

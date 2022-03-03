@@ -14,7 +14,7 @@ module.exports = {
         wordText += wordArr[i] + new Array(22 - wordArr[i].length).join(' ');
       }
     } else wordText = msg.language.none;
-    const embed = new Discord.MessageEmbed().addFields(
+    const embed = new Discord.UnsafeEmbed().addFieldss([
       {
         name: msg.lanSettings.active,
         value: `${
@@ -120,78 +120,78 @@ module.exports = {
           `${msg.client.ch.stp(msg.lan.banafter, { amount: r.banafter ? r.banafter : '--' })}`,
         inline: false,
       },
-    );
+    ]);
     return embed;
   },
   buttons(msg, r) {
-    const active = new Discord.MessageButton()
+    const active = new Discord.Button()
       .setCustomId(msg.lan.edit.active.name)
       .setLabel(msg.lanSettings.active)
-      .setStyle(r.active ? 'SUCCESS' : 'DANGER');
-    const wm = new Discord.MessageButton()
+      .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
+    const wm = new Discord.Button()
       .setCustomId(msg.lan.edit.warntof.name)
       .setLabel(msg.lan.warntof)
-      .setStyle(r.warntof ? 'SUCCESS' : 'DANGER');
-    const mm = new Discord.MessageButton()
+      .setStyle(r.warntof ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
+    const mm = new Discord.Button()
       .setCustomId(msg.lan.edit.mutetof.name)
       .setLabel(msg.lan.mutetof)
-      .setStyle(r.mutetof ? 'SUCCESS' : 'DANGER');
-    const km = new Discord.MessageButton()
+      .setStyle(r.mutetof ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
+    const km = new Discord.Button()
       .setCustomId(msg.lan.edit.kicktof.name)
       .setLabel(msg.lan.kicktof)
-      .setStyle(r.kicktof ? 'SUCCESS' : 'DANGER');
-    const bm = new Discord.MessageButton()
+      .setStyle(r.kicktof ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
+    const bm = new Discord.Button()
       .setCustomId(msg.lan.edit.bantof.name)
       .setLabel(msg.lan.bantof)
-      .setStyle(r.bantof ? 'SUCCESS' : 'DANGER');
-    const channel = new Discord.MessageButton()
+      .setStyle(r.bantof ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
+    const channel = new Discord.Button()
       .setCustomId(msg.lan.edit.bpchannelid.name)
       .setLabel(msg.lan.bpchannelid)
-      .setStyle('PRIMARY');
-    const user = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary);
+    const user = new Discord.Button()
       .setCustomId(msg.lan.edit.bpuserid.name)
       .setLabel(msg.lan.bpuserid)
-      .setStyle('PRIMARY');
-    const role = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary);
+    const role = new Discord.Button()
       .setCustomId(msg.lan.edit.bproleid.name)
       .setLabel(msg.lan.bproleid)
-      .setStyle('PRIMARY');
-    const maw = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary);
+    const maw = new Discord.Button()
       .setCustomId(msg.lan.edit.muteafter.name)
       .setLabel(
         msg.client.ch.stp(msg.lan.muteafter.replace(/\*/g, ''), {
           amount: r.muteafter ? r.muteafter : '--',
         }),
       )
-      .setStyle('SECONDARY');
-    const kaw = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Secondary);
+    const kaw = new Discord.Button()
       .setCustomId(msg.lan.edit.kickafter.name)
       .setLabel(
         msg.client.ch.stp(msg.lan.kickafter.replace(/\*/g, ''), {
           amount: r.kickafter ? r.kickafter : '--',
         }),
       )
-      .setStyle('SECONDARY');
-    const baw = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Secondary);
+    const baw = new Discord.Button()
       .setCustomId(msg.lan.edit.banafter.name)
       .setLabel(
         msg.client.ch.stp(msg.lan.banafter.replace(/\*/g, ''), {
           amount: r.banafter ? r.banafter : '--',
         }),
       )
-      .setStyle('SECONDARY');
-    const words = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Secondary);
+    const words = new Discord.Button()
       .setCustomId(msg.lan.edit.words.name)
       .setLabel(msg.lan.words.replace(/\*/g, ''))
-      .setStyle('PRIMARY');
-    const waw = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary);
+    const waw = new Discord.Button()
       .setCustomId(msg.lan.edit.warnafter.name)
       .setLabel(
         msg.client.ch.stp(msg.lan.warnafter.replace(/\*/g, ''), {
           amount: r.warnafter ? r.warnafter : '--',
         }),
       )
-      .setStyle('SECONDARY');
+      .setStyle(Discord.ButtonStyle.Secondary);
 
     return [
       [active, words],

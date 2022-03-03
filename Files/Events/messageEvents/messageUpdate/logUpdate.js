@@ -22,18 +22,18 @@ module.exports = {
         const language = await ch.languageSelector(guild);
         const con = Constants.messageUpdateLogUpdate;
         const lan = language.messageUpdateLogUpdate;
-        const embed = new Discord.MessageEmbed()
+        const embed = new Discord.UnsafeEmbed()
           .setColor(con.color)
           .setTimestamp()
           .setAuthor({
             name: lan.author.name,
             iconURL: con.author.image,
-            url: ch.stp(con.author.link, { msg: newMsg }),
+            url: newMsg.url,
           })
           .setDescription(
             ch.stp(lan.description, {
               msg: newMsg,
-              link: ch.stp(con.author.link, { msg: newMsg }),
+              link: newMsg.url,
             }),
           );
         const maxFieldSize = 1024;
@@ -43,10 +43,10 @@ module.exports = {
             const chunks = [];
             chunks.first = `${oldMsg.content.substr(0, maxFieldSize - 1)}\u2026`;
             chunks.last = `\u2026${oldMsg.content.substr(maxFieldSize - 1, maxFieldSize * 2)}`;
-            embed.addField(lan.oldContent, chunks.first);
-            embed.addField('\u200b', chunks.last);
+            embed.addFields({ name: lan.oldContent, value: chunks.first });
+            embed.addFields({ name: '\u200b', value: chunks.last });
           } else {
-            embed.addField(lan.oldContent, oldMsg.content);
+            embed.addFields({ name: lan.oldContent, value: oldMsg.content });
           }
         }
         if (newMsg.content) {
@@ -55,10 +55,10 @@ module.exports = {
             const chunks = [];
             chunks.first = `${newMsg.content.substr(0, maxFieldSize - 1)}\u2026`;
             chunks.last = `\u2026${newMsg.content.substr(maxFieldSize - 1, maxFieldSize * 2)}`;
-            embed.addField(lan.newContent, chunks.first);
-            embed.addField('\u200b', chunks.last);
+            embed.addFields({ name: lan.newContent, value: chunks.first });
+            embed.addFields({ name: '\u200b', value: chunks.last });
           } else {
-            embed.addField(lan.newContent, newMsg.content);
+            embed.addFields({ name: lan.newContent, value: newMsg.content });
           }
         }
         ch.send(channels, { embeds: [embed] });

@@ -16,25 +16,23 @@ module.exports = {
       returned = e.message;
     }
 
-    const embed = new Discord.MessageEmbed()
-      .setDescription(returned)
-      .addField(
-        '\u200b',
-        `${msg.language.Examples}: ${msg.client.ch.makeCodeBlock(
-          `t!stp {{msg.guild.name}}\nt!stp {{msg.author.username}}\nt!stp {{msg.channel.name}}`,
-        )}`,
-      );
+    const embed = new Discord.UnsafeEmbed().setDescription(returned).addFields({
+      name: '\u200b',
+      value: `${msg.language.Examples}: ${msg.client.ch.makeCodeBlock(
+        `t!stp {{msg.guild.name}}\nt!stp {{msg.author.username}}\nt!stp {{msg.channel.name}}`,
+      )}`,
+    });
 
-    const warn = new Discord.MessageButton()
+    const warn = new Discord.Button()
       .setCustomId('uselessbutton')
       .setLabel(msg.lan.warn)
-      .setStyle('DANGER')
+      .setStyle(Discord.ButtonStyle.Danger)
       .setDisabled(true);
 
-    const link = new Discord.MessageButton()
+    const link = new Discord.Button()
       .setURL('https://discord.js.org/#/docs/discord.js/stable/class/Message')
       .setLabel(msg.lan.button)
-      .setStyle('LINK');
+      .setStyle(Discord.ButtonStyle.Link);
 
     msg.client.ch.reply(msg, {
       embeds: [embed],

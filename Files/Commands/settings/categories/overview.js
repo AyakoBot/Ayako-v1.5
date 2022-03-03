@@ -9,9 +9,10 @@ module.exports = {
   displayEmbed(msg, r) {
     const small = `${msg.client.constants.emotes.small} ${msg.language.small}`;
     const big = `${msg.client.constants.emotes.big} ${msg.language.big}`;
-    if (r.prefix && r.prefix.startsWith('{"') && r.prefix.endsWith('"}'))
+    if (r.prefix && r.prefix.startsWith('{"') && r.prefix.endsWith('"}')) {
       r.prefix = r.prefix.slice(2, r.prefix.length - 2);
-    const embed = new Discord.MessageEmbed().addFields(
+    }
+    const embed = new Discord.UnsafeEmbed().addFieldss([
       {
         name: msg.lan.prefix,
         value: `\`${msg.client.constants.standard.prefix}\` ${r.prefix ? `/ \`${r.prefix}\`` : ''}`,
@@ -36,22 +37,22 @@ module.exports = {
         } | ${msg.language.languages[r.lan].status}`,
         inline: true,
       },
-    );
+    ]);
     return embed;
   },
   buttons(msg) {
-    const prefix = new Discord.MessageButton()
+    const prefix = new Discord.Button()
       .setCustomId(msg.lan.edit.prefix.name)
       .setLabel(msg.lan.prefix)
-      .setStyle('SUCCESS');
-    const interactionsmode = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary);
+    const interactionsmode = new Discord.Button()
       .setCustomId(msg.lan.edit.interactionsmode.name)
       .setLabel(msg.lan.interactionsmode)
-      .setStyle('SECONDARY');
-    const language = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Secondary);
+    const language = new Discord.Button()
       .setCustomId(msg.lan.edit.lan.name)
       .setLabel(msg.lan.lan)
-      .setStyle('SECONDARY');
+      .setStyle(Discord.ButtonStyle.Secondary);
     return [[prefix, interactionsmode, language]];
   },
 };

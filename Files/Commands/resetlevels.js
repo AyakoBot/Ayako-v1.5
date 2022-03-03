@@ -39,7 +39,7 @@ module.exports = {
       );
     }
 
-    const embed = new Discord.MessageEmbed()
+    const embed = new Discord.UnsafeEmbed()
       .setDescription(msg.client.ch.stp(msg.lan.reset, { amount: res.rowCount }))
       .setColor(msg.client.constants.colors.success)
       .setAuthor({
@@ -53,17 +53,17 @@ module.exports = {
 };
 
 const areYouSure = async (msg, all, user) => {
-  const tick = new Discord.MessageButton()
+  const tick = new Discord.Button()
     .setEmoji(msg.client.constants.emotes.tick)
     .setCustomId('yes')
-    .setStyle('DANGER');
+    .setStyle(Discord.ButtonStyle.Danger);
 
-  const cross = new Discord.MessageButton()
+  const cross = new Discord.Button()
     .setEmoji(msg.client.constants.emotes.cross)
     .setCustomId('no')
-    .setStyle('SUCCESS');
+    .setStyle(Discord.ButtonStyle.Primary);
 
-  const embed = new Discord.MessageEmbed()
+  const embed = new Discord.UnsafeEmbed()
     .setDescription(all ? msg.lan.sureAll : msg.client.ch.stp(msg.lan.sureUser, { user }))
     .setColor(msg.client.constants.colors.warning)
     .setAuthor({

@@ -42,17 +42,18 @@ module.exports = {
             collected.first().embeds.forEach(async (embed) => {
               if (embed.description.includes(' has gifted ')) {
                 const PaidRole = msg.guild.roles.cache.find((role) => role.name === rolename);
-                if (!PaidRole)
+                if (!PaidRole) {
                   return msg.client.ch.reply(msg, 'Something is wrong with the Role you entered');
-                const successEmbed = new Discord.MessageEmbed()
+                }
+                const successEmbed = new Discord.UnsafeEmbed()
                   .setDescription(`Congraz! You now have the ${PaidRole} role`)
-                  .setColor('#b0ff00');
+                  .setColor(msg.client.constants.standard.color);
                 msg.member.roles.add(PaidRole).catch(() => {});
                 msg.client.ch.reply(msg, { embeds: [successEmbed] });
               } else {
-                const successEmbed = new Discord.MessageEmbed()
+                const successEmbed = new Discord.UnsafeEmbed()
                   .setDescription('Seems like something went wrong')
-                  .setColor('#b0ff00');
+                  .setColor(msg.client.constants.standard.color);
                 msg.client.ch.reply(msg, { embeds: [successEmbed] });
               }
               return null;

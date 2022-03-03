@@ -84,7 +84,7 @@ module.exports = {
     const descF = [];
 
     if (uniqueUsers.length !== 0) {
-      const replyEmbed = new Discord.MessageEmbed()
+      const replyEmbed = new Discord.UnsafeEmbed()
         .setColor(con.success)
         .setDescription(msg.lan.descS)
         .setAuthor({
@@ -104,7 +104,7 @@ module.exports = {
       uniqueUsers.forEach(async (user, i) => {
         const ban = await msg.guild.bans
           .create(user, {
-            days: 1,
+            deleteMessageDays: 1,
             reason: msg.client.ch.stp(msg.lan.banReason, { user: msg.author, reason: banreason }),
           })
           .catch(() => {
@@ -150,7 +150,7 @@ module.exports = {
     }
 
     if (uniqueFails.length !== 0) {
-      const replyEmbed = new Discord.MessageEmbed()
+      const replyEmbed = new Discord.UnsafeEmbed()
         .setColor(con.fail)
         .setDescription(msg.lan.descF)
         .setAuthor({
@@ -203,7 +203,7 @@ module.exports = {
 
     const interval = jobs.scheduleJob('*/1 * * * * *', () => {
       if (uniqueUsers.length === descS.length && uniqueFails.length === descF.length) {
-        const logembed = new Discord.MessageEmbed()
+        const logembed = new Discord.UnsafeEmbed()
           .setAuthor({
             name: msg.client.ch.stp(msg.lan.log.desc, { amount: uniqueUsers.length }),
             iconURL: msg.client.constants.guildBanAdd.author.image,
@@ -215,7 +215,7 @@ module.exports = {
               amount: uniqueUsers.length,
             }),
           )
-          .addField(msg.language.reason, banreason)
+          .addFields({ name: msg.language.reason, value: banreason })
           .setColor(con.log.color)
           .setTimestamp();
 

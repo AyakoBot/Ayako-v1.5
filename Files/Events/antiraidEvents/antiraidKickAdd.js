@@ -29,7 +29,7 @@ module.exports = {
       const language = await guild.client.ch.languageSelector(guild);
       const lan = language.antiraid.kickAdd;
 
-      const embed = new Discord.MessageEmbed()
+      const embed = new Discord.UnsafeEmbed()
         .setColor(con.color)
         .setAuthor({
           name: guild.client.ch.stp(lan.author, {
@@ -41,7 +41,7 @@ module.exports = {
           url: guild.client.constants.standard.invite,
         })
         .setTimestamp()
-        .addField(language.reason, `${reason}`);
+        .addFields({ name: language.reason, value: `${reason}` });
 
       res.rows[0].modlogs.forEach((logChannel) => {
         const channel = guild.channels.cache.get(logChannel);

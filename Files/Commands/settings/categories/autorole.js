@@ -6,7 +6,7 @@ module.exports = {
   finished: true,
   category: ['automation'],
   displayEmbed(msg, r) {
-    const embed = new Discord.MessageEmbed().addFields(
+    const embed = new Discord.UnsafeEmbed().addFieldss([
       {
         name: `${msg.lanSettings.active}`,
         value: `${
@@ -43,26 +43,26 @@ module.exports = {
         }`,
         inline: false,
       },
-    );
+    ]);
     return embed;
   },
   buttons(msg, r) {
-    const active = new Discord.MessageButton()
+    const active = new Discord.Button()
       .setCustomId(msg.lan.edit.active.name)
       .setLabel(msg.lanSettings.active)
-      .setStyle(r.active ? 'SUCCESS' : 'DANGER');
-    const bot = new Discord.MessageButton()
+      .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
+    const bot = new Discord.Button()
       .setCustomId(msg.lan.edit.botRole.name)
       .setLabel(msg.lan.botRole)
-      .setStyle('PRIMARY');
-    const user = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary);
+    const user = new Discord.Button()
       .setCustomId(msg.lan.edit.userRole.name)
       .setLabel(msg.lan.userRole)
-      .setStyle('PRIMARY');
-    const all = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary);
+    const all = new Discord.Button()
       .setCustomId(msg.lan.edit.allRole.name)
       .setLabel(msg.lan.allRole)
-      .setStyle('PRIMARY');
+      .setStyle(Discord.ButtonStyle.Primary);
     return [[active], [bot, user, all]];
   },
 };

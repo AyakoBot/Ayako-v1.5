@@ -35,12 +35,12 @@ module.exports = {
     const Objects = {
       edit: 'menu',
       category: null,
-      embed: existingEmbed ? new Discord.MessageEmbed(existingEmbed) : new Discord.MessageEmbed(),
+      embed: existingEmbed ? new Discord.Embed(existingEmbed) : new Discord.UnsafeEmbed(),
       page: page || 1,
       options,
     };
 
-    const embed = new Discord.MessageEmbed()
+    const embed = new Discord.UnsafeEmbed()
       .setAuthor({
         name: msg.language.commands.embedbuilder.author,
         iconURL: msg.client.constants.commands.embedbuilder.author,
@@ -50,9 +50,9 @@ module.exports = {
       .setColor(msg.client.ch.colorSelector(msg.guild.me));
 
     if (Objects.options) {
-      embed.addField(
-        msg.language.commands.embedbuilder.replacedOptions,
-        `${Objects.options
+      embed.addFields({
+        name: msg.language.commands.embedbuilder.replacedOptions,
+        value: `${Objects.options
           .map((o) =>
             msg.client.ch.stp(msg.language.commands.embedbuilder.replacedOptionsDescription, {
               option: o[0],
@@ -60,7 +60,7 @@ module.exports = {
             }),
           )
           .join('\n')}`,
-      );
+      });
     }
 
     const components = await getComponents(msg, { page, Objects });
@@ -80,9 +80,9 @@ const replier = async ({ msg, answer }, { embeds, components, content, files }, 
   let finishedEmbed;
   if (Objects) {
     if (cantBeSent(Objects)) {
-      finishedEmbed = new Discord.MessageEmbed()
+      finishedEmbed = new Discord.UnsafeEmbed()
         .setDescription(msg.language.commands.embedbuilder.warns.noValue)
-        .setColor('FF0000')
+        .setColor(16711680)
         .setThumbnail(msg.client.constants.commands.embedbuilder.error);
 
       const saveButton =
@@ -132,10 +132,6 @@ const validate = (type, embed, constants) => {
 
     limits.totalOf.forEach((limit) => {
       switch (limit) {
-        default: {
-          total += embed[type]?.length;
-          break;
-        }
         case 'field-names': {
           embed.fieldNames?.forEach((field) => {
             total += field.name.length;
@@ -144,11 +140,15 @@ const validate = (type, embed, constants) => {
           break;
         }
         case 'footer-text': {
-          total += embed.footer?.name?.length;
+          total += embed.footer?.name?.length || 0;
           break;
         }
         case 'author-name': {
-          total += embed.author?.name?.length;
+          total += embed.author?.name?.length || 0;
+          break;
+        }
+        default: {
+          total += embed[type]?.length || 0;
           break;
         }
       }
@@ -158,9 +158,6 @@ const validate = (type, embed, constants) => {
   }
 
   switch (type) {
-    default: {
-      return embed[type]?.length >= limits.fields[type];
-    }
     case 'author-name': {
       return embed.author?.name?.length >= limits.fields[type];
     }
@@ -178,6 +175,9 @@ const validate = (type, embed, constants) => {
       if (failed.lenght) return failed;
       return true;
     }
+    default: {
+      return embed[type]?.length >= limits.fields[type];
+    }
   }
 };
 
@@ -187,106 +187,103 @@ const getComponents = async (msg, { page, Objects }, editing) => {
   const baseLan = msg.language.commands.embedbuilder;
 
   switch (page) {
-    default: {
-      break;
-    }
     case 1: {
-      let authorNameStyle = Objects.embed.author?.name ? 'SECONDARY' : 'PRIMARY';
+      let authorNameStyle = Objects.embed.author?.name ? Discord.ButtonStyle.Secondary : Discord.ButtonStyle.Primary;
       authorNameStyle = validate('author-name', Objects.embed, msg.client.constants)
-        ? 'DANGER'
+        ? Discord.ButtonStyle.Danger
         : authorNameStyle;
-      if (editing === 'author-name') authorNameStyle = 'SUCCESS';
+      if (editing === 'author-name') authorNameStyle = Discord.ButtonStyle.Success;
 
-      let titleStyle = Objects.embed.title ? 'SECONDARY' : 'PRIMARY';
-      titleStyle = validate('title', Objects.embed, msg.client.constants) ? 'DANGER' : titleStyle;
-      if (editing === 'title') titleStyle = 'SUCCESS';
+      let titleStyle = Objects.embed.title ? Discord.ButtonStyle.Secondary : Discord.ButtonStyle.Primary;
+      titleStyle = validate('title', Objects.embed, msg.client.constants) ? Discord.ButtonStyle.Danger : titleStyle;
+      if (editing === 'title') titleStyle = Discord.ButtonStyle.Success;
 
-      let descriptionStyle = Objects.embed.description ? 'SECONDARY' : 'PRIMARY';
+      let descriptionStyle = Objects.embed.description ? Discord.ButtonStyle.Secondary : Discord.ButtonStyle.Primary;
       descriptionStyle = validate('description', Objects.embed, msg.client.constants)
-        ? 'DANGER'
+        ? Discord.ButtonStyle.Danger
         : descriptionStyle;
-      if (editing === 'description') descriptionStyle = 'SUCCESS';
+      if (editing === 'description') descriptionStyle = Discord.ButtonStyle.Success;
 
-      let footerTextStyle = Objects.embed.footer?.text ? 'SECONDARY' : 'PRIMARY';
+      let footerTextStyle = Objects.embed.footer?.text ? Discord.ButtonStyle.Secondary : Discord.ButtonStyle.Primary;
       footerTextStyle = validate('footer-text', Objects.embed, msg.client.constants)
-        ? 'DANGER'
+        ? Discord.ButtonStyle.Danger
         : footerTextStyle;
-      if (editing === 'footer-text') footerTextStyle = 'SUCCESS';
+      if (editing === 'footer-text') footerTextStyle = Discord.ButtonStyle.Success;
 
-      let authorIconUrlStyle = Objects.embed.author?.iconURL ? 'SECONDARY' : 'PRIMARY';
-      if (editing === 'author-iconURL') authorIconUrlStyle = 'SUCCESS';
+      let authorIconUrlStyle = Objects.embed.author?.iconURL ? Discord.ButtonStyle.Secondary : Discord.ButtonStyle.Primary;
+      if (editing === 'author-iconURL') authorIconUrlStyle = Discord.ButtonStyle.Success;
 
-      let authorUrlStyle = Objects.embed.author?.url ? 'SECONDARY' : 'PRIMARY';
-      if (editing === 'author-url') authorUrlStyle = 'SUCCESS';
+      let authorUrlStyle = Objects.embed.author?.url ? Discord.ButtonStyle.Secondary : Discord.ButtonStyle.Primary;
+      if (editing === 'author-url') authorUrlStyle = Discord.ButtonStyle.Success;
 
-      let urlStyle = Objects.embed.url ? 'SECONDARY' : 'PRIMARY';
-      if (editing === 'url') urlStyle = 'SUCCESS';
+      let urlStyle = Objects.embed.url ? Discord.ButtonStyle.Secondary : Discord.ButtonStyle.Primary;
+      if (editing === 'url') urlStyle = Discord.ButtonStyle.Success;
 
-      let thumbnailStyle = Objects.embed.thumbnail?.url ? 'SECONDARY' : 'PRIMARY';
-      if (editing === 'thumbnail') thumbnailStyle = 'SUCCESS';
+      let thumbnailStyle = Objects.embed.thumbnail?.url ? Discord.ButtonStyle.Secondary : Discord.ButtonStyle.Primary;
+      if (editing === 'thumbnail') thumbnailStyle = Discord.ButtonStyle.Success;
 
-      let imageStyle = Objects.embed.image?.url ? 'SECONDARY' : 'PRIMARY';
-      if (editing === 'image') imageStyle = 'SUCCESS';
+      let imageStyle = Objects.embed.image?.url ? Discord.ButtonStyle.Secondary : Discord.ButtonStyle.Primary;
+      if (editing === 'image') imageStyle = Discord.ButtonStyle.Success;
 
-      let footerIconUrlStyle = Objects.embed.footer?.iconURL ? 'SECONDARY' : 'PRIMARY';
-      if (editing === 'footer-iconURL') footerIconUrlStyle = 'SUCCESS';
+      let footerIconUrlStyle = Objects.embed.footer?.iconURL ? Discord.ButtonStyle.Secondary : Discord.ButtonStyle.Primary;
+      if (editing === 'footer-iconURL') footerIconUrlStyle = Discord.ButtonStyle.Success;
 
-      let colorStyle = Objects.embed.color ? 'SECONDARY' : 'PRIMARY';
-      if (editing === 'color') colorStyle = 'SUCCESS';
+      let colorStyle = Objects.embed.color ? Discord.ButtonStyle.Secondary : Discord.ButtonStyle.Primary;
+      if (editing === 'color') colorStyle = Discord.ButtonStyle.Success;
 
-      let timestampStyle = Objects.embed.timestamp ? 'SECONDARY' : 'PRIMARY';
-      if (editing === 'timestamp') timestampStyle = 'SUCCESS';
+      let timestampStyle = Objects.embed.timestamp ? Discord.ButtonStyle.Secondary : Discord.ButtonStyle.Primary;
+      if (editing === 'timestamp') timestampStyle = Discord.ButtonStyle.Success;
 
       components.push(
         [
-          new Discord.MessageButton()
+          new Discord.Button()
             .setCustomId('author-name')
             .setLabel(lan['author-name'].name)
             .setStyle(authorNameStyle),
-          new Discord.MessageButton()
+          new Discord.Button()
             .setCustomId('author-iconURL')
             .setLabel(lan['author-iconURL'].name)
             .setStyle(authorIconUrlStyle),
-          new Discord.MessageButton()
+          new Discord.Button()
             .setCustomId('author-url')
             .setLabel(lan['author-url'].name)
             .setStyle(authorUrlStyle),
         ],
         [
-          new Discord.MessageButton()
+          new Discord.Button()
             .setCustomId('title')
             .setLabel(lan.title.name)
             .setStyle(titleStyle),
-          new Discord.MessageButton().setCustomId('url').setLabel(lan.url.name).setStyle(urlStyle),
-          new Discord.MessageButton()
+          new Discord.Button().setCustomId('url').setLabel(lan.url.name).setStyle(urlStyle),
+          new Discord.Button()
             .setCustomId('description')
             .setLabel(lan.description.name)
             .setStyle(descriptionStyle),
         ],
         [
-          new Discord.MessageButton()
+          new Discord.Button()
             .setCustomId('thumbnail')
             .setLabel(lan.thumbnail.name)
             .setStyle(thumbnailStyle),
-          new Discord.MessageButton()
+          new Discord.Button()
             .setCustomId('image')
             .setLabel(lan.image.name)
             .setStyle(imageStyle),
-          new Discord.MessageButton()
+          new Discord.Button()
             .setCustomId('color')
             .setLabel(lan.color.name)
             .setStyle(colorStyle),
         ],
         [
-          new Discord.MessageButton()
+          new Discord.Button()
             .setCustomId('footer-text')
             .setLabel(lan['footer-text'].name)
             .setStyle(footerTextStyle),
-          new Discord.MessageButton()
+          new Discord.Button()
             .setCustomId('footer-iconURL')
             .setLabel(lan['footer-iconURL'].name)
             .setStyle(footerIconUrlStyle),
-          new Discord.MessageButton()
+          new Discord.Button()
             .setCustomId('timestamp')
             .setLabel(lan.timestamp.name)
             .setStyle(timestampStyle),
@@ -305,22 +302,20 @@ const getComponents = async (msg, { page, Objects }, editing) => {
             .setDisabled(!Objects.embed.fields?.length)
             .addOptions(
               Objects.embed.fields?.length
-                ? Objects.embed.fields.map((field, i) => {
-                    return {
-                      label: field.name === '\u200b' ? msg.language.none : field.name.slice(0, 100),
-                      description:
-                        field.value === '\u200b' ? msg.language.none : field.value.slice(0, 100),
-                      value: `${i}`,
-                    };
-                  })
+                ? Objects.embed.fields.map((field, i) => ({
+                    label: field.name === '\u200b' ? msg.language.none : field.name.slice(0, 100),
+                    description:
+                      field.value === '\u200b' ? msg.language.none : field.value.slice(0, 100),
+                    value: `${i}`,
+                  }))
                 : { label: 'placeholder', value: 'placeholder' },
             ),
         ],
         [
-          new Discord.MessageButton()
+          new Discord.Button()
             .setCustomId('add-field')
-            .setLabel(baseLan.addField)
-            .setStyle('SUCCESS')
+            .setLabel(baseLan.addFields)
+            .setStyle(Discord.ButtonStyle.Primary)
             .setDisabled(Objects.embed.fields?.length === 25),
         ],
       );
@@ -329,35 +324,35 @@ const getComponents = async (msg, { page, Objects }, editing) => {
     case 3: {
       components.push(
         [
-          new Discord.MessageButton()
+          new Discord.Button()
             .setCustomId('inheritCode')
             .setLabel(baseLan.inheritCode)
-            .setStyle('PRIMARY'),
-          new Discord.MessageButton()
+            .setStyle(Discord.ButtonStyle.Primary),
+          new Discord.Button()
             .setCustomId('viewRaw')
             .setLabel(baseLan.viewRaw)
-            .setStyle('PRIMARY'),
+            .setStyle(Discord.ButtonStyle.Primary),
         ],
         [
-          new Discord.MessageButton()
+          new Discord.Button()
             .setCustomId('viewRawOtherMsg')
             .setLabel(baseLan.viewRawOtherMsg)
-            .setStyle('SECONDARY'),
+            .setStyle(Discord.ButtonStyle.Secondary),
         ],
         [
-          new Discord.MessageButton()
+          new Discord.Button()
             .setCustomId('save')
             .setLabel(baseLan.save)
-            .setStyle('PRIMARY')
+            .setStyle(Discord.ButtonStyle.Primary)
             .setDisabled(
               !(
                 msg.member.permissions.has(module.exports.insideCommandPerm) && !cantBeSent(Objects)
               ),
             ),
-          new Discord.MessageButton()
+          new Discord.Button()
             .setCustomId('send')
             .setLabel(baseLan.send)
-            .setStyle('PRIMARY')
+            .setStyle(Discord.ButtonStyle.Primary)
             .setDisabled(!(msg.command.name === module.exports.name && !cantBeSent(Objects))),
         ],
       );
@@ -373,99 +368,94 @@ const getComponents = async (msg, { page, Objects }, editing) => {
       );
       break;
     }
+    default: {
+      break;
+    }
   }
 
   components.push(getNavigation(msg, page));
   return components;
 };
 
-const getMenu = (savedEmbeds, baseLan, msg) => {
-  return [
-    new Discord.MessageSelectMenu()
-      .setCustomId('savedEmbedSelection')
-      .setMaxValues(1)
-      .setMinValues(1)
-      .setPlaceholder(baseLan.embedPlaceholder)
-      .setDisabled(
-        !savedEmbeds.length || !msg.member.permissions.has(module.exports.insideCommandPerm),
-      )
-      .addOptions(
-        savedEmbeds.length
-          ? savedEmbeds
-              .map((embed, i) => {
-                if (i < 25) {
-                  return {
-                    label: embed.name.slice(0, 100),
-                    value: `${embed.uniquetimestamp}`,
-                  };
-                }
-                return null;
-              })
-              .filter((r) => !!r)
-          : { label: 'placeholder', value: 'placeholder' },
-      ),
-  ];
-};
+const getMenu = (savedEmbeds, baseLan, msg) => [
+  new Discord.MessageSelectMenu()
+    .setCustomId('savedEmbedSelection')
+    .setMaxValues(1)
+    .setMinValues(1)
+    .setPlaceholder(baseLan.embedPlaceholder)
+    .setDisabled(
+      !savedEmbeds.length || !msg.member.permissions.has(module.exports.insideCommandPerm),
+    )
+    .addOptions(
+      savedEmbeds.length
+        ? savedEmbeds
+            .map((embed, i) => {
+              if (i < 25) {
+                return {
+                  label: embed.name.slice(0, 100),
+                  value: `${embed.uniquetimestamp}`,
+                };
+              }
+              return null;
+            })
+            .filter((r) => !!r)
+        : { label: 'placeholder', value: 'placeholder' },
+    ),
+];
 
-const getNavigation = (msg, page) => {
-  return [
-    new Discord.MessageButton()
-      .setLabel('\u200b')
-      .setCustomId('left')
-      .setStyle('SECONDARY')
-      .setEmoji(msg.client.constants.emotes.back)
-      .setDisabled(page === 1),
-    new Discord.MessageButton()
-      .setLabel('\u200b')
-      .setCustomId('cross')
-      .setStyle('DANGER')
-      .setEmoji(msg.client.constants.emotes.cross),
-    new Discord.MessageButton()
-      .setLabel('\u200b')
-      .setCustomId('right')
-      .setStyle('SECONDARY')
-      .setEmoji(msg.client.constants.emotes.forth)
-      .setDisabled(page === 4),
-  ];
-};
+const getNavigation = (msg, page) => [
+  new Discord.Button()
+    .setLabel('\u200b')
+    .setCustomId('left')
+    .setStyle(Discord.ButtonStyle.Secondary)
+    .setEmoji(msg.client.constants.emotes.back)
+    .setDisabled(page === 1),
+  new Discord.Button()
+    .setLabel('\u200b')
+    .setCustomId('cross')
+    .setStyle(Discord.ButtonStyle.Danger)
+    .setEmoji(msg.client.constants.emotes.cross),
+  new Discord.Button()
+    .setLabel('\u200b')
+    .setCustomId('right')
+    .setStyle(Discord.ButtonStyle.Secondary)
+    .setEmoji(msg.client.constants.emotes.forth)
+    .setDisabled(page === 4),
+];
 
-const getArrows = (msg, currentPage, maxPage) => {
-  return [
-    new Discord.MessageButton()
-      .setLabel('\u200b')
-      .setCustomId('prev')
-      .setStyle('DANGER')
-      .setEmoji(msg.client.constants.emotes.back)
-      .setDisabled(currentPage === 1 || !maxPage),
-    new Discord.MessageButton()
-      .setLabel('\u200b')
-      .setCustomId('next')
-      .setStyle('SUCCESS')
-      .setEmoji(msg.client.constants.emotes.forth)
-      .setDisabled(currentPage === maxPage || !maxPage),
-  ];
-};
+const getArrows = (msg, currentPage, maxPage) => [
+  new Discord.Button()
+    .setLabel('\u200b')
+    .setCustomId('prev')
+    .setStyle(Discord.ButtonStyle.Danger)
+    .setEmoji(msg.client.constants.emotes.back)
+    .setDisabled(currentPage === 1 || !maxPage),
+  new Discord.Button()
+    .setLabel('\u200b')
+    .setCustomId('next')
+    .setStyle(Discord.ButtonStyle.Primary)
+    .setEmoji(msg.client.constants.emotes.forth)
+    .setDisabled(currentPage === maxPage || !maxPage),
+];
 
-const getOtherButtons = (baseLan) => {
-  return [
-    new Discord.MessageButton()
-      .setCustomId('inheritFromSavedEmbed')
-      .setLabel(baseLan.inheritFromSavedEmbed)
-      .setStyle('PRIMARY')
-      .setDisabled(true),
-    new Discord.MessageButton()
-      .setCustomId('deleteSavedEmbed')
-      .setLabel(baseLan.deleteSavedEmbed)
-      .setStyle('PRIMARY')
-      .setDisabled(true),
-  ];
-};
+const getOtherButtons = (baseLan) => [
+  new Discord.Button()
+    .setCustomId('inheritFromSavedEmbed')
+    .setLabel(baseLan.inheritFromSavedEmbed)
+    .setStyle(Discord.ButtonStyle.Primary)
+    .setDisabled(true),
+  new Discord.Button()
+    .setCustomId('deleteSavedEmbed')
+    .setLabel(baseLan.deleteSavedEmbed)
+    .setStyle(Discord.ButtonStyle.Primary)
+    .setDisabled(true),
+];
 
 const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, components }) => {
   const reply = async (editing, interaction) => {
     const lang = msg.language.commands.embedbuilder.edit[editing];
 
-    const recommendedEmbed = new Discord.MessageEmbed()
+    const recommendedEmbed = new Discord.UnsafeEmbed()
       .setAuthor({
         name: msg.language.commands.embedbuilder.author,
         iconURL: msg.client.constants.commands.embedbuilder.author,
@@ -475,9 +465,9 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
       .setDescription(lang.answers);
 
     if (Objects.options) {
-      recommendedEmbed.addField(
-        msg.language.commands.embedbuilder.replacedOptions,
-        `${Objects.options
+      recommendedEmbed.addFields({
+        name: msg.language.commands.embedbuilder.replacedOptions,
+        value: `${Objects.options
           .map((o) =>
             msg.client.ch.stp(msg.language.commands.embedbuilder.replacedOptionsDescription, {
               option: o[0],
@@ -485,11 +475,11 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
             }),
           )
           .join('\n')}`,
-      );
+      });
     }
 
     if (lang.recommended) {
-      recommendedEmbed.addField('\u200b', lang.recommended);
+      recommendedEmbed.addFields({ name: '\u200b', value: lang.recommended });
     }
 
     await replier(
@@ -519,10 +509,6 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
 
       editing = interaction.customId;
       switch (editing) {
-        default: {
-          reply(editing, interaction);
-          break;
-        }
         case 'deleteSavedEmbed': {
           buttonsCollector.stop();
           messageCollector.stop();
@@ -589,7 +575,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           messageCollector.stop();
           buttonsCollector.stop();
 
-          const inheritCodeEmbed = new Discord.MessageEmbed().setDescription(
+          const inheritCodeEmbed = new Discord.UnsafeEmbed().setDescription(
             lan.inheritCodeDescription,
           );
 
@@ -615,7 +601,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
                   )),
               );
 
-              Objects.embed = new Discord.MessageEmbed(code);
+              Objects.embed = new Discord.Embed(code);
               inheritCodeEmbedMessageCollector.stop();
               resolve(
                 await module.exports.builder(msg, answer, Objects.embed, null, Objects.options),
@@ -661,7 +647,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           break;
         }
         case 'add-field': {
-          Objects.embed.addField('\u200b', '\u200b', false);
+          Objects.embed.addFields({ name: '\u200b', value: '\u200b', inline: false });
 
           messageCollector.stop();
           buttonsCollector.stop();
@@ -686,6 +672,10 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           resolve(await fieldSelect(msg, interaction, Objects));
           break;
         }
+        default: {
+          reply(editing, interaction);
+          break;
+        }
       }
     });
 
@@ -700,16 +690,13 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
       messageCollector.resetTimer();
 
       switch (editing) {
-        default: {
-          break;
-        }
         case 'color': {
           const passesReg = colorReg.test(message.content);
 
           let e;
           if (passesReg) {
             try {
-              new Discord.MessageEmbed().setColor(message.content);
+              new Discord.UnsafeEmbed().setColor(message.content);
             } catch (err) {
               e = err;
             }
@@ -732,7 +719,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           let e;
           if (!passesLength) {
             try {
-              new Discord.MessageEmbed().setTitle(message.content);
+              new Discord.UnsafeEmbed().setTitle(message.content);
             } catch (err) {
               e = err;
             }
@@ -762,7 +749,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           let e;
           if (!isUrl) {
             try {
-              new Discord.MessageEmbed().setURL(message.content);
+              new Discord.UnsafeEmbed().setURL(message.content);
             } catch (err) {
               e = err;
             }
@@ -785,7 +772,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           let e;
           if (!passesLength) {
             try {
-              new Discord.MessageEmbed().setAuthor({ name: message.content });
+              new Discord.UnsafeEmbed().setAuthor({ name: message.content });
             } catch (err) {
               e = err;
             }
@@ -819,7 +806,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           let e;
           if (!isUrl) {
             try {
-              new Discord.MessageEmbed().setAuthor({
+              new Discord.UnsafeEmbed().setAuthor({
                 name: '\u200b',
                 iconURL: message.content,
               });
@@ -859,7 +846,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           let e;
           if (!isUrl) {
             try {
-              new Discord.MessageEmbed().setAuthor({ name: '\u200b', url: message.content });
+              new Discord.UnsafeEmbed().setAuthor({ name: '\u200b', url: message.content });
             } catch (err) {
               e = err;
             }
@@ -886,7 +873,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
         case 'description': {
           let e;
           try {
-            new Discord.MessageEmbed().setDescription(message.content);
+            new Discord.UnsafeEmbed().setDescription(message.content);
           } catch (err) {
             e = err;
           }
@@ -912,7 +899,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           let e;
           if (!isUrl) {
             try {
-              new Discord.MessageEmbed().setImage(message.content);
+              new Discord.UnsafeEmbed().setImage(message.content);
             } catch (err) {
               e = err;
             }
@@ -942,7 +929,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           let e;
           if (!isUrl) {
             try {
-              new Discord.MessageEmbed().setThumbnail(message.content);
+              new Discord.UnsafeEmbed().setThumbnail(message.content);
             } catch (err) {
               e = err;
             }
@@ -972,7 +959,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
 
             let e;
             try {
-              new Discord.MessageEmbed().setTimestamp(message.content);
+              new Discord.UnsafeEmbed().setTimestamp(message.content);
             } catch (err) {
               e = err;
             }
@@ -994,7 +981,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
         case 'footer-text': {
           let e;
           try {
-            new Discord.MessageEmbed().setFooter({ text: message.content });
+            new Discord.UnsafeEmbed().setFooter({ text: message.content });
           } catch (err) {
             e = err;
           }
@@ -1023,7 +1010,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           let e;
           if (!isUrl) {
             try {
-              new Discord.MessageEmbed().setFooter({
+              new Discord.UnsafeEmbed().setFooter({
                 text: '\u200b',
                 iconURL: message.content,
               });
@@ -1049,6 +1036,9 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           });
           break;
         }
+        default: {
+          break;
+        }
       }
 
       await replier(
@@ -1071,16 +1061,16 @@ const postCode = (Objects, msg, answer, embed, noRemove) => {
   if (noRemove) {
     components = msg.client.ch.buttonRower([
       [
-        new Discord.MessageButton()
+        new Discord.Button()
           .setLabel('\u200b')
-          .setStyle('PRIMARY')
+          .setStyle(Discord.ButtonStyle.Primary)
           .setEmoji(msg.client.constants.emotes.back)
           .setCustomId('back'),
       ],
     ]);
   }
 
-  const rawCode = new Discord.MessageEmbed(Objects.embed).toJSON();
+  const rawCode = new Discord.Embed(Objects.embed).toJSON();
   if (rawCode.length > 4000) {
     const attachment = msg.client.ch.txtFileWriter([rawCode]);
 
@@ -1089,16 +1079,16 @@ const postCode = (Objects, msg, answer, embed, noRemove) => {
     const embeds = [];
     if (embed) embeds.push(embed);
     embeds.push(
-      new Discord.MessageEmbed()
+      new Discord.UnsafeEmbed()
         .setAuthor({
           name: msg.language.commands.embedbuilder.author,
           iconURL: msg.client.constants.commands.embedbuilder.author,
           url: msg.client.constants.standard.invite,
         })
         .setDescription(msg.client.ch.makeCodeBlock(JSON.stringify(rawCode, null, 1)))
-        .setColor('ffffff')
+        .setColor(16777215)
         .setTitle(msg.language.commands.embedbuilder.unsaved)
-        .addField('\u200b', msg.language.commands.embedbuilder.unsavedFieldValue),
+        .addFields({ name: '\u200b', value: msg.language.commands.embedbuilder.unsavedFieldValue }),
     );
 
     replier(
@@ -1141,13 +1131,13 @@ const postCode = (Objects, msg, answer, embed, noRemove) => {
 
 const handleSave = async (msg, answer, Objects) => {
   const lan = msg.language.commands.embedbuilder;
-  const save = new Discord.MessageButton()
+  const save = new Discord.Button()
     .setCustomId('save')
     .setLabel(lan.save)
-    .setStyle('PRIMARY')
+    .setStyle(Discord.ButtonStyle.Primary)
     .setDisabled(true);
 
-  const embed = new Discord.MessageEmbed().setDescription(lan.giveName).setAuthor({
+  const embed = new Discord.UnsafeEmbed().setDescription(lan.giveName).setAuthor({
     name: msg.language.commands.embedbuilder.author,
     iconURL: msg.client.constants.commands.embedbuilder.author,
     url: msg.client.constants.standard.invite,
@@ -1161,10 +1151,10 @@ const handleSave = async (msg, answer, Objects) => {
     const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
     const messageCollector = msg.channel.createMessageCollector({ time: 60000 });
 
-    const back = new Discord.MessageButton()
+    const back = new Discord.Button()
       .setLabel('\u200b')
       .setEmoji(msg.client.constants.emotes.back)
-      .setStyle('PRIMARY')
+      .setStyle(Discord.ButtonStyle.Primary)
       .setCustomId('back');
 
     buttonsCollector.on('collect', async (interaction) => {
@@ -1184,14 +1174,17 @@ const handleSave = async (msg, answer, Objects) => {
 
       name = message.content.slice(0, 1024);
 
-      const newSave = new Discord.MessageButton()
+      const newSave = new Discord.Button()
         .setCustomId('save')
         .setLabel(lan.save)
-        .setStyle('PRIMARY')
+        .setStyle(Discord.ButtonStyle.Primary)
         .setDisabled(!name);
 
-      embed.fields.length = 0;
-      embed.addField(msg.language.name, `\u200b${message.content.slice(0, 1024)}`);
+      embed.fields = [];
+      embed.addFields({
+        name: msg.language.name,
+        value: `\u200b${message.content.slice(0, 1024)}`,
+      });
       message.delete().catch(() => {});
 
       await replier({ msg, answer }, { embeds: [embed], components: [newSave, back] }, Objects);
@@ -1242,7 +1235,12 @@ const handleSave = async (msg, answer, Objects) => {
         ],
       );
 
-      resolve({ embed: emb, answer: interaction, name, now });
+      resolve({
+        embed: emb,
+        answer: interaction,
+        name,
+        now,
+      });
     });
     buttonsCollector.on('end', (collected, reason) => {
       if (reason === 'time') {
@@ -1256,22 +1254,22 @@ const handleSave = async (msg, answer, Objects) => {
 
 const handleSend = async (msg, answer, Objects) => {
   const getButtons = (options) => {
-    const next = new Discord.MessageButton()
+    const next = new Discord.Button()
       .setCustomId('next')
       .setLabel(msg.language.next)
       .setDisabled(
         options.options.length > 25 && options.page === Math.ceil(options.options.length / 25),
       )
-      .setStyle('SUCCESS');
-    const prev = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary);
+    const prev = new Discord.Button()
       .setCustomId('prev')
       .setLabel(msg.language.prev)
       .setDisabled(options.page === 1)
-      .setStyle('DANGER');
-    const send = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Danger);
+    const send = new Discord.Button()
       .setCustomId('send')
       .setLabel(msg.language.commands.embedbuilder.send)
-      .setStyle('PRIMARY');
+      .setStyle(Discord.ButtonStyle.Primary);
     const channels = new Discord.MessageSelectMenu()
       .setCustomId('channels')
       .addOptions(options.take)
@@ -1283,7 +1281,7 @@ const handleSend = async (msg, answer, Objects) => {
   };
 
   const getEmbed = (options) => {
-    const embed = new Discord.MessageEmbed()
+    const embed = new Discord.UnsafeEmbed()
       .setAuthor({
         name: msg.language.commands.embedbuilder.author,
         iconURL: msg.client.constants.commands.embedbuilder.author,
@@ -1296,7 +1294,10 @@ const handleSend = async (msg, answer, Objects) => {
             : msg.language.none
         }`,
       )
-      .addField(msg.language.page, `\`${options.page}/${Math.ceil(options.options.length / 25)}\``);
+      .addFields({
+        name: msg.language.page,
+        value: `\`${options.page}/${Math.ceil(options.options.length / 25)}\``,
+      });
 
     return embed;
   };
@@ -1314,9 +1315,7 @@ const handleSend = async (msg, answer, Objects) => {
         ].includes(c.type),
       )
       .sort((a, b) => a.rawPosition - b.rawPosition)
-      .map((c) => {
-        return { label: `${c.name}`, value: `${c.id}` };
-      }),
+      .map((c) => ({ label: `${c.name}`, value: `${c.id}` })),
     selected: [],
   };
 
@@ -1344,17 +1343,6 @@ const handleSend = async (msg, answer, Objects) => {
     buttonsCollector.resetTimer();
 
     switch (interaction.customId) {
-      default: {
-        interaction.values.forEach((v) => {
-          if (options.selected.includes(v)) {
-            const index = options.selected.indexOf(v);
-            options.selected.splice(index, 1);
-          } else {
-            options.selected.push(v);
-          }
-        });
-        break;
-      }
       case 'next': {
         options.page += 1;
         options.take.length = 0;
@@ -1383,7 +1371,7 @@ const handleSend = async (msg, answer, Objects) => {
         const errors = returns.filter((r) => r[1]);
         const successes = returns.filter((r) => !r[1]);
 
-        const embed = new Discord.MessageEmbed()
+        const embed = new Discord.UnsafeEmbed()
           .setAuthor({
             name: msg.language.commands.embedbuilder.author,
             iconURL: msg.client.constants.commands.embedbuilder.author,
@@ -1402,16 +1390,27 @@ const handleSend = async (msg, answer, Objects) => {
                     )
                     .join('\n')
                 : '',
-              successes.map((c) => {
-                return msg.client.ch.stp(`${msg.language.commands.embedbuilder.sendSuccess}`, {
+              successes.map((c) =>
+                msg.client.ch.stp(`${msg.language.commands.embedbuilder.sendSuccess}`, {
                   channel: `<#${c[0]}>`,
-                });
-              }))
+                }),
+              ))
             }`,
           );
 
         await replier({ msg, answer: interaction }, { embeds: [embed], components: [] }, Objects);
         return;
+      }
+      default: {
+        interaction.values.forEach((v) => {
+          if (options.selected.includes(v)) {
+            const index = options.selected.indexOf(v);
+            options.selected.splice(index, 1);
+          } else {
+            options.selected.push(v);
+          }
+        });
+        break;
       }
     }
 
@@ -1425,7 +1424,7 @@ const handleSend = async (msg, answer, Objects) => {
 
 const handleOtherMsgRaw = async (msg, answer, Objects) => {
   const noFound = () => {
-    const embed = new Discord.MessageEmbed()
+    const embed = new Discord.UnsafeEmbed()
       .setAuthor({
         name: msg.language.commands.embedbuilder.author,
         iconURL: msg.client.constants.commands.embedbuilder.author,
@@ -1436,22 +1435,22 @@ const handleOtherMsgRaw = async (msg, answer, Objects) => {
     return replier({ msg, answer }, { embeds: [embed], components: [] }, Objects);
   };
 
-  const embed = new Discord.MessageEmbed()
+  const embed = new Discord.UnsafeEmbed()
     .setAuthor({
       name: msg.language.commands.embedbuilder.author,
       iconURL: msg.client.constants.commands.embedbuilder.author,
       url: msg.client.constants.standard.invite,
     })
     .setDescription(msg.language.commands.embedbuilder.otherMsg)
-    .addField(
-      msg.language.Examples,
-      msg.client.constants.discordMsgUrls.map((url) => `\`${url}\``).join('\n'),
-    );
+    .addFields({
+      name: msg.language.Examples,
+      value: msg.client.constants.discordMsgUrls.map((url) => `\`${url}\``).join('\n'),
+    });
 
-  const back = new Discord.MessageButton()
+  const back = new Discord.Button()
     .setLabel('\u200b')
     .setEmoji(msg.client.constants.emotes.back)
-    .setStyle('PRIMARY')
+    .setStyle(Discord.ButtonStyle.Primary)
     .setCustomId('back');
 
   await replier({ msg, answer }, { embeds: [embed], components: [back] }, Objects);
@@ -1547,10 +1546,6 @@ const errorVal = async (msg, lan, valid, Objects, error, answer) => {
   let lanError;
 
   switch (error) {
-    default: {
-      lanError = error;
-      break;
-    }
     case 'regFail': {
       lanError = lan.regFail;
       break;
@@ -1563,17 +1558,21 @@ const errorVal = async (msg, lan, valid, Objects, error, answer) => {
       lanError = lan.noTimestamp;
       break;
     }
+    default: {
+      lanError = error;
+      break;
+    }
   }
 
-  const errorEmbed = new Discord.MessageEmbed()
+  const errorEmbed = new Discord.UnsafeEmbed()
     .setAuthor({
       name: msg.language.commands.embedbuilder.author,
       iconURL: msg.client.constants.commands.embedbuilder.author,
       url: msg.client.constants.standard.invite,
     })
     .setDescription(msg.language.commands.embedbuilder.errorVal)
-    .setColor('ff0000');
-  if (error) errorEmbed.addField(msg.language.error, `${lanError}`);
+    .setColor(16711680);
+  if (error) errorEmbed.addFields({ name: msg.language.error, value: `${lanError}` });
 
   await replier({ msg, answer }, { embeds: [errorEmbed], components: [] }, Objects);
 
@@ -1594,40 +1593,38 @@ const fieldSelect = async (msg, answer, Objects) => {
   const selected = Objects.embed.fields[index];
   let editing = 'name';
 
-  const getFieldComponents = () => {
-    return [
-      [
-        new Discord.MessageButton()
-          .setCustomId('remove-field')
-          .setLabel(baseLan.removeField)
-          .setStyle('DANGER'),
-      ],
-      [
-        new Discord.MessageButton()
-          .setCustomId('name')
-          .setLabel(baseLan.fieldName)
-          .setStyle(editing === 'name' ? 'PRIMARY' : 'SECONDARY'),
-        new Discord.MessageButton()
-          .setCustomId('value')
-          .setLabel(baseLan.fieldValue)
-          .setStyle(editing === 'value' ? 'PRIMARY' : 'SECONDARY'),
-        new Discord.MessageButton()
-          .setCustomId('inline')
-          .setLabel(baseLan.fieldInline)
-          .setStyle(selected.inline ? 'SUCCESS' : 'SECONDARY'),
-      ],
-      [
-        new Discord.MessageButton()
-          .setLabel('\u200b')
-          .setStyle('PRIMARY')
-          .setEmoji(msg.client.constants.emotes.back)
-          .setCustomId('back'),
-      ],
-    ];
-  };
+  const getFieldComponents = () => [
+    [
+      new Discord.Button()
+        .setCustomId('remove-field')
+        .setLabel(baseLan.removeField)
+        .setStyle(Discord.ButtonStyle.Danger),
+    ],
+    [
+      new Discord.Button()
+        .setCustomId('name')
+        .setLabel(baseLan.fieldName)
+        .setStyle(editing === 'name' ? Discord.ButtonStyle.Primary : Discord.ButtonStyle.Secondary),
+      new Discord.Button()
+        .setCustomId('value')
+        .setLabel(baseLan.fieldValue)
+        .setStyle(editing === 'value' ? Discord.ButtonStyle.Primary : Discord.ButtonStyle.Secondary),
+      new Discord.Button()
+        .setCustomId('inline')
+        .setLabel(baseLan.fieldInline)
+        .setStyle(selected.inline ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Secondary),
+    ],
+    [
+      new Discord.Button()
+        .setLabel('\u200b')
+        .setStyle(Discord.ButtonStyle.Primary)
+        .setEmoji(msg.client.constants.emotes.back)
+        .setCustomId('back'),
+    ],
+  ];
 
   const getEmbed = () => {
-    const baseEmbed = new Discord.MessageEmbed()
+    const baseEmbed = new Discord.UnsafeEmbed()
       .setAuthor({
         name: msg.language.commands.embedbuilder.author,
         iconURL: msg.client.constants.commands.embedbuilder.author,
@@ -1636,9 +1633,9 @@ const fieldSelect = async (msg, answer, Objects) => {
       .setDescription(baseLan.chooseTheEdit);
 
     if (Objects.options) {
-      baseEmbed.addField(
-        msg.language.commands.embedbuilder.replacedOptions,
-        `${Objects.options
+      baseEmbed.addFields({
+        name: msg.language.commands.embedbuilder.replacedOptions,
+        value: `${Objects.options
           .map((o) =>
             msg.client.ch.stp(msg.language.commands.embedbuilder.replacedOptionsDescription, {
               option: o[0],
@@ -1646,7 +1643,7 @@ const fieldSelect = async (msg, answer, Objects) => {
             }),
           )
           .join('\n')}`,
-      );
+      });
     }
 
     return baseEmbed;
@@ -1681,12 +1678,9 @@ const fieldSelect = async (msg, answer, Objects) => {
 
       message.delete().catch(() => {});
       switch (editing) {
-        default: {
-          break;
-        }
         case 'name': {
           try {
-            new Discord.MessageEmbed().addField(collected, '\u200b');
+            new Discord.UnsafeEmbed().addFields({ name: collected, value: '\u200b' });
             selected.name = collected;
           } catch (e) {
             msg.client.ch
@@ -1703,7 +1697,7 @@ const fieldSelect = async (msg, answer, Objects) => {
         }
         case 'value': {
           try {
-            new Discord.MessageEmbed().addField('\u200b', collected);
+            new Discord.UnsafeEmbed().addFields({ name: '\u200b', value: collected });
             selected.value = collected;
           } catch (e) {
             msg.client.ch
@@ -1718,6 +1712,9 @@ const fieldSelect = async (msg, answer, Objects) => {
           }
           break;
         }
+        default: {
+          break;
+        }
       }
 
       await replier(
@@ -1730,9 +1727,6 @@ const fieldSelect = async (msg, answer, Objects) => {
       buttonsCollector.resetTimer();
 
       switch (interaction.customId) {
-        default: {
-          break;
-        }
         case 'inline': {
           selected.inline = !selected.inline;
           break;
@@ -1762,6 +1756,9 @@ const fieldSelect = async (msg, answer, Objects) => {
           );
           break;
         }
+        default: {
+          break;
+        }
       }
 
       await replier(
@@ -1786,9 +1783,7 @@ const handleEmbedSelection = async ({ msg, answer }, Objects, { embed, component
   const embeds = await getSavedEmbeds(msg);
 
   const Options = {
-    options: embeds.map((e) => {
-      return { name: e.name.slice(0, 100), value: e.uniquetimestamp };
-    }),
+    options: embeds.map((e) => ({ name: e.name.slice(0, 100), value: e.uniquetimestamp })),
   };
   Options.page = Math.ceil(embeds.findIndex((e) => e.uniquetimestamp === answer.values[0]) / 25);
   if (Options.page === 0) Options.page = 1;
@@ -1816,21 +1811,16 @@ const handleEmbedSelection = async ({ msg, answer }, Objects, { embed, component
     )
     .addOptions(
       Options.take.length
-        ? Options.take.map((e) => {
-            return {
-              label: e.name.slice(0, 100),
-              value: `${e.value}`,
-              default: e.default,
-            };
-          })
+        ? Options.take.map((e) => ({
+            label: e.name.slice(0, 100),
+            value: `${e.value}`,
+            default: e.default,
+          }))
         : { label: 'placeholder', value: 'placeholder' },
     );
 
   const enableButtons = (customId, i, j) => {
     switch (customId) {
-      default: {
-        break;
-      }
       case newMenu.customId: {
         if (typeof j === 'number') {
           components[i][j] = newMenu;
@@ -1857,6 +1847,10 @@ const handleEmbedSelection = async ({ msg, answer }, Objects, { embed, component
             !msg.member.permissions.has(module.exports.insideCommandPerm),
           );
         }
+        break;
+      }
+      default: {
+        break;
       }
     }
   };
@@ -1937,9 +1931,7 @@ const handlePage = async ({ msg, answer }, Objects, { embed }, increasePage) => 
   });
 
   const Options = {
-    options: embeds.map((e) => {
-      return { name: e.name.slice(0, 100), value: e.uniquetimestamp };
-    }),
+    options: embeds.map((e) => ({ name: e.name.slice(0, 100), value: e.uniquetimestamp })),
   };
   Options.page = Math.ceil(
     embeds.findIndex((e) => e.uniquetimestamp === menu.options[10].value) / 25,
@@ -1967,13 +1959,11 @@ const handlePage = async ({ msg, answer }, Objects, { embed }, increasePage) => 
     )
     .addOptions(
       Options.take?.length
-        ? Options.take.map((e) => {
-            return {
-              label: e.name.slice(0, 100),
-              value: `${e.value}`,
-              default: e.default,
-            };
-          })
+        ? Options.take.map((e) => ({
+            label: e.name.slice(0, 100),
+            value: `${e.value}`,
+            default: e.default,
+          }))
         : { label: 'placeholder', value: 'placeholder' },
     );
 
@@ -1994,14 +1984,11 @@ const handlePage = async ({ msg, answer }, Objects, { embed }, increasePage) => 
   );
 };
 
-const cantBeSent = (Objects) => {
-  return (
-    !Objects.embed.title &&
-    (!Objects.embed.author || !Objects.embed.author.name) &&
-    !Objects.embed.description &&
-    (!Objects.embed.thumbnail || !Objects.embed.thumbnail.url) &&
-    !Objects.embed.fields?.length &&
-    (!Objects.embed.image || !Objects.embed.image.url) &&
-    (!Objects.embed.footer || !Objects.embed.footer.text)
-  );
-};
+const cantBeSent = (Objects) =>
+  !Objects.embed.title &&
+  (!Objects.embed.author || !Objects.embed.author.name) &&
+  !Objects.embed.description &&
+  (!Objects.embed.thumbnail || !Objects.embed.thumbnail.url) &&
+  !Objects.embed.fields?.length &&
+  (!Objects.embed.image || !Objects.embed.image.url) &&
+  (!Objects.embed.footer || !Objects.embed.footer.text);

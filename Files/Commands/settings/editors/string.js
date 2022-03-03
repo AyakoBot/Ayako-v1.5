@@ -16,11 +16,11 @@ module.exports = {
       doneDisabled = !insertedValues[required.assinger];
     }
 
-    const done = new Discord.MessageButton()
+    const done = new Discord.Button()
       .setCustomId('done')
       .setLabel(msg.language.done)
       .setDisabled(doneDisabled)
-      .setStyle('PRIMARY');
+      .setStyle(Discord.ButtonStyle.Primary);
 
     return [[done]];
   },
@@ -55,7 +55,7 @@ module.exports = {
 
     const selected = this.getSelected(msg, insertedValues, required, required.key);
 
-    const returnEmbed = new Discord.MessageEmbed().setDescription(
+    const returnEmbed = new Discord.UnsafeEmbed().setDescription(
       `**${msg.language.selected}:**\n${selected?.length ? selected : msg.language.none}`,
     );
 

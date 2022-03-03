@@ -13,24 +13,26 @@ module.exports = {
   childOf: 'leveling',
   category: ['automation'],
   mmrEmbed(msg, res) {
-    const embed = new Discord.MessageEmbed();
+    const embed = new Discord.UnsafeEmbed();
     for (let i = 0; i < res.length; i += 1) {
       const r = res[i];
 
-      embed.addFields({
-        name: `${msg.language.number}: \`${r.id}\` | ${r.multiplier ? r.multiplier : '1.0'}x`,
-        value: `${msg.language.affected}: ${
-          r.channels && r.channels.length
-            ? `${r.channels.length} ${msg.language.Channels}`
-            : msg.language.none
-        }`,
-        inline: true,
-      });
+      embed.addFieldss([
+        {
+          name: `${msg.language.number}: \`${r.id}\` | ${r.multiplier ? r.multiplier : '1.0'}x`,
+          value: `${msg.language.affected}: ${
+            r.channels && r.channels.length
+              ? `${r.channels.length} ${msg.language.Channels}`
+              : msg.language.none
+          }`,
+          inline: true,
+        },
+      ]);
     }
     return embed;
   },
   displayEmbed(msg, r) {
-    const embed = new Discord.MessageEmbed().addFields(
+    const embed = new Discord.UnsafeEmbed().addFieldss([
       {
         name: msg.lan.channels,
         value: `${r.channels?.length ? r.channels.map((id) => ` <#${id}>`) : msg.language.none}`,
@@ -41,19 +43,19 @@ module.exports = {
         value: `${r.multiplier}`,
         inline: false,
       },
-    );
+    ]);
     return embed;
   },
   buttons(msg) {
-    const channels = new Discord.MessageButton()
+    const channels = new Discord.Button()
       .setCustomId(msg.lan.edit.channels.name)
       .setLabel(msg.lan.channels)
-      .setStyle('PRIMARY');
+      .setStyle(Discord.ButtonStyle.Primary);
 
-    const multiplier = new Discord.MessageButton()
+    const multiplier = new Discord.Button()
       .setCustomId(msg.lan.edit.multiplier.name)
       .setLabel(msg.lan.multiplier.replace(/\*/g, ''))
-      .setStyle('SECONDARY');
+      .setStyle(Discord.ButtonStyle.Secondary);
 
     return [[channels, multiplier]];
   },

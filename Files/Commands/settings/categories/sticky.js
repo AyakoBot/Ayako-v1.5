@@ -6,9 +6,9 @@ module.exports = {
   finished: true,
   category: ['automation'],
   displayEmbed(msg, r) {
-    const embed = new Discord.MessageEmbed();
+    const embed = new Discord.UnsafeEmbed();
 
-    embed.addFields(
+    embed.addFieldss([
       {
         name: msg.lan.stickyrolesactive,
         value: r.stickyrolesactive
@@ -42,26 +42,26 @@ module.exports = {
           : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
         inline: false,
       },
-    );
+    ]);
     return embed;
   },
   buttons(msg, r) {
-    const stickyrolesactive = new Discord.MessageButton()
+    const stickyrolesactive = new Discord.Button()
       .setCustomId(msg.lan.edit.stickyrolesactive.name)
       .setLabel(msg.lan.stickyrolesactive)
-      .setStyle(r.stickyrolesactive ? 'SUCCESS' : 'DANGER');
-    const stickyrolesmode = new Discord.MessageButton()
+      .setStyle(r.stickyrolesactive ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
+    const stickyrolesmode = new Discord.Button()
       .setCustomId(msg.lan.edit.stickyrolesmode.name)
       .setLabel(msg.lan.stickyrolesmode)
-      .setStyle('SECONDARY');
-    const roles = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Secondary);
+    const roles = new Discord.Button()
       .setCustomId(msg.lan.edit.roles.name)
       .setLabel(msg.lan.roles)
-      .setStyle('PRIMARY');
-    const stickypermsactive = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary);
+    const stickypermsactive = new Discord.Button()
       .setCustomId(msg.lan.edit.stickypermsactive.name)
       .setLabel(msg.lan.stickypermsactive)
-      .setStyle(r.stickypermsactive ? 'SUCCESS' : 'DANGER');
+      .setStyle(r.stickypermsactive ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
     return [[stickyrolesactive], [stickyrolesmode, roles], [stickypermsactive]];
   },
 };

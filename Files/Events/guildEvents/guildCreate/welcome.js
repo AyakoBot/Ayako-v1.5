@@ -7,33 +7,33 @@ module.exports = {
     const { ch } = guild.client;
     const language = await guild.client.ch.languageSelector(guild);
     const lan = language.guildCreate;
-    const joinembed = new Discord.MessageEmbed()
+    const joinembed = new Discord.UnsafeEmbed()
       .setAuthor({
         name: lan.author,
         iconURL: Constants.standard.image,
         url: Constants.standard.invite,
       })
-      .setColor(guild.me.displayHexColor)
-      .addField(
-        ch.stp(lan.fields.one.name, { prefix: Constants.standard.prefix }),
-        lan.fields.one.value,
-      )
-      .addField(
-        ch.stp(lan.fields.two.name, { prefix: Constants.standard.prefix }),
-        lan.fields.two.value,
-      )
-      .addField(
-        ch.stp(lan.fields.three.name, { prefix: Constants.standard.prefix }),
-        lan.fields.three.value,
-      )
-      .addField(
-        ch.stp(lan.fields.four.name, { prefix: Constants.standard.prefix }),
-        lan.fields.four.value,
-      )
-      .addField(
-        ch.stp(lan.fields.five.name, { prefix: Constants.standard.prefix }),
-        lan.fields.five.value,
-      );
+      .setColor(guild.me.displayColor)
+      .addFields({
+        name: ch.stp(lan.fields.one.name, { prefix: Constants.standard.prefix }),
+        value: lan.fields.one.value,
+      })
+      .addFields({
+        name: ch.stp(lan.fields.two.name, { prefix: Constants.standard.prefix }),
+        value: lan.fields.two.value,
+      })
+      .addFields({
+        name: ch.stp(lan.fields.three.name, { prefix: Constants.standard.prefix }),
+        value: lan.fields.three.value,
+      })
+      .addFields({
+        name: ch.stp(lan.fields.four.name, { prefix: Constants.standard.prefix }),
+        value: lan.fields.four.value,
+      })
+      .addFields({
+        name: ch.stp(lan.fields.five.name, { prefix: Constants.standard.prefix }),
+        value: lan.fields.five.value,
+      });
     const audits = await guild.fetchAuditLogs({ limit: 3, type: 28 }).catch(() => {});
     let entry;
     if (audits && audits.entries) {

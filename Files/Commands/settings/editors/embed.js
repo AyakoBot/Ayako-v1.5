@@ -103,31 +103,31 @@ module.exports = {
       .setMinValues(1)
       .setMaxValues(1)
       .setPlaceholder(msg.language.select[required.key].select);
-    const next = new Discord.MessageButton()
+    const next = new Discord.Button()
       .setCustomId('next')
       .setLabel(msg.language.next)
       .setDisabled(
         Objects.page === Math.ceil(Objects.options.length / 25) || !Objects.options.length,
       )
-      .setStyle('SUCCESS');
-    const prev = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary);
+    const prev = new Discord.Button()
       .setCustomId('prev')
       .setLabel(msg.language.prev)
       .setDisabled(Objects.page === 1 || !Objects.options.length)
-      .setStyle('DANGER');
+      .setStyle(Discord.ButtonStyle.Danger);
 
     returnedButtons.push([menu], [prev, next]);
 
-    const done = new Discord.MessageButton()
+    const done = new Discord.Button()
       .setCustomId('done')
       .setLabel(msg.language.done)
       .setDisabled(doneDisabled)
-      .setStyle('PRIMARY');
+      .setStyle(Discord.ButtonStyle.Primary);
 
-    const create = new Discord.MessageButton()
+    const create = new Discord.Button()
       .setCustomId('create')
       .setLabel(msg.language.createNew)
-      .setStyle('SUCCESS');
+      .setStyle(Discord.ButtonStyle.Primary);
 
     returnedButtons.push([done, create]);
 
@@ -155,7 +155,7 @@ module.exports = {
 
         const selected = await module.exports.getSelected(msg, insertedValues, required);
 
-        const returnEmbed = new Discord.MessageEmbed().setDescription(
+        const returnEmbed = new Discord.UnsafeEmbed().setDescription(
           `**${msg.language.selected}:**\n${selected?.length ? selected : msg.language.none}`,
         );
         return { returnEmbed };

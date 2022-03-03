@@ -10,26 +10,28 @@ module.exports = {
   childOf: 'leveling',
   category: ['automation'],
   mmrEmbed(msg, res) {
-    const embed = new Discord.MessageEmbed();
+    const embed = new Discord.UnsafeEmbed();
     for (let i = 0; i < res.length; i += 1) {
       const r = res[i];
 
-      embed.addFields({
-        name: `${msg.language.number}: \`${r.id}\` | ${
-          r.rules ? msg.client.ch.channelRuleCalc(r.rules, msg.language).length : '--'
-        } ${msg.language.ChannelRules}`,
-        value: `${msg.language.affected}: ${
-          r.channels && r.channels.length
-            ? `${r.channels.length} ${msg.language.Channels}`
-            : msg.language.none
-        }`,
-        inline: true,
-      });
+      embed.addFieldss([
+        {
+          name: `${msg.language.number}: \`${r.id}\` | ${
+            r.rules ? msg.client.ch.channelRuleCalc(r.rules, msg.language).length : '--'
+          } ${msg.language.ChannelRules}`,
+          value: `${msg.language.affected}: ${
+            r.channels && r.channels.length
+              ? `${r.channels.length} ${msg.language.Channels}`
+              : msg.language.none
+          }`,
+          inline: true,
+        },
+      ]);
     }
     return embed;
   },
   displayEmbed(msg, r) {
-    const embed = new Discord.MessageEmbed()
+    const embed = new Discord.UnsafeEmbed()
       .setDescription(
         `**${msg.lan.rules}**:\n${
           r.rules
@@ -37,30 +39,36 @@ module.exports = {
             : msg.language.none
         }`,
       )
-      .addFields({
-        name: msg.language.Channels,
-        value: `${r.channels?.length ? r.channels.map((id) => ` <#${id}>`) : msg.language.none}`,
-        inline: false,
-      });
+      .addFieldss([
+        {
+          name: msg.language.Channels,
+          value: `${r.channels?.length ? r.channels.map((id) => ` <#${id}>`) : msg.language.none}`,
+          inline: false,
+        },
+      ]);
 
     if (r.rules) {
-      embed.addFields({
-        name: '\u200b',
-        value: '\u200b',
-        inline: false,
-      });
+      embed.addFieldss([
+        {
+          name: '\u200b',
+          value: '\u200b',
+          inline: false,
+        },
+      ]);
 
       msg.client.ch.channelRuleCalc(r.rules, msg.language).forEach((rule, i) => {
         const [key] = Object.entries(msg.language.channelRules).find(([, v]) => v === rule);
         const emote = msg.client.constants.emotes.numbers[(i % 5) + 1];
 
-        embed.addFields({
-          name: `${emote} ${rule}`,
-          value: `${msg.language.amountDefinition}: ${
-            typeof r[key] === 'string' ? r[key] : msg.language.none
-          }`,
-          inline: true,
-        });
+        embed.addFieldss([
+          {
+            name: `${emote} ${rule}`,
+            value: `${msg.language.amountDefinition}: ${
+              typeof r[key] === 'string' ? r[key] : msg.language.none
+            }`,
+            inline: true,
+          },
+        ]);
       });
     }
 
@@ -69,15 +77,15 @@ module.exports = {
   buttons(msg, r) {
     const lan = msg.language.commands.settings[msg.file.name];
 
-    const channels = new Discord.MessageButton()
+    const channels = new Discord.Button()
       .setCustomId(lan.edit.channels.name)
       .setLabel(lan.channels)
-      .setStyle('PRIMARY');
+      .setStyle(Discord.ButtonStyle.Primary);
 
-    const rules = new Discord.MessageButton()
+    const rules = new Discord.Button()
       .setCustomId(lan.edit.rules.name)
       .setLabel(lan.rules)
-      .setStyle('SECONDARY');
+      .setStyle(Discord.ButtonStyle.Secondary);
 
     const ruleButtons = [[]];
     let i = 0;
@@ -88,11 +96,11 @@ module.exports = {
         const [key] = Object.entries(msg.language.channelRules).find(([, v]) => v === rule);
         const emote = msg.client.constants.emotes.numbers[(j % 5) + 1];
 
-        const button = new Discord.MessageButton()
+        const button = new Discord.Button()
           .setCustomId(lan.edit[key].name)
           .setLabel(msg.language.channelRules[`${key}_SHORT`])
           .setEmoji(emote)
-          .setStyle('SECONDARY');
+          .setStyle(Discord.ButtonStyle.Secondary);
 
         if (ruleButtons[i].length <= 4) {
           ruleButtons[i].push(button);

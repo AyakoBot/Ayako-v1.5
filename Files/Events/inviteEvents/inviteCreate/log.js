@@ -31,7 +31,7 @@ module.exports = {
         }
         let link = invite.url;
         if (invite.inviter) link = ch.stp(con.author.link, { user: invite.inviter });
-        const embed = new Discord.MessageEmbed()
+        const embed = new Discord.UnsafeEmbed()
           .setAuthor({
             name: lan.author.name,
             iconURL: con.author.image,
@@ -41,20 +41,21 @@ module.exports = {
           .setTimestamp();
         if (entry) {
           embed.setDescription(ch.stp(lan.description, { user: entry.executor }));
-          if (entry.reason) embed.addField(language.reason, entry.reason);
-        } else if (invite.inviter)
+          if (entry.reason) embed.addFields({ name: language.reason, value: entry.reason });
+        } else if (invite.inviter) {
           embed.setDescription(ch.stp(lan.description, { user: invite.inviter }));
-        else embed.setDescription(lan.descriptionNoUser);
-        if (invite.channel)
-          embed.addField(
-            lan.channel,
-            `${invite.channel} / \`${invite.channel.name}\` / \`${invite.channel.id}\``,
-            false,
-          );
-        if (invite.expiresTimestamp)
-          embed.addField(
-            lan.expires,
-            `\`${new Date(invite.expiresTimestamp).toUTCString()}\`\n(\`${ch.stp(
+        } else embed.setDescription(lan.descriptionNoUser);
+        if (invite.channel) {
+          embed.addFields({
+            name: lan.channel,
+            value: `${invite.channel} / \`${invite.channel.name}\` / \`${invite.channel.id}\``,
+            inline: false,
+          });
+        }
+        if (invite.expiresTimestamp) {
+          embed.addFields({
+            name: lan.expires,
+            value: `\`${new Date(invite.expiresTimestamp).toUTCString()}\`\n(\`${ch.stp(
               language.time.timeIn,
               {
                 time: moment
@@ -64,26 +65,29 @@ module.exports = {
                   ),
               },
             )}\`)`,
-            false,
-          );
-        if (invite.maxAge)
-          embed.addField(
-            lan.age,
-            moment
+            inline: false,
+          });
+        }
+        if (invite.maxAge) {
+          embed.addFields({
+            name: lan.age,
+            value: moment
               .duration(invite.maxAge * 1000)
               .format(
                 `Y [${language.time.years}], M [${language.time.months}], W [${language.time.weeks}], D [${language.time.days}], H [${language.time.hours}], m [${language.time.minutes}], s [${language.time.seconds}]`,
               ),
-            true,
-          );
-        if (invite.maxUses) embed.addField(lan.uses, `\u200B${invite.maxUses}`, true);
-        if (invite.targetUser)
-          embed.addField(
-            lan.targetedUser,
-            `${invite.targetUser} / \`${invite.targetUser.username}\` / \`${invite.targetUser.id}\``,
-            true,
-          );
-        if (invite.url) embed.addField(lan.url, `${invite.url}`, true);
+            inline: true,
+          });
+        }
+        if (invite.maxUses) embed.addFields(lan.uses, `\u200B${invite.maxUses}`, true);
+        if (invite.targetUser) {
+          embed.addFields({
+            name: lan.targetedUser,
+            value: `${invite.targetUser} / \`${invite.targetUser.username}\` / \`${invite.targetUser.id}\``,
+            inline: true,
+          });
+        }
+        if (invite.url) embed.addFields({ name: lan.url, value: `${invite.url}`, inline: true });
         ch.send(channels, { embeds: [embed] });
       }
     }

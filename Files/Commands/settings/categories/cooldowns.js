@@ -9,25 +9,29 @@ module.exports = {
   finished: false,
   category: ['automation'],
   mmrEmbed(msg, res) {
-    const embed = new Discord.MessageEmbed();
+    const embed = new Discord.UnsafeEmbed();
     for (let i = 0; i < res.length; i += 1) {
       const r = res[i];
-      embed.addFields({
-        name: `${msg.language.number}: \`${r.id}\` | ${msg.language.command}: \`${r.command}\` | ${
-          r.active
-            ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-            : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
-        }`,
-        value: `${msg.language.cooldown}: ${moment
-          .duration(r.cooldown * 1000)
-          .format(`s [${msg.language.time.seconds}]`)} `,
-        inline: true,
-      });
+      embed.addFieldss([
+        {
+          name: `${msg.language.number}: \`${r.id}\` | ${msg.language.command}: \`${
+            r.command
+          }\` | ${
+            r.active
+              ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
+              : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
+          }`,
+          value: `${msg.language.cooldown}: ${moment
+            .duration(r.cooldown * 1000)
+            .format(`s [${msg.language.time.seconds}]`)} `,
+          inline: true,
+        },
+      ]);
     }
     return embed;
   },
   displayEmbed(msg, r) {
-    const embed = new Discord.MessageEmbed().addFields(
+    const embed = new Discord.UnsafeEmbed().addFieldss([
       {
         name: msg.lanSettings.active,
         value: r.active
@@ -92,46 +96,46 @@ module.exports = {
         }`,
         inline: false,
       },
-    );
+    ]);
     return embed;
   },
   buttons(msg, r) {
-    const active = new Discord.MessageButton()
+    const active = new Discord.Button()
       .setCustomId(msg.lan.edit.active.name)
       .setLabel(msg.lanSettings.active)
-      .setStyle(r.active ? 'SUCCESS' : 'DANGER');
-    const command = new Discord.MessageButton()
+      .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
+    const command = new Discord.Button()
       .setCustomId(msg.lan.edit.command.name)
       .setLabel(
         msg.client.ch.stp(msg.lan.command.replace(/\*/g, ''), {
           amount: r.command ? `\`${r.command}\`` : '--',
         }),
       )
-      .setStyle('SECONDARY');
-    const cooldown = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Secondary);
+    const cooldown = new Discord.Button()
       .setCustomId(msg.lan.edit.cooldown.name)
       .setLabel(
         msg.client.ch.stp(msg.lan.cooldown.replace(/\*/g, ''), {
           amount: r.cooldown ? `${r.cooldown} ${msg.language.time.seconds}` : '--',
         }),
       )
-      .setStyle('SECONDARY');
-    const achannel = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Secondary);
+    const achannel = new Discord.Button()
       .setCustomId(msg.lan.edit.activechannelid.name)
       .setLabel(msg.lan.activechannelid)
-      .setStyle('PRIMARY');
-    const bchannel = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary);
+    const bchannel = new Discord.Button()
       .setCustomId(msg.lan.edit.bpchannelid.name)
       .setLabel(msg.lan.bpchannelid)
-      .setStyle('PRIMARY');
-    const user = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary);
+    const user = new Discord.Button()
       .setCustomId(msg.lan.edit.bpuserid.name)
       .setLabel(msg.lan.bpuserid)
-      .setStyle('PRIMARY');
-    const role = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary);
+    const role = new Discord.Button()
       .setCustomId(msg.lan.edit.bproleid.name)
       .setLabel(msg.lan.bproleid)
-      .setStyle('PRIMARY');
+      .setStyle(Discord.ButtonStyle.Primary);
     return [[active], [command, cooldown], [achannel, bchannel, user, role]];
   },
 };

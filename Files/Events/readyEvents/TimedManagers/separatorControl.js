@@ -35,7 +35,7 @@ module.exports = {
         jobs.scheduleJob(new Date(Date.now() + 300000), () => {
           require('../../guildEvents/guildMemberUpdate/separator').oneTimeRunner(
             msg,
-            new Discord.MessageEmbed(),
+            new Discord.UnsafeEmbed(),
           );
         });
       }

@@ -44,7 +44,7 @@ module.exports = {
     }
     if (requirement) {
       let dmChannel;
-      const embed = new Discord.MessageEmbed().setAuthor(
+      const embed = new Discord.UnsafeEmbed().setAuthor(
         lan.author.name,
         Constants.standard.icon,
         Constants.standard.invite,
@@ -78,7 +78,7 @@ module.exports = {
               .setDescription(
                 `${lan.description.acceptedText} [${reqGuild.name}](${invitelink} "${lan.description.ClickText}").`,
               )
-              .setColor(guild.me.displayHexColor);
+              .setColor(guild.me.displayColor);
           }
         }
       }

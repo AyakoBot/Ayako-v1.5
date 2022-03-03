@@ -186,9 +186,9 @@ const announcement = async (voter, usedRole) => {
       roles: [],
     },
     components: client.ch.buttonRower([
-      new Discord.MessageButton()
+      new Discord.Button()
         .setURL('https://top.gg/bot/650691698409734151/vote')
-        .setStyle('LINK')
+        .setStyle(Discord.ButtonStyle.Link)
         .setLabel('Vote Here'),
     ]),
   });
@@ -198,8 +198,8 @@ const reminder = async (voter) => {
   const allowsReminder = await getReminder(voter);
   if (!allowsReminder) return;
 
-  const embed = new Discord.MessageEmbed()
-    .setColor('#b0ff00')
+  const embed = new Discord.UnsafeEmbed()
+    .setColor(client.constants.standard.color)
     .setAuthor({
       name: 'Ayako Vote Reminder',
       iconURL: 'https://ayakobot.com/cdn/Ayako_Assets/ayakolove.png',
@@ -232,18 +232,18 @@ const endReminder = async (voter, endTime) => {
     endTime,
   ]);
 
-  const disable = new Discord.MessageButton()
+  const disable = new Discord.Button()
     .setLabel('Disable Vote Reminder')
-    .setStyle('DANGER')
+    .setStyle(Discord.ButtonStyle.Danger)
     .setCustomId('vote_reminder_disable');
 
-  const vote = new Discord.MessageButton()
+  const vote = new Discord.Button()
     .setLabel('Vote for Ayako')
-    .setStyle('LINK')
+    .setStyle(Discord.ButtonStyle.Link)
     .setURL('https://top.gg/bot/650691698409734151/vote');
 
-  const embed = new Discord.MessageEmbed()
-    .setColor('#b0ff00')
+  const embed = new Discord.UnsafeEmbed()
+    .setColor(client.constants.standard.color)
     .setAuthor({
       name: 'Ayako Vote Reminder',
       iconURL: 'https://ayakobot.com/cdn/Ayako_Assets/ayakolove.png',

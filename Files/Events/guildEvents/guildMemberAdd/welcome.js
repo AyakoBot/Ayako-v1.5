@@ -19,9 +19,9 @@ module.exports = {
             .replace(/%u205/g, "'")
             .replace(/%o205/g, '`')
             .replace(/%i205/g, `${user}`);
-          const embed = new Discord.MessageEmbed()
+          const embed = new Discord.UnsafeEmbed()
             .setDescription(`${r.text.toString()}`)
-            .setColor(r.color.toUpperCase());
+            .setColor(parseInt(r.color, 16));
           if (r.imageurl !== null) {
             embed.setImage(`${r.imageurl}`);
           }

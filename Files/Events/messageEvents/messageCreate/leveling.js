@@ -306,7 +306,7 @@ const doReact = async (msg, row, levelData, language) => {
 
 const doEmbed = async (msg, settinsgrow, language, levelData, row) => {
   const getDefaultEmbed = () =>
-    new Discord.MessageEmbed()
+    new Discord.UnsafeEmbed()
       .setAuthor({ name: language.leveling.author })
       .setColor(msg.client.ch.colorSelector(msg.member));
 
@@ -550,7 +550,7 @@ const getChannelMultiplier = async (msg) => {
 };
 
 const infoEmbed = (msg, reactions, language) => {
-  const embed = new Discord.MessageEmbed()
+  const embed = new Discord.UnsafeEmbed()
     .setColor(msg.client.ch.colorSelector(msg.guild.me))
     .setDescription(
       msg.client.ch.stp(language.leveling.description, { reactions: reactions.join('') }),

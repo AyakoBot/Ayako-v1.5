@@ -42,6 +42,7 @@
     "nonblock-statement-body-position": "off",
     "padded-blocks": "off",
     "quotes": "off",
+    "object-curly-newline": "off",
     "prettier/prettier": [
       "warn",
       {

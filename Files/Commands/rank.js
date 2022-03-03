@@ -64,7 +64,7 @@ module.exports = {
         ` D [${msg.language.time.days}], H [${msg.language.time.hours}], m [${msg.language.time.minutes}]`,
       );
 
-    const embed = new Discord.MessageEmbed()
+    const embed = new Discord.UnsafeEmbed()
       .setAuthor({
         name: isGuild ? msg.lan.author : msg.lan.globalAuthor,
         iconURL: msg.client.constants.commands.rank.authorImage,
@@ -76,7 +76,7 @@ module.exports = {
       .setColor(
         isGuild ? msg.client.ch.colorSelector(msg.guild.me) : msg.client.constants.standard.color,
       )
-      .addFields(
+      .addFieldss([
         { name: msg.lan.currentXP, value: `${xp}`, inline: true },
         { name: msg.lan.nextXP, value: `${Math.ceil(neededXP)}`, inline: true },
         { name: msg.lan.diff, value: `${Math.round(neededXP - xp)}`, inline: true },
@@ -88,7 +88,7 @@ module.exports = {
           })}`,
           inline: false,
         },
-      );
+      ]);
 
     msg.client.ch.reply(msg, { embeds: [embed] });
   },

@@ -4,7 +4,7 @@ module.exports = {
   async execute(executor, targets, reason, guild) {
     const banPromises = targets.map((target) =>
       guild.bans
-        .create(target, { days: 7, reason: `${executor.username} | ${reason}` })
+        .create(target, { deleteMessageDays: 7, reason: `${executor.username} | ${reason}` })
         .catch((e) => `${target} | ${e}`),
     );
 
@@ -29,7 +29,7 @@ module.exports = {
       const language = await guild.client.ch.languageSelector(guild);
       const lan = language.antiraid.banAdd;
 
-      const embed = new Discord.MessageEmbed()
+      const embed = new Discord.UnsafeEmbed()
         .setColor(con.color)
         .setAuthor({
           name: guild.client.ch.stp(lan.author, {
@@ -40,7 +40,7 @@ module.exports = {
           url: guild.client.constants.standard.invite,
         })
         .setTimestamp()
-        .addField(language.reason, `${reason}`);
+        .addFields({ name: language.reason, value: `${reason}` });
 
       res.rows[0].modlogs.forEach((logChannel) => {
         const channel = guild.channels.cache.get(logChannel);

@@ -23,7 +23,7 @@ module.exports = {
         const lan = language.channelUpdate;
         const con = Constants.channelUpdate;
         let typeID;
-        const embed = new Discord.MessageEmbed()
+        const embed = new Discord.UnsafeEmbed()
           .setAuthor({
             name: ch.stp(lan.author.title, { type: `${language.channels[newChannel.type]}` }),
             iconURL: con.author.image,
@@ -35,26 +35,26 @@ module.exports = {
         if (oldChannel.name !== newChannel.name) {
           changedKey.push(language.name);
           typeID = 11;
-          embed.addField(
-            language.name,
-            `${language.before}: \`${oldChannel.name}\`\n${language.after}: \`${newChannel.name}\``,
-          );
+          embed.addFields({
+            name: language.name,
+            value: `${language.before}: \`${oldChannel.name}\`\n${language.after}: \`${newChannel.name}\``,
+          });
         }
         if (oldChannel.parent !== newChannel.parent) {
           changedKey.push(language.category);
           typeID = 11;
-          embed.addField(
-            language.category,
-            `${language.before}: \`${oldChannel.parent.name}\`\n${language.after}: \`${newChannel.parent.name}\``,
-          );
+          embed.addFields({
+            name: language.category,
+            value: `${language.before}: \`${oldChannel.parent.name}\`\n${language.after}: \`${newChannel.parent.name}\``,
+          });
         }
         if (oldChannel.nsfw !== newChannel.nsfw) {
           changedKey.push(language.nsfw);
           typeID = 11;
-          embed.addField(
-            language.nsfw,
-            `${language.before}: \`${oldChannel.nsfw}\`\n${language.after}: \`${newChannel.nsfw}\``,
-          );
+          embed.addFields({
+            name: language.nsfw,
+            value: `${language.before}: \`${oldChannel.nsfw}\`\n${language.after}: \`${newChannel.nsfw}\``,
+          });
         }
         if (
           oldChannel.rateLimitPerUser !== newChannel.rateLimitPerUser &&
@@ -63,64 +63,65 @@ module.exports = {
         ) {
           changedKey.push(language.rate_limit_per_user);
           typeID = 11;
-          embed.addField(
-            language.rate_limit_per_user,
-            `${language.before}: \`${oldChannel.rateLimitPerUser} ${language.time.seconds}\`\n${language.after}: \`${newChannel.rateLimitPerUser} ${language.time.seconds}\``,
-          );
+          embed.addFields({
+            name: language.rate_limit_per_user,
+            value: `${language.before}: \`${oldChannel.rateLimitPerUser} ${language.time.seconds}\`\n${language.after}: \`${newChannel.rateLimitPerUser} ${language.time.seconds}\``,
+          });
         }
         if (oldChannel.topic !== newChannel.topic) {
           changedKey.push(language.topic);
           typeID = 11;
-          if (oldChannel.type === 'stage')
-            embed.addField(
-              language.stageOpen,
-              `${language.before}: \`${oldChannel.topic}\`\n${language.after}: \`${newChannel.topic}\``,
-            );
-          else
-            embed.addField(
-              language.topic,
-              `${language.before}: \`${oldChannel.topic}\`\n${language.after}: \`${newChannel.topic}\``,
-            );
+          if (oldChannel.type === 'stage') {
+            embed.addFields({
+              name: language.stageOpen,
+              value: `${language.before}: \`${oldChannel.topic}\`\n${language.after}: \`${newChannel.topic}\``,
+            });
+          } else {
+            embed.addFields({
+              name: language.topic,
+              value: `${language.before}: \`${oldChannel.topic}\`\n${language.after}: \`${newChannel.topic}\``,
+            });
+          }
         }
         if (oldChannel.type !== newChannel.type) {
           changedKey.push(language.type);
           typeID = 11;
-          embed.addField(
-            language.type,
-            `${language.before}: \`${language.channels[oldChannel.type]}\`\n${language.after}: \`${
-              language.channels[newChannel.type]
-            }\``,
-          );
+          embed.addFields({
+            name: language.type,
+            value: `${language.before}: \`${language.channels[oldChannel.type]}\`\n${
+              language.after
+            }: \`${language.channels[newChannel.type]}\``,
+          });
         }
         if (oldChannel.bitrate !== newChannel.bitrate) {
           changedKey.push(language.bitrate);
           typeID = 11;
-          embed.addField(
-            language.bitrate,
-            `${language.before}: \`${oldChannel.bitrate / 1000} kbps\`\n${language.after}: \`${
-              newChannel.bitrate / 1000
-            } kbps\``,
-          );
+          embed.addFields({
+            name: language.bitrate,
+            value: `${language.before}: \`${oldChannel.bitrate / 1000} kbps\`\n${
+              language.after
+            }: \`${newChannel.bitrate / 1000} kbps\``,
+          });
         }
         if (oldChannel.rtcRegion !== newChannel.rtcRegion) {
           changedKey.push(language.rtc_region);
           typeID = 11;
-          embed.addField(
-            language.rtc_region,
-            `${language.before}: \`${
+          embed.addFields({
+            name: language.rtc_region,
+            value: `${language.before}: \`${
               oldChannel.rtcRegion ? oldChannel.rtcRegion : 'automatic'
             }\`\n${language.after}: \`${
               newChannel.rtcRegion ? newChannel.rtcRegion : 'automatic'
             }\``,
-          );
+          });
         }
         if (oldChannel.userLimit !== newChannel.userLimit) {
           changedKey.push(language.user_limit);
           typeID = 11;
-          embed.addField(
-            language.user_limit,
-            `${language.before}: \`${oldChannel.userLimit}\`\n${language.after}: \`${newChannel.userLimit}\``,
-          );
+          embed.addFields({
+            name: language.user_limit,
+            value: `${language.before}: \`${oldChannel.userLimit}\`\n${language.after}: \`${newChannel.userLimit}\``,
+          });
         }
         if (oldChannel.permissionOverwrites.cache !== newChannel.permissionOverwrites.cache) {
           const tempOP = [];
@@ -188,7 +189,7 @@ module.exports = {
             else if (deletedPerm.type === 'role') text = `${language.role} <@&${deletedPerm.id}>`;
             else text = `${language.unknown} ${deletedPerm}`;
 
-            embed.addField(language.permissions.removedPermissionsFor, text);
+            embed.addFields({ name: language.permissions.removedPermissionsFor, value: text });
           } else if (oldPerms.length < newPerms.length) {
             changedKey.push(language.permission_overwrites);
             let createdPerm;
@@ -206,7 +207,7 @@ module.exports = {
             if (createdPerm.type === 'member') text = `${language.member} <@${createdPerm.id}>`;
             else if (createdPerm.type === 'role') text = `${language.role} <@&${createdPerm.id}>`;
             else text = `${language.unknown} ${createdPerm}`;
-            embed.addField(language.permissions.grantedPermissionFor, text);
+            embed.addFields({ name: language.permissions.grantedPermissionFor, value: text });
           } else {
             for (
               let i = 0;
@@ -247,21 +248,19 @@ module.exports = {
                 Bit1.toArray(),
                 Bit2.toArray(),
                 Bit3.toArray(),
-              ].map((arr) => {
-                return [
-                  ...new Set(
-                    arr.map((name) => {
-                      if (name === 'USE_PUBLIC_THREADS' || name === 'CREATE_PUBLIC_THREADS') {
-                        return 'USE_AND_CREATE_PUBLIC_THREADS';
-                      }
-                      if (name === 'USE_PRIVATE_THREADS' || name === 'CREATE_PRIVATE_THREADS') {
-                        return 'USE_AND_CREATE_PRIVATE_THREADS';
-                      }
-                      return name;
-                    }),
-                  ),
-                ];
-              });
+              ].map((arr) => [
+                ...new Set(
+                  arr.map((name) => {
+                    if (name === 'USE_PUBLIC_THREADS' || name === 'CREATE_PUBLIC_THREADS') {
+                      return 'USE_AND_CREATE_PUBLIC_THREADS';
+                    }
+                    if (name === 'USE_PRIVATE_THREADS' || name === 'CREATE_PRIVATE_THREADS') {
+                      return 'USE_AND_CREATE_PRIVATE_THREADS';
+                    }
+                    return name;
+                  }),
+                ),
+              ]);
 
               for (let j = 0; useArray1.length > j; j += 1) {
                 disable += `${Constants.switch.disable} \`${
@@ -278,32 +277,32 @@ module.exports = {
               }
 
               if (neutral.includes('`')) {
-                embed.addField(
-                  `${language.permissions.removedPermissionsFor} ${
+                embed.addFields({
+                  name: `${language.permissions.removedPermissionsFor} ${
                     oldPerm.type === 'member' ? language.member : language.role
                   }`,
-                  neutral,
-                );
+                  value: neutral,
+                });
                 changedKey.push(language.permission_overwrites);
                 typeID = 14;
               }
               if (disable.includes('`')) {
-                embed.addField(
-                  `${language.permissions.deniedPermissionsFor} ${
+                embed.addFields({
+                  name: `${language.permissions.deniedPermissionsFor} ${
                     newPerm.type === 'member' ? language.member : language.role
                   }`,
-                  disable,
-                );
+                  value: disable,
+                });
                 changedKey.push(language.permission_overwrites);
                 typeID = 14;
               }
               if (enable.includes('`')) {
-                embed.addField(
-                  `${language.permissions.grantedPermissionFor} ${
+                embed.addFields({
+                  name: `${language.permissions.grantedPermissionFor} ${
                     newPerm.type === 'member' ? language.member : language.role
                   }`,
-                  enable,
-                );
+                  value: enable,
+                });
                 changedKey.push(language.permission_overwrites);
                 typeID = 14;
               }
@@ -324,25 +323,25 @@ module.exports = {
                 const before = change[i].old;
                 const after = change[i].new;
                 if (key === 'video_quality_mode') {
-                  embed.addField(
-                    language.video_quality_mode,
-                    `${language.before}: \`${before === 1 ? language.automatic : '720p'}\`\n${
-                      language.after
-                    }: \`${after === 1 ? language.automatic : '720p'}\``,
-                  );
+                  embed.addFields({
+                    name: language.video_quality_mode,
+                    value: `${language.before}: \`${
+                      before === 1 ? language.automatic : '720p'
+                    }\`\n${language.after}: \`${after === 1 ? language.automatic : '720p'}\``,
+                  });
                   changedKey.push(language.video_quality_mode);
                 }
                 if (key === 'type') {
                   let type;
                   if (before === 1) type = language.channelFollower;
                   if (before === 0) type = language.incoming;
-                  if (type) embed.addField(language.type, type);
+                  if (type) embed.addFields({ name: language.type, value: type });
                 }
               }
             });
           }
 
-          if (!embed.fields.length) return;
+          if (!embed.fields?.length) return;
 
           if (changedKey.length) changedKey = [...new Set(changedKey)];
 

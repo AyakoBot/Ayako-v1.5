@@ -25,7 +25,7 @@ module.exports = {
           entry = audit.sort((a, b) => b.id - a.id);
           entry = entry.first();
         }
-        const embed = new Discord.MessageEmbed()
+        const embed = new Discord.UnsafeEmbed()
           .setAuthor({
             name: lan.author.title,
             iconURL: con.author.image,
@@ -36,10 +36,16 @@ module.exports = {
           embed.setDescription(
             ch.stp(lan.description.withUser, { user: entry.executor, target: ban.user }),
           );
-          embed.addField(language.reason, entry.reason ? `\n${entry.reason}` : language.none);
+          embed.addFields({
+            name: language.reason,
+            value: entry.reason ? `\n${entry.reason}` : language.none,
+          });
         } else {
           embed.setDescription(ch.stp(lan.description.withoutUser, { target: ban.user }));
-          embed.addField(language.reason, ban.reason ? ban.reason : language.unknown);
+          embed.addFields({
+            name: language.reason,
+            value: ban.reason ? ban.reason : language.unknown,
+          });
         }
         ch.send(channels, { embeds: [embed] });
       }

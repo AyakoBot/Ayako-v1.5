@@ -1,73 +1,73 @@
 {
   "channelCreate": {
-    "color": "GREEN",
+    "color": 65280,
     "author": {
       "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673217172897822/ChannelCreate.png",
       "link": "https://discord.com/channels/{{channel.guild.id}}/{{channel.id}}"
     }
   },
   "channelDelete": {
-    "color": "RED",
+    "color": 16711680,
     "author": {
       "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673218522808361/ChannelDelete.png"
     }
   },
   "channelPin": {
-    "color": "GREEN",
+    "color": 65280,
     "author": {
       "image": "https://cdn.discordapp.com/attachments/760152457799401532/832029343206211614/PinAdd.png",
       "link": "https://discord.com/channels/{{guild.id}}/{{channel.id}}/{{msg.id}}"
     }
   },
   "channelUnPin": {
-    "color": "RED",
+    "color": 16711680,
     "author": {
       "image": "https://cdn.discordapp.com/attachments/760152457799401532/832029341968891974/PinRemove.png",
       "link": "https://discord.com/channels/{{guild.id}}/{{channel.id}}/{{msg.id}}"
     }
   },
   "channelPinUpdate": {
-    "color": "YELLOW",
+    "color": 16776960,
     "author": {
       "image": "https://cdn.discordapp.com/attachments/760152457799401532/832029346880421918/PinUpdate.png"
     }
   },
   "channelUpdate": {
-    "color": "YELLOW",
+    "color": 16776960,
     "author": {
       "image": "https://cdn.discordapp.com/attachments/760152457799401532/831674121997123624/ChannelUpdate.png",
       "link": "https://discord.com/channels/{{channel.guild.id}}/{{channel.id}}"
     }
   },
   "emojiCreate": {
-    "color": "GREEN",
+    "color": 65280,
     "author": {
       "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673209342263296/emojiDelete.png",
       "link": "https://cdn.discordapp.com/emojis/{{emoji.id}}.{{ending}}"
     }
   },
   "emojiDelete": {
-    "color": "RED",
+    "color": 16711680,
     "author": {
       "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673209342263296/emojiDelete.png",
       "link": "https://cdn.discordapp.com/emojis/{{emoji.id}}.{{ending}}"
     }
   },
   "emojiUpdate": {
-    "color": "YELLOW",
+    "color": 16776960,
     "author": {
       "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673221350162462/emojiUpdate.png",
       "link": "https://cdn.discordapp.com/emojis/{{emoji.id}}.{{ending}}"
     }
   },
   "guildBanAdd": {
-    "color": "GREEN",
+    "color": 65280,
     "author": {
       "image": "https://cdn.discordapp.com/attachments/760152457799401532/831682933777235968/BanAdd.png"
     }
   },
   "guildBanRemove": {
-    "color": "GREEN",
+    "color": 65280,
     "author": {
       "image": "https://cdn.discordapp.com/attachments/760152457799401532/831682931952844851/BanRemove.png"
     }
@@ -84,7 +84,7 @@
   },
   "guildDelete": {
     "logEmbed": {
-      "color": "RED",
+      "color": 16711680,
       "guildName": "Guild Name",
       "guildId": "Guild ID",
       "memberCount": "Membercount",
@@ -94,25 +94,25 @@
     }
   },
   "guildIntegrationsUpdate": {
-    "color": "YELLOW",
+    "color": 16776960,
     "author": {
       "image": "https://cdn.discordapp.com/attachments/760152457799401532/832079482864926760/IntegrationsUpdate.png"
     }
   },
   "guildIntegrationsRemove": {
-    "color": "RED",
+    "color": 16711680,
     "author": {
       "image": "https://cdn.discordapp.com/attachments/760152457799401532/832079483955576883/IntegrationsDelete.png"
     }
   },
   "guildIntegrationsCreate": {
-    "color": "GREEN",
+    "color": 65280,
     "author": {
       "image": "https://cdn.discordapp.com/attachments/760152457799401532/832079485481255002/IntegrationsCreate.png"
     }
   },
   "guildMemberAddLog": {
-    "color": "GREEN",
+    "color": 65280,
     "author": {
       "image": "https://cdn.discordapp.com/attachments/760152457799401532/832837384936620032/GuildMemberAdd.png",
       "link": "https://discord.com/channels/@me/{{user.id}}"
@@ -124,54 +124,54 @@
       "leaveImage": "https://cdn.discordapp.com/attachments/760152457799401532/833915889077846036/GuildMemberRemove.png",
       "link": "https://discord.com/channels/@me/{{user.id}}"
     },
-    "color": "RED"
+    "color": 16711680
   },
   "guildMemberUpdate": {
     "author": {
       "image": "https://cdn.discordapp.com/attachments/760152457799401532/834254630644219944/GuildMemberUpdate.png",
       "link": "https://discord.com/channels/@me/{{user.id}}"
     },
-    "color": "YELLOW"
+    "color": 16776960
   },
   "guildUpdate": {
     "author": {
       "image": ""
     },
-    "color": "YELLOW"
+    "color": 16776960
   },
   "inviteCreate": {
     "author": {
       "image": "",
       "link": "https://discord.com/channels/@me/{{user.id}}"
     },
-    "color": "GREEN"
+    "color": 65280
   },
   "inviteDelete": {
     "author": {
       "image": "",
       "link": "https://discord.com/channels/@me/{{user.id}}"
     },
-    "color": "RED"
+    "color": 16711680
   },
   "messageDelete": {
     "author": {
       "image": "",
       "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
     },
-    "color": "RED"
+    "color": 16711680
   },
   "messageDeleteBulk": {
     "author": {
       "image": "",
       "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}"
     },
-    "color": "RED"
+    "color": 16711680
   },
   "messageReactionAddGiveaway": {
     "author": {
       "image": ""
     },
-    "color": "ff0000",
+    "color": 16711680,
     "url": "https://discordapp.com/channels/{{reaction.message.guild.id}}/{{reaction.message.channel.id}}/{{reaction.message.id}}"
   },
   "messageReactionRemoveAll": {
@@ -179,102 +179,102 @@
       "image": "",
       "link": "https://discordapp.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
     },
-    "color": "RED"
+    "color": 16711680
   },
   "messageUpdateLogUpdate": {
     "author": {
       "image": "",
       "link": "https://discordapp.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
     },
-    "color": "YELLOW"
+    "color": 16776960
   },
   "messageUpdateLogPublish": {
     "author": {
       "image": "",
       "link": "https://discordapp.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
     },
-    "color": "GREEN"
+    "color": 65280
   },
   "prune": {
     "author": {
       "image": ""
     },
-    "color": "RED"
+    "color": 16711680
   },
   "roleCreate": {
     "author": {
       "image": ""
     },
-    "color": "GREEN"
+    "color": 65280
   },
   "roleRemove": {
     "author": {
       "image": ""
     },
-    "color": "RED"
+    "color": 16711680
   },
   "roleUpdate": {
     "author": {
       "image": ""
     },
-    "color": "YELLOW"
+    "color": 16776960
   },
   "userUpdate": {
     "author": {
       "image": "",
       "link": "https://discord.com/channels/@me/{{user.id}}"
     },
-    "color": "YELLOW"
+    "color": 16776960
   },
   "voiceUpdate": {
     "author": {
       "image": ""
     },
-    "color": "YELLOW",
-    "joinColor": "GREEN",
-    "leaveColor": "RED"
+    "color": 16776960,
+    "joinColor": 65280,
+    "leaveColor": 16711680
   },
   "webhookCreate": {
     "author": {
       "image": ""
     },
-    "color": "GREEN"
+    "color": 65280
   },
   "webhookUpdate": {
     "author": {
       "image": ""
     },
-    "color": "YELLOW"
+    "color": 16776960
   },
   "webhookDelete": {
     "author": {
       "image": ""
     },
-    "color": "RED"
+    "color": 16711680
   },
   "commandCreate": {
-    "color": "GREEN",
+    "color": 65280,
     "author": {
       "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673209342263296/commandCreate.png",
       "link": ""
     }
   },
   "commandDelete": {
-    "color": "RED",
+    "color": 16711680,
     "author": {
       "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673209342263296/commandDelete.png",
       "link": ""
     }
   },
   "commandUpdate": {
-    "color": "YELLOW",
+    "color": 16776960,
     "author": {
       "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673221350162462/commandUpdate.png",
       "link": ""
     }
   },
   "antiraidMessage": {
-    "color": "RED",
+    "color": 16711680,
     "author": {
       "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673209342263296/Warning.png",
       "link": ""
@@ -297,7 +297,7 @@
     "success": "#00FF00"
   },
   "standard": {
-    "color": "#b0ff00",
+    "color": 11599616,
     "name": "Ayako",
     "guildLogChannel": "718181439354437693",
     "errorLogChannel": "829148971125047328",
@@ -316,7 +316,7 @@
   "emotes": {
     "userFlags": {
       "DISCORD_EMPLOYEE": "<:DiscordStaff:945409713661706292>",
-      "PARTNERED_SERVER_OWNER": "<:ParteneredServerOwner:945409713762365460>",
+      "PARTNEff0000_SERVER_OWNER": "<:Parteneff0000ServerOwner:945409713762365460>",
       "HYPESQUAD_EVENTS": "<:HypeSquadEventCoordinator:945409713653313617>",
       "BUGHUNTER_LEVEL_1": "<:BugHunterLevel1:945409713737199636>",
       "HOUSE_BRAVERY": "<:Bravery:945409713745559652>",
@@ -494,79 +494,79 @@
     "lock": "🔒",
     "unlock": "🔓"
   },
-  "error": "ff0000",
+  "error": 16711680,
   "mod": {
     "muteAdd": {
-      "color": "ff0000",
+      "color": 16711680,
       "author": {
         "image": "",
         "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
       }
     },
     "strike": {
-      "color": "ff0000",
+      "color": 16711680,
       "author": {
         "image": "",
         "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
       },
       "confirmEmbed": {
-        "color": "ff0000",
+        "color": 16711680,
         "author": {
           "image": ""
         }
       }
     },
     "tempmuteAdd": {
-      "color": "ff0000",
+      "color": 16711680,
       "author": {
         "image": "",
         "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
       }
     },
     "tempbanAdd": {
-      "color": "ff0000",
+      "color": 16711680,
       "author": {
         "image": "",
         "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
       }
     },
     "muteRemove": {
-      "color": "00ff00",
+      "color": 65280,
       "author": {
         "image": "",
         "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
       }
     },
     "kickAdd": {
-      "color": "ff0000",
+      "color": 16711680,
       "author": {
         "image": "",
         "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
       }
     },
     "banAdd": {
-      "color": "ff0000",
+      "color": 16711680,
       "author": {
         "image": "",
         "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
       }
     },
     "softbanAdd": {
-      "color": "ff0000",
+      "color": 16711680,
       "author": {
         "image": "",
         "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
       }
     },
     "banRemove": {
-      "color": "00ff00",
+      "color": 65280,
       "author": {
         "image": "",
         "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
       }
     },
     "warnAdd": {
-      "color": "ff0000"
+      "color": 16711680
     }
   },
   "customembeds": {
@@ -601,9 +601,9 @@
     ]
   },
   "expire": {
-    "success": "1aff00",
+    "success": 65280,
     "log": {
-      "color": "1aff00",
+      "color": 65280,
       "image": "https://ayakobot.com/cdn/Ayako_Assets/Warning.png"
     }
   },
@@ -620,19 +620,19 @@
     "rank": {
       "authorImage": ""
     },
-    "afk": "YELLOW",
-    "toxicityCheck": "ff0000",
+    "afk": 16776960,
+    "toxicityCheck": 16711680,
     "pardon": {
-      "success": "1aff00",
+      "success": 65280,
       "log": {
-        "color": "1aff00",
+        "color": 65280,
         "image": "https://ayakobot.com/cdn/Ayako_Assets/Warning.png"
       }
     },
     "edit": {
-      "success": "1aff00",
+      "success": 65280,
       "log": {
-        "color": "1aff00",
+        "color": 65280,
         "image": "https://ayakobot.com/cdn/Ayako_Assets/Edit.png"
       }
     },
@@ -640,19 +640,19 @@
       "error": "https://ayakobot.com/cdn/Ayako_Assets/Warning.png"
     },
     "clearwarns": {
-      "success": "1aff00",
-      "fail": "ff0000",
-      "loading": "ffff00",
+      "success": 65280,
+      "fail": 16711680,
+      "loading": 16776960,
       "log": {
-        "color": "1aff00",
+        "color": 65280,
         "image": "https://ayakobot.com/cdn/Ayako_Assets/Warning.png"
       }
     },
     "massban": {
-      "success": "1aff00",
-      "fail": "ff0000",
+      "success": 65280,
+      "fail": 16711680,
       "log": {
-        "color": "ff0000"
+        "color": 16711680
       }
     },
     "check": {
@@ -667,9 +667,9 @@
       }
     },
     "settings": {
-      "color": "ffffff",
+      "color": 16777215,
       "log": {
-        "color": "YELLOW"
+        "color": 16776960
       },
       "baseSettings": {
         "leveling": "levelsettings",
@@ -678,766 +678,762 @@
       "edit": {
         "active": {
           "key": "boolean",
-          "required": true
+          "requiff0000": true
         },
         "antispam": {
           "banenabledtof": {
             "key": "boolean",
-            "required": true
+            "requiff0000": true
           },
           "kickenabledtof": {
             "key": "boolean",
-            "required": true
+            "requiff0000": true
           },
           "muteenabledtof": {
             "key": "boolean",
-            "required": true
+            "requiff0000": true
           },
           "giveofficialwarnstof": {
             "key": "boolean",
-            "required": true
+            "requiff0000": true
           },
           "muteafterwarnsamount": {
             "key": "number",
-            "required": true
+            "requiff0000": true
           },
           "kickafterwarnsamount": {
             "key": "number",
-            "required": true
+            "requiff0000": true
           },
           "banafterwarnsamount": {
             "key": "number",
-            "required": true
+            "requiff0000": true
           },
           "bpchannelid": {
             "key": "channels",
-            "required": false
+            "requiff0000": false
           },
           "bproleid": {
             "key": "roles",
-            "required": false
+            "requiff0000": false
           },
           "bpuserid": {
             "key": "users",
-            "required": false
+            "requiff0000": false
           },
           "readofwarnstof": {
             "key": "boolean",
-            "required": true
+            "requiff0000": true
           }
         },
         "autorole": {
           "botroleid": {
             "key": "roles",
-            "required": false
+            "requiff0000": false
           },
           "userroleid": {
             "key": "roles",
-            "required": false
+            "requiff0000": false
           },
           "allroleid": {
             "key": "roles",
-            "required": false
+            "requiff0000": false
           }
         },
         "blacklist": {
           "warntof": {
             "key": "boolean",
-            "required": true
+            "requiff0000": true
           },
           "mutetof": {
             "key": "boolean",
-            "required": true
+            "requiff0000": true
           },
           "kicktof": {
             "key": "boolean",
-            "required": true
+            "requiff0000": true
           },
           "bantof": {
             "key": "boolean",
-            "required": true
+            "requiff0000": true
           },
           "warnafter": {
             "key": "number",
-            "required": false
+            "requiff0000": false
           },
           "muteafter": {
             "key": "number",
-            "required": false
+            "requiff0000": false
           },
           "kickafter": {
             "key": "number",
-            "required": false
+            "requiff0000": false
           },
           "banafter": {
             "key": "number",
-            "required": false
+            "requiff0000": false
           },
           "bpchannelid": {
             "key": "channels",
-            "required": false
+            "requiff0000": false
           },
           "bproleid": {
             "key": "roles",
-            "required": false
+            "requiff0000": false
           },
           "bpuserid": {
             "key": "users",
-            "required": false
+            "requiff0000": false
           },
           "words": {
             "key": "stringArray",
-            "required": false
+            "requiff0000": false
           }
         },
         "cooldowns": {
           "command": {
             "key": "command",
-            "required": true
+            "requiff0000": true
           },
           "cooldown": {
             "key": "second",
-            "required": true
+            "requiff0000": true
           },
           "activechannelid": {
             "key": "channels",
-            "required": false
+            "requiff0000": false
           },
           "bpchannelid": {
             "key": "channels",
-            "required": false
+            "requiff0000": false
           },
           "bproleid": {
             "key": "roles",
-            "required": false
+            "requiff0000": false
           },
           "bpuserid": {
             "key": "users",
-            "required": false
+            "requiff0000": false
           }
         },
         "overview": {
           "prefix": {
             "key": "string",
-            "required": false
+            "requiff0000": false
           },
           "interactionsmode": {
             "key": "boolean",
-            "required": true
+            "requiff0000": true
           },
           "lan": {
             "key": "lan",
-            "required": true
+            "requiff0000": true
           }
         },
         "disabled": {
           "commands": {
             "key": "commands",
-            "required": false
+            "requiff0000": false
           },
           "channels": {
             "key": "channels",
-            "required": false
+            "requiff0000": false
           },
           "bproleid": {
             "key": "roles",
-            "required": false
+            "requiff0000": false
           },
           "blroleid": {
             "key": "roles",
-            "required": false
+            "requiff0000": false
           },
           "bpuserid": {
             "key": "users",
-            "required": false
+            "requiff0000": false
           },
           "bluserid": {
             "key": "users",
-            "required": false
+            "requiff0000": false
           }
         },
         "logs": {
           "guildevents": {
             "key": "channels",
-            "required": false
+            "requiff0000": false
           },
           "emojievents": {
             "key": "channels",
-            "required": false
+            "requiff0000": false
           },
           "channelevents": {
             "key": "channels",
-            "required": false
+            "requiff0000": false
           },
           "inviteevents": {
             "key": "channels",
-            "required": false
+            "requiff0000": false
           },
           "messageevents": {
             "key": "channels",
-            "required": false
+            "requiff0000": false
           },
           "roleevents": {
             "key": "channels",
-            "required": false
+            "requiff0000": false
           },
           "userevents": {
             "key": "channels",
-            "required": false
+            "requiff0000": false
           },
           "voiceevents": {
             "key": "channels",
-            "required": false
+            "requiff0000": false
           },
           "webhookevents": {
             "key": "channels",
-            "required": false
-          },
-          "applicationevents": {
-            "key": "channels",
-            "required": false
+            "requiff0000": false
           },
           "stageinstanceevents": {
             "key": "channels",
-            "required": false
+            "requiff0000": false
           },
           "stickerevents": {
             "key": "channels",
-            "required": false
+            "requiff0000": false
           },
           "threadevents": {
             "key": "channels",
-            "required": false
+            "requiff0000": false
           },
           "guildmemberevents": {
             "key": "channels",
-            "required": false
+            "requiff0000": false
           },
           "modlogs": {
             "key": "channels",
-            "required": false
+            "requiff0000": false
           },
           "settingslog": {
             "key": "channels",
-            "required": false
+            "requiff0000": false
           }
         },
         "interactions": {
           "size": {
             "key": "boolean",
-            "required": true
+            "requiff0000": true
           },
           "block": {
             "key": "stringArray",
-            "required": false
+            "requiff0000": false
           }
         },
         "separators": {
           "stoprole": {
             "key": "role",
-            "required": false
+            "requiff0000": false
           },
           "separator": {
             "key": "role",
-            "required": true
+            "requiff0000": true
           },
           "oneTimeRunner": {
             "key": "onetimerunner",
-            "required": false
+            "requiff0000": false
           },
           "roles": {
             "key": "roles",
-            "required": false
+            "requiff0000": false
           },
           "isvarying": {
             "key": "boolean",
-            "required": true
+            "requiff0000": true
           }
         },
         "autopunish": {
           "punishment": {
             "key": "punishment",
-            "required": false
+            "requiff0000": false
           },
           "duration": {
             "key": "time",
-            "required": false
+            "requiff0000": false
           },
           "warnamount": {
             "key": "number",
-            "required": true
+            "requiff0000": true
           },
           "removeroles": {
             "key": "roles",
-            "required": false
+            "requiff0000": false
           },
           "addroles": {
             "key": "roles",
-            "required": false
+            "requiff0000": false
           },
           "confirmationreq": {
             "key": "boolean",
-            "required": true
+            "requiff0000": true
           }
         },
         "modsettings": {
           "expirewarns": {
             "key": "boolean",
-            "required": true
+            "requiff0000": true
           },
           "expiremutes": {
             "key": "boolean",
-            "required": true
+            "requiff0000": true
           },
           "expiremutesafter": {
             "key": "time",
-            "required": true
+            "requiff0000": true
           },
           "expirewarnsafter": {
             "key": "time",
-            "required": true
+            "requiff0000": true
           },
           "muteban": {
             "key": "boolean",
-            "required": true
+            "requiff0000": true
           }
         },
         "antivirus": {
           "bantof": {
             "key": "boolean",
-            "required": true
+            "requiff0000": true
           },
           "kicktof": {
             "key": "boolean",
-            "required": true
+            "requiff0000": true
           },
           "mutetof": {
             "key": "boolean",
-            "required": true
+            "requiff0000": true
           },
           "warntof": {
             "key": "boolean",
-            "required": true
+            "requiff0000": true
           },
           "verbaltof": {
             "key": "boolean",
-            "required": true
+            "requiff0000": true
           },
           "muteafterwarnsamount": {
             "key": "number",
-            "required": false
+            "requiff0000": false
           },
           "kickafterwarnsamount": {
             "key": "number",
-            "required": false
+            "requiff0000": false
           },
           "banafterwarnsamount": {
             "key": "number",
-            "required": false
+            "requiff0000": false
           },
           "warnafterwarnsamount": {
             "key": "number",
-            "required": false
+            "requiff0000": false
           },
           "minimize": {
             "key": "time",
-            "required": false
+            "requiff0000": false
           },
           "delete": {
             "key": "time",
-            "required": false
+            "requiff0000": false
           }
         },
         "disboard": {
           "roles": {
             "key": "roles",
-            "required": false
+            "requiff0000": false
           },
           "users": {
             "key": "users",
-            "required": false
+            "requiff0000": false
           },
           "channelid": {
             "key": "channel",
-            "required": false
+            "requiff0000": false
           },
           "repeatreminder": {
             "key": "minute",
-            "required": false
+            "requiff0000": false
           }
         },
         "suggestions": {
           "channelid": {
             "key": "channel",
-            "required": true
+            "requiff0000": true
           },
           "bluserid": {
             "key": "users",
-            "required": false
+            "requiff0000": false
           },
           "blroleid": {
             "key": "roles",
-            "required": false
+            "requiff0000": false
           },
           "approverroleid": {
             "key": "roles",
-            "required": true
+            "requiff0000": true
           }
         },
         "sticky": {
           "roles": {
             "key": "roles",
-            "required": false
+            "requiff0000": false
           },
           "stickyrolesmode": {
             "key": "boolean",
-            "required": true
+            "requiff0000": true
           },
           "stickyrolesactive": {
             "key": "boolean",
-            "required": true
+            "requiff0000": true
           },
           "stickypermsactive": {
             "key": "boolean",
-            "required": true
+            "requiff0000": true
           }
         },
         "verification": {
           "logchannel": {
             "key": "channel",
-            "required": false
+            "requiff0000": false
           },
           "finishedrole": {
             "key": "role",
-            "required": false
+            "requiff0000": false
           },
           "pendingrole": {
             "key": "role",
-            "required": false
+            "requiff0000": false
           },
           "startchannel": {
             "key": "channel",
-            "required": false
+            "requiff0000": false
           },
           "selfstart": {
             "key": "boolean",
-            "required": true
+            "requiff0000": true
           },
           "kickafter": {
             "key": "minute",
-            "required": false
+            "requiff0000": false
           },
           "kicktof": {
             "key": "boolean",
-            "required": true
+            "requiff0000": true
           },
           "deletestartchmsgs": {
             "key": "boolean",
-            "required": true
+            "requiff0000": true
           }
         },
         "antiraid": {
           "punishmenttof": {
             "key": "boolean",
-            "required": true
+            "requiff0000": true
           },
           "punishment": {
             "key": "boolean",
-            "required": true
+            "requiff0000": true
           },
           "posttof": {
             "key": "boolean",
-            "required": false
+            "requiff0000": false
           },
           "postchannel": {
             "key": "channel",
-            "required": false
+            "requiff0000": false
           },
           "pingroles": {
             "key": "roles",
-            "required": false
+            "requiff0000": false
           },
           "pingusers": {
             "key": "users",
-            "required": false
+            "requiff0000": false
           },
           "time": {
             "key": "second",
-            "required": true
+            "requiff0000": true
           },
           "jointhreshold": {
             "key": "number",
-            "required": true
+            "requiff0000": true
           },
           "similaridthreshold": {
             "key": "number",
-            "required": true
+            "requiff0000": true
           }
         },
         "selfroles": {
           "roles": {
             "key": "roles",
-            "required": false
+            "requiff0000": false
           },
           "onlyone": {
             "key": "boolean",
-            "required": false
+            "requiff0000": false
           },
           "blacklistedroles": {
             "key": "roles",
-            "required": false
+            "requiff0000": false
           },
           "blacklistedusers": {
             "key": "users",
-            "required": false
+            "requiff0000": false
           },
           "whitelistedroles": {
             "key": "roles",
-            "required": false
+            "requiff0000": false
           },
           "whitelistedusers": {
             "key": "users",
-            "required": false
+            "requiff0000": false
           },
           "name": {
             "key": "string",
-            "required": true
+            "requiff0000": true
           }
         },
         "modroles": {
           "blacklistedroles": {
             "key": "roles",
-            "required": false
+            "requiff0000": false
           },
           "blacklistedusers": {
             "key": "users",
-            "required": false
+            "requiff0000": false
           },
           "whitelistedroles": {
             "key": "roles",
-            "required": false
+            "requiff0000": false
           },
           "whitelistedusers": {
             "key": "users",
-            "required": false
+            "requiff0000": false
           },
           "roleid": {
             "key": "role",
-            "required": true
+            "requiff0000": true
           },
           "perms": {
             "key": "permissions",
-            "required": false
+            "requiff0000": false
           },
           "whitelistedcommands": {
             "key": "commands",
-            "required": false
+            "requiff0000": false
           },
           "blacklistedcommands": {
             "key": "commands",
-            "required": false
+            "requiff0000": false
           }
         },
         "levelsettings": {
           "xpmultiplier": {
             "key": "number",
-            "required": true
+            "requiff0000": true
           },
           "blchannels": {
             "key": "channels",
-            "required": false
+            "requiff0000": false
           },
           "blroles": {
             "key": "roles",
-            "required": false
+            "requiff0000": false
           },
           "blusers": {
             "key": "users",
-            "required": false
+            "requiff0000": false
           },
           "wlchannels": {
             "key": "channels",
-            "required": false
+            "requiff0000": false
           },
           "wlroles": {
             "key": "roles",
-            "required": false
+            "requiff0000": false
           },
           "wlusers": {
             "key": "users",
-            "required": true
+            "requiff0000": true
           },
           "xppermsg": {
             "key": "number",
-            "required": true
+            "requiff0000": true
           },
           "rolemode": {
             "key": "boolean",
-            "required": true
+            "requiff0000": true
           },
           "lvlupmode": {
             "key": "number",
-            "required": true
+            "requiff0000": true
           },
           "lvlupdeltimeout": {
             "key": "second",
-            "required": true
+            "requiff0000": true
           },
           "lvlupemotes": {
             "key": "emotes",
-            "required": false
+            "requiff0000": false
           },
           "embed": {
             "key": "embed",
-            "required": true
+            "requiff0000": true
           },
           "lvlupchannels": {
             "key": "channels",
-            "required": false
+            "requiff0000": false
           },
           "ignoreprefixes": {
             "key": "boolean",
-            "required": true
+            "requiff0000": true
           },
           "prefixes": {
             "key": "stringArray",
-            "required": false
+            "requiff0000": false
           }
         },
         "nitrosettings": {
           "roleid": {
             "key": "role",
-            "required": true
+            "requiff0000": true
           },
           "logchannels": {
             "key": "channels",
-            "required": false
+            "requiff0000": false
           },
           "rolemode": {
             "key": "boolean",
-            "required": true
+            "requiff0000": true
           }
         },
         "nitroroles": {
           "days": {
             "key": "number",
-            "required": true
+            "requiff0000": true
           },
           "roles": {
             "key": "roles",
-            "required": true
+            "requiff0000": true
           }
         },
         "levelroles": {
           "level": {
             "key": "number",
-            "required": true
+            "requiff0000": true
           },
           "roles": {
             "key": "roles",
-            "required": true
+            "requiff0000": true
           }
         },
         "multiroles": {
           "multiplier": {
             "key": "number",
-            "required": true
+            "requiff0000": true
           },
           "roles": {
             "key": "roles",
-            "required": true
+            "requiff0000": true
           }
         },
         "multichannels": {
           "multiplier": {
             "key": "number",
-            "required": true
+            "requiff0000": true
           },
           "channels": {
             "key": "channels",
-            "required": true
+            "requiff0000": true
           }
         },
         "ruleschannels": {
           "rules": {
             "key": "permissions",
-            "required": true
+            "requiff0000": true
           },
           "channels": {
             "key": "channels",
-            "required": true
+            "requiff0000": true
           },
           "HAS_LEAST_ATTACHMENTS": {
             "key": "number",
-            "required": true
+            "requiff0000": true
           },
           "HAS_MOST_ATTACHMENTS": {
             "key": "number",
-            "required": true
+            "requiff0000": true
           },
           "HAS_LEAST_CHARACTERS": {
             "key": "number",
-            "required": true
+            "requiff0000": true
           },
           "HAS_MOST_CHARACTERS": {
             "key": "number",
-            "required": true
+            "requiff0000": true
           },
           "HAS_LEAST_WORDS": {
             "key": "number",
-            "required": true
+            "requiff0000": true
           },
           "HAS_MOST_WORDS": {
             "key": "number",
-            "required": true
+            "requiff0000": true
           },
           "MENTIONS_LEAST_USERS": {
             "key": "number",
-            "required": true
+            "requiff0000": true
           },
           "MENTIONS_MOST_USERS": {
             "key": "number",
-            "required": true
+            "requiff0000": true
           },
           "MENTIONS_LEAST_CHANNELS": {
             "key": "number",
-            "required": true
+            "requiff0000": true
           },
           "MENTIONS_MOST_CHANNELS": {
             "key": "number",
-            "required": true
+            "requiff0000": true
           },
           "MENTIONS_LEAST_ROLES": {
             "key": "number",
-            "required": true
+            "requiff0000": true
           },
           "MENTIONS_MOST_ROLES": {
             "key": "number",
-            "required": true
+            "requiff0000": true
           },
           "HAS_LEAST_LINKS": {
             "key": "number",
-            "required": true
+            "requiff0000": true
           },
           "HAS_MOST_LINKS": {
             "key": "number",
-            "required": true
+            "requiff0000": true
           },
           "HAS_LEAST_EMOTES": {
             "key": "number",
-            "required": true
+            "requiff0000": true
           },
           "HAS_MOST_EMOTES": {
             "key": "number",
-            "required": true
+            "requiff0000": true
           },
           "HAS_LEAST_MENTIONS": {
             "key": "number",
-            "required": true
+            "requiff0000": true
           },
           "HAS_MOST_MENTIONS": {
             "key": "number",
-            "required": true
+            "requiff0000": true
           }
         }
       },

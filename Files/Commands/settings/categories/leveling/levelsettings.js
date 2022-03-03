@@ -29,11 +29,11 @@ module.exports = {
       }
     }
 
-    const embed = new Discord.MessageEmbed()
+    const embed = new Discord.UnsafeEmbed()
       .setDescription(
         msg.client.ch.stp(msg.lan.description, { prefix: msg.client.constants.standard.prefix }),
       )
-      .addFields(
+      .addFieldss([
         {
           name: msg.lanSettings.active,
           value: r.active
@@ -78,52 +78,63 @@ module.exports = {
           value: `${lvlupmode}`,
           inline: true,
         },
-      );
+      ]);
 
     switch (r.lvlupmode) {
       case '1': {
         const customEmbed = await embedName(msg, r);
 
-        embed.addField(msg.lan.embed, customEmbed ? customEmbed.name : msg.language.default, true);
-        embed.addFields({
-          name: msg.lan.lvlupdeltimeout,
-          value: Number(r.lvlupdeltimeout)
-            ? `\`${r.lvlupdeltimeout} ${msg.language.time.seconds}\``
-            : msg.language.none,
-          inline: true,
-        });
-        embed.addFields({
-          name: `${msg.lan.lvlupchannels}`,
-          value: `${
-            r.lvlupchannels && r.lvlupchannels.length
-              ? r.lvlupchannels.map((id) => ` <#${id}>`)
-              : msg.language.whereTriggered
-          }`,
-          inline: false,
-        });
+        embed.addFields([
+          {
+            name: msg.lan.embed,
+            value: customEmbed ? customEmbed.name : msg.language.default,
+            inline: true,
+          },
+        ]);
+        embed.addFieldss([
+          {
+            name: msg.lan.lvlupdeltimeout,
+            value: Number(r.lvlupdeltimeout)
+              ? `\`${r.lvlupdeltimeout} ${msg.language.time.seconds}\``
+              : msg.language.none,
+            inline: true,
+          },
+        ]);
+        embed.addFieldss([
+          {
+            name: `${msg.lan.lvlupchannels}`,
+            value: `${
+              r.lvlupchannels && r.lvlupchannels.length
+                ? r.lvlupchannels.map((id) => ` <#${id}>`)
+                : msg.language.whereTriggered
+            }`,
+            inline: false,
+          },
+        ]);
 
         break;
       }
       case '2': {
-        embed.addField(
-          msg.lan.reactions,
-          r.lvlupemotes && r.lvlupemotes.length
-            ? r.lvlupemotes
-                .map((e) => {
-                  let emote;
-                  if (msg.client.emojis.cache.get(e)) {
-                    emote = msg.client.emojis.cache.get(e);
-                  } else if (e.match(msg.client.ch.regexes.emojiTester)?.length) {
-                    emote = e;
-                  }
+        embed.addFields({
+          name: msg.lan.reactions,
+          value:
+            r.lvlupemotes && r.lvlupemotes.length
+              ? r.lvlupemotes
+                  .map((e) => {
+                    let emote;
+                    if (msg.client.emojis.cache.get(e)) {
+                      emote = msg.client.emojis.cache.get(e);
+                    } else if (e.match(msg.client.ch.regexes.emojiTester)?.length) {
+                      emote = e;
+                    }
 
-                  if (emote) return `${emote}`;
-                  return null;
-                })
-                .filter((e) => !!e)
-                .join('')
-            : msg.client.constants.standard.levelupemotes.map((e) => e).join(''),
-        );
+                    if (emote) return `${emote}`;
+                    return null;
+                  })
+                  .filter((e) => !!e)
+                  .join('')
+              : msg.client.constants.standard.levelupemotes.map((e) => e).join(''),
+        });
         break;
       }
       default: {
@@ -131,7 +142,7 @@ module.exports = {
       }
     }
 
-    embed.addFields(
+    embed.addFieldss([
       {
         name: '\u200b',
         value: '\u200b',
@@ -208,117 +219,117 @@ module.exports = {
             : msg.language.none
         }`,
       },
-    );
+    ]);
     return embed;
   },
   buttons(msg, r) {
     const components = [];
 
     components.push([
-      new Discord.MessageButton()
+      new Discord.Button()
         .setCustomId(msg.lan.edit.active.name)
         .setLabel(msg.lanSettings.active)
-        .setStyle(r.active ? 'SUCCESS' : 'DANGER'),
+        .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger),
     ]);
 
     components.push([
-      new Discord.MessageButton()
+      new Discord.Button()
         .setCustomId(msg.lan.edit.rolemode.name)
         .setLabel(msg.lan.rolemode)
-        .setStyle(r.rolemode ? 'SECONDARY' : 'PRIMARY'),
-      new Discord.MessageButton()
+        .setStyle(r.rolemode ? Discord.ButtonStyle.Secondary : Discord.ButtonStyle.Primary),
+      new Discord.Button()
         .setCustomId(msg.lan.edit.xppermsg.name)
         .setLabel(msg.lan.xppermsg.replace(/\*/g, ''))
-        .setStyle('SECONDARY'),
-      new Discord.MessageButton()
+        .setStyle(Discord.ButtonStyle.Secondary),
+      new Discord.Button()
         .setCustomId(msg.lan.edit.xpmultiplier.name)
         .setLabel(msg.lan.xpmultiplier.replace(/\*/g, ''))
-        .setStyle('SECONDARY'),
+        .setStyle(Discord.ButtonStyle.Secondary),
     ]);
 
     switch (r.lvlupmode) {
       case '1': {
         components.push([
-          new Discord.MessageButton()
+          new Discord.Button()
             .setCustomId(msg.lan.edit.lvlupmode.name)
             .setLabel(msg.lan.lvlupmode)
-            .setStyle('PRIMARY'),
-          new Discord.MessageButton()
+            .setStyle(Discord.ButtonStyle.Primary),
+          new Discord.Button()
             .setCustomId(msg.lan.edit.lvlupchannels.name)
             .setLabel(msg.lan.lvlupchannels)
-            .setStyle('PRIMARY'),
-          new Discord.MessageButton()
+            .setStyle(Discord.ButtonStyle.Primary),
+          new Discord.Button()
             .setCustomId(msg.lan.edit.embed.name)
             .setLabel(msg.lan.embed)
-            .setStyle('PRIMARY'),
-          new Discord.MessageButton()
+            .setStyle(Discord.ButtonStyle.Primary),
+          new Discord.Button()
             .setCustomId(msg.lan.edit.lvlupdeltimeout.name)
             .setLabel(msg.lan.lvlupdeltimeout)
-            .setStyle('PRIMARY'),
+            .setStyle(Discord.ButtonStyle.Primary),
         ]);
 
         break;
       }
       case '2': {
         components.push([
-          new Discord.MessageButton()
+          new Discord.Button()
             .setCustomId(msg.lan.edit.lvlupmode.name)
             .setLabel(msg.lan.lvlupmode)
-            .setStyle('PRIMARY'),
-          new Discord.MessageButton()
+            .setStyle(Discord.ButtonStyle.Primary),
+          new Discord.Button()
             .setCustomId(msg.lan.edit.lvlupemotes.name)
             .setLabel(msg.lan.lvlupemotes)
-            .setStyle('PRIMARY'),
+            .setStyle(Discord.ButtonStyle.Primary),
         ]);
         break;
       }
       default: {
         components.push([
-          new Discord.MessageButton()
+          new Discord.Button()
             .setCustomId(msg.lan.edit.lvlupmode.name)
             .setLabel(msg.lan.lvlupmode)
-            .setStyle('PRIMARY'),
+            .setStyle(Discord.ButtonStyle.Primary),
         ]);
         break;
       }
     }
 
     components.push([
-      new Discord.MessageButton()
+      new Discord.Button()
         .setCustomId(msg.lan.edit.blchannels.name)
         .setLabel(msg.lan.blchannels)
-        .setStyle('PRIMARY'),
-      new Discord.MessageButton()
+        .setStyle(Discord.ButtonStyle.Primary),
+      new Discord.Button()
         .setCustomId(msg.lan.edit.blroles.name)
         .setLabel(msg.lan.blroles)
-        .setStyle('PRIMARY'),
-      new Discord.MessageButton()
+        .setStyle(Discord.ButtonStyle.Primary),
+      new Discord.Button()
         .setCustomId(msg.lan.edit.blusers.name)
         .setLabel(msg.lan.blusers)
-        .setStyle('PRIMARY'),
+        .setStyle(Discord.ButtonStyle.Primary),
     ]);
 
     components.push([
-      new Discord.MessageButton()
+      new Discord.Button()
         .setCustomId(msg.lan.edit.wlchannels.name)
         .setLabel(msg.lan.wlchannels)
-        .setStyle('PRIMARY'),
-      new Discord.MessageButton()
+        .setStyle(Discord.ButtonStyle.Primary),
+      new Discord.Button()
         .setCustomId(msg.lan.edit.wlroles.name)
         .setLabel(msg.lan.wlroles)
-        .setStyle('PRIMARY'),
-      new Discord.MessageButton()
+        .setStyle(Discord.ButtonStyle.Primary),
+      new Discord.Button()
         .setCustomId(msg.lan.edit.wlusers.name)
         .setLabel(msg.lan.wlusers)
-        .setStyle('PRIMARY'),
-      new Discord.MessageButton()
+        .setStyle(Discord.ButtonStyle.Primary),
+      new Discord.Button()
         .setCustomId(msg.lan.edit.ignoreprefixes.name)
         .setLabel(msg.lan.ignoreprefixes)
-        .setStyle(r.ignoreprefixes ? 'SUCCESS' : 'SECONDARY'),
-      new Discord.MessageButton()
+        .setStyle(r.ignoreprefixes ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Secondary),
+      new Discord.Button()
         .setCustomId(msg.lan.edit.prefixes.name)
         .setLabel(msg.lan.prefixes)
-        .setStyle('PRIMARY'),
+        .setStyle(Discord.ButtonStyle.Primary),
     ]);
 
     return components;

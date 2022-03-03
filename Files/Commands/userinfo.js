@@ -82,10 +82,7 @@ module.exports = {
       botInfo = await getBotInfo(msg, user);
     }
 
-    if (
-      new URL(msg.client.ch.displayAvatarURL(user)).pathname.endsWith('.gif') ||
-      msg.client.ch.displayBannerURL(user)
-    ) {
+    if (new URL(user.displayAvatarURL()).pathname.endsWith('.gif') || user.displayBannerURL()) {
       flags.add(4096);
     }
 
@@ -93,14 +90,14 @@ module.exports = {
     getBoosting(userflags, user, msg);
     const con = msg.client.constants.commands[this.name];
 
-    const userEmbed = new Discord.MessageEmbed()
+    const userEmbed = new Discord.UnsafeEmbed()
       .setAuthor({
         name: user.bot ? msg.lan.authorBot : msg.lan.authorUser,
         iconURL: con.authorImage,
         url: msg.client.constants.standard.invite,
       })
-      .setThumbnail(msg.client.ch.displayAvatarURL(user))
-      .setImage(msg.client.ch.displayBannerURL(user) || botInfo?.bannerURL)
+      .setThumbnail(user.displayAvatarURL())
+      .setImage(user.displayBannerURL() || botInfo?.bannerURL)
       .setColor(user.accentColor)
       .setDescription(
         `${msg.client.ch.stp(msg.lan.userInfo, {
@@ -111,27 +108,31 @@ module.exports = {
       );
 
     if (botInfo) {
-      userEmbed.addField(msg.language.description, botInfo.description);
+      userEmbed.addFields({ name: msg.language.description, value: botInfo.description });
     }
     if (userflags.length) {
-      userEmbed.addFields({
-        name: msg.lan.flags,
-        value: userflags.join('\n'),
-        inline: false,
-      });
+      userEmbed.addFieldss([
+        {
+          name: msg.lan.flags,
+          value: userflags.join('\n'),
+          inline: false,
+        },
+      ]);
     }
 
-    userEmbed.addFields({
-      name: `${msg.client.constants.emotes.plusBG} ${msg.lan.createdAt}`,
-      value: `<t:${String(user.createdTimestamp).slice(0, -3)}:F> (<t:${String(
-        user.createdTimestamp,
-      ).slice(0, -3)}:R>)\n\`${moment
-        .duration(Date.now() - user.createdTimestamp)
-        .format(
-          `y [${msg.language.time.years}], M [${msg.language.time.months}], d [${msg.language.time.days}], h [${msg.language.time.hours}], m [${msg.language.time.minutes}], s [${msg.language.time.seconds}]`,
-          { trim: 'all' },
-        )}\``,
-    });
+    userEmbed.addFieldss([
+      {
+        name: `${msg.client.constants.emotes.plusBG} ${msg.lan.createdAt}`,
+        value: `<t:${String(user.createdTimestamp).slice(0, -3)}:F> (<t:${String(
+          user.createdTimestamp,
+        ).slice(0, -3)}:R>)\n\`${moment
+          .duration(Date.now() - user.createdTimestamp)
+          .format(
+            `y [${msg.language.time.years}], M [${msg.language.time.months}], d [${msg.language.time.days}], h [${msg.language.time.hours}], m [${msg.language.time.minutes}], s [${msg.language.time.seconds}]`,
+            { trim: 'all' },
+          )}\``,
+      },
+    ]);
 
     if (user.accentColor) userEmbed.setFooter({ text: msg.lan.footer });
 
@@ -139,13 +140,13 @@ module.exports = {
     let components = [];
     const member = await msg.guild.members.fetch(user.id).catch(() => {});
     if (member) {
-      const memberEmbed = new Discord.MessageEmbed()
+      const memberEmbed = new Discord.UnsafeEmbed()
         .setAuthor({
           name: user.bot ? msg.lan.memberAuthorBot : msg.lan.memberAuthorUser,
           iconURL: con.authorImage,
           url: msg.client.constants.standard.invite,
         })
-        .addFields(
+        .addFieldss([
           {
             name: msg.lan.nickname,
             value: msg.client.ch.makeInlineCode(member.displayName),
@@ -183,10 +184,10 @@ module.exports = {
                 : `${msg.client.constants.emotes.crossBG} ${msg.language.No}`
             }`,
           },
-        );
+        ]);
 
-      if (msg.client.ch.displayAvatarURL(member) !== msg.client.ch.displayAvatarURL(user)) {
-        memberEmbed.setThumbnail(msg.client.ch.displayAvatarURL(member));
+      if (member.displayAvatarURL() !== user.displayAvatarURL()) {
+        memberEmbed.setThumbnail(member.displayAvatarURL());
       }
 
       embeds.push(memberEmbed);
@@ -270,15 +271,15 @@ const interactionHandler = (msg, m, embeds, member) => {
 
 const getComponents = (msg, member, page) => [
   [
-    new Discord.MessageButton()
+    new Discord.Button()
       .setLabel(msg.lan.viewRoles)
       .setDisabled(member.roles.cache.size <= 1)
-      .setStyle('SECONDARY')
+      .setStyle(Discord.ButtonStyle.Secondary)
       .setCustomId('roles'),
-    new Discord.MessageButton()
+    new Discord.Button()
       .setLabel(msg.lan.viewBasicPermissions)
       .setCustomId('basicPerms')
-      .setStyle('SECONDARY'),
+      .setStyle(Discord.ButtonStyle.Secondary),
   ],
   [
     new Discord.MessageSelectMenu()
@@ -289,15 +290,15 @@ const getComponents = (msg, member, page) => [
       .setOptions(getChannelOptions(msg).slice((page - 1) * 25, page * 25)),
   ],
   [
-    new Discord.MessageButton()
+    new Discord.Button()
       .setCustomId('back')
       .setEmoji(msg.client.constants.emotes.back)
-      .setStyle('SECONDARY')
+      .setStyle(Discord.ButtonStyle.Secondary)
       .setDisabled(page === 1),
-    new Discord.MessageButton()
+    new Discord.Button()
       .setCustomId('next')
       .setEmoji(msg.client.constants.emotes.forth)
-      .setStyle('SECONDARY')
+      .setStyle(Discord.ButtonStyle.Secondary)
       .setDisabled(page === Math.ceil(msg.guild.channels.cache.size / 25)),
   ],
 ];
@@ -431,44 +432,56 @@ const rolesHandler = async (interaction, msg, member) => {
     const rolesWithoutSep = member.roles.cache.filter((role) => !rolesWithSep.includes(role.id));
     rolesWithoutSep.sort((a, b) => b.rawPosition - a.rawPosition);
 
-    const embed = new Discord.MessageEmbed();
+    const embed = new Discord.UnsafeEmbed();
     separators.forEach((sep, key) => {
       if (!sep.stopRole) {
-        embed.addField('\u200b', sep.roles.map((r) => r).join('\n'), false);
+        embed.addFields({
+          name: '\u200b',
+          value: sep.roles.map((r) => r).join('\n'),
+          inline: false,
+        });
 
         const index = separators.map((s) => s).findIndex((s) => s.id === key);
         const nextSep = separators.map((s) => s)[index + 1];
 
         if (!nextSep || (nextSep.stopRole && nextSep.rawPosition > nextSep.stopRole.rawPosition)) {
-          embed.addField(sep.name, '\u200b', false);
+          embed.addFields({ name: sep.name, value: '\u200b', inline: false });
         }
       } else if (sep.rawPosition > sep.stopRole.rawPosition) {
-        embed.addField(sep.name, sep.roles.map((r) => r).join('\n'), false);
+        embed.addFields({
+          name: sep.name,
+          value: sep.roles.map((r) => r).join('\n'),
+          inline: false,
+        });
       } else if (sep.rawPosition < sep.stopRole.rawPosition) {
         const index = separators.map((s) => s).findIndex((s) => s.id === key);
         const lastSep = separators.map((s) => s)[index - 1];
 
-        embed.addField(
-          `${lastSep ? lastSep.name : '\u200b'}`,
-          sep.roles.map((r) => r).join('\n'),
-          false,
-        );
+        embed.addFields({
+          name: `${lastSep ? lastSep.name : '\u200b'}`,
+          value: sep.roles.map((r) => r).join('\n'),
+          inline: false,
+        });
 
         if (key === separators.lastKey()) {
-          embed.addField(sep.name, '\u200b', false);
+          embed.addFields({ name: sep.name, value: '\u200b', inline: false });
         }
       }
     });
 
     if (rolesWithoutSep.size) {
-      embed.addField(msg.lan.rolesWithoutSep, rolesWithoutSep.map((r) => r).join('\n'), false);
+      embed.addFields({
+        name: msg.lan.rolesWithoutSep,
+        value: rolesWithoutSep.map((r) => r).join('\n'),
+        inline: false,
+      });
     }
 
     interaction.reply({ embeds: [embed], ephemeral: true });
     return;
   }
 
-  const embed = new Discord.MessageEmbed().setDescription(
+  const embed = new Discord.UnsafeEmbed().setDescription(
     `**${msg.language.roles}**:\n${member.roles.cache
       .sort((a, b) => b.rawPosition - a.rawPosition)
       .map((r) => `${r}`)
@@ -479,17 +492,17 @@ const rolesHandler = async (interaction, msg, member) => {
 };
 
 const basicPermsHandler = (interaction, msg, member) => {
-  const allPerms = new Discord.Permissions(Discord.Permissions.ALL).toArray();
+  const allPerms = new Discord.PermissionsBitField(Discord.Permissions.ALL).toArray();
   const allowedBits = [];
   const deniedBits = [];
 
   allPerms.forEach((perm, i) => {
     const p = Object.entries(member.permissions.serialize())[i];
     if (p[1]) {
-      allowedBits.push(new Discord.Permissions(p[0]).bitfield);
+      allowedBits.push(new Discord.PermissionsBitField(p[0]).bitfield);
     }
     if (!p[1]) {
-      deniedBits.push(new Discord.Permissions(p[0]).bitfield);
+      deniedBits.push(new Discord.PermissionsBitField(p[0]).bitfield);
     }
   });
 
@@ -509,7 +522,7 @@ const basicPermsHandler = (interaction, msg, member) => {
       ...new Set([
         ...allowedBits
           .map((perm) =>
-            new Discord.Permissions(bit).has(perm, false)
+            new Discord.PermissionsBitField(bit).has(perm, false)
               ? `${msg.client.constants.emotes.enabled} ${msg.client.ch.permCalc(
                   perm,
                   msg.language,
@@ -519,7 +532,7 @@ const basicPermsHandler = (interaction, msg, member) => {
           .filter((r) => !!r),
         ...deniedBits
           .map((perm) =>
-            new Discord.Permissions(bit).has(perm, false)
+            new Discord.PermissionsBitField(bit).has(perm, false)
               ? `${msg.client.constants.emotes.disabled} ${msg.client.ch.permCalc(
                   perm,
                   msg.language,
@@ -531,9 +544,9 @@ const basicPermsHandler = (interaction, msg, member) => {
     ]);
   });
 
-  const embed = new Discord.MessageEmbed();
+  const embed = new Discord.UnsafeEmbed();
   categories.forEach((perms, name) => {
-    embed.addField(`${name}`, ` ${perms.join('\n')}\u200b`, false);
+    embed.addFields({ name: `${name}`, value: ` ${perms.join('\n')}\u200b`, inline: false });
   });
 
   interaction.reply({ embeds: [embed], ephemeral: true });
@@ -565,22 +578,22 @@ const permsHandler = (interaction, msg, member) => {
   let usedPermissions = Discord.Permissions.ALL;
   switch (channel.type) {
     case 'GUILD_TEXT' || 'GUILD_PUBLIC_THREAD' || 'GUILD_PRIVATE_THREAD': {
-      usedPermissions = new Discord.Permissions(535529258065n);
+      usedPermissions = new Discord.PermissionsBitField(535529258065n);
       categoryBits = [categoryBits[0], categoryBits[1], categoryBits[2]];
       break;
     }
     case 'GUILD_NEWS' || 'GUILD_NEWS_THREAD': {
-      usedPermissions = new Discord.Permissions(466809781329n);
+      usedPermissions = new Discord.PermissionsBitField(466809781329n);
       categoryBits = [categoryBits[0], categoryBits[1], categoryBits[2]];
       break;
     }
     case 'GUILD_VOICE': {
-      usedPermissions = new Discord.Permissions(558680246033n);
+      usedPermissions = new Discord.PermissionsBitField(558680246033n);
       categoryBits = [categoryBits[0], categoryBits[1], categoryBits[3]];
       break;
     }
     case 'GUILD_CATEGORY': {
-      usedPermissions = new Discord.Permissions(1098236034897n);
+      usedPermissions = new Discord.PermissionsBitField(1098236034897n);
       categoryBits = [
         categoryBits[0],
         categoryBits[1],
@@ -591,7 +604,7 @@ const permsHandler = (interaction, msg, member) => {
       break;
     }
     case 'GUILD_STAGE_VOICE': {
-      usedPermissions = new Discord.Permissions(13175358481n);
+      usedPermissions = new Discord.PermissionsBitField(13175358481n);
       categoryBits = [
         categoryBits[0],
         categoryBits[1],
@@ -614,10 +627,10 @@ const permsHandler = (interaction, msg, member) => {
   Object.entries(permissions.serialize()).forEach(([name, has]) => {
     if (!usedPermissions.has(name, false)) return;
     if (has) {
-      allowedBits.push(new Discord.Permissions(name).bitfield);
+      allowedBits.push(new Discord.PermissionsBitField(name).bitfield);
     }
     if (!has) {
-      deniedBits.push(new Discord.Permissions(name).bitfield);
+      deniedBits.push(new Discord.PermissionsBitField(name).bitfield);
     }
   });
 
@@ -626,7 +639,7 @@ const permsHandler = (interaction, msg, member) => {
       ...new Set([
         ...allowedBits
           .map((perm) =>
-            new Discord.Permissions(bit).has(perm, false)
+            new Discord.PermissionsBitField(bit).has(perm, false)
               ? `${msg.client.constants.emotes.enabled} ${msg.client.ch.permCalc(
                   perm,
                   msg.language,
@@ -636,7 +649,7 @@ const permsHandler = (interaction, msg, member) => {
           .filter((r) => !!r),
         ...deniedBits
           .map((perm) =>
-            new Discord.Permissions(bit).has(perm, false)
+            new Discord.PermissionsBitField(bit).has(perm, false)
               ? `${msg.client.constants.emotes.disabled} ${msg.client.ch.permCalc(
                   perm,
                   msg.language,
@@ -648,9 +661,9 @@ const permsHandler = (interaction, msg, member) => {
     ]);
   });
 
-  const embed = new Discord.MessageEmbed();
+  const embed = new Discord.UnsafeEmbed();
   categories.forEach((perms, name) => {
-    embed.addField(`${name}`, ` ${perms.join('\n')}\u200b`, false);
+    embed.addFields({ name: `${name}`, value: ` ${perms.join('\n')}\u200b`, inline: false });
   });
 
   interaction.reply({ embeds: [embed], ephemeral: true });
@@ -748,17 +761,17 @@ const getUserComponents = (msg, page, users) => {
   ];
 
   if (users.length > 25) {
-    const back = new Discord.MessageButton()
+    const back = new Discord.Button()
       .setEmoji(msg.client.constants.emotes.back)
       .setDisabled(page === 1)
       .setCustomId('back')
-      .setStyle('SECONDARY');
+      .setStyle(Discord.ButtonStyle.Secondary);
 
-    const next = new Discord.MessageButton()
+    const next = new Discord.Button()
       .setEmoji(msg.client.constants.emotes.forth)
       .setCustomId('next')
       .setDisabled(page === Math.ceil(users.length / 25))
-      .setStyle('SECONDARY');
+      .setStyle(Discord.ButtonStyle.Secondary);
 
     return [menu, [back, next]];
   }

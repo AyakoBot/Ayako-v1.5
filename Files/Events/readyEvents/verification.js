@@ -48,8 +48,7 @@ module.exports = {
   },
 };
 
-const getEmbed = (guild, lan) => {
-  return new Discord.MessageEmbed()
+const getEmbed = (guild, lan) =>
+  new Discord.UnsafeEmbed()
     .setDescription(client.ch.stp(lan.kickMsg, { guild }))
     .setColor(client.constants.mod.kickAdd.color);
-};

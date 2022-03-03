@@ -12,7 +12,7 @@ module.exports = {
   thisGuildOnly: ['692452151112368218'],
   async execute(msg) {
     msg.delete().catch(() => {});
-    const embed = new Discord.MessageEmbed()
+    const embed = new Discord.UnsafeEmbed()
       .setDescription(msg.args.slice(0).join(' '))
       .setColor(msg.client.ch.colorSelector(msg.guild.me));
     msg.react('670163913370894346').catch(() => {});

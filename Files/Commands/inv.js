@@ -15,7 +15,7 @@ module.exports = {
     const channel = msg.args[0];
     if (!promotion) return msg.reply("You need to tell me who's up to be invited?");
     if (channel.toLowerCase() === 'mc') {
-      const SuggestEmbed = new Discord.MessageEmbed()
+      const SuggestEmbed = new Discord.UnsafeEmbed()
         .setTitle('Should this player be invited to TA Infinite MC server?')
         .setAuthor({
           name: `${msg.author.tag}`,
@@ -23,7 +23,7 @@ module.exports = {
         })
         .setDescription(promotion)
         .setTimestamp()
-        .setColor('#b0ff00');
+        .setColor(msg.client.constants.standard.color);
       msg.react('670163913370894346').catch(() => {});
       const m = await msg.client.ch.send(msg.client.channels.cache.get('773310464700579851'), {
         embeds: [SuggestEmbed],
@@ -31,7 +31,7 @@ module.exports = {
       m.react('670163913370894346').catch(() => {});
       m.react('746392936807268474').catch(() => {});
     } else if (channel.toLowerCase() === 'discord') {
-      const SuggestEmbed = new Discord.MessageEmbed()
+      const SuggestEmbed = new Discord.UnsafeEmbed()
         .setTitle('Should this player be invited to this Discord?')
         .setAuthor({
           name: `${msg.author.tag}`,
@@ -39,7 +39,7 @@ module.exports = {
         })
         .setDescription(promotion)
         .setTimestamp()
-        .setColor('#b0ff00');
+        .setColor(msg.client.constants.standard.color);
       msg.react('670163913370894346').catch(() => {});
       const m = await msg.client.ch.send(msg.client.channels.cache.get('773310464700579851'), {
         embeds: [SuggestEmbed],

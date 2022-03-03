@@ -99,7 +99,7 @@ const getLanguages = () => {
 const getEvents = () => {
   const events = new Discord.Collection();
   const eventsDir = fs.readdirSync(`${appDir}/Files/Events`);
-  const reg = new RegExp('.js', 'g');
+  const reg = /.js/g;
 
   eventsDir.forEach((folder) => {
     if (folder.endsWith('.js')) {
@@ -138,8 +138,15 @@ const getClient = () => {
   const client = new Discord.Client({
     failIfNotExists: false,
     shards: 'auto',
-    partials: ['MESSAGE', 'REACTION', 'CHANNEL', 'USER', 'GUILD_MEMBER', 'GUILD_SCHEDULED_EVENT'],
-    intents: new Discord.Intents(14079),
+    partials: [
+      Discord.Partials.Message,
+      Discord.Partials.Reaction,
+      Discord.Partials.Channel,
+      Discord.Partials.User,
+      Discord.Partials.GuildMember,
+      Discord.Partials.GuildScheduleEvent,
+    ],
+    intents: new Discord.IntentsBitField(14079),
 
     allowedMentions: {
       parse: ['users', 'roles'],

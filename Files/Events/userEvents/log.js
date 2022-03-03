@@ -22,12 +22,12 @@ module.exports = {
             const lan = language.userUpdate;
             const con = Constants.userUpdate;
             const changedKey = [];
-            const embed = new Discord.MessageEmbed()
+            const embed = new Discord.UnsafeEmbed()
               .setTimestamp()
               .setAuthor({
                 name: lan.author.name,
                 iconURL: con.author.image,
-                url: ch.stp(con.author.link, { user: newUser }),
+                url: ch.stp(con.author.link, { user: newUser.id }),
               })
               .setColor(con.color);
 
@@ -35,31 +35,32 @@ module.exports = {
             if (oldUser.avatar !== newUser.avatar) {
               changedKey.push(language.avatar);
 
-              const buffers = await ch.convertImageURLtoBuffer([ch.displayAvatarURL(newUser)]);
+              const buffers = await ch.convertImageURLtoBuffer([newUser.displayAvatarURL()]);
               if (buffers.length) {
                 files = buffers;
-                embed.addField(language.avatar, lan.avatar);
+                embed.addFields({ name: language.avatar, value: lan.avatar });
                 embed.setThumbnail(`attachment://${buffers[0].name}`);
               }
             }
             if (oldUser.username !== newUser.username) {
               changedKey.push(language.username);
-              embed.addField(
-                language.username,
-                `${language.before}: \`${oldUser.username}\`\n${language.after}: \`${newUser.username}\``,
-              );
+              embed.addFields({
+                name: language.username,
+                value: `${language.before}: \`${oldUser.username}\`\n${language.after}: \`${newUser.username}\``,
+              });
             }
             if (oldUser.discriminator !== newUser.discriminator) {
               changedKey.push(language.discriminator);
-              embed.addField(
-                language.discriminator,
-                `${language.before}: \`${oldUser.discriminator}\`\n${language.after}: \`${newUser.discriminator}\``,
-              );
+              embed.addFields({
+                name: language.discriminator,
+                value: `${language.before}: \`${oldUser.discriminator}\`\n${language.after}: \`${newUser.discriminator}\``,
+              });
             }
             embed.setDescription(
               ch.stp(lan.description, { user: newUser }) + changedKey.map((o) => ` \`${o}\``),
             );
-            if (embed.fields.length || (embed.thumbnail && embed.thumbnail.url)) {
+
+            if (embed.fields?.length || (embed.thumbnail && embed.thumbnail.url)) {
               ch.send(channels, { embeds: [embed], files });
             }
           }

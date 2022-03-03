@@ -1177,7 +1177,7 @@
       "fieldsPlaceholder": "Select Fields you want to edit",
       "embedPlaceholder": "Select an Embed",
       "otherPlaceholder": "Select anything (except Fields) you want to edit",
-      "addField": "Add Field",
+      "addFields": "Add Field",
       "viewRaw": "View Raw Embed Code",
       "viewRawOtherMsg": "View Raw Embed Code of any Message",
       "inheritCode": "Inherit Raw Embed Code",

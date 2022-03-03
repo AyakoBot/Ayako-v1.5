@@ -24,7 +24,7 @@ module.exports = {
               const language = await ch.languageSelector(guild);
               const lan = language.guildMemberAddGiveaway;
               const DM = user.createDM().catch(() => {});
-              const embed = new Discord.MessageEmbed()
+              const embed = new Discord.UnsafeEmbed()
                 .setAuthor(
                   ch.stp(lan.author.title, { member }),
                   Constants.standard.image,

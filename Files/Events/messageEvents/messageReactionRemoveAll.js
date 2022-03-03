@@ -19,7 +19,7 @@ module.exports = {
         const language = await ch.languageSelector(guild);
         const con = Constants.messageReactionRemoveAll;
         const lan = language.messageReactionRemoveAll;
-        const embed = new Discord.MessageEmbed()
+        const embed = new Discord.UnsafeEmbed()
           .setColor(con.color)
           .setAuthor({
             name: lan.author.name,

@@ -86,7 +86,7 @@ const logExpire = async (rows, client, guildid) => {
 
   const embeds = rows.map((warn, i) => {
     warn.row_number = i;
-    const embed = new Discord.MessageEmbed();
+    const embed = new Discord.UnsafeEmbed();
     const user = client.users.cache.get(warn.userid);
 
     if (warn.type === 'Warn') {
@@ -101,7 +101,7 @@ const logExpire = async (rows, client, guildid) => {
             msgid: warn.msgid,
           }),
         })
-        .addFields(
+        .addFieldss([
           {
             name: lan.date,
             value: `<t:${warn.dateofwarn.slice(0, -3)}:F> (<t:${warn.dateofwarn.slice(0, -3)}:R>)`,
@@ -122,7 +122,7 @@ const logExpire = async (rows, client, guildid) => {
             value: `${client.user.tag}\n\`${client.user.username}\` (\`${client.user.id}\`)`,
             inline: false,
           },
-        )
+        ])
         .setColor(con.log.color)
         .setFooter({ text: lan.warnID + warn.row_number });
     } else if (warn.type === 'Mute') {
@@ -130,10 +130,11 @@ const logExpire = async (rows, client, guildid) => {
       let notClosed = client.ch.stp(lan.notClosed, {
         time: `<t:${warn.duration.slice(0, -3)}:F> (<t:${warn.duration.slice(0, -3)}:R>)`,
       });
-      if (member && member.isCommunicationDisabled())
+      if (member && member.isCommunicationDisabled()) {
         notClosed = client.ch.stp(lan.abortedMute, {
           time: `<t:${warn.duration.slice(0, -3)}:F> (<t:${warn.duration.slice(0, -3)}:R>)`,
         });
+      }
       let warnClosedText;
       if (warn.closed === true) {
         warnClosedText = client.ch.stp(lan.closed, {
@@ -153,7 +154,7 @@ const logExpire = async (rows, client, guildid) => {
             msgid: warn.msgid,
           }),
         })
-        .addFields(
+        .addFieldss([
           {
             name: lan.date,
             value: `<t:${warn.dateofwarn.slice(0, -3)}:F> (<t:${warn.dateofwarn.slice(0, -3)}:R>)`,
@@ -192,7 +193,7 @@ const logExpire = async (rows, client, guildid) => {
             value: `${client.user.tag}\n\`${client.user.username}\` (\`${client.user.id}\`)`,
             inline: false,
           },
-        )
+        ])
         .setColor(con.log.color)
         .setFooter({ text: lan.warnID + warn.row_number });
     }

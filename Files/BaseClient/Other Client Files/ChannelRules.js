@@ -14,7 +14,7 @@ class ChannelRules extends BitField {
   }
 }
 
-ChannelRules.FLAGS = {
+ChannelRules.Flags = {
   HAS_LEAST_ATTACHMENTS: 1n << 0n,
   HAS_MOST_ATTACHMENTS: 1n << 1n,
   HAS_LEAST_CHARACTERS: 1n << 2n,
@@ -35,7 +35,7 @@ ChannelRules.FLAGS = {
   HAS_MOST_MENTIONS: 1n << 17n,
 };
 
-ChannelRules.ALL = Object.values(ChannelRules.FLAGS).reduce((all, p) => all | p, 0n);
+ChannelRules.ALL = Object.values(ChannelRules.Flags).reduce((all, p) => all | p, 0n);
 
 ChannelRules.defaultBit = BigInt(0);
 

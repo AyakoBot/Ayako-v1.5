@@ -8,7 +8,7 @@ module.exports = {
   finished: true,
   category: ['automation'],
   displayEmbed(msg, r) {
-    const embed = new Discord.MessageEmbed().addFields(
+    const embed = new Discord.UnsafeEmbed().addFieldss([
       {
         name: msg.lanSettings.active,
         value: r.active
@@ -44,30 +44,30 @@ module.exports = {
           )}`,
         inline: false,
       },
-    );
+    ]);
     return embed;
   },
   buttons(msg, r) {
-    const active = new Discord.MessageButton()
+    const active = new Discord.Button()
       .setCustomId(msg.lan.edit.active.name)
       .setLabel(msg.lanSettings.active)
-      .setStyle(r.active ? 'SUCCESS' : 'DANGER');
-    const roles = new Discord.MessageButton()
+      .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
+    const roles = new Discord.Button()
       .setCustomId(msg.lan.edit.roles.name)
       .setLabel(msg.lan.roles)
-      .setStyle('PRIMARY');
-    const users = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary);
+    const users = new Discord.Button()
       .setCustomId(msg.lan.edit.users.name)
       .setLabel(msg.lan.users)
-      .setStyle('PRIMARY');
-    const channel = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary);
+    const channel = new Discord.Button()
       .setCustomId(msg.lan.edit.channelid.name)
       .setLabel(msg.lan.channelid)
-      .setStyle('PRIMARY');
-    const repeatreminder = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary);
+    const repeatreminder = new Discord.Button()
       .setCustomId(msg.lan.edit.repeatreminder.name)
       .setLabel(msg.lan.repeatreminder)
-      .setStyle('SECONDARY');
+      .setStyle(Discord.ButtonStyle.Secondary);
     return [[active], [roles, users, channel], [repeatreminder]];
   },
 };

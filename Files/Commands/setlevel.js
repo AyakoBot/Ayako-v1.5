@@ -34,7 +34,7 @@ module.exports = {
 };
 
 const getUser = async (msg) => {
-  const embed = new Discord.MessageEmbed().setDescription(msg.lan.selectUser).setAuthor({
+  const embed = new Discord.UnsafeEmbed().setDescription(msg.lan.selectUser).setAuthor({
     name: msg.lan.author,
     url: msg.client.constants.standard.invite,
   });
@@ -261,76 +261,76 @@ const getRows = async (msg, user) => {
 };
 
 const getEmbed = (msg, selection) =>
-  new Discord.MessageEmbed().setDescription(msg.client.ch.stp(msg.lan.selectInfo, { selection }));
+  new Discord.UnsafeEmbed().setDescription(msg.client.ch.stp(msg.lan.selectInfo, { selection }));
 
 const getComponents = (msg, selection) => {
-  const addZeroXP = new Discord.MessageButton()
+  const addZeroXP = new Discord.Button()
     .setCustomId('addZeroXP')
     .setLabel(msg.lan.add)
-    .setStyle('PRIMARY');
+    .setStyle(Discord.ButtonStyle.Primary);
 
-  const delZeroXP = new Discord.MessageButton()
+  const delZeroXP = new Discord.Button()
     .setCustomId('delZeroXP')
     .setLabel(msg.lan.remove)
-    .setStyle('PRIMARY')
+    .setStyle(Discord.ButtonStyle.Primary)
     .setDisabled(selection.xpZeros === 0);
 
-  const addZeroLvl = new Discord.MessageButton()
+  const addZeroLvl = new Discord.Button()
     .setCustomId('addZeroLvl')
     .setLabel(msg.lan.add)
-    .setStyle('PRIMARY');
+    .setStyle(Discord.ButtonStyle.Primary);
 
-  const delZeroLvl = new Discord.MessageButton()
+  const delZeroLvl = new Discord.Button()
     .setCustomId('delZeroLvl')
     .setLabel(msg.lan.remove)
-    .setStyle('PRIMARY')
+    .setStyle(Discord.ButtonStyle.Primary)
     .setDisabled(selection.lvlZeros === 0);
 
-  const resetXP = new Discord.MessageButton()
+  const resetXP = new Discord.Button()
     .setCustomId('resetXP')
     .setLabel(msg.lan.resetXP)
-    .setStyle('SECONDARY')
+    .setStyle(Discord.ButtonStyle.Secondary)
     .setDisabled(selection.curXP === selection.newXP);
 
-  const resetLvl = new Discord.MessageButton()
+  const resetLvl = new Discord.Button()
     .setCustomId('resetLvl')
     .setLabel(msg.lan.resetLevel)
-    .setStyle('SECONDARY')
+    .setStyle(Discord.ButtonStyle.Secondary)
     .setDisabled(selection.curLvl === selection.newLvl);
 
-  const increaseXP = new Discord.MessageButton()
+  const increaseXP = new Discord.Button()
     .setCustomId('increaseXP')
     .setLabel(`+1${'0'.repeat(selection.xpZeros)}`)
-    .setStyle('PRIMARY');
+    .setStyle(Discord.ButtonStyle.Primary);
 
-  const decreaseXP = new Discord.MessageButton()
+  const decreaseXP = new Discord.Button()
     .setCustomId('decreaseXP')
     .setLabel(`-1${'0'.repeat(selection.xpZeros)}`)
-    .setStyle('PRIMARY');
+    .setStyle(Discord.ButtonStyle.Primary);
 
-  const increaseLvl = new Discord.MessageButton()
+  const increaseLvl = new Discord.Button()
     .setCustomId('increaseLvl')
     .setLabel(`+1${'0'.repeat(selection.lvlZeros)}`)
-    .setStyle('PRIMARY');
+    .setStyle(Discord.ButtonStyle.Primary);
 
-  const decreaseLvl = new Discord.MessageButton()
+  const decreaseLvl = new Discord.Button()
     .setCustomId('decreaseLvl')
     .setLabel(`-1${'0'.repeat(selection.lvlZeros)}`)
-    .setStyle('PRIMARY');
+    .setStyle(Discord.ButtonStyle.Primary);
 
-  const done = new Discord.MessageButton()
+  const done = new Discord.Button()
     .setCustomId('done')
     .setLabel(msg.language.done)
-    .setStyle('SUCCESS')
+    .setStyle(Discord.ButtonStyle.Primary)
     .setDisabled(
       Number(selection.newXP) === Number(selection.curXP) &&
         Number(selection.newLvl) === Number(selection.curLvl),
     );
 
-  const cancel = new Discord.MessageButton()
+  const cancel = new Discord.Button()
     .setCustomId('cancel')
     .setLabel(msg.language.Cancel)
-    .setStyle('DANGER');
+    .setStyle(Discord.ButtonStyle.Danger);
 
   return msg.client.ch.buttonRower([
     [delZeroXP, decreaseXP, resetXP, increaseXP, addZeroXP],
@@ -392,7 +392,7 @@ const handleDone = async (answer, msg, m, selection) => {
     );
   }
 
-  const embed = new Discord.MessageEmbed()
+  const embed = new Discord.UnsafeEmbed()
     .setDescription(msg.client.ch.stp(msg.lan.updated, { user: selection.user }))
     .setAuthor({
       name: msg.lan.author,

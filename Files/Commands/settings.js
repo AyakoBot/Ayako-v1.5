@@ -95,7 +95,7 @@ module.exports = {
           .setPlaceholder(msg.language.commands.settings.menu.placeholder),
       ];
 
-      const embed = new Discord.MessageEmbed()
+      const embed = new Discord.UnsafeEmbed()
         .setAuthor({
           name: msg.language.commands.settings.noEmbed.author,
           iconURL: msg.client.constants.emotes.settingsLink,
@@ -160,14 +160,14 @@ module.exports = {
         url: msg.client.constants.standard.invite,
       });
 
-      const edit = new Discord.MessageButton()
+      const edit = new Discord.Button()
         .setCustomId('edit')
-        .setStyle('PRIMARY')
+        .setStyle(Discord.ButtonStyle.Primary)
         .setLabel(msg.language.Edit);
 
       if (
         msg.file.perm &&
-        !msg.member.permissions.has(new Discord.Permissions(msg.file.perm)) &&
+        !msg.member.permissions.has(new Discord.PermissionsBitField(msg.file.perm)) &&
         msg.author.id !== '318453143476371456'
       ) {
         if (embed2) return replier({ msg, answer }, { embeds: [embed2, embed] });
@@ -224,7 +224,7 @@ module.exports = {
           res.rows[i].id = i;
         });
       }
-      let embed = new Discord.MessageEmbed();
+      let embed = new Discord.UnsafeEmbed();
 
       if (res && res.rowCount > 0) {
         if (msg.file.mmrEmbed[Symbol.toStringTag] === 'AsyncFunction') {
@@ -277,7 +277,7 @@ module.exports = {
       const rows = [[list], [prev, next]];
       if (
         !msg.file.perm ||
-        msg.member.permissions.has(new Discord.Permissions(msg.file.perm)) ||
+        msg.member.permissions.has(new Discord.PermissionsBitField(msg.file.perm)) ||
         msg.author.id === '318453143476371456'
       ) {
         rows.push([edit]);
@@ -343,7 +343,7 @@ module.exports = {
 };
 
 const noEmbed = async (msg, answer, res) => {
-  const embed = new Discord.MessageEmbed()
+  const embed = new Discord.UnsafeEmbed()
     .setAuthor({
       name: msg.language.commands.settings.noEmbed.author,
     })
@@ -354,9 +354,9 @@ const noEmbed = async (msg, answer, res) => {
       }),
     );
 
-  const edit = new Discord.MessageButton()
+  const edit = new Discord.Button()
     .setCustomId('edit')
-    .setStyle('PRIMARY')
+    .setStyle(Discord.ButtonStyle.Primary)
     .setLabel(msg.language.Edit);
 
   await replier({ msg, answer }, { embeds: [embed], rawButtons: [edit] });
@@ -418,16 +418,16 @@ const replier = async (msgData, sendData) => {
 };
 
 const getMMRListButtons = (msg, options, editView) => {
-  const next = new Discord.MessageButton()
+  const next = new Discord.Button()
     .setCustomId('next')
     .setLabel(msg.language.next)
     .setDisabled(options.allOptions.length < 25)
-    .setStyle('SUCCESS');
-  const prev = new Discord.MessageButton()
+    .setStyle(Discord.ButtonStyle.Primary);
+  const prev = new Discord.Button()
     .setCustomId('prev')
     .setLabel(msg.language.prev)
     .setDisabled(true)
-    .setStyle('DANGER');
+    .setStyle(Discord.ButtonStyle.Danger);
   const list = new Discord.MessageSelectMenu()
     .setCustomId('list')
     .setDisabled(!options.allOptions.length)
@@ -437,22 +437,22 @@ const getMMRListButtons = (msg, options, editView) => {
     .setOptions(options.take.length ? options.take : { label: '--', value: '0' });
 
   if (editView) {
-    const add = new Discord.MessageButton()
+    const add = new Discord.Button()
       .setCustomId('add')
-      .setStyle('SUCCESS')
+      .setStyle(Discord.ButtonStyle.Primary)
       .setLabel(msg.language.add);
-    const remove = new Discord.MessageButton()
+    const remove = new Discord.Button()
       .setCustomId('remove')
-      .setStyle('DANGER')
+      .setStyle(Discord.ButtonStyle.Danger)
       .setLabel(msg.language.remove)
       .setDisabled(!options.allOptions.length);
 
     return { next, prev, list, add, remove };
   }
   if (!editView) {
-    const edit = new Discord.MessageButton()
+    const edit = new Discord.Button()
       .setCustomId('edit')
-      .setStyle('PRIMARY')
+      .setStyle(Discord.ButtonStyle.Primary)
       .setLabel(msg.language.Edit);
 
     return { next, prev, edit, list };
@@ -585,7 +585,7 @@ const mmrEditList = async (msgData, sendData) => {
     const addLanguage = msg.lanSettings[msg.file.name].otherEdits.add;
     const requiredSteps = msg.client.constants.commands.settings.setupQueries[msg.file.name].add;
 
-    const embed = new Discord.MessageEmbed().setAuthor({
+    const embed = new Discord.UnsafeEmbed().setAuthor({
       name: addLanguage.name,
       iconURL: msg.client.constants.emotes.settingsLink,
       url: msg.client.constants.standard.invite,
@@ -823,7 +823,7 @@ const whereToGo = async (msg, answer) => {
   else if (
     msg.args[1].toLowerCase() === msg.language.edit &&
     msg.file.perm &&
-    !msg.member.permissions.has(new Discord.Permissions(msg.file.perm)) &&
+    !msg.member.permissions.has(new Discord.PermissionsBitField(msg.file.perm)) &&
     msg.author.id !== '318453143476371456'
   ) {
     return msg.client.ch.reply(msg, {
@@ -876,18 +876,20 @@ const editorInteractionHandler = async (msgData, editorData, row, res, comesFrom
       ? await editor.getSelected(msg, insertedValues, required, passObject)
       : 'noSelect';
 
-  const embed = new Discord.MessageEmbed();
+  const embed = new Discord.UnsafeEmbed();
   if (required.assinger !== 'id') {
     embed
-      .addField(
-        '\u200b',
-        `\u200b**${msg.lanSettings.valid}**:\n${languageOfKey.answers}${
+      .addFields({
+        name: '\u200b',
+        value: `\u200b**${msg.lanSettings.valid}**:\n${languageOfKey.answers}${
           languageOfKey.recommended ? `\n\n${languageOfKey.recommended}\n` : ''
         }${languageOfKey.desc ? languageOfKey.desc : ''}`,
-      )
+      })
       .setTitle(msg.client.ch.stp(languageOfKey.name, { row: row || '--' }));
   } else {
-    embed.addField('\u200b', `${msg.language.select.id.desc}`).setTitle(msg.language.id);
+    embed
+      .addFields({ name: '\u200b', value: `${msg.language.select.id.desc}` })
+      .setTitle(msg.language.id);
   }
   embed.setAuthor({
     name: msg.client.ch.stp(msg.lanSettings.authorEdit, {
@@ -898,12 +900,12 @@ const editorInteractionHandler = async (msgData, editorData, row, res, comesFrom
   });
 
   if (editor.requiresMenu) {
-    embed.addField(
-      msg.language.page,
-      `\`${
+    embed.addFields({
+      name: msg.language.page,
+      value: `\`${
         Math.ceil(passObject.Objects.options.length / 25) ? passObject.Objects.page : 0
       }/${Math.ceil(Objects.options.length / 25)}\``,
-    );
+    });
   }
 
   if (selected !== 'noSelect') {
@@ -1062,7 +1064,7 @@ const log = async (msg, editData, logType) => {
       : 'id';
   const { type } = msg.language.commands.settings[msg.file.name];
 
-  const embed = new Discord.MessageEmbed().setAuthor({
+  const embed = new Discord.UnsafeEmbed().setAuthor({
     name: msg.client.ch.stp(msg.language.selfLog.author, {
       type,
     }),
@@ -1071,25 +1073,12 @@ const log = async (msg, editData, logType) => {
   });
 
   switch (logType) {
-    default: {
-      embed.addField(msg.lanSettings.oldValue, `${settingsName}: ${oldSettings}`, true);
-      embed.addField(msg.lanSettings.newValue, `${settingsName}: ${newSettings}`, true);
-
-      if (comesFromMMR) {
-        embed.setDescription(
-          msg.client.ch.stp(msg.language.selfLog.descriptionWithID, { type, msg, id: row.id }),
-        );
-      } else {
-        embed.setDescription(msg.client.ch.stp(msg.language.selfLog.description, { type, msg }));
-      }
-      break;
-    }
     case 'add': {
-      embed.addField(
-        msg.lanSettings.newValue,
-        `\`\`\`${JSON.stringify(insertedValues, null, 1)}\`\`\``,
-        true,
-      );
+      embed.addFields({
+        name: msg.lanSettings.newValue,
+        value: `\`\`\`${JSON.stringify(insertedValues, null, 1)}\`\`\``,
+        inline: true,
+      });
 
       if (comesFromMMR) {
         embed.setDescription(
@@ -1101,11 +1090,11 @@ const log = async (msg, editData, logType) => {
       break;
     }
     case 'del': {
-      embed.addField(
-        msg.lanSettings.oldValue,
-        `\`\`\`${JSON.stringify(insertedValues, null, 1)}\`\`\``,
-        true,
-      );
+      embed.addFields({
+        name: msg.lanSettings.oldValue,
+        value: `\`\`\`${JSON.stringify(insertedValues, null, 1)}\`\`\``,
+        inline: true,
+      });
 
       if (comesFromMMR) {
         embed.setDescription(
@@ -1113,6 +1102,27 @@ const log = async (msg, editData, logType) => {
         );
       } else {
         embed.setDescription(msg.client.ch.stp(msg.language.selfLog.deleted, { type, msg }));
+      }
+      break;
+    }
+    default: {
+      embed.addFields({
+        name: msg.lanSettings.oldValue,
+        value: `${settingsName}: ${oldSettings}`,
+        inline: true,
+      });
+      embed.addFields({
+        name: msg.lanSettings.newValue,
+        value: `${settingsName}: ${newSettings}`,
+        inline: true,
+      });
+
+      if (comesFromMMR) {
+        embed.setDescription(
+          msg.client.ch.stp(msg.language.selfLog.descriptionWithID, { type, msg, id: row.id }),
+        );
+      } else {
+        embed.setDescription(msg.client.ch.stp(msg.language.selfLog.description, { type, msg }));
       }
       break;
     }
@@ -1144,6 +1154,94 @@ const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
       buttonsCollector.resetTimer();
       if (messageCollector) messageCollector.resetTimer();
       switch (interaction.customId) {
+        case 'next': {
+          const indexLast = passObject.Objects.options.findIndex(
+            (r) =>
+              r.value ===
+              interaction.message.components[0].components[0].options[
+                interaction.message.components[0].components[0].options.length - 1
+              ].value,
+          );
+
+          passObject.Objects.take = [];
+          passObject.Objects.page += 1;
+
+          embed.fields.splice(-1, 1);
+
+          if (editor.requiresMenu) {
+            embed.addFields({
+              name: msg.language.page,
+              value: `\`${
+                Math.ceil(passObject.Objects.options.length / 25) ? passObject.Objects.page : 0
+              }/${Math.ceil(passObject.Objects.options.length / 25)}\``,
+            });
+          }
+
+          for (
+            let j = indexLast + 1;
+            j < indexLast + 26 && j < passObject.Objects.options.length;
+            j += 1
+          ) {
+            passObject.Objects.take.push(passObject.Objects.options[j]);
+          }
+
+          await replier(
+            { msg, answer: interaction },
+            {
+              rawButtons:
+                typeof editor.buttons === 'function'
+                  ? await editor.buttons(msg, passObject, insertedValues, required, row)
+                  : await standardButtons(msg, passObject, insertedValues, required, row, editor),
+              embeds: [embed],
+            },
+          );
+          break;
+        }
+        case 'prev': {
+          const indexFirst = passObject.Objects.options.findIndex(
+            (r) => r.value === interaction.message.components[0].components[0].options[0].value,
+          );
+
+          passObject.Objects.take = [];
+          passObject.Objects.page -= 1;
+
+          embed.fields.splice(-1, 1);
+
+          if (editor.requiresMenu) {
+            embed.addFields({
+              name: msg.language.page,
+              value: `\`${
+                Math.ceil(passObject.Objects.options.length / 25) ? passObject.Objects.page : 0
+              }/${Math.ceil(passObject.Objects.options.length / 25)}\``,
+            });
+          }
+
+          for (
+            let j = indexFirst - 25;
+            j < indexFirst && j < passObject.Objects.options.length;
+            j += 1
+          ) {
+            passObject.Objects.take.push(passObject.Objects.options[j]);
+          }
+
+          await replier(
+            { msg, answer: interaction },
+            {
+              rawButtons:
+                typeof editor.buttons === 'function'
+                  ? await editor.buttons(msg, passObject, insertedValues, required, row)
+                  : await standardButtons(msg, passObject, insertedValues, required, row, editor),
+              embeds: [embed],
+            },
+          );
+          break;
+        }
+        case 'done': {
+          buttonsCollector.stop();
+          if (messageCollector) messageCollector.stop();
+          resolve({ values: insertedValues, interaction });
+          break;
+        }
         default: {
           const collectors = [buttonsCollector];
           if (messageCollector) collectors.push(messageCollector);
@@ -1191,7 +1289,7 @@ const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
 
           if (required.assinger !== 'id') {
             embed
-              .addField(
+              .addFields(
                 '\u200b',
                 `\u200b**${msg.lanSettings.valid}**:\n${languageOfKey.answers}${
                   languageOfKey.recommended ? `\n\n${languageOfKey.recommended}\n` : ''
@@ -1200,7 +1298,7 @@ const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
 
               .setTitle(msg.client.ch.stp(languageOfKey.name, { row: row || '--' }));
           } else {
-            embed.addField('\u200b', `${msg.language.select.id.desc}`).setTitle(msg.language.id);
+            embed.addFields('\u200b', `${msg.language.select.id.desc}`).setTitle(msg.language.id);
           }
           embed.setAuthor({
             name: msg.client.ch.stp(msg.lanSettings.authorEdit, {
@@ -1211,7 +1309,7 @@ const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
           });
 
           if (editor.requiresMenu) {
-            embed.addField(
+            embed.addFields(
               msg.language.page,
               `\`${
                 Math.ceil(passObject.Objects.options.length / 25) ? passObject.Objects.page : 0
@@ -1230,93 +1328,6 @@ const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
             },
           );
           break;
-        }
-        case 'next': {
-          const indexLast = passObject.Objects.options.findIndex(
-            (r) =>
-              r.value ===
-              interaction.message.components[0].components[0].options[
-                interaction.message.components[0].components[0].options.length - 1
-              ].value,
-          );
-
-          passObject.Objects.take = [];
-          passObject.Objects.page += 1;
-
-          embed.fields.splice(-1, 1);
-
-          if (editor.requiresMenu) {
-            embed.addField(
-              msg.language.page,
-              `\`${
-                Math.ceil(passObject.Objects.options.length / 25) ? passObject.Objects.page : 0
-              }/${Math.ceil(passObject.Objects.options.length / 25)}\``,
-            );
-          }
-
-          for (
-            let j = indexLast + 1;
-            j < indexLast + 26 && j < passObject.Objects.options.length;
-            j += 1
-          ) {
-            passObject.Objects.take.push(passObject.Objects.options[j]);
-          }
-
-          await replier(
-            { msg, answer: interaction },
-            {
-              rawButtons:
-                typeof editor.buttons === 'function'
-                  ? await editor.buttons(msg, passObject, insertedValues, required, row)
-                  : await standardButtons(msg, passObject, insertedValues, required, row, editor),
-              embeds: [embed],
-            },
-          );
-          break;
-        }
-        case 'prev': {
-          const indexFirst = passObject.Objects.options.findIndex(
-            (r) => r.value === interaction.message.components[0].components[0].options[0].value,
-          );
-
-          passObject.Objects.take = [];
-          passObject.Objects.page -= 1;
-
-          embed.fields.splice(-1, 1);
-
-          if (editor.requiresMenu) {
-            embed.addField(
-              msg.language.page,
-              `\`${
-                Math.ceil(passObject.Objects.options.length / 25) ? passObject.Objects.page : 0
-              }/${Math.ceil(passObject.Objects.options.length / 25)}\``,
-            );
-          }
-
-          for (
-            let j = indexFirst - 25;
-            j < indexFirst && j < passObject.Objects.options.length;
-            j += 1
-          ) {
-            passObject.Objects.take.push(passObject.Objects.options[j]);
-          }
-
-          await replier(
-            { msg, answer: interaction },
-            {
-              rawButtons:
-                typeof editor.buttons === 'function'
-                  ? await editor.buttons(msg, passObject, insertedValues, required, row)
-                  : await standardButtons(msg, passObject, insertedValues, required, row, editor),
-              embeds: [embed],
-            },
-          );
-          break;
-        }
-        case 'done': {
-          buttonsCollector.stop();
-          if (messageCollector) messageCollector.stop();
-          resolve({ values: insertedValues, interaction });
         }
       }
       return null;
@@ -1368,12 +1379,12 @@ const messageHandler = async (msgData, editData, languageData, Objects) => {
     const { returnEmbed } = editor.messageHandler({ msg, message }, insertedValues, required);
 
     returnEmbed
-      .addField(
-        '\u200b',
-        `\u200b**${msg.lanSettings.valid}**:\n${languageOfKey.answers}${
+      .addFields({
+        name: '\u200b',
+        value: `\u200b**${msg.lanSettings.valid}**:\n${languageOfKey.answers}${
           languageOfKey.recommended ? `\n\n${languageOfKey.recommended}\n` : ''
         }${languageOfKey.desc ? languageOfKey.desc : ''}`,
-      )
+      })
 
       .setTitle(msg.client.ch.stp(languageOfKey.name, { row: row || '--' }))
       .setAuthor({
@@ -1385,12 +1396,12 @@ const messageHandler = async (msgData, editData, languageData, Objects) => {
       });
 
     if (editor.requiresMenu) {
-      returnEmbed.addField(
-        msg.language.page,
-        `\`${
+      returnEmbed.addFields({
+        name: msg.language.page,
+        value: `\`${
           Math.ceil(passObject.Objects.options.length / 25) ? passObject.Objects.page : 0
         }/${Math.ceil(Objects.options.length / 25)}\``,
-      );
+      });
     }
 
     return replier(
@@ -1456,7 +1467,7 @@ const interactionHandler = async (msgData, preparedData, insertedValues, require
       ? await editor.getSelected(msg, insertedValues, required, preparedData)
       : 'noSelect';
 
-  const returnEmbed = new Discord.MessageEmbed().setDescription(
+  const returnEmbed = new Discord.UnsafeEmbed().setDescription(
     `**${msg.language.selected}:**\n${selected?.length ? selected : msg.language.none}`,
   );
 
@@ -1520,27 +1531,27 @@ const standardButtons = async (msg, preparedData, insertedValues, required, row,
       .setMinValues(1)
       .setMaxValues(getMany ? Objects.take.length : 1)
       .setPlaceholder(msg.language.select[required.key].select);
-    const next = new Discord.MessageButton()
+    const next = new Discord.Button()
       .setCustomId('next')
       .setLabel(msg.language.next)
       .setDisabled(
         Objects.page === Math.ceil(Objects.options.length / 25) || !Objects.options.length,
       )
-      .setStyle('SUCCESS');
-    const prev = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary);
+    const prev = new Discord.Button()
       .setCustomId('prev')
       .setLabel(msg.language.prev)
       .setDisabled(Objects.page === 1 || !Objects.options.length)
-      .setStyle('DANGER');
+      .setStyle(Discord.ButtonStyle.Danger);
 
     returnedButtons.push([menu], [prev, next]);
   }
 
-  const done = new Discord.MessageButton()
+  const done = new Discord.Button()
     .setCustomId('done')
     .setLabel(msg.language.done)
     .setDisabled(doneDisabled)
-    .setStyle('PRIMARY');
+    .setStyle(Discord.ButtonStyle.Primary);
 
   returnedButtons.push([done]);
 
@@ -1550,21 +1561,21 @@ const standardButtons = async (msg, preparedData, insertedValues, required, row,
 const setup = async (msg, answer) => {
   const lan = msg.language.commands.settings.setup;
 
-  const embed = new Discord.MessageEmbed()
+  const embed = new Discord.UnsafeEmbed()
     .setAuthor({
       name: lan.author,
       url: msg.client.constants.standard.invite,
     })
     .setDescription(msg.client.ch.stp(lan.question, { type: msg.lanSettings[msg.file.name].type }));
 
-  const yes = new Discord.MessageButton()
+  const yes = new Discord.Button()
     .setLabel(msg.language.Yes)
     .setCustomId('yes')
-    .setStyle('SUCCESS');
-  const no = new Discord.MessageButton()
+    .setStyle(Discord.ButtonStyle.Primary);
+  const no = new Discord.Button()
     .setLabel(msg.language.No)
     .setCustomId('no')
-    .setStyle('DANGER');
+    .setStyle(Discord.ButtonStyle.Danger);
 
   await replier({ msg, answer }, { rawButtons: [[yes, no]], embeds: [embed] });
 
@@ -1600,7 +1611,7 @@ const setup = async (msg, answer) => {
       }
       case 'no': {
         buttonsCollector.stop();
-        const abort = new Discord.MessageEmbed()
+        const abort = new Discord.UnsafeEmbed()
           .setAuthor({
             name: lan.author,
             url: msg.client.constants.standard.invite,
@@ -1682,7 +1693,7 @@ const categoryDisplay = async (msg, answer, needsBack) => {
     )}\n`;
   });
 
-  const embed = new Discord.MessageEmbed()
+  const embed = new Discord.UnsafeEmbed()
     .setAuthor({
       name: msg.client.ch.stp(msg.language.commands.settings.author, {
         type: msg.language.commands.settings[settings.first().name].type,

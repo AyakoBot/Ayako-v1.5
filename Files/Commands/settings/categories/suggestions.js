@@ -6,7 +6,7 @@ module.exports = {
   finished: false,
   category: ['automation'],
   displayEmbed(msg, r) {
-    const embed = new Discord.MessageEmbed().addFields(
+    const embed = new Discord.UnsafeEmbed().addFieldss([
       {
         name: msg.lanSettings.active,
         value: r.active
@@ -54,30 +54,30 @@ module.exports = {
         }`,
         inline: false,
       },
-    );
+    ]);
     return embed;
   },
   buttons(msg, r) {
-    const active = new Discord.MessageButton()
+    const active = new Discord.Button()
       .setCustomId(msg.lan.edit.active.name)
       .setLabel(msg.lanSettings.active)
-      .setStyle(r.active ? 'SUCCESS' : 'DANGER');
-    const channelid = new Discord.MessageButton()
+      .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
+    const channelid = new Discord.Button()
       .setCustomId(msg.lan.edit.channelid.name)
       .setLabel(msg.lan.channelid)
-      .setStyle('PRIMARY');
-    const bluserid = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary);
+    const bluserid = new Discord.Button()
       .setCustomId(msg.lan.edit.bluserid.name)
       .setLabel(msg.lan.bluserid)
-      .setStyle('PRIMARY');
-    const blroleid = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary);
+    const blroleid = new Discord.Button()
       .setCustomId(msg.lan.edit.blroleid.name)
       .setLabel(msg.lan.blroleid)
-      .setStyle('PRIMARY');
-    const approverroleid = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary);
+    const approverroleid = new Discord.Button()
       .setCustomId(msg.lan.edit.approverroleid.name)
       .setLabel(msg.lan.approverroleid)
-      .setStyle('PRIMARY');
+      .setStyle(Discord.ButtonStyle.Primary);
     return [[active], [channelid, approverroleid], [blroleid, bluserid]];
   },
 };

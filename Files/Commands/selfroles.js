@@ -30,7 +30,11 @@ module.exports = {
           .map((role) => (msg.guild.roles.cache.get(role) ? msg.guild.roles.cache.get(role) : null))
           .filter((role) => !!role);
         if (roles.length) {
-          embed.addField(`${row.name}`, `${roles.length} ${msg.language.roles}`, true);
+          embed.addFields({
+            name: `${row.name}`,
+            value: `${roles.length} ${msg.language.roles}`,
+            inline: true,
+          });
         }
       });
     };
@@ -45,17 +49,17 @@ module.exports = {
         .setMaxValues(1)
         .setPlaceholder(msg.language.select.selfroles.select);
 
-      const prevCategory = new Discord.MessageButton()
+      const prevCategory = new Discord.Button()
         .setCustomId('prevCategory')
         .setLabel(msg.lan.prevCategory)
         .setDisabled(Data.cPage === 1)
-        .setStyle('DANGER');
+        .setStyle(Discord.ButtonStyle.Danger);
 
-      const nextCategory = new Discord.MessageButton()
+      const nextCategory = new Discord.Button()
         .setCustomId('nextCategory')
         .setLabel(msg.lan.nextCategory)
         .setDisabled(Data.cPage === Math.ceil(res.rowCount / 25))
-        .setStyle('SUCCESS');
+        .setStyle(Discord.ButtonStyle.Primary);
 
       buttons.push([categoryMenu], [prevCategory, nextCategory]);
 
@@ -72,23 +76,23 @@ module.exports = {
           )
           .setDisabled(Data.currentRow.isBlacklisted);
 
-        const prevRoles = new Discord.MessageButton()
+        const prevRoles = new Discord.Button()
           .setCustomId('prevRoles')
           .setLabel(msg.lan.prevRoles)
           .setDisabled(Data.rPage === 1)
-          .setStyle('DANGER');
+          .setStyle(Discord.ButtonStyle.Danger);
 
-        const nextRoles = new Discord.MessageButton()
+        const nextRoles = new Discord.Button()
           .setCustomId('nextRoles')
           .setLabel(msg.lan.nextRoles)
           .setDisabled(Data.rPage === Math.ceil(Data.rOptions.length / 25))
-          .setStyle('SUCCESS');
+          .setStyle(Discord.ButtonStyle.Primary);
 
-        const back = new Discord.MessageButton()
+        const back = new Discord.Button()
           .setCustomId('back')
           .setLabel(msg.language.back)
           .setEmoji(msg.client.constants.emotes.back)
-          .setStyle('DANGER');
+          .setStyle(Discord.ButtonStyle.Danger);
 
         buttons.push([roleMenu], [prevRoles, nextRoles], [back]);
       }
@@ -134,7 +138,7 @@ module.exports = {
     };
 
     const getRoleUpdateReplyEmbed = async (add, remove) => {
-      const embed = new Discord.MessageEmbed()
+      const embed = new Discord.UnsafeEmbed()
         .setAuthor({
           name: msg.lan.rolesUpdated,
           url: msg.client.constants.standard.invite,
@@ -142,10 +146,18 @@ module.exports = {
         .setColor(msg.client.ch.colorSelector(msg.guild.me));
 
       if (add.length) {
-        embed.addField(msg.lan.addedRoles, add.map((r) => `<@&${r}>`).join(', '), false);
+        embed.addFields({
+          name: msg.lan.addedRoles,
+          value: add.map((r) => `<@&${r}>`).join(', '),
+          inline: false,
+        });
       }
       if (remove.length) {
-        embed.addField(msg.lan.removedRoles, remove.map((r) => `<@&${r}>`).join(', '), false);
+        embed.addFields({
+          name: msg.lan.removedRoles,
+          value: remove.map((r) => `<@&${r}>`).join(', '),
+          inline: false,
+        });
       }
 
       if (add.length) await msg.member.roles.add(add, msg.language.autotypes.selfroles);
@@ -154,8 +166,8 @@ module.exports = {
       return embed;
     };
 
-    const getRoleUpdateEmbed = () => {
-      return new Discord.MessageEmbed()
+    const getRoleUpdateEmbed = () =>
+      new Discord.UnsafeEmbed()
         .setColor(msg.client.ch.colorSelector(msg.guild.me))
         .setAuthor({
           name: Data.currentRow.name,
@@ -168,10 +180,9 @@ module.exports = {
             Data.rPage
           }/${Math.ceil(Data.rOptions.length / 25)}\``,
         );
-    };
 
-    const getCategoryUpdateEmbed = () => {
-      return new Discord.MessageEmbed()
+    const getCategoryUpdateEmbed = () =>
+      new Discord.UnsafeEmbed()
         .setColor(msg.client.ch.colorSelector(msg.guild.me))
         .setAuthor({
           name: Data.currentRow.name,
@@ -184,7 +195,6 @@ module.exports = {
             (Data.rOptions.length + 1) / 25,
           )}\``,
         );
-    };
 
     const categoryMenuHandler = (clickButton) => {
       roleGetter(clickButton);
@@ -221,7 +231,7 @@ module.exports = {
 
     const getCategoryButtonEmbed = () => {
       if (Data.currentRow) {
-        return new Discord.MessageEmbed()
+        return new Discord.UnsafeEmbed()
           .setColor(msg.client.ch.colorSelector(msg.guild.me))
           .setAuthor({
             name: Data.currentRow.name,
@@ -235,7 +245,7 @@ module.exports = {
             }/${Math.ceil((Data.rOptions.length + 1) / 25)}\``,
           );
       }
-      const embed = new Discord.MessageEmbed()
+      const embed = new Discord.UnsafeEmbed()
         .setColor(msg.client.ch.colorSelector(msg.guild.me))
         .setAuthor({
           name: Data.currentRow.name,
@@ -248,8 +258,8 @@ module.exports = {
       return embed;
     };
 
-    const getRoleButtonEmbed = () => {
-      return new Discord.MessageEmbed()
+    const getRoleButtonEmbed = () =>
+      new Discord.UnsafeEmbed()
         .setColor(msg.client.ch.colorSelector(msg.guild.me))
         .setAuthor({
           name: Data.currentRow.name,
@@ -262,7 +272,6 @@ module.exports = {
             Data.rPage
           }/${Math.ceil((Data.rOptions.length + 1) / 25)}\``,
         );
-    };
 
     const categoryButtonHandler = (clickButton, increasePage) => {
       if (increasePage) Data.cPage += 1;
@@ -307,7 +316,7 @@ module.exports = {
       return { embeds: [embed], components: currentRows };
     };
 
-    const embed = new Discord.MessageEmbed();
+    const embed = new Discord.UnsafeEmbed();
     embed.setColor(msg.client.ch.colorSelector(msg.guild.me)).setAuthor({
       name: msg.lan.author,
       url: msg.client.constants.standard.invite,

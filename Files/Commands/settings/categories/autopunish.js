@@ -9,29 +9,31 @@ module.exports = {
   finished: true,
   category: ['auto-moderation'],
   async mmrEmbed(msg, res) {
-    const embed = new Discord.MessageEmbed().setDescription(
+    const embed = new Discord.UnsafeEmbed().setDescription(
       msg.client.ch.stp(msg.lan.description, { prefix: msg.client.constants.standard.prefix }),
     );
     for (let i = 0; i < res.length; i += 1) {
       const r = res[i];
       const punishment = r.punishment ? msg.language.autopunish[r.punishment] : msg.language.none;
-      embed.addFields({
-        name: `${msg.language.number}: \`${r.id}\` | ${
-          r.active
-            ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-            : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
-        }`,
-        value: `${msg.lan.punishment}: ${punishment}\n${msg.lan.requiredWarns} ${
-          r.warnamount ? r.warnamount : msg.language.none
-        }`,
-        inline: true,
-      });
+      embed.addFieldss([
+        {
+          name: `${msg.language.number}: \`${r.id}\` | ${
+            r.active
+              ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
+              : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
+          }`,
+          value: `${msg.lan.punishment}: ${punishment}\n${msg.lan.requiredWarns} ${
+            r.warnamount ? r.warnamount : msg.language.none
+          }`,
+          inline: true,
+        },
+      ]);
     }
     return embed;
   },
   displayEmbed(msg, r) {
-    const embed = new Discord.MessageEmbed();
-    embed.addFields(
+    const embed = new Discord.UnsafeEmbed();
+    embed.addFieldss([
       {
         name: `${msg.lanSettings.active}\u200b`,
         value: r.active
@@ -123,46 +125,46 @@ module.exports = {
           : msg.language.none,
         inline: true,
       },
-    );
+    ]);
     return embed;
   },
   buttons(msg, r) {
-    const active = new Discord.MessageButton()
+    const active = new Discord.Button()
       .setCustomId(msg.lan.edit.active.name)
       .setLabel(msg.lanSettings.active)
-      .setStyle(r.active ? 'SUCCESS' : 'DANGER');
-    const warnamount = new Discord.MessageButton()
+      .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
+    const warnamount = new Discord.Button()
       .setCustomId(msg.lan.edit.warnamount.name)
       .setLabel(
         msg.client.ch
           .stp(msg.lan.edit.warnamount.name, { warnamount: r.warnamount ? r.warnamount : '--' })
           .replace(/\**/g, ''),
       )
-      .setStyle('SECONDARY');
-    const punishment = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Secondary);
+    const punishment = new Discord.Button()
       .setCustomId(msg.lan.edit.punishment.name)
       .setLabel(msg.lan.punishment)
-      .setStyle(r.isvarying ? 'SUCCESS' : 'SECONDARY');
-    const duration = new Discord.MessageButton()
+      .setStyle(r.isvarying ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Secondary);
+    const duration = new Discord.Button()
       .setCustomId(msg.lan.edit.duration.name)
       .setLabel(msg.lan.edit.duration.name)
-      .setStyle('PRIMARY');
-    const addroles = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary);
+    const addroles = new Discord.Button()
       .setCustomId(msg.lan.edit.addroles.name)
       .setLabel(msg.lan.addroles)
-      .setStyle('PRIMARY');
-    const removeroles = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary);
+    const removeroles = new Discord.Button()
       .setCustomId(msg.lan.edit.removeroles.name)
       .setLabel(msg.lan.removeroles)
-      .setStyle('PRIMARY');
-    const confirmationreq = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary);
+    const confirmationreq = new Discord.Button()
       .setCustomId(msg.lan.edit.confirmationreq.name)
       .setLabel(msg.lan.confirmationreq)
-      .setStyle(r.confirmationreq ? 'SUCCESS' : 'SECONDARY');
-    const punishmentawaittime = new Discord.MessageButton()
+      .setStyle(r.confirmationreq ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Secondary);
+    const punishmentawaittime = new Discord.Button()
       .setCustomId(msg.lan.edit.punishmentawaittime.name)
       .setLabel(msg.lan.punishmentawaittime)
-      .setStyle(r.isvarying ? 'SUCCESS' : 'SECONDARY');
+      .setStyle(r.isvarying ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Secondary);
 
     return [
       [active],

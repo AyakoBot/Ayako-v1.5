@@ -22,7 +22,7 @@ module.exports = {
         const language = await ch.languageSelector(guild);
         const con = Constants.messageUpdateLogPublish;
         const lan = language.messageUpdateLogPublish;
-        const embed = new Discord.MessageEmbed()
+        const embed = new Discord.UnsafeEmbed()
           .setColor(con.color)
           .setTimestamp()
           .setAuthor({
@@ -43,15 +43,16 @@ module.exports = {
             const chunks = [];
             chunks.first = `${newMsg.content.substr(0, maxFieldSize - 1)}\u2026`;
             chunks.last = `\u2026${newMsg.content.substr(maxFieldSize - 1, maxFieldSize * 2)}`;
-            embed.addField(language.content, chunks.first);
-            embed.addField('\u200b', chunks.last);
-          } else embed.addField(language.content, newMsg.content);
+            embed.addFields({ name: language.content, value: chunks.first });
+            embed.addFields({ name: '\u200b', value: chunks.last });
+          } else embed.addFields({ name: language.content, value: newMsg.content });
         }
         if (newMsg.embeds) {
           newMsg.embeds.forEach((embeds) => {
-            if (embeds.title) embed.addField(language.title, embeds.title);
-            else if (embeds.description) embed.addField(language.description, embeds.description);
-            else embed.addField(language.unknownEmbed, '\u200b');
+            if (embeds.title) embed.addFields({ name: language.title, value: embeds.title });
+            else if (embeds.description) {
+              embed.addFields({ name: language.description, value: embeds.description });
+            } else embed.addFields({ name: language.unknownEmbed, value: '\u200b' });
           });
         }
 

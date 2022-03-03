@@ -22,11 +22,12 @@ module.exports = {
                     user.id,
                     amount,
                   ]);
-                } else
+                } else {
                   msg.client.ch.query('INSERT INTO shoob (userid, amount) VALUES ($1, $2);', [
                     user.id,
                     1,
                   ]);
+                }
                 const twentyRole = msg.guild.roles.cache.find(
                   (role) => role.id === '755962444547096677',
                 );
@@ -45,12 +46,12 @@ module.exports = {
                 const fivekRole = msg.guild.roles.cache.find(
                   (role) => role.id === '756597282891366434',
                 );
-                const rembed = new Discord.MessageEmbed();
+                const rembed = new Discord.UnsafeEmbed();
                 if (amount > 19) {
                   if (!msg.member.roles.cache.has('755962444547096677')) {
                     msg.member.roles.add(twentyRole).catch(() => {});
                     rembed
-                      .setColor('b0ff00')
+                      .setColor(msg.client.constants.standard.color)
                       .setDescription(`${user} now has the ${twentyRole} role`);
                   }
                 }
@@ -58,7 +59,7 @@ module.exports = {
                   if (!msg.member.roles.cache.has('756331367561822258')) {
                     msg.member.roles.add(fiftyRole).catch(() => {});
                     rembed
-                      .setColor('b0ff00')
+                      .setColor(msg.client.constants.standard.color)
                       .setDescription(`${user} now has the ${fiftyRole} role`);
                   }
                 }
@@ -66,7 +67,7 @@ module.exports = {
                   if (!msg.member.roles.cache.has('756331587616112660')) {
                     msg.member.roles.add(hundretRole).catch(() => {});
                     rembed
-                      .setColor('b0ff00')
+                      .setColor(msg.client.constants.standard.color)
                       .setDescription(`${user} now has the ${hundretRole} role`);
                   }
                 }
@@ -74,21 +75,23 @@ module.exports = {
                   if (!msg.member.roles.cache.has('756332260805967882')) {
                     msg.member.roles.add(fivehundretRole).catch(() => {});
                     rembed
-                      .setColor('b0ff00')
+                      .setColor(msg.client.constants.standard.color)
                       .setDescription(`${user} now has the ${fivehundretRole} role`);
                   }
                 }
                 if (amount > 999) {
                   if (!msg.member.roles.cache.has('756597164850806896')) {
                     msg.member.roles.add(kRole).catch(() => {});
-                    rembed.setColor('b0ff00').setDescription(`${user} now has the ${kRole} role`);
+                    rembed
+                      .setColor(msg.client.constants.standard.color)
+                      .setDescription(`${user} now has the ${kRole} role`);
                   }
                 }
                 if (amount > 4999) {
                   if (!msg.member.roles.cache.has('756597282891366434')) {
                     msg.member.roles.add(fivekRole).catch(() => {});
                     rembed
-                      .setColor('b0ff00')
+                      .setColor(msg.client.constants.standard.color)
                       .setDescription(`${user} now has the ${fivekRole} role`);
                   }
                 }

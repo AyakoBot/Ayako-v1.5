@@ -29,7 +29,7 @@ module.exports = {
           entry = audit.sort((a, b) => b.id - a.id);
           entry = entry.first();
         }
-        const embed = new Discord.MessageEmbed().setColor(con.color).setTimestamp();
+        const embed = new Discord.UnsafeEmbed().setColor(con.color).setTimestamp();
         if (entry) {
           embed.setAuthor({
             name: lan.author.name,
@@ -43,7 +43,7 @@ module.exports = {
               channel: msg.channel,
             }),
           );
-          if (entry.reason) embed.addField(language.reason, entry.reason);
+          if (entry.reason) embed.addFields({ name: language.reason, value: entry.reason });
         } else {
           embed.setAuthor({
             name: lan.author.name,
@@ -61,9 +61,9 @@ module.exports = {
             const chunks = [];
             chunks.first = `${msg.content.substr(0, maxFieldSize - 1)}\u2026`;
             chunks.last = `\u2026${msg.content.substr(maxFieldSize - 1, maxFieldSize * 2)}`;
-            embed.addField(language.content, chunks.first);
-            embed.addField('\u200b', chunks.last);
-          } else embed.addField(language.content, msg.content);
+            embed.addFields({ name: language.content, value: chunks.first });
+            embed.addFields({ name: '\u200b', value: chunks.last });
+          } else embed.addFields({ name: language.content, value: msg.content });
         }
         let buffers = [];
         let files = [];
@@ -80,9 +80,12 @@ module.exports = {
 
         if (msg.embeds.size > 0) {
           for (let i = 0; i < msg.embeds.size; i += 1) {
-            if (msg.embeds[i].title) embed.addField(language.embedTitle, msg.embeds[i].title);
-            if (msg.embeds[i].description)
-              embed.addField(language.embedDescription, msg.embeds[i].description);
+            if (msg.embeds[i].title) {
+              embed.addFields({ name: language.embedTitle, value: msg.embeds[i].title });
+            }
+            if (msg.embeds[i].description) {
+              embed.addFields({ name: language.embedDescription, value: msg.embeds[i].description });
+            }
           }
         }
         ch.send(channels, { embeds: [embed], files });

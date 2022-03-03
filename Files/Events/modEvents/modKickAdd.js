@@ -10,11 +10,12 @@ module.exports = {
     const con = msg.client.constants.mod.kickAdd;
     let em;
     if (mexisted) {
-      em = new Discord.MessageEmbed(msg.m.embeds[0])
-        .setColor(con.color)
-        .addField('\u200b', `${msg.client.constants.emotes.loading} ${lan.loading}`);
+      em = new Discord.Embed(msg.m.embeds[0]).setColor(con.color).addFields({
+        name: '\u200b',
+        value: `${msg.client.constants.emotes.loading} ${lan.loading}}`,
+      });
     } else {
-      em = new Discord.MessageEmbed()
+      em = new Discord.UnsafeEmbed()
         .setColor(con.color)
         .setDescription(`${msg.client.constants.emotes.loading} ${lan.loading}`);
     }
@@ -25,7 +26,10 @@ module.exports = {
     if (!member) {
       if (mexisted) {
         em.fields.pop();
-        em.addField('\u200b', `${msg.client.constants.emotes.cross} ${lan.noMember}`);
+        em.addFields({
+          name: '\u200b',
+          value: `${msg.client.constants.emotes.cross} ${lan.noMember}`,
+        });
       } else em.setDescription(`${msg.client.constants.emotes.cross} ${lan.noMember}`);
       msg.m?.edit({ embeds: [em] });
       if (mexisted) {
@@ -41,7 +45,10 @@ module.exports = {
     ) {
       if (mexisted) {
         em.fields.pop();
-        em.addField('\u200b', `${msg.client.constants.emotes.cross} ${lan.exeNoPerms}`);
+        em.addFields({
+          name: '\u200b',
+          value: `${msg.client.constants.emotes.cross} ${lan.exeNoPerms}`,
+        });
       } else em.setDescription(`${msg.client.constants.emotes.cross} ${lan.exeNoPerms}`);
       msg.m?.edit({ embeds: [em] });
       if (mexisted) {
@@ -54,7 +61,10 @@ module.exports = {
     if (!member.kickable) {
       if (mexisted) {
         em.fields.pop();
-        em.addField('\u200b', `${msg.client.constants.emotes.cross} ${lan.permissionError}`);
+        em.addFields({
+          name: '\u200b',
+          value: `${msg.client.constants.emotes.cross} ${lan.permissionError}`,
+        });
       } else em.setDescription(`${msg.client.constants.emotes.cross} ${lan.permissionError}`);
       msg.m?.edit({ embeds: [em] });
       if (mexisted) {
@@ -66,7 +76,7 @@ module.exports = {
     }
 
     const dmChannel = await target.createDM().catch(() => {});
-    const DMembed = new Discord.MessageEmbed()
+    const DMembed = new Discord.UnsafeEmbed()
       .setDescription(`**${language.reason}:** \n${reason}`)
       .setColor(con.color)
       .setTimestamp()
@@ -81,23 +91,27 @@ module.exports = {
       err = e;
     });
     if (kick) {
-      const embed = new Discord.MessageEmbed()
+      const embed = new Discord.UnsafeEmbed()
         .setColor(con.color)
         .setAuthor({
           name: msg.client.ch.stp(lan.author, { user: target }),
-          iconURL: msg.client.ch.displayAvatarURL(target),
+          iconURL: target.displayAvatarURL(),
           url: msg.client.constants.standard.invite,
         })
         .setDescription(msg.client.ch.stp(lan.description, { user: executor, target }))
         .setTimestamp()
-        .addField(language.reason, `${reason}`)
+        .addFields({ name: language.reason, value: `${reason}` })
         .setFooter({ text: msg.client.ch.stp(lan.footer, { user: executor, target }) });
-      if (msg.logchannels && msg.logchannels.length)
+      if (msg.logchannels && msg.logchannels.length) {
         msg.client.ch.send(msg.logchannels, { embeds: [embed] });
+      }
     } else if (!member) {
       if (mexisted) {
         em.fields.pop();
-        em.addField('\u200b', `${msg.client.constants.emotes.cross} ${lan.noMember}`);
+        em.addFields({
+          name: '\u200b',
+          value: `${msg.client.constants.emotes.cross} ${lan.noMember}`,
+        });
       } else em.setDescription(`${msg.client.constants.emotes.cross} ${lan.noMember}`);
       msg.m?.edit({ embeds: [em] });
       if (mexisted) {
@@ -110,14 +124,17 @@ module.exports = {
       m?.delete().catch(() => {});
       if (mexisted) {
         em.fields.pop();
-        em.addField(
-          '\u200b',
-          `${msg.client.constants.emotes.cross + lan.error} ${msg.client.ch.makeCodeBlock(err)}`,
-        );
-      } else
+        em.addFields({
+          name: '\u200b',
+          value: `${msg.client.constants.emotes.cross + lan.error} ${msg.client.ch.makeCodeBlock(
+            err,
+          )}`,
+        });
+      } else {
         em.setDescription(
           `${msg.client.constants.emotes.cross + lan.error} ${msg.client.ch.makeCodeBlock(err)}`,
         );
+      }
       msg.m?.edit({ embeds: [em] });
       if (mexisted) {
         jobs.scheduleJob(new Date(Date.now() + 10000), () => {
@@ -129,16 +146,17 @@ module.exports = {
 
     if (mexisted) {
       em.fields.pop();
-      em.addField(
-        '\u200b',
-        `${msg.client.constants.emotes.tick} ${msg.client.ch.stp(lan.success, {
+      em.addFields({
+        name: '\u200b',
+        value: `${msg.client.constants.emotes.tick} ${msg.client.ch.stp(lan.success, {
           target,
         })}`,
-      );
-    } else
+      });
+    } else {
       em.setDescription(
         `${msg.client.constants.emotes.tick} ${msg.client.ch.stp(lan.success, { target })}`,
       );
+    }
     await msg.m?.edit({ embeds: [em] });
     if (msg.source) msg.client.emit('modSourceHandler', msg, em);
     return true;
