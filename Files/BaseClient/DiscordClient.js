@@ -144,9 +144,9 @@ const getClient = () => {
       Discord.Partials.Channel,
       Discord.Partials.User,
       Discord.Partials.GuildMember,
-      Discord.Partials.GuildScheduleEvent,
+      Discord.Partials.GuildScheduledEvent,
     ],
-    intents: new Discord.IntentsBitField(14079),
+    intents: new Discord.IntentsBitField(79615),
 
     allowedMentions: {
       parse: ['users', 'roles'],
