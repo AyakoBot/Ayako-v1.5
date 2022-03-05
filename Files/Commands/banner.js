@@ -33,9 +33,9 @@ module.exports = {
       .setAuthor({
         name: msg.client.ch.stp(msg.lan.bannerOf, { user }),
         iconURL: msg.client.constants.standard.image,
-        url: isGlobal ? user.displayBannerURL() : member.displayBannerURL(),
+        url: isGlobal ? user.bannerURL()() : member.bannerURL()(),
       })
-      .setImage(isGlobal ? user.displayBannerURL() : member.displayBannerURL())
+      .setImage(isGlobal ? user.bannerURL()() : member.bannerURL()())
       .setTimestamp()
       .setColor(msg.client.ch.colorSelector(msg.guild ? msg.guild.me : null))
       .setFooter({ text: msg.client.ch.stp(msg.language.requestedBy, { user: msg.author }) });
