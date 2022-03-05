@@ -82,7 +82,7 @@ module.exports = {
       botInfo = await getBotInfo(msg, user);
     }
 
-    if (new URL(user.displayAvatarURL()).pathname.endsWith('.gif') || user.displayBannerURL()) {
+    if (new URL(user.displayAvatarURL()).pathname.endsWith('.gif') || user.bannerURL()()) {
       flags.add(4096);
     }
 
@@ -97,7 +97,7 @@ module.exports = {
         url: msg.client.constants.standard.invite,
       })
       .setThumbnail(user.displayAvatarURL())
-      .setImage(user.displayBannerURL() || botInfo?.bannerURL)
+      .setImage(user.bannerURL()() || botInfo?.bannerURL)
       .setColor(user.accentColor)
       .setDescription(
         `${msg.client.ch.stp(msg.lan.userInfo, {
