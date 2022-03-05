@@ -47,12 +47,12 @@ module.exports = {
     return embed;
   },
   buttons(msg) {
-    const roles = new Discord.ButtonComponent()
+    const roles = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.roles.name)
       .setLabel(msg.lan.roles)
       .setStyle(Discord.ButtonStyle.Primary);
 
-    const multiplier = new Discord.ButtonComponent()
+    const multiplier = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.multiplier.name)
       .setLabel(msg.lan.multiplier.replace(/\*/g, ''))
       .setStyle(Discord.ButtonStyle.Secondary);

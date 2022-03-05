@@ -77,12 +77,12 @@ module.exports = {
   buttons(msg, r) {
     const lan = msg.language.commands.settings[msg.file.name];
 
-    const channels = new Discord.ButtonComponent()
+    const channels = new Discord.UnsafeButtonComponent()
       .setCustomId(lan.edit.channels.name)
       .setLabel(lan.channels)
       .setStyle(Discord.ButtonStyle.Primary);
 
-    const rules = new Discord.ButtonComponent()
+    const rules = new Discord.UnsafeButtonComponent()
       .setCustomId(lan.edit.rules.name)
       .setLabel(lan.rules)
       .setStyle(Discord.ButtonStyle.Secondary);
@@ -96,7 +96,7 @@ module.exports = {
         const [key] = Object.entries(msg.language.channelRules).find(([, v]) => v === rule);
         const emote = msg.client.constants.emotes.numbers[(j % 5) + 1];
 
-        const button = new Discord.ButtonComponent()
+        const button = new Discord.UnsafeButtonComponent()
           .setCustomId(lan.edit[key].name)
           .setLabel(msg.language.channelRules[`${key}_SHORT`])
           .setEmoji(emote)

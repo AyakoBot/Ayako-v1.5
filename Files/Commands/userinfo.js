@@ -271,18 +271,18 @@ const interactionHandler = (msg, m, embeds, member) => {
 
 const getComponents = (msg, member, page) => [
   [
-    new Discord.ButtonComponent()
+    new Discord.UnsafeButtonComponent()
       .setLabel(msg.lan.viewRoles)
       .setDisabled(member.roles.cache.size <= 1)
       .setStyle(Discord.ButtonStyle.Secondary)
       .setCustomId('roles'),
-    new Discord.ButtonComponent()
+    new Discord.UnsafeButtonComponent()
       .setLabel(msg.lan.viewBasicPermissions)
       .setCustomId('basicPerms')
       .setStyle(Discord.ButtonStyle.Secondary),
   ],
   [
-    new Discord.SelectMenuComponent()
+    new Discord.UnsafeSelectMenuComponent()
       .setPlaceholder(msg.lan.viewChannelPermissions)
       .setMaxValues(1)
       .setMinValues(1)
@@ -290,12 +290,12 @@ const getComponents = (msg, member, page) => [
       .setOptions(getChannelOptions(msg).slice((page - 1) * 25, page * 25)),
   ],
   [
-    new Discord.ButtonComponent()
+    new Discord.UnsafeButtonComponent()
       .setCustomId('back')
       .setEmoji(msg.client.constants.emotes.back)
       .setStyle(Discord.ButtonStyle.Secondary)
       .setDisabled(page === 1),
-    new Discord.ButtonComponent()
+    new Discord.UnsafeButtonComponent()
       .setCustomId('next')
       .setEmoji(msg.client.constants.emotes.forth)
       .setStyle(Discord.ButtonStyle.Secondary)
@@ -744,7 +744,7 @@ const decideUser = async (msg, users, m) => {
 
 const getUserComponents = (msg, page, users) => {
   const menu = [
-    new Discord.SelectMenuComponent()
+    new Discord.UnsafeSelectMenuComponent()
       .setPlaceholder(msg.lan.selectUser)
       .setMaxValues(1)
       .setMinValues(1)
@@ -761,13 +761,13 @@ const getUserComponents = (msg, page, users) => {
   ];
 
   if (users.length > 25) {
-    const back = new Discord.ButtonComponent()
+    const back = new Discord.UnsafeButtonComponent()
       .setEmoji(msg.client.constants.emotes.back)
       .setDisabled(page === 1)
       .setCustomId('back')
       .setStyle(Discord.ButtonStyle.Secondary);
 
-    const next = new Discord.ButtonComponent()
+    const next = new Discord.UnsafeButtonComponent()
       .setEmoji(msg.client.constants.emotes.forth)
       .setCustomId('next')
       .setDisabled(page === Math.ceil(users.length / 25))

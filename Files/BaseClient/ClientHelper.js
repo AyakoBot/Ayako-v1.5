@@ -753,12 +753,12 @@ module.exports = {
    * @param {object} msg - The triggering Message of module.exports Awaiter.
    */
   modRoleWaiter: async (msg) => {
-    const SUCCESS = new Discord.ButtonComponent()
+    const SUCCESS = new Discord.UnsafeButtonComponent()
       .setCustomId('modProceedAction')
       .setLabel(msg.language.mod.warning.proceed)
       .setStyle(Discord.ButtonStyle.Primary)
       .setEmoji(Constants.emotes.tickBGID);
-    const DANGER = new Discord.ButtonComponent()
+    const DANGER = new Discord.UnsafeButtonComponent()
       .setCustomId('modAbortAction')
       .setLabel(msg.language.mod.warning.abort)
       .setEmoji(Constants.emotes.crossBGID)

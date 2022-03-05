@@ -41,15 +41,15 @@ module.exports = {
     return embed;
   },
   buttons(msg) {
-    const prefix = new Discord.ButtonComponent()
+    const prefix = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.prefix.name)
       .setLabel(msg.lan.prefix)
       .setStyle(Discord.ButtonStyle.Primary);
-    const interactionsmode = new Discord.ButtonComponent()
+    const interactionsmode = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.interactionsmode.name)
       .setLabel(msg.lan.interactionsmode)
       .setStyle(Discord.ButtonStyle.Secondary);
-    const language = new Discord.ButtonComponent()
+    const language = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.lan.name)
       .setLabel(msg.lan.lan)
       .setStyle(Discord.ButtonStyle.Secondary);

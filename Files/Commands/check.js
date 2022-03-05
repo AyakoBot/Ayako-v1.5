@@ -382,7 +382,7 @@ module.exports = {
 function buttonOrder(take, msg, options, answered) {
   const rawRows = [];
   if (take.warns.length) {
-    const warnMenu = new Discord.SelectMenuComponent()
+    const warnMenu = new Discord.UnsafeSelectMenuComponent()
       .setCustomId('warnMenu')
       .addOptions(take.warns)
       .setMinValues(1)
@@ -390,12 +390,12 @@ function buttonOrder(take, msg, options, answered) {
       .setPlaceholder(
         `${answered.warns.length ? answered.warns.sort((a, b) => a - b) : msg.lan.selWarns}`,
       );
-    const warnNext = new Discord.ButtonComponent()
+    const warnNext = new Discord.UnsafeButtonComponent()
       .setCustomId('warnNext')
       .setLabel(msg.language.next)
       .setDisabled(options.warns.length < msg.pages.warn * 25 + 26)
       .setStyle(Discord.ButtonStyle.Primary);
-    const warnPrev = new Discord.ButtonComponent()
+    const warnPrev = new Discord.UnsafeButtonComponent()
       .setCustomId('warnPrev')
       .setLabel(msg.language.prev)
       .setDisabled(msg.pages.warn === 1)
@@ -407,7 +407,7 @@ function buttonOrder(take, msg, options, answered) {
     else warnPrev.setDisabled(true);
   }
   if (take.mutes.length) {
-    const muteMenu = new Discord.SelectMenuComponent()
+    const muteMenu = new Discord.UnsafeSelectMenuComponent()
       .setCustomId('muteMenu')
       .addOptions(take.mutes)
       .setMinValues(1)
@@ -415,12 +415,12 @@ function buttonOrder(take, msg, options, answered) {
       .setPlaceholder(
         `${answered.mutes.length ? answered.mutes.sort((a, b) => a - b) : msg.lan.selMutes}`,
       );
-    const muteNext = new Discord.ButtonComponent()
+    const muteNext = new Discord.UnsafeButtonComponent()
       .setCustomId('muteNext')
       .setLabel(msg.language.next)
       .setDisabled(options.mutes.length < msg.pages.mute * 25 + 26)
       .setStyle(Discord.ButtonStyle.Primary);
-    const mutePrev = new Discord.ButtonComponent()
+    const mutePrev = new Discord.UnsafeButtonComponent()
       .setCustomId('mutePrev')
       .setLabel(msg.language.prev)
       .setDisabled(msg.pages.mute === 1)
@@ -432,7 +432,7 @@ function buttonOrder(take, msg, options, answered) {
     else mutePrev.setDisabled(true);
   }
   if (take.warns.length || take.mutes.length) {
-    const done = new Discord.ButtonComponent()
+    const done = new Discord.UnsafeButtonComponent()
       .setCustomId('done')
       .setLabel(msg.language.done)
       .setStyle(Discord.ButtonStyle.Primary);

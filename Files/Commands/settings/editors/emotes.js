@@ -19,7 +19,7 @@ module.exports = {
       doneDisabled = !insertedValues[required.assinger];
     }
 
-    const done = new Discord.ButtonComponent()
+    const done = new Discord.UnsafeButtonComponent()
       .setCustomId('done')
       .setLabel(msg.language.done)
       .setDisabled(doneDisabled)

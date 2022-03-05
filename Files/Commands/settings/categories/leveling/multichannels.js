@@ -47,12 +47,12 @@ module.exports = {
     return embed;
   },
   buttons(msg) {
-    const channels = new Discord.ButtonComponent()
+    const channels = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.channels.name)
       .setLabel(msg.lan.channels)
       .setStyle(Discord.ButtonStyle.Primary);
 
-    const multiplier = new Discord.ButtonComponent()
+    const multiplier = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.multiplier.name)
       .setLabel(msg.lan.multiplier.replace(/\*/g, ''))
       .setStyle(Discord.ButtonStyle.Secondary);

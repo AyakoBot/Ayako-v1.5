@@ -84,39 +84,39 @@ module.exports = {
     return embed;
   },
   buttons(msg, r) {
-    const active = new Discord.ButtonComponent()
+    const active = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.active.name)
       .setLabel(msg.lanSettings.active)
       .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const kicktof = new Discord.ButtonComponent()
+    const kicktof = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.kicktof.name)
       .setLabel(msg.lan.kicktof)
       .setStyle(r.kicktof ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const kickafter = new Discord.ButtonComponent()
+    const kickafter = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.kickafter.name)
       .setLabel(msg.lan.kickafter)
       .setStyle(Discord.ButtonStyle.Secondary);
-    const selfstart = new Discord.ButtonComponent()
+    const selfstart = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.selfstart.name)
       .setLabel(msg.lan.selfstart)
       .setStyle(r.selfstart ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const logchannel = new Discord.ButtonComponent()
+    const logchannel = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.logchannel.name)
       .setLabel(msg.lan.logchannel)
       .setStyle(Discord.ButtonStyle.Secondary);
-    const startchannel = new Discord.ButtonComponent()
+    const startchannel = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.startchannel.name)
       .setLabel(msg.lan.startchannel)
       .setStyle(r.startchannel ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const deleteMsgs = new Discord.ButtonComponent()
+    const deleteMsgs = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.deletestartchmsgs.name)
       .setLabel(msg.lan.deletestartchmsgs)
       .setStyle(r.deletestartchmsgs ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const finishedrole = new Discord.ButtonComponent()
+    const finishedrole = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.finishedrole.name)
       .setLabel(msg.lan.finishedrole)
       .setStyle(r.finishedrole ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const pendingrole = new Discord.ButtonComponent()
+    const pendingrole = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.pendingrole.name)
       .setLabel(msg.lan.pendingrole)
       .setStyle(Discord.ButtonStyle.Secondary);

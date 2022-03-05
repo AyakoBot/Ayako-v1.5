@@ -100,18 +100,18 @@ const getEmbed = (content, isGuild, msg, ownPos) => {
 };
 
 const getButtons = (msg, page, rows) => {
-  const toggleType = new Discord.ButtonComponent()
+  const toggleType = new Discord.UnsafeButtonComponent()
     .setLabel(msg.lan.toggle)
     .setCustomId('tt')
     .setStyle(Discord.ButtonStyle.Primary);
 
-  const next = new Discord.ButtonComponent()
+  const next = new Discord.UnsafeButtonComponent()
     .setCustomId('next')
     .setEmoji(msg.client.constants.emotes.forth)
     .setStyle(Discord.ButtonStyle.Secondary)
     .setDisabled(rows ? page === Math.ceil(rows.length / 30) : true);
 
-  const back = new Discord.ButtonComponent()
+  const back = new Discord.UnsafeButtonComponent()
     .setCustomId('back')
     .setEmoji(msg.client.constants.emotes.back)
     .setStyle(Discord.ButtonStyle.Secondary)
