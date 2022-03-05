@@ -262,57 +262,57 @@ const getComponents = async (msg, { page, Objects }, editing) => {
 
       components.push(
         [
-          new Discord.ButtonComponent()
+          new Discord.UnsafeButtonComponent()
             .setCustomId('author-name')
             .setLabel(lan['author-name'].name)
             .setStyle(authorNameStyle),
-          new Discord.ButtonComponent()
+          new Discord.UnsafeButtonComponent()
             .setCustomId('author-iconURL')
             .setLabel(lan['author-iconURL'].name)
             .setStyle(authorIconUrlStyle),
-          new Discord.ButtonComponent()
+          new Discord.UnsafeButtonComponent()
             .setCustomId('author-url')
             .setLabel(lan['author-url'].name)
             .setStyle(authorUrlStyle),
         ],
         [
-          new Discord.ButtonComponent()
+          new Discord.UnsafeButtonComponent()
             .setCustomId('title')
             .setLabel(lan.title.name)
             .setStyle(titleStyle),
-          new Discord.ButtonComponent()
+          new Discord.UnsafeButtonComponent()
             .setCustomId('url')
             .setLabel(lan.url.name)
             .setStyle(urlStyle),
-          new Discord.ButtonComponent()
+          new Discord.UnsafeButtonComponent()
             .setCustomId('description')
             .setLabel(lan.description.name)
             .setStyle(descriptionStyle),
         ],
         [
-          new Discord.ButtonComponent()
+          new Discord.UnsafeButtonComponent()
             .setCustomId('thumbnail')
             .setLabel(lan.thumbnail.name)
             .setStyle(thumbnailStyle),
-          new Discord.ButtonComponent()
+          new Discord.UnsafeButtonComponent()
             .setCustomId('image')
             .setLabel(lan.image.name)
             .setStyle(imageStyle),
-          new Discord.ButtonComponent()
+          new Discord.UnsafeButtonComponent()
             .setCustomId('color')
             .setLabel(lan.color.name)
             .setStyle(colorStyle),
         ],
         [
-          new Discord.ButtonComponent()
+          new Discord.UnsafeButtonComponent()
             .setCustomId('footer-text')
             .setLabel(lan['footer-text'].name)
             .setStyle(footerTextStyle),
-          new Discord.ButtonComponent()
+          new Discord.UnsafeButtonComponent()
             .setCustomId('footer-iconURL')
             .setLabel(lan['footer-iconURL'].name)
             .setStyle(footerIconUrlStyle),
-          new Discord.ButtonComponent()
+          new Discord.UnsafeButtonComponent()
             .setCustomId('timestamp')
             .setLabel(lan.timestamp.name)
             .setStyle(timestampStyle),
@@ -323,7 +323,7 @@ const getComponents = async (msg, { page, Objects }, editing) => {
     case 2: {
       components.push(
         [
-          new Discord.SelectMenuComponent()
+          new Discord.UnsafeSelectMenuComponent()
             .setCustomId('field-select')
             .setMaxValues(1)
             .setMinValues(1)
@@ -341,7 +341,7 @@ const getComponents = async (msg, { page, Objects }, editing) => {
             ),
         ],
         [
-          new Discord.ButtonComponent()
+          new Discord.UnsafeButtonComponent()
             .setCustomId('add-field')
             .setLabel(baseLan.addFields)
             .setStyle(Discord.ButtonStyle.Primary)
@@ -353,23 +353,23 @@ const getComponents = async (msg, { page, Objects }, editing) => {
     case 3: {
       components.push(
         [
-          new Discord.ButtonComponent()
+          new Discord.UnsafeButtonComponent()
             .setCustomId('inheritCode')
             .setLabel(baseLan.inheritCode)
             .setStyle(Discord.ButtonStyle.Primary),
-          new Discord.ButtonComponent()
+          new Discord.UnsafeButtonComponent()
             .setCustomId('viewRaw')
             .setLabel(baseLan.viewRaw)
             .setStyle(Discord.ButtonStyle.Primary),
         ],
         [
-          new Discord.ButtonComponent()
+          new Discord.UnsafeButtonComponent()
             .setCustomId('viewRawOtherMsg')
             .setLabel(baseLan.viewRawOtherMsg)
             .setStyle(Discord.ButtonStyle.Secondary),
         ],
         [
-          new Discord.ButtonComponent()
+          new Discord.UnsafeButtonComponent()
             .setCustomId('save')
             .setLabel(baseLan.save)
             .setStyle(Discord.ButtonStyle.Primary)
@@ -378,7 +378,7 @@ const getComponents = async (msg, { page, Objects }, editing) => {
                 msg.member.permissions.has(module.exports.insideCommandPerm) && !cantBeSent(Objects)
               ),
             ),
-          new Discord.ButtonComponent()
+          new Discord.UnsafeButtonComponent()
             .setCustomId('send')
             .setLabel(baseLan.send)
             .setStyle(Discord.ButtonStyle.Primary)
@@ -407,7 +407,7 @@ const getComponents = async (msg, { page, Objects }, editing) => {
 };
 
 const getMenu = (savedEmbeds, baseLan, msg) => [
-  new Discord.SelectMenuComponent()
+  new Discord.UnsafeSelectMenuComponent()
     .setCustomId('savedEmbedSelection')
     .setMaxValues(1)
     .setMinValues(1)
@@ -433,18 +433,18 @@ const getMenu = (savedEmbeds, baseLan, msg) => [
 ];
 
 const getNavigation = (msg, page) => [
-  new Discord.ButtonComponent()
+  new Discord.UnsafeButtonComponent()
     .setLabel('\u200b')
     .setCustomId('left')
     .setStyle(Discord.ButtonStyle.Secondary)
     .setEmoji(msg.client.constants.emotes.back)
     .setDisabled(page === 1),
-  new Discord.ButtonComponent()
+  new Discord.UnsafeButtonComponent()
     .setLabel('\u200b')
     .setCustomId('cross')
     .setStyle(Discord.ButtonStyle.Danger)
     .setEmoji(msg.client.constants.emotes.cross),
-  new Discord.ButtonComponent()
+  new Discord.UnsafeButtonComponent()
     .setLabel('\u200b')
     .setCustomId('right')
     .setStyle(Discord.ButtonStyle.Secondary)
@@ -453,13 +453,13 @@ const getNavigation = (msg, page) => [
 ];
 
 const getArrows = (msg, currentPage, maxPage) => [
-  new Discord.ButtonComponent()
+  new Discord.UnsafeButtonComponent()
     .setLabel('\u200b')
     .setCustomId('prev')
     .setStyle(Discord.ButtonStyle.Danger)
     .setEmoji(msg.client.constants.emotes.back)
     .setDisabled(currentPage === 1 || !maxPage),
-  new Discord.ButtonComponent()
+  new Discord.UnsafeButtonComponent()
     .setLabel('\u200b')
     .setCustomId('next')
     .setStyle(Discord.ButtonStyle.Primary)
@@ -468,12 +468,12 @@ const getArrows = (msg, currentPage, maxPage) => [
 ];
 
 const getOtherButtons = (baseLan) => [
-  new Discord.ButtonComponent()
+  new Discord.UnsafeButtonComponent()
     .setCustomId('inheritFromSavedEmbed')
     .setLabel(baseLan.inheritFromSavedEmbed)
     .setStyle(Discord.ButtonStyle.Primary)
     .setDisabled(true),
-  new Discord.ButtonComponent()
+  new Discord.UnsafeButtonComponent()
     .setCustomId('deleteSavedEmbed')
     .setLabel(baseLan.deleteSavedEmbed)
     .setStyle(Discord.ButtonStyle.Primary)
@@ -1090,7 +1090,7 @@ const postCode = (Objects, msg, answer, embed, noRemove) => {
   if (noRemove) {
     components = msg.client.ch.buttonRower([
       [
-        new Discord.ButtonComponent()
+        new Discord.UnsafeButtonComponent()
           .setLabel('\u200b')
           .setStyle(Discord.ButtonStyle.Primary)
           .setEmoji(msg.client.constants.emotes.back)
@@ -1160,7 +1160,7 @@ const postCode = (Objects, msg, answer, embed, noRemove) => {
 
 const handleSave = async (msg, answer, Objects) => {
   const lan = msg.language.commands.embedbuilder;
-  const save = new Discord.ButtonComponent()
+  const save = new Discord.UnsafeButtonComponent()
     .setCustomId('save')
     .setLabel(lan.save)
     .setStyle(Discord.ButtonStyle.Primary)
@@ -1180,7 +1180,7 @@ const handleSave = async (msg, answer, Objects) => {
     const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
     const messageCollector = msg.channel.createMessageCollector({ time: 60000 });
 
-    const back = new Discord.ButtonComponent()
+    const back = new Discord.UnsafeButtonComponent()
       .setLabel('\u200b')
       .setEmoji(msg.client.constants.emotes.back)
       .setStyle(Discord.ButtonStyle.Primary)
@@ -1203,7 +1203,7 @@ const handleSave = async (msg, answer, Objects) => {
 
       name = message.content.slice(0, 1024);
 
-      const newSave = new Discord.ButtonComponent()
+      const newSave = new Discord.UnsafeButtonComponent()
         .setCustomId('save')
         .setLabel(lan.save)
         .setStyle(Discord.ButtonStyle.Primary)
@@ -1283,23 +1283,23 @@ const handleSave = async (msg, answer, Objects) => {
 
 const handleSend = async (msg, answer, Objects) => {
   const getButtons = (options) => {
-    const next = new Discord.ButtonComponent()
+    const next = new Discord.UnsafeButtonComponent()
       .setCustomId('next')
       .setLabel(msg.language.next)
       .setDisabled(
         options.options.length > 25 && options.page === Math.ceil(options.options.length / 25),
       )
       .setStyle(Discord.ButtonStyle.Primary);
-    const prev = new Discord.ButtonComponent()
+    const prev = new Discord.UnsafeButtonComponent()
       .setCustomId('prev')
       .setLabel(msg.language.prev)
       .setDisabled(options.page === 1)
       .setStyle(Discord.ButtonStyle.Danger);
-    const send = new Discord.ButtonComponent()
+    const send = new Discord.UnsafeButtonComponent()
       .setCustomId('send')
       .setLabel(msg.language.commands.embedbuilder.send)
       .setStyle(Discord.ButtonStyle.Primary);
-    const channels = new Discord.SelectMenuComponent()
+    const channels = new Discord.UnsafeSelectMenuComponent()
       .setCustomId('channels')
       .addOptions(options.take)
       .setPlaceholder(msg.language.select.channels.select)
@@ -1468,7 +1468,7 @@ const handleOtherMsgRaw = async (msg, answer, Objects) => {
       value: msg.client.constants.discordMsgUrls.map((url) => `\`${url}\``).join('\n'),
     });
 
-  const back = new Discord.ButtonComponent()
+  const back = new Discord.UnsafeButtonComponent()
     .setLabel('\u200b')
     .setEmoji(msg.client.constants.emotes.back)
     .setStyle(Discord.ButtonStyle.Primary)
@@ -1616,29 +1616,29 @@ const fieldSelect = async (msg, answer, Objects) => {
 
   const getFieldComponents = () => [
     [
-      new Discord.ButtonComponent()
+      new Discord.UnsafeButtonComponent()
         .setCustomId('remove-field')
         .setLabel(baseLan.removeField)
         .setStyle(Discord.ButtonStyle.Danger),
     ],
     [
-      new Discord.ButtonComponent()
+      new Discord.UnsafeButtonComponent()
         .setCustomId('name')
         .setLabel(baseLan.fieldName)
         .setStyle(editing === 'name' ? Discord.ButtonStyle.Primary : Discord.ButtonStyle.Secondary),
-      new Discord.ButtonComponent()
+      new Discord.UnsafeButtonComponent()
         .setCustomId('value')
         .setLabel(baseLan.fieldValue)
         .setStyle(
           editing === 'value' ? Discord.ButtonStyle.Primary : Discord.ButtonStyle.Secondary,
         ),
-      new Discord.ButtonComponent()
+      new Discord.UnsafeButtonComponent()
         .setCustomId('inline')
         .setLabel(baseLan.fieldInline)
         .setStyle(selected.inline ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Secondary),
     ],
     [
-      new Discord.ButtonComponent()
+      new Discord.UnsafeButtonComponent()
         .setLabel('\u200b')
         .setStyle(Discord.ButtonStyle.Primary)
         .setEmoji(msg.client.constants.emotes.back)
@@ -1824,7 +1824,7 @@ const handleEmbedSelection = async ({ msg, answer }, Objects, { embed, component
     else Options.take[i].default = false;
   });
 
-  const newMenu = new Discord.SelectMenuComponent()
+  const newMenu = new Discord.UnsafeSelectMenuComponent()
     .setCustomId('savedEmbedSelection')
     .setMaxValues(1)
     .setMinValues(1)
@@ -1972,7 +1972,7 @@ const handlePage = async ({ msg, answer }, Objects, { embed }, increasePage) => 
     )
     .filter((r) => !!r);
 
-  const newMenu = new Discord.SelectMenuComponent()
+  const newMenu = new Discord.UnsafeSelectMenuComponent()
     .setCustomId('savedEmbedSelection')
     .setMaxValues(1)
     .setMinValues(1)

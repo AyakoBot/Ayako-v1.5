@@ -47,19 +47,19 @@ module.exports = {
     return embed;
   },
   buttons(msg, r) {
-    const active = new Discord.ButtonComponent()
+    const active = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.active.name)
       .setLabel(msg.lanSettings.active)
       .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const bot = new Discord.ButtonComponent()
+    const bot = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.botRole.name)
       .setLabel(msg.lan.botRole)
       .setStyle(Discord.ButtonStyle.Primary);
-    const user = new Discord.ButtonComponent()
+    const user = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.userRole.name)
       .setLabel(msg.lan.userRole)
       .setStyle(Discord.ButtonStyle.Primary);
-    const all = new Discord.ButtonComponent()
+    const all = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.allRole.name)
       .setLabel(msg.lan.allRole)
       .setStyle(Discord.ButtonStyle.Primary);

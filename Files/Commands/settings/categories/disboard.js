@@ -48,23 +48,23 @@ module.exports = {
     return embed;
   },
   buttons(msg, r) {
-    const active = new Discord.ButtonComponent()
+    const active = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.active.name)
       .setLabel(msg.lanSettings.active)
       .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const roles = new Discord.ButtonComponent()
+    const roles = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.roles.name)
       .setLabel(msg.lan.roles)
       .setStyle(Discord.ButtonStyle.Primary);
-    const users = new Discord.ButtonComponent()
+    const users = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.users.name)
       .setLabel(msg.lan.users)
       .setStyle(Discord.ButtonStyle.Primary);
-    const channel = new Discord.ButtonComponent()
+    const channel = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.channelid.name)
       .setLabel(msg.lan.channelid)
       .setStyle(Discord.ButtonStyle.Primary);
-    const repeatreminder = new Discord.ButtonComponent()
+    const repeatreminder = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.repeatreminder.name)
       .setLabel(msg.lan.repeatreminder)
       .setStyle(Discord.ButtonStyle.Secondary);

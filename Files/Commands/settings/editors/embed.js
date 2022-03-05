@@ -94,7 +94,7 @@ module.exports = {
         insertedValues[required.assinger] === msg.language.none;
     }
 
-    const menu = new Discord.SelectMenuComponent()
+    const menu = new Discord.UnsafeSelectMenuComponent()
       .setCustomId(required.key)
       .addOptions(
         Objects.take.length ? Objects.take : { label: 'placeholder', value: 'placeholder' },
@@ -103,14 +103,14 @@ module.exports = {
       .setMinValues(1)
       .setMaxValues(1)
       .setPlaceholder(msg.language.select[required.key].select);
-    const next = new Discord.ButtonComponent()
+    const next = new Discord.UnsafeButtonComponent()
       .setCustomId('next')
       .setLabel(msg.language.next)
       .setDisabled(
         Objects.page === Math.ceil(Objects.options.length / 25) || !Objects.options.length,
       )
       .setStyle(Discord.ButtonStyle.Primary);
-    const prev = new Discord.ButtonComponent()
+    const prev = new Discord.UnsafeButtonComponent()
       .setCustomId('prev')
       .setLabel(msg.language.prev)
       .setDisabled(Objects.page === 1 || !Objects.options.length)
@@ -118,13 +118,13 @@ module.exports = {
 
     returnedButtons.push([menu], [prev, next]);
 
-    const done = new Discord.ButtonComponent()
+    const done = new Discord.UnsafeButtonComponent()
       .setCustomId('done')
       .setLabel(msg.language.done)
       .setDisabled(doneDisabled)
       .setStyle(Discord.ButtonStyle.Primary);
 
-    const create = new Discord.ButtonComponent()
+    const create = new Discord.UnsafeButtonComponent()
       .setCustomId('create')
       .setLabel(msg.language.createNew)
       .setStyle(Discord.ButtonStyle.Primary);

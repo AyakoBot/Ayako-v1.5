@@ -73,7 +73,7 @@ module.exports = {
       .addFields({ name: msg.lan.field, value: '\u200b' })
       .setColor(msg.client.constants.standard.color);
 
-    const regenerate = new Discord.ButtonComponent()
+    const regenerate = new Discord.UnsafeButtonComponent()
       .setCustomId('regenerate')
       .setLabel(msg.language.regenerate)
       .setStyle(Discord.ButtonStyle.Secondary);

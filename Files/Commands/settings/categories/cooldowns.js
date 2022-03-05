@@ -100,11 +100,11 @@ module.exports = {
     return embed;
   },
   buttons(msg, r) {
-    const active = new Discord.ButtonComponent()
+    const active = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.active.name)
       .setLabel(msg.lanSettings.active)
       .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const command = new Discord.ButtonComponent()
+    const command = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.command.name)
       .setLabel(
         msg.client.ch.stp(msg.lan.command.replace(/\*/g, ''), {
@@ -112,7 +112,7 @@ module.exports = {
         }),
       )
       .setStyle(Discord.ButtonStyle.Secondary);
-    const cooldown = new Discord.ButtonComponent()
+    const cooldown = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.cooldown.name)
       .setLabel(
         msg.client.ch.stp(msg.lan.cooldown.replace(/\*/g, ''), {
@@ -120,19 +120,19 @@ module.exports = {
         }),
       )
       .setStyle(Discord.ButtonStyle.Secondary);
-    const achannel = new Discord.ButtonComponent()
+    const achannel = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.activechannelid.name)
       .setLabel(msg.lan.activechannelid)
       .setStyle(Discord.ButtonStyle.Primary);
-    const bchannel = new Discord.ButtonComponent()
+    const bchannel = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.bpchannelid.name)
       .setLabel(msg.lan.bpchannelid)
       .setStyle(Discord.ButtonStyle.Primary);
-    const user = new Discord.ButtonComponent()
+    const user = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.bpuserid.name)
       .setLabel(msg.lan.bpuserid)
       .setStyle(Discord.ButtonStyle.Primary);
-    const role = new Discord.ButtonComponent()
+    const role = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.bproleid.name)
       .setLabel(msg.lan.bproleid)
       .setStyle(Discord.ButtonStyle.Primary);

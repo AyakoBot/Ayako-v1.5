@@ -58,23 +58,23 @@ module.exports = {
     return embed;
   },
   buttons(msg, r) {
-    const active = new Discord.ButtonComponent()
+    const active = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.active.name)
       .setLabel(msg.lanSettings.active)
       .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const channelid = new Discord.ButtonComponent()
+    const channelid = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.channelid.name)
       .setLabel(msg.lan.channelid)
       .setStyle(Discord.ButtonStyle.Primary);
-    const bluserid = new Discord.ButtonComponent()
+    const bluserid = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.bluserid.name)
       .setLabel(msg.lan.bluserid)
       .setStyle(Discord.ButtonStyle.Primary);
-    const blroleid = new Discord.ButtonComponent()
+    const blroleid = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.blroleid.name)
       .setLabel(msg.lan.blroleid)
       .setStyle(Discord.ButtonStyle.Primary);
-    const approverroleid = new Discord.ButtonComponent()
+    const approverroleid = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.approverroleid.name)
       .setLabel(msg.lan.approverroleid)
       .setStyle(Discord.ButtonStyle.Primary);
