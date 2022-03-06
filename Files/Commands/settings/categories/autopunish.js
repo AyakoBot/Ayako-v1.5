@@ -15,7 +15,7 @@ module.exports = {
     for (let i = 0; i < res.length; i += 1) {
       const r = res[i];
       const punishment = r.punishment ? msg.language.autopunish[r.punishment] : msg.language.none;
-      embed.addFields([
+      embed.addFields(...[
         {
           name: `${msg.language.number}: \`${r.id}\` | ${
             r.active
@@ -33,7 +33,7 @@ module.exports = {
   },
   displayEmbed(msg, r) {
     const embed = new Discord.UnsafeEmbed();
-    embed.addFields([
+    embed.addFields(...[
       {
         name: `${msg.lanSettings.active}\u200b`,
         value: r.active

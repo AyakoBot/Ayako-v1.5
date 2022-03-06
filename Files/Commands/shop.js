@@ -17,7 +17,7 @@ module.exports = {
           name: 'Server Role Shop',
           url: msg.client.constants.standard.invite,
         })
-        .addFields([
+        .addFields(...[
           {
             name: '**#1 - 15000<a:NadekoFlower:746420831390793899>**',
             value: '<@&330766391999463424>',
@@ -66,7 +66,7 @@ module.exports = {
         .setDescription(
           'To buy these Roles visit `t!shop` number `3` i. e. `Server Shop`\n View this message anytime by typing `h!shop`',
         )
-        .addFields([
+        .addFields(...[
           {
             name: '2.500 <a:TatsuCoins:800684425582477392>',
             value: '<@&800159175836827719> <a:DogDance:800685678958608404> ',

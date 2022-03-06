@@ -46,7 +46,7 @@ module.exports = {
 
       if (Number.isNaN(+affected)) affected = '--';
 
-      embed.addFields([
+      embed.addFields(...[
         {
           name: `${msg.language.number}: \`${r.id}\` | ${
             r.active
@@ -139,7 +139,7 @@ module.exports = {
         affectedNumber = affected;
       }
 
-      embed.addFields([
+      embed.addFields(...[
         {
           name: msg.lanSettings.active,
           value: r.active
@@ -194,7 +194,7 @@ module.exports = {
         },
       ]);
     } else {
-      embed.addFields([
+      embed.addFields(...[
         {
           name: msg.lanSettings.active,
           value: r.active

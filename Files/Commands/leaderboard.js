@@ -95,7 +95,7 @@ const getEmbed = (content, isGuild, msg, ownPos) => {
       iconURL: msg.client.constants.commands.leaderboard.authorImage,
       url: msg.client.constants.standard.invite,
     });
-  if (ownPos.name) embed.addFields([ownPos]);
+  if (ownPos.name) embed.addFields(...[ownPos]);
   return embed;
 };
 

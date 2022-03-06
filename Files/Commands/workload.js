@@ -33,7 +33,7 @@ module.exports = {
         iconURL: msg.client.constants.emotes.workloadLink,
         url: msg.client.constants.standard.invite,
       })
-      .addFields([
+      .addFields(...[
         {
           name: msg.lan.RAM.name,
           value: msg.client.ch.stp(msg.lan.RAM.value, {

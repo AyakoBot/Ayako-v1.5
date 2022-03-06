@@ -45,10 +45,6 @@ module.exports = {
           let type;
           if (settingsFile.type) {
             switch (settingsFile.type) {
-              default: {
-                type = msg.client.constants.emotes.blue;
-                break;
-              }
               case 1: {
                 type = msg.client.constants.emotes.yellow;
                 break;
@@ -63,6 +59,10 @@ module.exports = {
               }
               case 4: {
                 type = msg.client.constants.emotes.green;
+                break;
+              }
+              default: {
+                type = msg.client.constants.emotes.blue;
                 break;
               }
             }
@@ -293,9 +293,6 @@ module.exports = {
           return msg.client.ch.notYours(interaction);
         }
         switch (interaction.customId) {
-          default: {
-            break;
-          }
           case 'list': {
             await interaction.deferReply().catch(() => {});
             singleRowDisplay(res, res.rows[interaction.values[0]], interaction, true);
@@ -313,6 +310,9 @@ module.exports = {
           case 'edit': {
             buttonsCollector.stop();
             mmrEditList({ msg, answer: interaction }, { res, embed });
+            break;
+          }
+          default: {
             break;
           }
         }
@@ -465,10 +465,6 @@ const getIdentifier = (msg, settingsConstant, row) => {
   let identifier;
 
   switch (settingsConstant.identType) {
-    default: {
-      identifier = row[settingsConstant.ident] ? row[settingsConstant.ident] : '--';
-      break;
-    }
     case 'role': {
       const role = msg.guild.roles.cache.get(row[settingsConstant.ident]);
       if (role) {
@@ -485,6 +481,10 @@ const getIdentifier = (msg, settingsConstant, row) => {
       } else {
         identifier = '--';
       }
+      break;
+    }
+    default: {
+      identifier = row[settingsConstant.ident] ? row[settingsConstant.ident] : '--';
       break;
     }
   }
@@ -702,9 +702,6 @@ const mmrEditList = async (msgData, sendData) => {
   buttonsCollector.on('collect', async (interaction) => {
     if (interaction.user.id !== msg.author.id) return msg.client.ch.notYours(interaction);
     switch (interaction.customId) {
-      default: {
-        return null;
-      }
       case 'add': {
         mmrAdd(interaction, {});
         buttonsCollector.stop();
@@ -730,6 +727,9 @@ const mmrEditList = async (msgData, sendData) => {
         singleRowEdit({ msg, answer: interaction }, { row, res }, null, true);
         buttonsCollector.stop();
         break;
+      }
+      default: {
+        return null;
       }
     }
 
@@ -818,9 +818,9 @@ const singleRowEdit = async (msgData, resData, embed, comesFromMMR) => {
 };
 
 const whereToGo = async (msg, answer) => {
-  if (!msg.args[1] || msg.args[1].toLowerCase() !== msg.language.edit)
+  if (!msg.args[1] || msg.args[1].toLowerCase() !== msg.language.edit) {
     module.exports.display({ msg, answer });
-  else if (
+  } else if (
     msg.args[1].toLowerCase() === msg.language.edit &&
     msg.file.perm &&
     !msg.member.permissions.has(new Discord.PermissionsBitField(msg.file.perm)) &&
@@ -1583,9 +1583,6 @@ const setup = async (msg, answer) => {
   buttonsCollector.on('collect', async (interaction) => {
     if (interaction.user.id !== msg.author.id) return msg.client.ch.notYours(interaction);
     switch (interaction.customId) {
-      default: {
-        return null;
-      }
       case 'yes': {
         buttonsCollector.stop();
         const settingsConst = msg.client.constants.commands.settings.setupQueries[msg.file.name];
@@ -1618,6 +1615,9 @@ const setup = async (msg, answer) => {
           })
           .setDescription(lan.abort);
         return replier({ msg, answer: interaction }, { embeds: [abort] });
+      }
+      default: {
+        return null;
       }
     }
     return null;
@@ -1657,10 +1657,6 @@ const categoryDisplay = async (msg, answer, needsBack) => {
       let type;
       if (settingsFile.type) {
         switch (settingsFile.type) {
-          default: {
-            type = msg.client.constants.emotes.blue;
-            break;
-          }
           case 1: {
             type = msg.client.constants.emotes.yellow;
             break;
@@ -1675,6 +1671,10 @@ const categoryDisplay = async (msg, answer, needsBack) => {
           }
           case 4: {
             type = msg.client.constants.emotes.green;
+            break;
+          }
+          default: {
+            type = msg.client.constants.emotes.blue;
             break;
           }
         }
@@ -1749,7 +1749,7 @@ const categoryMenuHandler = async ({ msg, answer }, needsBack) => {
 
 const reassignMsg = (newContent, msg) => {
   msg.content = `${newContent}`;
-  msg.args = msg.content.replace(new RegExp('\\n', 'g'), ' ').split(/ +/);
+  msg.args = msg.content.replace(/\\n/g, ' ').split(/ +/);
 
   msg.args.shift();
 };

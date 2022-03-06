@@ -76,7 +76,7 @@ module.exports = {
       .setColor(
         isGuild ? msg.client.ch.colorSelector(msg.guild.me) : msg.client.constants.standard.color,
       )
-      .addFields([
+      .addFields(...[
         { name: msg.lan.currentXP, value: `${xp}`, inline: true },
         { name: msg.lan.nextXP, value: `${Math.ceil(neededXP)}`, inline: true },
         { name: msg.lan.diff, value: `${Math.round(neededXP - xp)}`, inline: true },
