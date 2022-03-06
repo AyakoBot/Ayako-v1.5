@@ -44,7 +44,7 @@ module.exports = {
               else embed.addFields({ name: '\u200b', value: chunks[i] });
             }
           } else {
-            embed.addFields([
+            embed.addFields(...[
               {
                 name: language.roles,
                 value: roles.map((r) => `${r}`).join(' | '),

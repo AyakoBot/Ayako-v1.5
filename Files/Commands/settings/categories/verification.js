@@ -12,7 +12,7 @@ module.exports = {
     if (r.finishdesc && r.finishdesc.startsWith('{"') && r.finishdesc.endsWith('"}')) {
       r.finishdesc = r.finishdesc.slice(2, r.finishdesc.length - 2);
     }
-    const embed = new Discord.UnsafeEmbed().addFields([
+    const embed = new Discord.UnsafeEmbed().addFields(...[
       {
         name: msg.lanSettings.active,
         value: r.active

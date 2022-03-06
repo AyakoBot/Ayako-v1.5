@@ -33,7 +33,7 @@ module.exports = {
       .setDescription(
         msg.client.ch.stp(msg.lan.description, { prefix: msg.client.constants.standard.prefix }),
       )
-      .addFields([
+      .addFields(...[
         {
           name: msg.lanSettings.active,
           value: r.active
@@ -84,14 +84,14 @@ module.exports = {
       case '1': {
         const customEmbed = await embedName(msg, r);
 
-        embed.addFields([
+        embed.addFields(...[
           {
             name: msg.lan.embed,
             value: customEmbed ? customEmbed.name : msg.language.default,
             inline: true,
           },
         ]);
-        embed.addFields([
+        embed.addFields(...[
           {
             name: msg.lan.lvlupdeltimeout,
             value: Number(r.lvlupdeltimeout)
@@ -100,7 +100,7 @@ module.exports = {
             inline: true,
           },
         ]);
-        embed.addFields([
+        embed.addFields(...[
           {
             name: `${msg.lan.lvlupchannels}`,
             value: `${
@@ -142,7 +142,7 @@ module.exports = {
       }
     }
 
-    embed.addFields([
+    embed.addFields(...[
       {
         name: '\u200b',
         value: '\u200b',

@@ -14,7 +14,7 @@ module.exports = {
     for (let i = 0; i < res.length; i += 1) {
       const r = res[i];
 
-      embed.addFields([
+      embed.addFields(...[
         {
           name: `${msg.language.number}: \`${r.id}\` | ${
             r.rules ? msg.client.ch.channelRuleCalc(r.rules, msg.language).length : '--'
@@ -39,7 +39,7 @@ module.exports = {
             : msg.language.none
         }`,
       )
-      .addFields([
+      .addFields(...[
         {
           name: msg.language.channelTypes,
           value: `${r.channels?.length ? r.channels.map((id) => ` <#${id}>`) : msg.language.none}`,
@@ -48,7 +48,7 @@ module.exports = {
       ]);
 
     if (r.rules) {
-      embed.addFields([
+      embed.addFields(...[
         {
           name: '\u200b',
           value: '\u200b',
@@ -60,7 +60,7 @@ module.exports = {
         const [key] = Object.entries(msg.language.channelRules).find(([, v]) => v === rule);
         const emote = msg.client.constants.emotes.numbers[(i % 5) + 1];
 
-        embed.addFields([
+        embed.addFields(...[
           {
             name: `${emote} ${rule}`,
             value: `${msg.language.amountDefinition}: ${

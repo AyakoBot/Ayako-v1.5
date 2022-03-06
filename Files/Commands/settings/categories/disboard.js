@@ -8,7 +8,7 @@ module.exports = {
   finished: true,
   category: ['automation'],
   displayEmbed(msg, r) {
-    const embed = new Discord.UnsafeEmbed().addFields([
+    const embed = new Discord.UnsafeEmbed().addFields(...[
       {
         name: msg.lanSettings.active,
         value: r.active

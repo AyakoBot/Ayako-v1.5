@@ -17,7 +17,7 @@ module.exports = {
     for (let i = 0; i < res.length; i += 1) {
       const r = res[i];
 
-      embed.addFields([
+      embed.addFields(...[
         {
           name: `${msg.language.number}: \`${r.id}\` | ${r.multiplier ? r.multiplier : '1.0'}x`,
           value: `${msg.language.affected}: ${
@@ -32,7 +32,7 @@ module.exports = {
     return embed;
   },
   displayEmbed(msg, r) {
-    const embed = new Discord.UnsafeEmbed().addFields([
+    const embed = new Discord.UnsafeEmbed().addFields(...[
       {
         name: msg.lan.channels,
         value: `${r.channels?.length ? r.channels.map((id) => ` <#${id}>`) : msg.language.none}`,

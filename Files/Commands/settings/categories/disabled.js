@@ -10,7 +10,7 @@ module.exports = {
     const embed = new Discord.UnsafeEmbed();
     for (let i = 0; i < res.length; i += 1) {
       const r = res[i];
-      embed.addFields([
+      embed.addFields(...[
         {
           name: `${msg.language.number}: \`${r.id}\` | ${msg.lan.commands}: ${r.commands.map(
             (c) => ` \`${c}\``,
@@ -27,7 +27,7 @@ module.exports = {
     return embed;
   },
   displayEmbed(msg, r) {
-    const embed = new Discord.UnsafeEmbed().addFields([
+    const embed = new Discord.UnsafeEmbed().addFields(...[
       {
         name: msg.lanSettings.active,
         value: r.active

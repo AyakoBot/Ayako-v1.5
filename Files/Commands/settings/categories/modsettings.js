@@ -8,7 +8,7 @@ module.exports = {
   finished: true,
   category: ['moderation'],
   displayEmbed: (msg, r) => {
-    const embed = new Discord.UnsafeEmbed().addFields([
+    const embed = new Discord.UnsafeEmbed().addFields(...[
       {
         name: msg.lan.expirewarns,
         value: r.expirewarns

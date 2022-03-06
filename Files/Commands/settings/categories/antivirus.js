@@ -8,7 +8,7 @@ module.exports = {
   finished: true,
   category: ['auto-moderation'],
   displayEmbed(msg, r) {
-    const embed = new Discord.UnsafeEmbed().addFields([
+    const embed = new Discord.UnsafeEmbed().addFields(
       {
         name: msg.lanSettings.active,
         value: r.active
@@ -112,7 +112,7 @@ module.exports = {
           : msg.language.none,
         inline: false,
       },
-    ]);
+    );
     return embed;
   },
   buttons(msg, r) {

@@ -14,7 +14,7 @@ module.exports = {
         wordText += wordArr[i] + new Array(22 - wordArr[i].length).join(' ');
       }
     } else wordText = msg.language.none;
-    const embed = new Discord.UnsafeEmbed().addFields([
+    const embed = new Discord.UnsafeEmbed().addFields(...[
       {
         name: msg.lanSettings.active,
         value: `${

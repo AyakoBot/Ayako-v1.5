@@ -111,7 +111,7 @@ module.exports = {
       userEmbed.addFields({ name: msg.language.description, value: botInfo.description });
     }
     if (userflags.length) {
-      userEmbed.addFields([
+      userEmbed.addFields(...[
         {
           name: msg.lan.flags,
           value: userflags.join('\n'),
@@ -120,7 +120,7 @@ module.exports = {
       ]);
     }
 
-    userEmbed.addFields([
+    userEmbed.addFields(...[
       {
         name: `${msg.client.constants.emotes.plusBG} ${msg.lan.createdAt}`,
         value: `<t:${String(user.createdTimestamp).slice(0, -3)}:F> (<t:${String(
@@ -146,7 +146,7 @@ module.exports = {
           iconURL: con.authorImage,
           url: msg.client.constants.standard.invite,
         })
-        .addFields([
+        .addFields(...[
           {
             name: msg.lan.nickname,
             value: msg.client.ch.makeInlineCode(member.displayName),

@@ -251,7 +251,7 @@ module.exports = {
                     msgid: warn.msgid,
                   }),
                 })
-                .addFields([
+                .addFields(...[
                   {
                     name: msg.lan.date,
                     value: `<t:${warn.dateofwarn.slice(0, -3)}:F> (<t:${warn.dateofwarn.slice(
@@ -309,7 +309,7 @@ module.exports = {
                     msgid: mute.msgid,
                   }),
                 })
-                .addFields([
+                .addFields(...[
                   {
                     name: msg.lan.date,
                     value: `<t:${mute.dateofwarn.slice(0, -3)}:F> (<t:${mute.dateofwarn.slice(

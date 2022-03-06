@@ -8,7 +8,7 @@ module.exports = {
   displayEmbed(msg, r) {
     const embed = new Discord.UnsafeEmbed();
 
-    embed.addFields([
+    embed.addFields(...[
       {
         name: msg.lan.stickyrolesactive,
         value: r.stickyrolesactive
