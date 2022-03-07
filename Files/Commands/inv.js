@@ -19,7 +19,7 @@ module.exports = {
         .setTitle('Should this player be invited to TA Infinite MC server?')
         .setAuthor({
           name: `${msg.author.tag}`,
-          iconURL: msg.author.displayAvatarURL(),
+          iconURL: msg.author.displayAvatarURL({ size: 4096 }),
         })
         .setDescription(promotion)
         .setTimestamp()
@@ -35,7 +35,7 @@ module.exports = {
         .setTitle('Should this player be invited to this Discord?')
         .setAuthor({
           name: `${msg.author.tag}`,
-          iconURL: msg.author.displayAvatarURL(),
+          iconURL: msg.author.displayAvatarURL({ size: 4096 }),
         })
         .setDescription(promotion)
         .setTimestamp()

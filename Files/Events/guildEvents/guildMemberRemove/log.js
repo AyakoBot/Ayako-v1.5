@@ -31,7 +31,7 @@ module.exports = {
         }
         const embed = new Discord.UnsafeEmbed()
           .setColor(con.color)
-          .setThumbnail(user.displayAvatarURL())
+          .setThumbnail(user.displayAvatarURL({ size: 4096 }))
           .setTimestamp();
         const roles = member.roles.cache.sort((a, b) => b.position - a.position);
         const letters = 27 * roles.size;

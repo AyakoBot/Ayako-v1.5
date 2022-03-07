@@ -12,7 +12,7 @@ module.exports = {
     const SuggestEmbed = new Discord.UnsafeEmbed()
       .setAuthor({
         name: `${msg.author.tag} / ${msg.author.id} / ${msg.guild.name}`,
-        iconURL: msg.author.displayAvatarURL(),
+        iconURL: msg.author.displayAvatarURL({ size: 4096 }),
       })
       .setDescription(tta)
       .addFields({ name: '\u200B', value: `${msg.url}` });

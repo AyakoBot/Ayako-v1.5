@@ -23,11 +23,11 @@ module.exports = {
             if (msg.author) {
               const embed2 = new Discord.UnsafeEmbed()
                 .setColor(msg.client.constants.standard.color)
-                .setThumbnail(user.displayAvatarURL())
+                .setThumbnail(user.displayAvatarURL({ size: 4096 }))
                 .setDescription(`${user} accepted the submission of ${msg.author}`)
                 .setAuthor({
                   name: msg.author.username,
-                  iconURL: msg.author.displayAvatarURL(),
+                  iconURL: msg.author.displayAvatarURL({ size: 4096 }),
                 })
                 .setTimestamp();
               const log = await logchannel.send(embed2).catch(() => {});
@@ -104,11 +104,11 @@ module.exports = {
             if (msg.author) {
               const embed2 = new Discord.UnsafeEmbed()
                 .setColor(16711680)
-                .setThumbnail(user.displayAvatarURL())
+                .setThumbnail(user.displayAvatarURL({ size: 4096 }))
                 .setDescription(`${user} rejected the submission of ${msg.author}`)
                 .setAuthor({
                   name: msg.author.username,
-                  iconURL: msg.author.displayAvatarURL(),
+                  iconURL: msg.author.displayAvatarURL({ size: 4096 }),
                 })
                 .setTimestamp();
               const log = await logchannel.send(embed2).catch(() => {});

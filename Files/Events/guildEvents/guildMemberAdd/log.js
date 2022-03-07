@@ -56,7 +56,7 @@ module.exports = {
             iconURL: con.author.image,
             url: ch.stp(con.author.link, { user }),
           });
-          embed.setThumbnail(user.displayAvatarURL());
+          embed.setThumbnail(user.displayAvatarURL({ size: 4096 }));
           if (entry) {
             embed.setDescription(ch.stp(lan.descriptionBot, { user: entry.executor, bot: user }));
           } else embed.setDescription(ch.stp(lan.descriptionBotNoAudit, { bot: user }));
@@ -74,7 +74,7 @@ module.exports = {
             iconURL: con.author.image,
             url: ch.stp(con.author.link, { user }),
           });
-          embed.setThumbnail(member.user.displayAvatarURL());
+          embed.setThumbnail(member.user.displayAvatarURL({ size: 4096 }));
           embed.setDescription(ch.stp(lan.descriptionUser, { user }));
           if (usedInvite) {
             if (usedInvite.uses) {

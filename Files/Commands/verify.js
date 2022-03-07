@@ -50,7 +50,7 @@ module.exports = {
         .setDescription(msg.client.ch.stp(msg.lan.log.start, { user: msg.author }))
         .setAuthor({
           name: msg.author.tag,
-          iconURL: msg.author.displayAvatarURL(),
+          iconURL: msg.author.displayAvatarURL({ size: 4096 }),
         })
         .setTimestamp()
         .setColor();
@@ -209,7 +209,7 @@ module.exports = {
         )
         .setAuthor({
           name: msg.author.tag,
-          iconURL: msg.author.displayAvatarURL(),
+          iconURL: msg.author.displayAvatarURL({ size: 4096 }),
         })
         .setTimestamp()
         .setColor();
