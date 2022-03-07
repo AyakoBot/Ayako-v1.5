@@ -6,13 +6,13 @@ module.exports = {
   finished: true,
   category: ['automation'],
   displayEmbed(msg, r) {
-    const embed = new Discord.UnsafeEmbed().addFields(...[
+    const embed = new Discord.UnsafeEmbed().addFields(
       {
         name: `${msg.lanSettings.active}`,
         value: `${
           r.active
-            ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-            : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
+            ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+            : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`
         }`,
         inline: false,
       },
@@ -43,7 +43,7 @@ module.exports = {
         }`,
         inline: false,
       },
-    ]);
+    );
     return embed;
   },
   buttons(msg, r) {

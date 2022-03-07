@@ -6,8 +6,9 @@ const ch = require('../../../BaseClient/ClientHelper');
 const UpdateWorker = new Worker('./Files/Events/guildevents/guildMemberUpdate/separatorUpdater.js');
 
 UpdateWorker.on('message', ({ text, data }) => {
-  if (text === 'NO_SEP')
+  if (text === 'NO_SEP') {
     ch.query('UPDATE roleseparator SET active = false WHERE separator = $1;', [data.sep]);
+  }
 });
 UpdateWorker.on('error', (error) => {
   throw error;
@@ -60,9 +61,9 @@ module.exports = {
         )
       )?.rows[0]?.stillrunning &&
       msg.author.id !== client.user.id
-    )
+    ) {
       membersWithRoles = true;
-    else {
+    } else {
       msg.client.ch.query(
         'UPDATE roleseparatorsettings SET stillrunning = $2 WHERE guildid = $1;',
         [msg.guild.id, true],
@@ -75,7 +76,7 @@ module.exports = {
       embed
         .setAuthor({
           name: msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
-          iconURL: msg.client.constants.emotes.settingsLink,
+          iconURL: msg.client.objectEmotes.settings.link,
           url: msg.client.constants.standard.invite,
         })
         .setDescription(msg.lan.edit.oneTimeRunner.timeout);
@@ -91,7 +92,7 @@ module.exports = {
         embed
           .setAuthor({
             name: msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
-            iconURL: msg.client.constants.emotes.settingsLink,
+            iconURL: msg.client.objectEmotes.settings.link,
             url: msg.client.constants.standard.invite,
           })
           .setDescription(msg.lan.edit.oneTimeRunner.time);
@@ -100,7 +101,7 @@ module.exports = {
         embed
           .setAuthor({
             name: msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
-            iconURL: msg.client.constants.emotes.settingsLink,
+            iconURL: msg.client.objectEmotes.settings.link,
             url: msg.client.constants.standard.invite,
           })
           .setDescription(msg.lan.edit.oneTimeRunner.stillrunning);
@@ -111,16 +112,20 @@ module.exports = {
         const fakeMember = m;
         const realMember = msg.guild.members.cache.get(m.id);
         if (realMember) {
-          if (fakeMember.giveTheseRoles)
+          if (fakeMember.giveTheseRoles) {
             fakeMember.giveTheseRoles.forEach((roleID, rindex) => {
-              if (realMember.roles.cache.has(roleID))
+              if (realMember.roles.cache.has(roleID)) {
                 membersWithRoles[index].giveTheseRoles.splice(rindex, 1);
+              }
             });
-          if (fakeMember.takeTheseRoles)
+          }
+          if (fakeMember.takeTheseRoles) {
             fakeMember.takeTheseRoles.forEach((roleID, rindex) => {
-              if (!realMember.roles.cache.has(roleID))
+              if (!realMember.roles.cache.has(roleID)) {
                 membersWithRoles[index].takeTheseRoles.splice(rindex, 1);
+              }
             });
+          }
         }
       });
       const finishTime = Math.floor(
@@ -132,7 +137,7 @@ module.exports = {
       embed
         .setAuthor({
           name: msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
-          iconURL: msg.client.constants.emotes.settingsLink,
+          iconURL: msg.client.objectEmotes.settings.link,
           url: msg.client.constants.standard.invite,
         })
         .setDescription(
@@ -187,7 +192,7 @@ module.exports = {
     });
 
     res.rows.forEach((r) => {
-      if (r.stoprole)
+      if (r.stoprole) {
         obj.separators.push({
           separator: {
             id: r.separator,
@@ -195,18 +200,20 @@ module.exports = {
           },
           stoprole: { id: r.stoprole, position: guild.roles.cache.get(r.stoprole)?.position },
         });
-      else
+      } else {
         obj.separators.push({
           separator: {
             id: r.separator,
             position: guild.roles.cache.get(r.separator)?.position,
           },
         });
-      if (r.roles && r.roles.length)
+      }
+      if (r.roles && r.roles.length) {
         obj.roles.forEach((roleid) => {
           const role = guild.roles.cache.get(roleid);
           obj.rowroles.push({ id: role.id, position: role.position });
         });
+      }
     });
     const worker = new Worker('./Files/Events/guildevents/guildMemberUpdate/separatorWorker.js', {
       workerData: { res: res.rows, obj },
@@ -229,8 +236,9 @@ module.exports = {
     if (membersWithRoles.length) {
       if (!msg.client.separatorAssigner) msg.client.separatorAssigner = {};
       membersWithRoles.forEach((raw, index) => {
-        if (!msg.client.separatorAssigner[msg.guild.id])
+        if (!msg.client.separatorAssigner[msg.guild.id]) {
           msg.client.separatorAssigner[msg.guild.id] = {};
+        }
 
         msg.client.separatorAssigner[msg.guild.id][index] = jobs.scheduleJob(
           new Date(Date.now() + index * 3000),
@@ -241,7 +249,7 @@ module.exports = {
             if (member) {
               const roles = giveRoles ? [...member._roles, ...giveRoles] : member._roles;
               if (takeRoles) takeRoles.forEach((r) => roles.splice(roles.indexOf(r), 1));
-              if ((giveRoles && giveRoles.length) || (takeRoles && takeRoles.length))
+              if ((giveRoles && giveRoles.length) || (takeRoles && takeRoles.length)) {
                 await msg.client.eris
                   .editGuildMember(
                     msg.guild.id,
@@ -250,12 +258,13 @@ module.exports = {
                     msg.language.autotypes.separators,
                   )
                   .catch(() => {});
+              }
             }
             if (index === membersWithRoles.length - 1 && msg.lastTime) {
               embed
                 .setAuthor({
                   name: msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
-                  iconURL: msg.client.constants.emotes.settingsLink,
+                  iconURL: msg.client.objectEmotes.settings.link,
                   url: msg.client.constants.standard.invite,
                 })
                 .setDescription(msg.lan.edit.oneTimeRunner.finished);
@@ -267,11 +276,12 @@ module.exports = {
             } else if (index === membersWithRoles.length - 1) {
               msg.lastTime = true;
               this.oneTimeRunner(msg, embed);
-            } else
+            } else {
               msg.client.ch.query(
                 'UPDATE roleseparatorsettings SET index = $1, length = $3 WHERE guildid = $2;',
                 [index, msg.guild.id, membersWithRoles.length - 1],
               );
+            }
           },
         );
       });
@@ -279,7 +289,7 @@ module.exports = {
       embed
         .setAuthor({
           name: msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
-          iconURL: msg.client.constants.emotes.settingsLink,
+          iconURL: msg.client.objectEmotes.settings.link,
           url: msg.client.constants.standard.invite,
         })
         .setDescription(msg.lan.edit.oneTimeRunner.finished);

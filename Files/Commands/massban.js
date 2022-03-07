@@ -89,7 +89,7 @@ module.exports = {
         .setDescription(msg.lan.descS)
         .setAuthor({
           name: msg.lan.descSLoading,
-          iconURL: msg.client.constants.emotes.loadingLink,
+          iconURL: msg.client.objectEmotes.loading.link,
           url: msg.client.constants.standard.invite,
         })
         .setTimestamp();
@@ -133,7 +133,7 @@ module.exports = {
           } else replyEmbed.setDescription(`\u200b${descS.join(' ')}`);
           replyEmbed.setAuthor({
             name: msg.lan.finish,
-            iconURL: msg.client.constants.emotes.tickLink,
+            iconURL: msg.client.objectEmotes.tick.link,
             url: msg.client.constants.standard.invite,
           });
           intervalS.cancel();
@@ -155,7 +155,7 @@ module.exports = {
         .setDescription(msg.lan.descF)
         .setAuthor({
           name: msg.lan.descFLoading,
-          iconURL: msg.client.constants.emotes.loadingLink,
+          iconURL: msg.client.objectEmotes.loading.link,
           url: msg.client.constants.standard.invite,
         })
         .setTimestamp();
@@ -183,7 +183,7 @@ module.exports = {
           } else replyEmbed.setDescription(`\u200b${descF.join('')}`);
           replyEmbed.setAuthor({
             name: msg.lan.failed,
-            iconURL: msg.client.constants.emotes.crossLink,
+            iconURL: msg.client.objectEmotes.cross.link,
             url: msg.client.constants.standard.invite,
           });
 

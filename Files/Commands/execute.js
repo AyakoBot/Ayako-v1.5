@@ -19,7 +19,5 @@ module.exports = {
   perm: 0n,
   dm: true,
   takesFirstArg: false,
-  execute: async (msg) => {
-    console.log(msg.channel.type);
-  },
+  execute: async (msg) => {},
 };

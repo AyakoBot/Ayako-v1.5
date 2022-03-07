@@ -12,12 +12,12 @@ module.exports = {
     if (mexisted) {
       em = new Discord.Embed(msg.m.embeds[0]).setColor(con.color).addFields({
         name: '\u200b',
-        value: `${msg.client.constants.emotes.loading} ${lan.loading}}`,
+        value: `${msg.client.textEmotes.loading} ${lan.loading}}`,
       });
     } else {
       em = new Discord.UnsafeEmbed()
         .setColor(con.color)
-        .setDescription(`${msg.client.constants.emotes.loading} ${lan.loading}`);
+        .setDescription(`${msg.client.textEmotes.loading} ${lan.loading}`);
     }
     if (mexisted) await msg.m.edit({ embeds: [em] });
     else msg.m = await msg.client.ch.reply(msg, { embeds: [em] });
@@ -28,9 +28,9 @@ module.exports = {
         em.fields.pop();
         em.addFields({
           name: '\u200b',
-          value: `${msg.client.constants.emotes.cross} ${lan.noMember}`,
+          value: `${msg.client.textEmotes.cross} ${lan.noMember}`,
         });
-      } else em.setDescription(`${msg.client.constants.emotes.cross} ${lan.noMember}`);
+      } else em.setDescription(`${msg.client.textEmotes.cross} ${lan.noMember}`);
       msg.m?.edit({ embeds: [em] });
       if (mexisted) {
         jobs.scheduleJob(new Date(Date.now() + 10000), () => {
@@ -47,9 +47,9 @@ module.exports = {
         em.fields.pop();
         em.addFields({
           name: '\u200b',
-          value: `${msg.client.constants.emotes.cross} ${lan.exeNoPerms}`,
+          value: `${msg.client.textEmotes.cross} ${lan.exeNoPerms}`,
         });
-      } else em.setDescription(`${msg.client.constants.emotes.cross} ${lan.exeNoPerms}`);
+      } else em.setDescription(`${msg.client.textEmotes.cross} ${lan.exeNoPerms}`);
       msg.m?.edit({ embeds: [em] });
       if (mexisted) {
         jobs.scheduleJob(new Date(Date.now() + 10000), () => {
@@ -63,9 +63,9 @@ module.exports = {
         em.fields.pop();
         em.addFields({
           name: '\u200b',
-          value: `${msg.client.constants.emotes.cross} ${lan.permissionError}`,
+          value: `${msg.client.textEmotes.cross} ${lan.permissionError}`,
         });
-      } else em.setDescription(`${msg.client.constants.emotes.cross} ${lan.permissionError}`);
+      } else em.setDescription(`${msg.client.textEmotes.cross} ${lan.permissionError}`);
       msg.m?.edit({ embeds: [em] });
       if (mexisted) {
         jobs.scheduleJob(new Date(Date.now() + 10000), () => {
@@ -110,9 +110,9 @@ module.exports = {
         em.fields.pop();
         em.addFields({
           name: '\u200b',
-          value: `${msg.client.constants.emotes.cross} ${lan.noMember}`,
+          value: `${msg.client.textEmotes.cross} ${lan.noMember}`,
         });
-      } else em.setDescription(`${msg.client.constants.emotes.cross} ${lan.noMember}`);
+      } else em.setDescription(`${msg.client.textEmotes.cross} ${lan.noMember}`);
       msg.m?.edit({ embeds: [em] });
       if (mexisted) {
         jobs.scheduleJob(new Date(Date.now() + 10000), () => {
@@ -126,13 +126,11 @@ module.exports = {
         em.fields.pop();
         em.addFields({
           name: '\u200b',
-          value: `${msg.client.constants.emotes.cross + lan.error} ${msg.client.ch.makeCodeBlock(
-            err,
-          )}`,
+          value: `${msg.client.textEmotes.cross + lan.error} ${msg.client.ch.makeCodeBlock(err)}`,
         });
       } else {
         em.setDescription(
-          `${msg.client.constants.emotes.cross + lan.error} ${msg.client.ch.makeCodeBlock(err)}`,
+          `${msg.client.textEmotes.cross + lan.error} ${msg.client.ch.makeCodeBlock(err)}`,
         );
       }
       msg.m?.edit({ embeds: [em] });
@@ -148,13 +146,13 @@ module.exports = {
       em.fields.pop();
       em.addFields({
         name: '\u200b',
-        value: `${msg.client.constants.emotes.tick} ${msg.client.ch.stp(lan.success, {
+        value: `${msg.client.textEmotes.tick} ${msg.client.ch.stp(lan.success, {
           target,
         })}`,
       });
     } else {
       em.setDescription(
-        `${msg.client.constants.emotes.tick} ${msg.client.ch.stp(lan.success, { target })}`,
+        `${msg.client.textEmotes.tick} ${msg.client.ch.stp(lan.success, { target })}`,
       );
     }
     await msg.m?.edit({ embeds: [em] });

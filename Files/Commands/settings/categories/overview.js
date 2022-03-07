@@ -7,12 +7,12 @@ module.exports = {
   finished: true,
   category: ['none'],
   displayEmbed(msg, r) {
-    const small = `${msg.client.constants.emotes.small} ${msg.language.small}`;
-    const big = `${msg.client.constants.emotes.big} ${msg.language.big}`;
+    const small = `${msg.client.textEmotes.small1}${msg.client.textEmotes.small2} ${msg.language.small}`;
+    const big = `${msg.client.textEmotes.big} ${msg.language.big}`;
     if (r.prefix && r.prefix.startsWith('{"') && r.prefix.endsWith('"}')) {
       r.prefix = r.prefix.slice(2, r.prefix.length - 2);
     }
-    const embed = new Discord.UnsafeEmbed().addFields(...[
+    const embed = new Discord.UnsafeEmbed().addFields(
       {
         name: msg.lan.prefix,
         value: `\`${msg.client.constants.standard.prefix}\` ${r.prefix ? `/ \`${r.prefix}\`` : ''}`,
@@ -32,12 +32,12 @@ module.exports = {
 
       {
         name: msg.lan.lan,
-        value: `${msg.client.constants.emotes.flags[r.lan]} | ${
-          msg.language.languages[r.lan].name
-        } | ${msg.language.languages[r.lan].status}`,
+        value: `${msg.client.textEmotes.flags[r.lan]} | ${msg.language.languages[r.lan].name} | ${
+          msg.language.languages[r.lan].status
+        }`,
         inline: true,
       },
-    ]);
+    );
     return embed;
   },
   buttons(msg) {

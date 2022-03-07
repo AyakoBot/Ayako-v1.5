@@ -7,12 +7,12 @@ module.exports = {
   category: ['automation'],
   childOf: 'nitro',
   displayEmbed(msg, r) {
-    const embed = new Discord.UnsafeEmbed().addFields(...[
+    const embed = new Discord.UnsafeEmbed().addFields(
       {
         name: msg.lanSettings.active,
         value: r.active
-          ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-          : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
+          ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+          : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`,
         inline: false,
       },
       {
@@ -29,7 +29,7 @@ module.exports = {
         value: `${r.rolemode ? msg.lan.replace : msg.lan.stack}`,
         inline: true,
       },
-    ]);
+    );
     return embed;
   },
   buttons(msg, r) {

@@ -17,9 +17,9 @@ module.exports = {
         Array.isArray(insertedValues[required.assinger]) &&
         insertedValues[required.assinger].includes(element.id)
       ) {
-        inserted.emoji = msg.client.constants.emotes.minusBGID;
+        inserted.emoji = msg.client.objectEmotes.minusBG;
       } else {
-        inserted.emoji = msg.client.constants.emotes.plusBGID;
+        inserted.emoji = msg.client.objectEmotes.plusBG;
       }
       Objects.options.push(inserted);
     });
@@ -44,10 +44,6 @@ const getIdentifier = (msg, settingsConstant, row) => {
   let identifier;
 
   switch (settingsConstant.identType) {
-    default: {
-      identifier = row[settingsConstant.ident] ? row[settingsConstant.ident] : '--';
-      break;
-    }
     case 'role': {
       const role = msg.guild.roles.cache.get(row[settingsConstant.ident]);
       if (role) {
@@ -64,6 +60,10 @@ const getIdentifier = (msg, settingsConstant, row) => {
       } else {
         identifier = '--';
       }
+      break;
+    }
+    default: {
+      identifier = row[settingsConstant.ident] ? row[settingsConstant.ident] : '--';
       break;
     }
   }

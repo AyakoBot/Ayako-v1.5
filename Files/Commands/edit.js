@@ -59,7 +59,7 @@ module.exports = {
             msgid: warn.msgid,
           }),
         })
-        .addFields(...[
+        .addFields(
           {
             name: msg.lan.date,
             value: `<t:${warn.dateofwarn.slice(0, -3)}:F> (<t:${warn.dateofwarn.slice(0, -3)}:R>)`,
@@ -80,7 +80,7 @@ module.exports = {
             value: `${msg.author.tag}\n\`${msg.author.username}\` (\`${msg.author.id}\`)`,
             inline: false,
           },
-        ])
+        )
         .setColor(con.log.color)
         .setFooter({ text: msg.lan.warnID + warn.row_number });
     } else if (warn.type === 'Mute') {
@@ -95,7 +95,7 @@ module.exports = {
             msgid: warn.msgid,
           }),
         })
-        .addFields(...[
+        .addFields(
           {
             name: msg.lan.date,
             value: `<t:${warn.dateofwarn.slice(0, -3)}:F> (<t:${warn.dateofwarn.slice(0, -3)}:R>)`,
@@ -129,7 +129,7 @@ module.exports = {
             value: `${msg.author.tag}\n\`${msg.author.username}\` (\`${msg.author.id}\`)`,
             inline: false,
           },
-        ])
+        )
         .setColor(con.log.color)
         .setFooter({ text: msg.lan.warnID + warn.row_number });
     }

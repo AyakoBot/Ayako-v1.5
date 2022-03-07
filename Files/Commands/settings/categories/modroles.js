@@ -13,37 +13,35 @@ module.exports = {
     for (let i = 0; i < res.length; i += 1) {
       const r = res[i];
 
-      embed.addFields(...[
-        {
-          name: `${msg.language.number}: \`${r.id}\` | ${
-            r.active
-              ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-              : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
-          }`,
-          value: `${msg.lan.roleid}: <@&${r.roleid}>\n${msg.lan.perms}: ${
-            r.perms
-              ? `[\`${BigInt(r.perms)}\`](${msg.client.ch.stp(
-                  msg.client.constants.standard.permissionsViewer,
-                  {
-                    permission: `${BigInt(r.perms)}`,
-                  },
-                )} "${msg.lan.clickview}")`
-              : msg.language.none
-          }`,
-          inline: true,
-        },
-      ]);
+      embed.addFields({
+        name: `${msg.language.number}: \`${r.id}\` | ${
+          r.active
+            ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+            : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`
+        }`,
+        value: `${msg.lan.roleid}: <@&${r.roleid}>\n${msg.lan.perms}: ${
+          r.perms
+            ? `[\`${BigInt(r.perms)}\`](${msg.client.ch.stp(
+                msg.client.constants.standard.permissionsViewer,
+                {
+                  permission: `${BigInt(r.perms)}`,
+                },
+              )} "${msg.lan.clickview}")`
+            : msg.language.none
+        }`,
+        inline: true,
+      });
     }
     return embed;
   },
   displayEmbed(msg, r) {
     const embed = new Discord.UnsafeEmbed();
-    embed.addFields(...[
+    embed.addFields(
       {
         name: msg.lanSettings.active,
         value: r.active
-          ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-          : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
+          ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+          : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`,
         inline: false,
       },
       {
@@ -117,7 +115,7 @@ module.exports = {
         }`,
         inline: false,
       },
-    ]);
+    );
     return embed;
   },
   buttons(msg, r) {

@@ -30,10 +30,10 @@ module.exports = {
     const embed = new Discord.Embed(m.embeds[0])
       .setAuthor({
         name: msg.lan.author,
-        iconURL: msg.client.constants.emotes.workloadLink,
+        iconURL: msg.client.objectEmotes.workload.link,
         url: msg.client.constants.standard.invite,
       })
-      .addFields(...[
+      .addFields(
         {
           name: msg.lan.RAM.name,
           value: msg.client.ch.stp(msg.lan.RAM.value, {
@@ -46,7 +46,7 @@ module.exports = {
           name: 'Host OS Runtime',
           value: `${Math.round(os.uptime() / 60 / 60) / 1} ${msg.language.time.hours}`,
         },
-      ]);
+      );
     embed.description = null;
 
     m.edit({ embeds: [embed] }).catch(() => {});

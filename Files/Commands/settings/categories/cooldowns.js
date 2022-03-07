@@ -12,31 +12,27 @@ module.exports = {
     const embed = new Discord.UnsafeEmbed();
     for (let i = 0; i < res.length; i += 1) {
       const r = res[i];
-      embed.addFields(...[
-        {
-          name: `${msg.language.number}: \`${r.id}\` | ${msg.language.command}: \`${
-            r.command
-          }\` | ${
-            r.active
-              ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-              : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
-          }`,
-          value: `${msg.language.cooldown}: ${moment
-            .duration(r.cooldown * 1000)
-            .format(`s [${msg.language.time.seconds}]`)} `,
-          inline: true,
-        },
-      ]);
+      embed.addFields({
+        name: `${msg.language.number}: \`${r.id}\` | ${msg.language.command}: \`${r.command}\` | ${
+          r.active
+            ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+            : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`
+        }`,
+        value: `${msg.language.cooldown}: ${moment
+          .duration(r.cooldown * 1000)
+          .format(`s [${msg.language.time.seconds}]`)} `,
+        inline: true,
+      });
     }
     return embed;
   },
   displayEmbed(msg, r) {
-    const embed = new Discord.UnsafeEmbed().addFields(...[
+    const embed = new Discord.UnsafeEmbed().addFields(
       {
         name: msg.lanSettings.active,
         value: r.active
-          ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-          : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
+          ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+          : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`,
         inline: false,
       },
       {
@@ -96,7 +92,7 @@ module.exports = {
         }`,
         inline: false,
       },
-    ]);
+    );
     return embed;
   },
   buttons(msg, r) {

@@ -6,7 +6,10 @@ module.exports = {
 
     console.log(`Unhandled Rejection`, error);
 
-    if (`${error}`.includes('GUILD_MEMBERS_TIMEOUT')) {
+    if (
+      String(error).includes('GUILD_MEMBERS_TIMEOUT') ||
+      String(error).includes('Expected token to be set for this request, but none was present')
+    ) {
       client.destroy().catch(() => {});
       client.login(auth.token);
     }

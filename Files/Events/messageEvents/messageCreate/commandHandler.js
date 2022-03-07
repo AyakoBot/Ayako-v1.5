@@ -147,8 +147,8 @@ module.exports = {
       msg,
       msg.client.language.commands.commandHandler.verifyMessgae,
     );
-    m.react(msg.client.constants.emotes.tickID).catch(() => {});
-    m.react(msg.client.constants.emotes.crossID).catch(() => {});
+    m.react(msg.client.objectEmotes.tick.id).catch(() => {});
+    m.react(msg.client.objectEmotes.cross.id).catch(() => {});
     msg.channel
       .awaitMessages((me) => me.author.id === msg.author.id, { max: 1, time: 30000 })
       .then((rawcollected) => {
@@ -175,15 +175,15 @@ module.exports = {
       });
     m.awaitReactions(
       (reaction, user) =>
-        (reaction.emoji.id === msg.client.constants.emotes.tickID ||
-          reaction.emoji.id === msg.client.constants.emotes.crossID) &&
+        (reaction.emoji.id === msg.client.objectEmotes.tick.id ||
+          reaction.emoji.id === msg.client.objectEmotes.cross.id) &&
         user.id === msg.author.id,
       { max: 1, time: 60000 },
     )
       .then((rawcollected) => {
         if (!rawcollected.first()) return;
         // eslint-disable-next-line no-underscore-dangle
-        if (rawcollected.first()._emoji.id === msg.client.constants.emotes.tickID) {
+        if (rawcollected.first()._emoji.id === msg.client.objectEmotes.tickID) {
           m.delete().catch(() => {});
           this.commandExe(msg);
         } else m.delete().catch(() => {});
@@ -231,7 +231,7 @@ module.exports = {
       const embed = new Discord.UnsafeEmbed()
         .setAuthor({
           name: 'Command Error',
-          iconURL: msg.client.constants.emotes.crossLink,
+          iconURL: msg.client.objectEmotes.cross.link,
           url: msg.url,
         })
         .setTimestamp()

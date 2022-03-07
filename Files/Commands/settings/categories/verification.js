@@ -12,12 +12,12 @@ module.exports = {
     if (r.finishdesc && r.finishdesc.startsWith('{"') && r.finishdesc.endsWith('"}')) {
       r.finishdesc = r.finishdesc.slice(2, r.finishdesc.length - 2);
     }
-    const embed = new Discord.UnsafeEmbed().addFields(...[
+    const embed = new Discord.UnsafeEmbed().addFields(
       {
         name: msg.lanSettings.active,
         value: r.active
-          ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-          : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
+          ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+          : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`,
         inline: false,
       },
       {
@@ -28,15 +28,15 @@ module.exports = {
       {
         name: msg.lan.selfstart,
         value: r.selfstart
-          ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-          : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
+          ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+          : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`,
         inline: false,
       },
       {
         name: msg.lan.kicktof,
         value: r.kicktof
-          ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-          : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
+          ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+          : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`,
         inline: true,
       },
       {
@@ -69,14 +69,14 @@ module.exports = {
         value: r.startchannel ? `<#${r.startchannel}>` : msg.language.none,
         inline: true,
       },
-    ]);
+    );
 
     if (msg.lan.startchannel) {
       embed.addFields({
         name: msg.lan.deletestartchmsgs,
         value: r.deletestartchmsgs
-          ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-          : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
+          ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+          : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`,
         inline: true,
       });
     }

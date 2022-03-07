@@ -44,7 +44,7 @@ module.exports = {
 
       const categoryMenu = new Discord.UnsafeSelectMenuComponent()
         .setCustomId('categoryMenu')
-        .addOptions(Data.cTake)
+        .addOptions(...Data.cTake)
         .setMinValues(1)
         .setMaxValues(1)
         .setPlaceholder(msg.language.select.selfroles.select);
@@ -66,7 +66,7 @@ module.exports = {
       if (Data.currentRow) {
         const roleMenu = new Discord.UnsafeSelectMenuComponent()
           .setCustomId('roleMenu')
-          .addOptions(Data.rTake)
+          .addOptions(...Data.rTake)
           .setMinValues(1)
           .setMaxValues(Data.currentRow.onlyone ? 1 : Data.rTake.length)
           .setPlaceholder(
@@ -91,7 +91,7 @@ module.exports = {
         const back = new Discord.UnsafeButtonComponent()
           .setCustomId('back')
           .setLabel(msg.language.back)
-          .setEmoji(msg.client.constants.emotes.back)
+          .setEmoji(msg.client.objectEmotes.back)
           .setStyle(Discord.ButtonStyle.Danger);
 
         buttons.push([roleMenu], [prevRoles, nextRoles], [back]);
@@ -113,13 +113,14 @@ module.exports = {
         const r = msg.guild.roles.cache.get(Data.currentRow.roles[i]);
         if (r) {
           let disabled;
-          if (msg.member.roles.cache.has(r.id)) disabled = msg.client.constants.emotes.minusBGID;
-          else disabled = msg.client.constants.emotes.plusBGID;
-          Data.rOptions.push({
-            label: `${r.name}`,
-            value: r.id,
-            emoji: disabled,
-          });
+          if (msg.member.roles.cache.has(r.id)) disabled = msg.client.objectEmotes.minusBG;
+          else disabled = msg.client.objectEmotes.plusBG;
+          Data.rOptions.push(
+            new Discord.UnsafeSelectMenuOption()
+              .setLabel(`${r.name}`)
+              .setValue(r.id)
+              .setEmoji(disabled),
+          );
         }
       }
 
@@ -200,9 +201,9 @@ module.exports = {
       roleGetter(clickButton);
       Data.cTake.forEach((c, i) => {
         if (c.value === clickButton.values[0]) {
-          Data.cTake[i].default = true;
+          Data.cTake[i].setDefault(true);
         } else {
-          Data.cTake[i].default = false;
+          Data.cTake[i].setDefault(false);
         }
       });
       const embed = getCategoryUpdateEmbed();
@@ -379,12 +380,15 @@ module.exports = {
 
       for (let i = 0; i < res.rowCount; i += 1) {
         const r = res.rows[i];
-        Data.cOptions.push({
-          label: r.name,
-          value: r.uniquetimestamp,
-          description: r.disabled ? msg.lan.disabled : null,
-          emoji: r.disabled ? msg.client.constants.emotes.lock : msg.client.constants.emotes.unlock,
-        });
+        Data.cOptions.push(
+          new Discord.UnsafeSelectMenuOption()
+            .setLabel(r.name)
+            .setValue(r.uniquetimestamp)
+            .setDescription(r.disabled ? msg.lan.disabled : null)
+            .setEmoji({
+              name: r.disabled ? msg.client.objectEmotes.lock : msg.client.objectEmotes.unlock,
+            }),
+        );
       }
 
       for (let i = 0; i < Data.cOptions.length && i < 25; i += 1) {

@@ -19,7 +19,7 @@ module.exports = {
       if (sep) {
         affectedText =
           msg.guild.members.cache.get(msg.client.user.id).roles.highest.position <= sep.position
-            ? `\n${msg.client.constants.emotes.warning} ${msg.language.permissions.error.role}`
+            ? `\n${msg.client.textEmotes.warning} ${msg.language.permissions.error.role}`
             : '';
 
         sepMention = `${sep}`;
@@ -32,7 +32,7 @@ module.exports = {
               ? (sep?.position || 0) - msg.guild.roles.highest.position
               : msg.guild.roles.highest.position - (sep?.position || 0)) - 1;
       } else {
-        sepMention = `${msg.client.constants.emotes.warning} ${msg.lan.deletedRole}`;
+        sepMention = `${msg.client.textEmotes.warning} ${msg.lan.deletedRole}`;
 
         affected = `--`;
       }
@@ -41,24 +41,22 @@ module.exports = {
       if (stop) {
         stopMention = `${stop}`;
       } else {
-        stopMention = `${msg.client.constants.emotes.warning} ${msg.lan.deletedRole}`;
+        stopMention = `${msg.client.textEmotes.warning} ${msg.lan.deletedRole}`;
       }
 
       if (Number.isNaN(+affected)) affected = '--';
 
-      embed.addFields(...[
-        {
-          name: `${msg.language.number}: \`${r.id}\` | ${
-            r.active
-              ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-              : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
-          }`,
-          value: `${msg.lan.separator}: ${sepMention}\n${msg.lan.stoprole}: ${
-            r.stoprole ? stopMention : msg.language.none
-          }\n${msg.language.affected}: ${affected} ${msg.language.roles}${affectedText || ''}`,
-          inline: true,
-        },
-      ]);
+      embed.addFields({
+        name: `${msg.language.number}: \`${r.id}\` | ${
+          r.active
+            ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+            : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`
+        }`,
+        value: `${msg.lan.separator}: ${sepMention}\n${msg.lan.stoprole}: ${
+          r.stoprole ? stopMention : msg.language.none
+        }\n${msg.language.affected}: ${affected} ${msg.language.roles}${affectedText || ''}`,
+        inline: true,
+      });
     }
     return embed;
   },
@@ -122,14 +120,14 @@ module.exports = {
       if (sep) {
         sepMention = `${sep}`;
       } else {
-        sepMention = `${msg.client.constants.emotes.warning} ${msg.lan.deletedRole}`;
+        sepMention = `${msg.client.textEmotes.warning} ${msg.lan.deletedRole}`;
       }
 
       let stopMention;
       if (stop) {
         stopMention = `${stop}`;
       } else {
-        stopMention = `${msg.client.constants.emotes.warning} ${msg.lan.deletedRole}`;
+        stopMention = `${msg.client.textEmotes.warning} ${msg.lan.deletedRole}`;
       }
 
       let affectedNumber;
@@ -139,18 +137,18 @@ module.exports = {
         affectedNumber = affected;
       }
 
-      embed.addFields(...[
+      embed.addFields(
         {
           name: msg.lanSettings.active,
           value: r.active
-            ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-            : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
+            ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+            : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`,
           inline: false,
         },
         {
           name:
             msg.guild.members.cache.get(msg.client.user.id).roles.highest.position <= sep?.position
-              ? `${msg.client.constants.emotes.warning} ${msg.language.permissions.error.role}`
+              ? `${msg.client.textEmotes.warning} ${msg.language.permissions.error.role}`
               : '\u200b',
           value: '\u200b',
           inline: false,
@@ -158,8 +156,8 @@ module.exports = {
         {
           name: msg.lan.isvarying,
           value: r.isvarying
-            ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-            : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
+            ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+            : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`,
           inline: false,
         },
         {
@@ -192,20 +190,20 @@ module.exports = {
           value: `${affectedRoleText}\u200b`,
           inline: false,
         },
-      ]);
+      );
     } else {
-      embed.addFields(...[
+      embed.addFields(
         {
           name: msg.lanSettings.active,
           value: r.active
-            ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-            : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
+            ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+            : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`,
           inline: false,
         },
         {
           name:
             msg.guild.members.cache.get(msg.client.user.id).roles.highest.position <= sep?.position
-              ? `${msg.client.constants.emotes.warning} ${msg.language.permissions.error.role}`
+              ? `${msg.client.textEmotes.warning} ${msg.language.permissions.error.role}`
               : '\u200b',
           value: '\u200b',
           inline: false,
@@ -213,8 +211,8 @@ module.exports = {
         {
           name: msg.lan.isvarying,
           value: r.isvarying
-            ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-            : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
+            ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+            : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`,
           inline: false,
         },
         {
@@ -239,7 +237,7 @@ module.exports = {
           value: !Number.isNaN(+r.id) ? `\`${r.id}\`` : msg.language.none,
           inline: false,
         },
-      ]);
+      );
     }
     return embed;
   },
@@ -264,7 +262,7 @@ module.exports = {
       const oneTimeRunner = new Discord.UnsafeButtonComponent()
         .setCustomId(msg.lan.edit.oneTimeRunner.name)
         .setLabel(msg.lan.oneTimeRunner)
-        .setEmoji(msg.client.constants.emotes.warning)
+        .setEmoji(msg.client.objectEmotes.warning)
         .setStyle(Discord.ButtonStyle.Danger);
       return [[active], [separator, stoprole], [isvarying], [oneTimeRunner]];
     }
@@ -287,7 +285,7 @@ module.exports = {
     const oneTimeRunner = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.oneTimeRunner.name)
       .setLabel(msg.lan.oneTimeRunner)
-      .setEmoji(msg.client.constants.emotes.warning)
+      .setEmoji(msg.client.objectEmotes.warning)
       .setStyle(Discord.ButtonStyle.Danger);
     return [[active], [separator, roles], [isvarying], [oneTimeRunner]];
   },

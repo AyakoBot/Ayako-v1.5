@@ -72,7 +72,7 @@ const prepare = async (msg, lan, check, language) => {
   let exited = false;
 
   if (links.length && check) {
-    reaction = await msg.react(msg.client.constants.emotes.loading).catch(() => {});
+    reaction = await msg.react(msg.client.objectEmotes.loading.link).catch(() => {});
   }
 
   fullLinks.forEach((linkObject, i) => {
@@ -282,7 +282,7 @@ const blacklisted = async ({ msg, lan, linkObject, note, check, language }) => {
     const embed = new Discord.UnsafeEmbed()
       .setDescription(
         `**${language.result}**\n${client.ch.stp(lan.malicious, {
-          cross: client.constants.emotes.cross,
+          cross: client.textEmotes.cross,
         })}`,
       )
       .addFields({ name: language.attention, value: note.split(/\|+/)[1] })
@@ -295,7 +295,7 @@ const blacklisted = async ({ msg, lan, linkObject, note, check, language }) => {
     const embed = new Discord.UnsafeEmbed()
       .setDescription(
         `**${language.result}**\n${client.ch.stp(lan.malicious, {
-          cross: client.constants.emotes.cross,
+          cross: client.textEmotes.cross,
         })}`,
       )
       .setColor(16711680);
@@ -320,7 +320,7 @@ const severeLink = async ({ msg, lan, linkObject, check, language, hrefLogging }
   const embed = new Discord.UnsafeEmbed()
     .setDescription(
       `**${language.result}**\n${client.ch.stp(lan.malicious, {
-        cross: client.constants.emotes.cross,
+        cross: client.textEmotes.cross,
       })}`,
     )
     .setColor(16711680);
@@ -342,7 +342,7 @@ const ccscam = async ({ msg, lan, linkObject, check, language }) => {
   const embed = new Discord.UnsafeEmbed()
     .setDescription(
       `**${language.result}**\n${client.ch.stp(lan.ccscam, {
-        cross: client.constants.emotes.cross,
+        cross: client.textEmotes.cross,
       })}`,
     )
     .setColor(16711680);
@@ -364,7 +364,7 @@ const newUrl = async ({ msg, lan, linkObject, check, language }) => {
   const embed = new Discord.UnsafeEmbed()
     .setDescription(
       `**${language.result}**\n${client.ch.stp(lan.newLink, {
-        cross: client.constants.emotes.cross,
+        cross: client.textEmotes.cross,
       })}`,
     )
     .setColor(16711680);
@@ -409,7 +409,7 @@ const whitelisted = async ({ msg, lan, check, linkObject, language }) => {
   const embed = new Discord.UnsafeEmbed()
     .setDescription(
       `**${language.result}**\n${client.ch.stp(lan.whitelisted, {
-        tick: client.constants.emotes.tick,
+        tick: client.textEmotes.tick,
       })}`,
     )
     .setColor(65280);
@@ -425,7 +425,7 @@ const cloudFlare = async ({ msg, lan, linkObject, check, language }) => {
   const embed = new Discord.UnsafeEmbed()
     .setDescription(
       `**${language.result}**\n${client.ch.stp(lan.cfProtected, {
-        tick: client.constants.emotes.cross,
+        tick: client.textEmotes.cross,
       })}`,
     )
     .setColor(16776960);
@@ -444,7 +444,7 @@ const VTfail = ({ msg, lan, check, linkObject, language }) => {
   const embed = new Discord.UnsafeEmbed()
     .setDescription(
       `**${language.result}**\n${client.ch.stp(lan.VTfail, {
-        cross: msg.client.constants.emotes.cross,
+        cross: msg.client.textEmotes.cross,
       })}`,
     )
     .setColor(16776960);
@@ -461,7 +461,7 @@ const timedOut = ({ msg, lan, check, linkObject, language }) => {
   const embed = new Discord.UnsafeEmbed()
     .setDescription(
       `**${language.result}**\n${client.ch.stp(lan.timedOut, {
-        cross: msg.client.constants.emotes.cross,
+        cross: msg.client.textEmotes.cross,
       })}`,
     )
     .setColor(16776960);

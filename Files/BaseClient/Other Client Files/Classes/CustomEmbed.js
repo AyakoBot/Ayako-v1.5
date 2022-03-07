@@ -24,10 +24,10 @@ class CustomEmbed extends Discord.UnsafeEmbed {
   }
 
   /**
-   * @param {{ data: any; }} oldEmbed
+   * @param {{ data: any; }} data
    */
-  set data(oldEmbed) {
-    this.data = oldEmbed.data;
+  set data(data) {
+    this.data = data;
   }
 }
 

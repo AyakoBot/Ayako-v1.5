@@ -12,22 +12,20 @@ module.exports = {
     for (let i = 0; i < res.length; i += 1) {
       const r = res[i];
 
-      embed.addFields(...[
-        {
-          name: `${msg.language.number}: \`${r.id}\` | ${r.days ? r.days : '--'} ${
-            msg.language.time.days
-          }`,
-          value: `${msg.language.affected}: ${
-            r.roles && r.roles.length ? r.roles.length : msg.language.none
-          } ${msg.language.roles}`,
-          inline: true,
-        },
-      ]);
+      embed.addFields({
+        name: `${msg.language.number}: \`${r.id}\` | ${r.days ? r.days : '--'} ${
+          msg.language.time.days
+        }`,
+        value: `${msg.language.affected}: ${
+          r.roles && r.roles.length ? r.roles.length : msg.language.none
+        } ${msg.language.roles}`,
+        inline: true,
+      });
     }
     return embed;
   },
   displayEmbed(msg, r) {
-    const embed = new Discord.UnsafeEmbed().addFields(...[
+    const embed = new Discord.UnsafeEmbed().addFields(
       {
         name: msg.lan.roles,
         value: `${r.roles?.length ? r.roles.map((id) => ` <@&${id}>`) : msg.language.none}`,
@@ -38,7 +36,7 @@ module.exports = {
         value: `${r.days ? r.days : msg.language.none}`,
         inline: false,
       },
-    ]);
+    );
     return embed;
   },
   buttons(msg) {

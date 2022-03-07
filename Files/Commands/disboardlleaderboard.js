@@ -87,7 +87,7 @@ const getEmbed = (content, msg, ownPos) => {
       iconURL: msg.client.constants.commands.leaderboard.authorImage,
       url: msg.client.constants.standard.invite,
     });
-  if (ownPos?.name) embed.addFields(...[ownPos]);
+  if (ownPos?.name) embed.addFields(ownPos);
   return embed;
 };
 
@@ -99,13 +99,13 @@ const getButtons = (msg, page, rows) => {
 
   const next = new Discord.UnsafeButtonComponent()
     .setCustomId('next')
-    .setEmoji(msg.client.constants.emotes.forth)
+    .setEmoji(msg.client.objectEmotes.forth)
     .setStyle(Discord.ButtonStyle.Secondary)
     .setDisabled(page === Math.ceil(rows.length / 30));
 
   const back = new Discord.UnsafeButtonComponent()
     .setCustomId('back')
-    .setEmoji(msg.client.constants.emotes.back)
+    .setEmoji(msg.client.objectEmotes.back)
     .setStyle(Discord.ButtonStyle.Secondary)
     .setDisabled(page === 1);
 

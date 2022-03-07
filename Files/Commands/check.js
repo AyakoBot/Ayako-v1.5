@@ -32,7 +32,7 @@ module.exports = {
         iconURL: con.author.image,
         url: con.author.url,
       })
-      .addFields({ name: lan.banLoad, value: msg.client.constants.emotes.loading });
+      .addFields({ name: lan.banLoad, value: msg.client.textEmotes.loading });
 
     const count = { warns: 0, mutes: 0 };
     const options = { warns: [], mutes: [] };
@@ -48,20 +48,24 @@ module.exports = {
       res.rows.forEach((r) => {
         const dateOfWarn = new Date(Number(r.dateofwarn));
         if (r.type === 'Warn') {
-          options.warns.push({
-            label: `${msg.language.number}: ${r.row_number} | ${dateOfWarn.getDate()} ${
-              msg.language.months[dateOfWarn.getMonth()]
-            } ${dateOfWarn.getFullYear()}`,
-            value: `${r.row_number}`,
-          });
+          options.warns.push(
+            new msg.client.ch.SelectMenuOption({
+              label: `${msg.language.number}: ${r.row_number} | ${dateOfWarn.getDate()} ${
+                msg.language.months[dateOfWarn.getMonth()]
+              } ${dateOfWarn.getFullYear()}`,
+              value: r.row_number,
+            }),
+          );
         }
         if (r.type === 'Mute') {
-          options.mutes.push({
-            label: `${msg.language.number}: ${r.row_number} | ${dateOfWarn.getDate()} ${
-              msg.language.months[dateOfWarn.getMonth()]
-            } ${dateOfWarn.getFullYear()}`,
-            value: `${r.row_number}`,
-          });
+          options.mutes.push(
+            new msg.client.ch.SelectMenuOption({
+              label: `${msg.language.number}: ${r.row_number} | ${dateOfWarn.getDate()} ${
+                msg.language.months[dateOfWarn.getMonth()]
+              } ${dateOfWarn.getFullYear()}`,
+              value: r.row_number,
+            }),
+          );
         }
       });
       if (res.rows.filter((row) => row.type === 'Warn').length) {
@@ -236,7 +240,9 @@ module.exports = {
         if (answered.mutes.length || answered.warns.length) {
           const embeds = [];
           if (answered.warns.length) {
-            const WarnTitleEmbed = new Discord.UnsafeEmbed().setTitle(msg.lan.warns).setColor(16777215);
+            const WarnTitleEmbed = new Discord.UnsafeEmbed()
+              .setTitle(msg.lan.warns)
+              .setColor(16777215);
             embeds.push(WarnTitleEmbed);
             answered.warns.forEach((number) => {
               const warn = res.rows.filter((r) => r.row_number === Number(number))[0];
@@ -251,7 +257,7 @@ module.exports = {
                     msgid: warn.msgid,
                   }),
                 })
-                .addFields(...[
+                .addFields(
                   {
                     name: msg.lan.date,
                     value: `<t:${warn.dateofwarn.slice(0, -3)}:F> (<t:${warn.dateofwarn.slice(
@@ -270,13 +276,15 @@ module.exports = {
                     value: `<@${warn.warnedbyuserid}>\n\`${warn.warnedbyusername}\` (\`${warn.warnedbyuserid}\`)`,
                     inline: false,
                   },
-                ])
+                )
                 .setFooter({ text: msg.lan.warnID + warn.row_number });
               embeds.push(warnEmbed);
             });
           }
           if (answered.mutes.length) {
-            const MuteTitleEmbed = new Discord.UnsafeEmbed().setTitle(msg.lan.mutes).setColor(16777215);
+            const MuteTitleEmbed = new Discord.UnsafeEmbed()
+              .setTitle(msg.lan.mutes)
+              .setColor(16777215);
             embeds.push(MuteTitleEmbed);
             answered.mutes.forEach((number) => {
               const mute = res.rows.filter((r) => r.row_number === Number(number))[0];
@@ -309,7 +317,7 @@ module.exports = {
                     msgid: mute.msgid,
                   }),
                 })
-                .addFields(...[
+                .addFields(
                   {
                     name: msg.lan.date,
                     value: `<t:${mute.dateofwarn.slice(0, -3)}:F> (<t:${mute.dateofwarn.slice(
@@ -347,7 +355,7 @@ module.exports = {
                     value: muteCloseText,
                     inline: false,
                   },
-                ])
+                )
                 .setFooter({ text: msg.lan.warnID + mute.row_number });
               embeds.push(muteEmbed);
             });
@@ -384,7 +392,7 @@ function buttonOrder(take, msg, options, answered) {
   if (take.warns.length) {
     const warnMenu = new Discord.UnsafeSelectMenuComponent()
       .setCustomId('warnMenu')
-      .addOptions(take.warns)
+      .addOptions(...take.warns)
       .setMinValues(1)
       .setMaxValues(take.warns.length < 8 ? take.warns.length : 8)
       .setPlaceholder(
@@ -409,7 +417,7 @@ function buttonOrder(take, msg, options, answered) {
   if (take.mutes.length) {
     const muteMenu = new Discord.UnsafeSelectMenuComponent()
       .setCustomId('muteMenu')
-      .addOptions(take.mutes)
+      .addOptions(...take.mutes)
       .setMinValues(1)
       .setMaxValues(take.mutes.length < 8 ? take.mutes.length : 8)
       .setPlaceholder(

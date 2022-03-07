@@ -33,9 +33,9 @@ module.exports = {
       };
 
       if (new Discord.BitField(Number(insertedValues[required.assinger])).has(Number(bits))) {
-        inserted.emoji = msg.client.constants.emotes.minusBGID;
+        inserted.emoji = msg.client.objectEmotes.minusBG;
       } else {
-        inserted.emoji = msg.client.constants.emotes.plusBGID;
+        inserted.emoji = msg.client.objectEmotes.plusBG;
       }
 
       Objects.options.push(inserted);
@@ -75,9 +75,9 @@ module.exports = {
 
     passObject.Objects.options.forEach((option) => {
       if (new Discord.BitField(insertedValues[required.assinger]).has(Number(option.value))) {
-        option.emoji = msg.client.constants.emotes.minusBGID;
+        option.emoji = msg.client.objectEmotes.minusBGID;
       } else {
-        option.emoji = msg.client.constants.emotes.plusBGID;
+        option.emoji = msg.client.objectEmotes.plusBGID;
       }
     });
 

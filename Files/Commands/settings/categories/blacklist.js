@@ -14,13 +14,13 @@ module.exports = {
         wordText += wordArr[i] + new Array(22 - wordArr[i].length).join(' ');
       }
     } else wordText = msg.language.none;
-    const embed = new Discord.UnsafeEmbed().addFields(...[
+    const embed = new Discord.UnsafeEmbed().addFields(
       {
         name: msg.lanSettings.active,
         value: `${
           r.active
-            ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-            : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
+            ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+            : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`
         }`,
         inline: false,
       },
@@ -73,8 +73,8 @@ module.exports = {
         name: msg.lan.warntof,
         value: `${
           r.warntof
-            ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-            : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
+            ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+            : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`
         }\n`,
         inline: true,
       },
@@ -82,8 +82,8 @@ module.exports = {
         name: msg.lan.mutetof,
         value: `${
           r.mutetof
-            ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-            : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
+            ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+            : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`
         }`,
         inline: true,
       },
@@ -91,8 +91,8 @@ module.exports = {
         name: msg.lan.kicktof,
         value: `${
           r.kicktof
-            ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-            : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
+            ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+            : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`
         }`,
         inline: true,
       },
@@ -100,8 +100,8 @@ module.exports = {
         name: msg.lan.bantof,
         value: `${
           r.bantof
-            ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-            : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
+            ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+            : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`
         }`,
         inline: true,
       },
@@ -120,7 +120,7 @@ module.exports = {
           `${msg.client.ch.stp(msg.lan.banafter, { amount: r.banafter ? r.banafter : '--' })}`,
         inline: false,
       },
-    ]);
+    );
     return embed;
   },
   buttons(msg, r) {

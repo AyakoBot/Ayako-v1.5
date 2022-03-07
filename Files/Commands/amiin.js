@@ -17,19 +17,19 @@ module.exports = {
     if (res.rows[0].willis == null) {
       embed
         .setDescription(
-          `${msg.client.constants.emotes.tick} You are NOT participating!\nGo to <#805839305377447936> and follow the instructions to enter`,
+          `${msg.client.textEmotes.tick} You are NOT participating!\nGo to <#805839305377447936> and follow the instructions to enter`,
         )
         .setColor(16776960);
       msg.channel.send(embed);
     } else if (res.rows[0].willis.includes(id)) {
       embed
-        .setDescription(`${msg.client.constants.emotes.tick} You are participating! Good Luck!`)
+        .setDescription(`${msg.client.textEmotes.tick} You are participating! Good Luck!`)
         .setColor(65280);
       msg.channel.send(embed);
     } else {
       embed
         .setDescription(
-          `${msg.client.constants.emotes.tick} You are NOT participating!\nGo to <#805839305377447936> and follow the instructions to enter`,
+          `${msg.client.textEmotes.tick} You are NOT participating!\nGo to <#805839305377447936> and follow the instructions to enter`,
         )
         .setColor(16711680);
       msg.channel.send(embed);

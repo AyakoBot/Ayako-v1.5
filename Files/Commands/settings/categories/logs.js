@@ -6,7 +6,7 @@ module.exports = {
   finished: true,
   category: ['automation'],
   displayEmbed(msg, r) {
-    const embed = new Discord.UnsafeEmbed().addFields(...[
+    const embed = new Discord.UnsafeEmbed().addFields(
       {
         name: '\u200b',
         value: `**${msg.lan.discordLogs}**`,
@@ -150,7 +150,7 @@ module.exports = {
         }`,
         inline: true,
       },
-    ]);
+    );
     return embed;
   },
   buttons(msg) {

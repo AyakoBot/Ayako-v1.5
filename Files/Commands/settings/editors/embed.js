@@ -11,18 +11,18 @@ module.exports = {
 
     if (embeds.length) {
       embeds.forEach((embed) => {
-        const inserted = {
+        const inserted = new msg.client.ch.SelectMenuOption({
           label: `${embed.name}`,
           value: `${embed.uniquetimestamp}`,
-        };
+        });
 
         if (
           Array.isArray(insertedValues[required.assinger]) &&
           insertedValues[required.assinger].includes(embed.uniquetimestamp)
         ) {
-          inserted.emoji = msg.client.constants.emotes.minusBGID;
+          inserted.emoji = msg.client.objectEmotes.minusBG;
         } else {
-          inserted.emoji = msg.client.constants.emotes.plusBGID;
+          inserted.emoji = msg.client.objectEmotes.plusBG;
         }
 
         Objects.options.push(inserted);
@@ -38,25 +38,23 @@ module.exports = {
   getSelected: async (msg, insertedValues, required) => {
     if (insertedValues[required.assinger]) {
       switch (required.key.endsWith('s')) {
-        default: {
-          const returned = insertedValues[required.assinger]
-            ? await getEmbedName(msg, insertedValues[required.assinger])
-            : msg.language.none;
-
-          return returned;
-        }
         case true: {
           return Promise.all(
             insertedValues[required.assinger] &&
               insertedValues[required.assinger].length &&
               Array.isArray(insertedValues[required.assinger])
               ? insertedValues[required.assinger]
-                  .map((value) => {
-                    return `${getEmbedName(msg, value)}`;
-                  })
+                  .map((value) => `${getEmbedName(msg, value)}`)
                   .join(', ')
               : msg.language.none,
           );
+        }
+        default: {
+          const returned = insertedValues[required.assinger]
+            ? await getEmbedName(msg, insertedValues[required.assinger])
+            : msg.language.none;
+
+          return returned;
         }
       }
     }
@@ -97,7 +95,9 @@ module.exports = {
     const menu = new Discord.UnsafeSelectMenuComponent()
       .setCustomId(required.key)
       .addOptions(
-        Objects.take.length ? Objects.take : { label: 'placeholder', value: 'placeholder' },
+        ...(Objects.take.length
+          ? Objects.take
+          : new msg.client.ch.SelectMenuOption({ label: 'placeholder', value: 'placeholder' })),
       )
       .setDisabled(!Objects.take.length)
       .setMinValues(1)
@@ -137,6 +137,16 @@ module.exports = {
     const { msg, answer: interaction } = msgData;
 
     switch (interaction.customId) {
+      case 'embed': {
+        [insertedValues[required.assinger]] = interaction.values;
+
+        const selected = await module.exports.getSelected(msg, insertedValues, required);
+
+        const returnEmbed = new Discord.UnsafeEmbed().setDescription(
+          `**${msg.language.selected}:**\n${selected?.length ? selected : msg.language.none}`,
+        );
+        return { returnEmbed };
+      }
       default: {
         const options = Object.entries(msg.language.commands.settings[msg.file.name].options);
 
@@ -149,16 +159,6 @@ module.exports = {
         const { answer } = fin;
 
         return { answer, recall: true };
-      }
-      case 'embed': {
-        [insertedValues[required.assinger]] = interaction.values;
-
-        const selected = await module.exports.getSelected(msg, insertedValues, required);
-
-        const returnEmbed = new Discord.UnsafeEmbed().setDescription(
-          `**${msg.language.selected}:**\n${selected?.length ? selected : msg.language.none}`,
-        );
-        return { returnEmbed };
       }
     }
   },

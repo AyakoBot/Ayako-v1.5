@@ -7,7 +7,7 @@ module.exports = {
 
     Object.entries(msg.language.languages).forEach(([languageKey, language], i) => {
       const inserted = {
-        label: `${language.name} | ${language.status} | ${msg.client.constants.emotes.flags[languageKey]}`,
+        label: `${language.name} | ${language.status} | ${msg.client.textEmotes.flags[languageKey]}`,
         value: languageKey,
       };
 
@@ -15,9 +15,9 @@ module.exports = {
         Array.isArray(insertedValues[required.assinger]) &&
         insertedValues[required.assinger].includes(i)
       ) {
-        inserted.emoji = msg.client.constants.emotes.minusBGID;
+        inserted.emoji = msg.client.objectEmotes.minusBG;
       } else {
-        inserted.emoji = msg.client.constants.emotes.plusBGID;
+        inserted.emoji = msg.client.objectEmotes.plusBG;
       }
 
       Objects.options.push(inserted);
@@ -32,20 +32,16 @@ module.exports = {
   getSelected(msg, insertedValues, required) {
     if (insertedValues[required.assinger]) {
       switch (required.key.endsWith('s')) {
-        default: {
-          return insertedValues[required.assinger]
-            ? insertedValues[required.assinger]
-            : msg.language.none;
-        }
         case true: {
           return insertedValues[required.assinger] &&
             insertedValues[required.assinger].length &&
             Array.isArray(insertedValues[required.assinger])
+            ? insertedValues[required.assinger].map((value) => `${value}`).join(', ')
+            : msg.language.none;
+        }
+        default: {
+          return insertedValues[required.assinger]
             ? insertedValues[required.assinger]
-                .map((value) => {
-                  return `${value}`;
-                })
-                .join(', ')
             : msg.language.none;
         }
       }

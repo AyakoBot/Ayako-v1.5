@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const ChannelRules = require('../../../../BaseClient/Other Client Files/ChannelRules');
+const ChannelRules = require('../../../../BaseClient/Other Client Files/Classes/ChannelRules');
 
 module.exports = {
   perm: 32n,
@@ -14,19 +14,17 @@ module.exports = {
     for (let i = 0; i < res.length; i += 1) {
       const r = res[i];
 
-      embed.addFields(...[
-        {
-          name: `${msg.language.number}: \`${r.id}\` | ${
-            r.rules ? msg.client.ch.channelRuleCalc(r.rules, msg.language).length : '--'
-          } ${msg.language.ChannelRules}`,
-          value: `${msg.language.affected}: ${
-            r.channels && r.channels.length
-              ? `${r.channels.length} ${msg.language.channelTypes}`
-              : msg.language.none
-          }`,
-          inline: true,
-        },
-      ]);
+      embed.addFields({
+        name: `${msg.language.number}: \`${r.id}\` | ${
+          r.rules ? msg.client.ch.channelRuleCalc(r.rules, msg.language).length : '--'
+        } ${msg.language.ChannelRules}`,
+        value: `${msg.language.affected}: ${
+          r.channels && r.channels.length
+            ? `${r.channels.length} ${msg.language.channelTypes}`
+            : msg.language.none
+        }`,
+        inline: true,
+      });
     }
     return embed;
   },
@@ -39,36 +37,30 @@ module.exports = {
             : msg.language.none
         }`,
       )
-      .addFields(...[
-        {
-          name: msg.language.channelTypes,
-          value: `${r.channels?.length ? r.channels.map((id) => ` <#${id}>`) : msg.language.none}`,
-          inline: false,
-        },
-      ]);
+      .addFields({
+        name: msg.language.channelTypes,
+        value: `${r.channels?.length ? r.channels.map((id) => ` <#${id}>`) : msg.language.none}`,
+        inline: false,
+      });
 
     if (r.rules) {
-      embed.addFields(...[
-        {
-          name: '\u200b',
-          value: '\u200b',
-          inline: false,
-        },
-      ]);
+      embed.addFields({
+        name: '\u200b',
+        value: '\u200b',
+        inline: false,
+      });
 
       msg.client.ch.channelRuleCalc(r.rules, msg.language).forEach((rule, i) => {
         const [key] = Object.entries(msg.language.channelRules).find(([, v]) => v === rule);
-        const emote = msg.client.constants.emotes.numbers[(i % 5) + 1];
+        const emote = msg.client.textEmotes.numbers[(i % 5) + 1];
 
-        embed.addFields(...[
-          {
-            name: `${emote} ${rule}`,
-            value: `${msg.language.amountDefinition}: ${
-              typeof r[key] === 'string' ? r[key] : msg.language.none
-            }`,
-            inline: true,
-          },
-        ]);
+        embed.addFields({
+          name: `${emote} ${rule}`,
+          value: `${msg.language.amountDefinition}: ${
+            typeof r[key] === 'string' ? r[key] : msg.language.none
+          }`,
+          inline: true,
+        });
       });
     }
 
@@ -94,7 +86,7 @@ module.exports = {
     if (channelRules && channelRules.length) {
       channelRules.forEach((rule, j) => {
         const [key] = Object.entries(msg.language.channelRules).find(([, v]) => v === rule);
-        const emote = msg.client.constants.emotes.numbers[(j % 5) + 1];
+        const emote = msg.client.objectEmotes.numbers[(j % 5) + 1];
 
         const button = new Discord.UnsafeButtonComponent()
           .setCustomId(lan.edit[key].name)

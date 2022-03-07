@@ -10,29 +10,27 @@ module.exports = {
     const embed = new Discord.UnsafeEmbed();
     for (let i = 0; i < res.length; i += 1) {
       const r = res[i];
-      embed.addFields(...[
-        {
-          name: `${msg.language.number}: \`${r.id}\` | ${
-            r.active
-              ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-              : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
-          }`,
-          value: `${msg.language.affected}: ${r.roles ? r.roles.length : 0}\n${
-            msg.language.name
-          }: ${r.name}`,
-          inline: true,
-        },
-      ]);
+      embed.addFields({
+        name: `${msg.language.number}: \`${r.id}\` | ${
+          r.active
+            ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+            : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`
+        }`,
+        value: `${msg.language.affected}: ${r.roles ? r.roles.length : 0}\n${msg.language.name}: ${
+          r.name
+        }`,
+        inline: true,
+      });
     }
     return embed;
   },
   displayEmbed(msg, r) {
-    const embed = new Discord.UnsafeEmbed().addFields(...[
+    const embed = new Discord.UnsafeEmbed().addFields(
       {
         name: msg.lanSettings.active,
         value: r.active
-          ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-          : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
+          ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+          : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`,
         inline: false,
       },
       {
@@ -43,8 +41,8 @@ module.exports = {
       {
         name: msg.lan.onlyone,
         value: r.onlyone
-          ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-          : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
+          ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+          : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`,
         inline: false,
       },
       {
@@ -90,7 +88,7 @@ module.exports = {
         }`,
         inline: false,
       },
-    ]);
+    );
     return embed;
   },
   buttons(msg, r) {

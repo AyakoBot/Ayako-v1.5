@@ -111,28 +111,24 @@ module.exports = {
       userEmbed.addFields({ name: msg.language.description, value: botInfo.description });
     }
     if (userflags.length) {
-      userEmbed.addFields(...[
-        {
-          name: msg.lan.flags,
-          value: userflags.join('\n'),
-          inline: false,
-        },
-      ]);
+      userEmbed.addFields({
+        name: msg.lan.flags,
+        value: userflags.join('\n'),
+        inline: false,
+      });
     }
 
-    userEmbed.addFields(...[
-      {
-        name: `${msg.client.constants.emotes.plusBG} ${msg.lan.createdAt}`,
-        value: `<t:${String(user.createdTimestamp).slice(0, -3)}:F> (<t:${String(
-          user.createdTimestamp,
-        ).slice(0, -3)}:R>)\n\`${moment
-          .duration(Date.now() - user.createdTimestamp)
-          .format(
-            `y [${msg.language.time.years}], M [${msg.language.time.months}], d [${msg.language.time.days}], h [${msg.language.time.hours}], m [${msg.language.time.minutes}], s [${msg.language.time.seconds}]`,
-            { trim: 'all' },
-          )}\``,
-      },
-    ]);
+    userEmbed.addFields({
+      name: `${msg.client.textEmotes.plusBG} ${msg.lan.createdAt}`,
+      value: `<t:${String(user.createdTimestamp).slice(0, -3)}:F> (<t:${String(
+        user.createdTimestamp,
+      ).slice(0, -3)}:R>)\n\`${moment
+        .duration(Date.now() - user.createdTimestamp)
+        .format(
+          `y [${msg.language.time.years}], M [${msg.language.time.months}], d [${msg.language.time.days}], h [${msg.language.time.hours}], m [${msg.language.time.minutes}], s [${msg.language.time.seconds}]`,
+          { trim: 'all' },
+        )}\``,
+    });
 
     if (user.accentColor) userEmbed.setFooter({ text: msg.lan.footer });
 
@@ -146,7 +142,7 @@ module.exports = {
           iconURL: con.authorImage,
           url: msg.client.constants.standard.invite,
         })
-        .addFields(...[
+        .addFields(
           {
             name: msg.lan.nickname,
             value: msg.client.ch.makeInlineCode(member.displayName),
@@ -156,18 +152,18 @@ module.exports = {
             name: msg.lan.timeout,
             value: `${
               member.communicationDisabledUntil
-                ? `${msg.client.constants.emotes.tickBG} ${msg.language.Yes}\n${
+                ? `${msg.client.textEmotes.tickBG} ${msg.language.Yes}\n${
                     msg.lan.communicationDisabledUntil
                   } <t:${String(member.communicationDisabledUntilTimestamp).slice(
                     0,
                     -3,
                   )}:F> (<t:${String(member.communicationDisabledUntilTimestamp).slice(0, -3)}:R>)`
-                : `${msg.client.constants.emotes.crossBG} ${msg.language.No}`
+                : `${msg.client.textEmotes.crossBG} ${msg.language.No}`
             }`,
             inline: false,
           },
           {
-            name: `${msg.client.constants.emotes.plusBG} ${msg.lan.joinedAt}`,
+            name: `${msg.client.textEmotes.plusBG} ${msg.lan.joinedAt}`,
             value: `<t:${String(member.joinedTimestamp).slice(0, -3)}:F> (<t:${String(
               member.joinedTimestamp,
             ).slice(0, -3)}:R>)`,
@@ -176,15 +172,15 @@ module.exports = {
             name: `${getBoostEmote(member)} ${msg.lan.boosting}`,
             value: `${
               member.premiumSinceTimestamp
-                ? `${msg.client.constants.emotes.tickBG} ${msg.language.Yes}\n${
+                ? `${msg.client.textEmotes.tickBG} ${msg.language.Yes}\n${
                     msg.lan.boostingSince
                   } <t:${String(member.premiumSinceTimestamp).slice(0, -3)}:F> (<t:${String(
                     member.premiumSinceTimestamp,
                   ).slice(0, -3)}:R>)`
-                : `${msg.client.constants.emotes.crossBG} ${msg.language.No}`
+                : `${msg.client.textEmotes.crossBG} ${msg.language.No}`
             }`,
           },
-        ]);
+        );
 
       if (member.displayAvatarURL() !== user.displayAvatarURL()) {
         memberEmbed.setThumbnail(member.displayAvatarURL());
@@ -287,17 +283,17 @@ const getComponents = (msg, member, page) => [
       .setMaxValues(1)
       .setMinValues(1)
       .setCustomId('perms')
-      .setOptions(getChannelOptions(msg).slice((page - 1) * 25, page * 25)),
+      .setOptions(...getChannelOptions(msg).slice((page - 1) * 25, page * 25)),
   ],
   [
     new Discord.UnsafeButtonComponent()
       .setCustomId('back')
-      .setEmoji(msg.client.constants.emotes.back)
+      .setEmoji(msg.client.textEmotes.back)
       .setStyle(Discord.ButtonStyle.Secondary)
       .setDisabled(page === 1),
     new Discord.UnsafeButtonComponent()
       .setCustomId('next')
-      .setEmoji(msg.client.constants.emotes.forth)
+      .setEmoji(msg.client.textEmotes.forth)
       .setStyle(Discord.ButtonStyle.Secondary)
       .setDisabled(page === Math.ceil(msg.guild.channels.cache.size / 25)),
   ],
@@ -321,11 +317,12 @@ const getChannelOptions = (msg) => {
     sorted.splice(index + 1, 0, channel);
   });
 
-  const options = sorted.map((c) => ({
-    label: c.name,
-    value: c.id,
-    emoji: msg.client.constants.emotes.channelTypes[c.type],
-  }));
+  const options = sorted.map((c) =>
+    new Discord.SelectMenuOption()
+      .setLabel(c.name)
+      .setValue(c.id)
+      .setEmoji(msg.client.objectEmotes.channelTypes[c.type]),
+  );
 
   return options;
 };
@@ -335,15 +332,15 @@ const getBoostEmote = (member) => {
   const time = Math.abs(member.premiumSinceTimestamp - Date.now());
   const month = 2629743000;
 
-  if (time < month * 2) return member.client.constants.emotes.userFlags.BOOST1;
-  if (time < month * 3) return member.client.constants.emotes.userFlags.BOOST2;
-  if (time < month * 6) return member.client.constants.emotes.userFlags.BOOST3;
-  if (time < month * 9) return member.client.constants.emotes.userFlags.BOOST6;
-  if (time < month * 12) return member.client.constants.emotes.userFlags.BOOST9;
-  if (time < month * 15) return member.client.constants.emotes.userFlags.BOOST12;
-  if (time < month * 18) return member.client.constants.emotes.userFlags.BOOST15;
-  if (time < month * 24) return member.client.constants.emotes.userFlags.BOOST18;
-  return member.client.constants.emotes.userFlags.BOOST24;
+  if (time < month * 2) return member.client.textEmotes.userFlags.BOOST1;
+  if (time < month * 3) return member.client.textEmotes.userFlags.BOOST2;
+  if (time < month * 6) return member.client.textEmotes.userFlags.BOOST3;
+  if (time < month * 9) return member.client.textEmotes.userFlags.BOOST6;
+  if (time < month * 12) return member.client.textEmotes.userFlags.BOOST9;
+  if (time < month * 15) return member.client.textEmotes.userFlags.BOOST12;
+  if (time < month * 18) return member.client.textEmotes.userFlags.BOOST15;
+  if (time < month * 24) return member.client.textEmotes.userFlags.BOOST18;
+  return member.client.textEmotes.userFlags.BOOST24;
 };
 
 const getBoosting = (flags, user, msg) => {
@@ -523,20 +520,14 @@ const basicPermsHandler = (interaction, msg, member) => {
         ...allowedBits
           .map((perm) =>
             new Discord.PermissionsBitField(bit).has(perm, false)
-              ? `${msg.client.constants.emotes.enabled} ${msg.client.ch.permCalc(
-                  perm,
-                  msg.language,
-                )}`
+              ? `${msg.client.textEmotes.enabled} ${msg.client.ch.permCalc(perm, msg.language)}`
               : null,
           )
           .filter((r) => !!r),
         ...deniedBits
           .map((perm) =>
             new Discord.PermissionsBitField(bit).has(perm, false)
-              ? `${msg.client.constants.emotes.disabled} ${msg.client.ch.permCalc(
-                  perm,
-                  msg.language,
-                )}`
+              ? `${msg.client.textEmotes.disabled} ${msg.client.ch.permCalc(perm, msg.language)}`
               : null,
           )
           .filter((r) => !!r),
@@ -640,20 +631,14 @@ const permsHandler = (interaction, msg, member) => {
         ...allowedBits
           .map((perm) =>
             new Discord.PermissionsBitField(bit).has(perm, false)
-              ? `${msg.client.constants.emotes.enabled} ${msg.client.ch.permCalc(
-                  perm,
-                  msg.language,
-                )}`
+              ? `${msg.client.textEmotes.enabled} ${msg.client.ch.permCalc(perm, msg.language)}`
               : null,
           )
           .filter((r) => !!r),
         ...deniedBits
           .map((perm) =>
             new Discord.PermissionsBitField(bit).has(perm, false)
-              ? `${msg.client.constants.emotes.disabled} ${msg.client.ch.permCalc(
-                  perm,
-                  msg.language,
-                )}`
+              ? `${msg.client.textEmotes.disabled} ${msg.client.ch.permCalc(perm, msg.language)}`
               : null,
           )
           .filter((r) => !!r),
@@ -750,25 +735,28 @@ const getUserComponents = (msg, page, users) => {
       .setMinValues(1)
       .setCustomId('userSelection')
       .setOptions(
-        users
-          .map((user) => ({
-            label: `${user.tag}`,
-            description: `${user.id}`,
-            value: `${user.id}`,
-          }))
+        ...users
+          .map(
+            (user) =>
+              new msg.client.ch.SelectMenuOption({
+                label: `${user.tag}`,
+                description: `${user.id}`,
+                value: `${user.id}`,
+              }),
+          )
           .slice((page - 1) * 25, page * 25),
       ),
   ];
 
   if (users.length > 25) {
     const back = new Discord.UnsafeButtonComponent()
-      .setEmoji(msg.client.constants.emotes.back)
+      .setEmoji(msg.client.objectEmotes.back)
       .setDisabled(page === 1)
       .setCustomId('back')
       .setStyle(Discord.ButtonStyle.Secondary);
 
     const next = new Discord.UnsafeButtonComponent()
-      .setEmoji(msg.client.constants.emotes.forth)
+      .setEmoji(msg.client.objectEmotes.forth)
       .setCustomId('next')
       .setDisabled(page === Math.ceil(users.length / 25))
       .setStyle(Discord.ButtonStyle.Secondary);
