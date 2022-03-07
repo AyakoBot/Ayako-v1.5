@@ -82,7 +82,10 @@ module.exports = {
       botInfo = await getBotInfo(msg, user);
     }
 
-    if (new URL(user.displayAvatarURL()).pathname.endsWith('.gif') || user.bannerURL()) {
+    if (
+      new URL(user.displayAvatarURL({ size: 4096 })).pathname.endsWith('.gif') ||
+      user.bannerURL({ size: 4096 })
+    ) {
       flags.add(4096);
     }
 
@@ -96,8 +99,8 @@ module.exports = {
         iconURL: con.authorImage,
         url: msg.client.constants.standard.invite,
       })
-      .setThumbnail(user.displayAvatarURL())
-      .setImage(user.bannerURL() || botInfo?.bannerURL)
+      .setThumbnail(user.displayAvatarURL({ size: 4096 }))
+      .setImage(user.bannerURL({ size: 4096 }) || botInfo?.bannerURL)
       .setColor(user.accentColor)
       .setDescription(
         `${msg.client.ch.stp(msg.lan.userInfo, {
@@ -182,8 +185,8 @@ module.exports = {
           },
         );
 
-      if (member.displayAvatarURL() !== user.displayAvatarURL()) {
-        memberEmbed.setThumbnail(member.displayAvatarURL());
+      if (member.displayAvatarURL({ size: 4096 }) !== user.displayAvatarURL({ size: 4096 })) {
+        memberEmbed.setThumbnail(member.displayAvatarURL({ size: 4096 }));
       }
 
       embeds.push(memberEmbed);
@@ -288,12 +291,12 @@ const getComponents = (msg, member, page) => [
   [
     new Discord.UnsafeButtonComponent()
       .setCustomId('back')
-      .setEmoji(msg.client.textEmotes.back)
+      .setEmoji(msg.client.objectEmotes.back)
       .setStyle(Discord.ButtonStyle.Secondary)
       .setDisabled(page === 1),
     new Discord.UnsafeButtonComponent()
       .setCustomId('next')
-      .setEmoji(msg.client.textEmotes.forth)
+      .setEmoji(msg.client.objectEmotes.forth)
       .setStyle(Discord.ButtonStyle.Secondary)
       .setDisabled(page === Math.ceil(msg.guild.channels.cache.size / 25)),
   ],
@@ -323,7 +326,6 @@ const getChannelOptions = (msg) => {
       .setValue(c.id)
       .setEmoji(msg.client.objectEmotes.channelTypes[c.type]),
   );
-
   return options;
 };
 

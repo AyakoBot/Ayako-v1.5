@@ -178,7 +178,7 @@ module.exports = {
         .setColor(con.color)
         .setAuthor({
           name: msg.client.ch.stp(lan.author, { user: target }),
-          iconURL: target.displayAvatarURL(),
+          iconURL: target.displayAvatarURL({ size: 4096 }),
           url: msg.client.constants.standard.invite,
         })
         .setDescription(msg.client.ch.stp(lan.description, { user: executor, target }))
@@ -304,7 +304,7 @@ async function assingWarn(
     .setColor(con.color)
     .setAuthor({
       name: msg.client.ch.stp(lan.author, { user: target }),
-      iconURL: target.displayAvatarURL(),
+      iconURL: target.displayAvatarURL({ size: 4096 }),
       url: msg.client.constants.standard.invite,
     })
     .setDescription(msg.client.ch.stp(lan.description, { user: executor, target }))

@@ -51,7 +51,7 @@ module.exports = {
     const WarnLogEmbed = new Discord.UnsafeEmbed()
       .setAuthor({
         name: msg.client.ch.stp(lan.log.author, { target }),
-        iconURL: target.displayAvatarURL(),
+        iconURL: target.displayAvatarURL({ size: 4096 }),
         url: msg.url,
       })
       .setDescription(msg.client.ch.stp(lan.log.description, { target, user: executor }))

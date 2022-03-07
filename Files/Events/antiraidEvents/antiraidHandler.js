@@ -16,7 +16,7 @@ module.exports = {
 const checkAll = async (guild, language, con, client, r, memberIDs) => {
   const buffers = await Promise.all(
     memberIDs.map(async (id) =>
-      client.ch.convertImageURLtoBuffer([client.users.cache.get(id).displayAvatarURL()]),
+      client.ch.convertImageURLtoBuffer([client.users.cache.get(id).displayAvatarURL({ size: 4096 })]),
     ),
   );
 
