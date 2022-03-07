@@ -17,7 +17,7 @@ const getMethod = (msg) => {
     .setLabel(msg.lan.method)
     .setCustomId('methods')
     .setOptions(
-      msg.lan.methods.map((method, i) => ({
+      ...msg.lan.methods.map((method, i) => ({
         name: method,
         value: msg.client.contsants.commands.synclevel.methods[i],
       })),
@@ -28,7 +28,7 @@ const getMethod = (msg) => {
   const embed = new Discord.UnsafeEmbed()
     .setAuthor({
       name: msg.lan.author,
-      iconURL: msg.client.constants.emotes.settingsLink,
+      iconURL: msg.client.objectEmotes.settings.link,
       url: msg.client.constants.standard.invite,
     })
     */

@@ -73,7 +73,7 @@ module.exports = {
         iconURL: msg.client.constants.standard.image,
         url: msg.client.constants.standard.invite,
       })
-      .addFields(...[
+      .addFields(
         {
           name: `|${language.name}`,
           value: `\u200b${commandLan.name ? commandLan.name : reqcommand.name}`,
@@ -109,7 +109,7 @@ module.exports = {
           value: `\u200b${reqcommand.dm ? lan.dmsTrue : lan.dmsFalse}`,
           inline: false,
         },
-      ])
+      )
       .setColor(msg.client.ch.colorSelector(msg.guild ? msg.guild.me : null))
       .setTimestamp();
     if (commandLan.usage && commandLan.usage.length) {

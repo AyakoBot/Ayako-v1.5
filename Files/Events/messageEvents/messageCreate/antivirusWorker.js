@@ -6,7 +6,7 @@ const fs = require('fs');
 const jobs = require('node-schedule');
 
 const ch = require('../../../BaseClient/ClientHelper');
-const constants = require('../../../Constants.json');
+const constants = require('../../../BaseClient/Other Client Files/Constants.json');
 const auth = require('../../../BaseClient/auth.json');
 
 parentPort.on('message', async (data) => {

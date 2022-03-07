@@ -24,11 +24,13 @@ module.exports = {
           if (s.category.includes(category)) {
             if (s.folder && !!settingCategories.findIndex((a) => a.folder === s.folder)) {
               if (msg.client.constants.commands.settings.baseSettings[s.folder] === s.name) {
-                options.push({ label: s.folder, value: s.folder });
+                options.push(
+                  new Discord.UnsafeSelectMenuOption().setLabel(s.folder).setValue(s.folder),
+                );
                 settingCategories.push(s.folder);
               }
             } else {
-              options.push({ label: s.name, value: s.name });
+              options.push(new Discord.UnsafeSelectMenuOption().setLabel(s.name).setValue(s.name));
               settingCategories.push(s.name);
             }
           }
@@ -42,42 +44,51 @@ module.exports = {
             );
           }
 
-          let type;
+          let textType;
+          let objectType;
           if (settingsFile.type) {
             switch (settingsFile.type) {
               case 1: {
-                type = msg.client.constants.emotes.yellow;
+                objectType = msg.client.objectEmotes.yellow;
+                textType = msg.client.textEmotes.yellow;
                 break;
               }
               case 2: {
-                type = msg.client.constants.emotes.red;
+                objectType = msg.client.objectEmotes.red;
+                textType = msg.client.textEmotes.red;
                 break;
               }
               case 3: {
-                type = msg.client.constants.emotes.blue;
+                objectType = msg.client.objectEmotes.blue;
+                textType = msg.client.textEmotes.blue;
                 break;
               }
               case 4: {
-                type = msg.client.constants.emotes.green;
+                objectType = msg.client.objectEmotes.green;
+                textType = msg.client.textEmotes.green;
                 break;
               }
               default: {
-                type = msg.client.constants.emotes.blue;
+                objectType = msg.client.objectEmotes.blue;
+                textType = msg.client.textEmotes.blue;
                 break;
               }
             }
-          } else type = msg.client.constants.emotes.blue;
+          } else {
+            objectType = msg.client.objectEmotes.blue;
+            textType = msg.client.textEmotes.blue;
+          }
 
           const index = options.findIndex((o) => o.value === settingsFile.name);
           if (options[index]) {
-            options[index].emoji = type;
-            options[index].description = category;
+            options[index].setEmoji(objectType);
+            options[index].setDescription(category);
           } else {
             const ind = options.findIndex((o) => o.value === settingsFile.folder);
-            options[ind].emoji = msg.client.constants.emotes.folder;
+            options[ind].setEmoji(msg.client.objectEmotes.folder);
           }
 
-          settingCategories[i] = `${type}${settingCategories[i]} `;
+          settingCategories[i] = `${textType}${settingCategories[i]} `;
           settingCategories[i] += new Array(22 - settingCategories[i].length).join(' ');
         }
 
@@ -88,7 +99,7 @@ module.exports = {
 
       const rawButtons = [
         new Discord.UnsafeSelectMenuComponent()
-          .addOptions(options)
+          .addOptions(...options)
           .setCustomId('menu')
           .setMaxValues(1)
           .setMinValues(1)
@@ -98,7 +109,7 @@ module.exports = {
       const embed = new Discord.UnsafeEmbed()
         .setAuthor({
           name: msg.language.commands.settings.noEmbed.author,
-          iconURL: msg.client.constants.emotes.settingsLink,
+          iconURL: msg.client.objectEmotes.settings.link,
           url: msg.client.constants.standard.invite,
         })
         .setDescription(
@@ -156,7 +167,7 @@ module.exports = {
 
       embed.setAuthor({
         name: msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
-        iconURL: msg.client.constants.emotes.settingsLink,
+        iconURL: msg.client.objectEmotes.settings.link,
         url: msg.client.constants.standard.invite,
       });
 
@@ -242,7 +253,7 @@ module.exports = {
 
       embed.setAuthor({
         name: msg.client.ch.stp(msg.lanSettings.author, { type: msg.lan.type }),
-        iconURL: msg.client.constants.emotes.settingsLink,
+        iconURL: msg.client.objectEmotes.settings.link,
         url: msg.client.constants.standard.invite,
       });
 
@@ -253,14 +264,17 @@ module.exports = {
         page: 1,
       };
       res.rows.forEach((row) => {
-        options.allOptions.push({
-          label: `${row.id} ${
-            settingsConstant.removeIdent !== ''
-              ? `| ${getIdentifier(msg, settingsConstant, row)}`
-              : ''
-          }`,
-          value: `${row.id}`,
-        });
+        options.allOptions.push(
+          new Discord.SelectMenuOption()
+            .setLabel(
+              `${row.id} ${
+                settingsConstant.removeIdent !== ''
+                  ? `| ${getIdentifier(msg, settingsConstant, row)}`
+                  : ''
+              }`,
+            )
+            .setValue(`${row.id}`),
+        );
       });
 
       options.take = [];
@@ -434,7 +448,11 @@ const getMMRListButtons = (msg, options, editView) => {
     .setMaxValues(1)
     .setMinValues(1)
     .setPlaceholder(msg.language.select.id.select)
-    .setOptions(options.take.length ? options.take : { label: '--', value: '0' });
+    .setOptions(
+      ...(options.take.length
+        ? options.take
+        : [new Discord.SelectMenuOption().setLabel('--').setValue('0')]),
+    );
 
   if (editView) {
     const add = new Discord.UnsafeButtonComponent()
@@ -587,7 +605,7 @@ const mmrEditList = async (msgData, sendData) => {
 
     const embed = new Discord.UnsafeEmbed().setAuthor({
       name: addLanguage.name,
-      iconURL: msg.client.constants.emotes.settingsLink,
+      iconURL: msg.client.objectEmotes.settings.link,
       url: msg.client.constants.standard.invite,
     });
 
@@ -664,7 +682,7 @@ const mmrEditList = async (msgData, sendData) => {
     name: msg.client.ch.stp(msg.lanSettings.authorEdit, {
       type: msg.lanSettings[msg.file.name].type,
     }),
-    iconURL: msg.client.constants.emotes.settingsLink,
+    iconURL: msg.client.objectEmotes.settings.link,
     url: msg.client.constants.standard.invite,
   });
 
@@ -676,12 +694,17 @@ const mmrEditList = async (msgData, sendData) => {
   const settingsConstant = msg.client.constants.commands.settings.setupQueries[msg.file.name];
 
   res.rows.forEach((row) => {
-    options.allOptions.push({
-      label: `${row.id} ${
-        settingsConstant.removeIdent !== '' ? `| ${getIdentifier(msg, settingsConstant, row)}` : ''
-      }`,
-      value: `${row.id}`,
-    });
+    options.allOptions.push(
+      new Discord.SelectMenuOption()
+        .setLabel(
+          `${row.id} ${
+            settingsConstant.removeIdent !== ''
+              ? `| ${getIdentifier(msg, settingsConstant, row)}`
+              : ''
+          }`,
+        )
+        .setValue(String(row.id)),
+    );
   });
 
   options.take = [];
@@ -772,7 +795,7 @@ const singleRowEdit = async (msgData, resData, embed, comesFromMMR) => {
     name: msg.client.ch.stp(msg.lanSettings.authorEdit, {
       type: msg.lanSettings[msg.file.name].type,
     }),
-    iconURL: msg.client.constants.emotes.settingsLink,
+    iconURL: msg.client.objectEmotes.settings.link,
     url: msg.client.constants.standard.invite,
   });
 
@@ -895,7 +918,7 @@ const editorInteractionHandler = async (msgData, editorData, row, res, comesFrom
     name: msg.client.ch.stp(msg.lanSettings.authorEdit, {
       type: languageOfSetting.type,
     }),
-    iconURL: msg.client.constants.emotes.settingsLink,
+    iconURL: msg.client.objectEmotes.settings.link,
     url: msg.client.constants.standard.invite,
   });
 
@@ -1068,7 +1091,7 @@ const log = async (msg, editData, logType) => {
     name: msg.client.ch.stp(msg.language.selfLog.author, {
       type,
     }),
-    iconURL: msg.client.constants.emotes.settingsLink,
+    iconURL: msg.client.objectEmotes.settings.link,
     url: msg.client.constants.standard.invite,
   });
 
@@ -1304,7 +1327,7 @@ const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
             name: msg.client.ch.stp(msg.lanSettings.authorEdit, {
               type: languageOfSetting.type,
             }),
-            iconURL: msg.client.constants.emotes.settingsLink,
+            iconURL: msg.client.objectEmotes.settings.link,
             url: msg.client.constants.standard.invite,
           });
 
@@ -1391,7 +1414,7 @@ const messageHandler = async (msgData, editData, languageData, Objects) => {
         name: msg.client.ch.stp(msg.lanSettings.authorEdit, {
           type: languageOfSetting.type,
         }),
-        iconURL: msg.client.constants.emotes.settingsLink,
+        iconURL: msg.client.objectEmotes.settings.link,
         url: msg.client.constants.standard.invite,
       });
 
@@ -1477,9 +1500,9 @@ const interactionHandler = async (msgData, preparedData, insertedValues, require
         insertedValues[required.assinger]?.includes(option.value)) ||
       insertedValues[required.assinger] === option.value
     ) {
-      option.emoji = msg.client.constants.emotes.minusBGID;
+      option.setEmoji(msg.client.objectEmotes.minusBG);
     } else {
-      option.emoji = msg.client.constants.emotes.plusBGID;
+      option.setEmoji(msg.client.objectEmotes.plusBG);
     }
   });
 
@@ -1525,7 +1548,9 @@ const standardButtons = async (msg, preparedData, insertedValues, required, row,
     const menu = new Discord.UnsafeSelectMenuComponent()
       .setCustomId(required.key)
       .addOptions(
-        Objects.take.length ? Objects.take : { label: 'placeholder', value: 'placeholder' },
+        ...(Objects.take.length
+          ? Objects.take
+          : [new Discord.SelectMenuOption().setLabel('--').setValue('0')]),
       )
       .setDisabled(!Objects.take.length)
       .setMinValues(1)
@@ -1647,45 +1672,53 @@ const categoryDisplay = async (msg, answer, needsBack) => {
     settings.forEach((s) => {
       if (s.category.includes(category)) {
         settingCategories.push(s.name);
-        options.push({ label: s.name, value: s.name });
+        options.push(new Discord.SelectMenuOption().setLabel(s.name).setValue(s.name));
       }
     });
 
     for (let i = 0; i < settingCategories.length; i += 1) {
       const settingsFile = settings.get(settingCategories[i]);
 
-      let type;
+      let textType;
+      let objectType;
       if (settingsFile.type) {
         switch (settingsFile.type) {
           case 1: {
-            type = msg.client.constants.emotes.yellow;
+            objectType = msg.client.objectEmotes.yellow;
+            textType = msg.client.textEmotes.yellow;
             break;
           }
           case 2: {
-            type = msg.client.constants.emotes.red;
+            objectType = msg.client.objectEmotes.red;
+            textType = msg.client.textEmotes.red;
             break;
           }
           case 3: {
-            type = msg.client.constants.emotes.blue;
+            objectType = msg.client.objectEmotes.blue;
+            textType = msg.client.textEmotes.blue;
             break;
           }
           case 4: {
-            type = msg.client.constants.emotes.green;
+            objectType = msg.client.objectEmotes.green;
+            textType = msg.client.textEmotes.green;
             break;
           }
           default: {
-            type = msg.client.constants.emotes.blue;
+            objectType = msg.client.objectEmotes.blue;
+            textType = msg.client.textEmotes.blue;
             break;
           }
         }
-      } else type = msg.client.constants.emotes.blue;
-
-      settingCategories[i] = `${type}${settingCategories[i]} `;
+      } else {
+        objectType = msg.client.objectEmotes.blue;
+        textType = msg.client.textEmotes.blue;
+      }
+      settingCategories[i] = `${textType}${settingCategories[i]} `;
       settingCategories[i] += new Array(22 - settingCategories[i].length).join(' ');
 
       const index = options.findIndex((o) => o.value === settingsFile.name);
-      options[index].emoji = type;
-      options[index].description = category;
+      options[index].setEmoji(objectType);
+      options[index].setDescription(category);
     }
 
     categoryText += `__${category}__:\n${msg.client.ch.makeCodeBlock(
@@ -1698,7 +1731,7 @@ const categoryDisplay = async (msg, answer, needsBack) => {
       name: msg.client.ch.stp(msg.language.commands.settings.author, {
         type: msg.language.commands.settings[settings.first().name].type,
       }),
-      iconURL: msg.client.constants.emotes.settingsLink,
+      iconURL: msg.client.objectEmotes.settings.link,
       url: msg.client.constants.standard.invite,
     })
     .setDescription(
@@ -1710,7 +1743,7 @@ const categoryDisplay = async (msg, answer, needsBack) => {
 
   const rawButtons = [
     new Discord.UnsafeSelectMenuComponent()
-      .addOptions(options)
+      .addOptions(...options)
       .setCustomId('menu')
       .setMaxValues(1)
       .setMinValues(1)
@@ -1767,8 +1800,8 @@ const reactionHandler = ({ msg, answer }, buttonsCollector, byData) => {
     removeReact = byData.removeReact;
   }
 
-  if (!msg.m.reactions.cache.get(msg.client.constants.emotes.back)?.me) {
-    msg.m.react(msg.client.constants.emotes.back).catch(() => {});
+  if (!msg.m.reactions.cache.get(msg.client.objectEmotes.back.name)?.me) {
+    msg.m.react(msg.client.objectEmotes.back.name).catch(() => {});
   }
   const reactionsCollector = msg.m.createReactionCollector({
     time: 60000,
@@ -1782,7 +1815,7 @@ const reactionHandler = ({ msg, answer }, buttonsCollector, byData) => {
 
       if (user.id === msg.client.user.id) return null;
 
-      if (reaction.emoji.name === msg.client.constants.emotes.back) {
+      if (reaction.emoji.name === msg.client.objectEmotes.back.name) {
         if (buttonsCollector) buttonsCollector.stop();
         reactionsCollector.stop();
 

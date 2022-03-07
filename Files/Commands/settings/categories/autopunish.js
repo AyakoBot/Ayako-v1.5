@@ -15,30 +15,28 @@ module.exports = {
     for (let i = 0; i < res.length; i += 1) {
       const r = res[i];
       const punishment = r.punishment ? msg.language.autopunish[r.punishment] : msg.language.none;
-      embed.addFields(...[
-        {
-          name: `${msg.language.number}: \`${r.id}\` | ${
-            r.active
-              ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-              : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`
-          }`,
-          value: `${msg.lan.punishment}: ${punishment}\n${msg.lan.requiredWarns} ${
-            r.warnamount ? r.warnamount : msg.language.none
-          }`,
-          inline: true,
-        },
-      ]);
+      embed.addFields({
+        name: `${msg.language.number}: \`${r.id}\` | ${
+          r.active
+            ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+            : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`
+        }`,
+        value: `${msg.lan.punishment}: ${punishment}\n${msg.lan.requiredWarns} ${
+          r.warnamount ? r.warnamount : msg.language.none
+        }`,
+        inline: true,
+      });
     }
     return embed;
   },
   displayEmbed(msg, r) {
     const embed = new Discord.UnsafeEmbed();
-    embed.addFields(...[
+    embed.addFields(
       {
         name: `${msg.lanSettings.active}\u200b`,
         value: r.active
-          ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-          : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
+          ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+          : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`,
         inline: false,
       },
       {
@@ -104,8 +102,8 @@ module.exports = {
       {
         name: `${msg.lan.confirmationreq}\u200b`,
         value: r.confirmationreq
-          ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-          : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
+          ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+          : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`,
         inline: true,
       },
       {
@@ -125,7 +123,7 @@ module.exports = {
           : msg.language.none,
         inline: true,
       },
-    ]);
+    );
     return embed;
   },
   buttons(msg, r) {

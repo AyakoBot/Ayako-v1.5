@@ -2,7 +2,7 @@
 const Discord = require('discord.js');
 const fs = require('fs');
 const { dirname } = require('path');
-const Constants = require('../Constants.json');
+const Constants = require('./Other Client Files/Constants.json');
 const Eris = require('./ErisClient');
 
 const appDir = dirname(require.main.filename);
@@ -175,6 +175,8 @@ class Client extends Discord.Client {
 
     this.eris = Eris;
     this.constants = Constants;
+    this.objectEmotes = require('./Other Client Files/ObjectEmojis.json');
+    this.textEmotes = require('./Other Client Files/TextEmojis.json');
 
     this.setMaxListeners(this.events.size);
   }

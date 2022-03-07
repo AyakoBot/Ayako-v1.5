@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const jobs = require('node-schedule');
 const StringSimilarity = require('string-similarity');
-const ChannelRules = require('../../../BaseClient/Other Client Files/ChannelRules');
+const ChannelRules = require('../../../BaseClient/Other Client Files/Classes/ChannelRules');
 
 const guildCooldown = new Set();
 const lastMessageGuild = new Map();

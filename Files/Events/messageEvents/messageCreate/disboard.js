@@ -14,7 +14,7 @@ module.exports = {
       );
 
       if (res && res.rowCount > 0) {
-        if (res.rows[0].enabled) msg.react(msg.client.constants.emotes.tickID).catch(() => {});
+        if (res.rows[0].enabled) msg.react(msg.client.objectEmotes.tick.id).catch(() => {});
 
         if (res.rows[0].channelid) {
           msg.client.ch.query(
@@ -49,11 +49,11 @@ const getUser = async (msg) => {
 
     const timestamp = possibleMsgs
       .map((m) => m.createdTimestamp)
-      .reduce((prev, curr) => {
-        return Math.abs(curr - answer.createdTimestamp) < Math.abs(prev - answer.createdTimestamp)
+      .reduce((prev, curr) =>
+        Math.abs(curr - answer.createdTimestamp) < Math.abs(prev - answer.createdTimestamp)
           ? curr
-          : prev;
-      })[0];
+          : prev,
+      )[0];
 
     const m = msgs.find((me) => me.createdTimestamp === timestamp);
 

@@ -5,7 +5,7 @@ module.exports = {
     const { guild } = oldEmoji;
     const client = oldEmoji ? oldEmoji.client : newEmoji.client;
     const ch = require('../../BaseClient/ClientHelper');
-    const Constants = require('../../Constants.json');
+    const Constants = require('../../BaseClient/Other Client Files/Constants.json');
     const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);
     if (res && res.rowCount > 0) {
       const channels = res.rows[0].emojievents
@@ -40,7 +40,7 @@ module.exports = {
           )
           .setColor(con.color)
           .setTimestamp();
-        if (entry && entry.id)
+        if (entry && entry.id) {
           embed.setDescription(
             ch.stp(lan.description.withUser, {
               user: entry.executor,
@@ -48,7 +48,7 @@ module.exports = {
               oldEmoji,
             }),
           );
-        else embed.setDescription(ch.stp(lan.description.withoutUser, { newEmoji, oldEmoji }));
+        } else embed.setDescription(ch.stp(lan.description.withoutUser, { newEmoji, oldEmoji }));
         ch.send(channels, { embeds: [embed] });
       }
     }

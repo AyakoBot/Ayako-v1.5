@@ -330,14 +330,21 @@ const getComponents = async (msg, { page, Objects }, editing) => {
             .setPlaceholder(baseLan.fieldsPlaceholder)
             .setDisabled(!Objects.embed.fields?.length)
             .addOptions(
-              Objects.embed.fields?.length
-                ? Objects.embed.fields.map((field, i) => ({
-                    label: field.name === '\u200b' ? msg.language.none : field.name.slice(0, 100),
-                    description:
-                      field.value === '\u200b' ? msg.language.none : field.value.slice(0, 100),
-                    value: `${i}`,
-                  }))
-                : { label: 'placeholder', value: 'placeholder' },
+              ...(Objects.embed.fields?.length
+                ? Objects.embed.fields.map(
+                    (field, i) =>
+                      new msg.client.ch.SelectMenuOption({
+                        value: i,
+                        label:
+                          field.name === '\u200b' ? msg.language.none : field.name.slice(0, 100),
+                        description:
+                          field.value === '\u200b' ? msg.language.none : field.value.slice(0, 100),
+                      }),
+                  )
+                : new msg.client.ch.SelectMenuOption({
+                    label: 'placeholder',
+                    value: 'placeholder',
+                  })),
             ),
         ],
         [
@@ -416,19 +423,18 @@ const getMenu = (savedEmbeds, baseLan, msg) => [
       !savedEmbeds.length || !msg.member.permissions.has(module.exports.insideCommandPerm),
     )
     .addOptions(
-      savedEmbeds.length
+      ...(savedEmbeds.length
         ? savedEmbeds
             .map((embed, i) => {
               if (i < 25) {
-                return {
-                  label: embed.name.slice(0, 100),
-                  value: `${embed.uniquetimestamp}`,
-                };
+                return new Discord.SelectMenuOption()
+                  .setLabel(embed.name.slice(0, 100))
+                  .setValue(String(embed.uniquetimestamp));
               }
               return null;
             })
             .filter((r) => !!r)
-        : { label: 'placeholder', value: 'placeholder' },
+        : new Discord.SelectMenuOption().setValue('0').setLabel('0')),
     ),
 ];
 
@@ -437,18 +443,18 @@ const getNavigation = (msg, page) => [
     .setLabel('\u200b')
     .setCustomId('left')
     .setStyle(Discord.ButtonStyle.Secondary)
-    .setEmoji(msg.client.constants.emotes.back)
+    .setEmoji(msg.client.objectEmotes.back)
     .setDisabled(page === 1),
   new Discord.UnsafeButtonComponent()
     .setLabel('\u200b')
     .setCustomId('cross')
     .setStyle(Discord.ButtonStyle.Danger)
-    .setEmoji(msg.client.constants.emotes.cross),
+    .setEmoji(msg.client.objectEmotes.cross),
   new Discord.UnsafeButtonComponent()
     .setLabel('\u200b')
     .setCustomId('right')
     .setStyle(Discord.ButtonStyle.Secondary)
-    .setEmoji(msg.client.constants.emotes.forth)
+    .setEmoji(msg.client.objectEmotes.forth)
     .setDisabled(page === 4),
 ];
 
@@ -457,13 +463,13 @@ const getArrows = (msg, currentPage, maxPage) => [
     .setLabel('\u200b')
     .setCustomId('prev')
     .setStyle(Discord.ButtonStyle.Danger)
-    .setEmoji(msg.client.constants.emotes.back)
+    .setEmoji(msg.client.objectEmotes.back)
     .setDisabled(currentPage === 1 || !maxPage),
   new Discord.UnsafeButtonComponent()
     .setLabel('\u200b')
     .setCustomId('next')
     .setStyle(Discord.ButtonStyle.Primary)
-    .setEmoji(msg.client.constants.emotes.forth)
+    .setEmoji(msg.client.objectEmotes.forth)
     .setDisabled(currentPage === maxPage || !maxPage),
 ];
 
@@ -1093,7 +1099,7 @@ const postCode = (Objects, msg, answer, embed, noRemove) => {
         new Discord.UnsafeButtonComponent()
           .setLabel('\u200b')
           .setStyle(Discord.ButtonStyle.Primary)
-          .setEmoji(msg.client.constants.emotes.back)
+          .setEmoji(msg.client.objectEmotes.back)
           .setCustomId('back'),
       ],
     ]);
@@ -1182,7 +1188,7 @@ const handleSave = async (msg, answer, Objects) => {
 
     const back = new Discord.UnsafeButtonComponent()
       .setLabel('\u200b')
-      .setEmoji(msg.client.constants.emotes.back)
+      .setEmoji(msg.client.objectEmotes.back)
       .setStyle(Discord.ButtonStyle.Primary)
       .setCustomId('back');
 
@@ -1301,7 +1307,7 @@ const handleSend = async (msg, answer, Objects) => {
       .setStyle(Discord.ButtonStyle.Primary);
     const channels = new Discord.UnsafeSelectMenuComponent()
       .setCustomId('channels')
-      .addOptions(options.take)
+      .addOptions(...options.take)
       .setPlaceholder(msg.language.select.channels.select)
       .setMaxValues(options.take.length)
       .setMinValues(1);
@@ -1336,7 +1342,7 @@ const handleSend = async (msg, answer, Objects) => {
     options: msg.guild.channels.cache
       .filter((c) => [0, 5, 10, 11, 12].includes(c.type))
       .sort((a, b) => a.rawPosition - b.rawPosition)
-      .map((c) => ({ label: `${c.name}`, value: `${c.id}` })),
+      .map((c) => new Discord.SelectMenuOption().setLabel(c.name).setValue(String(c.id))),
     selected: [],
   };
 
@@ -1470,7 +1476,7 @@ const handleOtherMsgRaw = async (msg, answer, Objects) => {
 
   const back = new Discord.UnsafeButtonComponent()
     .setLabel('\u200b')
-    .setEmoji(msg.client.constants.emotes.back)
+    .setEmoji(msg.client.objectEmotes.back)
     .setStyle(Discord.ButtonStyle.Primary)
     .setCustomId('back');
 
@@ -1597,7 +1603,7 @@ const errorVal = async (msg, lan, valid, Objects, error, answer) => {
 
   await replier({ msg, answer }, { embeds: [errorEmbed], components: [] }, Objects);
 
-  const reaction = await msg.m.react(msg.client.constants.emotes.timers[3]);
+  const reaction = await msg.m.react(msg.client.objectEmotes.timers[3].id);
 
   return new Promise((resolve) => {
     jobs.scheduleJob(new Date(Date.now() + 3000), () => {
@@ -1641,7 +1647,7 @@ const fieldSelect = async (msg, answer, Objects) => {
       new Discord.UnsafeButtonComponent()
         .setLabel('\u200b')
         .setStyle(Discord.ButtonStyle.Primary)
-        .setEmoji(msg.client.constants.emotes.back)
+        .setEmoji(msg.client.objectEmotes.back)
         .setCustomId('back'),
     ],
   ];
@@ -1833,13 +1839,14 @@ const handleEmbedSelection = async ({ msg, answer }, Objects, { embed, component
       !Options.take.length || !msg.member.permissions.has(module.exports.insideCommandPerm),
     )
     .addOptions(
-      Options.take.length
-        ? Options.take.map((e) => ({
-            label: e.name.slice(0, 100),
-            value: `${e.value}`,
-            default: e.default,
-          }))
-        : { label: 'placeholder', value: 'placeholder' },
+      ...(Options.take.length
+        ? Options.take.map((e) =>
+            new Discord.SelectMenuOption()
+              .setLabel(e.name.slice(0, 100))
+              .setValue(String(e.value))
+              .setDefault(e.default),
+          )
+        : new Discord.SelectMenuOption().setLabel('0').setValue('0')),
     );
 
   const enableButtons = (customId, i, j) => {
@@ -1981,13 +1988,16 @@ const handlePage = async ({ msg, answer }, Objects, { embed }, increasePage) => 
       !Options.take.length || !msg.member.permissions.has(module.exports.insideCommandPerm),
     )
     .addOptions(
-      Options.take?.length
-        ? Options.take.map((e) => ({
-            label: e.name.slice(0, 100),
-            value: `${e.value}`,
-            default: e.default,
-          }))
-        : { label: 'placeholder', value: 'placeholder' },
+      ...(Options.take?.length
+        ? Options.take.map(
+            (e) =>
+              new msg.client.ch.SelectMenuOption({
+                label: e.name.slice(0, 100),
+                value: `${e.value}`,
+                default: e.default,
+              }),
+          )
+        : new msg.client.ch.SelectMenuOption({ label: 'placeholder', value: 'placeholder' })),
     );
 
   const baseLan = msg.language.commands.embedbuilder;

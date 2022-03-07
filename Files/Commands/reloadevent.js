@@ -13,9 +13,9 @@ module.exports = {
     if (!args.length) return ch.reply(msg, "You didn't pass anything to reload!");
     const name = args[0].toLowerCase();
     if (name.toLowerCase() === 'constants') {
-      delete require.cache[require.resolve('../Constants.json')];
+      delete require.cache[require.resolve('../BaseClient/Other Client Files/Constants.json')];
       try {
-        client.constants = require('../Constants.json');
+        client.constants = require('../BaseClient/Other Client Files/Constants.json');
         ch.reply(msg, 'File `Constants.json` was reloaded!');
       } catch (e) {
         ch.reply(
@@ -32,15 +32,16 @@ module.exports = {
         client.languages.set(`lan-${args[1]}`, lan);
         ch.reply(msg, `Language File \`lan-${args[1]}.json\` was reloaded!`);
       } catch (e) {
-        if (`${e}`.startsWith('Error: Cannot find module'))
+        if (`${e}`.startsWith('Error: Cannot find module')) {
           ch.reply(msg, `There is no Language File called \`lan-${args[1]}.json\``);
-        else
+        } else {
           ch.reply(
             msg,
             `There was an error while reloading that Language File \`${name}\`:\n${msg.client.ch.makeCodeBlock(
               e.stack,
             )}`,
           );
+        }
       }
     } else if (name.toLowerCase() === 'ch') {
       delete require.cache[require.resolve('../BaseClient/ClientHelper')];
@@ -71,8 +72,9 @@ module.exports = {
       if (mainSubFolder) {
         const mainSubFolderFS = fs.readdirSync(`./Files/Events/${mainFolder}`);
         mainSubFolderFS.forEach((folderName, index) => {
-          if (folderName.toLowerCase() === msg.args[0].toLowerCase() + mainSubFolder)
+          if (folderName.toLowerCase() === msg.args[0].toLowerCase() + mainSubFolder) {
             mainSubFolder = mainSubFolderFS[index];
+          }
         });
         const fileFolderFS = fs.readdirSync(`./Files/Events/${mainFolder}/${mainSubFolder}`);
         fileFolderFS.forEach((fileName, index) => {
@@ -82,8 +84,9 @@ module.exports = {
       } else {
         const fileFolderFS = fs.readdirSync(`./Files/Events/${mainFolder}`);
         fileFolderFS.forEach((fileName, index) => {
-          if (fileName.toLowerCase() === `${msg.args[0].toLowerCase() + file}.js`)
+          if (fileName.toLowerCase() === `${msg.args[0].toLowerCase() + file}.js`) {
             file = fileFolderFS[index];
+          }
         });
         PathToReload = `./Files/Events/${mainFolder}/${file}`;
       }

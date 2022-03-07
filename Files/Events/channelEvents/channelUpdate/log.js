@@ -7,7 +7,7 @@ module.exports = {
     if (newChannel.position !== oldChannel.position) return;
     if (newChannel.children !== oldChannel.children) return;
     const ch = require('../../../BaseClient/ClientHelper');
-    const Constants = require('../../../Constants.json');
+    const Constants = require('../../../BaseClient/Other Client Files/Constants.json');
     const { guild } = newChannel;
     const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);
     if (res && res.rowCount > 0) {

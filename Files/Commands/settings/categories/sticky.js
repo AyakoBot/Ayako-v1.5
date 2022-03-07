@@ -8,19 +8,19 @@ module.exports = {
   displayEmbed(msg, r) {
     const embed = new Discord.UnsafeEmbed();
 
-    embed.addFields(...[
+    embed.addFields(
       {
         name: msg.lan.stickyrolesactive,
         value: r.stickyrolesactive
-          ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-          : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
+          ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+          : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`,
         inline: false,
       },
       {
         name: msg.lan.stickyrolesmode,
         value: r.stickyrolesmode
-          ? `${msg.client.constants.emotes.enabled} ${msg.lan.unsticky}`
-          : `${msg.client.constants.emotes.disabled} ${msg.lan.sticky}`,
+          ? `${msg.client.textEmotes.enabled} ${msg.lan.unsticky}`
+          : `${msg.client.textEmotes.disabled} ${msg.lan.sticky}`,
         inline: false,
       },
       {
@@ -38,11 +38,11 @@ module.exports = {
       {
         name: msg.lan.stickypermsactive,
         value: r.stickypermsactive
-          ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-          : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
+          ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+          : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`,
         inline: false,
       },
-    ]);
+    );
     return embed;
   },
   buttons(msg, r) {

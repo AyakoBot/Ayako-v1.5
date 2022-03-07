@@ -8,12 +8,12 @@ module.exports = {
   finished: true,
   category: ['moderation'],
   displayEmbed: (msg, r) => {
-    const embed = new Discord.UnsafeEmbed().addFields(...[
+    const embed = new Discord.UnsafeEmbed().addFields(
       {
         name: msg.lan.expirewarns,
         value: r.expirewarns
-          ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-          : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
+          ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+          : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`,
         inline: true,
       },
       {
@@ -41,8 +41,8 @@ module.exports = {
       {
         name: msg.lan.expiremutes,
         value: r.expiremutes
-          ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-          : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
+          ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+          : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`,
         inline: true,
       },
       {
@@ -70,11 +70,11 @@ module.exports = {
       {
         name: msg.lan.muteban,
         value: r.muteban
-          ? `${msg.client.constants.emotes.enabled} ${msg.language.enabled}`
-          : `${msg.client.constants.emotes.disabled} ${msg.language.disabled}`,
+          ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+          : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`,
         inline: true,
       },
-    ]);
+    );
     return embed;
   },
   buttons: (msg, r) => {

@@ -41,9 +41,9 @@ module.exports = {
           insertedValues[required.assinger].includes(element.id)) ||
         insertedValues[required.assinger] === element.id
       ) {
-        inserted.emoji = msg.client.constants.emotes.minusBGID;
+        inserted.emoji = msg.client.objectEmotes.minusBG;
       } else {
-        inserted.emoji = msg.client.constants.emotes.plusBGID;
+        inserted.emoji = msg.client.objectEmotes.plusBG;
       }
 
       Objects.options.push(inserted);
@@ -59,6 +59,19 @@ module.exports = {
     if (insertedValues[required.assinger]) {
       if (insertedValues[required.assinger]) {
         switch (required.key.endsWith('s')) {
+          case true: {
+            if (cacheName === 'roles') {
+              return Array.isArray(insertedValues[required.assinger])
+                ? insertedValues[required.assinger].map((value) => `<@&${value}>`).join(', ')
+                : msg.language.none;
+            }
+            if (cacheName === 'channels') {
+              return Array.isArray(insertedValues[required.assinger])
+                ? insertedValues[required.assinger].map((value) => `<#${value}>`).join(', ')
+                : msg.language.none;
+            }
+            return msg.language.none;
+          }
           default: {
             if (cacheName === 'roles') {
               return Number.isNaN(+insertedValues[required.assinger])
@@ -69,27 +82,6 @@ module.exports = {
               return Number.isNaN(+insertedValues[required.assinger])
                 ? msg.language.none
                 : `<#${insertedValues[required.assinger]}>`;
-            }
-            return msg.language.none;
-          }
-          case true: {
-            if (cacheName === 'roles') {
-              return Array.isArray(insertedValues[required.assinger])
-                ? insertedValues[required.assinger]
-                    .map((value) => {
-                      return `<@&${value}>`;
-                    })
-                    .join(', ')
-                : msg.language.none;
-            }
-            if (cacheName === 'channels') {
-              return Array.isArray(insertedValues[required.assinger])
-                ? insertedValues[required.assinger]
-                    .map((value) => {
-                      return `<#${value}>`;
-                    })
-                    .join(', ')
-                : msg.language.none;
             }
             return msg.language.none;
           }

@@ -44,7 +44,7 @@ module.exports = {
       .setColor(msg.client.constants.colors.success)
       .setAuthor({
         name: msg.lan.author,
-        iconURL: msg.client.constants.emotes.warningLink,
+        iconURL: msg.client.objectEmotes.warning.languageink,
         url: msg.client.constants.standard.invite,
       });
 
@@ -54,12 +54,12 @@ module.exports = {
 
 const areYouSure = async (msg, all, user) => {
   const tick = new Discord.UnsafeButtonComponent()
-    .setEmoji(msg.client.constants.emotes.tick)
+    .setEmoji(msg.client.objectEmotes.tick)
     .setCustomId('yes')
     .setStyle(Discord.ButtonStyle.Danger);
 
   const cross = new Discord.UnsafeButtonComponent()
-    .setEmoji(msg.client.constants.emotes.cross)
+    .setEmoji(msg.client.objectEmotes.cross)
     .setCustomId('no')
     .setStyle(Discord.ButtonStyle.Primary);
 
@@ -68,7 +68,7 @@ const areYouSure = async (msg, all, user) => {
     .setColor(msg.client.constants.colors.warning)
     .setAuthor({
       name: msg.lan.author,
-      iconURL: msg.client.constants.emotes.warningLink,
+      iconURL: msg.client.objectEmotes.warning.link,
       url: msg.client.constants.standard.invite,
     });
 

@@ -44,13 +44,11 @@ module.exports = {
               else embed.addFields({ name: '\u200b', value: chunks[i] });
             }
           } else {
-            embed.addFields(...[
-              {
-                name: language.roles,
-                value: roles.map((r) => `${r}`).join(' | '),
-                inline: false,
-              },
-            ]);
+            embed.addFields({
+              name: language.roles,
+              value: roles.map((r) => `${r}`).join(' | '),
+              inline: false,
+            });
           }
         }
         if (entry && entry.id && +ch.getUnix(entry.id) > Date.now() - 1000) {

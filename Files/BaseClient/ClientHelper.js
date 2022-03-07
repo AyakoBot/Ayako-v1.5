@@ -7,8 +7,8 @@ const fs = require('fs');
 const SA = require('superagent');
 
 const auth = require('./auth.json');
-const ChannelRules = require('./Other Client Files/ChannelRules');
-const Constants = require('../Constants.json');
+const ChannelRules = require('./Other Client Files/Classes/ChannelRules');
+const Constants = require('./Other Client Files/Constants.json');
 
 const DiscordEpoch = 1420070400000;
 
@@ -253,49 +253,31 @@ module.exports = {
     const Flags = [];
 
     if (BitField.has(1)) {
-      Flags.push(
-        `${emotes ? client.constants.emotes.userFlags.BOOST1 : ''} ${lan.userFlags.BOOST1}`,
-      );
+      Flags.push(`${emotes ? client.textEmotes.userFlags.BOOST1 : ''} ${lan.userFlags.BOOST1}`);
     }
     if (BitField.has(2)) {
-      Flags.push(
-        `${emotes ? client.constants.emotes.userFlags.BOOST2 : ''} ${lan.userFlags.BOOST2}`,
-      );
+      Flags.push(`${emotes ? client.textEmotes.userFlags.BOOST2 : ''} ${lan.userFlags.BOOST2}`);
     }
     if (BitField.has(4)) {
-      Flags.push(
-        `${emotes ? client.constants.emotes.userFlags.BOOST3 : ''} ${lan.userFlags.BOOST3}`,
-      );
+      Flags.push(`${emotes ? client.textEmotes.userFlags.BOOST3 : ''} ${lan.userFlags.BOOST3}`);
     }
     if (BitField.has(8)) {
-      Flags.push(
-        `${emotes ? client.constants.emotes.userFlags.BOOST6 : ''} ${lan.userFlags.BOOST6}`,
-      );
+      Flags.push(`${emotes ? client.textEmotes.userFlags.BOOST6 : ''} ${lan.userFlags.BOOST6}`);
     }
     if (BitField.has(16)) {
-      Flags.push(
-        `${emotes ? client.constants.emotes.userFlags.BOOST9 : ''} ${lan.userFlags.BOOST9}`,
-      );
+      Flags.push(`${emotes ? client.textEmotes.userFlags.BOOST9 : ''} ${lan.userFlags.BOOST9}`);
     }
     if (BitField.has(32)) {
-      Flags.push(
-        `${emotes ? client.constants.emotes.userFlags.BOOST12 : ''} ${lan.userFlags.BOOST12}`,
-      );
+      Flags.push(`${emotes ? client.textEmotes.userFlags.BOOST12 : ''} ${lan.userFlags.BOOST12}`);
     }
     if (BitField.has(64)) {
-      Flags.push(
-        `${emotes ? client.constants.emotes.userFlags.BOOST15 : ''} ${lan.userFlags.BOOST15}`,
-      );
+      Flags.push(`${emotes ? client.textEmotes.userFlags.BOOST15 : ''} ${lan.userFlags.BOOST15}`);
     }
     if (BitField.has(128)) {
-      Flags.push(
-        `${emotes ? client.constants.emotes.userFlags.BOOST18 : ''} ${lan.userFlags.BOOST18}`,
-      );
+      Flags.push(`${emotes ? client.textEmotes.userFlags.BOOST18 : ''} ${lan.userFlags.BOOST18}`);
     }
     if (BitField.has(256)) {
-      Flags.push(
-        `${emotes ? client.constants.emotes.userFlags.BOOST24 : ''} ${lan.userFlags.BOOST24}`,
-      );
+      Flags.push(`${emotes ? client.textEmotes.userFlags.BOOST24 : ''} ${lan.userFlags.BOOST24}`);
     }
 
     return Flags;
@@ -315,56 +297,52 @@ module.exports = {
 
     if (BitField.has(1)) {
       Flags.push(
-        `${emotes ? client.constants.emotes.userFlags.DISCORD_EMPLOYEE : ''} ${
+        `${emotes ? client.textEmotes.userFlags.DISCORD_EMPLOYEE : ''} ${
           lan.userFlags.DISCORD_EMPLOYEE
         }`,
       );
     }
     if (BitField.has(2)) {
       Flags.push(
-        `${emotes ? client.constants.emotes.userFlags.PARTNERED_SERVER_OWNER : ''} ${
+        `${emotes ? client.textEmotes.userFlags.PARTNERED_SERVER_OWNER : ''} ${
           lan.userFlags.PARTNERED_SERVER_OWNER
         }`,
       );
     }
     if (BitField.has(4)) {
       Flags.push(
-        `${emotes ? client.constants.emotes.userFlags.HYPESQUAD_EVENTS : ''} ${
+        `${emotes ? client.textEmotes.userFlags.HYPESQUAD_EVENTS : ''} ${
           lan.userFlags.HYPESQUAD_EVENTS
         }`,
       );
     }
     if (BitField.has(8)) {
       Flags.push(
-        `${emotes ? client.constants.emotes.userFlags.BUGHUNTER_LEVEL_1 : ''} ${
+        `${emotes ? client.textEmotes.userFlags.BUGHUNTER_LEVEL_1 : ''} ${
           lan.userFlags.BUGHUNTER_LEVEL_1
         }`,
       );
     }
     if (BitField.has(64)) {
       Flags.push(
-        `${emotes ? client.constants.emotes.userFlags.HOUSE_BRAVERY : ''} ${
-          lan.userFlags.HOUSE_BRAVERY
-        }`,
+        `${emotes ? client.textEmotes.userFlags.HOUSE_BRAVERY : ''} ${lan.userFlags.HOUSE_BRAVERY}`,
       );
     }
     if (BitField.has(128)) {
       Flags.push(
-        `${emotes ? client.constants.emotes.userFlags.HOUSE_BRILLIANCE : ''} ${
+        `${emotes ? client.textEmotes.userFlags.HOUSE_BRILLIANCE : ''} ${
           lan.userFlags.HOUSE_BRILLIANCE
         }`,
       );
     }
     if (BitField.has(256)) {
       Flags.push(
-        `${emotes ? client.constants.emotes.userFlags.HOUSE_BALANCE : ''} ${
-          lan.userFlags.HOUSE_BALANCE
-        }`,
+        `${emotes ? client.textEmotes.userFlags.HOUSE_BALANCE : ''} ${lan.userFlags.HOUSE_BALANCE}`,
       );
     }
     if (BitField.has(512)) {
       Flags.push(
-        `${emotes ? client.constants.emotes.userFlags.EARLY_SUPPORTER : ''} ${
+        `${emotes ? client.textEmotes.userFlags.EARLY_SUPPORTER : ''} ${
           lan.userFlags.EARLY_SUPPORTER
         }`,
       );
@@ -373,35 +351,33 @@ module.exports = {
       Flags.push(`${lan.userFlags.TEAM_USER}`);
     }
     if (BitField.has(2048)) {
-      Flags.push(`${emotes ? client.constants.emotes.userFlags.BOT : ''} ${lan.userFlags.BOT}`);
+      Flags.push(`${emotes ? client.textEmotes.userFlags.BOT : ''} ${lan.userFlags.BOT}`);
     }
     if (BitField.has(4096)) {
-      Flags.push(`${emotes ? client.constants.emotes.userFlags.NITRO : ''} ${lan.userFlags.NITRO}`);
+      Flags.push(`${emotes ? client.textEmotes.userFlags.NITRO : ''} ${lan.userFlags.NITRO}`);
     }
     if (BitField.has(16384)) {
       Flags.push(
-        `${emotes ? client.constants.emotes.userFlags.BUGHUNTER_LEVEL_2 : ''} ${
+        `${emotes ? client.textEmotes.userFlags.BUGHUNTER_LEVEL_2 : ''} ${
           lan.userFlags.BUGHUNTER_LEVEL_2
         }`,
       );
     }
     if (BitField.has(65536)) {
       Flags.push(
-        `${emotes ? client.constants.emotes.userFlags.VERIFIED_BOT : ''} ${
-          lan.userFlags.VERIFIED_BOT
-        }`,
+        `${emotes ? client.textEmotes.userFlags.VERIFIED_BOT : ''} ${lan.userFlags.VERIFIED_BOT}`,
       );
     }
     if (BitField.has(131072)) {
       Flags.push(
-        `${emotes ? client.constants.emotes.userFlags.EARLY_VERIFIED_BOT_DEVELOPER : ''} ${
+        `${emotes ? client.textEmotes.userFlags.EARLY_VERIFIED_BOT_DEVELOPER : ''} ${
           lan.userFlags.EARLY_VERIFIED_BOT_DEVELOPER
         }`,
       );
     }
     if (BitField.has(262144)) {
       Flags.push(
-        `${emotes ? client.constants.emotes.userFlags.DISCORD_CERTIFIED_MODERATOR : ''} ${
+        `${emotes ? client.textEmotes.userFlags.DISCORD_CERTIFIED_MODERATOR : ''} ${
           lan.userFlags.DISCORD_CERTIFIED_MODERATOR
         }`,
       );
@@ -757,11 +733,11 @@ module.exports = {
       .setCustomId('modProceedAction')
       .setLabel(msg.language.mod.warning.proceed)
       .setStyle(Discord.ButtonStyle.Primary)
-      .setEmoji(Constants.emotes.tickBGID);
+      .setEmoji(msg.client.objectEmotes.tickBG);
     const DANGER = new Discord.UnsafeButtonComponent()
       .setCustomId('modAbortAction')
       .setLabel(msg.language.mod.warning.abort)
-      .setEmoji(Constants.emotes.crossBGID)
+      .setEmoji(msg.client.objectEmotes.crossBG)
       .setStyle(Discord.ButtonStyle.Danger);
     const m = await module.exports.reply(msg, {
       content: msg.language.mod.warning.text,
@@ -878,12 +854,12 @@ module.exports = {
     const embed = new Discord.UnsafeEmbed()
       .setAuthor({
         name: lan.author,
-        iconURL: guild.client.constants.emotes.loadingLink,
+        iconURL: guild.client.objectEmotes.loading.link,
         url: guild.client.constants.standard.invite,
       })
       .setColor(module.exports.colorSelector(guild?.me))
       .setDescription(
-        `${guild.client.constants.emotes.loading} ${
+        `${guild.client.objectEmotes.loading} ${
           lan.loading ? lan.loading : (await module.exports.languageSelector(guild)).loading
         }`,
       );
@@ -1146,7 +1122,7 @@ module.exports = {
     const embed = new Discord.UnsafeEmbed()
       .setAuthor({
         name: msg.language.error,
-        iconURL: msg.client.constants.emotes.warningLink,
+        iconURL: msg.client.objectEmotes.warning.link,
         url: msg.client.constants.standard.invite,
       })
       .setColor(msg.client.constants.error)
@@ -1218,5 +1194,6 @@ module.exports = {
 
     await msg.m.edit({ embeds: [embed], components: msg.m.components });
   },
-  Embed: require('./Other Client Files/CustomEmbed'),
+  Embed: require('./Other Client Files/Classes/CustomEmbed'),
+  SelectMenuOption: require('./Other Client Files/Classes/SelectMenuOption'),
 };

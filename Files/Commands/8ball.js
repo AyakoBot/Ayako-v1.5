@@ -18,10 +18,8 @@ module.exports = {
         url: msg.client.constants.standard.invite,
       })
       .addFields(
-        ...[
-          { name: msg.lan.question, value: `${question}\u200b`, inline: false },
-          { name: msg.lan.answer, value: `${answer}\u200b`, inline: false },
-        ],
+        { name: msg.lan.question, value: `${question}\u200b`, inline: false },
+        { name: msg.lan.answer, value: `${answer}\u200b`, inline: false },
       );
     msg.client.ch.reply(msg, { embeds: [embed] });
   },

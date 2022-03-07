@@ -17,22 +17,18 @@ module.exports = {
     for (let i = 0; i < res.length; i += 1) {
       const r = res[i];
 
-      embed.addFields(...[
-        {
-          name: `${msg.language.number}: \`${r.id}\` | ${r.multiplier ? r.multiplier : '1.0'}x`,
-          value: `${msg.language.affected}: ${
-            r.roles && r.roles.length
-              ? `${r.roles.length} ${msg.language.roles}`
-              : msg.language.none
-          }`,
-          inline: true,
-        },
-      ]);
+      embed.addFields({
+        name: `${msg.language.number}: \`${r.id}\` | ${r.multiplier ? r.multiplier : '1.0'}x`,
+        value: `${msg.language.affected}: ${
+          r.roles && r.roles.length ? `${r.roles.length} ${msg.language.roles}` : msg.language.none
+        }`,
+        inline: true,
+      });
     }
     return embed;
   },
   displayEmbed(msg, r) {
-    const embed = new Discord.UnsafeEmbed().addFields(...[
+    const embed = new Discord.UnsafeEmbed().addFields(
       {
         name: msg.lan.roles,
         value: `${r.roles?.length ? r.roles.map((id) => ` <@&${id}>`) : msg.language.none}`,
@@ -43,7 +39,7 @@ module.exports = {
         value: `${r.multiplier}`,
         inline: false,
       },
-    ]);
+    );
     return embed;
   },
   buttons(msg) {

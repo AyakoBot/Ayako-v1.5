@@ -101,7 +101,7 @@ const logExpire = async (rows, client, guildid) => {
             msgid: warn.msgid,
           }),
         })
-        .addFields(...[
+        .addFields(
           {
             name: lan.date,
             value: `<t:${warn.dateofwarn.slice(0, -3)}:F> (<t:${warn.dateofwarn.slice(0, -3)}:R>)`,
@@ -122,7 +122,7 @@ const logExpire = async (rows, client, guildid) => {
             value: `${client.user.tag}\n\`${client.user.username}\` (\`${client.user.id}\`)`,
             inline: false,
           },
-        ])
+        )
         .setColor(con.log.color)
         .setFooter({ text: lan.warnID + warn.row_number });
     } else if (warn.type === 'Mute') {
@@ -154,7 +154,7 @@ const logExpire = async (rows, client, guildid) => {
             msgid: warn.msgid,
           }),
         })
-        .addFields(...[
+        .addFields(
           {
             name: lan.date,
             value: `<t:${warn.dateofwarn.slice(0, -3)}:F> (<t:${warn.dateofwarn.slice(0, -3)}:R>)`,
@@ -193,7 +193,7 @@ const logExpire = async (rows, client, guildid) => {
             value: `${client.user.tag}\n\`${client.user.username}\` (\`${client.user.id}\`)`,
             inline: false,
           },
-        ])
+        )
         .setColor(con.log.color)
         .setFooter({ text: lan.warnID + warn.row_number });
     }
