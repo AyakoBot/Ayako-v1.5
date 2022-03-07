@@ -17,9 +17,9 @@ module.exports = {
         Array.isArray(insertedValues[required.assinger]) &&
         insertedValues[required.assinger].includes(i)
       ) {
-        inserted.emoji = msg.client.objectEmotes.minusBGID;
+        inserted.emoji = msg.client.objectEmotes.minusBG.id;
       } else {
-        inserted.emoji = msg.client.objectEmotes.plusBGID;
+        inserted.emoji = msg.client.objectEmotes.plusBG.id;
       }
 
       Objects.options.push(inserted);

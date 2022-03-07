@@ -75,9 +75,9 @@ module.exports = {
 
     passObject.Objects.options.forEach((option) => {
       if (new Discord.BitField(insertedValues[required.assinger]).has(Number(option.value))) {
-        option.emoji = msg.client.objectEmotes.minusBGID;
+        option.emoji = msg.client.objectEmotes.minusBG.id;
       } else {
-        option.emoji = msg.client.objectEmotes.plusBGID;
+        option.emoji = msg.client.objectEmotes.plusBG.id;
       }
     });
 

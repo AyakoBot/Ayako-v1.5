@@ -385,9 +385,7 @@ module.exports = {
             .setLabel(r.name)
             .setValue(r.uniquetimestamp)
             .setDescription(r.disabled ? msg.lan.disabled : null)
-            .setEmoji({
-              name: r.disabled ? msg.client.objectEmotes.lock : msg.client.objectEmotes.unlock,
-            }),
+            .setEmoji(r.disabled ? msg.client.objectEmotes.lock : msg.client.objectEmotes.unlock),
         );
       }
 
