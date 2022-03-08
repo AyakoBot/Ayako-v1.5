@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 
-class CustomSelectMenuOption extends Discord.SelectMenuOption {
+class CustomSelectMenuOption extends Discord.UnsafeSelectMenuOption {
   constructor(options) {
     if (!options.label) {
       throw new Error('Select Menu Option Requires a Label');
