@@ -286,8 +286,8 @@
     "https://canary.discord.com/channels/[Guild ID]/[Channel ID]/[Message ID]"
   ],
   "colors": {
-    "warning": "#FF0000",
-    "success": "#00FF00"
+    "warning": 16711680,
+    "success": 65280
   },
   "standard": {
     "color": 11599616,

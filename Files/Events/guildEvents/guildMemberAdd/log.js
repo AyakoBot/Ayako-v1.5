@@ -64,7 +64,7 @@ module.exports = {
           const newInvites = await client.ch.getErisInvites(guild);
 
           let usedInvite;
-          if (cachedInvites) {
+          if (cachedInvites && newInvites) {
             usedInvite = newInvites.find((inv) => cachedInvites.get(inv?.code).uses < inv.uses);
           }
           client.invites.set(guild.id, newInvites);

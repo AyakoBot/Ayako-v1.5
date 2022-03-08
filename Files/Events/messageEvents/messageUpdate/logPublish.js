@@ -3,8 +3,8 @@ const client = require('../../../BaseClient/DiscordClient');
 
 module.exports = {
   async execute(oldMsg, newMsg) {
-    if (oldMsg?.channel?.type !== 5 || newMsg.channel.type !== 5) return;
-    if (!oldMsg.author || newMsg.author) return;
+    if (oldMsg?.channel?.type !== 5 || newMsg?.channel?.type !== 5) return;
+    if (!oldMsg?.author || !newMsg?.author) return;
     if (oldMsg?.crosspostable === newMsg?.crosspostable) return;
     const { ch } = client;
     const Constants = client.constants;
