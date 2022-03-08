@@ -144,6 +144,11 @@ module.exports = {
 
         break;
       }
+      case 'AwesomeForm': {
+        interaction.reply({ content: 'thanks', ephemeral: true });
+
+        break;
+      }
       default: {
         break;
       }

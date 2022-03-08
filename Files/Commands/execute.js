@@ -19,5 +19,45 @@ module.exports = {
   perm: 0n,
   dm: true,
   takesFirstArg: false,
-  execute: async (msg) => {},
+  execute: async (msg) => {
+    const m = await msg.channel.send({
+      content: 'Is Shina Cute',
+      components: [
+        new Discord.ActionRow().setComponents(
+          new Discord.ButtonComponent().setLabel('Answer Here').setCustomId('test').setStyle(1),
+        ),
+      ],
+    });
+
+    const buttonsCollector = m.channel.createMessageComponentCollector({ time: 500000 });
+    buttonsCollector.on('collect', (interaction) => {
+      if (interaction.customId === 'test') {
+        // Create the modal
+        const modal = new Discord.Modal().setTitle('My Awesome Form').setCustomId('AwesomeForm');
+
+        // Create text input fields
+        const one = new Discord.TextInputComponent()
+          .setCustomId('1')
+          .setLabel('Is Shina Cute')
+          .setStyle(Discord.TextInputStyle.Short);
+
+        const two = new Discord.TextInputComponent()
+          .setCustomId('2')
+          .setLabel('Why is Shina Cute')
+          .setStyle(Discord.TextInputStyle.Paragraph);
+
+        const rows = [one, two].map((component) =>
+          new Discord.ActionRow().addComponents(component),
+        );
+
+        // Add action rows to form
+        modal.addComponents(...rows);
+
+        // --- snip ---
+
+        // Present the modal to the user
+        interaction.showModal(modal);
+      }
+    });
+  },
 };
