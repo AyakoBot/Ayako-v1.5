@@ -21,10 +21,10 @@ module.exports = {
   takesFirstArg: false,
   execute: async (msg) => {
     const m = await msg.channel.send({
-      content: 'Is Shina Cute',
+      content: 'Test Message',
       components: [
         new Discord.ActionRow().setComponents(
-          new Discord.ButtonComponent().setLabel('Answer Here').setCustomId('test').setStyle(1),
+          new Discord.ButtonComponent().setLabel('Test Button').setCustomId('test').setStyle(1),
         ),
       ],
     });
@@ -38,12 +38,12 @@ module.exports = {
         // Create text input fields
         const one = new Discord.TextInputComponent()
           .setCustomId('1')
-          .setLabel('Is Shina Cute')
+          .setLabel('Test Short')
           .setStyle(Discord.TextInputStyle.Short);
 
         const two = new Discord.TextInputComponent()
           .setCustomId('2')
-          .setLabel('Why is Shina Cute')
+          .setLabel('Test Paragraph')
           .setStyle(Discord.TextInputStyle.Paragraph);
 
         const rows = [one, two].map((component) =>
@@ -52,8 +52,6 @@ module.exports = {
 
         // Add action rows to form
         modal.addComponents(...rows);
-
-        // --- snip ---
 
         // Present the modal to the user
         interaction.showModal(modal);
