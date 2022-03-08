@@ -93,11 +93,14 @@ const logStart = async (member, days) => {
   }
 };
 
-const getSettings = async (member) =>
-  member.client.ch.query(
+const getSettings = async (member) => {
+  const res = member.client.ch.query(
     `SELECT * FROM nitrosettings WHERE guildid = $1 AND active = true;`,
-    [member.guild.id].rows[0],
+    [member.guild.id],
   );
+  if (res) return res.rows[0];
+  return null;
+};
 
 const getDays = async (member) => {
   const res = await member.client.ch.query(
