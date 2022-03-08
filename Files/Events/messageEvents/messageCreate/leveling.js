@@ -288,7 +288,9 @@ const doReact = async (msg, row, levelData, language) => {
       if (emote) reactions.push(emote);
     });
   } else {
-    msg.client.constants.standard.levelupemotes.forEach((emote) => reactions.push(emote));
+    msg.client.objectEmotes.levelupemotes.forEach((emote) =>
+      reactions.push(emote.id || emote.name),
+    );
   }
 
   if (levelData.newLevel === 1) {

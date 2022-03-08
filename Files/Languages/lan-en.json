@@ -1071,7 +1071,10 @@
       "viewChannelPermissions": "View Channel Permissions",
       "rolesWithoutSep": "Roles without Separator",
       "botInfo": "**Website:** {{website}}\n**Support Server:** {{support}}\n**Invite Link:** [Click to Invite]({{invite}})\n**GitHub:** {{github}}\n**Prefix:** `{{res.prefix}}`\n**Server Count:** {{res.server_count}}",
-      "selectUser": "Select the User you want to view"
+      "selectUser": "Select the User you want to view",
+      "browser": "Open Profile | Browser",
+      "desktop": "Open Profile | Desktop App",
+      "mobile": "Possibly Open Profile | Mobile"
     },
     "resetlevels": {
       "description": "Reset the XP of one or all Users",

@@ -193,6 +193,21 @@ module.exports = {
       components = getComponents(msg, member, 1);
     }
 
+    components.push([
+      new Discord.UnsafeButtonComponent()
+        .setStyle(Discord.ButtonStyle.Link)
+        .setLabel(msg.lan.desktop)
+        .setURL(`discord://-/users/${user.id}`),
+      new Discord.UnsafeButtonComponent()
+        .setStyle(Discord.ButtonStyle.Link)
+        .setLabel(msg.lan.browser)
+        .setURL(`https://discord.com/users/${user.id}`),
+      new Discord.UnsafeButtonComponent()
+        .setStyle(Discord.ButtonStyle.Link)
+        .setLabel(msg.lan.mobile)
+        .setURL(`https://discord.com/users/${user.id}`),
+    ]);
+
     if (answer) {
       answer
         .update({
@@ -491,7 +506,7 @@ const rolesHandler = async (interaction, msg, member) => {
 };
 
 const basicPermsHandler = (interaction, msg, member) => {
-  const allPerms = new Discord.PermissionsBitField(Discord.Permissions.ALL).toArray();
+  const allPerms = new Discord.PermissionsBitField(Discord.PermissionsBitField.All).toArray();
   const allowedBits = [];
   const deniedBits = [];
 
@@ -568,7 +583,7 @@ const permsHandler = (interaction, msg, member) => {
     [8n, msg.language.permissions.categories.ADVANCED],
   ];
 
-  let usedPermissions = Discord.Permissions.ALL;
+  let usedPermissions = Discord.PermissionsBitField.All;
   switch (channel.type) {
     case 0 || 11 || 12: {
       usedPermissions = new Discord.PermissionsBitField(535529258065n);
@@ -608,7 +623,7 @@ const permsHandler = (interaction, msg, member) => {
       break;
     }
     default: {
-      usedPermissions = Discord.Permissions.ALL;
+      usedPermissions = Discord.PermissionsBitField.All;
       break;
     }
   }
