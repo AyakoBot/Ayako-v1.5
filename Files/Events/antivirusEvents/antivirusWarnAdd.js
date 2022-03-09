@@ -5,8 +5,6 @@ module.exports = {
       allowedMentions: { repliedUser: true },
     });
 
-    if (msg.source) {
-      msg.client.emit('modSourceHandler', msg);
-    }
+    msg.client.emit('modWarnAdd', msg.client.user, msg.author, language.autotypes.antivirus, msg);
   },
 };

@@ -7,9 +7,6 @@ module.exports = {
     let deleteTimeout = 0;
 
     switch (msg.source) {
-      default: {
-        break;
-      }
       case 'antivirus': {
         minimizeTimeout = Number(msg.r.minimize);
         deleteTimeout = Number(msg.r.delete);
@@ -31,6 +28,9 @@ module.exports = {
           });
         }
 
+        break;
+      }
+      default: {
         break;
       }
     }
