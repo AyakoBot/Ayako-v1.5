@@ -35,7 +35,7 @@ module.exports = {
     const Objects = {
       edit: 'menu',
       category: null,
-      embed: existingEmbed ? new Discord.Embed(existingEmbed) : new Discord.UnsafeEmbed(),
+      embed: existingEmbed ? new Discord.UnsafeEmbed(existingEmbed) : new Discord.UnsafeEmbed(),
       page: page || 1,
       options,
     };
@@ -636,7 +636,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
                   )),
               );
 
-              Objects.embed = new Discord.Embed(code);
+              Objects.embed = new Discord.UnsafeEmbed(code);
               inheritCodeEmbedMessageCollector.stop();
               resolve(
                 await module.exports.builder(msg, answer, Objects.embed, null, Objects.options),
@@ -1105,7 +1105,7 @@ const postCode = (Objects, msg, answer, embed, noRemove) => {
     ]);
   }
 
-  const rawCode = new Discord.Embed(Objects.embed).toJSON();
+  const rawCode = new Discord.UnsafeEmbed(Objects.embed).toJSON();
   if (rawCode.length > 4000) {
     const attachment = msg.client.ch.txtFileWriter([rawCode]);
 

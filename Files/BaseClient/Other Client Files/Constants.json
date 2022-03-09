@@ -287,7 +287,8 @@
   ],
   "colors": {
     "warning": 16711680,
-    "success": 65280
+    "success": 65280,
+    "loading": 16776960
   },
   "standard": {
     "color": 11599616,
@@ -810,6 +811,14 @@
           }
         },
         "antivirus": {
+          "linklogging": {
+            "key": "boolean",
+            "required": true
+          },
+          "linklogchannels": {
+            "key": "channels",
+            "required": false
+          },
           "bantof": {
             "key": "boolean",
             "required": true
@@ -1312,9 +1321,9 @@
         },
         "antivirus": {
           "cols": [
-            "guildid, active, bantof, warntof, kicktof, mutetof, verbaltof, muteafterwarnsamount, banafterwarnsamount, kickafterwarnsamount, warnafterwarnsamount"
+            "guildid, active, bantof, warntof, kicktof, mutetof, verbaltof, muteafterwarnsamount, banafterwarnsamount, kickafterwarnsamount, warnafterwarnsamount, linklogging"
           ],
-          "vals": [["{{msg.guild.id}}", true, true, true, true, true, true, 2, 4, 3, 1]]
+          "vals": [["{{msg.guild.id}}", true, true, true, true, true, true, 2, 4, 3, 1, false]]
         },
         "disabled": {
           "cols": ["guildid, active, uniquetimestamp"],
