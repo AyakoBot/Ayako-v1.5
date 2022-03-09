@@ -9,17 +9,17 @@ module.exports = {
 
     punishments.forEach(([i, name]) => {
       const inserted = {
-        label: i,
-        value: name,
+        label: name,
+        value: i,
       };
 
       if (
         Array.isArray(insertedValues[required.assinger]) &&
         insertedValues[required.assinger].includes(i)
       ) {
-        inserted.emoji = msg.client.objectEmotes.minusBG.id;
+        inserted.emoji = msg.client.objectEmotes.minusBG;
       } else {
-        inserted.emoji = msg.client.objectEmotes.plusBG.id;
+        inserted.emoji = msg.client.objectEmotes.plusBG;
       }
 
       Objects.options.push(inserted);

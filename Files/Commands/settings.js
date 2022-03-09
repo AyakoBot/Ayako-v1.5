@@ -187,6 +187,7 @@ module.exports = {
 
       if (embed2) await replier({ msg, answer }, { embeds: [embed2, embed], rawButtons: [edit] });
       else await replier({ msg, answer }, { embeds: [embed], rawButtons: [edit] });
+      if (!msg.m) return null;
 
       const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
       buttonsCollector.on('collect', (interaction) => {
@@ -298,6 +299,7 @@ module.exports = {
       }
 
       await replier({ msg, answer }, { rawButtons: rows, embeds: [embed] });
+      if (!msg.m) return;
 
       const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
       reactionHandler({ msg, answer }, buttonsCollector);
@@ -374,6 +376,7 @@ const noEmbed = async (msg, answer, res) => {
     .setLabel(msg.language.Edit);
 
   await replier({ msg, answer }, { embeds: [embed], rawButtons: [edit] });
+  if (!msg.m) return;
 
   const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
   reactionHandler({ msg, answer }, buttonsCollector);
@@ -720,6 +723,7 @@ const mmrEditList = async (msgData, sendData) => {
   const rows = [[list], [prev, next], [remove, add]];
 
   await replier({ msg, answer }, { rawButtons: rows, embeds: [embed] });
+  if (!msg.m) return;
 
   const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
   buttonsCollector.on('collect', async (interaction) => {
@@ -801,6 +805,7 @@ const singleRowEdit = async (msgData, resData, embed, comesFromMMR) => {
 
   if (embed2) await replier({ msg, answer }, { embeds: [embed2, embed], rawButtons });
   else await replier({ msg, answer }, { rawButtons, embeds: [embed] });
+  if (!msg.m) return null;
 
   const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
   buttonsCollector.on('collect', async (interaction) => {
@@ -1170,6 +1175,7 @@ const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
   let { embed } = msgData;
   const { languageOfKey, languageOfSetting } = languageData;
 
+  if (!msg.m) return null;
   const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
   return new Promise((resolve) => {
     buttonsCollector.on('collect', async (interaction) => {
@@ -1312,16 +1318,18 @@ const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
 
           if (required.assinger !== 'id') {
             embed
-              .addFields(
-                '\u200b',
-                `\u200b**${msg.lanSettings.valid}**:\n${languageOfKey.answers}${
+              .addFields({
+                name: '\u200b',
+                value: `\u200b**${msg.lanSettings.valid}**:\n${languageOfKey.answers}${
                   languageOfKey.recommended ? `\n\n${languageOfKey.recommended}\n` : ''
                 }${languageOfKey.desc ? languageOfKey.desc : ''}`,
-              )
+              })
 
               .setTitle(msg.client.ch.stp(languageOfKey.name, { row: row || '--' }));
           } else {
-            embed.addFields('\u200b', `${msg.language.select.id.desc}`).setTitle(msg.language.id);
+            embed
+              .addFields({ name: '\u200b', value: `${msg.language.select.id.desc}` })
+              .setTitle(msg.language.id);
           }
           embed.setAuthor({
             name: msg.client.ch.stp(msg.lanSettings.authorEdit, {
@@ -1332,12 +1340,12 @@ const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
           });
 
           if (editor.requiresMenu) {
-            embed.addFields(
-              msg.language.page,
-              `\`${
+            embed.addFields({
+              name: msg.language.page,
+              value: `\`${
                 Math.ceil(passObject.Objects.options.length / 25) ? passObject.Objects.page : 0
               }/${Math.ceil(Objects.options.length / 25)}\``,
-            );
+            });
           }
 
           await replier(
@@ -1500,9 +1508,9 @@ const interactionHandler = async (msgData, preparedData, insertedValues, require
         insertedValues[required.assinger]?.includes(option.value)) ||
       insertedValues[required.assinger] === option.value
     ) {
-      option.setEmoji(msg.client.objectEmotes.minusBG);
+      option.emoji = msg.client.objectEmotes.minusBG;
     } else {
-      option.setEmoji(msg.client.objectEmotes.plusBG);
+      option.emoji = msg.client.objectEmotes.plusBG;
     }
   });
 
@@ -1603,6 +1611,7 @@ const setup = async (msg, answer) => {
     .setStyle(Discord.ButtonStyle.Danger);
 
   await replier({ msg, answer }, { rawButtons: [[yes, no]], embeds: [embed] });
+  if (!msg.m) return;
 
   const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
   buttonsCollector.on('collect', async (interaction) => {
@@ -1755,6 +1764,7 @@ const categoryDisplay = async (msg, answer, needsBack) => {
 };
 
 const categoryMenuHandler = async ({ msg, answer }, needsBack) => {
+  if (!msg.m) return;
   const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
 
   buttonsCollector.on('collect', (interaction) => {
