@@ -112,6 +112,27 @@ module.exports = {
           : msg.language.none,
         inline: false,
       },
+      {
+        name: '\u200b',
+        value: '\u200b',
+        inline: false,
+      },
+      {
+        name: msg.lan.linklogging,
+        value: r.linklogging
+          ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+          : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`,
+        inline: true,
+      },
+      {
+        name: `${msg.lan.linklogchannels}\u200b`,
+        value: `${
+          r.linklogchannels && r.linklogchannels.length
+            ? r.linklogchannels.map((id) => ` <#${id}>`)
+            : msg.language.none
+        }`,
+        inline: false,
+      },
     );
     return embed;
   },
@@ -180,6 +201,23 @@ module.exports = {
       .setCustomId(msg.lan.edit.delete.name)
       .setLabel(msg.lan.delete)
       .setStyle(Discord.ButtonStyle.Secondary);
-    return [[active], [verbal, warn, mute, kick, ban], [waw, maw, kaw, baw], [minimize, del]];
+
+    const linklogging = new Discord.UnsafeButtonComponent()
+      .setCustomId(msg.lan.edit.linklogging.name)
+      .setLabel(msg.lan.linklogging)
+      .setStyle(r.linklogging ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
+
+    const linklogchannels = new Discord.UnsafeButtonComponent()
+      .setCustomId(msg.lan.edit.linklogchannels.name)
+      .setLabel(msg.lan.linklogchannels)
+      .setStyle(Discord.ButtonStyle.Secondary);
+
+    return [
+      [active],
+      [verbal, warn, mute, kick, ban],
+      [waw, maw, kaw, baw],
+      [minimize, del],
+      [linklogging, linklogchannels],
+    ];
   },
 };
