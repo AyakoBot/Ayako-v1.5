@@ -3264,7 +3264,8 @@
     "numTooLarge": "Number too large",
     "guildCommand": "This Command is only available in Servers",
     "memberNotFound": "Member not found",
-    "notAvailableAPI": "This Command is not yet available due to Discord API limitations"
+    "notAvailableAPI": "This Command is not yet available due to Discord API limitations",
+    "sendMessage": "I cannot send Messages in this Channel"
   },
   "expire": {
     "warnIssue": "Warn was issued at",
