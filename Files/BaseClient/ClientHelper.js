@@ -73,7 +73,23 @@ module.exports = {
     }
 
     return msg.reply(rawPayload).catch((e) => {
-      console.log(e);
+      if (String(e).includes('Missing Permissions')) {
+        return module.exports.send(msg.author, {
+          content: undefined,
+          embeds: [
+            new Discord.UnsafeEmbed()
+              .setAuthor({
+                name: msg.language.error,
+                iconURL: msg.client.objectEmotes.warning.link,
+                url: msg.client.constants.standard.invite,
+              })
+              .setColor(msg.client.constants.error)
+              .setDescription(msg.language.errors.sendMessage),
+          ],
+          components: [],
+        });
+      }
+      return null;
     });
   },
   /**
