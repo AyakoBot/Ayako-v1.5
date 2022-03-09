@@ -24,7 +24,7 @@ module.exports = {
           .setURL('https://top.gg/bot/650691698409734151/vote')
           .setLabel('Vote for Ayako');
 
-        const embed = new Discord.Embed(msg.embeds[0]);
+        const embed = new Discord.UnsafeEmbed(msg.embeds[0]);
 
         interaction.update({
           embeds: [embed],
@@ -54,7 +54,7 @@ module.exports = {
           .setURL('https://top.gg/bot/650691698409734151/vote')
           .setLabel('Vote for Ayako');
 
-        const embed = new Discord.Embed(msg.embeds[0]);
+        const embed = new Discord.UnsafeEmbed(msg.embeds[0]);
 
         interaction.update({
           embeds: [embed],

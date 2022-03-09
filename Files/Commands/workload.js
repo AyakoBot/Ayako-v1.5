@@ -27,7 +27,7 @@ module.exports = {
     const used = process.memoryUsage().heapUsed / 1024 / 1024;
     const totalmem = os.totalmem() / 1024 / 1024;
 
-    const embed = new Discord.Embed(m.embeds[0])
+    const embed = new Discord.UnsafeEmbed(m.embeds[0])
       .setAuthor({
         name: msg.lan.author,
         iconURL: msg.client.objectEmotes.workload.link,
