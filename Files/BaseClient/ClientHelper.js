@@ -74,7 +74,7 @@ module.exports = {
 
     return msg.reply(rawPayload).catch((e) => {
       if (String(e).includes('Missing Permissions')) {
-        return module.exports.send(msg.author, {
+        module.exports.send(msg.author, {
           content: undefined,
           embeds: [
             new Discord.UnsafeEmbed()
