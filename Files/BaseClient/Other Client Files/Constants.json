@@ -487,6 +487,16 @@
         "leveling": "levelsettings",
         "nitro": "nitrosettings"
       },
+      "childSettings": {
+        "leveling": ["levelsettings", "levelroles", "multichannels", "multiroles", "ruleschannels"],
+        "nitro": ["nitroroles", "nitrosettings"],
+        "reactionroles": ["reactionsettings", "reactions", "buttons"]
+      },
+      "identifiers": {
+        "leveling": "guildid",
+        "nitro": "guildid",
+        "reactionroles": "messageid"
+      },
       "edit": {
         "active": {
           "key": "boolean",

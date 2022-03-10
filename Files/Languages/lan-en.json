@@ -1709,7 +1709,7 @@
       },
       "noEmbed": {
         "author": "Ayako Settings",
-        "desc": "No Settings available for the selected Setting\nUse `{{prefix}}settings {{name}} edit` to start the Set-up"
+        "desc": "No Settings available for the selected Setting\nUse `{{prefix}}settings {{name}} edit`, or the `Edit` Button below, to start the Set-up"
       },
       "menu": {
         "placeholder": "Select the Setting you want to view"
@@ -2539,7 +2539,6 @@
       },
       "nitrosettings": {
         "type": "Nitro Monitoring",
-        "description": "Also check out:\n`{{prefix}}settings nitroroles` to add Roles Applied after boosting Days",
         "roleid": "Nitro Role",
         "logchannels": "Log Channels",
         "rolemode": "Role Mode",
@@ -2580,7 +2579,7 @@
         }
       },
       "sticky": {
-        "type": "Sticky Roles",
+        "type": "Sticky",
         "description": "Sticky Roles are Roles that Stick to Members across re-joins\nSticky Perms are Channel Perms that stick to Channels across Member re-joins",
         "stickyRoles": "Roles that will be sticky",
         "notStickyRoles": "Roles that will not be sticky",
@@ -2616,8 +2615,7 @@
         }
       },
       "levelsettings": {
-        "type": "Leveling",
-        "description": "Also check out:\n`{{prefix}}settings levelroles` to add Roles Applied at Levels\n`{{prefix}}settings multiroles` to add Roles which grant XP Gain Multipliers\n`{{prefix}}settings levelchannels` to customize Ayako's Leveling behaviour on Channels",
+        "type": "Leveling Base",
         "xpmultiplier": "XP Multiplier",
         "blchannels": "Blacklisted Channels",
         "blroles": "Blacklisted Roles",
@@ -2735,7 +2733,7 @@
         }
       },
       "levelroles": {
-        "type": "Leveling",
+        "type": "Leveling Level-Roles",
         "roles": "Roles",
         "level": "Level",
         "edit": {
@@ -2766,7 +2764,7 @@
         }
       },
       "multiroles": {
-        "type": "Leveling",
+        "type": "Leveling Multi-Roles",
         "roles": "Roles",
         "multiplier": "Multiplier",
         "edit": {
@@ -2797,7 +2795,7 @@
         }
       },
       "ruleschannels": {
-        "type": "Leveling",
+        "type": "Leveling Rules-Channels",
         "channels": "Channels",
         "rules": "Rules",
         "HAS_LEAST_ATTACHMENTS": "Has at least [externally defined] Attachments",
@@ -2918,7 +2916,7 @@
         }
       },
       "multichannels": {
-        "type": "Leveling",
+        "type": "Leveling Multi-Channels",
         "channels": "Channels",
         "multiplier": "Multiplier",
         "edit": {
@@ -2949,7 +2947,7 @@
         }
       },
       "nitro": {
-        "type": "Nitro",
+        "type": "Nitro Base",
         "role": "Booster Role",
         "channel": "Boost Log-Channel",
         "allBoosters": "All Boosters",
