@@ -40,7 +40,7 @@ const run = async ({
     return;
   }
 
-  const websiteExists = await checkIfWebsiteExists(linkObject);
+  const [websiteExists, hrefRes] = await checkIfWebsiteExists(linkObject);
   if (!websiteExists) {
     parentPort.postMessage({ msgData, lan, linkObject, type: 'doesntExist', check });
     return;
@@ -160,7 +160,7 @@ const run = async ({
     return;
   }
 
-  const isCloudFlareProtected = await checkCloudFlare(linkObject);
+  const isCloudFlareProtected = checkCloudFlare(hrefRes);
   if (isCloudFlareProtected === true) {
     if (!check) {
       includedBadLink = true;
@@ -238,7 +238,7 @@ const checkIfWebsiteExists = async (linkObject) => {
     exists = true;
   }
 
-  return exists;
+  return [exists, hrefRes];
 };
 
 const getNote = (blacklist, url) => {
@@ -425,9 +425,7 @@ const sinkingYatchtsCheck = async (linkObject) => {
   return 'unkown';
 };
 
-const checkCloudFlare = async (linkObject) => {
-  const res = await SA.get(linkObject.href).catch((e) => e);
-
+const checkCloudFlare = (res) => {
   if (res && res.response) {
     return (
       /https:\/\/www\.cloudflare\.com\/5xx-error-landing/gi.test(res.response?.text) &&
