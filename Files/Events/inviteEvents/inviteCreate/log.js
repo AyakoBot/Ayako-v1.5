@@ -22,12 +22,14 @@ module.exports = {
         const language = await ch.languageSelector(guild);
         const lan = language.inviteCreate;
         const con = Constants.inviteCreate;
-        const audits = await invite.guild.fetchAuditLogs({ limit: 10, type: 40 });
         let entry;
-        if (audits && audits.entries) {
-          const audit = audits.entries.filter((a) => a.target && a.target.code === invite.code);
-          entry = audit.sort((a, b) => b.id - a.id);
-          entry = entry.first();
+        if (guild.me.permissions.has(128n)) {
+          const audits = await invite.guild.fetchAuditLogs({ limit: 10, type: 40 });
+          if (audits && audits.entries) {
+            const audit = audits.entries.filter((a) => a.target && a.target.code === invite.code);
+            entry = audit.sort((a, b) => b.id - a.id);
+            entry = entry.first();
+          }
         }
         let link = invite.url;
         if (invite.inviter) link = ch.stp(con.author.link, { user: invite.inviter });

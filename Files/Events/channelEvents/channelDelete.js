@@ -19,12 +19,15 @@ module.exports = {
         const language = await ch.languageSelector(guild);
         const lan = language.channelDelete;
         const con = Constants.channelDelete;
-        let audit = await guild.fetchAuditLogs({ limit: 5, type: 12 }).catch(() => {});
+
         let entry;
-        if (audit && audit.entries) {
-          audit = audit.entries.filter((e) => e.target.id === channel.id);
-          entry = audit.sort((a, b) => b.id - a.id);
-          entry = entry.first();
+        if (guild.me.permissions.has(128n)) {
+          let audit = await guild.fetchAuditLogs({ limit: 5, type: 12 }).catch(() => {});
+          if (audit && audit.entries) {
+            audit = audit.entries.filter((e) => e.target.id === channel.id);
+            entry = audit.sort((a, b) => b.id - a.id);
+            entry = entry.first();
+          }
         }
         if (entry && entry.id) {
           const embed = new Discord.UnsafeEmbed()

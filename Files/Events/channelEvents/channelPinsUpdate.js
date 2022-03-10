@@ -17,20 +17,25 @@ module.exports = {
         .filter((c) => c !== null);
       if (channels && channels.length) {
         const language = await ch.languageSelector(guild);
-        let auditsPin = await guild.fetchAuditLogs({ limit: 5, type: 74 }).catch(() => {});
-        let auditsUnPin = await guild.fetchAuditLogs({ limit: 5, type: 75 }).catch(() => {});
+
         let entryPin;
         let entryUnPin;
-        if (auditsPin) {
-          auditsPin = auditsPin.entries.filter((a) => a.extra.channel.id === channel.id);
-          auditsPin = auditsPin.sort((a, b) => b.id - a.id);
-          entryPin = auditsPin.first();
+        if (guild.me.permissions.has(128n)) {
+          let auditsPin = await guild.fetchAuditLogs({ limit: 5, type: 74 }).catch(() => {});
+          let auditsUnPin = await guild.fetchAuditLogs({ limit: 5, type: 75 }).catch(() => {});
+
+          if (auditsPin) {
+            auditsPin = auditsPin.entries.filter((a) => a.extra.channel.id === channel.id);
+            auditsPin = auditsPin.sort((a, b) => b.id - a.id);
+            entryPin = auditsPin.first();
+          }
+          if (auditsUnPin) {
+            auditsUnPin = auditsUnPin.entries.filter((a) => a.extra.channel.id === channel.id);
+            auditsUnPin = auditsUnPin.sort((a, b) => b.id - a.id);
+            entryUnPin = auditsUnPin.first();
+          }
         }
-        if (auditsUnPin) {
-          auditsUnPin = auditsUnPin.entries.filter((a) => a.extra.channel.id === channel.id);
-          auditsUnPin = auditsUnPin.sort((a, b) => b.id - a.id);
-          entryUnPin = auditsUnPin.first();
-        }
+
         const embed = new Discord.UnsafeEmbed().setTimestamp();
         if (entryPin && entryUnPin) {
           if (ch.getUnix(entryPin.id) > ch.getUnix(entryUnPin.id)) {

@@ -98,7 +98,7 @@ const getSettings = async (member) => {
     `SELECT * FROM nitrosettings WHERE guildid = $1 AND active = true;`,
     [member.guild.id],
   );
-  if (res) return res.rows[0];
+  if (res && res.rowCount) return res.rows[0];
   return null;
 };
 

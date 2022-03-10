@@ -20,16 +20,18 @@ module.exports = {
         const language = await ch.languageSelector(guild);
         const webhooks = await data.fetchWebhooks().catch(() => {});
         const audits = [];
-        const auditsCreate = await guild.fetchAuditLogs({ limit: 3, type: 50 });
-        const auditsUpdate = await guild.fetchAuditLogs({ limit: 3, type: 51 });
-        const auditsDelete = await guild.fetchAuditLogs({ limit: 3, type: 52 });
-        if (auditsCreate && auditsCreate.entries) {
-          auditsCreate.entries.forEach((a) => audits.push(a));
+        let auditsDelete;
+        if (guild.me.permissions.has(128n)) {
+          const auditsCreate = await guild.fetchAuditLogs({ limit: 3, type: 50 });
+          const auditsUpdate = await guild.fetchAuditLogs({ limit: 3, type: 51 });
+          auditsDelete = await guild.fetchAuditLogs({ limit: 3, type: 52 });
+          if (auditsCreate && auditsCreate.entries) {
+            auditsCreate.entries.forEach((a) => audits.push(a));
+          }
+          if (auditsUpdate && auditsUpdate.entries) {
+            auditsUpdate.entries.forEach((a) => audits.push(a));
+          }
         }
-        if (auditsUpdate && auditsUpdate.entries) {
-          auditsUpdate.entries.forEach((a) => audits.push(a));
-        }
-
         let entry;
         let webhook;
         let files = [];

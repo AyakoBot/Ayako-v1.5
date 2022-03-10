@@ -19,13 +19,17 @@ module.exports = {
         const language = await ch.languageSelector(guild);
         const lan = language.emojiUpdate;
         const con = Constants.emojiUpdate;
-        const audits = await guild.fetchAuditLogs({ limit: 2, type: 61 }).catch(() => {});
+
         let entry;
-        if (audits && audits.entries) {
-          const audit = audits.entries.filter((a) => a.target.id === newEmoji.id);
-          entry = audit.sort((a, b) => b.id - a.id);
-          entry = entry.first();
+        if (guild.me.permissions.has(128n)) {
+          const audits = await guild.fetchAuditLogs({ limit: 2, type: 61 }).catch(() => {});
+          if (audits && audits.entries) {
+            const audit = audits.entries.filter((a) => a.target.id === newEmoji.id);
+            entry = audit.sort((a, b) => b.id - a.id);
+            entry = entry.first();
+          }
         }
+
         const embed = new Discord.UnsafeEmbed()
           .setAuthor({
             name: lan.author.title,

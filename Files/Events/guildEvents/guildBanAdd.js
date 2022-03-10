@@ -18,13 +18,17 @@ module.exports = {
         const language = await ch.languageSelector(ban.guild);
         const lan = language.guildBanAdd;
         const con = Constants.guildBanAdd;
-        const audits = await ban.guild.fetchAuditLogs({ limit: 3, type: 22 });
+
         let entry;
-        if (audits && audits.entries) {
-          const audit = audits.entries.filter((a) => a.target.id === ban.user.id);
-          entry = audit.sort((a, b) => b.id - a.id);
-          entry = entry.first();
+        if (ban.guild.me.permissions.has(128n)) {
+          const audits = await ban.guild.fetchAuditLogs({ limit: 3, type: 22 });
+          if (audits && audits.entries) {
+            const audit = audits.entries.filter((a) => a.target.id === ban.user.id);
+            entry = audit.sort((a, b) => b.id - a.id);
+            entry = entry.first();
+          }
         }
+
         const embed = new Discord.UnsafeEmbed()
           .setAuthor({
             name: lan.author.title,

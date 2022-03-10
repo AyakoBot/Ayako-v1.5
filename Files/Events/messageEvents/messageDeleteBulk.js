@@ -34,12 +34,14 @@ module.exports = {
           .filter((e) => !!e);
 
         const attachment = ch.txtFileWriter(arr);
-        let audits = await guild.fetchAuditLogs({ limit: 5, type: 73 }).catch(() => {});
         let entry;
-        if (audits && audits.entries.size > 0) {
-          audits = audits.entries.filter((a) => a.target.id === msgs.first().channel.id);
-          entry = audits.sort((a, b) => b.id - a.id);
-          entry = entry.first();
+        if (guild.me.permissions.has(128n)) {
+          let audits = await guild.fetchAuditLogs({ limit: 5, type: 73 }).catch(() => {});
+          if (audits && audits.entries.size > 0) {
+            audits = audits.entries.filter((a) => a.target.id === msgs.first().channel.id);
+            entry = audits.sort((a, b) => b.id - a.id);
+            entry = entry.first();
+          }
         }
         const embed = new Discord.UnsafeEmbed()
           .setTimestamp()
@@ -49,7 +51,7 @@ module.exports = {
             iconURL: con.author.image,
             url: ch.stp(con.author.link, { msg: msgs.first() }),
           });
-        if (entry)
+        if (entry) {
           embed.setDescription(
             ch.stp(lan.descriptionWithAudit, {
               user: entry.executor,
@@ -57,13 +59,14 @@ module.exports = {
               amount: msgs.size,
             }),
           );
-        else
+        } else {
           embed.setDescription(
             ch.stp(lan.descriptionWithoutAudit, {
               channel: msgs.first().channel,
               amount: msgs.size,
             }),
           );
+        }
         if (attachment) ch.send(channels, { embeds: [embed], files: [attachment] });
         else ch.send(channels, { embeds: [embed] });
       }
