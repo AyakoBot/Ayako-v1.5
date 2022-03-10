@@ -171,10 +171,18 @@ module.exports = {
         url: msg.client.constants.standard.invite,
       });
 
-      const edit = new Discord.UnsafeButtonComponent()
-        .setCustomId('edit')
-        .setStyle(Discord.ButtonStyle.Primary)
-        .setLabel(msg.language.Edit);
+      const components = [
+        [
+          new Discord.UnsafeButtonComponent()
+            .setCustomId('edit')
+            .setStyle(Discord.ButtonStyle.Primary)
+            .setLabel(msg.language.Edit),
+        ],
+      ];
+
+      if (msg.file.childOf) {
+        components.unshift(getRelatedSettingsButtons(msg));
+      }
 
       if (
         msg.file.perm &&
@@ -185,8 +193,9 @@ module.exports = {
         return replier({ msg, answer }, { embeds: [embed] });
       }
 
-      if (embed2) await replier({ msg, answer }, { embeds: [embed2, embed], rawButtons: [edit] });
-      else await replier({ msg, answer }, { embeds: [embed], rawButtons: [edit] });
+      if (embed2) {
+        await replier({ msg, answer }, { embeds: [embed2, embed], rawButtons: components });
+      } else await replier({ msg, answer }, { embeds: [embed], rawButtons: components });
       if (!msg.m) return null;
 
       const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
@@ -195,6 +204,22 @@ module.exports = {
           if (interaction.customId === 'edit') {
             buttonsCollector.stop();
             singleRowEdit({ msg, answer: interaction }, { row, res }, embed, comesFromMMR);
+          } else if (
+            msg.client.constants.commands.settings.childSettings[msg.file.childOf].includes(
+              interaction.customId,
+            )
+          ) {
+            buttonsCollector.stop();
+            reassignMsg(
+              `${msg.client.constants.standard.prefix}${module.exports.name} ${
+                interaction.customId
+              } notedit ${row[msg.file.identification]}`,
+              msg,
+            );
+            msg.file = msg.client.settings.get(interaction.customId);
+            msg.lan = msg.language.commands.settings[msg.file.name];
+
+            whereToGo(msg, interaction);
           }
         } else msg.client.ch.notYours(interaction);
       });
@@ -298,6 +323,10 @@ module.exports = {
         rows.push([edit]);
       }
 
+      if (msg.file.childOf) {
+        rows.unshift(getRelatedSettingsButtons(msg));
+      }
+
       await replier({ msg, answer }, { rawButtons: rows, embeds: [embed] });
       if (!msg.m) return;
 
@@ -329,6 +358,20 @@ module.exports = {
             break;
           }
           default: {
+            if (
+              msg.client.constants.commands.settings.childSettings[msg.file.childOf].includes(
+                interaction.customId,
+              )
+            ) {
+              buttonsCollector.stop();
+              reassignMsg(
+                `${msg.client.constants.standard.prefix}${module.exports.name} ${interaction.customId}`,
+                msg,
+              );
+              msg.file = msg.client.settings.get(interaction.customId);
+              msg.lan = msg.language.commands.settings[msg.file.name];
+              return whereToGo(msg, interaction);
+            }
             break;
           }
         }
@@ -370,12 +413,20 @@ const noEmbed = async (msg, answer, res) => {
       }),
     );
 
-  const edit = new Discord.UnsafeButtonComponent()
-    .setCustomId('edit')
-    .setStyle(Discord.ButtonStyle.Primary)
-    .setLabel(msg.language.Edit);
+  const rawButtons = [
+    [
+      new Discord.UnsafeButtonComponent()
+        .setCustomId('edit')
+        .setStyle(Discord.ButtonStyle.Primary)
+        .setLabel(msg.language.Edit),
+    ],
+  ];
 
-  await replier({ msg, answer }, { embeds: [embed], rawButtons: [edit] });
+  if (msg.file.childOf) {
+    rawButtons.unshift(getRelatedSettingsButtons(msg));
+  }
+
+  await replier({ msg, answer }, { embeds: [embed], rawButtons });
   if (!msg.m) return;
 
   const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
@@ -384,8 +435,23 @@ const noEmbed = async (msg, answer, res) => {
   buttonsCollector.on('collect', (interaction) => {
     if (interaction.user.id !== msg.author.id) return msg.client.ch.notYours(interaction);
     buttonsCollector.stop();
-    if (msg.file.setupRequired === false) {
-      return mmrEditList({ msg, answer: interaction }, { res, embed });
+
+    if (interaction.customId === 'edit') {
+      if (msg.file.setupRequired === false) {
+        return mmrEditList({ msg, answer: interaction }, { res, embed });
+      }
+    } else if (
+      msg.client.constants.commands.settings.childSettings[msg.file.childOf].includes(
+        interaction.customId,
+      )
+    ) {
+      reassignMsg(
+        `${msg.client.constants.standard.prefix}${module.exports.name} ${interaction.customId}`,
+        msg,
+      );
+      msg.file = msg.client.settings.get(interaction.customId);
+      msg.lan = msg.language.commands.settings[msg.file.name];
+      return whereToGo(msg, interaction);
     }
     return setup(msg, interaction);
   });
@@ -719,6 +785,10 @@ const mmrEditList = async (msgData, sendData) => {
     options.take.push(options.allOptions[i]);
   }
 
+  if (msg.file.childOf) {
+    rows.unshift(getRelatedSettingsButtons(msg));
+  }
+
   const { list, next, prev, add, remove } = getMMRListButtons(msg, options, true);
   const rows = [[list], [prev, next], [remove, add]];
 
@@ -756,6 +826,20 @@ const mmrEditList = async (msgData, sendData) => {
         break;
       }
       default: {
+        if (
+          msg.client.constants.commands.settings.childSettings[msg.file.childOf].includes(
+            interaction.customId,
+          )
+        ) {
+          buttonsCollector.stop();
+          reassignMsg(
+            `${msg.client.constants.standard.prefix}${module.exports.name} ${interaction.customId} edit`,
+            msg,
+          );
+          msg.file = msg.client.settings.get(interaction.customId);
+          msg.lan = msg.language.commands.settings[msg.file.name];
+          return whereToGo(msg, interaction);
+        }
         return null;
       }
     }
@@ -794,6 +878,9 @@ const singleRowEdit = async (msgData, resData, embed, comesFromMMR) => {
   }
 
   const rawButtons = msg.file.buttons(msg, row);
+  if (msg.file.childOf) {
+    rawButtons.unshift(getRelatedSettingsButtons(msg));
+  }
 
   embed.setAuthor({
     name: msg.client.ch.stp(msg.lanSettings.authorEdit, {
@@ -811,6 +898,21 @@ const singleRowEdit = async (msgData, resData, embed, comesFromMMR) => {
   buttonsCollector.on('collect', async (interaction) => {
     if (interaction.user.id !== msg.author.id) {
       return msg.client.ch.notYours(interaction);
+    }
+
+    if (
+      msg.client.constants.commands.settings.childSettings[msg.file.childOf].includes(
+        interaction.customId,
+      )
+    ) {
+      buttonsCollector.stop();
+      reassignMsg(
+        `${msg.client.constants.standard.prefix}${module.exports.name} ${interaction.customId} edit`,
+        msg,
+      );
+      msg.file = msg.client.settings.get(interaction.customId);
+      msg.lan = msg.language.commands.settings[msg.file.name];
+      return whereToGo(msg, interaction);
     }
 
     let [editKey] = Object.entries(msg.lanSettings[msg.file.name].edit)
@@ -846,8 +948,16 @@ const singleRowEdit = async (msgData, resData, embed, comesFromMMR) => {
 };
 
 const whereToGo = async (msg, answer) => {
+  let res;
+  if (msg.args[2]) {
+    res = await getResRows(msg);
+  }
+
   if (!msg.args[1] || msg.args[1].toLowerCase() !== msg.language.edit) {
-    module.exports.display({ msg, answer });
+    module.exports.display(
+      { msg, answer },
+      res?.rows && res.rows.length === 1 ? res.rows[0] : null,
+    );
   } else if (
     msg.args[1].toLowerCase() === msg.language.edit &&
     msg.file.perm &&
@@ -859,14 +969,18 @@ const whereToGo = async (msg, answer) => {
       components: [],
     });
   } else if (msg.args[1].toLowerCase() === msg.language.edit) {
-    const res = await msg.client.ch.query(
-      `SELECT * FROM ${
-        msg.client.constants.commands.settings.tablenames[msg.file.name][0]
-      } WHERE guildid = $1;`,
-      [msg.guild.id],
-    );
+    let row = res?.rows?.length === 1 ? res.rows[0] : null;
+    if (!row) {
+      res = await msg.client.ch.query(
+        `SELECT * FROM ${
+          msg.client.constants.commands.settings.tablenames[msg.file.name][0]
+        } WHERE guildid = $1;`,
+        [msg.guild.id],
+      );
+      if (res && res.rowCount) [row] = res.rows;
+    }
     if (msg.file.setupRequired === false) return mmrEditList({ msg, answer }, { res });
-    singleRowEdit({ msg, answer }, { row: res.rows[0], res });
+    singleRowEdit({ msg, answer }, { row, res });
   }
   return null;
 };
@@ -1182,6 +1296,24 @@ const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
       if (interaction.user.id !== msg.author.id) return msg.client.ch.notYours(interaction);
       buttonsCollector.resetTimer();
       if (messageCollector) messageCollector.resetTimer();
+
+      if (
+        msg.client.constants.commands.settings.childSettings[msg.file.childOf].includes(
+          interaction.customId,
+        )
+      ) {
+        buttonsCollector.stop();
+        reassignMsg(
+          `${msg.client.constants.standard.prefix}${module.exports.name} ${
+            interaction.customId
+          } edit ${row[msg.file.identification]}`,
+          msg,
+        );
+        msg.file = msg.client.settings.get(interaction.customId);
+        msg.lan = msg.language.commands.settings[msg.file.name];
+        return whereToGo(msg, interaction);
+      }
+
       switch (interaction.customId) {
         case 'next': {
           const indexLast = passObject.Objects.options.findIndex(
@@ -1379,6 +1511,7 @@ const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
       if (messageCollector) messageCollector.stop();
 
       if (returned.isInEdit) {
+        buttonsCollector.stop();
         reassignMsg(
           `${msg.client.constants.standard.prefix}${module.exports.name} ${msg.file.name} ${msg.language.edit}`,
           msg,
@@ -1891,4 +2024,28 @@ const reactionHandler = ({ msg, answer }, buttonsCollector, byData) => {
       });
     }
   });
+};
+
+const getRelatedSettingsButtons = (msg) =>
+  msg.client.constants.commands.settings.childSettings[msg.file.childOf].map((setting) =>
+    new Discord.UnsafeButtonComponent()
+      .setCustomId(setting)
+      .setLabel(msg.lanSettings[setting].type)
+      .setStyle(
+        msg.file.name === setting ? Discord.ButtonStyle.Secondary : Discord.ButtonStyle.Primary,
+      )
+      .setDisabled(msg.file.name === setting),
+  );
+
+const getResRows = async (msg) => {
+  const res = await msg.client.ch.query(
+    `SELECT * FROM ${
+      msg.client.constants.commands.settings.tablenames[msg.file.name][0]
+    } WHERE guildid = $1 AND ${
+      msg.client.constants.commands.settings.identifiers[msg.file.childOf]
+    } = $2;`,
+    [msg.guild.id, msg.args[2]],
+  );
+  if (res && res.rowCount) return res;
+  return null;
 };

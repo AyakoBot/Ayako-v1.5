@@ -16,11 +16,11 @@ module.exports = {
     let lvlupmode;
     switch (r.lvlupmode) {
       case '1': {
-        lvlupmode = msg.client.ch.stp(msg.lan.messages);
+        lvlupmode = msg.lan.messages;
         break;
       }
       case '2': {
-        lvlupmode = msg.client.ch.stp(msg.lan.reactions);
+        lvlupmode = msg.lan.reactions;
         break;
       }
       default: {
@@ -127,7 +127,7 @@ module.exports = {
                   })
                   .filter((e) => !!e)
                   .join('')
-              : msg.client.constants.standard.levelupemotes.map((e) => e).join(''),
+              : msg.client.textEmotes.levelupemotes.map((e) => e).join(''),
         });
         break;
       }
@@ -224,9 +224,6 @@ module.exports = {
         .setCustomId(msg.lan.edit.active.name)
         .setLabel(msg.lanSettings.active)
         .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger),
-    ]);
-
-    components.push([
       new Discord.UnsafeButtonComponent()
         .setCustomId(msg.lan.edit.rolemode.name)
         .setLabel(msg.lan.rolemode)
