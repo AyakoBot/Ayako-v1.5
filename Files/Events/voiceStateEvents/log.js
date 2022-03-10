@@ -227,17 +227,19 @@ module.exports = {
       }
     }
     async function getAudit(type) {
-      const audits = await guild.fetchAuditLogs({ limit: 3, type });
       let entry;
-      if (audits && audits.entries) {
-        const audit = audits.entries.filter((a) => {
-          if (a.target) return a.target.id === newState.member.user.id;
-          if (a.extra.channel) return a.extra.channel.id;
-          if (newState.channel === '') return newState.channel.id;
-          return oldState.channel.id;
-        });
-        entry = audit.sort((a, b) => (b && a ? b.id - a.id : ''));
-        entry = entry.first();
+      if (guild.me.permissions.has(128n)) {
+        const audits = await guild.fetchAuditLogs({ limit: 3, type });
+        if (audits && audits.entries) {
+          const audit = audits.entries.filter((a) => {
+            if (a.target) return a.target.id === newState.member.user.id;
+            if (a.extra.channel) return a.extra.channel.id;
+            if (newState.channel === '') return newState.channel.id;
+            return oldState.channel.id;
+          });
+          entry = audit.sort((a, b) => (b && a ? b.id - a.id : ''));
+          entry = entry.first();
+        }
       }
       return entry;
     }

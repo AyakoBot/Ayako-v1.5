@@ -320,11 +320,13 @@ module.exports = {
 };
 
 async function getAudits(guild) {
-  const audits = await guild.fetchAuditLogs({ limit: 5, type: 1 }).catch(() => {});
   let entry;
-  if (audits && audits.entries) {
-    entry = audits.entries.sort((a, b) => b.id - a.id);
-    entry = entry.first();
+  if (guild.me.permissions.has(128n)) {
+    const audits = await guild.fetchAuditLogs({ limit: 5, type: 1 }).catch(() => {});
+    if (audits && audits.entries) {
+      entry = audits.entries.sort((a, b) => b.id - a.id);
+      entry = entry.first();
+    }
   }
   if (entry && entry.id) return entry;
   return null;

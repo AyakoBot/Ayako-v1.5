@@ -309,13 +309,17 @@ module.exports = {
             }
           }
           if (!typeID) typeID = 11;
-          const audits = await guild.fetchAuditLogs({ limit: 3, type: typeID });
+
           let entry;
-          if (audits && audits.entries) {
-            const audit = audits.entries.filter((a) => a.target.id === newChannel.id);
-            entry = audit.sort((a, b) => b.id - a.id);
-            entry = entry.first();
+          if (guild.me.permissions.has(128n)) {
+            const audits = await guild.fetchAuditLogs({ limit: 3, type: typeID });
+            if (audits && audits.entries) {
+              const audit = audits.entries.filter((a) => a.target.id === newChannel.id);
+              entry = audit.sort((a, b) => b.id - a.id);
+              entry = entry.first();
+            }
           }
+
           if (entry) {
             [...entry.changes.entries()].forEach((change) => {
               for (let i = 1; i < change.length; i += 1) {

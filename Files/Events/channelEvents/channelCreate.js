@@ -20,13 +20,17 @@ module.exports = {
         const language = await ch.languageSelector(guild);
         const lan = language.channelCreate;
         const con = Constants.channelCreate;
-        let audit = await guild.fetchAuditLogs({ limit: 5, type: 10 }).catch(() => {});
+
         let entry;
-        if (audit && audit.entries) {
-          audit = audit.entries.filter((e) => e.target.id === channel.id);
-          entry = audit.sort((a, b) => b.id - a.id);
-          entry = entry.first();
+        if (guild.me.permissions.has(128n)) {
+          let audit = await guild.fetchAuditLogs({ limit: 5, type: 10 }).catch(() => {});
+          if (audit && audit.entries) {
+            audit = audit.entries.filter((e) => e.target.id === channel.id);
+            entry = audit.sort((a, b) => b.id - a.id);
+            entry = entry.first();
+          }
         }
+
         if (entry && entry.id) {
           const embed = new Discord.UnsafeEmbed()
             .setAuthor({
@@ -92,13 +96,17 @@ module.exports = {
             if (after === undefined) after = language.none;
             if (entry.changes[i].key === 'type') {
               if (entry.changes[i].old === 0) entry.changes[i].old = language.channelTypes.text;
-              else if (entry.changes[i].old === 2) entry.changes[i].old = language.channelTypes.voice;
-              else if (entry.changes[i].old === 5) entry.changes[i].old = language.channelTypes.news;
-              else entry.changes[i].old = language.unknown;
+              else if (entry.changes[i].old === 2) {
+                entry.changes[i].old = language.channelTypes.voice;
+              } else if (entry.changes[i].old === 5) {
+                entry.changes[i].old = language.channelTypes.news;
+              } else entry.changes[i].old = language.unknown;
               if (entry.changes[i].new === 0) entry.changes[i].new = language.channelTypes.text;
-              else if (entry.changes[i].new === 2) entry.changes[i].new = language.channelTypes.voice;
-              else if (entry.changes[i].new === 5) entry.changes[i].new = language.channelTypes.news;
-              else entry.changes[i].new = language.unknown;
+              else if (entry.changes[i].new === 2) {
+                entry.changes[i].new = language.channelTypes.voice;
+              } else if (entry.changes[i].new === 5) {
+                entry.changes[i].new = language.channelTypes.news;
+              } else entry.changes[i].new = language.unknown;
             }
             if (Array.isArray(before)) {
               before = before.map((e) => `${e}\n`);

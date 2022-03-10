@@ -19,15 +19,17 @@ module.exports = {
         const language = await ch.languageSelector(guild);
         const lan = language.messageDelete;
         const con = Constants.messageDelete;
-        const audits = await guild.fetchAuditLogs({ limit: 5, type: 72 });
         let entry;
-        if (audits && audits.entries) {
-          const audit = audits.entries.filter(
-            (a) =>
-              a.target && a.target.id === msg.author.id && a.extra.channel.id === msg.channel.id,
-          );
-          entry = audit.sort((a, b) => b.id - a.id);
-          entry = entry.first();
+        if (guild.me.permissions.has(128n)) {
+          const audits = await guild.fetchAuditLogs({ limit: 5, type: 72 });
+          if (audits && audits.entries) {
+            const audit = audits.entries.filter(
+              (a) =>
+                a.target && a.target.id === msg.author.id && a.extra.channel.id === msg.channel.id,
+            );
+            entry = audit.sort((a, b) => b.id - a.id);
+            entry = entry.first();
+          }
         }
         const embed = new Discord.UnsafeEmbed().setColor(con.color).setTimestamp();
         if (entry) {
@@ -84,7 +86,10 @@ module.exports = {
               embed.addFields({ name: language.embedTitle, value: msg.embeds[i].title });
             }
             if (msg.embeds[i].description) {
-              embed.addFields({ name: language.embedDescription, value: msg.embeds[i].description });
+              embed.addFields({
+                name: language.embedDescription,
+                value: msg.embeds[i].description,
+              });
             }
           }
         }

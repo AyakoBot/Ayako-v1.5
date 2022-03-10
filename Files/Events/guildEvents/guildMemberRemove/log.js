@@ -22,12 +22,14 @@ module.exports = {
         const language = await ch.languageSelector(guild);
         const lan = language.guildMemberRemove;
         const con = Constants.guildMemberRemove;
-        let audit = await guild.fetchAuditLogs({ limit: 5, type: 20 }).catch(() => {});
         let entry;
-        if (audit && audit.entries) {
-          audit = audit.entries.filter((e) => e.target.id === user.id);
-          entry = audit.sort((a, b) => b.id - a.id);
-          entry = entry.first();
+        if (guild.me.permissions.has(128n)) {
+          let audit = await guild.fetchAuditLogs({ limit: 5, type: 20 }).catch(() => {});
+          if (audit && audit.entries) {
+            audit = audit.entries.filter((e) => e.target.id === user.id);
+            entry = audit.sort((a, b) => b.id - a.id);
+            entry = entry.first();
+          }
         }
         const embed = new Discord.UnsafeEmbed()
           .setColor(con.color)

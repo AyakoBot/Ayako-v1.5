@@ -34,12 +34,15 @@ module.exports = {
         name: ch.stp(lan.fields.five.name, { prefix: Constants.standard.prefix }),
         value: lan.fields.five.value,
       });
-    const audits = await guild.fetchAuditLogs({ limit: 3, type: 28 }).catch(() => {});
+
     let entry;
-    if (audits && audits.entries) {
-      const audit = audits.entries.filter((a) => a.target.id === guild.client.user.id);
-      entry = audit.sort((a, b) => b.id - a.id);
-      entry = entry.first();
+    if (guild.me.permissions.has(128n)) {
+      const audits = await guild.fetchAuditLogs({ limit: 3, type: 28 }).catch(() => {});
+      if (audits && audits.entries) {
+        const audit = audits.entries.filter((a) => a.target.id === guild.client.user.id);
+        entry = audit.sort((a, b) => b.id - a.id);
+        entry = entry.first();
+      }
     }
     let sent = false;
     const textchannels = guild.channels.cache.filter((c) => c.type === 'text');

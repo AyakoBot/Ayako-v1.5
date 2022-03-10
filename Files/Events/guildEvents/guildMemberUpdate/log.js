@@ -28,13 +28,17 @@ module.exports = {
             iconURL: con.author.image,
             url: ch.stp(con.author.link, { user }),
           });
-          const audit = await guild.fetchAuditLogs({ limit: 5, type: 24 });
+
           let entry;
-          if (audit && audit.entries) {
-            entry = audit.entries.filter((e) => e.target.id === user.id);
-            entry = entry.sort((a, b) => b.id - a.id);
-            entry = entry.first();
+          if (guild.me.permissions.has(128n)) {
+            const audit = await guild.fetchAuditLogs({ limit: 5, type: 24 });
+            if (audit && audit.entries) {
+              entry = audit.entries.filter((e) => e.target.id === user.id);
+              entry = entry.sort((a, b) => b.id - a.id);
+              entry = entry.first();
+            }
           }
+
           if (entry) {
             if (entry.executor.id === user.id) {
               embed.setDescription(ch.stp(lan.descriptionNoUser, { user: entry.executor }));
@@ -70,11 +74,13 @@ module.exports = {
           return;
         }
         if (oldMember.roles.cache === newMember.roles.cache) return;
-        const audit = await guild.fetchAuditLogs({ limit: 10, type: 25 }).catch(() => {});
         let entry;
-        if (audit && audit.entries) {
-          entry = audit.entries.filter((e) => e.target.id === user.id);
-          entry = entry.first();
+        if (guild.me.permissions.has(128n)) {
+          const audit = await guild.fetchAuditLogs({ limit: 10, type: 25 }).catch(() => {});
+          if (audit && audit.entries) {
+            entry = audit.entries.filter((e) => e.target.id === user.id);
+            entry = entry.first();
+          }
         }
         if (entry) {
           if (Date.now() - (entry.id / 4194304 + 1420070400000) < 3000) {

@@ -16,21 +16,26 @@ module.exports = {
         .filter((c) => c !== null);
       if (channels && channels.length) {
         const language = await ch.languageSelector(guild);
-        const auditsCreate = await guild.fetchAuditLogs({ limit: 3, type: 80 });
-        const auditsUpdate = await guild.fetchAuditLogs({ limit: 3, type: 81 });
-        const auditsDelete = await guild.fetchAuditLogs({ limit: 3, type: 82 });
+
         let entryCreate;
         let entryUpdate;
         let entryDelete;
-        if (auditsCreate && auditsCreate.entries) {
-          entryCreate = auditsCreate.entries.sort((a, b) => b.id - a.id);
+        if (guild.me.permissions.has(128n)) {
+          const auditsCreate = await guild.fetchAuditLogs({ limit: 3, type: 80 });
+          const auditsUpdate = await guild.fetchAuditLogs({ limit: 3, type: 81 });
+          const auditsDelete = await guild.fetchAuditLogs({ limit: 3, type: 82 });
+
+          if (auditsCreate && auditsCreate.entries) {
+            entryCreate = auditsCreate.entries.sort((a, b) => b.id - a.id);
+          }
+          if (auditsUpdate && auditsUpdate.entries) {
+            entryUpdate = auditsUpdate.entries.sort((a, b) => b.id - a.id);
+          }
+          if (auditsDelete && auditsDelete.entries) {
+            entryDelete = auditsDelete.entries.sort((a, b) => b.id - a.id);
+          }
         }
-        if (auditsUpdate && auditsUpdate.entries) {
-          entryUpdate = auditsUpdate.entries.sort((a, b) => b.id - a.id);
-        }
-        if (auditsDelete && auditsDelete.entries) {
-          entryDelete = auditsDelete.entries.sort((a, b) => b.id - a.id);
-        }
+
         if (entryCreate && entryCreate.entries) entryCreate = entryCreate.first();
         if (entryUpdate && entryUpdate.entries) entryUpdate = entryUpdate.first();
         if (entryDelete && entryDelete.entries) entryDelete = entryDelete.first();
@@ -73,36 +78,42 @@ module.exports = {
         }
         const embed = new Discord.UnsafeEmbed().setTimestamp();
         if (entry.actionType === 'DELETE') {
-          let botBan = await guild.fetchAuditLogs({ limit: 3, type: 20 });
-          botBan = botBan.entries.filter(
-            (e) => e.target.bot === true && e.executor === entry.executor,
-          );
-          let botKick = await guild.fetchAuditLogs({ limit: 3, type: 22 });
-          botKick = botKick.entries.filter(
-            (e) => e.target.bot === true && e.executor === entry.executor,
-          );
-          if (botBan.first()) botBan.first().timestamp = ch.getUnix(botBan.first().id);
-          else botBan = undefined;
-          if (botKick.first()) botKick.first().timestamp = ch.getUnix(botKick.first().id);
-          else botKick = undefined;
-          if (!botBan) botBan = undefined;
-          else if (botBan.first().timestamp > +entry.timestamp - 1000) botBan = botBan.first();
-          else botBan = undefined;
-          if (!botKick) botKick = undefined;
-          else if (botKick.first().timestamp > +entry.timestamp - 1000) botKick = botKick.first();
-          else botKick = undefined;
           let finalEntry;
-          if (botBan && botKick) {
-            if (botBan.timestamp > botKick.timestamp) {
-              finalEntry = botBan;
+          if (guild.me.permissions.has(128n)) {
+            let botBan = await guild.fetchAuditLogs({ limit: 3, type: 20 });
+            botBan = botBan.entries.filter(
+              (e) => e.target.bot === true && e.executor === entry.executor,
+            );
+            let botKick = await guild.fetchAuditLogs({ limit: 3, type: 22 });
+            botKick = botKick.entries.filter(
+              (e) => e.target.bot === true && e.executor === entry.executor,
+            );
+            if (botBan.first()) botBan.first().timestamp = ch.getUnix(botBan.first().id);
+            else botBan = undefined;
+
+            if (botKick.first()) botKick.first().timestamp = ch.getUnix(botKick.first().id);
+            else botKick = undefined;
+
+            if (!botBan) botBan = undefined;
+            else if (botBan.first().timestamp > +entry.timestamp - 1000) botBan = botBan.first();
+            else botBan = undefined;
+
+            if (!botKick) botKick = undefined;
+            else if (botKick.first().timestamp > +entry.timestamp - 1000) botKick = botKick.first();
+            else botKick = undefined;
+
+            if (botBan && botKick) {
+              if (botBan.timestamp > botKick.timestamp) {
+                finalEntry = botBan;
+              } else {
+                finalEntry = botKick;
+              }
+            } else if (botBan || botKick) {
+              if (botBan) finalEntry = botBan;
+              if (botKick) finalEntry = botKick;
             } else {
-              finalEntry = botKick;
+              finalEntry = null;
             }
-          } else if (botBan || botKick) {
-            if (botBan) finalEntry = botBan;
-            if (botKick) finalEntry = botKick;
-          } else {
-            finalEntry = null;
           }
           const con = Constants.guildIntegrationsRemove;
           const lan = language.guildIntegrationsRemove;

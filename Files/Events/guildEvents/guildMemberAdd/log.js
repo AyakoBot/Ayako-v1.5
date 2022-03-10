@@ -44,12 +44,14 @@ module.exports = {
         const cachedInvites = client.invites.get(guild.id);
 
         if (user.bot) {
-          const audits = await guild.fetchAuditLogs({ limit: 3, type: 28 });
           let entry;
-          if (audits && audits.entries) {
-            const audit = audits.entries.filter((a) => a.target.id === user.id);
-            entry = audit.sort((a, b) => b.id - a.id);
-            entry = entry.first();
+          if (guild.me.permissions.has(128n)) {
+            const audits = await guild.fetchAuditLogs({ limit: 3, type: 28 });
+            if (audits && audits.entries) {
+              const audit = audits.entries.filter((a) => a.target.id === user.id);
+              entry = audit.sort((a, b) => b.id - a.id);
+              entry = entry.first();
+            }
           }
           embed.setAuthor({
             name: lan.author.titleBot,

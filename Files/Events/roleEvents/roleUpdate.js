@@ -86,12 +86,14 @@ module.exports = {
             embed.addFields({ name: language.permissions.updatedPermissions, value: content });
           }
         }
-        const audits = await guild.fetchAuditLogs({ limit: 3, type: 31 });
         let entry;
-        if (audits && audits.entries) {
-          const audit = audits.entries.filter((a) => a.target.id === newRole.id);
-          entry = audit.sort((a, b) => b.id - a.id);
-          entry = entry.first();
+        if (guild.me.permissions.has(128n)) {
+          const audits = await guild.fetchAuditLogs({ limit: 3, type: 31 });
+          if (audits && audits.entries) {
+            const audit = audits.entries.filter((a) => a.target.id === newRole.id);
+            entry = audit.sort((a, b) => b.id - a.id);
+            entry = entry.first();
+          }
         }
         if (entry) {
           embed.setDescription(

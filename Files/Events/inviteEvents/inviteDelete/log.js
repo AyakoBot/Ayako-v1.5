@@ -21,11 +21,13 @@ module.exports = {
         const language = await ch.languageSelector(guild);
         const lan = language.inviteDelete;
         const con = Constants.inviteDelete;
-        const audits = await invite.guild.fetchAuditLogs({ limit: 10, type: 42 });
         let entry;
-        if (audits && audits.entries) {
-          entry = audits.entries.sort((a, b) => b.id - a.id);
-          entry = entry.first();
+        if (guild.me.permissions.has(128n)) {
+          const audits = await invite.guild.fetchAuditLogs({ limit: 10, type: 42 });
+          if (audits && audits.entries) {
+            entry = audits.entries.sort((a, b) => b.id - a.id);
+            entry = entry.first();
+          }
         }
         let link = invite.url;
         if (invite.inviter) link = ch.stp(con.author.link, { user: invite.inviter });
@@ -77,7 +79,9 @@ module.exports = {
             inline: true,
           });
         }
-        if (invite.maxUses) embed.addFields({ name: lan.uses, value: invite.maxUses, inline: true });
+        if (invite.maxUses) {
+          embed.addFields({ name: lan.uses, value: invite.maxUses, inline: true });
+        }
         if (invite.targetUser) {
           embed.addFields({
             name: lan.targetedUser,
