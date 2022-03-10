@@ -72,7 +72,7 @@ const prepare = async (msg, lan, check, language, res) => {
   let exited = false;
 
   if (links.length && check) {
-    reaction = await msg.react(msg.client.objectEmotes.loading.link).catch(() => {});
+    reaction = await msg.react(msg.client.objectEmotes.loading.id).catch(() => {});
   }
 
   fullLinks.forEach((linkObject, i) => {
