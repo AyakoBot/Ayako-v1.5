@@ -205,6 +205,7 @@ module.exports = {
             buttonsCollector.stop();
             singleRowEdit({ msg, answer: interaction }, { row, res }, embed, comesFromMMR);
           } else if (
+            msg.client.constants.commands.settings.childSettings[msg.file.childOf] &&
             msg.client.constants.commands.settings.childSettings[msg.file.childOf].includes(
               interaction.customId,
             )
@@ -359,6 +360,7 @@ module.exports = {
           }
           default: {
             if (
+              msg.client.constants.commands.settings.childSettings[msg.file.childOf] &&
               msg.client.constants.commands.settings.childSettings[msg.file.childOf].includes(
                 interaction.customId,
               )
@@ -441,6 +443,7 @@ const noEmbed = async (msg, answer, res) => {
         return mmrEditList({ msg, answer: interaction }, { res, embed });
       }
     } else if (
+      msg.client.constants.commands.settings.childSettings[msg.file.childOf] &&
       msg.client.constants.commands.settings.childSettings[msg.file.childOf].includes(
         interaction.customId,
       )
@@ -827,6 +830,7 @@ const mmrEditList = async (msgData, sendData) => {
       }
       default: {
         if (
+          msg.client.constants.commands.settings.childSettings[msg.file.childOf] &&
           msg.client.constants.commands.settings.childSettings[msg.file.childOf].includes(
             interaction.customId,
           )
@@ -901,6 +905,7 @@ const singleRowEdit = async (msgData, resData, embed, comesFromMMR) => {
     }
 
     if (
+      msg.client.constants.commands.settings.childSettings[msg.file.childOf] &&
       msg.client.constants.commands.settings.childSettings[msg.file.childOf].includes(
         interaction.customId,
       )
@@ -1298,6 +1303,7 @@ const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
       if (messageCollector) messageCollector.resetTimer();
 
       if (
+        msg.client.constants.commands.settings.childSettings[msg.file.childOf] &&
         msg.client.constants.commands.settings.childSettings[msg.file.childOf].includes(
           interaction.customId,
         )

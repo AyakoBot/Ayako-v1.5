@@ -1,7 +1,6 @@
-
 module.exports = {
   async execute(oldState, newState) {
-    require('./log').execute(oldState, newState);
-    require('./mute').execute(oldState, newState);
+    require('./log')(oldState, newState);
+    require('./streamroles')(oldState, newState);
   },
 };

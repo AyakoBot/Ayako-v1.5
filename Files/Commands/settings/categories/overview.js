@@ -29,13 +29,21 @@ module.exports = {
         }`,
         inline: true,
       },
-
       {
         name: msg.lan.lan,
         value: `${msg.client.textEmotes.flags[r.lan]} | ${msg.language.languages[r.lan].name} | ${
           msg.language.languages[r.lan].status
         }`,
         inline: true,
+      },
+      {
+        name: `${msg.lan.streamroles}\u200b`,
+        value: `${
+          r.streamroles && r.streamroles.length
+            ? r.streamroles.map((id) => ` <@&${id}>`)
+            : msg.language.none
+        }`,
+        inline: false,
       },
     );
     return embed;
@@ -53,6 +61,10 @@ module.exports = {
       .setCustomId(msg.lan.edit.lan.name)
       .setLabel(msg.lan.lan)
       .setStyle(Discord.ButtonStyle.Secondary);
-    return [[prefix, interactionsmode, language]];
+    const streamroles = new Discord.UnsafeButtonComponent()
+      .setCustomId(msg.lan.edit.streamroles.name)
+      .setLabel(msg.lan.streamroles)
+      .setStyle(Discord.ButtonStyle.Secondary);
+    return [[prefix, interactionsmode, language, streamroles]];
   },
 };
