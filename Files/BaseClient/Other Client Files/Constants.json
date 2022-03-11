@@ -650,6 +650,10 @@
           "lan": {
             "key": "language",
             "required": true
+          },
+          "streamroles": {
+            "key": "roles",
+            "required": false
           }
         },
         "disabled": {
