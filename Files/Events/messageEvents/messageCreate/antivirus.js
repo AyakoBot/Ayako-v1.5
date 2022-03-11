@@ -158,7 +158,7 @@ const prepare = async (msg, lan, check, language, res) => {
       badLinks,
     });
 
-    jobs.scheduleJob(new Date(Date.now() + 120000), () => {
+    jobs.scheduleJob(new Date(Date.now() + 180000), () => {
       if (!exited) {
         AVworker.terminate();
         timedOut({ msg, lan, check, linkObject, language });
