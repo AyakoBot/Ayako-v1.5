@@ -1,5 +1,6 @@
 module.exports = {
   async execute(event) {
+    return;
     const client = require('../BaseClient/DiscordClient');
     const { ch } = client;
     if (event.t === 'MESSAGE_REACTION_ADD') {

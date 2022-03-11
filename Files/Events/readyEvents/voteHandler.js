@@ -104,13 +104,17 @@ const roleReward = async (voteData) => {
 
 const queryCheck = async () => {
   const rewardsRes = await client.ch.query(`SELECT * FROM voterewards;`);
+
   if (rewardsRes && rewardsRes.rowCount) {
     rewardsRes.rows.forEach(async (row) => {
       if (row.removetime < Date.now()) {
         removeRoles(
           row.userid,
           row.removetime,
-          await client.guilds.cache.get('298954459172700181').members.fetch(row.userid),
+          await client.guilds.cache
+            .get('298954459172700181')
+            .members.fetch(row.userid)
+            .catch(() => {}),
           client.guilds.cache.get('298954459172700181'),
         );
       } else {
@@ -144,6 +148,7 @@ const queryCheck = async () => {
 };
 
 const removeRoles = (userid, delTime, member, guild) => {
+  if (!member) return;
   const roles = [
     guild.roles.cache.get('327424359016824842'),
     guild.roles.cache.get('910079633477730364'),

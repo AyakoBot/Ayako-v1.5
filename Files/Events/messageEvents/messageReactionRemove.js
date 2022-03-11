@@ -1,5 +1,6 @@
 module.exports = {
   async execute(reaction, user) {
+    return;
     const { client } = reaction;
     if (user.id === client.user.id) return;
     const { ch } = client;
