@@ -1879,7 +1879,7 @@
           "streamroles": {
             "name": "Stream Roles",
             "answers": "This is a Switch.\nIf the entered Role is already added it will be removed.",
-            "recommended": "Roles given to Users when Streaming in this Servers Voice Channels"
+            "recommended": "Roles given to Users when Streaming on Twitch"
           }
         }
       },
