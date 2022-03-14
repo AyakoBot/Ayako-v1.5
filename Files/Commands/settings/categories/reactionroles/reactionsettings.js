@@ -32,12 +32,8 @@ module.exports = {
 
     embed.addFields(
       {
-        name: msg.language.message,
-        value: msg.client.ch.stp(msg.client.constants.standard.discordUrlDB, {
-          guildid: r.guildid,
-          channelid: r.channelid,
-          msgid: r.msgid,
-        }),
+        name: msg.lan.messagelink,
+        value: r.messagelink,
         inline: false,
       },
       {

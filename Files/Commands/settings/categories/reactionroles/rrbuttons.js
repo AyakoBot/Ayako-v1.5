@@ -67,11 +67,6 @@ module.exports = {
       .setLabel(msg.lanSettings.active)
       .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
 
-    const name = new Discord.UnsafeButtonComponent()
-      .setCustomId(msg.lan.edit.name.name)
-      .setLabel(msg.lan.name)
-      .setStyle(Discord.ButtonStyle.Primary);
-
     const emoteid = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.emoteid.name)
       .setLabel(msg.lan.emoteid)
@@ -87,7 +82,7 @@ module.exports = {
       .setLabel(msg.lan.roles)
       .setStyle(Discord.ButtonStyle.Primary);
 
-    return [[active], [name], [emoteid, buttontext], [roles]];
+    return [[active], [emoteid, buttontext], [roles]];
   },
   manualResGetter: async (msg) => {
     const baseRes = await msg.client.ch.query(
