@@ -19,8 +19,8 @@ module.exports = {
       {
         name: msg.lan.stickyrolesmode,
         value: r.stickyrolesmode
-          ? `${msg.client.textEmotes.enabled} ${msg.lan.unsticky}`
-          : `${msg.client.textEmotes.disabled} ${msg.lan.sticky}`,
+          ? `${msg.client.textEmotes.enabled} ${msg.lan.sticky}`
+          : `${msg.client.textEmotes.disabled} ${msg.lan.unsticky}`,
         inline: false,
       },
       {

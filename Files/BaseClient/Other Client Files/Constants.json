@@ -502,6 +502,56 @@
           "key": "boolean",
           "required": true
         },
+        "reactionsettings": {
+          "name": {
+            "key": "string",
+            "required": true
+          },
+          "messagelink": {
+            "key": "messagelink",
+            "required": true
+          },
+          "onlyone": {
+            "key": "boolean",
+            "required": true
+          },
+          "anyroles": {
+            "key": "roles",
+            "required": false
+          }
+        },
+        "reations": {
+          "name": {
+            "key": "string",
+            "required": true
+          },
+          "emoteid": {
+            "key": "emotes",
+            "required": true
+          },
+          "roles": {
+            "key": "roles",
+            "required": false
+          }
+        },
+        "buttons": {
+          "name": {
+            "key": "string",
+            "required": true
+          },
+          "emoteid": {
+            "key": "emotes",
+            "required": true
+          },
+          "roles": {
+            "key": "roles",
+            "required": false
+          },
+          "buttontext": {
+            "key": "string",
+            "required": false
+          }
+        },
         "antispam": {
           "banenabledtof": {
             "key": "boolean",

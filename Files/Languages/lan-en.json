@@ -3070,6 +3070,68 @@
           }
         }
       },
+      "reactionsettings": {
+        "type": "Reaction Base",
+        "channelid": "Reaction Channel",
+        "name": "Name",
+        "message": "Message",
+        "onlyone": "Only One",
+        "anyroles": "\"Any\" Roles",
+        "edit": {
+          "active": {
+            "name": "Active",
+            "answers": "`True` or `False`",
+            "recommended": "Recommended: `True`"
+          },
+          "name": {
+            "name": "Name",
+            "answers": "Any Text",
+            "recommended": "Custom Name for this Reaction Message"
+          },
+          "message": {
+            "name": "Message",
+            "answers": "Message Link",
+            "recommended": "Message of this Reaction Message"
+          },
+          "onlyone": {
+            "name": "Only one of these Roles can be taken",
+            "answers": "`True` or `False`"
+          },
+          "anyroles": {
+            "name": "\"Any\" Roles",
+            "answers": "`Mentions or IDs`",
+            "recommended": "Roles to add if any of the Reaction or Button Roles were taken"
+          }
+        }
+      },
+      "buttons": {
+        "type": "Reaction Button",
+        "name": "Name",
+        "buttontext": "Button Text",
+        "emoteid": "Button Emote",
+        "edit": {
+          "active": {
+            "name": "Active",
+            "answers": "`True` or `False`",
+            "recommended": "Recommended: `True`"
+          },
+          "name": {
+            "name": "Name",
+            "answers": "Any Text",
+            "recommended": "Custom Name for this Button Message"
+          },
+          "buttontext": {
+            "name": "Button Text",
+            "answers": "Any Text",
+            "recommended": "Text displayed on the Button"
+          },
+          "emoteid": {
+            "name": "Button Emote",
+            "answers": "Emotes",
+            "recommended": "Roles to add if any of the Reaction or Button Roles were taken"
+          }
+        }
+      },
       "verification": {
         "type": "Verification",
         "logchannel": "Log Channel",
@@ -3534,5 +3596,6 @@
   "bumps": "Bumps",
   "oldReason": "Old Reason",
   "newReason": "New Reason",
-  "bot": "Bot"
+  "bot": "Bot",
+  "message": "Message"
 }

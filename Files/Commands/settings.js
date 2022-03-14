@@ -391,12 +391,17 @@ module.exports = {
 
     if (msg.file.setupRequired === false) return mmrDisplay(msgData.answer);
 
-    const res = await msg.client.ch.query(
-      `SELECT * FROM ${
-        msg.client.constants.commands.settings.tablenames[msg.file.name][0]
-      } WHERE guildid = $1;`,
-      [msg.guild.id],
-    );
+    let res;
+    if (msg.file.manualResGetter) {
+      res = await msg.file.manualResGetter(msg);
+    } else {
+      res = await msg.client.ch.query(
+        `SELECT * FROM ${
+          msg.client.constants.commands.settings.tablenames[msg.file.name][0]
+        } WHERE guildid = $1;`,
+        [msg.guild.id],
+      );
+    }
 
     if (res && res.rowCount > 0) return singleRowDisplay(res, res.rows[0], msgData.answer);
     return noEmbed(msg, msgData.answer, res, false);
@@ -976,12 +981,17 @@ const whereToGo = async (msg, answer) => {
   } else if (msg.args[1].toLowerCase() === msg.language.edit) {
     let row = res?.rows?.length === 1 ? res.rows[0] : null;
     if (!row) {
-      res = await msg.client.ch.query(
-        `SELECT * FROM ${
-          msg.client.constants.commands.settings.tablenames[msg.file.name][0]
-        } WHERE guildid = $1;`,
-        [msg.guild.id],
-      );
+      if (msg.file.manualResGetter) {
+        res = await msg.file.manualResGetter(msg);
+      } else {
+        res = await msg.client.ch.query(
+          `SELECT * FROM ${
+            msg.client.constants.commands.settings.tablenames[msg.file.name][0]
+          } WHERE guildid = $1;`,
+          [msg.guild.id],
+        );
+      }
+
       if (res && res.rowCount) [row] = res.rows;
     }
     if (msg.file.setupRequired === false) return mmrEditList({ msg, answer }, { res });
@@ -1438,12 +1448,17 @@ const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
           }
 
           if (returnedObject.recall) {
-            const newRes = await msg.client.ch.query(
-              `SELECT * FROM ${
-                msg.client.constants.commands.settings.tablenames[msg.file.name][0]
-              } WHERE guildid = $1;`,
-              [msg.guild.id],
-            );
+            let newRes;
+            if (msg.file.manualResGetter) {
+              newRes = await msg.file.manualResGetter(msg);
+            } else {
+              newRes = await msg.client.ch.query(
+                `SELECT * FROM ${
+                  msg.client.constants.commands.settings.tablenames[msg.file.name][0]
+                } WHERE guildid = $1;`,
+                [msg.guild.id],
+              );
+            }
 
             return changing(
               { msg, answer: returnedObject.answer },
