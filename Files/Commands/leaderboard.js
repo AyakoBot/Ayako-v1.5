@@ -140,13 +140,15 @@ const getContent = async (msg, type, isGuild, page) => {
   const index = rows?.findIndex((row) => row.userid === msg.author.id);
 
   if (rows) {
-    const longestLevel = Math.max(...rows.map((row) => String(row.level).length));
+    let longestLevel = Math.max(...rows.map((row) => String(row.level).length));
+    longestLevel = longestLevel > 6 ? longestLevel : 6;
 
     if (index !== -1) {
       ownPos.name = msg.lan.yourPosition;
-      ownPos.value = `\`${spaces(`${index + 1}`, 6)} | ${spaces(`${rows[index].level}`, 6)} | \`${
-        msg.author
-      }`;
+      ownPos.value = `\`${spaces(`${index + 1}`, 6)} | ${spaces(
+        `${rows[index].level}`,
+        longestLevel,
+      )} | \`${msg.author}`;
 
       rows.splice(30 * page, rows.length - 1);
       rows.splice(0, 30 * (page - 1));
@@ -161,8 +163,8 @@ const getContent = async (msg, type, isGuild, page) => {
 
     let content = `\`${spaces(msg.language.rank, 7)}| ${spaces(
       msg.language.level,
-      longestLevel + 1,
-    )}| ${msg.language.user}\`\n`;
+      longestLevel,
+    )} | ${msg.language.user}\`\n`;
 
     rows?.forEach((row, i) => {
       let user;

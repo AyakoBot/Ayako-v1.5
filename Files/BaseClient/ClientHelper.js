@@ -875,7 +875,7 @@ module.exports = {
       })
       .setColor(module.exports.colorSelector(guild?.me))
       .setDescription(
-        `${guild.client.objectEmotes.loading} ${
+        `${guild.client.textEmotes.loading} ${
           lan.loading ? lan.loading : (await module.exports.languageSelector(guild)).loading
         }`,
       );
