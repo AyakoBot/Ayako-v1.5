@@ -263,15 +263,17 @@ module.exports = {
               ]);
 
               for (let j = 0; useArray1.length > j; j += 1) {
-                disable += `${Constants.switch.disable} \`${
+                disable += `${client.textEmotes.switch.disable} \`${
                   language.permissions[useArray1[j]]
                 }\`\n`;
               }
               for (let j = 0; useArray2.length > j; j += 1) {
-                enable += `${Constants.switch.enable} \`${language.permissions[useArray2[j]]}\`\n`;
+                enable += `${client.textEmotes.switch.enable} \`${
+                  language.permissions[useArray2[j]]
+                }\`\n`;
               }
               for (let j = 0; useArray3.length > j; j += 1) {
-                neutral += `${Constants.switch.neutral} \`${
+                neutral += `${client.textEmotes.switch.neutral} \`${
                   language.permissions[useArray3[j]]
                 }\`\n`;
               }
