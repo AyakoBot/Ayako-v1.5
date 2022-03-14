@@ -503,12 +503,12 @@
           "required": true
         },
         "reactionsettings": {
-          "name": {
-            "key": "string",
-            "required": true
-          },
           "messagelink": {
             "key": "messagelink",
+            "required": true
+          },
+          "name": {
+            "key": "string",
             "required": true
           },
           "onlyone": {
@@ -520,11 +520,7 @@
             "required": false
           }
         },
-        "reations": {
-          "name": {
-            "key": "string",
-            "required": true
-          },
+        "rrreactions": {
           "emoteid": {
             "key": "emotes",
             "required": true
@@ -534,22 +530,18 @@
             "required": false
           }
         },
-        "buttons": {
-          "name": {
-            "key": "string",
-            "required": true
+        "rrbuttons": {
+          "roles": {
+            "key": "roles",
+            "required": false
           },
           "emoteid": {
             "key": "emotes",
             "required": true
           },
-          "roles": {
-            "key": "roles",
-            "required": false
-          },
           "buttontext": {
             "key": "string",
-            "required": false
+            "required": true
           }
         },
         "antispam": {
@@ -1353,10 +1345,55 @@
         "overview": ["guildsettings"],
         "prefix": ["prefix"],
         "interactions": ["interactions"],
-        "modroles": ["modroles"]
+        "modroles": ["modroles"],
+        "reactionsettings": [
+          "The strike System is not enabled\nuse `{{prefix}}settings autopunish` to enable it"
+        ],
+        "rrbuttons": ["rrbuttons"],
+        "rrreactions": ["rrreactions"]
       },
       "editReq": ["uniquetimestamp"],
       "setupQueries": {
+        "reactionsettings": {
+          "cols": ["guildid, uniquetimestamp, name, onlyone, active, messagelink"],
+          "vals": [
+            [
+              "{{msg.guild.id}}",
+              "{{values.uniquetimestamp}}",
+              "{{values.name}}",
+              false,
+              false,
+              "{{values.messagelink}}"
+            ]
+          ],
+          "add": ["name", "messagelink"],
+          "remove": ["uniquetimestamp"],
+          "ident": "name"
+        },
+        "rrbuttons": {
+          "cols": ["guildid, uniquetimestamp, active, messagelink"],
+          "vals": [
+            ["{{msg.guild.id}}", "{{values.uniquetimestamp}}", false, "{{values.messagelink}}"]
+          ],
+          "add": ["roles"],
+          "remove": ["uniquetimestamp"],
+          "ident": "emoteid"
+        },
+        "rrreactions": {
+          "cols": ["guildid, uniquetimestamp, active,  messagelink, emoteid, roles"],
+          "vals": [
+            [
+              "{{msg.guild.id}}",
+              "{{values.uniquetimestamp}}",
+              false,
+              "{{values.messagelink}}",
+              "{{values.emoteid}}"
+            ]
+          ],
+          "add": ["emoteid", "roles"],
+          "remove": ["uniquetimestamp"],
+          "ident": "emoteid"
+        },
         "antispam": {
           "cols": [
             "active, giveofficialwarnstof, muteafterwarnsamount, kickafterwarnsamount, banafterwarnsamount, readofwarnstof, muteenabledtof, kickenabledtof, banenabledtof, guildid"

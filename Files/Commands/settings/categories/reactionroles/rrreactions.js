@@ -40,15 +40,6 @@ module.exports = {
 
     embed.addFields(
       {
-        name: msg.language.message,
-        value: msg.client.ch.stp(msg.client.constants.standard.discordUrlDB, {
-          guildid: r.guildid,
-          channelid: r.channelid,
-          msgid: r.msgid,
-        }),
-        inline: false,
-      },
-      {
         name: msg.lan.name,
         value: r.active
           ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
@@ -84,11 +75,6 @@ module.exports = {
       .setLabel(msg.lanSettings.active)
       .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
 
-    const name = new Discord.UnsafeButtonComponent()
-      .setCustomId(msg.lan.edit.name.name)
-      .setLabel(msg.lan.name)
-      .setStyle(Discord.ButtonStyle.Primary);
-
     const emoteid = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.emoteid.name)
       .setLabel(msg.lan.emoteid)
@@ -99,7 +85,7 @@ module.exports = {
       .setLabel(msg.lan.roles)
       .setStyle(Discord.ButtonStyle.Primary);
 
-    return [[active], [name], [emoteid], [roles]];
+    return [[active], [emoteid], [roles]];
   },
   manualResGetter: async (msg) => {
     const baseRes = await msg.client.ch.query(
