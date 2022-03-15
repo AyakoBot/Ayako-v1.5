@@ -33,8 +33,9 @@ const stickyroles = async (member, user) => {
   );
 
   const language = await member.guild.client.ch.languageSelector(member.guild);
-  if (rolesToAdd.length)
+  if (rolesToAdd.length) {
     await member.roles.add(rolesToAdd, language.commands.settings.sticky.roleReason);
+  }
 };
 
 const getRoles = (mode, roles, memberRoles, guild) => {

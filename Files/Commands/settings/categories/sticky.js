@@ -19,12 +19,12 @@ module.exports = {
       {
         name: msg.lan.stickyrolesmode,
         value: r.stickyrolesmode
-          ? `${msg.client.textEmotes.enabled} ${msg.lan.sticky}`
-          : `${msg.client.textEmotes.disabled} ${msg.lan.unsticky}`,
+          ? `${msg.client.textEmotes.enabled} ${msg.lan.unsticky}`
+          : `${msg.client.textEmotes.disabled} ${msg.lan.sticky}`,
         inline: false,
       },
       {
-        name: r.stickyrolesmode ? msg.lan.stickyRoles : msg.lan.notStickyRoles,
+        name: r.stickyrolesmode ? msg.lan.notStickyRoles : msg.lan.stickyRoles,
         value: `${
           r.roles && r.roles.length ? r.roles.map((id) => ` <@&${id}>`) : msg.language.none
         }`,
