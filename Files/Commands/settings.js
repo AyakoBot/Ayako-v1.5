@@ -1561,7 +1561,7 @@ const messageHandler = async (msgData, editData, languageData, Objects) => {
       const valid = editor.validator(msg, message);
       if (!valid) return null;
     }
-    const { returnEmbed } = editor.messageHandler({ msg, message }, insertedValues, required);
+    const { returnEmbed } = await editor.messageHandler({ msg, message }, insertedValues, required);
 
     returnEmbed
       .addFields({

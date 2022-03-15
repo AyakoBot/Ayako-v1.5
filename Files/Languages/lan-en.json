@@ -3077,6 +3077,7 @@
         "message": "Message",
         "onlyone": "Only One",
         "anyroles": "\"Any\" Roles",
+        "notValidLink": "These Message Links are not Valid for this Server:\n {{links}}",
         "edit": {
           "active": {
             "name": "Active",

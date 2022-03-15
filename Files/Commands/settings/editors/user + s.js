@@ -27,13 +27,6 @@ module.exports = {
       .split(/ +/);
 
     switch (required.key) {
-      default: {
-        const user = msg.client.users.cache.get(message.content);
-        if (user) {
-          insertedValues[required.assinger] = user.id;
-        } else fail(message.content);
-        break;
-      }
       case 'users': {
         insertedValues[required.assinger] = Array.isArray(insertedValues[required.assinger])
           ? insertedValues[required.assinger]
@@ -54,13 +47,20 @@ module.exports = {
             } else if (
               insertedValues[required.assinger] &&
               insertedValues[required.assinger].length
-            )
+            ) {
               insertedValues[required.assinger].push(user.id);
-            else insertedValues[required.assinger] = [user.id];
+            } else insertedValues[required.assinger] = [user.id];
           } else notUserArgs.push(id);
 
           if (notUserArgs.length) fail(notUserArgs);
         });
+        break;
+      }
+      default: {
+        const user = msg.client.users.cache.get(message.content);
+        if (user) {
+          insertedValues[required.assinger] = user.id;
+        } else fail(message.content);
         break;
       }
     }
@@ -76,11 +76,6 @@ module.exports = {
   getSelected(msg, insertedValues, required) {
     if (insertedValues[required.assinger]) {
       switch (required.key) {
-        default: {
-          return insertedValues[required.assinger]
-            ? insertedValues[required.assinger]
-            : msg.language.none;
-        }
         case 'users': {
           if (
             insertedValues[required.assinger] &&
@@ -90,6 +85,11 @@ module.exports = {
             return insertedValues[required.assinger].map((value) => `<@${value}>`).join(', ');
           }
           return msg.language.none;
+        }
+        default: {
+          return insertedValues[required.assinger]
+            ? insertedValues[required.assinger]
+            : msg.language.none;
         }
       }
     }
