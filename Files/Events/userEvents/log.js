@@ -35,7 +35,9 @@ module.exports = {
             if (oldUser.avatar !== newUser.avatar) {
               changedKey.push(language.avatar);
 
-              const buffers = await ch.convertImageURLtoBuffer([newUser.displayAvatarURL({ size: 4096 })]);
+              const buffers = await ch.convertImageURLtoBuffer([
+                newUser.displayAvatarURL({ size: 4096 }),
+              ]);
               if (buffers.length) {
                 files = buffers;
                 embed.addFields({ name: language.avatar, value: lan.avatar });
