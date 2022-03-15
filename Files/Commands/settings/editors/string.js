@@ -30,10 +30,6 @@ module.exports = {
     const args = message.content.replace(/\\n/g, ' ').split(/ ?#+ ?/);
 
     switch (required.key) {
-      default: {
-        insertedValues[required.assinger] = message.content;
-        break;
-      }
       case 'stringArray': {
         insertedValues[required.assinger] = Array.isArray(insertedValues[required.assinger])
           ? insertedValues[required.assinger]
@@ -46,10 +42,18 @@ module.exports = {
           ) {
             const index = insertedValues[required.assinger].indexOf(arg);
             insertedValues[required.assinger].splice(index, 1);
-          } else if (insertedValues[required.assinger] && insertedValues[required.assinger].length)
+          } else if (
+            insertedValues[required.assinger] &&
+            insertedValues[required.assinger].length
+          ) {
             insertedValues[required.assinger].push(arg);
-          else insertedValues[required.assinger] = [arg];
+          } else insertedValues[required.assinger] = [arg];
         });
+        break;
+      }
+      default: {
+        insertedValues[required.assinger] = message.content;
+        break;
       }
     }
 
@@ -64,20 +68,16 @@ module.exports = {
   getSelected(msg, insertedValues, required) {
     if (insertedValues[required.assinger]) {
       switch (required.key) {
-        default: {
-          return insertedValues[required.assinger]
-            ? insertedValues[required.assinger]
-            : msg.language.none;
-        }
         case 'stringArray': {
           return insertedValues[required.assinger] &&
             insertedValues[required.assinger].length &&
             Array.isArray(insertedValues[required.assinger])
+            ? insertedValues[required.assinger].map((value) => `\`${value}\``).join(', ')
+            : msg.language.none;
+        }
+        default: {
+          return insertedValues[required.assinger]
             ? insertedValues[required.assinger]
-                .map((value) => {
-                  return `\`${value}\``;
-                })
-                .join(', ')
             : msg.language.none;
         }
       }
