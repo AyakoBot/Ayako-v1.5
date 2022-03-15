@@ -90,7 +90,7 @@ module.exports = {
 
         const button = new Discord.UnsafeButtonComponent()
           .setCustomId(lan.edit[key].name)
-          .setLabel(msg.language.channelRules[`${key}_SHORT`])
+          .setLabel(msg.language.channelRules[`${key}Short`])
           .setEmoji(emote)
           .setStyle(Discord.ButtonStyle.Secondary);
 

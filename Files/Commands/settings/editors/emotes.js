@@ -44,10 +44,6 @@ module.exports = {
     }
 
     switch (required.key) {
-      default: {
-        [insertedValues[required.assinger]] = args;
-        break;
-      }
       case 'emotes': {
         insertedValues[required.assinger] = Array.isArray(insertedValues[required.assinger])
           ? insertedValues[required.assinger]
@@ -60,10 +56,18 @@ module.exports = {
           ) {
             const index = insertedValues[required.assinger].indexOf(arg);
             insertedValues[required.assinger].splice(index, 1);
-          } else if (insertedValues[required.assinger] && insertedValues[required.assinger].length)
+          } else if (
+            insertedValues[required.assinger] &&
+            insertedValues[required.assinger].length
+          ) {
             insertedValues[required.assinger].push(arg);
-          else insertedValues[required.assinger] = [arg];
+          } else insertedValues[required.assinger] = [arg];
         });
+        break;
+      }
+      default: {
+        [insertedValues[required.assinger]] = args;
+        break;
       }
     }
 
@@ -78,24 +82,6 @@ module.exports = {
   getSelected: (msg, insertedValues, required) => {
     if (insertedValues[required.assinger]) {
       switch (required.key) {
-        default: {
-          if (insertedValues[required.assinger]) {
-            let emote;
-            if (msg.client.emojis.cache.get(insertedValues[required.assinger])) {
-              emote = msg.client.emojis.cache.get(insertedValues[required.assinger]);
-            } else if (
-              insertedValues[required.assinger].match(msg.client.ch.regexes.emojiTester)?.length
-            ) {
-              emote = insertedValues[required.assinger];
-            }
-
-            if (emote) {
-              return `${emote}`;
-            }
-            return msg.language.noAccess;
-          }
-          return msg.language.none;
-        }
         case 'emotes': {
           return insertedValues[required.assinger] &&
             insertedValues[required.assinger].length &&
@@ -116,6 +102,24 @@ module.exports = {
                 })
                 .join(', ')
             : msg.language.none;
+        }
+        default: {
+          if (insertedValues[required.assinger]) {
+            let emote;
+            if (msg.client.emojis.cache.get(insertedValues[required.assinger])) {
+              emote = msg.client.emojis.cache.get(insertedValues[required.assinger]);
+            } else if (
+              insertedValues[required.assinger].match(msg.client.ch.regexes.emojiTester)?.length
+            ) {
+              emote = insertedValues[required.assinger];
+            }
+
+            if (emote) {
+              return `${emote}`;
+            }
+            return msg.language.noAccess;
+          }
+          return msg.language.none;
         }
       }
     }

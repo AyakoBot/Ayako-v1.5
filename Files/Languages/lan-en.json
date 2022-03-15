@@ -504,88 +504,88 @@
     "unknownPermission": "Unknown Permission Updates have been made",
     "unknownPermissionFix": "Grant `View Audit` or `Administrator` to fix this issue",
     "Permissions": "Permissions",
-    "CREATE_INSTANT_INVITE": "Create Instant Invite",
-    "MANAGE_CHANNEL": "Manage Channel",
-    "KICK_MEMBERS": "Kick Members",
-    "BAN_MEMBERS": "Ban Members",
-    "ADMINISTRATOR": "Administrator",
-    "MANAGE_CHANNELS": "Manage Channels",
-    "MANAGE_GUILD": "Manage Guild/Server",
-    "ADD_REACTIONS": "Add Reactions",
-    "VIEW_AUDIT_LOG": "View Audit Log",
-    "PRIORITY_SPEAKER": "Priority Speaker",
-    "STREAM": "Stream",
-    "VIEW_CHANNEL": "View Channel",
-    "VIEW_CHANNELS": "View Channels",
-    "SEND_MESSAGES": "Send Messages",
-    "SEND_TTS_MESSAGES": "Send TTS Messages",
-    "MANAGE_MESSAGES": "Manage Messages",
-    "EMBED_LINKS": "Embed Links",
-    "ATTACH_FILES": "Attach Files",
-    "READ_MESSAGE_HISTORY": "Read Message History",
-    "MENTION_EVERYONE": "Mention Everyone",
-    "USE_EXTERNAL_EMOJIS": "Use External Emojis",
-    "VIEW_GUILD_INSIGHTS": "View Guild/Server Insights",
-    "CONNECT": "Connect",
-    "SPEAK": "Speak",
-    "MUTE_MEMBERS": "Mute Members",
-    "DEAFEN_MEMBERS": "Deafen Members",
-    "MOVE_MEMBERS": "Move Members",
-    "USE_VAD": "Use Voice Activity Detection",
-    "CHANGE_NICKNAME": "Change Nickname",
-    "MANAGE_NICKNAMES": "Manage Nicknames",
-    "MANAGE_ROLES": "Manage Roles",
-    "MANAGE_WEBHOOKS": "Manage Webhooks",
-    "MANAGE_EMOJIS_AND_STICKERS": "Manage Emojis and Stickers",
-    "USE_APPLICATION_COMMANDS": "Use Application Commands",
-    "REQUEST_TO_SPEAK": "Request to Speak",
-    "MANAGE_THREADS": "Manage Threads",
-    "USE_AND_CREATE_PUBLIC_THREADS": "Use and Create Public Threads",
-    "USE_AND_CREATE_PRIVATE_THREADS": "Use and Create Private Threads",
-    "USE_EXTERNAL_STICKERS": "Use External Stickers",
-    "SEND_MESSAGES_IN_THREADS": "Send Messages in Threads",
-    "START_EMBEDDED_ACTIVITIES": "Start Embedded Activities",
-    "MODERATE_MEMBERS": "Moderate Members",
-    "MANAGE_EVENTS": "Manage Events",
-    "MANAGE_PERMISSIONS": "Manage Permissions"
+    "CreateInstantInvite": "Create Instant Invite",
+    "ManageChannel": "Manage Channel",
+    "KickMembers": "Kick Members",
+    "BanMembers": "Ban Members",
+    "Administrator": "Administrator",
+    "ManageChannels": "Manage Channels",
+    "ManageGuild": "Manage Guild/Server",
+    "AddReactions": "Add Reactions",
+    "ViewAuditLog": "View Audit Log",
+    "PrioritySpeaker": "Priority Speaker",
+    "Stream": "Stream",
+    "ViewChannel": "View Channel",
+    "ViewChannels": "View Channels",
+    "SendMessages": "Send Messages",
+    "SendTTSMessages": "Send TTS Messages",
+    "ManageMessages": "Manage Messages",
+    "EmbedLinks": "Embed Links",
+    "AttachFiles": "Attach Files",
+    "ReadMessageHistory": "Read Message History",
+    "MentionEveryone": "Mention Everyone",
+    "UseExternalEmojis": "Use External Emojis",
+    "ViewGuildInsights": "View Guild/Server Insights",
+    "Connect": "Connect",
+    "Speak": "Speak",
+    "MuteMembers": "Mute Members",
+    "DeafenMembers": "Deafen Members",
+    "MoveMembers": "Move Members",
+    "UseVAD": "Use Voice Activity Detection",
+    "ChangeNickname": "Change Nickname",
+    "ManageNicknames": "Manage Nicknames",
+    "ManageRoles": "Manage Roles",
+    "ManageWebhooks": "Manage Webhooks",
+    "ManageEmojisAndStickers": "Manage Emojis and Stickers",
+    "UseApplicationCommands": "Use Application Commands",
+    "RequestToSpeak": "Request to Speak",
+    "ManageThreads": "Manage Threads",
+    "UsePublicThreads": "Create Public Threads",
+    "UsePrivateThreads": "Create Private Threads",
+    "UseExternalStickers": "Use External Stickers",
+    "SendMessagesInThreads": "Send Messages in Threads",
+    "StartEmbeddedActivities": "Start Embedded Activities",
+    "ModerateMembers": "Moderate Members",
+    "ManageEvents": "Manage Events",
+    "ManagePermissions": "Manage Permissions"
   },
   "channelRules": {
-    "HAS_LEAST_ATTACHMENTS": "Has at least [externally defined] Attachments",
-    "HAS_LEAST_ATTACHMENTS_SHORT": "least Attachments count",
-    "HAS_MOST_ATTACHMENTS": "Has at most [externally defined] Attachments",
-    "HAS_MOST_ATTACHMENTS_SHORT": "most Attachments count",
-    "HAS_LEAST_CHARACTERS": "Has at least [externally defined] Characters in Content",
-    "HAS_LEAST_CHARACTERS_SHORT": "least Characters count",
-    "HAS_MOST_CHARACTERS": "Has at most [externally defined] Characters in Content",
-    "HAS_MOST_CHARACTERS_SHORT": "most Characters count",
-    "HAS_LEAST_WORDS": "Has at least [externally defined] Words in Content",
-    "HAS_LEAST_WORDS_SHORT": "least Words count",
-    "HAS_MOST_WORDS": "Has at most [externally defined] Words in Content",
-    "HAS_MOST_WORDS_SHORT": "most Words count",
-    "MENTIONS_LEAST_USERS": "Mentions at least [externally defined] Users in Content",
-    "MENTIONS_LEAST_USERS_SHORT": "least Users count",
-    "MENTIONS_MOST_USERS": "Mentions at most [externally defined] Users in Content",
-    "MENTIONS_MOST_USERS_SHORT": "most Users count",
-    "MENTIONS_LEAST_CHANNELS": "Mentions at least [externally defined] Channels in Content",
-    "MENTIONS_LEAST_CHANNELS_SHORT": "least Channels count",
-    "MENTIONS_MOST_CHANNELS": "Mentions at most [externally defined] Channels in Content",
-    "MENTIONS_MOST_CHANNELS_SHORT": "most Channels count",
-    "MENTIONS_LEAST_ROLES": "Mentions at least [externally defined] Roles in Content",
-    "MENTIONS_LEAST_ROLES_SHORT": "least Roles count",
-    "MENTIONS_MOST_ROLES": "Mentions at most [externally defined] Roles in Content",
-    "MENTIONS_MOST_ROLES_SHORT": "most Roles count",
-    "HAS_LEAST_LINKS": "Has at least [externally defined] Links",
-    "HAS_LEAST_LINKS_SHORT": "least Links count",
-    "HAS_MOST_LINKS": "Has at most [externally defined] Links",
-    "HAS_MOST_LINKS_SHORT": "most Links count",
-    "HAS_LEAST_EMOTES": "Has at least [externally defined] Emotes",
-    "HAS_LEAST_EMOTES_SHORT": "least Emotes count",
-    "HAS_MOST_EMOTES": "Has at most [externally defined] Emotes",
-    "HAS_MOST_EMOTES_SHORT": "most Emotes count",
-    "HAS_LEAST_MENTIONS": "Has at least [externally defined] Mentions",
-    "HAS_LEAST_MENTIONS_SHORT": "least Mentions count",
-    "HAS_MOST_MENTIONS": "Has at most [externally defined] Mentions",
-    "HAS_MOST_MENTIONS_SHORT": "most Mentions count"
+    "HasLeastAttachments": "Has at least [externally defined] Attachments",
+    "HasLeastAttachmentsShort": "least Attachments count",
+    "HasMostAttachments": "Has at most [externally defined] Attachments",
+    "HasMostAttachmentsShort": "most Attachments count",
+    "HasLeastCharacters": "Has at least [externally defined] Characters in Content",
+    "HasLeastCharactersShort": "least Characters count",
+    "HasMostCharacters": "Has at most [externally defined] Characters in Content",
+    "HasMostCharactersShort": "most Characters count",
+    "HasLeastWords": "Has at least [externally defined] Words in Content",
+    "HasLeastWordsShort": "least Words count",
+    "HasMostWords": "Has at most [externally defined] Words in Content",
+    "HasMostWordsShort": "most Words count",
+    "MentionsLeastUsers": "Mentions at least [externally defined] Users in Content",
+    "MentionsLeastUsersShort": "least Users count",
+    "MentionsMostUsers": "Mentions at most [externally defined] Users in Content",
+    "MentionsMostUsersShort": "most Users count",
+    "MentionsLeastChannels": "Mentions at least [externally defined] Channels in Content",
+    "MentionsLeastChannelsShort": "least Channels count",
+    "MentionsMostChannels": "Mentions at most [externally defined] Channels in Content",
+    "MentionsMostChannelsShort": "most Channels count",
+    "MentionsLeastRoles": "Mentions at least [externally defined] Roles in Content",
+    "MentionsLeastRolesShort": "least Roles count",
+    "MentionsMostRoles": "Mentions at most [externally defined] Roles in Content",
+    "MentionsMostRolesShort": "most Roles count",
+    "HasLeastLinks": "Has at least [externally defined] Links",
+    "HasLeastLinksShort": "least Links count",
+    "HasMostLinks": "Has at most [externally defined] Links",
+    "HasMostLinksShort": "most Links count",
+    "HasLeastEmotes": "Has at least [externally defined] Emotes",
+    "HasLeastEmotesShort": "least Emotes count",
+    "HasMostEmotes": "Has at most [externally defined] Emotes",
+    "HasMostEmotesShort": "most Emotes count",
+    "HasLeastMentions": "Has at least [externally defined] Mentions",
+    "HasLeastMentionsShort": "least Mentions count",
+    "HasMostMentions": "Has at most [externally defined] Mentions",
+    "HasMostMentionsShort": "most Mentions count"
   },
   "channelsNrSorted": {
     "0": "Text Channel",
@@ -2804,24 +2804,24 @@
         "type": "Leveling Rules-Channels",
         "channels": "Channels",
         "rules": "Rules",
-        "HAS_LEAST_ATTACHMENTS": "Has at least [externally defined] Attachments",
-        "HAS_MOST_ATTACHMENTS": "Has at most [externally defined] Attachments",
-        "HAS_LEAST_CHARACTERS": "Has at least [externally defined] Characters in Content",
-        "HAS_MOST_CHARACTERS": "Has at most [externally defined] Characters in Content",
-        "HAS_LEAST_WORDS": "Has at least [externally defined] Words in Content",
-        "HAS_MOST_WORDS": "Has at most [externally defined] Words in Content",
-        "MENTIONS_LEAST_USERS": "Mentions at least [externally defined] Users in Content",
-        "MENTIONS_MOST_USERS": "Mentions at most [externally defined] Users in Content",
-        "MENTIONS_LEAST_CHANNELS": "Mentions at least [externally defined] Channels in Content",
-        "MENTIONS_MOST_CHANNELS": "Mentions at most [externally defined] Channels in Content",
-        "MENTIONS_LEAST_ROLES": "Mentions at least [externally defined] Roles in Content",
-        "MENTIONS_MOST_ROLES": "Mentions at most [externally defined] Roles in Content",
-        "HAS_LEAST_LINKS": "Has at least [externally defined] Links",
-        "HAS_MOST_LINKS": "Has at most [externally defined] Links",
-        "HAS_LEAST_EMOTES": "Has at least [externally defined] Emotes",
-        "HAS_MOST_EMOTES": "Has at most [externally defined] Emotes",
-        "HAS_LEAST_MENTIONS": "Has at least [externally defined] Mentions",
-        "HAS_MOST_MENTIONS": "Has at most [externally defined] Mentions",
+        "HasLeastAttachments": "Has at least [externally defined] Attachments",
+        "HasMostAttachments": "Has at most [externally defined] Attachments",
+        "HasLeastCharacters": "Has at least [externally defined] Characters in Content",
+        "HasMostCharacters": "Has at most [externally defined] Characters in Content",
+        "HasLeastWords": "Has at least [externally defined] Words in Content",
+        "HasMostWords": "Has at most [externally defined] Words in Content",
+        "MentionsLeastUsers": "Mentions at least [externally defined] Users in Content",
+        "MentionsMostUsers": "Mentions at most [externally defined] Users in Content",
+        "MentionsLeastChannels": "Mentions at least [externally defined] Channels in Content",
+        "MentionsMostChannels": "Mentions at most [externally defined] Channels in Content",
+        "MentionsLeastRoles": "Mentions at least [externally defined] Roles in Content",
+        "MentionsMostRoles": "Mentions at most [externally defined] Roles in Content",
+        "HasLeastLinks": "Has at least [externally defined] Links",
+        "HasMostLinks": "Has at most [externally defined] Links",
+        "HasLeastEmotes": "Has at least [externally defined] Emotes",
+        "HasMostEmotes": "Has at most [externally defined] Emotes",
+        "HasLeastMentions": "Has at least [externally defined] Mentions",
+        "HasMostMentions": "Has at most [externally defined] Mentions",
         "edit": {
           "channels": {
             "name": "Channels",
@@ -2833,75 +2833,75 @@
             "answers": "Select the Rules in the Select Menu below",
             "recommended": "The Rules a Message has to meet in order to gain XP"
           },
-          "HAS_LEAST_ATTACHMENTS": {
+          "ghasleastattachments": {
             "name": "Has at least [externally defined] Attachments",
             "answers": "Any Number"
           },
-          "HAS_MOST_ATTACHMENTS": {
+          "hasmostattachments": {
             "name": "Has at most [externally defined] Attachments",
             "answers": "Any Number"
           },
-          "HAS_LEAST_CHARACTERS": {
+          "hasleastcharacters": {
             "name": "Has at least [externally defined] Characters in Content",
             "answers": "Any Number"
           },
-          "HAS_MOST_CHARACTERS": {
+          "hasmostcharacters": {
             "name": "Has at most [externally defined] Characters in Content",
             "answers": "Any Number"
           },
-          "HAS_LEAST_WORDS": {
+          "hasleastwords": {
             "name": "Has at least [externally defined] Words in Content",
             "answers": "Any Number"
           },
-          "HAS_MOST_WORDS": {
+          "hasmostwords": {
             "name": "Has at most [externally defined] Words in Content",
             "answers": "Any Number"
           },
-          "MENTIONS_LEAST_USERS": {
+          "mentionsleastusers": {
             "name": "Mentions at least [externally defined] Users in Content",
             "answers": "Any Number"
           },
-          "MENTIONS_MOST_USERS": {
+          "mentionsmostusers": {
             "name": "Mentions at most [externally defined] Users in Content",
             "answers": "Any Number"
           },
-          "MENTIONS_LEAST_CHANNELS": {
+          "mentionsleastchannels": {
             "name": "Mentions at least [externally defined] Channels in Content",
             "answers": "Any Number"
           },
-          "MENTIONS_MOST_CHANNELS": {
+          "mentionsmostchannels": {
             "name": "Mentions at most [externally defined] Channels in Content",
             "answers": "Any Number"
           },
-          "MENTIONS_LEAST_ROLES": {
+          "mentionsleastroles": {
             "name": "Mentions at least [externally defined] Roles in Content",
             "answers": "Any Number"
           },
-          "MENTIONS_MOST_ROLES": {
+          "mentionsmostroles": {
             "name": "Mentions at most [externally defined] Roles in Content",
             "answers": "Any Number"
           },
-          "HAS_LEAST_LINKS": {
+          "hasleastlinks": {
             "name": "Has at least [externally defined] Links",
             "answers": "Any Number"
           },
-          "HAS_MOST_LINKS": {
+          "hasmostlinks": {
             "name": "Has at most [externally defined] Links",
             "answers": "Any Number"
           },
-          "HAS_LEAST_EMOTES": {
+          "hasleastemotes": {
             "name": "Has at least [externally defined] Emotes",
             "answers": "Any Number"
           },
-          "HAS_MOST_EMOTES": {
+          "hasmostemotes": {
             "name": "Has at most [externally defined] Emotes",
             "answers": "Any Number"
           },
-          "HAS_LEAST_MENTIONS": {
+          "hasleastmentions": {
             "name": "Has at least [externally defined] Mentions",
             "answers": "Any Number"
           },
-          "HAS_MOST_MENTIONS": {
+          "hasmostmentions": {
             "name": "Has at most [externally defined] Mentions",
             "answers": "Any Number"
           }
@@ -3374,31 +3374,31 @@
     "expired": "This Warn has expired"
   },
   "userFlags": {
-    "DISCORD_EMPLOYEE": "Discord Employee",
-    "PARTNERED_SERVER_OWNER": "Partnered Server Owner",
-    "HYPESQUAD_EVENTS": "HypeSquad Events Coordinator",
-    "BUGHUNTER_LEVEL_1": "Bug Hunter Level 1",
-    "HOUSE_BRAVERY": "House Bravery Member",
-    "HOUSE_BRILLIANCE": "House Brilliance Member",
-    "HOUSE_BALANCE": "House Balance Member",
-    "EARLY_SUPPORTER": "Early Nitro Supporter",
-    "TEAM_USER": "User is a [Team](https://discord.com/developers/docs/topics/teams \"Click to find out what a Team is\")",
-    "BUGHUNTER_LEVEL_2": "Bug Hunter Level 2",
-    "VERIFIED_BOT": "Verified Bot",
-    "EARLY_VERIFIED_BOT_DEVELOPER": "Early Verified Bot Developer",
-    "DISCORD_CERTIFIED_MODERATOR": "Discord Certified Moderator",
-    "BOT_HTTP_INTERACTIONS": "Bot uses only HTTP Interactions and is shown in the online Member List",
-    "BOT": "Unverified Bot",
-    "NITRO": "Nitro",
-    "BOOST1": "Boosting since less than 2 Months",
-    "BOOST2": "Boosting since at least 2 Months",
-    "BOOST3": "Boosting since at least 3 Months",
-    "BOOST6": "Boosting since at least 6 Months",
-    "BOOST9": "Boosting since at least 9 Months",
-    "BOOST12": "Boosting since at least 12 Months",
-    "BOOST15": "Boosting since at least 15 Months",
-    "BOOST18": "Boosting since at least 18 Months",
-    "BOOST24": "Boosting since at least 24 Months"
+    "DiscordEmployee": "Discord Employee",
+    "PartneredServerOwner": "Partnered Server Owner",
+    "HypesquadEvents": "HypeSquad Events Coordinator",
+    "BughunterLevel1": "Bug Hunter Level 1",
+    "HouseBravery": "House Bravery Member",
+    "HouseBrilliance": "House Brilliance Member",
+    "HouseBalance": "House Balance Member",
+    "EarlySupporter": "Early Nitro Supporter",
+    "TeamUser": "User is a [Team](https://discord.com/developers/docs/topics/teams \"Click to find out what a Team is\")",
+    "BughunterLevel2": "Bug Hunter Level 2",
+    "VerifiedBot": "Verified Bot",
+    "EarlyVerifiedBotDeveloper": "Early Verified Bot Developer",
+    "DiscordCertifiedModerator": "Discord Certified Moderator",
+    "BotHTTPInteractions": "Bot uses only HTTP Interactions and is shown in the online Member List",
+    "Bot": "Unverified Bot",
+    "Nitro": "Nitro",
+    "Boost1": "Boosting since less than 2 Months",
+    "Boost2": "Boosting since at least 2 Months",
+    "Boost3": "Boosting since at least 3 Months",
+    "Boost6": "Boosting since at least 6 Months",
+    "Boost9": "Boosting since at least 9 Months",
+    "Boost12": "Boosting since at least 12 Months",
+    "Boost15": "Boosting since at least 15 Months",
+    "Boost18": "Boosting since at least 18 Months",
+    "Boost24": "Boosting since at least 24 Months"
   },
   "channelTypes": {
     "0": "Text Channel",
