@@ -88,6 +88,8 @@ module.exports = {
           ],
           components: [],
         });
+      } else {
+        console.log(e);
       }
       return null;
     });

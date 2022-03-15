@@ -214,7 +214,9 @@ module.exports = {
             reassignMsg(
               `${msg.client.constants.standard.prefix}${module.exports.name} ${
                 interaction.customId
-              } notedit ${row[msg.file.identification]}`,
+              } notedit ${
+                row[msg.client.constants.commands.settings.identifiers[msg.file.childOf]]
+              }`,
               msg,
             );
             msg.file = msg.client.settings.get(interaction.customId);
@@ -290,17 +292,21 @@ module.exports = {
         take: [],
         page: 1,
       };
+
       res.rows.forEach((row) => {
+        const isEmote = msg.client.emojis.cache.get(getIdentifier(msg, settingsConstant, row));
+
         options.allOptions.push(
-          new Discord.SelectMenuOption()
+          new Discord.UnsafeSelectMenuOption()
             .setLabel(
               `${row.id} ${
                 settingsConstant.removeIdent !== ''
-                  ? `| ${getIdentifier(msg, settingsConstant, row)}`
+                  ? `| ${isEmote ? '' : getIdentifier(msg, settingsConstant, row)}`
                   : ''
               }`,
             )
-            .setValue(`${row.id}`),
+            .setValue(String(row.id))
+            .setEmoji(isEmote),
         );
       });
 
@@ -324,7 +330,7 @@ module.exports = {
         rows.push([edit]);
       }
 
-      if (msg.file.childOf) {
+      if (msg.file.childOf && !msg.file.displayParentOnly) {
         rows.unshift(getRelatedSettingsButtons(msg));
       }
 
@@ -429,7 +435,7 @@ const noEmbed = async (msg, answer, res) => {
     ],
   ];
 
-  if (msg.file.childOf) {
+  if (msg.file.childOf && !msg.file.displayParentOnly) {
     rawButtons.unshift(getRelatedSettingsButtons(msg));
   }
 
@@ -511,12 +517,12 @@ const replier = async (msgData, sendData) => {
 const getMMRListButtons = (msg, options, editView) => {
   const next = new Discord.UnsafeButtonComponent()
     .setCustomId('next')
-    .setLabel(msg.language.next)
+    .setEmoji(msg.client.objectEmotes.forth)
     .setDisabled(options.allOptions.length < 25)
     .setStyle(Discord.ButtonStyle.Primary);
   const prev = new Discord.UnsafeButtonComponent()
     .setCustomId('prev')
-    .setLabel(msg.language.prev)
+    .setEmoji(msg.client.objectEmotes.back)
     .setDisabled(true)
     .setStyle(Discord.ButtonStyle.Danger);
   const list = new Discord.UnsafeSelectMenuComponent()
@@ -591,7 +597,7 @@ const mmrEditList = async (msgData, sendData) => {
   const { msg } = msgData;
   const { res } = sendData;
 
-  if (!res.rows[0]?.id) {
+  if (res && res.rowCount && !res.rows[0].id) {
     res.rows.forEach((row, i) => {
       res.rows[i].id = i;
     });
@@ -771,16 +777,19 @@ const mmrEditList = async (msgData, sendData) => {
   const settingsConstant = msg.client.constants.commands.settings.setupQueries[msg.file.name];
 
   res.rows.forEach((row) => {
+    const isEmote = msg.client.emojis.cache.get(getIdentifier(msg, settingsConstant, row));
+
     options.allOptions.push(
-      new Discord.SelectMenuOption()
+      new Discord.UnsafeSelectMenuOption()
         .setLabel(
           `${row.id} ${
             settingsConstant.removeIdent !== ''
-              ? `| ${getIdentifier(msg, settingsConstant, row)}`
+              ? `| ${isEmote ? '' : getIdentifier(msg, settingsConstant, row)}`
               : ''
           }`,
         )
-        .setValue(String(row.id)),
+        .setValue(String(row.id))
+        .setEmoji(isEmote),
     );
   });
 
@@ -793,12 +802,12 @@ const mmrEditList = async (msgData, sendData) => {
     options.take.push(options.allOptions[i]);
   }
 
-  if (msg.file.childOf) {
-    rows.unshift(getRelatedSettingsButtons(msg));
-  }
-
   const { list, next, prev, add, remove } = getMMRListButtons(msg, options, true);
   const rows = [[list], [prev, next], [remove, add]];
+
+  if (msg.file.childOf && !msg.file.displayParentOnly) {
+    rows.unshift(getRelatedSettingsButtons(msg));
+  }
 
   await replier({ msg, answer }, { rawButtons: rows, embeds: [embed] });
   if (!msg.m) return;
@@ -1322,7 +1331,7 @@ const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
         reassignMsg(
           `${msg.client.constants.standard.prefix}${module.exports.name} ${
             interaction.customId
-          } edit ${row[msg.file.identification]}`,
+          } edit ${row[msg.client.constants.commands.settings.identifiers[msg.file.childOf]]}`,
           msg,
         );
         msg.file = msg.client.settings.get(interaction.customId);
@@ -1720,14 +1729,14 @@ const standardButtons = async (msg, preparedData, insertedValues, required, row,
       .setPlaceholder(msg.language.select[required.key].select);
     const next = new Discord.UnsafeButtonComponent()
       .setCustomId('next')
-      .setLabel(msg.language.next)
+      .setEmoji(msg.client.objectEmotes.forth)
       .setDisabled(
         Objects.page === Math.ceil(Objects.options.length / 25) || !Objects.options.length,
       )
       .setStyle(Discord.ButtonStyle.Primary);
     const prev = new Discord.UnsafeButtonComponent()
       .setCustomId('prev')
-      .setLabel(msg.language.prev)
+      .setEmoji(msg.client.objectEmotes.back)
       .setDisabled(Objects.page === 1 || !Objects.options.length)
       .setStyle(Discord.ButtonStyle.Danger);
 
@@ -2059,14 +2068,20 @@ const getRelatedSettingsButtons = (msg) =>
   );
 
 const getResRows = async (msg) => {
-  const res = await msg.client.ch.query(
-    `SELECT * FROM ${
-      msg.client.constants.commands.settings.tablenames[msg.file.name][0]
-    } WHERE guildid = $1 AND ${
-      msg.client.constants.commands.settings.identifiers[msg.file.childOf]
-    } = $2;`,
-    [msg.guild.id, msg.args[2]],
-  );
+  let res;
+  if (msg.file.manualResGetter) {
+    res = await msg.file.manualResGetter(msg);
+  } else {
+    res = await msg.client.ch.query(
+      `SELECT * FROM ${
+        msg.client.constants.commands.settings.tablenames[msg.file.name][0]
+      } WHERE guildid = $1 AND ${
+        msg.client.constants.commands.settings.identifiers[msg.file.childOf]
+      } = $2;`,
+      [msg.guild.id, msg.args[2]],
+    );
+  }
+
   if (res && res.rowCount) return res;
   return null;
 };

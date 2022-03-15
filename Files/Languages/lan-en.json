@@ -3074,7 +3074,7 @@
         "type": "Reaction Base",
         "channelid": "Reaction Channel",
         "name": "Name",
-        "message": "Message",
+        "messagelink": "Message",
         "onlyone": "Only One",
         "anyroles": "\"Any\" Roles",
         "notValidLink": "These Message Links are not Valid for this Server:\n {{links}}",
@@ -3089,7 +3089,7 @@
             "answers": "Any Text",
             "recommended": "Custom Name for this Reaction Message"
           },
-          "message": {
+          "messagelink": {
             "name": "Message",
             "answers": "Message Link",
             "recommended": "Message of this Reaction Message"
@@ -3103,12 +3103,28 @@
             "answers": "`Mentions or IDs`",
             "recommended": "Roles to add if any of the Reaction or Button Roles were taken"
           }
+        },
+        "otherEdits": {
+          "add": {
+            "name": "Add a Reaction Role Message",
+            "process": {
+              "0": "Give the Configuration a Name so you can Identify it later",
+              "1": "Send a Message URL to the Message you want to have the Reaction Roles on"
+            }
+          },
+          "remove": {
+            "name": "Remove a Reaction Role Message Configuration",
+            "process": {
+              "0": "Respond with the ID of the Reaction Role Message Configuration you want to delete"
+            }
+          }
         }
       },
-      "buttons": {
-        "type": "Reaction Button",
+      "rrbuttons": {
+        "type": "Button Role",
         "name": "Name",
         "buttontext": "Button Text",
+        "roles": "Roles",
         "emoteid": "Button Emote",
         "edit": {
           "active": {
@@ -3129,7 +3145,62 @@
           "emoteid": {
             "name": "Button Emote",
             "answers": "Emotes",
-            "recommended": "Roles to add if any of the Reaction or Button Roles were taken"
+            "recommended": "The Emote the Button will have"
+          },
+          "roles": {
+            "name": "Roles",
+            "answers": "`Mentions or IDs`",
+            "recommended": "Roles to add when the Reaction is added and take when the Reaction is removed"
+          }
+        },
+        "otherEdits": {
+          "remove": {
+            "name": "Remove a Reaction Role Button",
+            "process": {
+              "0": "Respond with the ID of the Reaction Role Button you want to delete"
+            }
+          }
+        }
+      },
+      "rrreactions": {
+        "type": "Reaction Role",
+        "name": "Name",
+        "roles": "Roles",
+        "emoteid": "Button Emote",
+        "edit": {
+          "active": {
+            "name": "Active",
+            "answers": "`True` or `False`",
+            "recommended": "Recommended: `True`"
+          },
+          "name": {
+            "name": "Name",
+            "answers": "Any Text",
+            "recommended": "Custom Name for this Button Message"
+          },
+          "roles": {
+            "name": "Roles",
+            "answers": "`Mentions or IDs`",
+            "recommended": "Roles to add when the Reaction is added and take when the Reaction is removed"
+          },
+          "emoteid": {
+            "name": "Button Emote",
+            "answers": "Emotes",
+            "recommended": "The Emote the Reaction will have"
+          }
+        },
+        "otherEdits": {
+          "add": {
+            "name": "Add a Reaction Role Reaction",
+            "process": {
+              "0": "Respond with an Emote for the Reaction"
+            }
+          },
+          "remove": {
+            "name": "Remove a Reaction Role Reaction",
+            "process": {
+              "0": "Respond with the ID of the Reaction Role Reaction you want to delete"
+            }
           }
         }
       },
