@@ -1239,75 +1239,75 @@
             "key": "channels",
             "required": true
           },
-          "HAS_LEAST_ATTACHMENTS": {
+          "hasleastattachments": {
             "key": "number",
             "required": true
           },
-          "HAS_MOST_ATTACHMENTS": {
+          "hasmostattachments": {
             "key": "number",
             "required": true
           },
-          "HAS_LEAST_CHARACTERS": {
+          "hasleastcharacters": {
             "key": "number",
             "required": true
           },
-          "HAS_MOST_CHARACTERS": {
+          "hasmostcharacters": {
             "key": "number",
             "required": true
           },
-          "HAS_LEAST_WORDS": {
+          "hasleastwords": {
             "key": "number",
             "required": true
           },
-          "HAS_MOST_WORDS": {
+          "hasmostwords": {
             "key": "number",
             "required": true
           },
-          "MENTIONS_LEAST_USERS": {
+          "mentionsleastusers": {
             "key": "number",
             "required": true
           },
-          "MENTIONS_MOST_USERS": {
+          "mentionsmostusers": {
             "key": "number",
             "required": true
           },
-          "MENTIONS_LEAST_CHANNELS": {
+          "mentionsleastchannels": {
             "key": "number",
             "required": true
           },
-          "MENTIONS_MOST_CHANNELS": {
+          "mentionsmostchannels": {
             "key": "number",
             "required": true
           },
-          "MENTIONS_LEAST_ROLES": {
+          "mentionsleastroles": {
             "key": "number",
             "required": true
           },
-          "MENTIONS_MOST_ROLES": {
+          "mentionsmostroles": {
             "key": "number",
             "required": true
           },
-          "HAS_LEAST_LINKS": {
+          "hasleastlinks": {
             "key": "number",
             "required": true
           },
-          "HAS_MOST_LINKS": {
+          "hasmostlinks": {
             "key": "number",
             "required": true
           },
-          "HAS_LEAST_EMOTES": {
+          "hasleastemotes": {
             "key": "number",
             "required": true
           },
-          "HAS_MOST_EMOTES": {
+          "hasmostemotes": {
             "key": "number",
             "required": true
           },
-          "HAS_LEAST_MENTIONS": {
+          "hasleastmentions": {
             "key": "number",
             "required": true
           },
-          "HAS_MOST_MENTIONS": {
+          "hasmostmentions": {
             "key": "number",
             "required": true
           }

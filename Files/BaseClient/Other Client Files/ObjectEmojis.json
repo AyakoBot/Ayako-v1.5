@@ -4,57 +4,57 @@
     { "name": "AMayakopeek", "id": "924071140257841162", "animated": false }
   ],
   "userFlags": {
-    "DISCORD_EMPLOYEE": { "name": "DiscordStaff", "id": "945409713661706292", "animated": false },
-    "PARTNERED_SERVER_OWNER": {
+    "DiscordEmployee": { "name": "DiscordStaff", "id": "945409713661706292", "animated": false },
+    "PartneredServerOwner": {
       "name": "PartneredServerOwner",
       "id": "945409713762365460",
       "animated": false
     },
-    "HYPESQUAD_EVENTS": {
+    "HypesquadEvents": {
       "name": "HypeSquadEventCoordinator",
       "id": "945409713653313617",
       "animated": false
     },
-    "BUGHUNTER_LEVEL_1": {
-      "name": "BugHunterLevel1",
+    "BughunterLevel1": {
+      "name": "BughunterLevel1",
       "id": "945409713737199636",
       "animated": false
     },
-    "HOUSE_BRAVERY": { "name": "Bravery", "id": "945409713745559652", "animated": false },
-    "HOUSE_BRILLIANCE": { "name": "Brilliance", "id": "945409713615540235", "animated": false },
-    "HOUSE_BALANCE": { "name": "Balance", "id": "945409713678450710", "animated": false },
-    "EARLY_SUPPORTER": {
+    "HouseBravery": { "name": "Bravery", "id": "945409713745559652", "animated": false },
+    "HouseBrilliance": { "name": "Brilliance", "id": "945409713615540235", "animated": false },
+    "HouseBalance": { "name": "Balance", "id": "945409713678450710", "animated": false },
+    "EarlySupporter": {
       "name": "EarlySupporter",
       "id": "945409713422602241",
       "animated": false
     },
-    "BUGHUNTER_LEVEL_2": {
-      "name": "BugHunterLevel2",
+    "BughunterLevel2": {
+      "name": "BughunterLevel2",
       "id": "945409713716199434",
       "animated": false
     },
-    "VERIFIED_BOT": { "name": "VerBot2", "id": "945605032185827349", "animated": false },
-    "EARLY_VERIFIED_BOT_DEVELOPER": {
+    "VerifiedBot": { "name": "VerBot2", "id": "945605032185827349", "animated": false },
+    "EarlyVerifiedBotDeveloper": {
       "name": "EarlyVerifiedBotDev",
       "id": "945604756087373854",
       "animated": false
     },
-    "DISCORD_CERTIFIED_MODERATOR": {
+    "DiscordCertifiedModerator": {
       "name": "DiscordModerator",
       "id": "945409713661677608",
       "animated": false
     },
-    "BOT": { "name": "Bot", "id": "945605032190029825", "animated": false },
-    "NITRO": { "name": "Nitro", "id": "945409713691066388", "animated": false },
-    "BOOST1": { "name": "1Month", "id": "945984202921345024", "animated": false },
-    "BOOST2": { "name": "2Months", "id": "945984202883612702", "animated": false },
-    "BOOST3": { "name": "3Months", "id": "945984202782965760", "animated": false },
-    "BOOST6": { "name": "6Months", "id": "945984202866843668", "animated": false },
-    "BOOST9": { "name": "9Months", "id": "945984202753581086", "animated": false },
-    "BOOST12": { "name": "12Months", "id": "945984202732609606", "animated": false },
-    "BOOST15": { "name": "15Months", "id": "945984202866839593", "animated": false },
-    "BOOST18": { "name": "18Months", "id": "945984202816495686", "animated": false },
-    "BOOST24": { "name": "24Months", "id": "945984202820702238", "animated": false }
+    "Bot": { "name": "Bot", "id": "945605032190029825", "animated": false },
+    "Nitro": { "name": "Nitro", "id": "945409713691066388", "animated": false },
+    "Boost1": { "name": "1Month", "id": "945984202921345024", "animated": false },
+    "Boost2": { "name": "2Months", "id": "945984202883612702", "animated": false },
+    "Boost3": { "name": "3Months", "id": "945984202782965760", "animated": false },
+    "Boost6": { "name": "6Months", "id": "945984202866843668", "animated": false },
+    "Boost9": { "name": "9Months", "id": "945984202753581086", "animated": false },
+    "Boost12": { "name": "12Months", "id": "945984202732609606", "animated": false },
+    "Boost15": { "name": "15Months", "id": "945984202866839593", "animated": false },
+    "Boost18": { "name": "18Months", "id": "945984202816495686", "animated": false },
+    "Boost24": { "name": "24Months", "id": "945984202820702238", "animated": false }
   },
   "channelTypes": {
     "2": { "name": "Voice", "id": "946108239072878682", "animated": false },

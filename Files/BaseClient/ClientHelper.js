@@ -269,31 +269,31 @@ module.exports = {
     const Flags = [];
 
     if (BitField.has(1)) {
-      Flags.push(`${emotes ? client.textEmotes.userFlags.BOOST1 : ''} ${lan.userFlags.BOOST1}`);
+      Flags.push(`${emotes ? client.textEmotes.userFlags.Boost1 : ''} ${lan.userFlags.Boost1}`);
     }
     if (BitField.has(2)) {
-      Flags.push(`${emotes ? client.textEmotes.userFlags.BOOST2 : ''} ${lan.userFlags.BOOST2}`);
+      Flags.push(`${emotes ? client.textEmotes.userFlags.Boost2 : ''} ${lan.userFlags.Boost2}`);
     }
     if (BitField.has(4)) {
-      Flags.push(`${emotes ? client.textEmotes.userFlags.BOOST3 : ''} ${lan.userFlags.BOOST3}`);
+      Flags.push(`${emotes ? client.textEmotes.userFlags.Boost3 : ''} ${lan.userFlags.Boost3}`);
     }
     if (BitField.has(8)) {
-      Flags.push(`${emotes ? client.textEmotes.userFlags.BOOST6 : ''} ${lan.userFlags.BOOST6}`);
+      Flags.push(`${emotes ? client.textEmotes.userFlags.Boost6 : ''} ${lan.userFlags.Boost6}`);
     }
     if (BitField.has(16)) {
-      Flags.push(`${emotes ? client.textEmotes.userFlags.BOOST9 : ''} ${lan.userFlags.BOOST9}`);
+      Flags.push(`${emotes ? client.textEmotes.userFlags.Boost9 : ''} ${lan.userFlags.Boost9}`);
     }
     if (BitField.has(32)) {
-      Flags.push(`${emotes ? client.textEmotes.userFlags.BOOST12 : ''} ${lan.userFlags.BOOST12}`);
+      Flags.push(`${emotes ? client.textEmotes.userFlags.Boost12 : ''} ${lan.userFlags.Boost12}`);
     }
     if (BitField.has(64)) {
-      Flags.push(`${emotes ? client.textEmotes.userFlags.BOOST15 : ''} ${lan.userFlags.BOOST15}`);
+      Flags.push(`${emotes ? client.textEmotes.userFlags.Boost15 : ''} ${lan.userFlags.Boost15}`);
     }
     if (BitField.has(128)) {
-      Flags.push(`${emotes ? client.textEmotes.userFlags.BOOST18 : ''} ${lan.userFlags.BOOST18}`);
+      Flags.push(`${emotes ? client.textEmotes.userFlags.Boost18 : ''} ${lan.userFlags.Boost18}`);
     }
     if (BitField.has(256)) {
-      Flags.push(`${emotes ? client.textEmotes.userFlags.BOOST24 : ''} ${lan.userFlags.BOOST24}`);
+      Flags.push(`${emotes ? client.textEmotes.userFlags.Boost24 : ''} ${lan.userFlags.Boost24}`);
     }
 
     return Flags;
@@ -313,93 +313,93 @@ module.exports = {
 
     if (BitField.has(1)) {
       Flags.push(
-        `${emotes ? client.textEmotes.userFlags.DISCORD_EMPLOYEE : ''} ${
-          lan.userFlags.DISCORD_EMPLOYEE
+        `${emotes ? client.textEmotes.userFlags.DiscordEmployee : ''} ${
+          lan.userFlags.DiscordEmployee
         }`,
       );
     }
     if (BitField.has(2)) {
       Flags.push(
-        `${emotes ? client.textEmotes.userFlags.PARTNERED_SERVER_OWNER : ''} ${
-          lan.userFlags.PARTNERED_SERVER_OWNER
+        `${emotes ? client.textEmotes.userFlags.PartneredServerOwner : ''} ${
+          lan.userFlags.PartneredServerOwner
         }`,
       );
     }
     if (BitField.has(4)) {
       Flags.push(
-        `${emotes ? client.textEmotes.userFlags.HYPESQUAD_EVENTS : ''} ${
-          lan.userFlags.HYPESQUAD_EVENTS
+        `${emotes ? client.textEmotes.userFlags.HypesquadEvents : ''} ${
+          lan.userFlags.HypesquadEvents
         }`,
       );
     }
     if (BitField.has(8)) {
       Flags.push(
-        `${emotes ? client.textEmotes.userFlags.BUGHUNTER_LEVEL_1 : ''} ${
-          lan.userFlags.BUGHUNTER_LEVEL_1
+        `${emotes ? client.textEmotes.userFlags.BughunterLevel1 : ''} ${
+          lan.userFlags.BughunterLevel1
         }`,
       );
     }
     if (BitField.has(64)) {
       Flags.push(
-        `${emotes ? client.textEmotes.userFlags.HOUSE_BRAVERY : ''} ${lan.userFlags.HOUSE_BRAVERY}`,
+        `${emotes ? client.textEmotes.userFlags.HouseBravery : ''} ${lan.userFlags.HouseBravery}`,
       );
     }
     if (BitField.has(128)) {
       Flags.push(
-        `${emotes ? client.textEmotes.userFlags.HOUSE_BRILLIANCE : ''} ${
-          lan.userFlags.HOUSE_BRILLIANCE
+        `${emotes ? client.textEmotes.userFlags.HouseBrilliance : ''} ${
+          lan.userFlags.HouseBrilliance
         }`,
       );
     }
     if (BitField.has(256)) {
       Flags.push(
-        `${emotes ? client.textEmotes.userFlags.HOUSE_BALANCE : ''} ${lan.userFlags.HOUSE_BALANCE}`,
+        `${emotes ? client.textEmotes.userFlags.HouseBalance : ''} ${lan.userFlags.HouseBalance}`,
       );
     }
     if (BitField.has(512)) {
       Flags.push(
-        `${emotes ? client.textEmotes.userFlags.EARLY_SUPPORTER : ''} ${
-          lan.userFlags.EARLY_SUPPORTER
+        `${emotes ? client.textEmotes.userFlags.EarlySupporter : ''} ${
+          lan.userFlags.EarlySupporter
         }`,
       );
     }
     if (BitField.has(1024)) {
-      Flags.push(`${lan.userFlags.TEAM_USER}`);
+      Flags.push(`${lan.userFlags.TeamUser}`);
     }
     if (BitField.has(2048)) {
-      Flags.push(`${emotes ? client.textEmotes.userFlags.BOT : ''} ${lan.userFlags.BOT}`);
+      Flags.push(`${emotes ? client.textEmotes.userFlags.Bot : ''} ${lan.userFlags.Bot}`);
     }
     if (BitField.has(4096)) {
-      Flags.push(`${emotes ? client.textEmotes.userFlags.NITRO : ''} ${lan.userFlags.NITRO}`);
+      Flags.push(`${emotes ? client.textEmotes.userFlags.Nitro : ''} ${lan.userFlags.Nitro}`);
     }
     if (BitField.has(16384)) {
       Flags.push(
-        `${emotes ? client.textEmotes.userFlags.BUGHUNTER_LEVEL_2 : ''} ${
-          lan.userFlags.BUGHUNTER_LEVEL_2
+        `${emotes ? client.textEmotes.userFlags.BughunterLevel2 : ''} ${
+          lan.userFlags.BughunterLevel2
         }`,
       );
     }
     if (BitField.has(65536)) {
       Flags.push(
-        `${emotes ? client.textEmotes.userFlags.VERIFIED_BOT : ''} ${lan.userFlags.VERIFIED_BOT}`,
+        `${emotes ? client.textEmotes.userFlags.VerifiedBot : ''} ${lan.userFlags.VerifiedBot}`,
       );
     }
     if (BitField.has(131072)) {
       Flags.push(
-        `${emotes ? client.textEmotes.userFlags.EARLY_VERIFIED_BOT_DEVELOPER : ''} ${
-          lan.userFlags.EARLY_VERIFIED_BOT_DEVELOPER
+        `${emotes ? client.textEmotes.userFlags.EarlyVerifiedBotDeveloper : ''} ${
+          lan.userFlags.EarlyVerifiedBotDeveloper
         }`,
       );
     }
     if (BitField.has(262144)) {
       Flags.push(
-        `${emotes ? client.textEmotes.userFlags.DISCORD_CERTIFIED_MODERATOR : ''} ${
-          lan.userFlags.DISCORD_CERTIFIED_MODERATOR
+        `${emotes ? client.textEmotes.userFlags.DiscordCertifiedModerator : ''} ${
+          lan.userFlags.DiscordCertifiedModerator
         }`,
       );
     }
     if (BitField.has(524288)) {
-      Flags.push(`${lan.userFlags.BOT_HTTP_INTERACTIONS}`);
+      Flags.push(`${lan.userFlags.BotHTTPInteractions}`);
     }
 
     return Flags;
@@ -416,58 +416,58 @@ module.exports = {
     const Rules = [];
 
     if (BitField.has(1n)) {
-      Rules.push(lan.channelRules.HAS_LEAST_ATTACHMENTS);
+      Rules.push(lan.channelRules.HasLeastAttachments);
     }
     if (BitField.has(2n)) {
-      Rules.push(lan.channelRules.HAS_MOST_ATTACHMENTS);
+      Rules.push(lan.channelRules.HasMostAttachments);
     }
     if (BitField.has(4n)) {
-      Rules.push(lan.channelRules.HAS_LEAST_CHARACTERS);
+      Rules.push(lan.channelRules.HasLeastCharacters);
     }
     if (BitField.has(8n)) {
-      Rules.push(lan.channelRules.HAS_MOST_CHARACTERS);
+      Rules.push(lan.channelRules.HasMostCharacters);
     }
     if (BitField.has(16n)) {
-      Rules.push(lan.channelRules.HAS_LEAST_WORDS);
+      Rules.push(lan.channelRules.HasLeastWords);
     }
     if (BitField.has(32n)) {
-      Rules.push(lan.channelRules.HAS_MOST_WORDS);
+      Rules.push(lan.channelRules.HasMostWords);
     }
     if (BitField.has(64n)) {
-      Rules.push(lan.channelRules.MENTIONS_LEAST_USERS);
+      Rules.push(lan.channelRules.MentionsLeastUsers);
     }
     if (BitField.has(128n)) {
-      Rules.push(lan.channelRules.MENTIONS_MOST_USERS);
+      Rules.push(lan.channelRules.MentionsMostUsers);
     }
     if (BitField.has(256n)) {
-      Rules.push(lan.channelRules.MENTIONS_LEAST_CHANNELS);
+      Rules.push(lan.channelRules.MentionsLeastChannels);
     }
     if (BitField.has(512n)) {
-      Rules.push(lan.channelRules.MENTIONS_MOST_CHANNELS);
+      Rules.push(lan.channelRules.MentionsMostChannels);
     }
     if (BitField.has(1024n)) {
-      Rules.push(lan.channelRules.MENTIONS_LEAST_ROLES);
+      Rules.push(lan.channelRules.MentionsLeastRoles);
     }
     if (BitField.has(2048n)) {
-      Rules.push(lan.channelRules.MENTIONS_MOST_ROLES);
+      Rules.push(lan.channelRules.MentionsMostRoles);
     }
     if (BitField.has(4096n)) {
-      Rules.push(lan.channelRules.HAS_LEAST_LINKS);
+      Rules.push(lan.channelRules.HasLeastLinks);
     }
     if (BitField.has(8192n)) {
-      Rules.push(lan.channelRules.HAS_MOST_LINKS);
+      Rules.push(lan.channelRules.HasMostLinks);
     }
     if (BitField.has(16384n)) {
-      Rules.push(lan.channelRules.HAS_LEAST_EMOTES);
+      Rules.push(lan.channelRules.HasLeastEmotes);
     }
     if (BitField.has(32768n)) {
-      Rules.push(lan.channelRules.HAS_MOST_EMOTES);
+      Rules.push(lan.channelRules.HasMostEmotes);
     }
     if (BitField.has(65536n)) {
-      Rules.push(lan.channelRules.HAS_LEAST_MENTIONS);
+      Rules.push(lan.channelRules.HasLeastMentions);
     }
     if (BitField.has(131072n)) {
-      Rules.push(lan.channelRules.HAS_MOST_MENTIONS);
+      Rules.push(lan.channelRules.HasMostMentions);
     }
 
     return Rules;
@@ -483,139 +483,139 @@ module.exports = {
     const Perms = [];
 
     if (BitField.has(1n, false)) {
-      Perms.push(lan.permissions.CREATE_INSTANT_INVITE);
+      Perms.push(lan.permissions.CreateInstantInvite);
     }
     if (BitField.has(2n, false)) {
-      Perms.push(lan.permissions.KICK_MEMBERS);
+      Perms.push(lan.permissions.KickMembers);
     }
     if (BitField.has(4n, false)) {
-      Perms.push(lan.permissions.BAN_MEMBERS);
+      Perms.push(lan.permissions.BanMembers);
     }
     if (BitField.has(8n, false)) {
-      Perms.push(lan.permissions.ADMINISTRATOR);
+      Perms.push(lan.permissions.Administrator);
     }
     if (BitField.has(16n, false)) {
       if (isntRole) {
-        Perms.push(lan.permissions.MANAGE_CHANNEL);
+        Perms.push(lan.permissions.ManageChannel);
       } else {
-        Perms.push(lan.permissions.MANAGE_CHANNELS);
+        Perms.push(lan.permissions.ManageChannels);
       }
     }
     if (BitField.has(32n, false)) {
-      Perms.push(lan.permissions.MANAGE_GUILD);
+      Perms.push(lan.permissions.ManageGuild);
     }
     if (BitField.has(64n, false)) {
-      Perms.push(lan.permissions.ADD_REACTIONS);
+      Perms.push(lan.permissions.AddReactions);
     }
     if (BitField.has(128n, false)) {
-      Perms.push(lan.permissions.VIEW_AUDIT_LOG);
+      Perms.push(lan.permissions.ViewAuditLog);
     }
     if (BitField.has(256n, false)) {
-      Perms.push(lan.permissions.PRIORITY_SPEAKER);
+      Perms.push(lan.permissions.PrioritySpeaker);
     }
     if (BitField.has(512n, false)) {
-      Perms.push(lan.permissions.STREAM);
+      Perms.push(lan.permissions.Stream);
     }
     if (BitField.has(1024n, false)) {
       if (isntRole) {
-        Perms.push(lan.permissions.VIEW_CHANNEL);
+        Perms.push(lan.permissions.ViewChannel);
       } else {
-        Perms.push(lan.permissions.VIEW_CHANNELS);
+        Perms.push(lan.permissions.ViewChannels);
       }
     }
     if (BitField.has(2048n, false)) {
-      Perms.push(lan.permissions.SEND_MESSAGES);
+      Perms.push(lan.permissions.SendMessages);
     }
     if (BitField.has(4096n, false)) {
-      Perms.push(lan.permissions.SEND_TTS_MESSAGES);
+      Perms.push(lan.permissions.SendTTSMessages);
     }
     if (BitField.has(8192n, false)) {
-      Perms.push(lan.permissions.MANAGE_MESSAGES);
+      Perms.push(lan.permissions.ManageMessages);
     }
     if (BitField.has(16384n, false)) {
-      Perms.push(lan.permissions.EMBED_LINKS);
+      Perms.push(lan.permissions.EmbedLinks);
     }
     if (BitField.has(32768n, false)) {
-      Perms.push(lan.permissions.ATTACH_FILES);
+      Perms.push(lan.permissions.AttachFiles);
     }
     if (BitField.has(65536n, false)) {
-      Perms.push(lan.permissions.READ_MESSAGE_HISTORY);
+      Perms.push(lan.permissions.ReadMessageHistory);
     }
     if (BitField.has(131072n, false)) {
-      Perms.push(lan.permissions.MENTION_EVERYONE);
+      Perms.push(lan.permissions.MentionEveryone);
     }
     if (BitField.has(262144n, false)) {
-      Perms.push(lan.permissions.USE_EXTERNAL_EMOJIS);
+      Perms.push(lan.permissions.UseExternalEmojis);
     }
     if (BitField.has(524288n, false)) {
-      Perms.push(lan.permissions.VIEW_GUILD_INSIGHTS);
+      Perms.push(lan.permissions.ViewGuildInsights);
     }
     if (BitField.has(1048576n, false)) {
-      Perms.push(lan.permissions.CONNECT);
+      Perms.push(lan.permissions.Connect);
     }
     if (BitField.has(2097152n, false)) {
-      Perms.push(lan.permissions.SPEAK);
+      Perms.push(lan.permissions.Speak);
     }
     if (BitField.has(4194304n, false)) {
-      Perms.push(lan.permissions.MUTE_MEMBERS);
+      Perms.push(lan.permissions.MuteMembers);
     }
     if (BitField.has(8388608n, false)) {
-      Perms.push(lan.permissions.DEAFEN_MEMBERS);
+      Perms.push(lan.permissions.DeafenMembers);
     }
     if (BitField.has(16777216n, false)) {
-      Perms.push(lan.permissions.MOVE_MEMBERS);
+      Perms.push(lan.permissions.MoveMembers);
     }
     if (BitField.has(33554432n, false)) {
-      Perms.push(lan.permissions.USE_VAD);
+      Perms.push(lan.permissions.UseVAD);
     }
     if (BitField.has(67108864n, false)) {
-      Perms.push(lan.permissions.CHANGE_NICKNAME);
+      Perms.push(lan.permissions.ChangeNickname);
     }
     if (BitField.has(134217728n, false)) {
-      Perms.push(lan.permissions.MANAGE_NICKNAMES);
+      Perms.push(lan.permissions.ManageNicknames);
     }
     if (BitField.has(268435456n, false)) {
       if (isntRole) {
-        Perms.push(lan.permissions.MANAGE_PERMISSIONS);
+        Perms.push(lan.permissions.ManagePermissions);
       } else {
-        Perms.push(lan.permissions.MANAGE_ROLES);
+        Perms.push(lan.permissions.ManageRoles);
       }
     }
     if (BitField.has(536870912n, false)) {
-      Perms.push(lan.permissions.MANAGE_WEBHOOKS);
+      Perms.push(lan.permissions.ManageWebhooks);
     }
     if (BitField.has(1073741824n, false)) {
-      Perms.push(lan.permissions.MANAGE_EMOJIS_AND_STICKERS);
+      Perms.push(lan.permissions.ManageEmojisAndStickers);
     }
     if (BitField.has(2147483648n, false)) {
-      Perms.push(lan.permissions.USE_APPLICATION_COMMANDS);
+      Perms.push(lan.permissions.UseApplicationCommands);
     }
     if (BitField.has(4294967296n, false)) {
-      Perms.push(lan.permissions.REQUEST_TO_SPEAK);
+      Perms.push(lan.permissions.RequestToSpeak);
     }
     if (BitField.has(8589934592n, false)) {
-      Perms.push(lan.permissions.MANAGE_EVENTS);
+      Perms.push(lan.permissions.ManageEvents);
     }
     if (BitField.has(17179869184n, false)) {
-      Perms.push(lan.permissions.MANAGE_THREADS);
+      Perms.push(lan.permissions.ManageThreads);
     }
     if (BitField.has(34359738368n, false)) {
-      Perms.push(lan.permissions.USE_AND_CREATE_PUBLIC_THREADS);
+      Perms.push(lan.permissions.CreatePublicThreads);
     }
     if (BitField.has(68719476736n, false)) {
-      Perms.push(lan.permissions.USE_AND_CREATE_PRIVATE_THREADS);
+      Perms.push(lan.permissions.CreatePrivateThreads);
     }
     if (BitField.has(137438953472n, false)) {
-      Perms.push(lan.permissions.USE_EXTERNAL_STICKERS);
+      Perms.push(lan.permissions.UseExternalStickers);
     }
     if (BitField.has(274877906944n, false)) {
-      Perms.push(lan.permissions.SEND_MESSAGES_IN_THREADS);
+      Perms.push(lan.permissions.SendMessagesInThreads);
     }
     if (BitField.has(549755813888n, false)) {
-      Perms.push(lan.permissions.START_EMBEDDED_ACTIVITIES);
+      Perms.push(lan.permissions.StartEmbeddedActivities);
     }
     if (BitField.has(1099511627776n, false)) {
-      Perms.push(lan.permissions.MODERATE_MEMBERS);
+      Perms.push(lan.permissions.ModerateMembers);
     }
 
     return Perms;
@@ -1144,14 +1144,7 @@ module.exports = {
       .setColor(msg.client.constants.error)
       .setDescription(content);
 
-    if (
-      [
-        'PING',
-        'APPLICATION_COMMAND',
-        'MESSAGE_COMPONENT',
-        'APPLICATION_COMMAND_AUTOCOMPLETE',
-      ].includes(msg.type)
-    ) {
+    if ([20, 23].includes(msg.type)) {
       return msg.reply({ embeds: [embed], ephemeral: true });
     }
 
@@ -1188,14 +1181,7 @@ module.exports = {
         inline: false,
       });
 
-    if (
-      [
-        'PING',
-        'APPLICATION_COMMAND',
-        'MESSAGE_COMPONENT',
-        'APPLICATION_COMMAND_AUTOCOMPLETE',
-      ].includes(msg.type)
-    ) {
+    if ([20, 23].includes(msg.type)) {
       return msg.reply({ embeds: [embed], ephemeral: true });
     }
 

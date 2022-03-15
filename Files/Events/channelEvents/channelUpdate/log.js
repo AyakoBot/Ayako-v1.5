@@ -185,8 +185,8 @@ module.exports = {
               );
             }
             let text;
-            if (deletedPerm.type === 'member') text = `${language.member} <@${deletedPerm.id}>`;
-            else if (deletedPerm.type === 'role') text = `${language.role} <@&${deletedPerm.id}>`;
+            if (deletedPerm.type === 1) text = `${language.member} <@${deletedPerm.id}>`;
+            else if (deletedPerm.type === 0) text = `${language.role} <@&${deletedPerm.id}>`;
             else text = `${language.unknown} ${deletedPerm}`;
 
             embed.addFields({ name: language.permissions.removedPermissionsFor, value: text });
@@ -204,8 +204,8 @@ module.exports = {
               );
             }
             let text;
-            if (createdPerm.type === 'member') text = `${language.member} <@${createdPerm.id}>`;
-            else if (createdPerm.type === 'role') text = `${language.role} <@&${createdPerm.id}>`;
+            if (createdPerm.type === 1) text = `${language.member} <@${createdPerm.id}>`;
+            else if (createdPerm.type === 0) text = `${language.role} <@&${createdPerm.id}>`;
             else text = `${language.unknown} ${createdPerm}`;
             embed.addFields({ name: language.permissions.grantedPermissionFor, value: text });
           } else {
@@ -225,10 +225,10 @@ module.exports = {
               let disable;
               let neutral;
 
-              if (newPerm.type === 'member') {
+              if (newPerm.type === 1) {
                 disable = `<@${newPerm.id}>\n`;
                 enable = `<@${newPerm.id}>\n`;
-              } else if (newPerm.type === 'role') {
+              } else if (newPerm.type === 0) {
                 disable = `<@&${newPerm.id}>\n`;
                 enable = `<@&${newPerm.id}>\n`;
               } else {
@@ -236,9 +236,9 @@ module.exports = {
                 enable = `${language.unknown} ${newPerm}\n`;
               }
 
-              if (oldPerm.type === 'member') {
+              if (oldPerm.type === 1) {
                 neutral = `<@${oldPerm.id}>\n`;
-              } else if (oldPerm.type === 'role') {
+              } else if (oldPerm.type === 0) {
                 neutral = `<@&${oldPerm.id}>\n`;
               } else {
                 neutral = `${language.unknown} ${oldPerm}\n`;
@@ -281,7 +281,7 @@ module.exports = {
               if (neutral.includes('`')) {
                 embed.addFields({
                   name: `${language.permissions.removedPermissionsFor} ${
-                    oldPerm.type === 'member' ? language.member : language.role
+                    oldPerm.type === 1 ? language.member : language.role
                   }`,
                   value: neutral,
                 });
@@ -291,7 +291,7 @@ module.exports = {
               if (disable.includes('`')) {
                 embed.addFields({
                   name: `${language.permissions.deniedPermissionsFor} ${
-                    newPerm.type === 'member' ? language.member : language.role
+                    newPerm.type === 1 ? language.member : language.role
                   }`,
                   value: disable,
                 });
@@ -301,7 +301,7 @@ module.exports = {
               if (enable.includes('`')) {
                 embed.addFields({
                   name: `${language.permissions.grantedPermissionFor} ${
-                    newPerm.type === 'member' ? language.member : language.role
+                    newPerm.type === 16n ? language.member : language.role
                   }`,
                   value: enable,
                 });
@@ -377,9 +377,9 @@ module.exports = {
 function send(logchannel, embed, language, { client }) {
   embed.fields.forEach((field) => {
     if (field.value.length > 1024 || embed.length > 6000) {
-      const re1 = new RegExp(client.constants.switch.disable, 'g');
-      const re2 = new RegExp(client.constants.switch.neutral, 'g');
-      const re3 = new RegExp(client.constants.switch.enable, 'g');
+      const re1 = new RegExp(client.textEmotes.switch.disable, 'g');
+      const re2 = new RegExp(client.textEmotes.switch.neutral, 'g');
+      const re3 = new RegExp(client.textEmotes.switch.enable, 'g');
       field.value = field.value
         .replace(re1, language.deny)
         .replace(re2, language.neutral)
