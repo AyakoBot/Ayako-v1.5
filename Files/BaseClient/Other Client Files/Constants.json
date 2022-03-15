@@ -485,17 +485,18 @@
       },
       "baseSettings": {
         "leveling": "levelsettings",
-        "nitro": "nitrosettings"
+        "nitro": "nitrosettings",
+        "reactionroles": "reactionsettings"
       },
       "childSettings": {
         "leveling": ["levelsettings", "levelroles", "multichannels", "multiroles", "ruleschannels"],
         "nitro": ["nitroroles", "nitrosettings"],
-        "reactionroles": ["reactionsettings", "reactions", "buttons"]
+        "reactionroles": ["reactionsettings", "rrreactions", "rrbuttons"]
       },
       "identifiers": {
         "leveling": "guildid",
         "nitro": "guildid",
-        "reactionroles": "messageid"
+        "reactionroles": "messagelink"
       },
       "edit": {
         "active": {
@@ -522,7 +523,7 @@
         },
         "rrreactions": {
           "emoteid": {
-            "key": "emotes",
+            "key": "emote",
             "required": true
           },
           "roles": {
@@ -536,7 +537,7 @@
             "required": false
           },
           "emoteid": {
-            "key": "emotes",
+            "key": "emote",
             "required": true
           },
           "buttontext": {
@@ -1346,9 +1347,7 @@
         "prefix": ["prefix"],
         "interactions": ["interactions"],
         "modroles": ["modroles"],
-        "reactionsettings": [
-          "The strike System is not enabled\nuse `{{prefix}}settings autopunish` to enable it"
-        ],
+        "reactionsettings": ["rrsettings"],
         "rrbuttons": ["rrbuttons"],
         "rrreactions": ["rrreactions"]
       },
@@ -1372,25 +1371,23 @@
         },
         "rrbuttons": {
           "cols": ["guildid, uniquetimestamp, active, messagelink"],
-          "vals": [
-            ["{{msg.guild.id}}", "{{values.uniquetimestamp}}", false, "{{values.messagelink}}"]
-          ],
-          "add": ["roles"],
+          "vals": [["{{msg.guild.id}}", "{{values.uniquetimestamp}}", false, "{{msg.args[2]}}"]],
+          "add": [],
           "remove": ["uniquetimestamp"],
           "ident": "emoteid"
         },
         "rrreactions": {
-          "cols": ["guildid, uniquetimestamp, active,  messagelink, emoteid, roles"],
+          "cols": ["guildid, uniquetimestamp, active, messagelink, emoteid"],
           "vals": [
             [
               "{{msg.guild.id}}",
               "{{values.uniquetimestamp}}",
               false,
-              "{{values.messagelink}}",
+              "{{msg.args[2]}}",
               "{{values.emoteid}}"
             ]
           ],
-          "add": ["emoteid", "roles"],
+          "add": ["emoteid"],
           "remove": ["uniquetimestamp"],
           "ident": "emoteid"
         },

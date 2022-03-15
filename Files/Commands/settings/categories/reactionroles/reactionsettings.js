@@ -6,48 +6,44 @@ module.exports = {
   setupRequired: false,
   finished: true,
   category: ['automation'],
-  mmrEmbed(msg, res) {
+  childOf: 'reactionroles',
+  displayParentOnly: true,
+  mmrEmbed: (msg, rows) => {
     const embed = new Discord.UnsafeEmbed();
 
-    res.rows.forEach((row) => {
+    rows.forEach((row) => {
       embed.addFields({
         name: row.name,
         value: `${
           row.active
             ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
             : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`
-        } ${msg.client.ch.stp(msg.client.constants.standard.discordUrlDB, {
-          guildid: row.guildid,
-          channelid: row.channelid,
-          msgid: row.msgid,
-        })}`,
+        } ${row.messagelink}`,
         inline: true,
       });
     });
 
     return embed;
   },
-  displayEmbed(msg, r) {
+  displayEmbed: (msg, r) => {
     const embed = new Discord.UnsafeEmbed();
 
     embed.addFields(
-      {
-        name: msg.lan.messagelink,
-        value: r.messagelink,
-        inline: false,
-      },
-      {
-        name: msg.lan.name,
-        value: r.active
-          ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
-          : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`,
-        inline: false,
-      },
       {
         name: msg.lanSettings.active,
         value: r.active
           ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
           : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`,
+        inline: false,
+      },
+      {
+        name: msg.lan.name,
+        value: r.name,
+        inline: false,
+      },
+      {
+        name: msg.lan.messagelink,
+        value: r.messagelink,
         inline: false,
       },
       {
@@ -68,7 +64,7 @@ module.exports = {
 
     return embed;
   },
-  buttons(msg, r) {
+  buttons: (msg, r) => {
     const active = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.active.name)
       .setLabel(msg.lanSettings.active)
