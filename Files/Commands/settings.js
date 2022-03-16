@@ -260,7 +260,7 @@ module.exports = {
       );
 
       if (!res.rows[0]?.id) {
-        res.rows.forEach((row, i) => {
+        res?.rows?.forEach((row, i) => {
           res.rows[i].id = i;
         });
       }
@@ -268,9 +268,9 @@ module.exports = {
 
       if (res && res.rowCount > 0) {
         if (msg.file.mmrEmbed[Symbol.toStringTag] === 'AsyncFunction') {
-          embed = await msg.file.mmrEmbed(msg, res.rows);
+          embed = await msg.file.mmrEmbed(msg, res && res.rows ? res.rows : []);
         } else if (typeof msg.file.mmrEmbed === 'function') {
-          embed = msg.file.mmrEmbed(msg, res.rows);
+          embed = msg.file.mmrEmbed(msg, res && res.rows ? res.rows : []);
         } else {
           noEmbed(msg, answer, res, true);
           return;
@@ -293,7 +293,7 @@ module.exports = {
         page: 1,
       };
 
-      res.rows.forEach((row) => {
+      res?.rows?.forEach((row) => {
         const isEmote = msg.client.emojis.cache.get(getIdentifier(msg, settingsConstant, row));
 
         options.allOptions.push(
@@ -598,7 +598,7 @@ const mmrEditList = async (msgData, sendData) => {
   const { res } = sendData;
 
   if (res && res.rowCount && !res.rows[0].id) {
-    res.rows.forEach((row, i) => {
+    res?.rows?.forEach((row, i) => {
       res.rows[i].id = i;
     });
   }
@@ -626,7 +626,7 @@ const mmrEditList = async (msgData, sendData) => {
     answer = returnedData.interaction;
 
     const { values } = returnedData;
-    const row = res.rows.find((f) => f.id === Number(values.id));
+    const row = res?.rows?.find((f) => f.id === Number(values.id));
     values.uniquetimestamp = row.uniquetimestamp;
 
     const table = msg.client.constants.commands.settings.tablenames[msg.file.name][0];
@@ -706,8 +706,12 @@ const mmrEditList = async (msgData, sendData) => {
     if (!repeaterDone) return;
 
     insertedValues.uniquetimestamp = Date.now();
-    insertedValues.id = res.rows.length + 1;
+    insertedValues.id = Number(res?.rows?.length) + 1 || 1;
     insertedValues.guildid = msg.guild.id;
+    insertedValues[msg.client.constants.commands.settings.identifiers[msg.file.childOf]] =
+      row[msg.client.constants.commands.settings.identifiers[msg.file.childOf]] ||
+      msg.args[2] ||
+      insertedValues[msg.client.constants.commands.settings.identifiers[msg.file.childOf]];
 
     const tables = msg.client.constants.commands.settings.tablenames[msg.file.name];
     const promises = tables.map(async (table, i) => {
@@ -741,6 +745,7 @@ const mmrEditList = async (msgData, sendData) => {
             )}); ${valuesSTP}`,
           );
         }
+
         await msg.client.ch.query(
           `INSERT INTO ${table} (${cols}) VALUES (${valueIdentifier.join(', ')});`,
           valuesSTP,
@@ -758,7 +763,7 @@ const mmrEditList = async (msgData, sendData) => {
   let { embed } = sendData;
 
   if (!embed) {
-    embed = await msg.file.mmrEmbed(msg, res.rows);
+    embed = await msg.file.mmrEmbed(msg, res && res.rows ? res.rows : []);
   }
 
   embed.setDescription(msg.lanSettings.mmrEditList).setAuthor({
@@ -776,7 +781,7 @@ const mmrEditList = async (msgData, sendData) => {
   };
   const settingsConstant = msg.client.constants.commands.settings.setupQueries[msg.file.name];
 
-  res.rows.forEach((row) => {
+  res?.rows?.forEach((row) => {
     const isEmote = msg.client.emojis.cache.get(getIdentifier(msg, settingsConstant, row));
 
     options.allOptions.push(
@@ -836,7 +841,7 @@ const mmrEditList = async (msgData, sendData) => {
       }
       case 'list': {
         await interaction.deferReply().catch(() => {});
-        const row = res.rows.find((r) => r.id === Number(interaction.values[0]));
+        const row = res?.rows?.find((r) => r.id === Number(interaction.values[0]));
 
         singleRowEdit({ msg, answer: interaction }, { row, res }, null, true);
         buttonsCollector.stop();
@@ -926,7 +931,9 @@ const singleRowEdit = async (msgData, resData, embed, comesFromMMR) => {
     ) {
       buttonsCollector.stop();
       reassignMsg(
-        `${msg.client.constants.standard.prefix}${module.exports.name} ${interaction.customId} edit`,
+        `${msg.client.constants.standard.prefix}${module.exports.name} ${
+          interaction.customId
+        } edit ${row[msg.client.constants.commands.settings.identifiers[msg.file.childOf]]}`,
         msg,
       );
       msg.file = msg.client.settings.get(interaction.customId);
@@ -975,7 +982,7 @@ const whereToGo = async (msg, answer) => {
   if (!msg.args[1] || msg.args[1].toLowerCase() !== msg.language.edit) {
     module.exports.display(
       { msg, answer },
-      res?.rows && res.rows.length === 1 ? res.rows[0] : null,
+      res?.rows && res?.rows?.length === 1 ? res.rows[0] : null,
     );
   } else if (
     msg.args[1].toLowerCase() === msg.language.edit &&
@@ -1173,6 +1180,7 @@ const changing = async (msgData, editData, resData) => {
 
   const [tableName] = msg.client.constants.commands.settings.tablenames[msg.file.name];
 
+  let updateRes;
   if (comesFromMMR) {
     await msg.client.ch.query(
       `UPDATE ${tableName} SET ${required.assinger} = $1 WHERE guildid = $2 AND uniquetimestamp = $3;`,
@@ -1185,6 +1193,11 @@ const changing = async (msgData, editData, resData) => {
         row.uniquetimestamp,
       ],
     );
+
+    updateRes = await msg.client.ch.query(
+      `SELECT * FROM ${tableName} WHERE guildid = $1 AND uniquetimestamp = $2;`,
+      [msg.guild.id, row.uniquetimestamp],
+    );
   } else {
     await msg.client.ch.query(
       `UPDATE ${tableName} SET ${required.assinger} = $1 WHERE guildid = $2;`,
@@ -1196,9 +1209,15 @@ const changing = async (msgData, editData, resData) => {
         msg.guild.id,
       ],
     );
+
+    updateRes = await msg.client.ch.query(`SELECT * FROM ${tableName} WHERE guildid = $1;`, [
+      msg.guild.id,
+    ]);
   }
 
-  if (msg.file.doMoreThings) msg.file.doMoreThings(msg, insertedValues, required.assinger);
+  if (msg.file.doMoreThings) {
+    msg.file.doMoreThings(msg, insertedValues, required.assinger, updateRes, res);
+  }
 
   log(msg, { insertedValues, required, comesFromMMR, row }, 'update');
 
@@ -1548,7 +1567,7 @@ const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
         );
       }
 
-      if (!comesFromMMR) {
+      if (comesFromMMR && !Object.keys(row).length) {
         if (returned) whereToGo(msg);
       } else if (returned) singleRowEdit({ msg }, { res, row }, null, comesFromMMR);
 

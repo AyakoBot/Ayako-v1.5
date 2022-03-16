@@ -1371,7 +1371,9 @@
         },
         "rrbuttons": {
           "cols": ["guildid, uniquetimestamp, active, messagelink"],
-          "vals": [["{{msg.guild.id}}", "{{values.uniquetimestamp}}", false, "{{msg.args[2]}}"]],
+          "vals": [
+            ["{{msg.guild.id}}", "{{values.uniquetimestamp}}", false, "{{values.messagelink}}"]
+          ],
           "add": [],
           "remove": ["uniquetimestamp"],
           "ident": "emoteid"
@@ -1383,7 +1385,7 @@
               "{{msg.guild.id}}",
               "{{values.uniquetimestamp}}",
               false,
-              "{{msg.args[2]}}",
+              "{{values.messagelink}}",
               "{{values.emoteid}}"
             ]
           ],
