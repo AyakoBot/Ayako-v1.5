@@ -79,22 +79,22 @@
     "link": "https://cdn.discordapp.com/emojis/902270930716340305.png"
   },
   "check": {
-    "name": "Check",
-    "id": "902269073805701211",
+    "name": "Tick",
+    "id": "902269933860290650",
     "animated": false,
-    "link": "https://cdn.discordapp.com/emojis/902269073805701211.png"
+    "link": "https://cdn.discordapp.com/emojis/902269933860290650.png"
   },
   "checkWithBackground": {
-    "name": "CheckWithBackground",
-    "id": "902270930716340305",
+    "name": "TickWithBackground",
+    "id": "902273165525409872",
     "animated": false,
-    "link": "https://cdn.discordapp.com/emojis/902270930716340305.png"
+    "link": "https://cdn.discordapp.com/emojis/902273165525409872.png"
   },
   "loading": {
     "name": "Loading",
-    "id": "946108238817030174",
+    "id": "780543908861182013",
     "animated": true,
-    "link": "https://cdn.discordapp.com/emojis/946108238817030174.gif"
+    "link": "https://cdn.discordapp.com/emojis/780543908861182013.gif"
   },
   "ayakoPeek": {
     "name": "AMayakopeek",
