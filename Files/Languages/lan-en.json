@@ -3126,6 +3126,8 @@
         "buttontext": "Button Text",
         "roles": "Roles",
         "emoteid": "Button Emote",
+        "cantManage": "I can't edit this Message",
+        "notMyMessage": "Since this is not my Message I can't edit it and add Buttons to it\nUse reactions instead.",
         "edit": {
           "active": {
             "name": "Active",
@@ -3154,6 +3156,9 @@
           }
         },
         "otherEdits": {
+          "add": {
+            "name": "Why is this displayed"
+          },
           "remove": {
             "name": "Remove a Reaction Role Button",
             "process": {

@@ -45,16 +45,16 @@ module.exports = {
               notValid.push(arg);
             } else if (
               insertedValues[required.assinger] &&
-              insertedValues[required.assinger].includes(arg)
+              insertedValues[required.assinger].includes(isValidMessageLink)
             ) {
-              const index = insertedValues[required.assinger].indexOf(arg);
+              const index = insertedValues[required.assinger].indexOf(isValidMessageLink);
               insertedValues[required.assinger].splice(index, 1);
             } else if (
               insertedValues[required.assinger] &&
               insertedValues[required.assinger].length
             ) {
-              insertedValues[required.assinger].push(arg);
-            } else insertedValues[required.assinger] = [arg];
+              insertedValues[required.assinger].push(isValidMessageLink);
+            } else insertedValues[required.assinger] = [isValidMessageLink];
           }),
         );
 
@@ -77,7 +77,7 @@ module.exports = {
           );
         }
 
-        insertedValues[required.assinger] = message.content;
+        insertedValues[required.assinger] = isValidMessageLink;
         break;
       }
     }
@@ -122,5 +122,9 @@ const getMessageLink = async (msg, arg) => {
   const message = await channel.messages.fetch(messageid).catch(() => {});
   if (!message) return false;
 
-  return true;
+  return msg.client.ch.stp(msg.client.constants.standard.discordUrlDB, {
+    guildid,
+    channelid,
+    msgid: messageid,
+  });
 };

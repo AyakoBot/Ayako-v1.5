@@ -7,6 +7,7 @@ module.exports = {
   finished: true,
   category: ['automation'],
   childOf: 'reactionroles',
+  noArrows: true,
   mmrEmbed: (msg, rows) => {
     const embed = new Discord.UnsafeEmbed();
 
@@ -71,15 +72,23 @@ module.exports = {
     return [[active], [emoteid], [roles]];
   },
   manualResGetter: async (msg) => {
+    if (!msg.args[3]) {
+      const res = await msg.client.ch.query(`SELECT * FROM rrreactions WHERE guildid = $1;`, [
+        msg.guild.id,
+      ]);
+      if (res && res.rowCount) return res;
+      return null;
+    }
+
     const baseRes = await msg.client.ch.query(
-      `SELECT * FROM rrsettings WHERE guildid = $1 AND uniquetimestamp = $2;`,
-      [msg.guild.id, msg.args[3]],
+      `SELECT * FROM rrsettings WHERE guildid = $1 AND messagelink = $2;`,
+      [msg.guild.id, msg.args[2]],
     );
 
     if (!baseRes || !baseRes.rowCount) return null;
 
-    const res = await msg.client.ch.query(`SELECT * FROM rrreactions WHERE messageid = $1;`, [
-      baseRes.rows[0].messageid,
+    const res = await msg.client.ch.query(`SELECT * FROM rrreactions WHERE messagelink = $1;`, [
+      baseRes.rows[0].messagelink,
     ]);
 
     return res;

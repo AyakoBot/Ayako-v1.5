@@ -92,4 +92,41 @@ module.exports = {
 
     return [[active], [name, messagelink], [onlyone, anyroles]];
   },
+  doMoreThings: async (msg, insertedValues, changedKey, res, oldRes) => {
+    if (res?.rows?.rowCount === oldRes?.rows?.rowCount) {
+      res.rows.forEach((newRow) => {
+        const oldRow =
+          oldRes.rows[res.rows.findIndex((r) => r.uniquetimestamp === newRow.uniquetimestamp)];
+
+        if (newRow.messagelink !== oldRow.messagelink) {
+          msg.client.ch.query(`UPDATE rrbuttons SET messagelink = $1 WHERE messagelink = $2;`, [
+            newRow.messagelink,
+            oldRow.messagelink,
+          ]);
+
+          msg.client.ch.query(`UPDATE rrreactions SET messagelink = $1 WHERE messagelink = $2;`, [
+            newRow.messagelink,
+            oldRow.messagelink,
+          ]);
+        }
+      });
+    }
+  },
+  manualResGetter: async (msg) => {
+    if (!msg.args[2]) {
+      const res = await msg.client.ch.query(`SELECT * FROM rrsettings WHERE guildid = $1;`, [
+        msg.guild.id,
+      ]);
+      if (res && res.rowCount) return res;
+      return null;
+    }
+
+    const baseRes = await msg.client.ch.query(
+      `SELECT * FROM rrsettings WHERE guildid = $1 AND messagelink = $2;`,
+      [msg.guild.id, msg.args[2]],
+    );
+
+    if (!baseRes || !baseRes.rowCount) return null;
+    return baseRes;
+  },
 };

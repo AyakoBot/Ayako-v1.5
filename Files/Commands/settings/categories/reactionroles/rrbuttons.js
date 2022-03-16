@@ -7,14 +7,24 @@ module.exports = {
   finished: true,
   category: ['automation'],
   childOf: 'reactionroles',
-  mmrEmbed: (msg, rows) => {
+  noArrows: true,
+  mmrEmbed: async (msg, rows) => {
+    const [, , message] = await linkToIDs(rows[0].messagelink);
     const embed = new Discord.UnsafeEmbed();
+    if (!message || !message.author || message.author.id !== msg.client.user.id) {
+      embed.addFields({
+        name: msg.lan.cantManage,
+        value: msg.lan.notMyMessage,
+        inline: false,
+      });
+      return embed;
+    }
 
     rows.forEach((row) => {
       const emote = msg.client.emojis.cache.get(row.emoteid);
 
       embed.addFields({
-        name: `${emote || row.buttontext}`,
+        name: `${emote || row.buttontext || msg.client.textEmotes.warning}`,
         value: `${msg.language.affected}: ${row.roles ? row.roles.length : '0'} ${
           msg.language.roles
         }`,
@@ -24,8 +34,18 @@ module.exports = {
 
     return embed;
   },
-  displayEmbed: (msg, r) => {
+  displayEmbed: async (msg, r) => {
+    const [, , message] = await linkToIDs(r.messagelink);
     const embed = new Discord.UnsafeEmbed();
+    if (!message || !message.author || message.author.id !== msg.client.user.id) {
+      embed.addFields({
+        name: msg.lan.cantManage,
+        value: msg.lan.notMyMessage,
+        inline: false,
+      });
+      return embed;
+    }
+
     const emote = msg.client.emojis.cache.get(r.emoteid);
 
     embed.addFields(
@@ -57,7 +77,10 @@ module.exports = {
 
     return embed;
   },
-  buttons: (msg, r) => {
+  buttons: async (msg, r) => {
+    const [, , message] = await linkToIDs(r.messagelink);
+    if (!message || !message.author || message.author.id !== msg.client.user.id) return [];
+
     const active = new Discord.UnsafeButtonComponent()
       .setCustomId(msg.lan.edit.active.name)
       .setLabel(msg.lanSettings.active)
@@ -82,19 +105,66 @@ module.exports = {
   },
   manualResGetter: async (msg) => {
     const baseRes = await msg.client.ch.query(
-      `SELECT * FROM rrsettings WHERE guildid = $1 AND uniquetimestamp = $2;`,
-      [msg.guild.id, msg.args[3]],
+      `SELECT * FROM rrsettings WHERE guildid = $1 AND messagelink = $2;`,
+      [msg.guild.id, msg.args[2]],
     );
 
     if (!baseRes || !baseRes.rowCount) return null;
 
-    const res = await msg.client.ch.query(`SELECT * FROM rrbuttons WHERE messageid = $1;`, [
-      baseRes.rows[0].messageid,
+    const res = await msg.client.ch.query(`SELECT * FROM rrbuttons WHERE messagelink = $1;`, [
+      baseRes.rows[0].messagelink,
     ]);
 
     return res;
   },
-  otherUpdateActions: async (msg, rows) => {
-    
+  doMoreThings: async (msg, insertedValues, changedKey, res) => {
+    const rows = res?.rows ? res.rows : null;
+    if (!rows || !rows.length) return;
+
+    const [, , message] = await linkToIDs(insertedValues.messagelink || res.rows[0].messagelink);
+    if (!message || !message.author || message.author.id !== msg.client.user.id) return;
+
+    const buttons = rows
+      .map((row) => {
+        if (row.messagelink !== insertedValues.messagelink) return null;
+
+        const button = new Discord.UnsafeButtonComponent();
+        if (row.buttontext) button.setLabel(row.buttontext);
+        if (row.emoteid) {
+          const emote = msg.client.emojis.cache.get(row.emoteid);
+          if (emote) button.setEmoji(emote);
+        }
+        if (row.active === false) button.setDisabled(true);
+
+        button.setStyle(Discord.ButtonStyle.Secondary);
+
+        return button;
+      })
+      .filter((b) => !!b);
+
+    const actionRows = [];
+    let useIndex = 0;
+    buttons.forEach((b, i) => {
+      if ((5 / i) % 1 === 0) {
+        rows.push(b);
+        useIndex += 1;
+      } else {
+        rows[useIndex].push(b);
+      }
+    });
+
+    message.components = msg.client.ch.buttonRower(actionRows);
+
+    message.edit(message).catch(() => {});
   },
+};
+
+const linkToIDs = async (msg, link) => {
+  const [, , , guildid, channelid, messageid] = link.split(/\/+/);
+
+  const guild = msg.client.guilds.cache.get(guildid);
+  const channel = guild ? guild.channels.cache.get(channelid) : null;
+  const message = channel ? await channel.messages.fetch(messageid).catch(() => {}) : null;
+
+  return [guild, channel, message];
 };
