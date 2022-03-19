@@ -54,6 +54,8 @@ const checkInserts = async (oM, nM) => {
   if (res && res.rowCount) {
     const [row] = res.rows;
 
+    if (!row.booststarts) row.booststarts = [];
+
     if (!row.booststarts.includes(timestamp)) {
       row.booststarts.push(timestamp);
     }

@@ -163,7 +163,7 @@ module.exports = {
         content: msg.client.ch.stp(msg.lan.wrongInput, { solution: captcha }),
       });
       jobs.scheduleJob(new Date(Date.now() + 10000), () => {
-        ms.delete().catch(() => {});
+        ms?.delete().catch(() => {});
       });
       msg.client.verificationCodes.delete(`${message.channel.id}-${msg.guild.id}`);
       module.exports.startProcess(msg, null, logchannel);
