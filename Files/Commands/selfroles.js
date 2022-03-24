@@ -43,20 +43,20 @@ module.exports = {
     const getComponents = () => {
       const buttons = [];
 
-      const categoryMenu = new Discord.UnsafeSelectMenuComponent()
+      const categoryMenu = new Builders.UnsafeSelectMenuBuilder()
         .setCustomId('categoryMenu')
         .addOptions(...Data.cTake)
         .setMinValues(1)
         .setMaxValues(1)
         .setPlaceholder(msg.language.select.selfroles.select);
 
-      const prevCategory = new Discord.UnsafeButtonComponent()
+      const prevCategory = new Builders.UnsafeButtonBuilder()
         .setCustomId('prevCategory')
         .setLabel(msg.lan.prevCategory)
         .setDisabled(Data.cPage === 1)
         .setStyle(Discord.ButtonStyle.Danger);
 
-      const nextCategory = new Discord.UnsafeButtonComponent()
+      const nextCategory = new Builders.UnsafeButtonBuilder()
         .setCustomId('nextCategory')
         .setLabel(msg.lan.nextCategory)
         .setDisabled(Data.cPage === Math.ceil(res.rowCount / 25))
@@ -65,7 +65,7 @@ module.exports = {
       buttons.push([categoryMenu], [prevCategory, nextCategory]);
 
       if (Data.currentRow) {
-        const roleMenu = new Discord.UnsafeSelectMenuComponent()
+        const roleMenu = new Builders.UnsafeSelectMenuBuilder()
           .setCustomId('roleMenu')
           .addOptions(...Data.rTake)
           .setMinValues(1)
@@ -77,19 +77,19 @@ module.exports = {
           )
           .setDisabled(Data.currentRow.isBlacklisted);
 
-        const prevRoles = new Discord.UnsafeButtonComponent()
+        const prevRoles = new Builders.UnsafeButtonBuilder()
           .setCustomId('prevRoles')
           .setLabel(msg.lan.prevRoles)
           .setDisabled(Data.rPage === 1)
           .setStyle(Discord.ButtonStyle.Danger);
 
-        const nextRoles = new Discord.UnsafeButtonComponent()
+        const nextRoles = new Builders.UnsafeButtonBuilder()
           .setCustomId('nextRoles')
           .setLabel(msg.lan.nextRoles)
           .setDisabled(Data.rPage === Math.ceil(Data.rOptions.length / 25))
           .setStyle(Discord.ButtonStyle.Primary);
 
-        const back = new Discord.UnsafeButtonComponent()
+        const back = new Builders.UnsafeButtonBuilder()
           .setCustomId('back')
           .setLabel(msg.language.back)
           .setEmoji(msg.client.objectEmotes.back)

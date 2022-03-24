@@ -48,19 +48,19 @@ module.exports = {
     return embed;
   },
   buttons(msg, r) {
-    const active = new Discord.UnsafeButtonComponent()
+    const active = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.active.name)
       .setLabel(msg.lanSettings.active)
       .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const bot = new Discord.UnsafeButtonComponent()
+    const bot = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.botRole.name)
       .setLabel(msg.lan.botRole)
       .setStyle(Discord.ButtonStyle.Primary);
-    const user = new Discord.UnsafeButtonComponent()
+    const user = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.userRole.name)
       .setLabel(msg.lan.userRole)
       .setStyle(Discord.ButtonStyle.Primary);
-    const all = new Discord.UnsafeButtonComponent()
+    const all = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.allRole.name)
       .setLabel(msg.lan.allRole)
       .setStyle(Discord.ButtonStyle.Primary);

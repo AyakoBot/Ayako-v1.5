@@ -748,12 +748,12 @@ module.exports = {
    * @param {object} msg - The triggering Message of module.exports Awaiter.
    */
   modRoleWaiter: async (msg) => {
-    const SUCCESS = new Discord.UnsafeButtonComponent()
+    const SUCCESS = new Builders.UnsafeButtonBuilder()
       .setCustomId('modProceedAction')
       .setLabel(msg.language.mod.warning.proceed)
       .setStyle(Discord.ButtonStyle.Primary)
       .setEmoji(msg.client.objectEmotes.tickBG);
-    const DANGER = new Discord.UnsafeButtonComponent()
+    const DANGER = new Builders.UnsafeButtonBuilder()
       .setCustomId('modAbortAction')
       .setLabel(msg.language.mod.warning.abort)
       .setEmoji(msg.client.objectEmotes.crossBG)
@@ -827,7 +827,7 @@ module.exports = {
   buttonRower: (buttonArrays) => {
     const actionRows = [];
     buttonArrays.forEach((buttonRow) => {
-      const row = new Discord.ActionRow();
+      const row = new Builders.ActionRowBuilder();
       if (Array.isArray(buttonRow)) {
         buttonRow.forEach((button) => {
           row.addComponents(button);

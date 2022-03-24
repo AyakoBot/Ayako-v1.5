@@ -93,18 +93,18 @@ const getEmbed = (content, msg, ownPos) => {
 };
 
 const getButtons = (msg, page, rows) => {
-  const toggleType = new Discord.UnsafeButtonComponent()
+  const toggleType = new Builders.UnsafeButtonBuilder()
     .setLabel(msg.lan.toggle)
     .setCustomId('tt')
     .setStyle(Discord.ButtonStyle.Primary);
 
-  const next = new Discord.UnsafeButtonComponent()
+  const next = new Builders.UnsafeButtonBuilder()
     .setCustomId('next')
     .setEmoji(msg.client.objectEmotes.forth)
     .setStyle(Discord.ButtonStyle.Secondary)
     .setDisabled(page === Math.ceil(rows.length / 30));
 
-  const back = new Discord.UnsafeButtonComponent()
+  const back = new Builders.UnsafeButtonBuilder()
     .setCustomId('back')
     .setEmoji(msg.client.objectEmotes.back)
     .setStyle(Discord.ButtonStyle.Secondary)

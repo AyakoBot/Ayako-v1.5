@@ -41,12 +41,12 @@ module.exports = {
     return embed;
   },
   buttons(msg) {
-    const roles = new Discord.UnsafeButtonComponent()
+    const roles = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.roles.name)
       .setLabel(msg.lan.roles)
       .setStyle(Discord.ButtonStyle.Primary);
 
-    const level = new Discord.UnsafeButtonComponent()
+    const level = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.level.name)
       .setLabel(msg.lan.level.replace(/\*/g, ''))
       .setStyle(Discord.ButtonStyle.Secondary);

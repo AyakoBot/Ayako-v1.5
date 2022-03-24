@@ -83,11 +83,11 @@ const doPunishment = async (punishment, executor, target, reason, msg, r) => {
         }),
       )
       .setColor(con.confirmEmbed.color);
-    const yes = new Discord.UnsafeButtonComponent()
+    const yes = new Builders.UnsafeButtonBuilder()
       .setLabel(msg.language.Yes)
       .setStyle(Discord.ButtonStyle.Primary)
       .setCustomId('yes');
-    const no = new Discord.UnsafeButtonComponent()
+    const no = new Builders.UnsafeButtonBuilder()
       .setLabel(msg.language.No)
       .setStyle(Discord.ButtonStyle.Danger)
       .setCustomId('no');

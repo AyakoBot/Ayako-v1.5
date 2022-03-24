@@ -192,7 +192,7 @@ const announcement = async (voter, usedRole) => {
       roles: [],
     },
     components: client.ch.buttonRower([
-      new Discord.UnsafeButtonComponent()
+      new Builders.UnsafeButtonBuilder()
         .setURL('https://top.gg/bot/650691698409734151/vote')
         .setStyle(Discord.ButtonStyle.Link)
         .setLabel('Vote Here'),
@@ -238,12 +238,12 @@ const endReminder = async (voter, endTime) => {
     endTime,
   ]);
 
-  const disable = new Discord.UnsafeButtonComponent()
+  const disable = new Builders.UnsafeButtonBuilder()
     .setLabel('Disable Vote Reminder')
     .setStyle(Discord.ButtonStyle.Danger)
     .setCustomId('vote_reminder_disable');
 
-  const vote = new Discord.UnsafeButtonComponent()
+  const vote = new Builders.UnsafeButtonBuilder()
     .setLabel('Vote for Ayako')
     .setStyle(Discord.ButtonStyle.Link)
     .setURL('https://top.gg/bot/650691698409734151/vote');

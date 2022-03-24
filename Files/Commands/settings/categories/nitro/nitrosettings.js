@@ -34,15 +34,15 @@ module.exports = {
     return embed;
   },
   buttons(msg, r) {
-    const active = new Discord.UnsafeButtonComponent()
+    const active = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.active.name)
       .setLabel(msg.lanSettings.active)
       .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const logchannels = new Discord.UnsafeButtonComponent()
+    const logchannels = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.logchannels.name)
       .setLabel(msg.lan.logchannels)
       .setStyle(Discord.ButtonStyle.Primary);
-    const rolemode = new Discord.UnsafeButtonComponent()
+    const rolemode = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.rolemode.name)
       .setLabel(msg.lan.rolemode)
       .setStyle(r.rolemode ? Discord.ButtonStyle.Secondary : Discord.ButtonStyle.Primary);

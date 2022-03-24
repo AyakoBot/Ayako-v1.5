@@ -83,7 +83,7 @@ const sendMessage = (client, lan, con, r, members) => {
       ),
     ];
 
-    const printIds = new Discord.UnsafeButtonComponent()
+    const printIds = new Builders.UnsafeButtonBuilder()
       .setLabel(lan.debugMessage.printIDs)
       .setCustomId('antiraid_print_ids')
       .setStyle(Discord.ButtonStyle.Secondary)
@@ -93,7 +93,7 @@ const sendMessage = (client, lan, con, r, members) => {
       printIds.setDisabled(false);
     }
 
-    const massban = new Discord.UnsafeButtonComponent()
+    const massban = new Builders.UnsafeButtonBuilder()
       .setLabel(lan.debugMessage.massban)
       .setCustomId('antiraid_massban')
       .setStyle(Discord.ButtonStyle.Danger);

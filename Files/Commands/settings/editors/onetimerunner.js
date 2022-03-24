@@ -5,11 +5,11 @@ module.exports = {
   key: ['onetimerunner'],
   requiresInteraction: true,
   buttons(msg) {
-    const yes = new Discord.UnsafeButtonComponent()
+    const yes = new Builders.UnsafeButtonBuilder()
       .setCustomId('yes')
       .setLabel(msg.language.Yes)
       .setStyle(Discord.ButtonStyle.Primary);
-    const no = new Discord.UnsafeButtonComponent()
+    const no = new Builders.UnsafeButtonBuilder()
       .setCustomId('no')
       .setLabel(msg.language.No)
       .setStyle(Discord.ButtonStyle.Secondary);

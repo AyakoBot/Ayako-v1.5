@@ -50,19 +50,19 @@ module.exports = {
     return embed;
   },
   buttons(msg) {
-    const prefix = new Discord.UnsafeButtonComponent()
+    const prefix = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.prefix.name)
       .setLabel(msg.lan.prefix)
       .setStyle(Discord.ButtonStyle.Primary);
-    const interactionsmode = new Discord.UnsafeButtonComponent()
+    const interactionsmode = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.interactionsmode.name)
       .setLabel(msg.lan.interactionsmode)
       .setStyle(Discord.ButtonStyle.Secondary);
-    const language = new Discord.UnsafeButtonComponent()
+    const language = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.lan.name)
       .setLabel(msg.lan.lan)
       .setStyle(Discord.ButtonStyle.Secondary);
-    const streamroles = new Discord.UnsafeButtonComponent()
+    const streamroles = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.streamroles.name)
       .setLabel(msg.lan.streamroles)
       .setStyle(Discord.ButtonStyle.Secondary);

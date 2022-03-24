@@ -195,15 +195,15 @@ module.exports = {
     }
 
     components.push([
-      new Discord.UnsafeButtonComponent()
+      new Builders.UnsafeButtonBuilder()
         .setStyle(Discord.ButtonStyle.Link)
         .setLabel(msg.lan.desktop)
         .setURL(`discord://-/users/${user.id}`),
-      new Discord.UnsafeButtonComponent()
+      new Builders.UnsafeButtonBuilder()
         .setStyle(Discord.ButtonStyle.Link)
         .setLabel(msg.lan.browser)
         .setURL(`https://discord.com/users/${user.id}`),
-      new Discord.UnsafeButtonComponent()
+      new Builders.UnsafeButtonBuilder()
         .setStyle(Discord.ButtonStyle.Link)
         .setLabel(msg.lan.mobile)
         .setURL(`https://discord.com/users/${user.id}`),
@@ -286,18 +286,18 @@ const interactionHandler = (msg, m, embeds, member) => {
 
 const getComponents = (msg, member, page) => [
   [
-    new Discord.UnsafeButtonComponent()
+    new Builders.UnsafeButtonBuilder()
       .setLabel(msg.lan.viewRoles)
       .setDisabled(member.roles.cache.size <= 1)
       .setStyle(Discord.ButtonStyle.Secondary)
       .setCustomId('roles'),
-    new Discord.UnsafeButtonComponent()
+    new Builders.UnsafeButtonBuilder()
       .setLabel(msg.lan.viewBasicPermissions)
       .setCustomId('basicPerms')
       .setStyle(Discord.ButtonStyle.Secondary),
   ],
   [
-    new Discord.UnsafeSelectMenuComponent()
+    new Builders.UnsafeSelectMenuBuilder()
       .setPlaceholder(msg.lan.viewChannelPermissions)
       .setMaxValues(1)
       .setMinValues(1)
@@ -305,12 +305,12 @@ const getComponents = (msg, member, page) => [
       .setOptions(...getChannelOptions(msg).slice((page - 1) * 25, page * 25)),
   ],
   [
-    new Discord.UnsafeButtonComponent()
+    new Builders.UnsafeButtonBuilder()
       .setCustomId('back')
       .setEmoji(msg.client.objectEmotes.back)
       .setStyle(Discord.ButtonStyle.Secondary)
       .setDisabled(page === 1),
-    new Discord.UnsafeButtonComponent()
+    new Builders.UnsafeButtonBuilder()
       .setCustomId('next')
       .setEmoji(msg.client.objectEmotes.forth)
       .setStyle(Discord.ButtonStyle.Secondary)
@@ -337,7 +337,7 @@ const getChannelOptions = (msg) => {
   });
 
   const options = sorted.map((c) =>
-    new Discord.SelectMenuOption()
+    new Builders.SelectMenuOptionBuilder()
       .setLabel(c.name)
       .setValue(c.id)
       .setEmoji(msg.client.objectEmotes.channelTypes[c.type]),
@@ -747,7 +747,7 @@ const decideUser = async (msg, users, m) => {
 
 const getUserComponents = (msg, page, users) => {
   const menu = [
-    new Discord.UnsafeSelectMenuComponent()
+    new Builders.UnsafeSelectMenuBuilder()
       .setPlaceholder(msg.lan.selectUser)
       .setMaxValues(1)
       .setMinValues(1)
@@ -767,13 +767,13 @@ const getUserComponents = (msg, page, users) => {
   ];
 
   if (users.length > 25) {
-    const back = new Discord.UnsafeButtonComponent()
+    const back = new Builders.UnsafeButtonBuilder()
       .setEmoji(msg.client.objectEmotes.back)
       .setDisabled(page === 1)
       .setCustomId('back')
       .setStyle(Discord.ButtonStyle.Secondary);
 
-    const next = new Discord.UnsafeButtonComponent()
+    const next = new Builders.UnsafeButtonBuilder()
       .setEmoji(msg.client.objectEmotes.forth)
       .setCustomId('next')
       .setDisabled(page === Math.ceil(users.length / 25))

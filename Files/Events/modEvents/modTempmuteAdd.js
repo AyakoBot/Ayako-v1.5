@@ -37,11 +37,11 @@ module.exports = {
         msg.m?.edit({ embeds: [em] });
       } else {
         em.setDescription(`${msg.client.textEmotes.cross} ${lan.noMemberHint}`);
-        const Yes = new Discord.UnsafeButtonComponent()
+        const Yes = new Builders.UnsafeButtonBuilder()
           .setCustomId('yes')
           .setLabel(language.Yes)
           .setStyle(Discord.ButtonStyle.Primary);
-        const No = new Discord.UnsafeButtonComponent()
+        const No = new Builders.UnsafeButtonBuilder()
           .setCustomId('no')
           .setLabel(language.No)
           .setStyle(Discord.ButtonStyle.Danger);

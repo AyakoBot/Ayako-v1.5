@@ -31,11 +31,11 @@ module.exports = {
     }
 
     embed.setDescription(msg.client.ch.stp(lan.sure, { user }));
-    const yes = new Discord.UnsafeButtonComponent()
+    const yes = new Builders.UnsafeButtonBuilder()
       .setCustomId('yes')
       .setLabel(msg.language.Yes)
       .setStyle(Discord.ButtonStyle.Primary);
-    const no = new Discord.UnsafeButtonComponent()
+    const no = new Builders.UnsafeButtonBuilder()
       .setCustomId('no')
       .setLabel(msg.language.No)
       .setStyle(Discord.ButtonStyle.Danger);

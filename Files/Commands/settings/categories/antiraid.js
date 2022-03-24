@@ -99,43 +99,43 @@ module.exports = {
     return embed;
   },
   buttons(msg, r) {
-    const active = new Discord.UnsafeButtonComponent()
+    const active = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.active.name)
       .setLabel(msg.lanSettings.active)
       .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const punishmenttof = new Discord.UnsafeButtonComponent()
+    const punishmenttof = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.punishmenttof.name)
       .setLabel(msg.lan.punishmenttof)
       .setStyle(r.punishmenttof ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const punishment = new Discord.UnsafeButtonComponent()
+    const punishment = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.punishment.name)
       .setLabel(msg.lan.punishment)
       .setStyle(r.punishment ? Discord.ButtonStyle.Secondary : Discord.ButtonStyle.Primary);
-    const post = new Discord.UnsafeButtonComponent()
+    const post = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.posttof.name)
       .setLabel(msg.lan.posttof)
       .setStyle(r.posttof ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Secondary);
-    const postchannel = new Discord.UnsafeButtonComponent()
+    const postchannel = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.postchannel.name)
       .setLabel(msg.lan.postchannel)
       .setStyle(Discord.ButtonStyle.Primary);
-    const pingusers = new Discord.UnsafeButtonComponent()
+    const pingusers = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.pingusers.name)
       .setLabel(msg.lan.pingusers)
       .setStyle(Discord.ButtonStyle.Secondary);
-    const pingroles = new Discord.UnsafeButtonComponent()
+    const pingroles = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.pingroles.name)
       .setLabel(msg.lan.pingroles)
       .setStyle(Discord.ButtonStyle.Secondary);
-    const time = new Discord.UnsafeButtonComponent()
+    const time = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.time.name)
       .setLabel(msg.lan.time)
       .setStyle(Discord.ButtonStyle.Primary);
-    const jointhreshold = new Discord.UnsafeButtonComponent()
+    const jointhreshold = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.jointhreshold.name)
       .setLabel(msg.lan.jointhreshold)
       .setStyle(Discord.ButtonStyle.Primary);
-    const similaridthreshold = new Discord.UnsafeButtonComponent()
+    const similaridthreshold = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.similaridthreshold.name)
       .setLabel(msg.lan.similaridthreshold)
       .setStyle(Discord.ButtonStyle.Primary);

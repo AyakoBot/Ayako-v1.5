@@ -47,19 +47,19 @@ module.exports = {
     return embed;
   },
   buttons(msg, r) {
-    const stickyrolesactive = new Discord.UnsafeButtonComponent()
+    const stickyrolesactive = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.stickyrolesactive.name)
       .setLabel(msg.lan.stickyrolesactive)
       .setStyle(r.stickyrolesactive ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const stickyrolesmode = new Discord.UnsafeButtonComponent()
+    const stickyrolesmode = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.stickyrolesmode.name)
       .setLabel(msg.lan.stickyrolesmode)
       .setStyle(Discord.ButtonStyle.Secondary);
-    const roles = new Discord.UnsafeButtonComponent()
+    const roles = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.roles.name)
       .setLabel(msg.lan.roles)
       .setStyle(Discord.ButtonStyle.Primary);
-    const stickypermsactive = new Discord.UnsafeButtonComponent()
+    const stickypermsactive = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.stickypermsactive.name)
       .setLabel(msg.lan.stickypermsactive)
       .setStyle(r.stickypermsactive ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
