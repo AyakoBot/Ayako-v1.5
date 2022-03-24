@@ -21,7 +21,7 @@ module.exports = {
 
     answer.deferReply();
     msg.m.reactions.removeAll().catch(() => {});
-    disableComponents(msg, msg.m.embeds[0]);
+    msg.client.ch.disableComponents(msg.m, msg.m.embeds);
 
     require('../../../Events/guildEvents/guildMemberUpdate/separator').oneTimeRunner(
       msg,
@@ -31,14 +31,4 @@ module.exports = {
 
     return null;
   },
-};
-
-const disableComponents = async (msg, embed) => {
-  msg.m.components.forEach((componentRow, i) => {
-    componentRow.components.forEach((component, j) => {
-      msg.m.components[i].components[j].disabled = true;
-    });
-  });
-
-  await msg.m.edit({ embeds: [embed], components: msg.m.components });
 };

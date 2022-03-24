@@ -148,7 +148,7 @@ module.exports = {
         })
         .addFields(
           {
-            name: msg.lan.nickname,
+            name: msg.lan.displayName,
             value: msg.client.ch.makeInlineCode(member.displayName),
             inline: false,
           },
@@ -193,21 +193,6 @@ module.exports = {
       embeds.push(memberEmbed);
       components = getComponents(msg, member, 1);
     }
-
-    components.push([
-      new Builders.UnsafeButtonBuilder()
-        .setStyle(Discord.ButtonStyle.Link)
-        .setLabel(msg.lan.desktop)
-        .setURL(`discord://-/users/${user.id}`),
-      new Builders.UnsafeButtonBuilder()
-        .setStyle(Discord.ButtonStyle.Link)
-        .setLabel(msg.lan.browser)
-        .setURL(`https://discord.com/users/${user.id}`),
-      new Builders.UnsafeButtonBuilder()
-        .setStyle(Discord.ButtonStyle.Link)
-        .setLabel(msg.lan.mobile)
-        .setURL(`https://discord.com/users/${user.id}`),
-    ]);
 
     if (answer) {
       answer
@@ -279,7 +264,7 @@ const interactionHandler = (msg, m, embeds, member) => {
 
   collector.on('end', (collected, reason) => {
     if (reason === 'time') {
-      disableComponents(m, embeds);
+      msg.client.ch.disableComponents(m, [embeds]);
     }
   });
 };
@@ -316,6 +301,20 @@ const getComponents = (msg, member, page) => [
       .setStyle(Discord.ButtonStyle.Secondary)
       .setDisabled(page === Math.ceil(msg.guild.channels.cache.size / 25)),
   ],
+  [
+    new Builders.UnsafeButtonBuilder()
+      .setStyle(Discord.ButtonStyle.Link)
+      .setLabel(msg.lan.desktop)
+      .setURL(`discord://-/users/${member.user.id}`),
+    new Builders.UnsafeButtonBuilder()
+      .setStyle(Discord.ButtonStyle.Link)
+      .setLabel(msg.lan.browser)
+      .setURL(`https://discord.com/users/${member.user.id}`),
+    new Builders.UnsafeButtonBuilder()
+      .setStyle(Discord.ButtonStyle.Link)
+      .setLabel(msg.lan.mobile)
+      .setURL(`https://discord.com/users/${member.user.id}`),
+  ],
 ];
 
 const getChannelOptions = (msg) => {
@@ -350,15 +349,15 @@ const getBoostEmote = (member) => {
   const time = Math.abs(member.premiumSinceTimestamp - Date.now());
   const month = 2629743000;
 
-  if (time < month * 2) return member.client.textEmotes.userFlags.BOOST1;
-  if (time < month * 3) return member.client.textEmotes.userFlags.BOOST2;
-  if (time < month * 6) return member.client.textEmotes.userFlags.BOOST3;
-  if (time < month * 9) return member.client.textEmotes.userFlags.BOOST6;
-  if (time < month * 12) return member.client.textEmotes.userFlags.BOOST9;
-  if (time < month * 15) return member.client.textEmotes.userFlags.BOOST12;
-  if (time < month * 18) return member.client.textEmotes.userFlags.BOOST15;
-  if (time < month * 24) return member.client.textEmotes.userFlags.BOOST18;
-  return member.client.textEmotes.userFlags.BOOST24;
+  if (time < month * 2) return member.client.textEmotes.userFlags.Boost1;
+  if (time < month * 3) return member.client.textEmotes.userFlags.Boost2;
+  if (time < month * 6) return member.client.textEmotes.userFlags.Boost3;
+  if (time < month * 9) return member.client.textEmotes.userFlags.Boost6;
+  if (time < month * 12) return member.client.textEmotes.userFlags.Boost9;
+  if (time < month * 15) return member.client.textEmotes.userFlags.Boost12;
+  if (time < month * 18) return member.client.textEmotes.userFlags.Boost15;
+  if (time < month * 24) return member.client.textEmotes.userFlags.Boost18;
+  return member.client.textEmotes.userFlags.Boost24;
 };
 
 const getBoosting = (flags, user, msg) => {
@@ -561,16 +560,6 @@ const basicPermsHandler = (interaction, msg, member) => {
   interaction.reply({ embeds: [embed], ephemeral: true });
 };
 
-const disableComponents = async (m, embeds) => {
-  m.components.forEach((componentRow, i) => {
-    componentRow.components.forEach((component, j) => {
-      m.components[i].components[j].disabled = true;
-    });
-  });
-
-  await m.edit({ embeds, components: m.components });
-};
-
 const permsHandler = (interaction, msg, member) => {
   const channel = msg.guild.channels.cache.get(interaction.values[0]);
   const permissions = channel.permissionsFor(member);
@@ -584,7 +573,7 @@ const permsHandler = (interaction, msg, member) => {
     [8n, msg.language.permissions.categories.ADVANCED],
   ];
 
-  let usedPermissions = Discord.PermissionsBitField.All;
+  let usedPermissions = new Discord.PermissionsBitField(Discord.PermissionsBitField.All);
   switch (channel.type) {
     case 0 || 11 || 12: {
       usedPermissions = new Discord.PermissionsBitField(535529258065n);
@@ -624,7 +613,7 @@ const permsHandler = (interaction, msg, member) => {
       break;
     }
     default: {
-      usedPermissions = Discord.PermissionsBitField.All;
+      usedPermissions = new Discord.PermissionsBitField(Discord.PermissionsBitField.All);
       break;
     }
   }

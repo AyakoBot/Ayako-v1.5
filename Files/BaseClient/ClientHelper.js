@@ -1190,14 +1190,18 @@ module.exports = {
 
     return module.exports.reply(msg, { embeds: [embed] });
   },
-  disableComponents: async (msg, embed) => {
-    msg.m.components.forEach((componentRow, i) => {
-      componentRow.components.forEach((component, j) => {
-        msg.m.components[i].components[j].disabled = true;
-      });
+  disableComponents: async (m, embeds) => {
+    await m.edit({
+      embeds,
+      components: m.client.ch.buttonRower(
+        m.components.map((c, i) =>
+          c.components.map((c2, j) => {
+            m.components[i].components[j].data.disabled = true;
+            return m.components[i].components[j];
+          }),
+        ),
+      ),
     });
-
-    await msg.m.edit({ embeds: [embed], components: msg.m.components });
   },
   Embed: require('./Other Client Files/Classes/CustomEmbed'),
   SelectMenuOption: require('./Other Client Files/Classes/SelectMenuOption'),

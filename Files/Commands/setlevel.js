@@ -262,7 +262,9 @@ const getRows = async (msg, user) => {
 };
 
 const getEmbed = (msg, selection) =>
-  new Builders.UnsafeEmbedBuilder().setDescription(msg.client.ch.stp(msg.lan.selectInfo, { selection }));
+  new Builders.UnsafeEmbedBuilder().setDescription(
+    msg.client.ch.stp(msg.lan.selectInfo, { selection }),
+  );
 
 const getComponents = (msg, selection) => {
   const addZeroXP = new Builders.UnsafeButtonBuilder()

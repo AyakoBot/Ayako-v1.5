@@ -41,7 +41,7 @@ const buttonsHandler = (msg, types, ownPos, content, oldEmbed) => {
       msg.client.ch.notYours(interaction);
       return;
     }
-    await disableComponents(msg, oldEmbed);
+    await msg.client.ch.disableComponents(msg.m, [oldEmbed]);
     await interaction.deferUpdate();
     buttonsCollector.resetTimer();
 
@@ -195,14 +195,4 @@ const getGuildRow = async (msg) => {
 const spaces = (str, num) => {
   if (num < str.length) return str;
   return `${str}${' '.repeat(num - str.length)}`;
-};
-
-const disableComponents = async (msg, embed) => {
-  msg.m.components.forEach((componentRow, i) => {
-    componentRow.components.forEach((component, j) => {
-      msg.m.components[i].components[j].disabled = true;
-    });
-  });
-
-  await msg.m.edit({ embeds: [embed], components: msg.m.components });
 };
