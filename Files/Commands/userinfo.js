@@ -17,14 +17,12 @@ module.exports = {
       .fetch(msg.args[0] ? msg.args[0].replace(/\D+/g, '') : msg.author.id, { force: true })
       .catch(() => {});
 
-    let m;
+    const m = await msg.client.ch.reply(msg, {
+      embeds: [await msg.client.ch.loadingEmbed({ author: msg.lan.authorUser }, msg.guild)],
+    });
     let answer;
 
     if (!user) {
-      m = await msg.client.ch.reply(msg, {
-        embeds: [await msg.client.ch.loadingEmbed({ author: msg.lan.authorUser }, msg.guild)],
-      });
-
       const users = [
         ...new Set([
           ...msg.client.users.cache
@@ -206,11 +204,6 @@ module.exports = {
         embeds,
         components: msg.client.ch.buttonRower(components),
       }).catch(() => {});
-    } else {
-      m = await msg.client.ch.reply(msg, {
-        embeds,
-        components: msg.client.ch.buttonRower(components),
-      });
     }
 
     if (components) {
@@ -264,7 +257,7 @@ const interactionHandler = (msg, m, embeds, member) => {
 
   collector.on('end', (collected, reason) => {
     if (reason === 'time') {
-      msg.client.ch.disableComponents(m, [embeds]);
+      msg.client.ch.disableComponents(m, embeds);
     }
   });
 };
@@ -670,10 +663,14 @@ const getBotInfo = async (msg, bot) => {
 
   const botInfo = msg.client.ch.stp(msg.lan.botInfo, {
     res: res.data,
-    website: res.data.website ? res.data.website : msg.language.none,
+    website: res.data.website || msg.language.none,
     support: res.data.support ? `https://discord.gg/${res.data.support}` : msg.language.none,
     invite: res.data.invite,
-    github: res.data.github ? res.data.github : msg.language.none,
+    github: res.data.github || msg.language.none,
+    tags: res.data.tags?.length
+      ? res.data.tags.map((t) => `\`${t}\``).join(', ')
+      : msg.language.none,
+    serverCount: res.data.server_count || msg.language.unknown,
   });
 
   return { bannerURL: res.data.bannerURL, info: botInfo, description: res.data.shortdesc };

@@ -1193,9 +1193,9 @@ module.exports = {
   disableComponents: async (m, embeds) => {
     await m.edit({
       embeds,
-      components: m.client.ch.buttonRower(
+      components: module.exports.buttonRower(
         m.components.map((c, i) =>
-          c.components.map((c2, j) => {
+          c.components.map((_, j) => {
             m.components[i].components[j].data.disabled = true;
             return m.components[i].components[j];
           }),

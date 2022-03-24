@@ -3,6 +3,7 @@ const jobs = require('node-schedule');
 
 const antiraidCache = new Discord.Collection();
 const sendings = new Discord.Collection();
+const knownRaids = new Discord.Collection();
 
 module.exports = {
   async execute(member) {
