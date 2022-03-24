@@ -221,19 +221,19 @@ module.exports = {
     const components = [];
 
     components.push([
-      new Discord.UnsafeButtonComponent()
+      new Builders.UnsafeButtonBuilder()
         .setCustomId(msg.lan.edit.active.name)
         .setLabel(msg.lanSettings.active)
         .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger),
-      new Discord.UnsafeButtonComponent()
+      new Builders.UnsafeButtonBuilder()
         .setCustomId(msg.lan.edit.rolemode.name)
         .setLabel(msg.lan.rolemode)
         .setStyle(r.rolemode ? Discord.ButtonStyle.Secondary : Discord.ButtonStyle.Primary),
-      new Discord.UnsafeButtonComponent()
+      new Builders.UnsafeButtonBuilder()
         .setCustomId(msg.lan.edit.xppermsg.name)
         .setLabel(msg.lan.xppermsg.replace(/\*/g, ''))
         .setStyle(Discord.ButtonStyle.Secondary),
-      new Discord.UnsafeButtonComponent()
+      new Builders.UnsafeButtonBuilder()
         .setCustomId(msg.lan.edit.xpmultiplier.name)
         .setLabel(msg.lan.xpmultiplier.replace(/\*/g, ''))
         .setStyle(Discord.ButtonStyle.Secondary),
@@ -242,19 +242,19 @@ module.exports = {
     switch (r.lvlupmode) {
       case '1': {
         components.push([
-          new Discord.UnsafeButtonComponent()
+          new Builders.UnsafeButtonBuilder()
             .setCustomId(msg.lan.edit.lvlupmode.name)
             .setLabel(msg.lan.lvlupmode)
             .setStyle(Discord.ButtonStyle.Primary),
-          new Discord.UnsafeButtonComponent()
+          new Builders.UnsafeButtonBuilder()
             .setCustomId(msg.lan.edit.lvlupchannels.name)
             .setLabel(msg.lan.lvlupchannels)
             .setStyle(Discord.ButtonStyle.Primary),
-          new Discord.UnsafeButtonComponent()
+          new Builders.UnsafeButtonBuilder()
             .setCustomId(msg.lan.edit.embed.name)
             .setLabel(msg.lan.embed)
             .setStyle(Discord.ButtonStyle.Primary),
-          new Discord.UnsafeButtonComponent()
+          new Builders.UnsafeButtonBuilder()
             .setCustomId(msg.lan.edit.lvlupdeltimeout.name)
             .setLabel(msg.lan.lvlupdeltimeout)
             .setStyle(Discord.ButtonStyle.Primary),
@@ -264,11 +264,11 @@ module.exports = {
       }
       case '2': {
         components.push([
-          new Discord.UnsafeButtonComponent()
+          new Builders.UnsafeButtonBuilder()
             .setCustomId(msg.lan.edit.lvlupmode.name)
             .setLabel(msg.lan.lvlupmode)
             .setStyle(Discord.ButtonStyle.Primary),
-          new Discord.UnsafeButtonComponent()
+          new Builders.UnsafeButtonBuilder()
             .setCustomId(msg.lan.edit.lvlupemotes.name)
             .setLabel(msg.lan.lvlupemotes)
             .setStyle(Discord.ButtonStyle.Primary),
@@ -277,7 +277,7 @@ module.exports = {
       }
       default: {
         components.push([
-          new Discord.UnsafeButtonComponent()
+          new Builders.UnsafeButtonBuilder()
             .setCustomId(msg.lan.edit.lvlupmode.name)
             .setLabel(msg.lan.lvlupmode)
             .setStyle(Discord.ButtonStyle.Primary),
@@ -287,38 +287,38 @@ module.exports = {
     }
 
     components.push([
-      new Discord.UnsafeButtonComponent()
+      new Builders.UnsafeButtonBuilder()
         .setCustomId(msg.lan.edit.blchannels.name)
         .setLabel(msg.lan.blchannels)
         .setStyle(Discord.ButtonStyle.Primary),
-      new Discord.UnsafeButtonComponent()
+      new Builders.UnsafeButtonBuilder()
         .setCustomId(msg.lan.edit.blroles.name)
         .setLabel(msg.lan.blroles)
         .setStyle(Discord.ButtonStyle.Primary),
-      new Discord.UnsafeButtonComponent()
+      new Builders.UnsafeButtonBuilder()
         .setCustomId(msg.lan.edit.blusers.name)
         .setLabel(msg.lan.blusers)
         .setStyle(Discord.ButtonStyle.Primary),
     ]);
 
     components.push([
-      new Discord.UnsafeButtonComponent()
+      new Builders.UnsafeButtonBuilder()
         .setCustomId(msg.lan.edit.wlchannels.name)
         .setLabel(msg.lan.wlchannels)
         .setStyle(Discord.ButtonStyle.Primary),
-      new Discord.UnsafeButtonComponent()
+      new Builders.UnsafeButtonBuilder()
         .setCustomId(msg.lan.edit.wlroles.name)
         .setLabel(msg.lan.wlroles)
         .setStyle(Discord.ButtonStyle.Primary),
-      new Discord.UnsafeButtonComponent()
+      new Builders.UnsafeButtonBuilder()
         .setCustomId(msg.lan.edit.wlusers.name)
         .setLabel(msg.lan.wlusers)
         .setStyle(Discord.ButtonStyle.Primary),
-      new Discord.UnsafeButtonComponent()
+      new Builders.UnsafeButtonBuilder()
         .setCustomId(msg.lan.edit.ignoreprefixes.name)
         .setLabel(msg.lan.ignoreprefixes)
         .setStyle(r.ignoreprefixes ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Secondary),
-      new Discord.UnsafeButtonComponent()
+      new Builders.UnsafeButtonBuilder()
         .setCustomId(msg.lan.edit.prefixes.name)
         .setLabel(msg.lan.prefixes)
         .setStyle(Discord.ButtonStyle.Primary),

@@ -80,23 +80,23 @@ module.exports = {
     return embed;
   },
   buttons: (msg, r) => {
-    const expirewarns = new Discord.UnsafeButtonComponent()
+    const expirewarns = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.expirewarns.name)
       .setLabel(msg.lan.expirewarns)
       .setStyle(r.expirewarns ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const expiremutes = new Discord.UnsafeButtonComponent()
+    const expiremutes = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.expiremutes.name)
       .setLabel(msg.lan.expiremutes)
       .setStyle(r.expiremutes ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const expirewarnsafter = new Discord.UnsafeButtonComponent()
+    const expirewarnsafter = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.expirewarnsafter.name)
       .setLabel(msg.lan.expirewarnsafter)
       .setStyle(r.expirewarnsafter ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const expiremutesafter = new Discord.UnsafeButtonComponent()
+    const expiremutesafter = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.expiremutesafter.name)
       .setLabel(msg.lan.expiremutesafter)
       .setStyle(r.expiremutesafter ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const muteban = new Discord.UnsafeButtonComponent()
+    const muteban = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.muteban.name)
       .setLabel(msg.lan.muteban)
       .setStyle(r.muteban ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);

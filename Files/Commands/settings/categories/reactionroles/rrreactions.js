@@ -55,17 +55,17 @@ module.exports = {
     return embed;
   },
   buttons: (msg, r) => {
-    const active = new Discord.UnsafeButtonComponent()
+    const active = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.active.name)
       .setLabel(msg.lanSettings.active)
       .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
 
-    const emoteid = new Discord.UnsafeButtonComponent()
+    const emoteid = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.emoteid.name)
       .setLabel(msg.lan.emoteid)
       .setStyle(Discord.ButtonStyle.Primary);
 
-    const roles = new Discord.UnsafeButtonComponent()
+    const roles = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.roles.name)
       .setLabel(msg.lan.roles)
       .setStyle(Discord.ButtonStyle.Primary);

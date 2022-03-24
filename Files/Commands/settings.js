@@ -103,7 +103,7 @@ module.exports = {
       });
 
       const rawButtons = [
-        new Discord.UnsafeSelectMenuComponent()
+        new Builders.UnsafeSelectMenuBuilder()
           .addOptions(...options)
           .setCustomId('menu')
           .setMaxValues(1)
@@ -178,7 +178,7 @@ module.exports = {
 
       const components = [
         [
-          new Discord.UnsafeButtonComponent()
+          new Builders.UnsafeButtonBuilder()
             .setCustomId('edit')
             .setStyle(Discord.ButtonStyle.Primary)
             .setLabel(msg.language.Edit),
@@ -433,7 +433,7 @@ const noEmbed = async (msg, answer, res) => {
 
   const rawButtons = [
     [
-      new Discord.UnsafeButtonComponent()
+      new Builders.UnsafeButtonBuilder()
         .setCustomId('edit')
         .setStyle(Discord.ButtonStyle.Primary)
         .setLabel(msg.language.Edit),
@@ -520,17 +520,17 @@ const replier = async (msgData, sendData) => {
 };
 
 const getMMRListButtons = (msg, options, editView) => {
-  const next = new Discord.UnsafeButtonComponent()
+  const next = new Builders.UnsafeButtonBuilder()
     .setCustomId('next')
     .setEmoji(msg.client.objectEmotes.forth)
     .setDisabled(options.allOptions.length < 25)
     .setStyle(Discord.ButtonStyle.Primary);
-  const prev = new Discord.UnsafeButtonComponent()
+  const prev = new Builders.UnsafeButtonBuilder()
     .setCustomId('prev')
     .setEmoji(msg.client.objectEmotes.back)
     .setDisabled(true)
     .setStyle(Discord.ButtonStyle.Danger);
-  const list = new Discord.UnsafeSelectMenuComponent()
+  const list = new Builders.UnsafeSelectMenuBuilder()
     .setCustomId('list')
     .setDisabled(!options.allOptions.length)
     .setMaxValues(1)
@@ -539,15 +539,15 @@ const getMMRListButtons = (msg, options, editView) => {
     .setOptions(
       ...(options.take.length
         ? options.take
-        : [new Discord.SelectMenuOption().setLabel('--').setValue('0')]),
+        : [new Builders.SelectMenuOptionBuilder().setLabel('--').setValue('0')]),
     );
 
   if (editView) {
-    const add = new Discord.UnsafeButtonComponent()
+    const add = new Builders.UnsafeButtonBuilder()
       .setCustomId('add')
       .setStyle(Discord.ButtonStyle.Primary)
       .setLabel(msg.language.add);
-    const remove = new Discord.UnsafeButtonComponent()
+    const remove = new Builders.UnsafeButtonBuilder()
       .setCustomId('remove')
       .setStyle(Discord.ButtonStyle.Danger)
       .setLabel(msg.language.remove)
@@ -556,7 +556,7 @@ const getMMRListButtons = (msg, options, editView) => {
     return { next, prev, list, add, remove };
   }
   if (!editView) {
-    const edit = new Discord.UnsafeButtonComponent()
+    const edit = new Builders.UnsafeButtonBuilder()
       .setCustomId('edit')
       .setStyle(Discord.ButtonStyle.Primary)
       .setLabel(msg.language.Edit);
@@ -1740,25 +1740,25 @@ const standardButtons = async (msg, preparedData, insertedValues, required, row,
   if (editor.requiresMenu) {
     const getMany = required.key.endsWith('s');
 
-    const menu = new Discord.UnsafeSelectMenuComponent()
+    const menu = new Builders.UnsafeSelectMenuBuilder()
       .setCustomId(required.key)
       .addOptions(
         ...(Objects.take.length
           ? Objects.take
-          : [new Discord.SelectMenuOption().setLabel('--').setValue('0')]),
+          : [new Builders.SelectMenuOptionBuilder().setLabel('--').setValue('0')]),
       )
       .setDisabled(!Objects.take.length)
       .setMinValues(1)
       .setMaxValues(getMany ? Objects.take.length : 1)
       .setPlaceholder(msg.language.select[required.key].select);
-    const next = new Discord.UnsafeButtonComponent()
+    const next = new Builders.UnsafeButtonBuilder()
       .setCustomId('next')
       .setEmoji(msg.client.objectEmotes.forth)
       .setDisabled(
         Objects.page === Math.ceil(Objects.options.length / 25) || !Objects.options.length,
       )
       .setStyle(Discord.ButtonStyle.Primary);
-    const prev = new Discord.UnsafeButtonComponent()
+    const prev = new Builders.UnsafeButtonBuilder()
       .setCustomId('prev')
       .setEmoji(msg.client.objectEmotes.back)
       .setDisabled(Objects.page === 1 || !Objects.options.length)
@@ -1767,7 +1767,7 @@ const standardButtons = async (msg, preparedData, insertedValues, required, row,
     returnedButtons.push([menu], [prev, next]);
   }
 
-  const done = new Discord.UnsafeButtonComponent()
+  const done = new Builders.UnsafeButtonBuilder()
     .setCustomId('done')
     .setLabel(msg.language.done)
     .setDisabled(doneDisabled)
@@ -1788,11 +1788,11 @@ const setup = async (msg, answer) => {
     })
     .setDescription(msg.client.ch.stp(lan.question, { type: msg.lanSettings[msg.file.name].type }));
 
-  const yes = new Discord.UnsafeButtonComponent()
+  const yes = new Builders.UnsafeButtonBuilder()
     .setLabel(msg.language.Yes)
     .setCustomId('yes')
     .setStyle(Discord.ButtonStyle.Primary);
-  const no = new Discord.UnsafeButtonComponent()
+  const no = new Builders.UnsafeButtonBuilder()
     .setLabel(msg.language.No)
     .setCustomId('no')
     .setStyle(Discord.ButtonStyle.Danger);
@@ -1868,7 +1868,7 @@ const categoryDisplay = async (msg, answer, needsBack) => {
     settings.forEach((s) => {
       if (s.category.includes(category)) {
         settingCategories.push(s.name);
-        options.push(new Discord.SelectMenuOption().setLabel(s.name).setValue(s.name));
+        options.push(new Builders.SelectMenuOptionBuilder().setLabel(s.name).setValue(s.name));
       }
     });
 
@@ -1938,7 +1938,7 @@ const categoryDisplay = async (msg, answer, needsBack) => {
     );
 
   const rawButtons = [
-    new Discord.UnsafeSelectMenuComponent()
+    new Builders.UnsafeSelectMenuBuilder()
       .addOptions(...options)
       .setCustomId('menu')
       .setMaxValues(1)
@@ -2082,7 +2082,7 @@ const reactionHandler = ({ msg, answer }, buttonsCollector, byData) => {
 
 const getRelatedSettingsButtons = (msg) =>
   msg.client.constants.commands.settings.childSettings[msg.file.childOf].map((setting) =>
-    new Discord.UnsafeButtonComponent()
+    new Builders.UnsafeButtonBuilder()
       .setCustomId(setting)
       .setLabel(msg.lanSettings[setting].type)
       .setStyle(

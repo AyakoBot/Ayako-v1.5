@@ -93,7 +93,7 @@ module.exports = {
         insertedValues[required.assinger] === msg.language.none;
     }
 
-    const menu = new Discord.UnsafeSelectMenuComponent()
+    const menu = new Builders.UnsafeSelectMenuBuilder()
       .setCustomId(required.key)
       .addOptions(
         ...(Objects.take.length
@@ -104,14 +104,14 @@ module.exports = {
       .setMinValues(1)
       .setMaxValues(1)
       .setPlaceholder(msg.language.select[required.key].select);
-    const next = new Discord.UnsafeButtonComponent()
+    const next = new Builders.UnsafeButtonBuilder()
       .setCustomId('next')
       .setLabel(msg.language.next)
       .setDisabled(
         Objects.page === Math.ceil(Objects.options.length / 25) || !Objects.options.length,
       )
       .setStyle(Discord.ButtonStyle.Primary);
-    const prev = new Discord.UnsafeButtonComponent()
+    const prev = new Builders.UnsafeButtonBuilder()
       .setCustomId('prev')
       .setLabel(msg.language.prev)
       .setDisabled(Objects.page === 1 || !Objects.options.length)
@@ -119,13 +119,13 @@ module.exports = {
 
     returnedButtons.push([menu], [prev, next]);
 
-    const done = new Discord.UnsafeButtonComponent()
+    const done = new Builders.UnsafeButtonBuilder()
       .setCustomId('done')
       .setLabel(msg.language.done)
       .setDisabled(doneDisabled)
       .setStyle(Discord.ButtonStyle.Primary);
 
-    const create = new Discord.UnsafeButtonComponent()
+    const create = new Builders.UnsafeButtonBuilder()
       .setCustomId('create')
       .setLabel(msg.language.createNew)
       .setStyle(Discord.ButtonStyle.Primary);

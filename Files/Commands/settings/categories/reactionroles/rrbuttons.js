@@ -82,22 +82,22 @@ module.exports = {
     const [, , message] = await linkToIDs(r.messagelink);
     if (!message || !message.author || message.author.id !== msg.client.user.id) return [];
 
-    const active = new Discord.UnsafeButtonComponent()
+    const active = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.active.name)
       .setLabel(msg.lanSettings.active)
       .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
 
-    const emoteid = new Discord.UnsafeButtonComponent()
+    const emoteid = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.emoteid.name)
       .setLabel(msg.lan.emoteid)
       .setStyle(Discord.ButtonStyle.Primary);
 
-    const buttontext = new Discord.UnsafeButtonComponent()
+    const buttontext = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.buttontext.name)
       .setLabel(msg.lan.buttontext)
       .setStyle(Discord.ButtonStyle.Primary);
 
-    const roles = new Discord.UnsafeButtonComponent()
+    const roles = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.roles.name)
       .setLabel(msg.lan.roles)
       .setStyle(Discord.ButtonStyle.Primary);
@@ -129,7 +129,7 @@ module.exports = {
       .map((row) => {
         if (row.messagelink !== insertedValues.messagelink) return null;
 
-        const button = new Discord.UnsafeButtonComponent();
+        const button = new Builders.UnsafeButtonBuilder();
         if (row.buttontext) button.setLabel(row.buttontext);
         if (row.emoteid) {
           const emote = msg.client.emojis.cache.get(row.emoteid);

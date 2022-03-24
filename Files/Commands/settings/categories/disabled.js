@@ -95,31 +95,31 @@ module.exports = {
     return embed;
   },
   buttons(msg, r) {
-    const active = new Discord.UnsafeButtonComponent()
+    const active = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.active.name)
       .setLabel(msg.lanSettings.active)
       .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const commands = new Discord.UnsafeButtonComponent()
+    const commands = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.commands.name)
       .setLabel(msg.lan.commands)
       .setStyle(Discord.ButtonStyle.Secondary);
-    const channels = new Discord.UnsafeButtonComponent()
+    const channels = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.channels.name)
       .setLabel(msg.lan.channels)
       .setStyle(Discord.ButtonStyle.Secondary);
-    const bpuserid = new Discord.UnsafeButtonComponent()
+    const bpuserid = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.bpuserid.name)
       .setLabel(msg.lan.bpuserid)
       .setStyle(Discord.ButtonStyle.Primary);
-    const bluserid = new Discord.UnsafeButtonComponent()
+    const bluserid = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.bluserid.name)
       .setLabel(msg.lan.bluserid)
       .setStyle(Discord.ButtonStyle.Primary);
-    const bproleid = new Discord.UnsafeButtonComponent()
+    const bproleid = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.bproleid.name)
       .setLabel(msg.lan.bproleid)
       .setStyle(Discord.ButtonStyle.Primary);
-    const blroleid = new Discord.UnsafeButtonComponent()
+    const blroleid = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.blroleid.name)
       .setLabel(msg.lan.blroleid)
       .setStyle(Discord.ButtonStyle.Primary);

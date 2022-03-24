@@ -138,31 +138,31 @@ module.exports = {
     return embed;
   },
   buttons(msg, r) {
-    const active = new Discord.UnsafeButtonComponent()
+    const active = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.active.name)
       .setLabel(msg.lanSettings.active)
       .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const ban = new Discord.UnsafeButtonComponent()
+    const ban = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.bantof.name)
       .setLabel(msg.lan.bantof)
       .setStyle(r.bantof ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const kick = new Discord.UnsafeButtonComponent()
+    const kick = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.kicktof.name)
       .setLabel(msg.lan.kicktof)
       .setStyle(r.kicktof ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const mute = new Discord.UnsafeButtonComponent()
+    const mute = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.mutetof.name)
       .setLabel(msg.lan.mutetof)
       .setStyle(r.mutetof ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const warn = new Discord.UnsafeButtonComponent()
+    const warn = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.warntof.name)
       .setLabel(msg.lan.warntof)
       .setStyle(r.warntof ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const verbal = new Discord.UnsafeButtonComponent()
+    const verbal = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.verbaltof.name)
       .setLabel(msg.lan.verbaltof)
       .setStyle(r.verbaltof ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const waw = new Discord.UnsafeButtonComponent()
+    const waw = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.warnafterwarnsamount.name)
       .setLabel(
         msg.client.ch.stp(msg.lan.warnafterwarnsamount.replace(/\*/g, ''), {
@@ -170,7 +170,7 @@ module.exports = {
         }),
       )
       .setStyle(!r.readofwarnstof ? Discord.ButtonStyle.Danger : Discord.ButtonStyle.Secondary);
-    const maw = new Discord.UnsafeButtonComponent()
+    const maw = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.muteafterwarnsamount.name)
       .setLabel(
         msg.client.ch.stp(msg.lan.muteafterwarnsamount.replace(/\*/g, ''), {
@@ -178,7 +178,7 @@ module.exports = {
         }),
       )
       .setStyle(!r.readofwarnstof ? Discord.ButtonStyle.Danger : Discord.ButtonStyle.Secondary);
-    const kaw = new Discord.UnsafeButtonComponent()
+    const kaw = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.kickafterwarnsamount.name)
       .setLabel(
         msg.client.ch.stp(msg.lan.kickafterwarnsamount.replace(/\*/g, ''), {
@@ -186,7 +186,7 @@ module.exports = {
         }),
       )
       .setStyle(!r.readofwarnstof ? Discord.ButtonStyle.Danger : Discord.ButtonStyle.Secondary);
-    const baw = new Discord.UnsafeButtonComponent()
+    const baw = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.banafterwarnsamount.name)
       .setLabel(
         msg.client.ch.stp(msg.lan.banafterwarnsamount.replace(/\*/g, ''), {
@@ -194,21 +194,21 @@ module.exports = {
         }),
       )
       .setStyle(!r.readofwarnstof ? Discord.ButtonStyle.Danger : Discord.ButtonStyle.Secondary);
-    const minimize = new Discord.UnsafeButtonComponent()
+    const minimize = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.minimize.name)
       .setLabel(msg.lan.minimize)
       .setStyle(Discord.ButtonStyle.Secondary);
-    const del = new Discord.UnsafeButtonComponent()
+    const del = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.delete.name)
       .setLabel(msg.lan.delete)
       .setStyle(Discord.ButtonStyle.Secondary);
 
-    const linklogging = new Discord.UnsafeButtonComponent()
+    const linklogging = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.linklogging.name)
       .setLabel(msg.lan.linklogging)
       .setStyle(r.linklogging ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
 
-    const linklogchannels = new Discord.UnsafeButtonComponent()
+    const linklogchannels = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.linklogchannels.name)
       .setLabel(msg.lan.linklogchannels)
       .setStyle(Discord.ButtonStyle.Secondary);

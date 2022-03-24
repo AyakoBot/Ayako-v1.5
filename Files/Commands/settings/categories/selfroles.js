@@ -93,35 +93,35 @@ module.exports = {
     return embed;
   },
   buttons(msg, r) {
-    const active = new Discord.UnsafeButtonComponent()
+    const active = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.active.name)
       .setLabel(msg.lanSettings.active)
       .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const name = new Discord.UnsafeButtonComponent()
+    const name = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.name.name)
       .setLabel(msg.lan.name)
       .setStyle(Discord.ButtonStyle.Primary);
-    const onlyone = new Discord.UnsafeButtonComponent()
+    const onlyone = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.onlyone.name)
       .setLabel(msg.lan.onlyone)
       .setStyle(r.onlyone ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const blacklistedusers = new Discord.UnsafeButtonComponent()
+    const blacklistedusers = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.blacklistedusers.name)
       .setLabel(msg.lan.blacklistedusers)
       .setStyle(Discord.ButtonStyle.Primary);
-    const blacklistedroles = new Discord.UnsafeButtonComponent()
+    const blacklistedroles = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.blacklistedroles.name)
       .setLabel(msg.lan.blacklistedroles)
       .setStyle(Discord.ButtonStyle.Primary);
-    const whitelistedusers = new Discord.UnsafeButtonComponent()
+    const whitelistedusers = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.whitelistedusers.name)
       .setLabel(msg.lan.whitelistedusers)
       .setStyle(Discord.ButtonStyle.Primary);
-    const whitelistedroles = new Discord.UnsafeButtonComponent()
+    const whitelistedroles = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.whitelistedroles.name)
       .setLabel(msg.lan.whitelistedroles)
       .setStyle(Discord.ButtonStyle.Primary);
-    const roles = new Discord.UnsafeButtonComponent()
+    const roles = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.roles.name)
       .setLabel(msg.lan.roles)
       .setStyle(Discord.ButtonStyle.Primary);
