@@ -1,3 +1,4 @@
+const { AutoPoster } = require('topgg-autoposter');
 const jobs = require('node-schedule');
 const auth = require('../../BaseClient/auth.json');
 
@@ -35,9 +36,7 @@ module.exports = async () => {
     });
   });
 
-  jobs.scheduleJob('0 */15 * * * *', () => {
-    dbl.postStats(client.guilds.cache.size).catch(() => {});
-  });
+  AutoPoster(auth.topGGtoken, client).catch(() => {});
 };
 
 const getAllUsers = async (client) => {
