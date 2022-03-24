@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const jobs = require('node-schedule');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   async execute(executor, target, reason, msg, duration) {
@@ -17,7 +18,7 @@ module.exports = {
         value: `${msg.client.textEmotes.loading} ${lan.loading}`,
       });
     } else {
-      em = new Discord.UnsafeEmbed()
+      em = new Builders.UnsafeEmbedBuilder()
         .setColor(con.color)
         .setDescription(`${msg.client.textEmotes.loading} ${lan.loading}`);
     }
@@ -164,7 +165,7 @@ module.exports = {
         );
       }
       const dmChannel = await target.createDM().catch(() => {});
-      const DMembed = new Discord.UnsafeEmbed()
+      const DMembed = new Builders.UnsafeEmbedBuilder()
         .setDescription(`**${language.reason}:** \n${reason}`)
         .setColor(con.color)
         .setTimestamp()
@@ -174,7 +175,7 @@ module.exports = {
           url: msg.client.ch.stp(con.author.link, { guild: msg.guild }),
         });
       msg.client.ch.send(dmChannel, { embeds: [DMembed] });
-      const embed = new Discord.UnsafeEmbed()
+      const embed = new Builders.UnsafeEmbedBuilder()
         .setColor(con.color)
         .setAuthor({
           name: msg.client.ch.stp(lan.author, { user: target }),
@@ -290,7 +291,7 @@ async function assingWarn(
       ],
     );
   }
-  const DMembed = new Discord.UnsafeEmbed()
+  const DMembed = new Builders.UnsafeEmbedBuilder()
     .setDescription(`**${language.reason}:** \n${reason}`)
     .setColor(con.color)
     .setTimestamp()
@@ -300,7 +301,7 @@ async function assingWarn(
       url: msg.client.ch.stp(con.author.link, { guild: msg.guild }),
     });
   msg.client.ch.send(dmChannel, { embeds: [DMembed] });
-  const embed = new Discord.UnsafeEmbed()
+  const embed = new Builders.UnsafeEmbedBuilder()
     .setColor(con.color)
     .setAuthor({
       name: msg.client.ch.stp(lan.author, { user: target }),

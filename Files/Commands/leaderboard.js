@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   name: 'leaderboard',
@@ -85,7 +86,7 @@ const buttonsHandler = (msg, types, isGuild, ownPos, content, oldEmbed) => {
 };
 
 const getEmbed = (content, isGuild, msg, ownPos) => {
-  const embed = new Discord.UnsafeEmbed()
+  const embed = new Builders.UnsafeEmbedBuilder()
     .setColor(
       isGuild ? msg.client.ch.colorSelector(msg.guild.me) : msg.client.constants.standard.color,
     )

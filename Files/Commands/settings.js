@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   name: 'settings',
@@ -25,12 +26,16 @@ module.exports = {
             if (s.folder && !!settingCategories.findIndex((a) => a.folder === s.folder)) {
               if (msg.client.constants.commands.settings.baseSettings[s.folder] === s.name) {
                 options.push(
-                  new Discord.UnsafeSelectMenuOption().setLabel(s.folder).setValue(s.folder),
+                  new Builders.UnsafeSelectMenuOptionBuilder()
+                    .setLabel(s.folder)
+                    .setValue(s.folder),
                 );
                 settingCategories.push(s.folder);
               }
             } else {
-              options.push(new Discord.UnsafeSelectMenuOption().setLabel(s.name).setValue(s.name));
+              options.push(
+                new Builders.UnsafeSelectMenuOptionBuilder().setLabel(s.name).setValue(s.name),
+              );
               settingCategories.push(s.name);
             }
           }
@@ -106,7 +111,7 @@ module.exports = {
           .setPlaceholder(msg.language.commands.settings.menu.placeholder),
       ];
 
-      const embed = new Discord.UnsafeEmbed()
+      const embed = new Builders.UnsafeEmbedBuilder()
         .setAuthor({
           name: msg.language.commands.settings.noEmbed.author,
           iconURL: msg.client.objectEmotes.settings.link,
@@ -264,7 +269,7 @@ module.exports = {
           res.rows[i].id = i;
         });
       }
-      let embed = new Discord.UnsafeEmbed();
+      let embed = new Builders.UnsafeEmbedBuilder();
 
       if (res && res.rowCount > 0) {
         if (msg.file.mmrEmbed[Symbol.toStringTag] === 'AsyncFunction') {
@@ -297,7 +302,7 @@ module.exports = {
         const isEmote = msg.client.emojis.cache.get(getIdentifier(msg, settingsConstant, row));
 
         options.allOptions.push(
-          new Discord.UnsafeSelectMenuOption()
+          new Builders.UnsafeSelectMenuOptionBuilder()
             .setLabel(
               `${row.id} ${
                 settingsConstant.removeIdent !== ''
@@ -415,7 +420,7 @@ module.exports = {
 };
 
 const noEmbed = async (msg, answer, res) => {
-  const embed = new Discord.UnsafeEmbed()
+  const embed = new Builders.UnsafeEmbedBuilder()
     .setAuthor({
       name: msg.language.commands.settings.noEmbed.author,
     })
@@ -686,7 +691,7 @@ const mmrEditList = async (msgData, sendData) => {
     const addLanguage = msg.lanSettings[msg.file.name].otherEdits.add;
     const requiredSteps = msg.client.constants.commands.settings.setupQueries[msg.file.name].add;
 
-    const embed = new Discord.UnsafeEmbed().setAuthor({
+    const embed = new Builders.UnsafeEmbedBuilder().setAuthor({
       name: addLanguage.name,
       iconURL: msg.client.objectEmotes.settings.link,
       url: msg.client.constants.standard.invite,
@@ -785,7 +790,7 @@ const mmrEditList = async (msgData, sendData) => {
     const isEmote = msg.client.emojis.cache.get(getIdentifier(msg, settingsConstant, row));
 
     options.allOptions.push(
-      new Discord.UnsafeSelectMenuOption()
+      new Builders.UnsafeSelectMenuOptionBuilder()
         .setLabel(
           `${row.id} ${
             settingsConstant.removeIdent !== ''
@@ -1049,7 +1054,7 @@ const editorInteractionHandler = async (msgData, editorData, row, res, comesFrom
       ? await editor.getSelected(msg, insertedValues, required, passObject)
       : 'noSelect';
 
-  const embed = new Discord.UnsafeEmbed();
+  const embed = new Builders.UnsafeEmbedBuilder();
   if (required.assinger !== 'id') {
     embed
       .addFields({
@@ -1249,7 +1254,7 @@ const log = async (msg, editData, logType) => {
       : 'id';
   const { type } = msg.language.commands.settings[msg.file.name];
 
-  const embed = new Discord.UnsafeEmbed().setAuthor({
+  const embed = new Builders.UnsafeEmbedBuilder().setAuthor({
     name: msg.client.ch.stp(msg.language.selfLog.author, {
       type,
     }),
@@ -1680,7 +1685,7 @@ const interactionHandler = async (msgData, preparedData, insertedValues, require
       ? await editor.getSelected(msg, insertedValues, required, preparedData)
       : 'noSelect';
 
-  const returnEmbed = new Discord.UnsafeEmbed().setDescription(
+  const returnEmbed = new Builders.UnsafeEmbedBuilder().setDescription(
     `**${msg.language.selected}:**\n${selected?.length ? selected : msg.language.none}`,
   );
 
@@ -1776,7 +1781,7 @@ const standardButtons = async (msg, preparedData, insertedValues, required, row,
 const setup = async (msg, answer) => {
   const lan = msg.language.commands.settings.setup;
 
-  const embed = new Discord.UnsafeEmbed()
+  const embed = new Builders.UnsafeEmbedBuilder()
     .setAuthor({
       name: lan.author,
       url: msg.client.constants.standard.invite,
@@ -1824,7 +1829,7 @@ const setup = async (msg, answer) => {
       }
       case 'no': {
         buttonsCollector.stop();
-        const abort = new Discord.UnsafeEmbed()
+        const abort = new Builders.UnsafeEmbedBuilder()
           .setAuthor({
             name: lan.author,
             url: msg.client.constants.standard.invite,
@@ -1917,7 +1922,7 @@ const categoryDisplay = async (msg, answer, needsBack) => {
     )}\n`;
   });
 
-  const embed = new Discord.UnsafeEmbed()
+  const embed = new Builders.UnsafeEmbedBuilder()
     .setAuthor({
       name: msg.client.ch.stp(msg.language.commands.settings.author, {
         type: msg.language.commands.settings[settings.first().name].type,

@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const jobs = require('node-schedule');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   async execute(executor, target, reason, msg) {
@@ -15,7 +16,7 @@ module.exports = {
         value: `${msg.client.textEmotes.loading} ${lan.loading}}`,
       });
     } else {
-      em = new Discord.UnsafeEmbed()
+      em = new Builders.UnsafeEmbedBuilder()
         .setColor(con.color)
         .setDescription(`${msg.client.textEmotes.loading} ${lan.loading}`);
     }
@@ -123,7 +124,7 @@ module.exports = {
       .catch(() => {});
 
     if (unmute) {
-      const embed = new Discord.UnsafeEmbed()
+      const embed = new Builders.UnsafeEmbedBuilder()
         .setColor(con.color)
         .setAuthor({
           name: msg.client.ch.stp(lan.author, { user: target }),
@@ -138,7 +139,7 @@ module.exports = {
         msg.client.ch.send(msg.logchannels, { embeds: [embed] });
       }
       const dmChannel = await target.createDM().catch(() => {});
-      const DMembed = new Discord.UnsafeEmbed()
+      const DMembed = new Builders.UnsafeEmbedBuilder()
         .setDescription(`**${language.reason}:** \n${reason}`)
         .setColor(con.color)
         .setTimestamp()
@@ -235,7 +236,7 @@ async function assingWarn(executor, target, reason, msg, answer, em, language, c
       [r.dateofwarn, msg.guild.id, target.id],
     ),
   );
-  const DMembed = new Discord.UnsafeEmbed()
+  const DMembed = new Builders.UnsafeEmbedBuilder()
     .setDescription(`**${language.reason}:** \n${reason}`)
     .setColor(con.color)
     .setTimestamp()
@@ -245,7 +246,7 @@ async function assingWarn(executor, target, reason, msg, answer, em, language, c
       url: msg.client.ch.stp(con.author.link, { guild: msg.guild }),
     });
   msg.client.ch.send(dmChannel, { embeds: [DMembed] });
-  const embed = new Discord.UnsafeEmbed()
+  const embed = new Builders.UnsafeEmbedBuilder()
     .setColor(con.color)
     .setAuthor({
       name: msg.client.ch.stp(lan.author, { user: target }),

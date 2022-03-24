@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   async execute() {
@@ -29,7 +29,7 @@ module.exports = {
         const member = await guild.members.fetch(user.id).catch(() => {});
         if (member) {
           const language = await ch.languageSelector(guild);
-          const embed = new Discord.UnsafeEmbed()
+          const embed = new Builders.UnsafeEmbedBuilder()
             .setDescription(`${language.ready.reminder.description}\n${text}`)
             .setColor(guild.me.displayHexColor)
             .setTimestamp();
@@ -45,7 +45,7 @@ module.exports = {
           ]);
         } else {
           const language = await ch.languageSelector('en');
-          const embed = new Discord.UnsafeEmbed()
+          const embed = new Builders.UnsafeEmbedBuilder()
             .setDescription(`${language.ready.reminder.description}\n${text}`)
             .setColor(guild.me.displayHexColor)
             .setTimestamp();

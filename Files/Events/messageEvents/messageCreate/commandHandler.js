@@ -1,6 +1,7 @@
 // TODO: assing msg.member.modrole;
 const Discord = require('discord.js');
-// const { statcord } = require('../../../BaseClient/Statcord');
+const Builders = require('@discordjs/builders');
+
 const auth = require('../../../BaseClient/auth.json');
 
 const cooldowns = new Discord.Collection();
@@ -223,12 +224,16 @@ module.exports = {
     }
     if (msg.author.id === msg.client.user.id) msg.delete();
     try {
-      // statcord.postCommand(msg.command.name, msg.author.id).catch(() => {});
+      if (msg.client.user.id === msg.client.mainID) {
+        const statcord = require('../../../BaseClient/Statcord');
+        statcord.postCommand(msg.command.name, msg.author.id).catch(() => {});
+      }
+
       console.log(`Command executed: ${msg.command.name}`);
       msg.command.execute(msg);
     } catch (e) {
       const channel = msg.client.channels.cache.get(msg.client.constants.errorchannel);
-      const embed = new Discord.UnsafeEmbed()
+      const embed = new Builders.UnsafeEmbedBuilder()
         .setAuthor({
           name: 'Command Error',
           iconURL: msg.client.objectEmotes.cross.link,

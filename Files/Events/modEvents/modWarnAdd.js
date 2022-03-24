@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const jobs = require('node-schedule');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   async execute(executor, target, reason, msg) {
@@ -15,7 +16,7 @@ module.exports = {
         value: `${msg.client.textEmotes.loading} ${lan.loading}`,
       });
     } else {
-      em = new Discord.UnsafeEmbed()
+      em = new Builders.UnsafeEmbedBuilder()
         .setColor(con.color)
         .setDescription(`${msg.client.textEmotes.loading} ${lan.loading}`);
     }
@@ -42,13 +43,13 @@ module.exports = {
       }
       return false;
     }
-    const warnEmbed = new Discord.UnsafeEmbed()
+    const warnEmbed = new Builders.UnsafeEmbedBuilder()
       .setTitle(msg.client.ch.stp(lan.DMtitle, { guild: msg.guild }))
       .setColor(con.color)
       .setDescription(`${language.reason}: \n${reason}`)
       .setTimestamp();
     msg.client.ch.send(target, { embeds: [warnEmbed] });
-    const WarnLogEmbed = new Discord.UnsafeEmbed()
+    const WarnLogEmbed = new Builders.UnsafeEmbedBuilder()
       .setAuthor({
         name: msg.client.ch.stp(lan.log.author, { target }),
         iconURL: target.displayAvatarURL({ size: 4096 }),

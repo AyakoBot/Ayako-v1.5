@@ -1,4 +1,5 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
+
 const jobs = require('node-schedule');
 
 module.exports = {
@@ -156,7 +157,7 @@ module.exports = {
                 link = args[i];
               }
             }
-            const embed = new Discord.UnsafeEmbed()
+            const embed = new Builders.UnsafeEmbedBuilder()
               .setColor(msg.client.constants.standard.color)
               .setDescription(
                 `${msg.author} killed ${killedUser} while being too retarded to use the proper commands`,
@@ -216,7 +217,7 @@ module.exports = {
                     reason: 'Executor: Lars_und_so#0666 | no reason specified',
                   })
                   .catch(() => {});
-                const embed = new Discord.UnsafeEmbed()
+                const embed = new Builders.UnsafeEmbedBuilder()
                   .setColor(16711680)
                   .setDescription(`${msg.author} was banned from the server`)
                   .setTimestamp();

@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   name: 'rate',
@@ -12,7 +12,7 @@ module.exports = {
   thisGuildOnly: ['692452151112368218'],
   async execute(msg) {
     msg.delete().catch(() => {});
-    const embed = new Discord.UnsafeEmbed()
+    const embed = new Builders.UnsafeEmbedBuilder()
       .setDescription(msg.args.slice(0).join(' '))
       .setColor(msg.client.ch.colorSelector(msg.guild.me));
     msg.react('670163913370894346').catch(() => {});

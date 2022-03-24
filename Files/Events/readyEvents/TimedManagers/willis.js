@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   async execute() {
@@ -346,7 +346,7 @@ module.exports = {
           }
           const link = 'https://strms.net/888_WillisgamingtvDiscord';
 
-          const e = new Discord.UnsafeEmbed()
+          const e = new Builders.UnsafeEmbedBuilder()
             .setAuthor({
               name: 'Childe Giveaway! [You can also click here]',
               iconURL: 'https://i1.sndcdn.com/artworks-NbRgsD5ixh9PkxUR-t81Dyg-t500x500.jpg',

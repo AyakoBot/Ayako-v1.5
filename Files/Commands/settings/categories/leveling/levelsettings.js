@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   perm: 32n,
@@ -29,7 +30,7 @@ module.exports = {
       }
     }
 
-    const embed = new Discord.UnsafeEmbed()
+    const embed = new Builders.UnsafeEmbedBuilder()
       .setDescription(
         msg.client.ch.stp(msg.lan.description, { prefix: msg.client.constants.standard.prefix }),
       )

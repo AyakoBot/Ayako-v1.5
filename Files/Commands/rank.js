@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 const moment = require('moment');
 require('moment-duration-format');
 
@@ -64,7 +64,7 @@ module.exports = {
         ` D [${msg.language.time.days}], H [${msg.language.time.hours}], m [${msg.language.time.minutes}]`,
       );
 
-    const embed = new Discord.UnsafeEmbed()
+    const embed = new Builders.UnsafeEmbedBuilder()
       .setAuthor({
         name: isGuild ? msg.lan.author : msg.lan.globalAuthor,
         iconURL: msg.client.constants.commands.rank.authorImage,

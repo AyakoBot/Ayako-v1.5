@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   perm: 268435456n,
@@ -10,7 +11,7 @@ module.exports = {
   noArrows: true,
   mmrEmbed: async (msg, rows) => {
     const [, , message] = await linkToIDs(rows[0].messagelink);
-    const embed = new Discord.UnsafeEmbed();
+    const embed = new Builders.UnsafeEmbedBuilder();
     if (!message || !message.author || message.author.id !== msg.client.user.id) {
       embed.addFields({
         name: msg.lan.cantManage,
@@ -36,7 +37,7 @@ module.exports = {
   },
   displayEmbed: async (msg, r) => {
     const [, , message] = await linkToIDs(r.messagelink);
-    const embed = new Discord.UnsafeEmbed();
+    const embed = new Builders.UnsafeEmbedBuilder();
     if (!message || !message.author || message.author.id !== msg.client.user.id) {
       embed.addFields({
         name: msg.lan.cantManage,

@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const moment = require('moment');
+const Builders = require('@discordjs/builders');
 require('moment-duration-format');
 
 module.exports = {
@@ -9,7 +10,7 @@ module.exports = {
   finished: false,
   category: ['automation'],
   mmrEmbed(msg, res) {
-    const embed = new Discord.UnsafeEmbed();
+    const embed = new Builders.UnsafeEmbedBuilder();
     for (let i = 0; i < res.length; i += 1) {
       const r = res[i];
       embed.addFields({
@@ -27,7 +28,7 @@ module.exports = {
     return embed;
   },
   displayEmbed(msg, r) {
-    const embed = new Discord.UnsafeEmbed().addFields(
+    const embed = new Builders.UnsafeEmbedBuilder().addFields(
       {
         name: msg.lanSettings.active,
         value: r.active

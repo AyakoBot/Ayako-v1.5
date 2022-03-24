@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 const moment = require('moment');
 require('moment-duration-format');
 
@@ -86,7 +86,7 @@ const logExpire = async (rows, client, guildid) => {
 
   const embeds = rows.map((warn, i) => {
     warn.row_number = i;
-    const embed = new Discord.UnsafeEmbed();
+    const embed = new Builders.UnsafeEmbedBuilder();
     const user = client.users.cache.get(warn.userid);
 
     if (warn.type === 'Warn') {

@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   async execute(member, user) {
@@ -19,7 +19,7 @@ module.exports = {
             .replace(/%u205/g, "'")
             .replace(/%o205/g, '`')
             .replace(/%i205/g, `${user}`);
-          const embed = new Discord.UnsafeEmbed()
+          const embed = new Builders.UnsafeEmbedBuilder()
             .setDescription(`${r.text.toString()}`)
             .setColor(parseInt(r.color, 16));
           if (r.imageurl !== null) {

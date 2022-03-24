@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 const moment = require('moment');
 require('moment-duration-format');
 
@@ -26,7 +27,7 @@ module.exports = {
       muteMax: 0,
     };
 
-    const embed = new Discord.UnsafeEmbed()
+    const embed = new Builders.UnsafeEmbedBuilder()
       .setAuthor({
         name: msg.client.ch.stp(lan.author, { target: user }),
         iconURL: con.author.image,
@@ -141,7 +142,7 @@ module.exports = {
         } else {
           msg.pages.mute = +msg.pages.mute - 1;
         }
-        const newEmbed = new Discord.UnsafeEmbed()
+        const newEmbed = new Builders.UnsafeEmbedBuilder()
           .setAuthor({
             name: msg.client.ch.stp(msg.lan.author, { target: user }),
             iconURL: msg.con.author.image,
@@ -188,7 +189,7 @@ module.exports = {
         } else {
           msg.pages.warn = +msg.pages.warn - 1;
         }
-        const newEmbed = new Discord.UnsafeEmbed()
+        const newEmbed = new Builders.UnsafeEmbedBuilder()
           .setAuthor({
             name: msg.client.ch.stp(msg.lan.author, { target: user }),
             iconURL: msg.con.author.image,
@@ -205,7 +206,7 @@ module.exports = {
           if (!answered.mutes.includes(val)) answered.mutes.push(val);
           else answered.mutes.splice(answered.mutes.indexOf(val), 1);
         });
-        const newEmbed = new Discord.UnsafeEmbed()
+        const newEmbed = new Builders.UnsafeEmbedBuilder()
           .setAuthor({
             name: msg.client.ch.stp(msg.lan.author, { target: user }),
             iconURL: msg.con.author.image,
@@ -223,7 +224,7 @@ module.exports = {
           if (!answered.warns.includes(val)) answered.warns.push(val);
           else answered.warns.splice(answered.warns.indexOf(val), 1);
         });
-        const newEmbed = new Discord.UnsafeEmbed()
+        const newEmbed = new Builders.UnsafeEmbedBuilder()
           .setAuthor({
             name: msg.client.ch.stp(msg.lan.author, { target: user }),
             iconURL: msg.con.author.image,
@@ -240,13 +241,13 @@ module.exports = {
         if (answered.mutes.length || answered.warns.length) {
           const embeds = [];
           if (answered.warns.length) {
-            const WarnTitleEmbed = new Discord.UnsafeEmbed()
+            const WarnTitleEmbed = new Builders.UnsafeEmbedBuilder()
               .setTitle(msg.lan.warns)
               .setColor(16777215);
             embeds.push(WarnTitleEmbed);
             answered.warns.forEach((number) => {
               const warn = res.rows.filter((r) => r.row_number === Number(number))[0];
-              const warnEmbed = new Discord.UnsafeEmbed()
+              const warnEmbed = new Builders.UnsafeEmbedBuilder()
                 .setDescription(`**${msg.language.reason}:**\n${warn.reason}`)
                 .setAuthor({
                   name: msg.lan.warnOf + user.tag,
@@ -282,7 +283,7 @@ module.exports = {
             });
           }
           if (answered.mutes.length) {
-            const MuteTitleEmbed = new Discord.UnsafeEmbed()
+            const MuteTitleEmbed = new Builders.UnsafeEmbedBuilder()
               .setTitle(msg.lan.mutes)
               .setColor(16777215);
             embeds.push(MuteTitleEmbed);
@@ -306,7 +307,7 @@ module.exports = {
               } else {
                 muteCloseText = msg.language.never;
               }
-              const muteEmbed = new Discord.UnsafeEmbed()
+              const muteEmbed = new Builders.UnsafeEmbedBuilder()
                 .setDescription(`**${msg.language.reason}:**\n${mute.reason}`)
                 .setAuthor({
                   name: msg.lan.muteOf + user.tag,

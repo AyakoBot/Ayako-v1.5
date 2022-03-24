@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   name: 'cmdhelp',
@@ -67,7 +68,7 @@ module.exports = {
     const aliases = reqcommand.aliases
       ? reqcommand.aliases.map((t) => `\`${msg.client.constants.standard.prefix}${t}\``).join(', ')
       : language.none;
-    const embed = new Discord.UnsafeEmbed()
+    const embed = new Builders.UnsafeEmbedBuilder()
       .setAuthor({
         name: `${language.command}: ${reqcommand.name}`,
         iconURL: msg.client.constants.standard.image,

@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   name: 'clearwarns',
@@ -12,7 +13,7 @@ module.exports = {
     const con = msg.client.constants.commands.clearwarns;
     const user = await msg.client.users.fetch(msg.args[0].replace(/\D+/g, '')).catch(() => {});
 
-    const embed = new Discord.UnsafeEmbed().setColor(con.loading);
+    const embed = new Builders.UnsafeEmbedBuilder().setColor(con.loading);
 
     if (!user) {
       embed.setDescription(lan.noUser);
@@ -73,7 +74,7 @@ module.exports = {
 };
 
 function log(msg, res, user, lan, con) {
-  const logEmbed = new Discord.UnsafeEmbed()
+  const logEmbed = new Builders.UnsafeEmbedBuilder()
     .setAuthor({
       name: msg.client.ch.stp(lan.log.author, { user }),
       iconURL: con.log.image,

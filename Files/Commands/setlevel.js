@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   name: 'setlevel',
@@ -34,7 +35,7 @@ module.exports = {
 };
 
 const getUser = async (msg) => {
-  const embed = new Discord.UnsafeEmbed().setDescription(msg.lan.selectUser).setAuthor({
+  const embed = new Builders.UnsafeEmbedBuilder().setDescription(msg.lan.selectUser).setAuthor({
     name: msg.lan.author,
     url: msg.client.constants.standard.invite,
   });
@@ -261,7 +262,7 @@ const getRows = async (msg, user) => {
 };
 
 const getEmbed = (msg, selection) =>
-  new Discord.UnsafeEmbed().setDescription(msg.client.ch.stp(msg.lan.selectInfo, { selection }));
+  new Builders.UnsafeEmbedBuilder().setDescription(msg.client.ch.stp(msg.lan.selectInfo, { selection }));
 
 const getComponents = (msg, selection) => {
   const addZeroXP = new Discord.UnsafeButtonComponent()
@@ -392,7 +393,7 @@ const handleDone = async (answer, msg, m, selection) => {
     );
   }
 
-  const embed = new Discord.UnsafeEmbed()
+  const embed = new Builders.UnsafeEmbedBuilder()
     .setDescription(msg.client.ch.stp(msg.lan.updated, { user: selection.user }))
     .setAuthor({
       name: msg.lan.author,

@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 const client = require('../../../BaseClient/DiscordClient');
 
 module.exports = {
@@ -22,7 +22,7 @@ module.exports = {
         const language = await ch.languageSelector(guild);
         const con = Constants.messageUpdateLogUpdate;
         const lan = language.messageUpdateLogUpdate;
-        const embed = new Discord.UnsafeEmbed()
+        const embed = new Builders.UnsafeEmbedBuilder()
           .setColor(con.color)
           .setTimestamp()
           .setAuthor({

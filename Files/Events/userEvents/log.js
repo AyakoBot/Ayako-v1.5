@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   async execute(oldUser, newUser) {
@@ -22,7 +22,7 @@ module.exports = {
             const lan = language.userUpdate;
             const con = Constants.userUpdate;
             const changedKey = [];
-            const embed = new Discord.UnsafeEmbed()
+            const embed = new Builders.UnsafeEmbedBuilder()
               .setTimestamp()
               .setAuthor({
                 name: lan.author.name,

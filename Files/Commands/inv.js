@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   name: 'inv',
@@ -15,7 +15,7 @@ module.exports = {
     const channel = msg.args[0];
     if (!promotion) return msg.reply("You need to tell me who's up to be invited?");
     if (channel.toLowerCase() === 'mc') {
-      const SuggestEmbed = new Discord.UnsafeEmbed()
+      const SuggestEmbed = new Builders.UnsafeEmbedBuilder()
         .setTitle('Should this player be invited to TA Infinite MC server?')
         .setAuthor({
           name: `${msg.author.tag}`,
@@ -31,7 +31,7 @@ module.exports = {
       m.react('670163913370894346').catch(() => {});
       m.react('746392936807268474').catch(() => {});
     } else if (channel.toLowerCase() === 'discord') {
-      const SuggestEmbed = new Discord.UnsafeEmbed()
+      const SuggestEmbed = new Builders.UnsafeEmbedBuilder()
         .setTitle('Should this player be invited to this Discord?')
         .setAuthor({
           name: `${msg.author.tag}`,

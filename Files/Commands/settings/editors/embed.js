@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   key: ['embed'],
@@ -142,7 +143,7 @@ module.exports = {
 
         const selected = await module.exports.getSelected(msg, insertedValues, required);
 
-        const returnEmbed = new Discord.UnsafeEmbed().setDescription(
+        const returnEmbed = new Builders.UnsafeEmbedBuilder().setDescription(
           `**${msg.language.selected}:**\n${selected?.length ? selected : msg.language.none}`,
         );
         return { returnEmbed };

@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   name: 'selfroles',
@@ -116,7 +117,7 @@ module.exports = {
           if (msg.member.roles.cache.has(r.id)) disabled = msg.client.objectEmotes.minusBG;
           else disabled = msg.client.objectEmotes.plusBG;
           Data.rOptions.push(
-            new Discord.UnsafeSelectMenuOption()
+            new Builders.UnsafeSelectMenuOptionBuilder()
               .setLabel(`${r.name}`)
               .setValue(r.id)
               .setEmoji(disabled),
@@ -139,7 +140,7 @@ module.exports = {
     };
 
     const getRoleUpdateReplyEmbed = async (add, remove) => {
-      const embed = new Discord.UnsafeEmbed()
+      const embed = new Builders.UnsafeEmbedBuilder()
         .setAuthor({
           name: msg.lan.rolesUpdated,
           url: msg.client.constants.standard.invite,
@@ -168,7 +169,7 @@ module.exports = {
     };
 
     const getRoleUpdateEmbed = () =>
-      new Discord.UnsafeEmbed()
+      new Builders.UnsafeEmbedBuilder()
         .setColor(msg.client.ch.colorSelector(msg.guild.me))
         .setAuthor({
           name: Data.currentRow.name,
@@ -183,7 +184,7 @@ module.exports = {
         );
 
     const getCategoryUpdateEmbed = () =>
-      new Discord.UnsafeEmbed()
+      new Builders.UnsafeEmbedBuilder()
         .setColor(msg.client.ch.colorSelector(msg.guild.me))
         .setAuthor({
           name: Data.currentRow.name,
@@ -232,7 +233,7 @@ module.exports = {
 
     const getCategoryButtonEmbed = () => {
       if (Data.currentRow) {
-        return new Discord.UnsafeEmbed()
+        return new Builders.UnsafeEmbedBuilder()
           .setColor(msg.client.ch.colorSelector(msg.guild.me))
           .setAuthor({
             name: Data.currentRow.name,
@@ -246,7 +247,7 @@ module.exports = {
             }/${Math.ceil((Data.rOptions.length + 1) / 25)}\``,
           );
       }
-      const embed = new Discord.UnsafeEmbed()
+      const embed = new Builders.UnsafeEmbedBuilder()
         .setColor(msg.client.ch.colorSelector(msg.guild.me))
         .setAuthor({
           name: Data.currentRow.name,
@@ -260,7 +261,7 @@ module.exports = {
     };
 
     const getRoleButtonEmbed = () =>
-      new Discord.UnsafeEmbed()
+      new Builders.UnsafeEmbedBuilder()
         .setColor(msg.client.ch.colorSelector(msg.guild.me))
         .setAuthor({
           name: Data.currentRow.name,
@@ -317,7 +318,7 @@ module.exports = {
       return { embeds: [embed], components: currentRows };
     };
 
-    const embed = new Discord.UnsafeEmbed();
+    const embed = new Builders.UnsafeEmbedBuilder();
     embed.setColor(msg.client.ch.colorSelector(msg.guild.me)).setAuthor({
       name: msg.lan.author,
       url: msg.client.constants.standard.invite,
@@ -381,7 +382,7 @@ module.exports = {
       for (let i = 0; i < res.rowCount; i += 1) {
         const r = res.rows[i];
         Data.cOptions.push(
-          new Discord.UnsafeSelectMenuOption()
+          new Builders.UnsafeSelectMenuOptionBuilder()
             .setLabel(r.name)
             .setValue(r.uniquetimestamp)
             .setDescription(r.disabled ? msg.lan.disabled : null)

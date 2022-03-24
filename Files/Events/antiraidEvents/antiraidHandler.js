@@ -1,4 +1,6 @@
 const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
+
 const confusables = require('confusables');
 
 module.exports = {
@@ -16,7 +18,9 @@ module.exports = {
 const checkAll = async (guild, language, con, client, r, memberIDs) => {
   const buffers = await Promise.all(
     memberIDs.map(async (id) =>
-      client.ch.convertImageURLtoBuffer([client.users.cache.get(id).displayAvatarURL({ size: 4096 })]),
+      client.ch.convertImageURLtoBuffer([
+        client.users.cache.get(id).displayAvatarURL({ size: 4096 }),
+      ]),
     ),
   );
 
@@ -57,7 +61,7 @@ const ban = (client, guild, language, members) => {
 };
 
 const sendMessage = (client, lan, con, r, members) => {
-  const embed = new Discord.UnsafeEmbed()
+  const embed = new Builders.UnsafeEmbedBuilder()
     .setAuthor({
       name: lan.debugMessage.author,
       iconURL: con.author.image,

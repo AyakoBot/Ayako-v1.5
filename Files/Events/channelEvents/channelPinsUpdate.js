@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   async execute(channel) {
@@ -36,7 +36,7 @@ module.exports = {
           }
         }
 
-        const embed = new Discord.UnsafeEmbed().setTimestamp();
+        const embed = new Builders.UnsafeEmbedBuilder().setTimestamp();
         if (entryPin && entryUnPin) {
           if (ch.getUnix(entryPin.id) > ch.getUnix(entryUnPin.id)) {
             casePin(entryPin, embed, language, channels);

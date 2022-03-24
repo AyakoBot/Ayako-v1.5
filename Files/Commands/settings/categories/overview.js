@@ -1,6 +1,7 @@
 /* eslint-disable no-nested-ternary */
 
 const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   perm: 32n,
@@ -12,7 +13,7 @@ module.exports = {
     if (r.prefix && r.prefix.startsWith('{"') && r.prefix.endsWith('"}')) {
       r.prefix = r.prefix.slice(2, r.prefix.length - 2);
     }
-    const embed = new Discord.UnsafeEmbed().addFields(
+    const embed = new Builders.UnsafeEmbedBuilder().addFields(
       {
         name: msg.lan.prefix,
         value: `\`${msg.client.constants.standard.prefix}\` ${r.prefix ? `/ \`${r.prefix}\`` : ''}`,

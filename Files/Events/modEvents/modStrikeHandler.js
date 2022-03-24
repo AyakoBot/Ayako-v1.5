@@ -1,11 +1,12 @@
 const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   async execute(executor, target, reason, msg) {
     const lan = msg.language.mod.strike;
     const con = msg.client.constants.mod.strike;
     if (!msg.res) {
-      const em = new Discord.UnsafeEmbed()
+      const em = new Builders.UnsafeEmbedBuilder()
         .setColor(con.color)
         .setDescription(
           msg.client.ch.stp(lan.notEnabled, { prefix: msg.client.constants.standard.prefix }),
@@ -71,7 +72,7 @@ const doPunishment = async (punishment, executor, target, reason, msg, r) => {
   if (punishment === 'modWarnAdd') {
     msg.client.emit(punishment, executor, target, reason, msg, r.duration ? r.duration : 3600000);
   } else {
-    const embed = new Discord.UnsafeEmbed()
+    const embed = new Builders.UnsafeEmbedBuilder()
       .setAuthor({
         name: lan.confirmEmbed.author,
       })

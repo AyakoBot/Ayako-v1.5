@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 const jobs = require('node-schedule');
 
 module.exports = {
@@ -36,7 +36,7 @@ async function end(ch, guild, Constants, channel) {
     const [row] = res.rows;
     const language = await ch.languageSelector(guild);
 
-    const embed = new Discord.UnsafeEmbed()
+    const embed = new Builders.UnsafeEmbedBuilder()
       .setDescription(language.ready.disboard.bumpMsg)
       .setColor(Constants.standard.color)
       .setTimestamp()

@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   async execute(role) {
@@ -28,7 +28,7 @@ module.exports = {
             entry = entry.first();
           }
         }
-        const embed = new Discord.UnsafeEmbed()
+        const embed = new Builders.UnsafeEmbedBuilder()
           .setTimestamp()
           .setAuthor({
             name: lan.author.name,

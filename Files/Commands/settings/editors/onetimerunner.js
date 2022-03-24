@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   key: ['onetimerunner'],
@@ -16,7 +17,7 @@ module.exports = {
   },
   interactionHandler(msgData) {
     const { msg, answer } = msgData;
-    const returnEmbed = new Discord.UnsafeEmbed();
+    const returnEmbed = new Builders.UnsafeEmbedBuilder();
 
     answer.deferReply();
     msg.m.reactions.removeAll().catch(() => {});

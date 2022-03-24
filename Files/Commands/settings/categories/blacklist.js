@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   perm: 8192n,
@@ -14,7 +15,7 @@ module.exports = {
         wordText += wordArr[i] + new Array(22 - wordArr[i].length).join(' ');
       }
     } else wordText = msg.language.none;
-    const embed = new Discord.UnsafeEmbed().addFields(
+    const embed = new Builders.UnsafeEmbedBuilder().addFields(
       {
         name: msg.lanSettings.active,
         value: `${

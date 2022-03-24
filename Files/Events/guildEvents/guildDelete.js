@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   async execute(guild) {
@@ -6,7 +6,7 @@ module.exports = {
     const { ch } = client;
     const Constants = client.constants;
     const con = Constants.guildDelete;
-    const logEmbed = new Discord.UnsafeEmbed()
+    const logEmbed = new Builders.UnsafeEmbedBuilder()
       .setDescription(con.logEmbed.joinedAGuild)
       .addFields({ name: con.logEmbed.guildName, value: `${guild.name}`, inline: true })
       .addFields({ name: con.logEmbed.guildId, value: `${guild.id}`, inline: true })

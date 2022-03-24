@@ -1,4 +1,6 @@
 const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
+
 const moment = require('moment');
 require('moment-duration-format');
 
@@ -8,7 +10,7 @@ module.exports = {
   finished: true,
   category: ['moderation'],
   displayEmbed: (msg, r) => {
-    const embed = new Discord.UnsafeEmbed().addFields(
+    const embed = new Builders.UnsafeEmbedBuilder().addFields(
       {
         name: msg.lan.expirewarns,
         value: r.expirewarns

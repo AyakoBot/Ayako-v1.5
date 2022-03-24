@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   async execute(channel) {
@@ -30,7 +30,7 @@ module.exports = {
           }
         }
         if (entry && entry.id) {
-          const embed = new Discord.UnsafeEmbed()
+          const embed = new Builders.UnsafeEmbedBuilder()
             .setAuthor({
               name: ch.stp(lan.author.title, { type: language.channelTypes[channel.type] }),
               iconURL: con.author.image,
@@ -46,7 +46,7 @@ module.exports = {
             .setTimestamp();
           ch.send(channels, { embeds: [embed] });
         } else {
-          const embed = new Discord.UnsafeEmbed()
+          const embed = new Builders.UnsafeEmbedBuilder()
             .setAuthor({
               name: con.author.title,
               iconURL: con.author.image,

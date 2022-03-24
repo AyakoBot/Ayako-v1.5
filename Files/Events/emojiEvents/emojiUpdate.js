@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   async execute(oldEmoji, newEmoji) {
@@ -30,7 +30,7 @@ module.exports = {
           }
         }
 
-        const embed = new Discord.UnsafeEmbed()
+        const embed = new Builders.UnsafeEmbedBuilder()
           .setAuthor({
             name: lan.author.title,
             iconURL: con.author.image,

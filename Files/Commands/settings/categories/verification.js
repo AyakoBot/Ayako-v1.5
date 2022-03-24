@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   perm: 32n,
@@ -12,7 +13,7 @@ module.exports = {
     if (r.finishdesc && r.finishdesc.startsWith('{"') && r.finishdesc.endsWith('"}')) {
       r.finishdesc = r.finishdesc.slice(2, r.finishdesc.length - 2);
     }
-    const embed = new Discord.UnsafeEmbed().addFields(
+    const embed = new Builders.UnsafeEmbedBuilder().addFields(
       {
         name: msg.lanSettings.active,
         value: r.active
@@ -132,7 +133,7 @@ module.exports = {
       const channel = msg.guild.channels.cache.get(r.startchannel);
       if (channel) {
         const lan = msg.language.verification;
-        const embed = new Discord.UnsafeEmbed()
+        const embed = new Builders.UnsafeEmbedBuilder()
           .setAuthor({
             name: lan.author.name,
             url: msg.client.constants.standard.invite,

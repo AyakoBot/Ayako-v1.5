@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 const jobs = require('node-schedule');
 
 const testReg = /discord\.com\/channels\//gi;
@@ -35,12 +36,14 @@ module.exports = {
     const Objects = {
       edit: 'menu',
       category: null,
-      embed: existingEmbed ? new Discord.UnsafeEmbed(existingEmbed) : new Discord.UnsafeEmbed(),
+      embed: existingEmbed
+        ? new Discord.UnsafeEmbed(existingEmbed)
+        : new Builders.UnsafeEmbedBuilder(),
       page: page || 1,
       options,
     };
 
-    const embed = new Discord.UnsafeEmbed()
+    const embed = new Builders.UnsafeEmbedBuilder()
       .setAuthor({
         name: msg.language.commands.embedbuilder.author,
         iconURL: msg.client.constants.commands.embedbuilder.author,
@@ -80,7 +83,7 @@ const replier = async ({ msg, answer }, { embeds, components, content, files }, 
   let finishedEmbed;
   if (Objects) {
     if (cantBeSent(Objects)) {
-      finishedEmbed = new Discord.UnsafeEmbed()
+      finishedEmbed = new Builders.UnsafeEmbedBuilder()
         .setDescription(msg.language.commands.embedbuilder.warns.noValue)
         .setColor(16711680)
         .setThumbnail(msg.client.constants.commands.embedbuilder.error);
@@ -490,7 +493,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
   const reply = async (editing, interaction) => {
     const lang = msg.language.commands.embedbuilder.edit[editing];
 
-    const recommendedEmbed = new Discord.UnsafeEmbed()
+    const recommendedEmbed = new Builders.UnsafeEmbedBuilder()
       .setAuthor({
         name: msg.language.commands.embedbuilder.author,
         iconURL: msg.client.constants.commands.embedbuilder.author,
@@ -610,7 +613,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           messageCollector.stop();
           buttonsCollector.stop();
 
-          const inheritCodeEmbed = new Discord.UnsafeEmbed().setDescription(
+          const inheritCodeEmbed = new Builders.UnsafeEmbedBuilder().setDescription(
             lan.inheritCodeDescription,
           );
 
@@ -731,7 +734,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           let e;
           if (passesReg) {
             try {
-              new Discord.UnsafeEmbed().setColor(message.content);
+              new Builders.UnsafeEmbedBuilder().setColor(message.content);
             } catch (err) {
               e = err;
             }
@@ -754,7 +757,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           let e;
           if (!passesLength) {
             try {
-              new Discord.UnsafeEmbed().setTitle(message.content);
+              new Builders.UnsafeEmbedBuilder().setTitle(message.content);
             } catch (err) {
               e = err;
             }
@@ -784,7 +787,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           let e;
           if (!isUrl) {
             try {
-              new Discord.UnsafeEmbed().setURL(message.content);
+              new Builders.UnsafeEmbedBuilder().setURL(message.content);
             } catch (err) {
               e = err;
             }
@@ -807,7 +810,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           let e;
           if (!passesLength) {
             try {
-              new Discord.UnsafeEmbed().setAuthor({ name: message.content });
+              new Builders.UnsafeEmbedBuilder().setAuthor({ name: message.content });
             } catch (err) {
               e = err;
             }
@@ -841,7 +844,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           let e;
           if (!isUrl) {
             try {
-              new Discord.UnsafeEmbed().setAuthor({
+              new Builders.UnsafeEmbedBuilder().setAuthor({
                 name: '\u200b',
                 iconURL: message.content,
               });
@@ -881,7 +884,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           let e;
           if (!isUrl) {
             try {
-              new Discord.UnsafeEmbed().setAuthor({ name: '\u200b', url: message.content });
+              new Builders.UnsafeEmbedBuilder().setAuthor({ name: '\u200b', url: message.content });
             } catch (err) {
               e = err;
             }
@@ -908,7 +911,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
         case 'description': {
           let e;
           try {
-            new Discord.UnsafeEmbed().setDescription(message.content);
+            new Builders.UnsafeEmbedBuilder().setDescription(message.content);
           } catch (err) {
             e = err;
           }
@@ -934,7 +937,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           let e;
           if (!isUrl) {
             try {
-              new Discord.UnsafeEmbed().setImage(message.content);
+              new Builders.UnsafeEmbedBuilder().setImage(message.content);
             } catch (err) {
               e = err;
             }
@@ -964,7 +967,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           let e;
           if (!isUrl) {
             try {
-              new Discord.UnsafeEmbed().setThumbnail(message.content);
+              new Builders.UnsafeEmbedBuilder().setThumbnail(message.content);
             } catch (err) {
               e = err;
             }
@@ -994,7 +997,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
 
             let e;
             try {
-              new Discord.UnsafeEmbed().setTimestamp(message.content);
+              new Builders.UnsafeEmbedBuilder().setTimestamp(message.content);
             } catch (err) {
               e = err;
             }
@@ -1016,7 +1019,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
         case 'footer-text': {
           let e;
           try {
-            new Discord.UnsafeEmbed().setFooter({ text: message.content });
+            new Builders.UnsafeEmbedBuilder().setFooter({ text: message.content });
           } catch (err) {
             e = err;
           }
@@ -1045,7 +1048,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           let e;
           if (!isUrl) {
             try {
-              new Discord.UnsafeEmbed().setFooter({
+              new Builders.UnsafeEmbedBuilder().setFooter({
                 text: '\u200b',
                 iconURL: message.content,
               });
@@ -1114,7 +1117,7 @@ const postCode = (Objects, msg, answer, embed, noRemove) => {
     const embeds = [];
     if (embed) embeds.push(embed);
     embeds.push(
-      new Discord.UnsafeEmbed()
+      new Builders.UnsafeEmbedBuilder()
         .setAuthor({
           name: msg.language.commands.embedbuilder.author,
           iconURL: msg.client.constants.commands.embedbuilder.author,
@@ -1172,7 +1175,7 @@ const handleSave = async (msg, answer, Objects) => {
     .setStyle(Discord.ButtonStyle.Primary)
     .setDisabled(true);
 
-  const embed = new Discord.UnsafeEmbed().setDescription(lan.giveName).setAuthor({
+  const embed = new Builders.UnsafeEmbedBuilder().setDescription(lan.giveName).setAuthor({
     name: msg.language.commands.embedbuilder.author,
     iconURL: msg.client.constants.commands.embedbuilder.author,
     url: msg.client.constants.standard.invite,
@@ -1316,7 +1319,7 @@ const handleSend = async (msg, answer, Objects) => {
   };
 
   const getEmbed = (options) => {
-    const embed = new Discord.UnsafeEmbed()
+    const embed = new Builders.UnsafeEmbedBuilder()
       .setAuthor({
         name: msg.language.commands.embedbuilder.author,
         iconURL: msg.client.constants.commands.embedbuilder.author,
@@ -1398,7 +1401,7 @@ const handleSend = async (msg, answer, Objects) => {
         const errors = returns.filter((r) => r[1]);
         const successes = returns.filter((r) => !r[1]);
 
-        const embed = new Discord.UnsafeEmbed()
+        const embed = new Builders.UnsafeEmbedBuilder()
           .setAuthor({
             name: msg.language.commands.embedbuilder.author,
             iconURL: msg.client.constants.commands.embedbuilder.author,
@@ -1451,7 +1454,7 @@ const handleSend = async (msg, answer, Objects) => {
 
 const handleOtherMsgRaw = async (msg, answer, Objects) => {
   const noFound = () => {
-    const embed = new Discord.UnsafeEmbed()
+    const embed = new Builders.UnsafeEmbedBuilder()
       .setAuthor({
         name: msg.language.commands.embedbuilder.author,
         iconURL: msg.client.constants.commands.embedbuilder.author,
@@ -1462,7 +1465,7 @@ const handleOtherMsgRaw = async (msg, answer, Objects) => {
     return replier({ msg, answer }, { embeds: [embed], components: [] }, Objects);
   };
 
-  const embed = new Discord.UnsafeEmbed()
+  const embed = new Builders.UnsafeEmbedBuilder()
     .setAuthor({
       name: msg.language.commands.embedbuilder.author,
       iconURL: msg.client.constants.commands.embedbuilder.author,
@@ -1591,7 +1594,7 @@ const errorVal = async (msg, lan, valid, Objects, error, answer) => {
     }
   }
 
-  const errorEmbed = new Discord.UnsafeEmbed()
+  const errorEmbed = new Builders.UnsafeEmbedBuilder()
     .setAuthor({
       name: msg.language.commands.embedbuilder.author,
       iconURL: msg.client.constants.commands.embedbuilder.author,
@@ -1653,7 +1656,7 @@ const fieldSelect = async (msg, answer, Objects) => {
   ];
 
   const getEmbed = () => {
-    const baseEmbed = new Discord.UnsafeEmbed()
+    const baseEmbed = new Builders.UnsafeEmbedBuilder()
       .setAuthor({
         name: msg.language.commands.embedbuilder.author,
         iconURL: msg.client.constants.commands.embedbuilder.author,
@@ -1709,7 +1712,7 @@ const fieldSelect = async (msg, answer, Objects) => {
       switch (editing) {
         case 'name': {
           try {
-            new Discord.UnsafeEmbed().addFields({ name: collected, value: '\u200b' });
+            new Builders.UnsafeEmbedBuilder().addFields({ name: collected, value: '\u200b' });
             selected.name = collected;
           } catch (e) {
             msg.client.ch
@@ -1726,7 +1729,7 @@ const fieldSelect = async (msg, answer, Objects) => {
         }
         case 'value': {
           try {
-            new Discord.UnsafeEmbed().addFields({ name: '\u200b', value: collected });
+            new Builders.UnsafeEmbedBuilder().addFields({ name: '\u200b', value: collected });
             selected.value = collected;
           } catch (e) {
             msg.client.ch

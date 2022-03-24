@@ -1,4 +1,5 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
+
 const moment = require('moment');
 require('moment-duration-format');
 
@@ -33,7 +34,7 @@ module.exports = {
         }
         let link = invite.url;
         if (invite.inviter) link = ch.stp(con.author.link, { user: invite.inviter });
-        const embed = new Discord.UnsafeEmbed()
+        const embed = new Builders.UnsafeEmbedBuilder()
           .setAuthor({
             name: lan.author.name,
             iconURL: con.author.image,

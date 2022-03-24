@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   name: 'avatar',
@@ -34,13 +34,17 @@ module.exports = {
       return;
     }
 
-    const embed = new Discord.UnsafeEmbed()
+    const embed = new Builders.UnsafeEmbedBuilder()
       .setAuthor({
         name: msg.client.ch.stp(msg.lan.avatarOf, { user }),
         iconURL: msg.client.constants.standard.image,
-        url: isGlobal ? user.displayAvatarURL({ size: 4096 }) : member.displayAvatarURL({ size: 4096 }),
+        url: isGlobal
+          ? user.displayAvatarURL({ size: 4096 })
+          : member.displayAvatarURL({ size: 4096 }),
       })
-      .setImage(isGlobal ? user.displayAvatarURL({ size: 4096 }) : member.displayAvatarURL({ size: 4096 }))
+      .setImage(
+        isGlobal ? user.displayAvatarURL({ size: 4096 }) : member.displayAvatarURL({ size: 4096 }),
+      )
       .setTimestamp()
       .setColor(msg.client.ch.colorSelector(msg.guild ? msg.guild.me : null))
       .setFooter({ text: msg.client.ch.stp(msg.language.requestedBy, { user: msg.author }) });

@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   execute: async (interaction) => {
@@ -122,7 +123,7 @@ module.exports = {
 
         interaction.reply({
           embeds: [
-            new Discord.UnsafeEmbed()
+            new Builders.UnsafeEmbedBuilder()
               .setColor(interaction.client.constants.standard.ephemeralColor)
               .setDescription(interaction.client.ch.makeCodeBlock(splitContent[0])),
           ],
@@ -134,7 +135,7 @@ module.exports = {
         splitContent.forEach((content) => {
           interaction.followUp({
             embeds: [
-              new Discord.UnsafeEmbed()
+              new Builders.UnsafeEmbedBuilder()
                 .setColor(interaction.client.constants.standard.ephemeralColor)
                 .setDescription(interaction.client.ch.makeCodeBlock(content)),
             ],

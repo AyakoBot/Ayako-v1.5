@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 const jobs = require('node-schedule');
 
 module.exports = {
@@ -84,7 +84,7 @@ module.exports = {
     const descF = [];
 
     if (uniqueUsers.length !== 0) {
-      const replyEmbed = new Discord.UnsafeEmbed()
+      const replyEmbed = new Builders.UnsafeEmbedBuilder()
         .setColor(con.success)
         .setDescription(msg.lan.descS)
         .setAuthor({
@@ -150,7 +150,7 @@ module.exports = {
     }
 
     if (uniqueFails.length !== 0) {
-      const replyEmbed = new Discord.UnsafeEmbed()
+      const replyEmbed = new Builders.UnsafeEmbedBuilder()
         .setColor(con.fail)
         .setDescription(msg.lan.descF)
         .setAuthor({
@@ -203,7 +203,7 @@ module.exports = {
 
     const interval = jobs.scheduleJob('*/1 * * * * *', () => {
       if (uniqueUsers.length === descS.length && uniqueFails.length === descF.length) {
-        const logembed = new Discord.UnsafeEmbed()
+        const logembed = new Builders.UnsafeEmbedBuilder()
           .setAuthor({
             name: msg.client.ch.stp(msg.lan.log.desc, { amount: uniqueUsers.length }),
             iconURL: msg.client.constants.guildBanAdd.author.image,

@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const jobs = require('node-schedule');
+const Builders = require('@discordjs/builders');
 const { CaptchaGenerator } = require('captcha-canvas');
 
 module.exports = {
@@ -46,7 +47,7 @@ module.exports = {
 
     if (msg.r.logchannel) logchannel = msg.guild.channels.cache.get(msg.r.logchannel);
     if (logchannel) {
-      const log = new Discord.UnsafeEmbed()
+      const log = new Builders.UnsafeEmbedBuilder()
         .setDescription(msg.client.ch.stp(msg.lan.log.start, { user: msg.author }))
         .setAuthor({
           name: msg.author.tag,
@@ -61,7 +62,7 @@ module.exports = {
     msg.client.verificationCodes.set(`${msg.DM.id}-${msg.guild.id}`, file.captcha.text);
     const { r } = msg;
 
-    const embed = new Discord.UnsafeEmbed()
+    const embed = new Builders.UnsafeEmbedBuilder()
       .setImage(`attachment://${file.name}`)
       .setAuthor({
         name: msg.lan.author.name,
@@ -203,7 +204,7 @@ module.exports = {
   finished: async (msg, logchannel) => {
     msg.language = await msg.client.ch.languageSelector(msg.guild);
     if (logchannel) {
-      const log = new Discord.UnsafeEmbed()
+      const log = new Builders.UnsafeEmbedBuilder()
         .setDescription(
           msg.client.ch.stp(msg.language.verification?.log?.end, { user: msg.author }),
         )
@@ -215,7 +216,7 @@ module.exports = {
         .setColor();
       msg.client.ch.send(logchannel, { embeds: [log] });
     }
-    const embed = new Discord.UnsafeEmbed()
+    const embed = new Builders.UnsafeEmbedBuilder()
       .setTitle(
         msg.lan.author.name,
         msg.client.constants.standard.image,

@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   name: 'contact',
@@ -9,7 +9,7 @@ module.exports = {
   aliases: null,
   execute(msg) {
     const tta = msg.args.slice(0).join(' ');
-    const SuggestEmbed = new Discord.UnsafeEmbed()
+    const SuggestEmbed = new Builders.UnsafeEmbedBuilder()
       .setAuthor({
         name: `${msg.author.tag} / ${msg.author.id} / ${msg.guild.name}`,
         iconURL: msg.author.displayAvatarURL({ size: 4096 }),
@@ -23,7 +23,7 @@ module.exports = {
     msg.client.ch.send(msg.client.channels.cache.get('745080980431175792'), {
       embeds: [SuggestEmbed],
     });
-    const suggestReplyEmbed = new Discord.UnsafeEmbed()
+    const suggestReplyEmbed = new Builders.UnsafeEmbedBuilder()
       .setAuthor({
         name: msg.lan.thanks.thanks,
         iconURL: msg.client.constants.standard.image,

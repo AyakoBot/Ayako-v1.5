@@ -1,4 +1,5 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
+
 const moment = require('moment');
 require('moment-duration-format');
 
@@ -22,7 +23,7 @@ module.exports = {
         const language = await ch.languageSelector(guild);
         const lan = language.guildMemberAddLog;
         const con = Constants.guildMemberAddLog;
-        const embed = new Discord.UnsafeEmbed()
+        const embed = new Builders.UnsafeEmbedBuilder()
           .setTimestamp()
           .addFields({
             name: language.createdAt,

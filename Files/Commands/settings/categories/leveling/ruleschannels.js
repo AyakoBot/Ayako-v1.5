@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 const ChannelRules = require('../../../../BaseClient/Other Client Files/Classes/ChannelRules');
 
 module.exports = {
@@ -10,7 +11,7 @@ module.exports = {
   childOf: 'leveling',
   category: ['automation'],
   mmrEmbed(msg, res) {
-    const embed = new Discord.UnsafeEmbed();
+    const embed = new Builders.UnsafeEmbedBuilder();
     for (let i = 0; i < res.length; i += 1) {
       const r = res[i];
 
@@ -29,7 +30,7 @@ module.exports = {
     return embed;
   },
   displayEmbed(msg, r) {
-    const embed = new Discord.UnsafeEmbed()
+    const embed = new Builders.UnsafeEmbedBuilder()
       .setDescription(
         `**${msg.lan.rules}**:\n${
           r.rules

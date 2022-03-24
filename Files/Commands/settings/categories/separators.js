@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   perm: 268435456n,
@@ -7,7 +8,7 @@ module.exports = {
   finished: true,
   category: ['automation'],
   mmrEmbed(msg, res) {
-    const embed = new Discord.UnsafeEmbed();
+    const embed = new Builders.UnsafeEmbedBuilder();
     for (let i = 0; i < res.length; i += 1) {
       const r = res[i];
       const sep = msg.guild.roles.cache.get(r.separator);
@@ -104,7 +105,7 @@ module.exports = {
       }
     }
 
-    const embed = new Discord.UnsafeEmbed();
+    const embed = new Builders.UnsafeEmbedBuilder();
 
     if (r.isvarying === true) {
       let affectedRoleText;

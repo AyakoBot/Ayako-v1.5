@@ -1,4 +1,5 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
+
 const client = require('../../../BaseClient/DiscordClient');
 
 module.exports = {
@@ -44,7 +45,7 @@ module.exports = {
     }
     if (requirement) {
       let dmChannel;
-      const embed = new Discord.UnsafeEmbed().setAuthor(
+      const embed = new Builders.UnsafeEmbedBuilder().setAuthor(
         lan.author.name,
         Constants.standard.icon,
         Constants.standard.invite,

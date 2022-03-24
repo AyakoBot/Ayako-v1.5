@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   name: 'resetlevels',
@@ -39,7 +40,7 @@ module.exports = {
       );
     }
 
-    const embed = new Discord.UnsafeEmbed()
+    const embed = new Builders.UnsafeEmbedBuilder()
       .setDescription(msg.client.ch.stp(msg.lan.reset, { amount: res.rowCount }))
       .setColor(msg.client.constants.colors.success)
       .setAuthor({
@@ -63,7 +64,7 @@ const areYouSure = async (msg, all, user) => {
     .setCustomId('no')
     .setStyle(Discord.ButtonStyle.Primary);
 
-  const embed = new Discord.UnsafeEmbed()
+  const embed = new Builders.UnsafeEmbedBuilder()
     .setDescription(all ? msg.lan.sureAll : msg.client.ch.stp(msg.lan.sureUser, { user }))
     .setColor(msg.client.constants.colors.warning)
     .setAuthor({

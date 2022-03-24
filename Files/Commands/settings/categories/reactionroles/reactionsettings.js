@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   perm: 268435456n,
@@ -9,7 +10,7 @@ module.exports = {
   childOf: 'reactionroles',
   displayParentOnly: true,
   mmrEmbed: (msg, rows) => {
-    const embed = new Discord.UnsafeEmbed();
+    const embed = new Builders.UnsafeEmbedBuilder();
 
     rows.forEach((row) => {
       embed.addFields({
@@ -26,7 +27,7 @@ module.exports = {
     return embed;
   },
   displayEmbed: (msg, r) => {
-    const embed = new Discord.UnsafeEmbed();
+    const embed = new Builders.UnsafeEmbedBuilder();
 
     embed.addFields(
       {

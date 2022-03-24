@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 const moment = require('moment');
 require('moment-duration-format');
 
@@ -33,14 +33,14 @@ module.exports = {
     if (!warn) {
       return msg.client.ch.reply(msg, msg.client.ch.stp(msg.lan.noWarn, { number: warnNr }));
     }
-    const embed = new Discord.UnsafeEmbed()
+    const embed = new Builders.UnsafeEmbedBuilder()
       .setDescription(msg.client.ch.stp(msg.lan.done, { number: warnNr, target: user }))
       .setColor(msg.client.constants.commands.edit.success)
       .setFooter({ text: msg.lan.warnIssue })
       .setTimestamp(Number(warn.dateofwarn));
     msg.client.ch.reply(msg, { embeds: [embed] });
 
-    const logEmbed = new Discord.UnsafeEmbed();
+    const logEmbed = new Builders.UnsafeEmbedBuilder();
     const con = msg.client.constants.commands.edit;
 
     if (warn.type === 'Warn') {
