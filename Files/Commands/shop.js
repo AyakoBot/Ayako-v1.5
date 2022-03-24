@@ -1,4 +1,3 @@
-const Discord = require('discord.js');
 const Builders = require('@discordjs/builders');
 
 module.exports = {
