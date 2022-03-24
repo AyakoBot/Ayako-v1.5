@@ -1,6 +1,6 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
-class CustomSelectMenuOption extends Discord.UnsafeSelectMenuOption {
+class CustomSelectMenuOption extends Builders.UnsafeSelectMenuOptionBuilder {
   constructor(options) {
     if (!options.label) {
       throw new Error('Select Menu Option Requires a Label');

@@ -1,5 +1,6 @@
 const regex = /\/[^ w]+\//g;
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
+
 const jobs = require('node-schedule');
 
 module.exports = {
@@ -43,7 +44,7 @@ module.exports = {
             m.delete().catch(() => {});
           });
         }
-        const embed = new Discord.UnsafeEmbed()
+        const embed = new Builders.UnsafeEmbedBuilder()
           .setAuthor({
             name: msg.client.constants.standard.image,
             iconURL: language.commands.toxicityCheck.author,

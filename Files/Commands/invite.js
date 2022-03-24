@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   name: 'invite',
@@ -8,7 +8,7 @@ module.exports = {
   aliases: ['support'],
   type: 'info',
   async execute(msg) {
-    const embed = new Discord.UnsafeEmbed()
+    const embed = new Builders.UnsafeEmbedBuilder()
       .setAuthor({
         name: msg.lan.author,
         iconURL: msg.client.constants.commands.invite.author.image,

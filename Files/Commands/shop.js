@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   name: 'shop',
@@ -12,7 +13,7 @@ module.exports = {
   type: 'info',
   async execute(msg) {
     if (msg.guild.id === '298954459172700181') {
-      const embed = new Discord.UnsafeEmbed()
+      const embed = new Builders.UnsafeEmbedBuilder()
         .setAuthor({
           name: 'Server Role Shop',
           url: msg.client.constants.standard.invite,
@@ -57,7 +58,7 @@ module.exports = {
         .setFooter({ text: 'If it doesnt work for some reason, wait for the Staff to reply' });
       msg.client.ch.reply(msg, { embeds: [embed] });
     } else if (msg.guild.id === '266632338883084290') {
-      const embed = new Discord.UnsafeEmbed()
+      const embed = new Builders.UnsafeEmbedBuilder()
         .setAuthor({
           name: 'Server Role Shop',
           url: msg.client.constants.standard.invite,

@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   name: 'banner',
@@ -29,7 +29,7 @@ module.exports = {
       return;
     }
 
-    const embed = new Discord.UnsafeEmbed()
+    const embed = new Builders.UnsafeEmbedBuilder()
       .setAuthor({
         name: msg.client.ch.stp(msg.lan.bannerOf, { user }),
         iconURL: msg.client.constants.standard.image,

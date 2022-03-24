@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   execute: async (guild) => {
@@ -47,8 +47,8 @@ const logEnd = async (member, days) => {
   const row = await getSettings(member);
   const language = await member.client.ch.languageSelector(member.guild);
 
-  if (row.logchannels && row.logchannels.length) {
-    const embed = new Discord.UnsafeEmbed()
+  if (row?.logchannels && row.logchannels.length) {
+    const embed = new Builders.UnsafeEmbedBuilder()
       .setAuthor({
         name: language.guildMemberUpdateNitro.author.nameEnd,
       })
@@ -73,7 +73,7 @@ const logStart = async (member, days) => {
   const language = await member.client.ch.languageSelector(member.guild);
 
   if (row.logchannels && row.logchannels.length) {
-    const embed = new Discord.UnsafeEmbed()
+    const embed = new Builders.UnsafeEmbedBuilder()
       .setAuthor({
         name: language.guildMemberUpdateNitro.author.nameStart,
       })

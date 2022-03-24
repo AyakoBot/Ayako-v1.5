@@ -178,6 +178,8 @@ class Client extends Discord.Client {
     this.objectEmotes = require('./Other Client Files/ObjectEmojis.json');
     this.textEmotes = require('./Other Client Files/TextEmojis.json');
 
+    this.mainID = '650691698409734151';
+
     this.setMaxListeners(this.events.size);
   }
 }

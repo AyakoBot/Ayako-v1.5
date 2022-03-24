@@ -1,6 +1,6 @@
 /* eslint-disable import/no-unresolved */
 
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 const client = require('../../BaseClient/DiscordClient');
 
 module.exports = {
@@ -28,7 +28,7 @@ module.exports = {
         msg.channel = client.channels.cache.get(row.channelid);
         require('../guildevents/guildMemberUpdate/separator').oneTimeRunner(
           msg,
-          new Discord.UnsafeEmbed(),
+          new Builders.UnsafeEmbedBuilder(),
         );
       }
     });

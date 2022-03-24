@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   perm: 32n,
@@ -6,7 +7,7 @@ module.exports = {
   finished: true,
   category: ['auto-moderation'],
   displayEmbed(msg, r) {
-    const embed = new Discord.UnsafeEmbed().addFields(
+    const embed = new Builders.UnsafeEmbedBuilder().addFields(
       {
         name: msg.lanSettings.active,
         value: r.active

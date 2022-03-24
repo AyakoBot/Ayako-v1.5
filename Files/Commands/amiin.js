@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   name: 'amiin',
@@ -12,7 +12,7 @@ module.exports = {
   async execute(msg) {
     if (msg.channel.id === '805839305377447936') return;
     const id = msg.args[0] ? msg.args[0] : msg.author.id;
-    const embed = new Discord.UnsafeEmbed();
+    const embed = new Builders.UnsafeEmbedBuilder();
     const res = await msg.client.ch.query('SELECT * FROM stats;');
     if (res.rows[0].willis == null) {
       embed

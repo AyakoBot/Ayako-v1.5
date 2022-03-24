@@ -1,11 +1,11 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   async execute(executor, targets, reason, guild) {
     const kickPromises = targets.map((target) =>
-      guild.members.kick(target, `${executor.username} | ${reason}`).catch((e) => {
-        return `${target} | ${e}`;
-      }),
+      guild.members
+        .kick(target, `${executor.username} | ${reason}`)
+        .catch((e) => `${target} | ${e}`),
     );
 
     const kicks = await Promise.all(kickPromises);
@@ -29,7 +29,7 @@ module.exports = {
       const language = await guild.client.ch.languageSelector(guild);
       const lan = language.antiraid.kickAdd;
 
-      const embed = new Discord.UnsafeEmbed()
+      const embed = new Builders.UnsafeEmbedBuilder()
         .setColor(con.color)
         .setAuthor({
           name: guild.client.ch.stp(lan.author, {

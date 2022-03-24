@@ -1,7 +1,8 @@
 const urlCheck = require('valid-url');
 const request = require('request');
 const fs = require('fs');
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
+
 const jobs = require('node-schedule');
 
 const { Worker } = require('worker_threads');
@@ -264,7 +265,7 @@ const makeFullLinks = async (links) => {
 };
 
 const doesntExist = async ({ msg, lan, linkObject, check, language }, res) => {
-  const embed = new Discord.UnsafeEmbed()
+  const embed = new Builders.UnsafeEmbedBuilder()
     .setDescription(
       `**${language.result}**\n${client.ch.stp(lan.notexistent, {
         url: linkObject.baseURLhostname,
@@ -290,7 +291,7 @@ const doesntExist = async ({ msg, lan, linkObject, check, language }, res) => {
 
 const blacklisted = async ({ msg, lan, linkObject, note, check, language }, res) => {
   if (note && note !== false) {
-    const embed = new Discord.UnsafeEmbed()
+    const embed = new Builders.UnsafeEmbedBuilder()
       .setDescription(
         `**${language.result}**\n${client.ch.stp(lan.malicious, {
           cross: client.textEmotes.cross,
@@ -303,7 +304,7 @@ const blacklisted = async ({ msg, lan, linkObject, note, check, language }, res)
 
     msg.m = await client.ch.reply(msg, { embeds: [embed] });
   } else {
-    const embed = new Discord.UnsafeEmbed()
+    const embed = new Builders.UnsafeEmbedBuilder()
       .setDescription(
         `**${language.result}**\n${client.ch.stp(lan.malicious, {
           cross: client.textEmotes.cross,
@@ -339,7 +340,7 @@ const blacklisted = async ({ msg, lan, linkObject, note, check, language }, res)
 const severeLink = async ({ msg, lan, linkObject, check, language, hrefLogging }, res) => {
   saveToBadLink(linkObject, msg, hrefLogging);
 
-  const embed = new Discord.UnsafeEmbed()
+  const embed = new Builders.UnsafeEmbedBuilder()
     .setDescription(
       `**${language.result}**\n${client.ch.stp(lan.malicious, {
         cross: client.textEmotes.cross,
@@ -372,7 +373,7 @@ const severeLink = async ({ msg, lan, linkObject, check, language, hrefLogging }
 
 const ccscam = async ({ msg, lan, linkObject, check, language }, res) => {
   saveToBadLink(linkObject, msg);
-  const embed = new Discord.UnsafeEmbed()
+  const embed = new Builders.UnsafeEmbedBuilder()
     .setDescription(
       `**${language.result}**\n${client.ch.stp(lan.ccscam, {
         cross: client.textEmotes.cross,
@@ -405,7 +406,7 @@ const ccscam = async ({ msg, lan, linkObject, check, language }, res) => {
 const newUrl = async ({ msg, lan, linkObject, check, language }, res) => {
   saveToBadLink(linkObject, msg);
 
-  const embed = new Discord.UnsafeEmbed()
+  const embed = new Builders.UnsafeEmbedBuilder()
     .setDescription(
       `**${language.result}**\n${client.ch.stp(lan.newLink, {
         cross: client.textEmotes.cross,
@@ -460,7 +461,7 @@ const saveToBadLink = async (linkObject, msg, hrefLogging) => {
 };
 
 const whitelisted = async ({ msg, lan, check, linkObject, language }, res) => {
-  const embed = new Discord.UnsafeEmbed()
+  const embed = new Builders.UnsafeEmbedBuilder()
     .setDescription(
       `**${language.result}**\n${client.ch.stp(lan.whitelisted, {
         tick: client.textEmotes.tick,
@@ -487,7 +488,7 @@ const whitelisted = async ({ msg, lan, check, linkObject, language }, res) => {
 };
 
 const cloudFlare = async ({ msg, lan, linkObject, check, language }, res) => {
-  const embed = new Discord.UnsafeEmbed()
+  const embed = new Builders.UnsafeEmbedBuilder()
     .setDescription(
       `**${language.result}**\n${client.ch.stp(lan.cfProtected, {
         cross: client.textEmotes.cross,
@@ -517,7 +518,7 @@ const cloudFlare = async ({ msg, lan, linkObject, check, language }, res) => {
 };
 
 const VTfail = ({ msg, lan, check, linkObject, language }, res) => {
-  const embed = new Discord.UnsafeEmbed()
+  const embed = new Builders.UnsafeEmbedBuilder()
     .setDescription(
       `**${language.result}**\n${client.ch.stp(lan.VTfail, {
         cross: msg.client.textEmotes.cross,
@@ -545,7 +546,7 @@ const timedOut = ({ msg, lan, check, linkObject, language }, res) => {
   msg.client.ch.send(msg.client.channels.cache.get('726252103302905907'), {
     content: `${linkObject.href}\n${msg.url}\nTimed Out`,
   });
-  const embed = new Discord.UnsafeEmbed()
+  const embed = new Builders.UnsafeEmbedBuilder()
     .setDescription(
       `**${language.result}**\n${client.ch.stp(lan.timedOut, {
         cross: msg.client.textEmotes.cross,
@@ -572,7 +573,7 @@ const timedOut = ({ msg, lan, check, linkObject, language }, res) => {
 const linkLog = (msg, lan, color, url, text, row) => {
   if (!row || !row.linklogging || !row.linklogchannels.length) return;
 
-  const embed = new Discord.UnsafeEmbed()
+  const embed = new Builders.UnsafeEmbedBuilder()
     .setAuthor({
       name: lan.log.author.author,
       url: msg.client.constants.standard.invite,

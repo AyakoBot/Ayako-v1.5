@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 const re = /[0-9A-Fa-f]{6}/g;
 
@@ -22,7 +22,7 @@ module.exports = {
         reason: msg.client.ch.stp(lan.reason, { user: msg.author }),
       })
       .catch(() => {});
-    const embed = new Discord.UnsafeEmbed()
+    const embed = new Builders.UnsafeEmbedBuilder()
       .setDescription(msg.client.ch.stp(lan.created, { role }))
       .setColor(parseInt(color, 16));
     return msg.client.ch.reply(msg, { embeds: [embed] });

@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 // fix channel rules
 
@@ -69,7 +70,7 @@ module.exports = {
 
     const selected = this.getSelected(msg, insertedValues, required);
 
-    const returnEmbed = new Discord.UnsafeEmbed().setDescription(
+    const returnEmbed = new Builders.UnsafeEmbedBuilder().setDescription(
       `**${msg.language.selected}:**\n${selected?.length ? selected : msg.language.none}`,
     );
 

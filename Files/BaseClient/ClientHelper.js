@@ -2,6 +2,7 @@
 const https = require('https');
 const http = require('http');
 const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 const v8 = require('v8');
 const fs = require('fs');
 const SA = require('superagent');
@@ -77,7 +78,7 @@ module.exports = {
         module.exports.send(msg.author, {
           content: undefined,
           embeds: [
-            new Discord.UnsafeEmbed()
+            new Builders.UnsafeEmbedBuilder()
               .setAuthor({
                 name: msg.language.error,
                 iconURL: msg.client.objectEmotes.warning.link,
@@ -792,7 +793,7 @@ module.exports = {
     let language;
     if (!language) language = await module.exports.languageSelector(interaction.guild);
 
-    const embed = new Discord.UnsafeEmbed()
+    const embed = new Builders.UnsafeEmbedBuilder()
       .setAuthor({
         name: language.error,
         iconURL: Constants.standard.image,
@@ -808,7 +809,7 @@ module.exports = {
    * @param {object} msg - The Message module.exports Function replies to.
    */
   collectorEnd: (msg, m) => {
-    const embed = new Discord.UnsafeEmbed()
+    const embed = new Builders.UnsafeEmbedBuilder()
       .setDescription(msg.language.timeError)
       .setColor(Constants.error);
 
@@ -869,7 +870,7 @@ module.exports = {
    * @param {object} guild - The Guild in which module.exports Command was called
    */
   loadingEmbed: async (lan, guild) => {
-    const embed = new Discord.UnsafeEmbed()
+    const embed = new Builders.UnsafeEmbedBuilder()
       .setAuthor({
         name: lan.author,
         iconURL: guild.client.objectEmotes.loading.link,
@@ -1072,7 +1073,7 @@ module.exports = {
 
     options.forEach((option) => {
       const embedToUse = embeds[embeds.length - 1];
-      const embed = new Discord.UnsafeEmbed();
+      const embed = new Builders.UnsafeEmbedBuilder();
 
       embed.color = embedToUse.color;
       embed.title = embedToUse.title ? mod(embedToUse.title, { [option[0]]: option[1] }) : null;
@@ -1137,7 +1138,7 @@ module.exports = {
     return embeds.pop();
   },
   error: (msg, content, m) => {
-    const embed = new Discord.UnsafeEmbed()
+    const embed = new Builders.UnsafeEmbedBuilder()
       .setAuthor({
         name: msg.language.error,
         iconURL: msg.client.objectEmotes.warning.link,
@@ -1159,7 +1160,7 @@ module.exports = {
       me ? msg.guild.me.permissions : msg.member.permissions,
     );
 
-    const embed = new Discord.UnsafeEmbed()
+    const embed = new Builders.UnsafeEmbedBuilder()
       .setAuthor({
         name: msg.language.error,
         iconURL: msg.client.constants.standard.errorImage,

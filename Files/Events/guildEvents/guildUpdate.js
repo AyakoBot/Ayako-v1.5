@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 /* eslint-disable no-case-declarations */
 module.exports = {
@@ -19,7 +19,7 @@ module.exports = {
         const language = await ch.languageSelector(newGuild);
         const lan = language.guildUpdate;
         const con = Constants.guildUpdate;
-        const embed = new Discord.UnsafeEmbed()
+        const embed = new Builders.UnsafeEmbedBuilder()
           .setAuthor({
             name: lan.author.name,
             iconURL: con.author.image,

@@ -1,4 +1,5 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
+
 const jobs = require('node-schedule');
 const StringSimilarity = require('string-similarity');
 const ChannelRules = require('../../../BaseClient/Other Client Files/Classes/ChannelRules');
@@ -308,7 +309,7 @@ const doReact = async (msg, row, levelData, language) => {
 
 const doEmbed = async (msg, settinsgrow, language, levelData, row) => {
   const getDefaultEmbed = () =>
-    new Discord.UnsafeEmbed()
+    new Builders.UnsafeEmbedBuilder()
       .setAuthor({ name: language.leveling.author })
       .setColor(msg.client.ch.colorSelector(msg.member));
 
@@ -552,7 +553,7 @@ const getChannelMultiplier = async (msg) => {
 };
 
 const infoEmbed = (msg, reactions, language) => {
-  const embed = new Discord.UnsafeEmbed()
+  const embed = new Builders.UnsafeEmbedBuilder()
     .setColor(msg.client.ch.colorSelector(msg.guild.me))
     .setDescription(
       msg.client.ch.stp(language.leveling.description, { reactions: reactions.join('') }),

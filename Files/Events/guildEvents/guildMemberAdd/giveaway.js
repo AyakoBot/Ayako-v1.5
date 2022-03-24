@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   async execute(member, user) {
@@ -24,7 +24,7 @@ module.exports = {
               const language = await ch.languageSelector(guild);
               const lan = language.guildMemberAddGiveaway;
               const DM = user.createDM().catch(() => {});
-              const embed = new Discord.UnsafeEmbed()
+              const embed = new Builders.UnsafeEmbedBuilder()
                 .setAuthor(
                   ch.stp(lan.author.title, { member }),
                   Constants.standard.image,

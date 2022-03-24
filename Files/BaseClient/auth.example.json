@@ -14,5 +14,8 @@
   "spamhausToken": "https://www.spamhaus.org/ API Token",
   "ip2whoisToken": "https://ip2whois.com/ API Token",
   "promptAPIToken": "https://promptapi.com/ API Token",
-  "topGGtoken": "https://top.gg/ Token"
+  "topGGtoken": "https://top.gg/ Token",
+  "DBToken": "https://discord.bots.gg Token",
+  "DBListToken": "https://discord.bots.gg Token",
+  "statcordKey": "https://statcord.com/ Token"
 }

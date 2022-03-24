@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   name: '8ball',
@@ -10,7 +10,7 @@ module.exports = {
     const random = Math.floor(Math.random() * 15);
     const question = msg.args.slice(0).join(' ');
     const answer = msg.lan.answers[random];
-    const embed = new Discord.UnsafeEmbed()
+    const embed = new Builders.UnsafeEmbedBuilder()
       .setColor(msg.client.ch.colorSelector(msg.guild ? msg.guild.me : null))
       .setAuthor({
         name: msg.lan.author,

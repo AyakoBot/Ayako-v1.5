@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 const moment = require('moment');
 require('moment-duration-format');
 const axios = require('axios');
@@ -93,7 +94,7 @@ module.exports = {
     getBoosting(userflags, user, msg);
     const con = msg.client.constants.commands[this.name];
 
-    const userEmbed = new Discord.UnsafeEmbed()
+    const userEmbed = new Builders.UnsafeEmbedBuilder()
       .setAuthor({
         name: user.bot ? msg.lan.authorBot : msg.lan.authorUser,
         iconURL: con.authorImage,
@@ -139,7 +140,7 @@ module.exports = {
     let components = [];
     const member = await msg.guild.members.fetch(user.id).catch(() => {});
     if (member) {
-      const memberEmbed = new Discord.UnsafeEmbed()
+      const memberEmbed = new Builders.UnsafeEmbedBuilder()
         .setAuthor({
           name: user.bot ? msg.lan.memberAuthorBot : msg.lan.memberAuthorUser,
           iconURL: con.authorImage,
@@ -446,7 +447,7 @@ const rolesHandler = async (interaction, msg, member) => {
     const rolesWithoutSep = member.roles.cache.filter((role) => !rolesWithSep.includes(role.id));
     rolesWithoutSep.sort((a, b) => b.rawPosition - a.rawPosition);
 
-    const embed = new Discord.UnsafeEmbed();
+    const embed = new Builders.UnsafeEmbedBuilder();
     separators.forEach((sep, key) => {
       if (!sep.stopRole) {
         embed.addFields({
@@ -495,7 +496,7 @@ const rolesHandler = async (interaction, msg, member) => {
     return;
   }
 
-  const embed = new Discord.UnsafeEmbed().setDescription(
+  const embed = new Builders.UnsafeEmbedBuilder().setDescription(
     `**${msg.language.roles}**:\n${member.roles.cache
       .sort((a, b) => b.rawPosition - a.rawPosition)
       .map((r) => `${r}`)
@@ -552,7 +553,7 @@ const basicPermsHandler = (interaction, msg, member) => {
     ]);
   });
 
-  const embed = new Discord.UnsafeEmbed();
+  const embed = new Builders.UnsafeEmbedBuilder();
   categories.forEach((perms, name) => {
     embed.addFields({ name: `${name}`, value: ` ${perms.join('\n')}\u200b`, inline: false });
   });
@@ -663,7 +664,7 @@ const permsHandler = (interaction, msg, member) => {
     ]);
   });
 
-  const embed = new Discord.UnsafeEmbed();
+  const embed = new Builders.UnsafeEmbedBuilder();
   categories.forEach((perms, name) => {
     embed.addFields({ name: `${name}`, value: ` ${perms.join('\n')}\u200b`, inline: false });
   });

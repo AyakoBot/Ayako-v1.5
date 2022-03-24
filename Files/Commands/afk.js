@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   name: 'afk',
@@ -22,7 +22,7 @@ module.exports = {
       msg.guild.id,
     ]);
 
-    const embed = new Discord.UnsafeEmbed().setColor(msg.client.constants.commands.afk);
+    const embed = new Builders.UnsafeEmbedBuilder().setColor(msg.client.constants.commands.afk);
 
     if (res && res.rowCount > 0) {
       msg.client.ch.query(

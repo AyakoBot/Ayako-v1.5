@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 const jobs = require('node-schedule');
 const client = require('../../../BaseClient/DiscordClient');
 
@@ -35,7 +35,7 @@ module.exports = {
         jobs.scheduleJob(new Date(Date.now() + 300000), () => {
           require('../../guildEvents/guildMemberUpdate/separator').oneTimeRunner(
             msg,
-            new Discord.UnsafeEmbed(),
+            new Builders.UnsafeEmbedBuilder(),
           );
         });
       }

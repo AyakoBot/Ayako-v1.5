@@ -1,4 +1,5 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
+
 const client = require('../../../BaseClient/DiscordClient');
 
 module.exports = {
@@ -21,7 +22,7 @@ module.exports = {
           if (reaction.emoji.name === '✅') {
             reaction.message.delete().catch(() => {});
             if (msg.author) {
-              const embed2 = new Discord.UnsafeEmbed()
+              const embed2 = new Builders.UnsafeEmbedBuilder()
                 .setColor(msg.client.constants.standard.color)
                 .setThumbnail(user.displayAvatarURL({ size: 4096 }))
                 .setDescription(`${user} accepted the submission of ${msg.author}`)
@@ -33,7 +34,7 @@ module.exports = {
               const log = await logchannel.send(embed2).catch(() => {});
               if (res.rows[0].willis) {
                 if (res.rows[0].willis.includes(msg.author.id)) {
-                  const embed = new Discord.UnsafeEmbed()
+                  const embed = new Builders.UnsafeEmbedBuilder()
                     .setAuthor({
                       name: 'Childe Giveaway!',
                       iconURL:
@@ -52,7 +53,7 @@ module.exports = {
                     .catch(() => {});
                   return;
                 }
-                const embed = new Discord.UnsafeEmbed()
+                const embed = new Builders.UnsafeEmbedBuilder()
                   .setAuthor({
                     name: 'Childe Giveaway!',
                     iconURL:
@@ -78,7 +79,7 @@ module.exports = {
                   newnr,
                 ]);
               } else {
-                const embed = new Discord.UnsafeEmbed()
+                const embed = new Builders.UnsafeEmbedBuilder()
                   .setAuthor({
                     name: 'Childe Giveaway!',
                     iconURL:
@@ -102,7 +103,7 @@ module.exports = {
           if (reaction.emoji.name === '❌') {
             reaction.message.delete().catch(() => {});
             if (msg.author) {
-              const embed2 = new Discord.UnsafeEmbed()
+              const embed2 = new Builders.UnsafeEmbedBuilder()
                 .setColor(16711680)
                 .setThumbnail(user.displayAvatarURL({ size: 4096 }))
                 .setDescription(`${user} rejected the submission of ${msg.author}`)
@@ -112,7 +113,7 @@ module.exports = {
                 })
                 .setTimestamp();
               const log = await logchannel.send(embed2).catch(() => {});
-              const embed = new Discord.UnsafeEmbed()
+              const embed = new Builders.UnsafeEmbedBuilder()
                 .setAuthor({
                   name: 'Childe Giveaway!',
                   iconURL:

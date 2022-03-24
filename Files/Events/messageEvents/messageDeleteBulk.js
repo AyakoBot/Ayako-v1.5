@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   async execute(msgs) {
@@ -43,7 +43,7 @@ module.exports = {
             entry = entry.first();
           }
         }
-        const embed = new Discord.UnsafeEmbed()
+        const embed = new Builders.UnsafeEmbedBuilder()
           .setTimestamp()
           .setColor(con.color)
           .setAuthor({

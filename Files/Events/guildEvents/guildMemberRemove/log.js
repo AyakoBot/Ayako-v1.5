@@ -1,4 +1,5 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
+
 const moment = require('moment');
 require('moment-duration-format');
 
@@ -31,7 +32,7 @@ module.exports = {
             entry = entry.first();
           }
         }
-        const embed = new Discord.UnsafeEmbed()
+        const embed = new Builders.UnsafeEmbedBuilder()
           .setColor(con.color)
           .setThumbnail(user.displayAvatarURL({ size: 4096 }))
           .setTimestamp();

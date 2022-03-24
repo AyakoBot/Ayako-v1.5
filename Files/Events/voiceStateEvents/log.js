@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = async (oldState, newState) => {
   if (!oldState || !newState) return;
@@ -19,7 +19,7 @@ module.exports = async (oldState, newState) => {
       const language = await ch.languageSelector(guild);
       const lan = language.voiceUpdate;
       const con = Constants.voiceUpdate;
-      const embed = new Discord.UnsafeEmbed().setTimestamp().setColor(con.color).setAuthor({
+      const embed = new Builders.UnsafeEmbedBuilder().setTimestamp().setColor(con.color).setAuthor({
         name: lan.author.name,
         iconURL: con.author.image,
       });

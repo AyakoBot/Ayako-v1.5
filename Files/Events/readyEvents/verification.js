@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 const client = require('../../BaseClient/DiscordClient');
 
 module.exports = {
@@ -49,6 +49,6 @@ module.exports = {
 };
 
 const getEmbed = (guild, lan) =>
-  new Discord.UnsafeEmbed()
+  new Builders.UnsafeEmbedBuilder()
     .setDescription(client.ch.stp(lan.kickMsg, { guild }))
     .setColor(client.constants.mod.kickAdd.color);

@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   async execute(oldChannel, newChannel) {
@@ -23,7 +23,7 @@ module.exports = {
         const lan = language.channelUpdate;
         const con = Constants.channelUpdate;
         let typeID;
-        const embed = new Discord.UnsafeEmbed()
+        const embed = new Builders.UnsafeEmbedBuilder()
           .setAuthor({
             name: ch.stp(lan.author.title, { type: `${language.channelTypes[newChannel.type]}` }),
             iconURL: con.author.image,

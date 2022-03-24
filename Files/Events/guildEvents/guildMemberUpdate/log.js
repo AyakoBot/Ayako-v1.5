@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   async execute(oldMember, newMember) {
@@ -20,7 +20,7 @@ module.exports = {
       if (channels && channels.length) {
         const language = await ch.languageSelector(guild);
         const con = Constants.guildMemberUpdate;
-        const embed = new Discord.UnsafeEmbed().setTimestamp().setColor(con.color);
+        const embed = new Builders.UnsafeEmbedBuilder().setTimestamp().setColor(con.color);
         if (oldMember && member.nickname !== oldMember.nickname) {
           const lan = language.guildMemberUpdateNickname;
           embed.setAuthor({

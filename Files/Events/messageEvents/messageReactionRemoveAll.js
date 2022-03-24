@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   async execute(msg) {
@@ -19,7 +19,7 @@ module.exports = {
         const language = await ch.languageSelector(guild);
         const con = Constants.messageReactionRemoveAll;
         const lan = language.messageReactionRemoveAll;
-        const embed = new Discord.UnsafeEmbed()
+        const embed = new Builders.UnsafeEmbedBuilder()
           .setColor(con.color)
           .setAuthor({
             name: lan.author.name,

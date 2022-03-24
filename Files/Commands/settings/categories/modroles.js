@@ -1,4 +1,6 @@
 const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
+
 // TODO: add default mute time when not provided
 
 module.exports = {
@@ -9,7 +11,7 @@ module.exports = {
   category: ['moderation'],
   async mmrEmbed(msg, res) {
     res.sort((a, b) => a.uniquetimestamp - b.uniquetimestamp);
-    const embed = new Discord.UnsafeEmbed();
+    const embed = new Builders.UnsafeEmbedBuilder();
     for (let i = 0; i < res.length; i += 1) {
       const r = res[i];
 
@@ -35,7 +37,7 @@ module.exports = {
     return embed;
   },
   displayEmbed(msg, r) {
-    const embed = new Discord.UnsafeEmbed();
+    const embed = new Builders.UnsafeEmbedBuilder();
     embed.addFields(
       {
         name: msg.lanSettings.active,

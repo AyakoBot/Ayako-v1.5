@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   async execute(msg) {
@@ -46,7 +46,7 @@ module.exports = {
                 const fivekRole = msg.guild.roles.cache.find(
                   (role) => role.id === '756597282891366434',
                 );
-                const rembed = new Discord.UnsafeEmbed();
+                const rembed = new Builders.UnsafeEmbedBuilder();
                 if (amount > 19) {
                   if (!msg.member.roles.cache.has('755962444547096677')) {
                     msg.member.roles.add(twentyRole).catch(() => {});

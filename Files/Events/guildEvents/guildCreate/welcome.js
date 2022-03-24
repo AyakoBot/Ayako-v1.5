@@ -1,5 +1,5 @@
 /* eslint-disable no-await-in-loop */
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   async execute(guild) {
@@ -7,7 +7,7 @@ module.exports = {
     const { ch } = guild.client;
     const language = await guild.client.ch.languageSelector(guild);
     const lan = language.guildCreate;
-    const joinembed = new Discord.UnsafeEmbed()
+    const joinembed = new Builders.UnsafeEmbedBuilder()
       .setAuthor({
         name: lan.author,
         iconURL: Constants.standard.image,

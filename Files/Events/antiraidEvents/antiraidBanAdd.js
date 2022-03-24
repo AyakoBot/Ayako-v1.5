@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   async execute(executor, targets, reason, guild) {
@@ -29,7 +29,7 @@ module.exports = {
       const language = await guild.client.ch.languageSelector(guild);
       const lan = language.antiraid.banAdd;
 
-      const embed = new Discord.UnsafeEmbed()
+      const embed = new Builders.UnsafeEmbedBuilder()
         .setColor(con.color)
         .setAuthor({
           name: guild.client.ch.stp(lan.author, {

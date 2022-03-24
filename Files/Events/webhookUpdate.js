@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   async execute(data) {
@@ -55,7 +55,7 @@ module.exports = {
               entry = auditsDelete.entries.first();
             }
           }
-          const embed = new Discord.UnsafeEmbed();
+          const embed = new Builders.UnsafeEmbedBuilder();
           if (entry.actionType === 'CREATE') {
             const lan = language.webhookCreate;
             const con = Constants.webhookCreate;

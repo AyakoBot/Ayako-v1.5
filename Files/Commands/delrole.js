@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 const stringSimilarity = require('string-similarity');
 
 module.exports = {
@@ -26,7 +26,7 @@ module.exports = {
     }
     if (!role) return msg.client.ch.reply(msg, lan.noRoleFound);
 
-    const embed = new Discord.UnsafeEmbed();
+    const embed = new Builders.UnsafeEmbedBuilder();
     if (role.managed) {
       embed
         .setAuthor({

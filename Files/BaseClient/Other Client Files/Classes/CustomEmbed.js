@@ -1,6 +1,6 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
-class CustomEmbed extends Discord.UnsafeEmbed {
+class CustomEmbed extends Builders.UnsafeEmbedBuilder {
   constructor(guild, oldEmbed) {
     super();
 

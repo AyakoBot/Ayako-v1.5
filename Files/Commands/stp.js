@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   name: 'stp',
@@ -16,7 +17,7 @@ module.exports = {
       returned = e.message;
     }
 
-    const embed = new Discord.UnsafeEmbed().setDescription(returned).addFields({
+    const embed = new Builders.UnsafeEmbedBuilder().setDescription(returned).addFields({
       name: '\u200b',
       value: `${msg.language.Examples}: ${msg.client.ch.makeCodeBlock(
         `t!stp {{msg.guild.name}}\nt!stp {{msg.author.username}}\nt!stp {{msg.channel.name}}`,

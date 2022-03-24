@@ -1,10 +1,8 @@
-// const { statcord } = require('../../BaseClient/Statcord');
 const jobs = require('node-schedule');
 
 module.exports = {
   once: true,
   execute: async () => {
-    // eslint-disable-next-line global-require
     const client = require('../../BaseClient/DiscordClient');
     console.log(`|Logged in as Ayako\n|-> Bot: ${client.user.tag}`);
     console.log(`Login at ${new Date(Date.now()).toLocaleString()}`);
@@ -14,10 +12,15 @@ module.exports = {
       client.ch.getErisBans(guild);
     });
 
-    // statcord.autopost();
+    if (client.user.id === client.mainID) {
+      const statcord = require('../../BaseClient/Statcord');
+      statcord.autopost();
+    }
 
     jobs.scheduleJob('*/1 */1 * * *', () => {
-      // require('./websiteFetcher').execute();
+      if (client.user.id === client.mainID) {
+        require('./WebsiteFetcher')();
+      }
       if (new Date().getHours() === 0) {
         client.guilds.cache.forEach((g) => {
           require('./nitro').execute(g);

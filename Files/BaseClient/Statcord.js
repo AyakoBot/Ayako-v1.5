@@ -16,4 +16,4 @@ statcord.on('autopost-start', () => {
   ch.logger('Started autopost', null);
 });
 
-module.exports = { statcord };
+module.exports = statcord;

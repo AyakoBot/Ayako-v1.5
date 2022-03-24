@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   async execute(guild) {
@@ -76,7 +76,7 @@ module.exports = {
           if (entryCreate) entry = entryCreate;
           if (entryUpdate) entry = entryUpdate;
         }
-        const embed = new Discord.UnsafeEmbed().setTimestamp();
+        const embed = new Builders.UnsafeEmbedBuilder().setTimestamp();
         if (entry.actionType === 'DELETE') {
           let finalEntry;
           if (guild.me.permissions.has(128n)) {

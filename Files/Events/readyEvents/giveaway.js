@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   async execute() {
@@ -74,7 +74,7 @@ module.exports = {
                   guild.members.cache.get(u.id).roles.cache.has(role.id),
                 );
               else {
-                const embed = new Discord.UnsafeEmbed()
+                const embed = new Builders.UnsafeEmbedBuilder()
                   .setDescription(description)
                   .setTimestamp(new Date(+endat).toUTCString())
                   .setColor(guild.me.displayColor)
@@ -98,7 +98,7 @@ module.exports = {
               if (reqGuild && reqGuild.id)
                 users = users.filter(async (u) => guild.members.fetch(u.id));
               else {
-                const embed = new Discord.UnsafeEmbed()
+                const embed = new Builders.UnsafeEmbedBuilder()
                   .setDescription(description)
                   .setTimestamp(new Date(+endat).toUTCString())
                   .setColor(guild.me.displayHexColor)
@@ -124,7 +124,7 @@ module.exports = {
             .map((u) => msg.guild.members.fetch(u.id));
         }
         if (abort === false) {
-          const embed = new Discord.UnsafeEmbed()
+          const embed = new Builders.UnsafeEmbedBuilder()
             .setDescription(description)
             .setTimestamp(new Date(+endat).toUTCString())
             .setColor(guild.me.displayHexColor)
@@ -139,7 +139,7 @@ module.exports = {
               language.ready.giveaway.winners,
               users.map((w) => `<@${w.id}>`).join(', '),
             );
-            const winnerembed = new Discord.UnsafeEmbed()
+            const winnerembed = new Builders.UnsafeEmbedBuilder()
               .setColor(guild.me.displayHexColor)
               .setDescription(description)
               .setFooter(language.ready.giveaway.endAt)

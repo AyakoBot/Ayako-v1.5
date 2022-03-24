@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const jobs = require('node-schedule');
+const Builders = require('@discordjs/builders');
 
 // TODO: fix standard emotes like 🔨
 
@@ -73,7 +74,7 @@ module.exports = {
 
     const selected = module.exports.getSelected(msg, insertedValues, required, required.key);
 
-    const returnEmbed = new Discord.UnsafeEmbed().setDescription(
+    const returnEmbed = new Builders.UnsafeEmbedBuilder().setDescription(
       `**${msg.language.selected}:**\n${selected?.length ? selected : msg.language.none}`,
     );
 

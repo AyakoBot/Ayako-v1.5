@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   async execute(oldRole, newRole) {
@@ -24,10 +24,13 @@ module.exports = {
         const language = await ch.languageSelector(guild);
         const lan = language.roleUpdate;
         const con = Constants.roleUpdate;
-        const embed = new Discord.UnsafeEmbed().setTimestamp().setColor(con.color).setAuthor({
-          name: lan.author.name,
-          iconURL: con.author.image,
-        });
+        const embed = new Builders.UnsafeEmbedBuilder()
+          .setTimestamp()
+          .setColor(con.color)
+          .setAuthor({
+            name: lan.author.name,
+            iconURL: con.author.image,
+          });
         const ChangedKey = [];
         if (oldRole.name !== newRole.name) {
           ChangedKey.push(language.name);

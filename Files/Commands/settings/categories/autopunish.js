@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 const moment = require('moment');
 require('moment-duration-format');
 
@@ -9,7 +10,7 @@ module.exports = {
   finished: true,
   category: ['auto-moderation'],
   async mmrEmbed(msg, res) {
-    const embed = new Discord.UnsafeEmbed().setDescription(
+    const embed = new Builders.UnsafeEmbedBuilder().setDescription(
       msg.client.ch.stp(msg.lan.description, { prefix: msg.client.constants.standard.prefix }),
     );
     for (let i = 0; i < res.length; i += 1) {
@@ -30,7 +31,7 @@ module.exports = {
     return embed;
   },
   displayEmbed(msg, r) {
-    const embed = new Discord.UnsafeEmbed();
+    const embed = new Builders.UnsafeEmbedBuilder();
     embed.addFields(
       {
         name: `${msg.lanSettings.active}\u200b`,

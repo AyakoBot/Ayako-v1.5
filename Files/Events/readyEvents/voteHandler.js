@@ -1,6 +1,7 @@
 const io = require('socket.io-client');
 const Discord = require('discord.js');
 const jobs = require('node-schedule');
+const Builders = require('@discordjs/builders');
 const client = require('../../BaseClient/DiscordClient');
 
 const timeouts = new Map();
@@ -203,7 +204,7 @@ const reminder = async (voter) => {
   const allowsReminder = await getReminder(voter);
   if (!allowsReminder) return;
 
-  const embed = new Discord.UnsafeEmbed()
+  const embed = new Builders.UnsafeEmbedBuilder()
     .setColor(client.constants.standard.color)
     .setAuthor({
       name: 'Ayako Vote Reminder',
@@ -247,7 +248,7 @@ const endReminder = async (voter, endTime) => {
     .setStyle(Discord.ButtonStyle.Link)
     .setURL('https://top.gg/bot/650691698409734151/vote');
 
-  const embed = new Discord.UnsafeEmbed()
+  const embed = new Builders.UnsafeEmbedBuilder()
     .setColor(client.constants.standard.color)
     .setAuthor({
       name: 'Ayako Vote Reminder',

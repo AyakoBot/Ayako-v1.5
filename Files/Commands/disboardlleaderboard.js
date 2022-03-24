@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   name: 'disboardleaderboard',
@@ -79,7 +80,7 @@ const buttonsHandler = (msg, types, ownPos, content, oldEmbed) => {
 };
 
 const getEmbed = (content, msg, ownPos) => {
-  const embed = new Discord.UnsafeEmbed()
+  const embed = new Builders.UnsafeEmbedBuilder()
     .setColor(msg.client.ch.colorSelector(msg.guild.me))
     .setDescription(content)
     .setAuthor({

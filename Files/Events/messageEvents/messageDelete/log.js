@@ -1,4 +1,5 @@
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
+
 const client = require('../../../BaseClient/DiscordClient');
 
 module.exports = {
@@ -31,7 +32,7 @@ module.exports = {
             entry = entry.first();
           }
         }
-        const embed = new Discord.UnsafeEmbed().setColor(con.color).setTimestamp();
+        const embed = new Builders.UnsafeEmbedBuilder().setColor(con.color).setTimestamp();
         if (entry) {
           embed.setAuthor({
             name: lan.author.name,
