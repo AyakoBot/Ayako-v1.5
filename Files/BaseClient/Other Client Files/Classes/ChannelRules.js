@@ -2,15 +2,15 @@ const { BitField } = require('discord.js');
 
 class ChannelRules extends BitField {
   missing(bits) {
-    return super.missing(bits);
+    return super.missing(BigInt(bits));
   }
 
-  any(permission) {
-    return super.any(permission);
+  any(bits) {
+    return super.any(BigInt(bits));
   }
 
-  has(permission) {
-    return super.has(permission);
+  has(bits) {
+    return super.has(BigInt(bits));
   }
 }
 
