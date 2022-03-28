@@ -3,7 +3,6 @@ const jobs = require('node-schedule');
 
 const antiraidCache = new Discord.Collection();
 const sendings = new Discord.Collection();
-const knownRaids = new Discord.Collection();
 
 module.exports = {
   async execute(member) {
@@ -24,8 +23,8 @@ module.exports = {
     }
 
     const cache = antiraidCache.get(member.guild.id);
+
     antiraidCache.set(member.guild.id, {
-      members: cache ? [...new Set([...cache.members, member.user.id])] : [member.user.id],
       time: member.joinedTimestamp,
       joins: (cache?.joins || 0) + 1,
       timeout: jobs.scheduleJob(new Date(Date.now() + Number(r.time)), () => {
@@ -43,15 +42,11 @@ module.exports = {
         sendings.get(member.guild.id).timeout.cancel();
       }
 
-      const oldSettings = sendings.get(member.guild.id);
       sendings.set(member.guild.id, {
-        members: oldSettings
-          ? [...new Set([...oldSettings.members, ...cache.members])]
-          : cache.members,
         time: cache.time,
         joins: cache.joins,
         timeout: jobs.scheduleJob(new Date(Date.now() + Number(r.time)), () => {
-          member.client.emit('antiraidHandler', sendings.get(member.guild.id), member.guild, r);
+          member.client.emit('antiraidHandler', member.guild, r);
           antiraidCache.delete(member.guild.id);
         }),
       });

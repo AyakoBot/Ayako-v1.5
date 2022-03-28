@@ -1,21 +1,22 @@
 const Discord = require('discord.js');
 const Builders = require('@discordjs/builders');
-
 const confusables = require('confusables');
 
 module.exports = {
-  execute: async (joins, guild, r) => {
+  execute: async (data, guild, r) => {
     const language = await guild.client.ch.languageSelector(guild.id);
     const con = guild.client.constants.antiraidMessage;
     const { client } = guild;
 
-    if (joins.members && joins.members.length) {
-      checkAll(guild, language, con, client, r, joins.members);
+    if (data.joins) {
+      checkAll(guild, language, con, client, r);
     }
   },
 };
 
-const checkAll = async (guild, language, con, client, r, memberIDs) => {
+const checkAll = async (guild, language, con, client, r, { time }) => {
+  const memberIDs = await getMemberIDs(guild, time, r);
+
   const buffers = await Promise.all(
     memberIDs.map(async (id) =>
       client.ch.convertImageURLtoBuffer([
@@ -160,4 +161,17 @@ const getSimilarUsers = (ids, guild) => {
   });
 
   return otherUsers;
+};
+
+const getMemberIDs = async (guild, timestamp, { time }) => {
+  await guild.members.fetch().catch(() => {});
+  const memberIDs = [];
+
+  guild.members.cache.forEach((member) => {
+    if (member.joinedTimestamp - time > timestamp) {
+      memberIDs.push(member.user.id);
+    }
+  });
+
+  return memberIDs;
 };
