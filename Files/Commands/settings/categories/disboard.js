@@ -20,14 +20,14 @@ module.exports = {
       {
         name: msg.lan.roles,
         value: `${
-          r.roles && r.roles.length ? r.roles.map((id) => ` <#${id}>`) : msg.language.none
+          r.roles && r.roles.length ? r.roles.map((id) => ` <@&${id}>`) : msg.language.none
         }`,
         inline: false,
       },
       {
         name: msg.lan.users,
         value: `${
-          r.users && r.users.length ? r.users.map((id) => ` <#${id}>`) : msg.language.none
+          r.users && r.users.length ? r.users.map((id) => ` <@${id}>`) : msg.language.none
         }`,
         inline: false,
       },

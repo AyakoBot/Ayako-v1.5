@@ -84,12 +84,12 @@ module.exports = {
             textType = msg.client.textEmotes.blue;
           }
 
-          const index = options.findIndex((o) => o.value === settingsFile.name);
+          const index = options.findIndex((o) => o.data.value === settingsFile.name);
           if (options[index]) {
             options[index].setEmoji(objectType);
             options[index].setDescription(category);
           } else {
-            const ind = options.findIndex((o) => o.value === settingsFile.folder);
+            const ind = options.findIndex((o) => o.data.value === settingsFile.folder);
             options[ind].setEmoji(msg.client.objectEmotes.folder);
           }
 
@@ -1376,7 +1376,7 @@ const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
           passObject.Objects.take = [];
           passObject.Objects.page += 1;
 
-          embed.fields.splice(-1, 1);
+          embed.data.fields.splice(-1, 1);
 
           if (editor.requiresMenu) {
             embed.addFields({
@@ -1415,7 +1415,7 @@ const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
           passObject.Objects.take = [];
           passObject.Objects.page -= 1;
 
-          embed.fields.splice(-1, 1);
+          embed.data.fields.splice(-1, 1);
 
           if (editor.requiresMenu) {
             embed.addFields({
@@ -1912,7 +1912,7 @@ const categoryDisplay = async (msg, answer, needsBack) => {
       settingCategories[i] = `${textType}${settingCategories[i]} `;
       settingCategories[i] += new Array(22 - settingCategories[i].length).join(' ');
 
-      const index = options.findIndex((o) => o.value === settingsFile.name);
+      const index = options.findIndex((o) => o.data.value === settingsFile.name);
       options[index].setEmoji(objectType);
       options[index].setDescription(category);
     }

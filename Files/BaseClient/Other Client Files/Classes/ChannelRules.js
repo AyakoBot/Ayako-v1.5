@@ -1,41 +1,29 @@
 const { BitField } = require('discord.js');
 
-class ChannelRules extends BitField {
-  missing(bits) {
-    return super.missing(BigInt(bits));
-  }
-
-  any(bits) {
-    return super.any(BigInt(bits));
-  }
-
-  has(bits) {
-    return super.has(BigInt(bits));
-  }
-}
+class ChannelRules extends BitField {}
 
 ChannelRules.Flags = {
-  HasLeastAttachments: 1n << 0n,
-  HasMostAttachments: 1n << 1n,
-  HasLeastCharacters: 1n << 2n,
-  HasMostCharacters: 1n << 3n,
-  HasLeastWords: 1n << 4n,
-  HasMostWords: 1n << 5n,
-  MentionsLeastUsers: 1n << 6n,
-  MentionsMostUsers: 1n << 7n,
-  MentionsLeastChannels: 1n << 8n,
-  MentionsMostChannels: 1n << 9n,
-  MentionsLeastRoles: 1n << 10n,
-  MentionsMostRoles: 1n << 11n,
-  HasLeastLinks: 1n << 12n,
-  HasMostLinks: 1n << 13n,
-  HasLeastEmotes: 1n << 14n,
-  HasMostEmotes: 1n << 15n,
-  HasLeastMentions: 1n << 16n,
-  HasMostMentions: 1n << 17n,
+  HasLeastAttachments: 1 << 0,
+  HasMostAttachments: 1 << 1,
+  HasLeastCharacters: 1 << 2,
+  HasMostCharacters: 1 << 3,
+  HasLeastWords: 1 << 4,
+  HasMostWords: 1 << 5,
+  MentionsLeastUsers: 1 << 6,
+  MentionsMostUsers: 1 << 7,
+  MentionsLeastChannels: 1 << 8,
+  MentionsMostChannels: 1 << 9,
+  MentionsLeastRoles: 1 << 10,
+  MentionsMostRoles: 1 << 11,
+  HasLeastLinks: 1 << 12,
+  HasMostLinks: 1 << 13,
+  HasLeastEmotes: 1 << 14,
+  HasMostEmotes: 1 << 15,
+  HasLeastMentions: 1 << 16,
+  HasMostMentions: 1 << 17,
 };
 
-ChannelRules.All = Object.values(ChannelRules.Flags).reduce((all, p) => all | p, 0n);
+ChannelRules.All = Object.values(ChannelRules.Flags).reduce((all, p) => all | p, 0);
 
 ChannelRules.defaultBit = BigInt(0);
 
