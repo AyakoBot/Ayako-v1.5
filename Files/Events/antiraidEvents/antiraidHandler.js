@@ -168,7 +168,7 @@ const getMemberIDs = async (guild, timestamp, { time }) => {
   const memberIDs = [];
 
   guild.members.cache.forEach((member) => {
-    if (member.joinedTimestamp - time > timestamp) {
+    if (member.joinedTimestamp > timestamp - time) {
       memberIDs.push(member.user.id);
     }
   });

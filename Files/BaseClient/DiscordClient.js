@@ -147,7 +147,9 @@ class Client extends Discord.Client {
         Discord.Partials.GuildMember,
         Discord.Partials.GuildScheduledEvent,
       ],
-      intents: new Discord.IntentsBitField(79871), // 79615
+      intents: new Discord.IntentsBitField(79615),
+      // no presences 79615
+      // presences 79871
 
       allowedMentions: {
         parse: ['users', 'roles'],
