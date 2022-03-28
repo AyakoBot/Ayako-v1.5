@@ -20,42 +20,6 @@ module.exports = {
   dm: true,
   takesFirstArg: false,
   execute: async (msg) => {
-    const m = await msg.channel.send({
-      content: 'Test Message',
-      components: [
-        new Discord.ActionRow().setComponents(
-          new Discord.ButtonComponent().setLabel('Test Button').setCustomId('test').setStyle(1),
-        ),
-      ],
-    });
 
-    const buttonsCollector = m.channel.createMessageComponentCollector({ time: 500000 });
-    buttonsCollector.on('collect', (interaction) => {
-      if (interaction.customId === 'test') {
-        // Create the modal
-        const modal = new Discord.Modal().setTitle('My Awesome Form').setCustomId('AwesomeForm');
-
-        // Create text input fields
-        const one = new Discord.TextInputComponent()
-          .setCustomId('1')
-          .setLabel('Test Short')
-          .setStyle(Discord.TextInputStyle.Short);
-
-        const two = new Discord.TextInputComponent()
-          .setCustomId('2')
-          .setLabel('Test Paragraph')
-          .setStyle(Discord.TextInputStyle.Paragraph);
-
-        const rows = [one, two].map((component) =>
-          new Discord.ActionRow().addComponents(component),
-        );
-
-        // Add action rows to form
-        modal.addComponents(...rows);
-
-        // Present the modal to the user
-        interaction.showModal(modal);
-      }
-    });
   },
 };
