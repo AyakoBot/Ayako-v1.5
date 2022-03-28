@@ -153,7 +153,7 @@ module.exports = {
           {
             name: msg.lan.timeout,
             value: `${
-              member.communicationDisabledUntil
+              member.communicationDisabledUntil && member.isCommunicationDisabled()
                 ? `${msg.client.textEmotes.tickBG} ${msg.language.Yes}\n${
                     msg.lan.communicationDisabledUntil
                   } <t:${String(member.communicationDisabledUntilTimestamp).slice(
