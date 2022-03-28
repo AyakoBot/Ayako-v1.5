@@ -1041,10 +1041,6 @@
           "jointhreshold": {
             "key": "number",
             "required": true
-          },
-          "similaridthreshold": {
-            "key": "number",
-            "required": true
           }
         },
         "selfroles": {
@@ -1401,9 +1397,9 @@
         },
         "antiraid": {
           "cols": [
-            "guildid, active, punishment, punishmenttof, time, jointhreshold, similaridthreshold"
+            "guildid, active, punishment, punishmenttof, time, jointhreshold"
           ],
-          "vals": [["{{msg.guild.id}}", false, true, false, 15000, 15, 5]]
+          "vals": [["{{msg.guild.id}}", false, true, false, 15000, 15]]
         },
         "blacklist": {
           "cols": [

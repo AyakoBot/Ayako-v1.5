@@ -89,12 +89,6 @@ module.exports = {
         value: r.jointhreshold ? r.jointhreshold : msg.language.none,
         inline: true,
       },
-
-      {
-        name: msg.lan.similaridthreshold,
-        value: r.similaridthreshold ? r.similaridthreshold : msg.language.none,
-        inline: true,
-      },
     );
     return embed;
   },
@@ -135,15 +129,11 @@ module.exports = {
       .setCustomId(msg.lan.edit.jointhreshold.name)
       .setLabel(msg.lan.jointhreshold)
       .setStyle(Discord.ButtonStyle.Primary);
-    const similaridthreshold = new Builders.UnsafeButtonBuilder()
-      .setCustomId(msg.lan.edit.similaridthreshold.name)
-      .setLabel(msg.lan.similaridthreshold)
-      .setStyle(Discord.ButtonStyle.Primary);
     return [
       [active],
       [punishmenttof, punishment],
       [post, postchannel, pingusers, pingroles],
-      [time, jointhreshold, similaridthreshold],
+      [time, jointhreshold],
     ];
   },
 };

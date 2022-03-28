@@ -2005,7 +2005,6 @@
         "pingusers": "TB Users to Ping",
         "time": "Join Remember-Time",
         "jointhreshold": "Join Threshold",
-        "similaridthreshold": "Similar ID Join Threshold",
         "debugSettings": "**__Notification Settings__**",
         "thresholdSettings": "**__Threshold Settings__**",
         "edit": {
@@ -2044,11 +2043,6 @@
             "name": "Join Threshold",
             "answers": "Any Number",
             "recommended": "Recommended: `15`"
-          },
-          "similaridthreshold": {
-            "name": "Similar ID Join Threshold",
-            "answers": "Any Number",
-            "recommended": "Recommended: `5`"
           },
           "pingroles": {
             "name": "TB Roles to Ping",
