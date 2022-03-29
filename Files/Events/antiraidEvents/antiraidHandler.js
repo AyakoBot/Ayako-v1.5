@@ -165,13 +165,15 @@ const getSimilarUsers = (ids, guild) => {
 
 const getMemberIDs = async (guild, timestamp, { time }) => {
   await guild.members.fetch().catch(() => {});
-  const memberIDs = [];
 
-  guild.members.cache.forEach((member) => {
-    if (member.joinedTimestamp > timestamp - time) {
-      memberIDs.push(member.user.id);
-    }
-  });
+  const memberIDs = guild.members.cache
+    .map((member) => {
+      if (member.joinedTimestamp > timestamp - time) {
+        return member.user.id;
+      }
+      return null;
+    })
+    .filter((m) => !!m);
 
   return memberIDs;
 };
