@@ -50,12 +50,20 @@ const prepare = async (msg, lan, check, language, res) => {
     .split(/ +/);
 
   const links = [];
+
   args.forEach((arg) => {
+    let url;
+    try {
+      url = new URL(arg).hostname;
+    } catch {
+      // empty block statement
+    }
+
     if (
       urlCheck.isUri(arg) &&
       arg.toLowerCase() !== 'http://' &&
       arg.toLowerCase() !== 'https://' &&
-      new URL(arg).hostname
+      url
     ) {
       links.push(arg);
     }
