@@ -372,7 +372,7 @@ const getRulesRes = async (msg) => {
 const checkPass = (msg, rows) => {
   const passes = rows.map((row) => {
     if (!row.rules) return true;
-    const rules = new ChannelRules(BigInt(Number.parseInt(row.rules, 10))).toArray();
+    const rules = new ChannelRules(row.rules, 10).toArray();
     const appliedRules = {};
 
     rules.forEach((uppercaseKey) => {
