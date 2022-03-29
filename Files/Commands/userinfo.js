@@ -28,8 +28,8 @@ module.exports = {
           ...msg.client.users.cache
             .filter(
               (u) =>
-                u.username.toLowerCase() === msg.args.slice(0).join(' ').toLowerCase() ||
-                u.tag.toLowerCase() === msg.args.slice(0).join(' ').toLowerCase(),
+                u.username?.toLowerCase() === msg.args.slice(0).join(' ').toLowerCase() ||
+                u.tag?.toLowerCase() === msg.args.slice(0).join(' ').toLowerCase(),
             )
             .map((u) => u.id),
           ...msg.guild.members.cache
