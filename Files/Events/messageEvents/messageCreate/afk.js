@@ -7,7 +7,9 @@ module.exports = {
     if (!msg.author) return;
     if (msg.author.bot) return;
     if (!msg.guild) return;
-    const [checkedMsg] = await require('./commandHandler').prefix(msg);
+    let checkedMsg = await require('./commandHandler').prefix(msg);
+    if (checkedMsg) [checkedMsg] = checkedMsg;
+
     const res = await msg.client.ch.query('SELECT * FROM afk WHERE userid = $1 AND guildid = $2;', [
       msg.author.id,
       msg.guild.id,
@@ -42,7 +44,7 @@ module.exports = {
         'SELECT * FROM afk WHERE userid = $1 AND guildid = $2;',
         [mention.id, msg.guild.id],
       );
-      if (afkRes && afkRes.rowCount > 0)
+      if (afkRes && afkRes.rowCount > 0) {
         msg.client.ch.reply(
           msg,
           `${
@@ -59,6 +61,7 @@ module.exports = {
             )
             .replace(/-/g, '')}`,
         );
+      }
     });
   },
 };
