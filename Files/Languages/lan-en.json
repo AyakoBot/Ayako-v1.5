@@ -1081,9 +1081,9 @@
       "rolesWithoutSep": "Roles without Separator",
       "botInfo": "\n**__Basic Info:__**\n**Prefix:** `{{res.prefix}}`\n**Server Count:** {{serverCount}}\n**Tags:** {{tags}}\n\n**__Links:__**\n**Website:** {{website}}\n**Support Server:** {{support}}\n**Invite Link:** [Click to Invite]({{invite}})\n**GitHub:** {{github}}\n\n**__Votes:__**\n**All Time Votes:** {{res.points}}\n**This Months Votes:** {{res.monthlyPoints}}",
       "selectUser": "Select the User you want to view",
-      "browser": "Open Profile | Browser",
-      "desktop": "Open Profile | Desktop App",
-      "mobile": "Possibly Open Profile | Mobile"
+      "browser": "Try Opening Profile | Browser",
+      "desktop": "Try Opening Profile | Desktop App",
+      "mobile": "Try Opening Profile | Mobile"
     },
     "resetlevels": {
       "description": "Reset the XP of one or all Users",
@@ -2637,7 +2637,6 @@
         "lvlupchannels": "Level-Up Channels",
         "lvlupdeltimeout": "Level-Up Message Delete Timeout",
         "lvlupemotes": "Level-Up Emotes",
-        "lackingAccess": "I'm lacking access to these emotes: {{emotes}}",
         "actualXP": "Actual XP per message (with multiplier)",
         "prefixes": "Prefixes",
         "ignoreprefixes": "Ignore Prefixes",
@@ -3121,7 +3120,7 @@
         "roles": "Roles",
         "emoteid": "Button Emote",
         "cantManage": "I can't edit this Message",
-        "notMyMessage": "Since this is not my Message I can't edit it and add Buttons to it\nUse reactions instead.",
+        "notMyMessage": "Since this is not my Message I can't edit it and add Buttons to it.\nUse reactions instead.",
         "edit": {
           "active": {
             "name": "Active",
@@ -3165,7 +3164,8 @@
         "type": "Reaction Role",
         "name": "Name",
         "roles": "Roles",
-        "emoteid": "Button Emote",
+        "lackingAccess": "I'm lacking access to these emotes: {{emotes}}",
+        "emoteid": "Reaction Emote",
         "edit": {
           "active": {
             "name": "Active",
@@ -3183,7 +3183,7 @@
             "recommended": "Roles to add when the Reaction is added and take when the Reaction is removed"
           },
           "emoteid": {
-            "name": "Button Emote",
+            "name": "Reaction Emote",
             "answers": "Emotes",
             "recommended": "The Emote the Reaction will have"
           }

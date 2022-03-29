@@ -9,10 +9,13 @@ module.exports = {
   category: ['automation'],
   childOf: 'reactionroles',
   noArrows: true,
+  canBe1Row: true,
   mmrEmbed: async (msg, rows) => {
-    const [, , message] = await linkToIDs(rows[0].messagelink);
+    let message;
+    if (rows.length) [, , message] = await linkToIDs(msg, rows[0].messagelink);
+
     const embed = new Builders.UnsafeEmbedBuilder();
-    if (!message || !message.author || message.author.id !== msg.client.user.id) {
+    if (message && message.author && message.author.id !== msg.client.user.id) {
       embed.addFields({
         name: msg.lan.cantManage,
         value: msg.lan.notMyMessage,
@@ -36,7 +39,7 @@ module.exports = {
     return embed;
   },
   displayEmbed: async (msg, r) => {
-    const [, , message] = await linkToIDs(r.messagelink);
+    const [, , message] = await linkToIDs(msg, r.messagelink);
     const embed = new Builders.UnsafeEmbedBuilder();
     if (!message || !message.author || message.author.id !== msg.client.user.id) {
       embed.addFields({
@@ -79,7 +82,7 @@ module.exports = {
     return embed;
   },
   buttons: async (msg, r) => {
-    const [, , message] = await linkToIDs(r.messagelink);
+    const [, , message] = await linkToIDs(msg, r.messagelink);
     if (!message || !message.author || message.author.id !== msg.client.user.id) return [];
 
     const active = new Builders.UnsafeButtonBuilder()
@@ -118,14 +121,20 @@ module.exports = {
 
     return res;
   },
-  doMoreThings: async (msg, insertedValues, changedKey, res) => {
-    const rows = res?.rows ? res.rows : null;
-    if (!rows || !rows.length) return;
+  doMoreThings: async (msg, insertedValues, changedKey, newRes, oldRes) => {
+    if (!newRes.rows || !oldRes.rows) return;
+    const newRows = newRes.rows[0];
+    const oldRows = oldRes.rows[0];
 
-    const [, , message] = await linkToIDs(insertedValues.messagelink || res.rows[0].messagelink);
+    const [, , message] = await linkToIDs(msg, newRows.messagelink);
+
     if (!message || !message.author || message.author.id !== msg.client.user.id) return;
 
-    const buttons = rows
+    if (oldRows.active === true && newRows.active === false) {
+      message.edit({ components: [] }).catch(() => {});
+      return;
+    }
+    const buttons = newRes
       .map((row) => {
         if (row.messagelink !== insertedValues.messagelink) return null;
 
@@ -147,10 +156,10 @@ module.exports = {
     let useIndex = 0;
     buttons.forEach((b, i) => {
       if ((5 / i) % 1 === 0) {
-        rows.push(b);
+        actionRows.push(b);
         useIndex += 1;
       } else {
-        rows[useIndex].push(b);
+        actionRows[useIndex].push(b);
       }
     });
 

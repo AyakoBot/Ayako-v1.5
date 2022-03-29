@@ -9,6 +9,7 @@ module.exports = {
   category: ['automation'],
   childOf: 'reactionroles',
   noArrows: true,
+  canBe1Row: true,
   mmrEmbed: (msg, rows) => {
     const embed = new Builders.UnsafeEmbedBuilder();
 
@@ -28,7 +29,13 @@ module.exports = {
   },
   displayEmbed: (msg, r) => {
     const embed = new Builders.UnsafeEmbedBuilder();
-    const emote = msg.client.emojis.cache.get(r.emoteid);
+
+    let emote;
+    if (Number.isNaN(+r.emoteid)) {
+      emote = r.emoteid;
+    } else {
+      emote = msg.client.emojis.cache.get(r.emoteid);
+    }
 
     embed.addFields(
       {
@@ -94,4 +101,45 @@ module.exports = {
 
     return res;
   },
+  doMoreThings: async (msg, insertedValues, assigner, newRes, oldRes) => {
+    if (!newRes.rows || !oldRes.rows) return;
+
+    const [, , message] = await linkToIDs(msg, newRes.rows[0].messagelink);
+
+    const newRow = newRes.rows[0];
+    const oldRow = oldRes.rows[0];
+
+    if (message) {
+      console.log(newRow, oldRow);
+      if (newRow.active === false && oldRow.active === true) {
+        message.reactions.cache
+          .get(oldRow.emoteid)
+          ?.remove()
+          .catch(() => {});
+      }
+
+      if (oldRow.emoteid !== newRow.emoteid) {
+        message.reactions.cache
+          .get(oldRow.emoteid)
+          ?.remove()
+          .catch(() => {});
+
+        message.react(newRow.emoteid).catch(() => {});
+      }
+
+      if (newRow.active === true && oldRow.active === false) {
+        message.react(newRow.emoteid).catch(() => {});
+      }
+    }
+  },
+};
+
+const linkToIDs = async (msg, link) => {
+  const [, , , guildid, channelid, messageid] = link.split(/\/+/);
+
+  const guild = msg.client.guilds.cache.get(guildid);
+  const channel = guild ? guild.channels.cache.get(channelid) : null;
+  const message = channel ? await channel.messages.fetch(messageid).catch(() => {}) : null;
+
+  return [guild, channel, message];
 };
