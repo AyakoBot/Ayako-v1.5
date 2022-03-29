@@ -63,12 +63,12 @@ module.exports = {
               enable = `${language.unknown} ${perm}`;
             }
             for (let j = 0; perm.deny.toArray().length > j; j += 1) {
-              disable += `${Constants.switch.disable} \`${
+              disable += `${client.textEmotes.disable} \`${
                 language.permissions[perm.deny.toArray()[j]]
               }\`\n`;
             }
             for (let j = 0; perm.allow.toArray().length > j; j += 1) {
-              enable += `${Constants.switch.enable} \`${
+              enable += `${client.textEmotes.enable} \`${
                 language.permissions[perm.allow.toArray()[j]]
               }\`\n`;
             }
