@@ -36,10 +36,10 @@ module.exports = {
     msg.args = args;
     msg.command = command;
     // eslint-disable-next-line consistent-return
-    return msg;
+    return [msg, prefix];
   },
   async execute(rawmsg) {
-    const msg = await this.prefix(rawmsg);
+    const msg = await this.prefix([rawmsg]);
     if (!msg) return;
     if (msg.channel.type === 1) {
       this.DMcommand(msg);

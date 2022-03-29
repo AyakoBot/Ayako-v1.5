@@ -7,7 +7,7 @@ module.exports = {
     if (!msg.author) return;
     if (msg.author.bot) return;
     if (!msg.guild) return;
-    const checkedMsg = await require('./commandHandler').prefix(msg);
+    const [checkedMsg] = await require('./commandHandler').prefix(msg);
     const res = await msg.client.ch.query('SELECT * FROM afk WHERE userid = $1 AND guildid = $2;', [
       msg.author.id,
       msg.guild.id,
