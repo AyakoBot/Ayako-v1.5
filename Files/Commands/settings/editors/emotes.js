@@ -90,8 +90,14 @@ module.exports = {
             ? insertedValues[required.assinger]
                 .map((value) => {
                   let emote;
-                  if (msg.client.emojis.cache.get(value)) {
-                    emote = msg.client.emojis.cache.get(value);
+                  if (
+                    msg.client.emojis.cache.get(
+                      value.replace(/[<:|<a:](.*):/g, '').replace(/>/g, ''),
+                    )
+                  ) {
+                    emote = msg.client.emojis.cache.get(
+                      value.replace(/[<:|<a:](.*):/g, '').replace(/>/g, ''),
+                    );
                   } else if (value.match(msg.client.ch.regexes.emojiTester)?.length) {
                     emote = value;
                   }
@@ -107,8 +113,14 @@ module.exports = {
         default: {
           if (insertedValues[required.assinger]) {
             let emote;
-            if (msg.client.emojis.cache.get(insertedValues[required.assinger])) {
-              emote = msg.client.emojis.cache.get(insertedValues[required.assinger]);
+            if (
+              msg.client.emojis.cache.get(
+                insertedValues[required.assinger].replace(/[<:|<a:](.*):/g, '').replace(/>/g, ''),
+              )
+            ) {
+              emote = msg.client.emojis.cache.get(
+                insertedValues[required.assinger].replace(/[<:|<a:](.*):/g, '').replace(/>/g, ''),
+              );
             } else if (
               insertedValues[required.assinger].match(msg.client.ch.regexes.emojiTester)?.length
             ) {
@@ -134,7 +146,9 @@ module.exports = {
 
     const noAccessEmotes = args
       .map((arg) => {
-        const emote = msg.client.emojis.cache.get(arg);
+        const emote = msg.client.emojis.cache.get(
+          arg.replace(/[<:|<a:](.*):/g, '').replace(/>/g, ''),
+        );
         if (!emote) {
           const nameArray = message.content.split(arg)[0].split(/:+/);
           return `\`${nameArray[nameArray.length - 2]}\``;
