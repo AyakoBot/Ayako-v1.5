@@ -36,6 +36,7 @@ module.exports = {
     require('./separators').execute();
     require('./antivirusBlocklistCacher').execute();
     require('./voteHandler').execute();
+    require('./inviteLogger')();
 
     jobs.scheduleJob('*/2 * * * * *', () => {
       require('./TimedManagers/TimedManagerSplitter').execute();
