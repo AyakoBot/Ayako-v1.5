@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Files",
+    "\\Files\\Commands"
   ],
-  "SelectedNode": "\\index.js",
+  "SelectedNode": "\\Files\\Commands\\settings.js",
   "PreviewInSolutionExplorer": false
 }
