@@ -10,8 +10,6 @@ module.exports = {
         ? command.aliases.map((alias) => `${alias}`).join(', ')
         : undefined;
 
-      console.log(command.name);
-
       const inserted = {
         label: command.name,
         value: command.name,
