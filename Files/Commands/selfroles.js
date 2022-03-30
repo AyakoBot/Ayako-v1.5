@@ -27,7 +27,7 @@ module.exports = {
     const getCategoryFields = (embed) => {
       Data.cTake.forEach((took) => {
         const row = res.rows.find((r) => r.uniquetimestamp === took.value);
-        const roles = row.roles
+        const roles = row?.roles
           .map((role) => (msg.guild.roles.cache.get(role) ? msg.guild.roles.cache.get(role) : null))
           .filter((role) => !!role);
         if (roles.length) {

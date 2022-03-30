@@ -176,6 +176,7 @@ class Client extends Discord.Client {
     this.verificationCodes = new Map();
 
     this.eris = Eris;
+    this.neko = require('./NekoClient');
     this.constants = Constants;
     this.objectEmotes = require('./Other Client Files/ObjectEmojis.json');
     this.textEmotes = require('./Other Client Files/TextEmojis.json');

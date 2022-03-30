@@ -1017,7 +1017,7 @@ module.exports = {
    * @param {object} DBembed - The Embed Data from the Database
    */
   getDiscordEmbed: (DBembed) =>
-    new Discord.UnsafeEmbed({
+    new Builders.UnsafeEmbedBuilder({
       color: Number(DBembed.color),
       title: DBembed.title,
       url: DBembed.url,
