@@ -1245,10 +1245,9 @@ const changing = async (msgData, editData, resData) => {
       [msg.guild.id, row.uniquetimestamp],
     );
   } else {
-    oldRes = await msg.client.ch.query(
-      `SELECT * FROM ${tableName} WHERE guildid = $1 AND uniquetimestamp = $2;`,
-      [msg.guild.id, row.uniquetimestamp],
-    );
+    oldRes = await msg.client.ch.query(`SELECT * FROM ${tableName} WHERE guildid = $1;`, [
+      msg.guild.id,
+    ]);
 
     await msg.client.ch.query(
       `UPDATE ${tableName} SET ${required.assinger} = $1 WHERE guildid = $2;`,
