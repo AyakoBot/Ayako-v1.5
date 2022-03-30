@@ -11,7 +11,7 @@ module.exports = {
     const con = msg.client.constants.mod.muteRemove;
     let em;
     if (mexisted) {
-      em = new Discord.UnsafeEmbed(msg.m.embeds[0]).setColor(con.color).addFields({
+      em = new Builders.UnsafeEmbedBuilder(msg.m.embeds[0]).setColor(con.color).addFields({
         name: '\u200b',
         value: `${msg.client.textEmotes.loading} ${lan.loading}}`,
       });

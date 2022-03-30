@@ -1,5 +1,5 @@
 const os = require('os');
-const Discord = require('discord.js');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   name: 'workload',
@@ -27,7 +27,7 @@ module.exports = {
     const used = process.memoryUsage().heapUsed / 1024 / 1024;
     const totalmem = os.totalmem() / 1024 / 1024;
 
-    const embed = new Discord.UnsafeEmbed(m.embeds[0])
+    const embed = new Builders.UnsafeEmbedBuilder(m.embeds[0])
       .setAuthor({
         name: msg.lan.author,
         iconURL: msg.client.objectEmotes.workload.link,

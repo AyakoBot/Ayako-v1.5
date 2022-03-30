@@ -1,5 +1,5 @@
-const Discord = require('discord.js');
 const jobs = require('node-schedule');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   async execute(msg, embed) {
@@ -16,7 +16,7 @@ module.exports = {
             msg.m?.delete().catch(() => {});
           });
         } else {
-          embed = new Discord.UnsafeEmbed(embed).setDescription(embed.fields[0].value);
+          embed = new Builders.UnsafeEmbedBuilder(embed).setDescription(embed.fields[0].value);
           embed.fields = [];
 
           jobs.scheduleJob(new Date(Date.now() + deleteTimeout), () => {
