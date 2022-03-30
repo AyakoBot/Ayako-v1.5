@@ -1,7 +1,7 @@
 const getPurrAPIFetch = require('../../BaseClient/Other Client Files/purrAPIfetcher');
 
 module.exports = {
-  name: 'pat',
+  name: 'fluff',
   aliases: null,
   execute: async (msg) => {
     const gif = await getGif(msg);
@@ -12,11 +12,4 @@ module.exports = {
   },
 };
 
-const getGif = async (msg) => {
-  const random = Math.round(Math.random() * 1);
-
-  if (random === 0) return (await msg.client.neko.fetchRandom(module.exports.name)).results[0].url;
-  if (random === 1) return getPurrAPIFetch(module.exports.name);
-
-  return null;
-};
+const getGif = async () => getPurrAPIFetch(module.exports.name);

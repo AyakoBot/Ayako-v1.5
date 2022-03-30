@@ -1,7 +1,7 @@
 const getPurrAPIFetch = require('../../BaseClient/Other Client Files/purrAPIfetcher');
 
 module.exports = {
-  name: 'pat',
+  name: 'bite',
   aliases: null,
   execute: async (msg) => {
     const gif = await getGif(msg);

@@ -50,6 +50,22 @@ const getSettings = () => {
   return settings;
 };
 
+const getInteractions = () => {
+  const interactions = new Discord.Collection();
+  const interactionFiles = fs
+    .readdirSync(`${appDir}/Files/Commands/Interactions`)
+    .filter((file) => file.endsWith('.js'));
+
+  interactionFiles.forEach((file) => {
+    const interaction = require(`${appDir}/Files/Commands/Interactions/${file}`);
+    interaction.path = `${appDir}/Files/Commands/Interactions/${file}`;
+
+    interactions.set(interaction.name, interaction);
+  });
+
+  return interactions;
+};
+
 const getSettingsEditors = () => {
   const settingsEditors = new Discord.Collection();
 
@@ -168,6 +184,7 @@ class Client extends Discord.Client {
     this.languages = getLanguages();
     this.settingsEditors = getSettingsEditors();
     this.settings = getSettings();
+    this.interactions = getInteractions();
 
     this.mutes = new Discord.Collection();
     this.bans = new Discord.Collection();
