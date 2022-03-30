@@ -1,4 +1,5 @@
 module.exports = async (rateLimitInfo) => {
+  console.log(rateLimitInfo);
   const client = require('../../BaseClient/DiscordClient');
   const res = await client.ch.query('SELECT * FROM stats;');
   if (res?.rows[0]?.verbosity) {
