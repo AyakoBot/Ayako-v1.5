@@ -7,7 +7,7 @@ module.exports = {
   perm: 8192n,
   type: 1,
   setupRequired: false,
-  finished: false,
+  finished: true,
   category: ['automation'],
   mmrEmbed(msg, res) {
     const embed = new Builders.UnsafeEmbedBuilder();
@@ -49,11 +49,6 @@ module.exports = {
       {
         name: msg.lan.cooldown,
         value: r.cooldown ? `\`${r.cooldown} ${msg.language.time.seconds}\`` : msg.language.none,
-        inline: true,
-      },
-      {
-        name: msg.language.number,
-        value: r.id ? `\`${r.id}\`` : msg.language.none,
         inline: true,
       },
       {
