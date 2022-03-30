@@ -8,8 +8,9 @@ module.exports = {
   aliases: ['r'],
   execute(msg) {
     const { args } = msg;
-    if (!args.length)
+    if (!args.length) {
       return msg.channel.send(`You didn't pass any command to reload, ${msg.author}!`);
+    }
     if (args[0].toLowerCase() === 'all') {
       const commandFiles = fs
         .readdirSync('./Files/Commands')
@@ -33,18 +34,19 @@ module.exports = {
           o += 1;
         }
       });
-      if (o > 0)
+      if (o > 0) {
         msg.channel.send(`Reloaded ${i} command files\nFailed to reload ${o} command files`);
-      else msg.channel.send(`Reloaded ${i} command files`);
+      } else msg.channel.send(`Reloaded ${i} command files`);
     } else {
       const commandName = args.slice(0).join(' ').toLowerCase();
       const command =
         msg.client.commands.get(commandName) ||
         msg.client.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName));
-      if (!command)
+      if (!command) {
         return msg.channel.send(
           `There is no command with name or alias \`${commandName}\`, ${msg.author}!`,
         );
+      }
       delete require.cache[require.resolve(`./${command.name}.js`)];
       try {
         const newCommand = require(`./${command.name}.js`);
