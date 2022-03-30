@@ -5,15 +5,17 @@ module.exports = {
   dataPreparation(msg, editorData) {
     const { insertedValues, required, Objects } = editorData;
 
-    const commands = msg.client.commands.map((c) => c.name);
+    msg.client.commands.forEach((command) => {
+      const desc = command.aliases?.length
+        ? command.aliases.map((alias) => `${alias}`).join(', ')
+        : undefined;
 
-    commands.forEach((element) => {
-      const command = msg.client.commands.get(element);
+      console.log(command.name);
 
       const inserted = {
         label: command.name,
         value: command.name,
-        description: command.aliases.map((alias) => `${alias}`).join(', '),
+        description: desc?.length > 100 ? desc.slice(0, 100) : desc,
       };
 
       if (
