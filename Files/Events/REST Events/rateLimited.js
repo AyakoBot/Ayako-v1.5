@@ -1,11 +1,10 @@
 module.exports = async (rateLimitInfo) => {
-  console.log(rateLimitInfo);
   const client = require('../../BaseClient/DiscordClient');
   const res = await client.ch.query('SELECT * FROM stats;');
   if (res?.rows[0]?.verbosity) {
     client.ch.logger(
-      'Discord Client was RateLimited',
-      `Timeout: ${rateLimitInfo.timeout}\nLimit: ${rateLimitInfo.limit}\nMethod: ${rateLimitInfo.method}\nPath: ${rateLimitInfo.path}\nRoute: ${rateLimitInfo.route}`,
+      'Discord Client was RateLimited\n',
+      `Timeout: ${rateLimitInfo.timeToReset}\nLimit: ${rateLimitInfo.limit}\nMethod: ${rateLimitInfo.method}\nPath: ${rateLimitInfo.url}\nRoute: ${rateLimitInfo.route}`,
     );
   }
 };
