@@ -11,7 +11,9 @@ module.exports = {
     }
 
     const interactionName = args.slice(0).join(' ').toLowerCase();
-    const interaction = msg.client.settings.get(interactionName);
+    const interaction =
+      msg.client.interactions.get(interactionName) ||
+      msg.client.interactions.find((i) => i.aliases.includes(interactionName));
 
     if (!interaction) {
       return msg.channel.send(
@@ -26,7 +28,7 @@ module.exports = {
       newInteraction.name = interaction.name;
       newInteraction.path = interaction.path;
 
-      msg.client.settings.set(interactionName, newInteraction);
+      msg.client.interactions.set(interactionName, newInteraction);
       msg.channel.send(`Interaction \`${interactionName}\` was reloaded!`);
     } catch (error) {
       msg.channel.send(
