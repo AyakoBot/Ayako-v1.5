@@ -288,7 +288,7 @@ module.exports = {
         .addFields({ name: 'Channel', value: `${msg.channel?.name} | ${msg.channel?.id}` })
         .addFields({ name: 'Message Link', value: msg.url })
         .setColor(16711680);
-      if (channel) msg.client.ch.send(msg.channel, { embeds: [embed] });
+      if (channel) msg.client.ch.send(channel, { embeds: [embed] });
     }
   },
 };
