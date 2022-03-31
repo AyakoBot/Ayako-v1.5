@@ -1087,7 +1087,7 @@
         "think": "{{msg.author}} is thinking",
         "thumbsup": "{{msg.author}} agrees with Chat",
         "wink": "{{msg.author}} winks at Chat ;)",
-        "wag": "{{msg.author}} wags their tail at Chat",
+        "tail": "{{msg.author}} wags their tail at Chat",
         "baka": "{{msg.author}} thinks everyone in Chat is a Baka!"
       },
       "one": {
@@ -1151,7 +1151,7 @@
         "think": "{{msg.author}} thinkgs about {{users}}{{text}}",
         "thumbsup": "{{msg.author}} agrees with {{users}}{{text}}",
         "wink": "{{msg.author}} winks at {{users}}{{text}}",
-        "wag": "{{msg.author}} wags their tail at {{users}}{{text}}"
+        "tail": "{{msg.author}} wags their tail at {{users}}{{text}}"
       },
       "self": {
         "hug": "{{msg.author}} hugs themselves, that looks quite sad...",
@@ -1202,7 +1202,7 @@
         "think": "{{msg.author}} thinkgs about themselves, must be a thinker",
         "thumbsup": "{{msg.author}} agrees with themselves",
         "wink": "{{msg.author}} winks at themselves, for some reason..",
-        "wag": "{{msg.author}} wags their tail at themselves, adorable~",
+        "tail": "{{msg.author}} wags their tail at themselves, adorable~",
         "baka": "{{msg.author}} thinks they themselves are a Baka??",
         "fluff": "{{msg.author}} fluffs their tail, how cute~"
       }
