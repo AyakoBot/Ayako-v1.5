@@ -3,8 +3,6 @@ const Builders = require('@discordjs/builders');
 
 module.exports = {
   execute: async (interaction) => {
-    console.log(interaction);
-
     switch (interaction.customId) {
       case 'vote_reminder_disable': {
         interaction.client.ch.query(
@@ -152,9 +150,9 @@ module.exports = {
           interaction.client.slashCommands.get(interaction.customId) ||
           interaction.client.slashCommands.get(interaction.commandName);
         if (!slashCommand) return;
-        interaction.language = await interaction.languageSelector(interaction.guild);
+        interaction.language = await interaction.client.ch.languageSelector(interaction.guild);
 
-        console.log('Slash Command executed: ', interaction.name);
+        console.log('Slash Command executed: ', slashCommand.name);
         try {
           slashCommand.execute(interaction);
         } catch (e) {

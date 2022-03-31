@@ -128,9 +128,9 @@ module.exports = {
       [deleteMsgs],
     ];
   },
-  doMoreThings(msg, r, name) {
-    if (name === 'startchannel') {
-      const channel = msg.guild.channels.cache.get(r.startchannel);
+  doMoreThings(msg, insertedValues, changedKey) {
+    if (changedKey === 'startchannel') {
+      const channel = msg.guild.channels.cache.get(insertedValues.startchannel);
       if (channel) {
         const lan = msg.language.verification;
         const embed = new Builders.UnsafeEmbedBuilder()
@@ -145,7 +145,15 @@ module.exports = {
           )
           .setColor(msg.client.constants.standard.color);
 
-        msg.client.ch.send(channel, { embeds: [embed] });
+        const verify = new Builders.UnsafeButtonBuilder()
+          .setLabel(lan.verify)
+          .setCustomId('verify_message_button')
+          .setStyle(Discord.ButtonStyle.Success);
+
+        msg.client.ch.send(channel, {
+          embeds: [embed],
+          components: msg.client.ch.buttonRower([verify]),
+        });
       }
     }
   },

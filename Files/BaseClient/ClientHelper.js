@@ -70,8 +70,8 @@ module.exports = {
       typeof rawPayload === 'string' ? { failIfNotExists: false, content: rawPayload } : rawPayload;
 
     if (typeof msg.reply !== 'function') {
-      const [response] = await module.exports.send(msg.channel, payload);
-      return response;
+      const response = await module.exports.send(msg.channel, payload);
+      return response[0];
     }
 
     const m = await msg.reply(rawPayload).catch((e) => {

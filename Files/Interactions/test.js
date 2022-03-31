@@ -10,7 +10,5 @@ module.exports = {
   description: 'Debug Purposes',
   aliases: [],
   type: 'owner',
-  execute: async (cmd) => {
-    console.log(cmd);
-  },
+  execute: async (cmd) => {},
 };

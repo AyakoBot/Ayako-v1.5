@@ -641,22 +641,23 @@
     "author": {
       "name": "Ayako Verification"
     },
-    "startchannelmessage": "Please **open your DMs** so I can DM you a verification Captcha.\nAfter you opened them, type `{{prefix}}verify` __here__ to restart verification!.",
-    "description": "<a:ToiletSpin:709805618030182510> **Welcome to {{guild.name}}!**",
-    "field": "If you don't verify, you won't be able to use the server!",
+    "verify": "Verify",
+    "checkDMs": "Verification Started, please Check our DMs",
+    "startchannelmessage": "Please **open your DMs** so I can DM you a verification Captcha.\nAfter you opened them, press the Button below to re-/start Verification!.",
+    "description": "<a:AMtoiletspin:709805618030182510> **Welcome to {{guild.name}}!**",
     "finishDesc": "**Thank you for verifying!**\nVerification Finished!",
     "kickMsg": "You have been kicked from `{{guild.name}}` because you didn't verify.\nYou can rejoin anytime with a valid Invite Link",
-    "hintmsg": "Please type the letters you see on the image below, traced by a line\nExample: `5H1ON` \n**The captcha contains 5 digits**",
+    "hintmsg": "Type out the traced colored Characters from left to right ➡️\nIgnore all gray decoy Characters\nIgnore Character Cases (upper & lower case)\nThe captcha contains 5 digits",
     "kickReason": "Ayako Verification | Unverified for too long",
-    "openDMs": "{{user}} **Please open your DM's** in order to verify as human. Then re-send the Command `{{prefix}}verify`.\n**You can close your DM's afterwards**.",
+    "openDMs": "{{user}} **Please open your DM's** in order to verify as human. Then press the Button above to re-/start Verification.\n**You can close your DM's afterwards**.",
     "wrongInput": "That was wrong... Are you a robot?.\nThe solution was `{{solution}}`\nI added a new Image to the Embed above, try again!",
-    "timeError": "Time ran out for this Verification\nPlease go to <#{{channel}}> and type `{{prefix}}verify` to re-start verification",
+    "timeError": "Time ran out for this Verification\nPlease go to <#{{channel}}> and press the `Verify` Botton to re-/start verification",
     "alreadyVerified": "You are already verified",
     "log": {
       "start": "User {{user}} /`{{user.tag}}` / `{{user.id}}`\nstarted Verification",
       "end": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nfinished Verification"
     },
-    "error": "An error occured while verifying! I have reported this to the Devs. Please re-try verification"
+    "error": "An error occured while verifying! I have reported this to the Devs. Please re-try verifying"
   },
   "expireBehavior": {
     "name": "What happens when subscription expires",
@@ -3370,7 +3371,7 @@
         "logchannel": "Log Channel",
         "finishedrole": "Verified Role",
         "pendingrole": "Pending Verification Role",
-        "startchannel": "Command Channel",
+        "startchannel": "Verify Channel",
         "selfstart": "Self Start",
         "kickafter": "Kick unverified Users Timeout",
         "kicktof": "Kick unverified Users after the Timeout",
@@ -3406,9 +3407,9 @@
             "recommended": "**This is not required\n\nHowever:** If you don't use this Role be sure @everyone does not have permissions to send Messages in any Channel"
           },
           "startchannel": {
-            "name": "Command Channel",
+            "name": "Verify Channel",
             "answers": "`Mention or ID`",
-            "recommended": "Pending Members will have to start Verification with the `{{prefix}}verify` Command here"
+            "recommended": "Pending Members will have to start Verification with via Button here"
           },
           "kickafter": {
             "name": "Kick unverified Users Timeout",
