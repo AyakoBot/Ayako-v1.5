@@ -15,6 +15,7 @@ module.exports = {
       msg.guild.id,
     ]);
     const language = await msg.client.ch.languageSelector(msg.guild);
+
     if (res && res.rowCount > 0) {
       if (+res.rows[0].since + 60000 < Date.now()) {
         if (checkedMsg?.command.name === 'afk') return;
@@ -49,11 +50,11 @@ module.exports = {
           msg,
           `${
             afkRes.rows[0].text
-              ? msg.client.ch.stp(msg.language.commands.afk.afkText2, {
+              ? msg.client.ch.stp(language.commands.afk.afkText2, {
                   username: mention.username,
                   slice: afkRes.rows[0].text,
                 })
-              : msg.client.ch.stp(msg.language.commands.afk.afkText, { username: mention.username })
+              : msg.client.ch.stp(language.commands.afk.afkText, { username: mention.username })
           } ${moment
             .duration(+afkRes.rows[0].since - Date.now())
             .format(
