@@ -6,6 +6,7 @@ const Builders = require('@discordjs/builders');
 const v8 = require('v8');
 const fs = require('fs');
 const SA = require('superagent');
+const jobs = require('node-schedule');
 
 const auth = require('./auth.json');
 const ChannelRules = require('./Other Client Files/Classes/ChannelRules');
@@ -73,7 +74,7 @@ module.exports = {
       return response;
     }
 
-    return msg.reply(rawPayload).catch((e) => {
+    const m = await msg.reply(rawPayload).catch((e) => {
       if (String(e).includes('Missing Permissions')) {
         module.exports.send(msg.author, {
           content: undefined,
@@ -94,6 +95,39 @@ module.exports = {
       }
       return null;
     });
+
+    if (msg.cooldown && msg.cooldown > 2000) {
+      const res = await getCooldown(msg);
+      if (res) {
+        if (
+          !res?.bpuserid?.includes(msg.author.id) &&
+          !res?.bpchannelid?.includes(msg.channel.id) &&
+          !res?.bproleid?.some((id) => msg.member.roles.cache.has(id)) &&
+          (!res?.activechannelid?.length || !res?.activechannelid.includes(msg.channel.id))
+        ) {
+          let emote;
+          if (msg.cooldown <= 60000) emote = msg.client.objectEmotes.timers[msg.cooldown / 1000];
+
+          if (emote) {
+            m.react(emote.id).catch(() => {});
+          } else {
+            jobs.scheduleJob(new Date(Date.now() + (msg.cooldown - 60000)), () => {
+              m.react(msg.client.objectEmotes.timers[60].id).catch(() => {});
+            });
+          }
+
+          jobs.scheduleJob(new Date(Date.now() + msg.cooldown), () => {
+            const reaction = emote
+              ? m.reactions.cache.get(emote.id)
+              : m.reactions.cache.get(msg.client.objectEmotes.timers[60].id);
+
+            if (reaction) reaction.remove().catch(() => {});
+          });
+        }
+      }
+    }
+
+    return m;
   },
   /**
    * Places Objects or Strings of the Objects Option into the Expressions option,
@@ -1205,4 +1239,17 @@ module.exports = {
   },
   Embed: require('./Other Client Files/Classes/CustomEmbed'),
   SelectMenuOption: require('./Other Client Files/Classes/SelectMenuOption'),
+};
+
+const getCooldown = async (msg) => {
+  const res = await module.exports.query(
+    `SELECT * FROM cooldowns WHERE guildid = $1 AND active = true AND command = $2;`,
+    [msg.guild.id, msg.command.name],
+  );
+
+  if (res && res.rowCount) {
+    res.rows[0].cooldown = Number(res.rows[0].cooldown) * 1000;
+    return res.rows[0];
+  }
+  return { cooldown: 1000 };
 };

@@ -1469,7 +1469,7 @@
     },
     "commandHandler": {
       "GuildOnly": "This Command is not made for DMs, please try again in a Server",
-      "PleaseWait": "Please wait `{{time}}` more Second(s)",
+      "pleaseWait": "Please wait {{time}} before re-using this Command",
       "CategoryDisabled": "Category `{{category}}` was disabled by the Server Administration",
       "CommandDisabled": "Command `{{name}}` was disabled by the Server Administration",
       "creatorOnly": "Only my Creator can use this Command (`Lars_und_so#0666`)",
