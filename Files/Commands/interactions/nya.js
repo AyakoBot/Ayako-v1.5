@@ -12,7 +12,7 @@ const gifs = [
 
 module.exports = {
   name: 'nya',
-  aliases: null,
+  aliases: ['mew'],
   execute: async (msg) => {
     const gif = await getGif(msg);
     const loneError = !msg.mentions.users.size && !msg.lan.lone[module.exports.name];
