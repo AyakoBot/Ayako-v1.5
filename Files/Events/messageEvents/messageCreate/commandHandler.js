@@ -264,7 +264,6 @@ module.exports = {
       }
       if (!msg.logchannels) msg.logchannels = [];
     }
-    if (msg.author.id === msg.client.user.id) msg.delete();
     try {
       if (msg.client.user.id === msg.client.mainID) {
         const statcord = require('../../../BaseClient/Statcord');
