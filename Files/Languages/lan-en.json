@@ -1606,6 +1606,17 @@
       "timeError2": "Please provide a valid Time in the format `[number] [unit]`",
       "timeError3": "Please provide a valid Time in the format `[number] [unit]`\nValid Units are `s` for Seconds, `m` for Minutes, `h` for Hours and `d` for Days"
     },
+    "unafk": {
+      "description": "Forcefully deletes a set AFK of a User",
+      "usage": ["unafk [user ID or mention] (reason)"],
+      "category": "Moderation",
+      "reason": "No Reason given",
+      "notAfk": "This User is not AFK",
+      "afkDeleted": "The AFK of this User was deleted",
+      "author": "{{user}}'s AFK was deleted",
+      "desc": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nAFK was deleted by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
+      "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}"
+    },
     "kick": {
       "description": "Bans a User from the Server",
       "usage": ["ban [user ID or mention] (reason)"],
