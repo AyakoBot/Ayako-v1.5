@@ -18,7 +18,7 @@ module.exports = {
         msg.author = user;
         msg.member = member;
         msg.guild = member.guild;
-        user.client.commands.get('verify').startProcess(msg);
+        user.client.slashCommands.get('verify_message_button').startProcess(msg);
       }
     }
   },
