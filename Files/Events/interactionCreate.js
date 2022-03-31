@@ -3,6 +3,8 @@ const Builders = require('@discordjs/builders');
 
 module.exports = {
   execute: async (interaction) => {
+    if (!interaction.user) return;
+
     switch (interaction.customId) {
       case 'vote_reminder_disable': {
         interaction.client.ch.query(

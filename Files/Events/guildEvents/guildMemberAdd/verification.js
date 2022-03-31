@@ -15,7 +15,7 @@ module.exports = {
         [msg.r] = res.rows;
         msg.client = user.client;
         msg.lan = msg.language.verification;
-        msg.author = user;
+        msg.user = user;
         msg.member = member;
         msg.guild = member.guild;
         user.client.slashCommands.get('verify_message_button').startProcess(msg);

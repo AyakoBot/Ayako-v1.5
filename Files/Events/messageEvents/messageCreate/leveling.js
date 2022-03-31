@@ -562,7 +562,7 @@ const infoEmbed = (msg, reactions, language) => {
   msg.client.ch.reply(msg, { embeds: [embed] }).then((m) => {
     const date = new Date(Date.now() + 30000);
     jobs.scheduleJob(date, () => {
-      m.delete();
+      m.delete().catch(() => {});
     });
   });
 };

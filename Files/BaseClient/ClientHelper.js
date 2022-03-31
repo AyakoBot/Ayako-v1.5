@@ -71,7 +71,7 @@ module.exports = {
 
     if (typeof msg.reply !== 'function') {
       const response = await module.exports.send(msg.channel, payload);
-      return response[0];
+      return response ? response[0] : null;
     }
 
     const m = await msg.reply(rawPayload).catch((e) => {

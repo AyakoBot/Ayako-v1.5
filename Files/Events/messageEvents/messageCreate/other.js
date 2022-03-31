@@ -6,7 +6,6 @@ module.exports = {
   async execute(msg) {
     if (!msg.channel || msg.channel.type === 1 || !msg.author || !msg.guild) return;
     const { member } = msg;
-    if (msg.channel.id === '805315908406870044') msg.delete();
     if (msg.guild.id === '366219406776336385' && msg.channel.id !== '801804774759727134') {
       if (msg.content.toLocaleLowerCase().includes('discord.gg/')) {
         if (msg.author.id !== '267835618032222209' && msg.author.id !== '400086473337995265') {

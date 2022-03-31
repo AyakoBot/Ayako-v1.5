@@ -16,7 +16,8 @@ module.exports = {
     } else if (
       !msg.member.roles.cache.has('293928278845030410') &&
       !msg.member.roles.cache.has('278332463141355520')
-    )
+    ) {
       msg.delete();
+    }
   },
 };
