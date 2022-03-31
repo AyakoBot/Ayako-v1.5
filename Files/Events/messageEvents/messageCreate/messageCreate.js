@@ -18,7 +18,6 @@ module.exports = {
     require('./nadeko').execute(msg);
     require('./antivirus').execute(msg);
     require('./autothreading').execute(msg);
-    require('./verificationChannel').execute(msg);
     if (!msg.editedAt) {
       if (msg.client.uptime > 10000) {
         const res = await msg.client.ch.query('SELECT * FROM stats;');

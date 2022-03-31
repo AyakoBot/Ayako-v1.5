@@ -3375,12 +3375,7 @@
         "selfstart": "Self Start",
         "kickafter": "Kick unverified Users Timeout",
         "kicktof": "Kick unverified Users after the Timeout",
-        "deletestartchmsgs": "Delete Command Channel Messages",
         "edit": {
-          "deletestartchmsgs": {
-            "name": "Delete every Message in the Command Channel",
-            "answers": "`True` or `False`"
-          },
           "finishedrole": {
             "name": "Verified Role",
             "answers": "`Mention or ID`",

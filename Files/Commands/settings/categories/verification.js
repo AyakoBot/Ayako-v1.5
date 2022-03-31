@@ -72,16 +72,6 @@ module.exports = {
       },
     );
 
-    if (msg.lan.startchannel) {
-      embed.addFields({
-        name: msg.lan.deletestartchmsgs,
-        value: r.deletestartchmsgs
-          ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
-          : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`,
-        inline: true,
-      });
-    }
-
     return embed;
   },
   buttons(msg, r) {
@@ -109,10 +99,6 @@ module.exports = {
       .setCustomId(msg.lan.edit.startchannel.name)
       .setLabel(msg.lan.startchannel)
       .setStyle(r.startchannel ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
-    const deleteMsgs = new Builders.UnsafeButtonBuilder()
-      .setCustomId(msg.lan.edit.deletestartchmsgs.name)
-      .setLabel(msg.lan.deletestartchmsgs)
-      .setStyle(r.deletestartchmsgs ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
     const finishedrole = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.finishedrole.name)
       .setLabel(msg.lan.finishedrole)
@@ -125,7 +111,6 @@ module.exports = {
       [active],
       [selfstart, kicktof, kickafter],
       [logchannel, finishedrole, pendingrole, startchannel],
-      [deleteMsgs],
     ];
   },
   doMoreThings(msg, insertedValues, changedKey) {

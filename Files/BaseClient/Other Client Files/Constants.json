@@ -1003,10 +1003,6 @@
           "kicktof": {
             "key": "boolean",
             "required": true
-          },
-          "deletestartchmsgs": {
-            "key": "boolean",
-            "required": true
           }
         },
         "antiraid": {
@@ -1520,8 +1516,8 @@
           "ident": ""
         },
         "verification": {
-          "cols": ["guildid, active, kickafter, kicktof, selfstart, deletestartchmsgs"],
-          "vals": [["{{msg.guild.id}}", false, 30, true, false, false]]
+          "cols": ["guildid, active, kickafter, kicktof, selfstart"],
+          "vals": [["{{msg.guild.id}}", false, 30, true, false]]
         },
         "welcome": {
           "cols": ["guildid, active"],
