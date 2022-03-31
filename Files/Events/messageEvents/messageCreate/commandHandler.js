@@ -81,6 +81,7 @@ module.exports = {
       const timeLeft = cl.expire - Date.now();
       const { emote, usedEmote } = getEmote(Math.ceil(timeLeft / 1000), msg);
 
+      msg.cooldown = undefined;
       msg.client.ch
         .reply(msg, {
           content: msg.client.ch.stp(msg.language.commands.commandHandler.pleaseWait, {
@@ -118,7 +119,7 @@ module.exports = {
         channel: msg.channel,
         expire: Date.now() + cooldownRes.cooldown,
       });
-    } 
+    }
     this.thisGuildOnly(msg);
   },
   async thisGuildOnly(msg) {
