@@ -11,7 +11,7 @@ const gifs = [
 ];
 
 module.exports = {
-  name: 'nom',
+  name: 'peck',
   aliases: null,
   execute: async (msg) => {
     const gif = await getGif(msg);

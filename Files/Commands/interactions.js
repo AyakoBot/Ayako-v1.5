@@ -29,10 +29,10 @@ module.exports = {
 
     const interaction =
       msg.client.interactions.get(usedCommandName) ||
-      msg.client.interactions.find((i) => i.aliases.includes(usedCommandName));
+      msg.client.interactions.find((i) => i.aliases?.includes(usedCommandName));
 
     const { gif, loneError } = await interaction.execute(msg);
-    const text = getMainText(msg, usedCommandName);
+    const text = getMainText(msg, interaction.name);
 
     if (loneError) {
       msg.client.ch.reply(msg, { content: msg.lan.loneError }).then((m) => {
@@ -62,7 +62,7 @@ const getMainText = (msg, usedCommandName) => {
   const lastMention = mentioned.length > 1 ? mentioned.pop() : null;
   const mentionText = getMentionText(msg, lastMention, mentioned);
   const saidText = msg.args
-    .slice(1)
+    .slice(0)
     .join(' ')
     .replace(/<@(!)?[0-9]+>/g, '')
     .replace(/\s+/g, ' ');
@@ -102,11 +102,13 @@ const getMentionText = (msg, lastMention, mentioned) => {
 
 const getText = (msg, saidText, mentionText, usedCommandName) => {
   let text;
+  let uncutContent;
 
   if (saidText.startsWith(' ')) saidText = saidText.slice(1, saidText.length);
   if (saidText.endsWith(' ')) saidText = saidText.slice(0, saidText.length - 1);
 
   if (saidText !== ' '.repeat(saidText.length)) {
+    uncutContent = `${saidText}`;
     saidText = msg.client.ch.stp(msg.lan.saying, { text: saidText });
   } else saidText = ' ';
 
@@ -135,6 +137,7 @@ const getText = (msg, saidText, mentionText, usedCommandName) => {
       msg,
       users: mentionText,
       text: saidText,
+      uncutContent,
     });
   }
 

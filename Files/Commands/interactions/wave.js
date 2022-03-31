@@ -2,7 +2,7 @@ module.exports = {
   name: 'wave',
   aliases: null,
   execute: async (msg) => {
-    const gif = await getGif();
+    const gif = await getGif(msg);
     const loneError = !msg.mentions.users.size && !msg.lan.lone[module.exports.name];
 
     if (loneError) return { loneError };

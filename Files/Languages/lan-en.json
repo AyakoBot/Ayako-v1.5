@@ -1108,8 +1108,8 @@
         "kiss": "{{msg.author}} kisses {{users}}{{text}}",
         "bloodsuck": "{{msg.author}} sucks {{users}}'s blood{{text}}",
         "thighsleep": "{{msg.author}} sleeps on {{users}}'s thighs{{text}}",
-        "lift": "{{msg.author}} lifts {{users}} up{{text}}",
-        "feed": "{{msg.author}} feeds {{users}} {{text}}{{text}}",
+        "lift": "{{msg.author}} lifts {{users}} up {{text}}",
+        "feed": "{{msg.author}} feeds {{users}} {{uncutContent}}",
         "cuddle": "{{msg.author}} cuddles with {{users}}{{text}}",
         "nuzzle": "{{msg.author}} nuzzles into {{users}}{{text}}",
         "run": "{{msg.author}} runs from {{users}}{{text}}",
@@ -1689,11 +1689,11 @@
       "usage": ["afk (text)"],
       "afkText": "{{username}} is AFK **since**",
       "afkText2": "{{slice}}\n{{username}} is AFK **since**",
-      "updatedTo": "AFK updated to:\n{{text}}",
-      "updated": "AFK updated",
-      "noLinks": "You may not set Links as AFK.",
-      "set": "AFK set",
-      "setTo": "AFK set to:\n{{text}}"
+      "updatedTo": "**AFK updated to:**\n{{text}}",
+      "updated": "**AFK updated**",
+      "noLinks": "**You may not set Links as AFK.**",
+      "set": "**AFK set**",
+      "setTo": "**AFK set to:**\n{{text}}"
     },
     "avatar": {
       "category": "User",
