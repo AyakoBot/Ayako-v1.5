@@ -3,6 +3,8 @@ const Builders = require('@discordjs/builders');
 
 module.exports = {
   execute: async (interaction) => {
+    console.log(interaction);
+
     switch (interaction.customId) {
       case 'vote_reminder_disable': {
         interaction.client.ch.query(
@@ -145,12 +147,46 @@ module.exports = {
 
         break;
       }
-      case 'AwesomeForm': {
-        interaction.reply({ content: 'thanks', ephemeral: true });
-
-        break;
-      }
       default: {
+        const slashCommand =
+          interaction.client.slashCommands.get(interaction.customId) ||
+          interaction.client.slashCommands.get(interaction.commandName);
+        if (!slashCommand) return;
+        interaction.language = await interaction.languageSelector(interaction.guild);
+
+        console.log('Slash Command executed: ', interaction.name);
+        try {
+          slashCommand.execute(interaction);
+        } catch (e) {
+          console.log(e);
+
+          const channel = interaction.client.channels.cache.get(
+            interaction.client.constants.errorchannel,
+          );
+          const embed = new Builders.UnsafeEmbedBuilder()
+            .setAuthor({
+              name: 'Command Error',
+              iconURL: interaction.client.objectEmotes.cross.link,
+              url: interaction.url,
+            })
+            .setTimestamp()
+            .setDescription(`${interaction.client.ch.makeCodeBlock(e.stack)}`)
+            .addFields({
+              name: 'Message',
+              value: `${interaction.client.ch.makeCodeBlock(interaction)}`,
+            })
+            .addFields({
+              name: 'Guild',
+              value: `${interaction.guild?.name} | ${interaction.guild?.id}`,
+            })
+            .addFields({
+              name: 'Channel',
+              value: `${interaction.channel?.name} | ${interaction.channel?.id}`,
+            })
+            .addFields({ name: 'Message Link', value: interaction.url })
+            .setColor(16711680);
+          if (channel) interaction.client.ch.send(channel, { embeds: [embed] });
+        }
         break;
       }
     }
