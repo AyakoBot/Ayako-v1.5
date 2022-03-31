@@ -21,7 +21,7 @@ module.exports = {
         }`,
         value: `${msg.language.cooldown}: ${moment
           .duration(r.cooldown * 1000)
-          .format(`s [${msg.language.time.seconds}]`)} `,
+          .format(`s [${msg.language.time.seconds}]`)}`,
         inline: true,
       });
     }
@@ -48,7 +48,9 @@ module.exports = {
       },
       {
         name: msg.lan.cooldown,
-        value: r.cooldown ? `\`${r.cooldown} ${msg.language.time.seconds}\`` : msg.language.none,
+        value: r.cooldown
+          ? `\`${moment.duration(r.cooldown * 1000).format(`s [${msg.language.time.seconds}]`)}\``
+          : msg.language.none,
         inline: true,
       },
       {
