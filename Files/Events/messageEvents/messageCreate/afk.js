@@ -1,6 +1,7 @@
 const moment = require('moment');
 require('moment-duration-format');
 const jobs = require('node-schedule');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   async execute(msg) {
@@ -19,17 +20,20 @@ module.exports = {
     if (res && res.rowCount > 0) {
       if (+res.rows[0].since + 60000 < Date.now()) {
         if (checkedMsg?.command.name === 'afk') return;
-        const m = await msg.client.ch.reply(
-          msg,
-          msg.client.ch.stp(language.commands.afkHandler.deletedAfk, {
-            time: moment
-              .duration(Date.now() - +res.rows[0].since)
-              .format(
-                ` D [${language.time.days}], H [${language.time.hours}], m [${language.time.minutes}], s [${language.time.seconds}]`,
-              )
-              .replace(/-/g, ''),
-          }),
-        );
+        const embed = new Builders.UnsafeEmbedBuilder()
+          .setColor(msg.client.ch.colorSelector(msg.guild.me))
+          .setDescription(
+            msg.client.ch.stp(language.commands.afkHandler.deletedAfk, {
+              time: moment
+                .duration(Date.now() - +res.rows[0].since)
+                .format(
+                  ` D [${language.time.days}], H [${language.time.hours}], m [${language.time.minutes}], s [${language.time.seconds}]`,
+                )
+                .replace(/-/g, ''),
+            }),
+          );
+        const m = await msg.client.ch.reply(msg, { embeds: [embed] });
+
         if (m) {
           jobs.scheduleJob(new Date(Date.now() + 10000), async () => {
             m.delete().catch(() => {});
@@ -46,22 +50,24 @@ module.exports = {
         [mention.id, msg.guild.id],
       );
       if (afkRes && afkRes.rowCount > 0) {
-        msg.client.ch.reply(
-          msg,
-          `${
-            afkRes.rows[0].text
-              ? msg.client.ch.stp(language.commands.afk.afkText2, {
-                  username: mention.username,
-                  slice: afkRes.rows[0].text,
-                })
-              : msg.client.ch.stp(language.commands.afk.afkText, { username: mention.username })
-          } ${moment
-            .duration(+afkRes.rows[0].since - Date.now())
-            .format(
-              ` D [${language.time.days}], H [${language.time.hours}], m [${language.time.minutes}], s [${language.time.seconds}]`,
-            )
-            .replace(/-/g, '')}`,
-        );
+        const embed = new Builders.UnsafeEmbedBuilder()
+          .setColor(msg.client.ch.colorSelector(msg.guild.me))
+          .setDescription(
+            `${
+              afkRes.rows[0].text
+                ? msg.client.ch.stp(language.commands.afk.afkText2, {
+                    username: mention.username,
+                    slice: afkRes.rows[0].text,
+                  })
+                : msg.client.ch.stp(language.commands.afk.afkText, { username: mention.username })
+            } ${moment
+              .duration(+afkRes.rows[0].since - Date.now())
+              .format(
+                ` D [${language.time.days}], H [${language.time.hours}], m [${language.time.minutes}], s [${language.time.seconds}]`,
+              )
+              .replace(/-/g, '')}`,
+          );
+        msg.client.ch.reply(msg, { embeds: [embed] });
       }
     });
   },
