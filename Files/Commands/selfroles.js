@@ -26,11 +26,11 @@ module.exports = {
 
     const getCategoryFields = (embed) => {
       Data.cTake.forEach((took) => {
-        const row = res.rows.find((r) => r.uniquetimestamp === took.value);
+        const row = res.rows.find((r) => r.uniquetimestamp === took.data.value);
         const roles = row?.roles
           .map((role) => (msg.guild.roles.cache.get(role) ? msg.guild.roles.cache.get(role) : null))
           .filter((role) => !!role);
-        if (roles.length) {
+        if (roles?.length) {
           embed.addFields({
             name: `${row.name}`,
             value: `${roles.length} ${msg.language.roles}`,
