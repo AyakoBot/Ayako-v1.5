@@ -22,7 +22,7 @@ module.exports = {
             : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`
         }`,
         value: `${msg.lan.deletetimeout}: ${moment
-          .duration(r.cooldown * 1000)
+          .duration(r.deletetimeout * 1000)
           .format(`s [${msg.language.time.seconds}]`)}\n${msg.lan.commands}: ${
           r.commands ? `${r.commands.map((o) => `\`${o}\``)}` : msg.language.none
         }`,
