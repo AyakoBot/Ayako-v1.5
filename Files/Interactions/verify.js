@@ -87,7 +87,7 @@ module.exports = {
       .setStyle(Discord.ButtonStyle.Secondary);
 
     if (answer) {
-      answer
+      await answer
         .update({
           embeds: [embed],
           components: cmd.client.ch.buttonRower([regenerate]),
@@ -95,7 +95,7 @@ module.exports = {
         })
         .catch(() => {});
     } else if (cmd.m) {
-      cmd.m
+      await cmd.m
         .edit({
           embeds: [embed],
           components: cmd.client.ch.buttonRower([regenerate]),
