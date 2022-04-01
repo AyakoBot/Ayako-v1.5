@@ -8,10 +8,14 @@ module.exports = {
   takesFirstArg: false,
   type: 'info',
   async execute(msg) {
-    const user =
-      msg.args[0] && (await msg.client.users.fetch(msg.args[0].replace(/\D+/g, '')).catch(() => {}))
-        ? msg.client.users.cache.get(msg.args[0].replace(/\D+/g, ''))
-        : msg.author;
+    const user = msg.args[0]
+      ? await msg.client.users.fetch(msg.args[0].replace(/\D+/g, '')).catch(() => {})
+      : msg.author;
+
+    if (!user) {
+      msg.client.ch.reply(msg, { content: msg.language.errors.userNotExist });
+      return;
+    }
 
     const isGlobal =
       !msg.content.split(' ')[0].includes(module.exports.aliases[2]) &&
