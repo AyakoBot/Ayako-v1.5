@@ -1263,10 +1263,12 @@ const deleteCommandHandler = async (msg, m) => {
   const deleteRows = await getDeleteRes(msg);
 
   deleteRows.forEach((row) => {
-    if (row.commands.includes(msg.command.name)) return;
+    if (!row.commands.includes(msg.command.name)) return;
+    console.log(1);
     if (!row.deletetimeout || Number(row.deletetimeout) === 0) return;
+    console.log(2);
 
-    jobs.scheduleJob(new Date(Date.now() + row.deletetimeout), () => {
+    jobs.scheduleJob(new Date(Date.now() + row.deletetimeout * 1000), () => {
       if (row.deletereply) {
         m.delete().catch(() => {});
       }
