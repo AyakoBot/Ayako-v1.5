@@ -1260,6 +1260,7 @@ const cooldownHandler = async (msg, m) => {
 };
 
 const deleteCommandHandler = async (msg, m) => {
+  if (!msg.command) return;
   const deleteRows = await getDeleteRes(msg);
 
   deleteRows.forEach((row) => {
