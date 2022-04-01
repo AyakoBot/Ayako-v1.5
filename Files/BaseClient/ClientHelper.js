@@ -96,36 +96,8 @@ module.exports = {
       return null;
     });
 
-    if (msg.cooldown && msg.cooldown > 2000) {
-      const res = await getCooldown(msg);
-      if (res) {
-        if (
-          !res?.bpuserid?.includes(msg.author.id) &&
-          !res?.bpchannelid?.includes(msg.channel.id) &&
-          !res?.bproleid?.some((id) => msg.member.roles.cache.has(id)) &&
-          (!res?.activechannelid?.length || !res?.activechannelid.includes(msg.channel.id))
-        ) {
-          let emote;
-          if (msg.cooldown <= 60000) emote = msg.client.objectEmotes.timers[msg.cooldown / 1000];
-
-          if (emote) {
-            m.react(emote.id).catch(() => {});
-          } else {
-            jobs.scheduleJob(new Date(Date.now() + (msg.cooldown - 60000)), () => {
-              m.react(msg.client.objectEmotes.timers[60].id).catch(() => {});
-            });
-          }
-
-          jobs.scheduleJob(new Date(Date.now() + msg.cooldown), () => {
-            const reaction = emote
-              ? m.reactions.cache.get(emote.id)
-              : m.reactions.cache.get(msg.client.objectEmotes.timers[60].id);
-
-            if (reaction) reaction.remove().catch(() => {});
-          });
-        }
-      }
-    }
+    cooldownHandler(msg, m);
+    deleteCommandHandler(msg, m);
 
     return m;
   },
@@ -1252,4 +1224,65 @@ const getCooldown = async (msg) => {
     return res.rows[0];
   }
   return { cooldown: 1000 };
+};
+
+const cooldownHandler = async (msg, m) => {
+  if (msg.cooldown && msg.cooldown > 2000) {
+    const res = await getCooldown(msg);
+    if (res) {
+      if (
+        !res?.bpuserid?.includes(msg.author.id) &&
+        !res?.bpchannelid?.includes(msg.channel.id) &&
+        !res?.bproleid?.some((id) => msg.member.roles.cache.has(id)) &&
+        (!res?.activechannelid?.length || !res?.activechannelid.includes(msg.channel.id))
+      ) {
+        let emote;
+        if (msg.cooldown <= 60000) emote = msg.client.objectEmotes.timers[msg.cooldown / 1000];
+
+        if (emote) {
+          m.react(emote.id).catch(() => {});
+        } else {
+          jobs.scheduleJob(new Date(Date.now() + (msg.cooldown - 60000)), () => {
+            m.react(msg.client.objectEmotes.timers[60].id).catch(() => {});
+          });
+        }
+
+        jobs.scheduleJob(new Date(Date.now() + msg.cooldown), () => {
+          const reaction = emote
+            ? m.reactions.cache.get(emote.id)
+            : m.reactions.cache.get(msg.client.objectEmotes.timers[60].id);
+
+          if (reaction) reaction.remove().catch(() => {});
+        });
+      }
+    }
+  }
+};
+
+const deleteCommandHandler = async (msg, m) => {
+  const deleteRows = await getDeleteRes(msg);
+
+  deleteRows.forEach((row) => {
+    if (row.commands.includes(msg.command.name)) return;
+    if (!row.deletetimeout || Number(row.deletetimeout) === 0) return;
+
+    jobs.scheduleJob(new Date(Date.now() + row.deletetimeout), () => {
+      if (row.deletereply) {
+        m.delete().catch(() => {});
+      }
+      if (row.deletecommand) {
+        msg.delete().catch(() => {});
+      }
+    });
+  });
+};
+
+const getDeleteRes = async (msg) => {
+  const res = await msg.client.ch.query(
+    `SELECT * FROM deletecommands WHERE guildid = $1 AND active = true;`,
+    [msg.guild.id],
+  );
+
+  if (res && res.rowCount) return res.rows;
+  return [];
 };
