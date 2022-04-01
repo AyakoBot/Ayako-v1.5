@@ -1136,7 +1136,7 @@
         "nom": "{{msg.author}} noms on {{users}}{{text}}",
         "peck": "{{msg.author}} pecks {{users}}{{text}}",
         "pout": "{{msg.author}} pouts at {{users}}{{text}}",
-        "slap": "{{msg.author}} slaps {{users}}{{text}}{{text}}",
+        "slap": "{{msg.author}} slaps {{users}}{{text}}",
         "smile": "{{msg.author}} smiles at {{users}}{{text}}",
         "tickle": "{{msg.author}} tickles {{users}}{{text}}",
         "stare": "{{msg.author}} stares at {{users}}{{text}}",
@@ -3558,6 +3558,45 @@
           "remove": {
             "name": "Remove a Mod-Role",
             "process": ["Respond with the ID of the Mod-Role you want to delete"]
+          }
+        }
+      },
+      "deletecommands": {
+        "type": "Delete Commands",
+        "deletecommand": "Delete Commands",
+        "deletereply": "Delete Reply",
+        "deletetimeout": "Delete Timeout",
+        "commands": "Commands",
+        "edit": {
+          "deletecommand": {
+            "name": "Delete Commands",
+            "answers": "`True` or `False`",
+            "recommended": "Recommended: `True`"
+          },
+          "deletereply": {
+            "name": "Delete Reply",
+            "answers": "`True` or `False`",
+            "recommended": "Recommended: `False`"
+          },
+          "active": {
+            "name": "Active",
+            "answers": "`True` or `False`",
+            "recommended": "Recommended: `True`"
+          },
+          "commands": {
+            "name": "Commands",
+            "answers": "`Ayako Command Names`",
+            "recommended": "This is a Switch.\nIf the entered Command is already added it will be removed."
+          }
+        },
+        "otherEdits": {
+          "add": {
+            "name": "Add a Delete Command",
+            "process": {}
+          },
+          "remove": {
+            "name": "Remove a Delete Command",
+            "process": ["Respond with the ID of the Delete Command you want to delete"]
           }
         }
       }
