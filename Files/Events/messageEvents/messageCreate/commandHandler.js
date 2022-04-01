@@ -270,7 +270,7 @@ module.exports = {
         statcord.postCommand(msg.command.name, msg.author.id).catch(() => {});
       }
 
-      console.log(`Command executed: ${msg.command.name}`);
+      console.log(`Command executed: ${msg.command.name} | ${msg.channel.id}`);
       msg.command.execute(msg);
     } catch (e) {
       const channel = msg.client.channels.cache.get(msg.client.constants.errorchannel);

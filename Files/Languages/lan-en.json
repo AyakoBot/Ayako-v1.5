@@ -3578,6 +3578,10 @@
             "answers": "`True` or `False`",
             "recommended": "Recommended: `False`"
           },
+          "deletetimeout": {
+            "name": "Delete Timeout",
+            "answers": "Time in Seconds"
+          },
           "active": {
             "name": "Active",
             "answers": "`True` or `False`",
