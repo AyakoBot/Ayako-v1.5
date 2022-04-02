@@ -1993,7 +1993,7 @@ const handlePage = async ({ msg, answer }, Objects, { embed }, increasePage) => 
     .addOptions(
       ...(Options.take?.length
         ? Options.take.map((e) =>
-          new Builders.UnsafeSelectMenuOptionBuilder()
+            new Builders.UnsafeSelectMenuOptionBuilder()
               .setLabel(e.name.slice(0, 100))
               .setValue(`${e.value}`)
               .setDefault(e.default),
