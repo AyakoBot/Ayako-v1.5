@@ -128,7 +128,7 @@ module.exports = {
       Data.rTake = [];
       const neededIndex = Data.rPage * 25 - 25;
       for (let j = neededIndex + 1; j < neededIndex + 26 && j < Data.rOptions.length; j += 1) {
-        if (msg.member.roles.cache.has(Data.rOptions[j].value) && Data.currentRow.onlyone) {
+        if (msg.member.roles.cache.has(Data.rOptions[j].data.value) && Data.currentRow.onlyone) {
           Data.rTake.push(Data.rOptions[j]);
         } else if (
           !msg.member.roles.cache.some((r) => Data.currentRow.roles.includes(r.id)) ||
@@ -176,9 +176,9 @@ module.exports = {
           url: msg.client.constants.standard.invite,
         })
         .setDescription(
-          `${Data.rOptions.map((r) => `<@&${r.value}>`).join(', ')}\n\n${msg.lan.categoryPage}: \`${
-            Data.cPage
-          }/${Math.ceil(Data.cOptions.length / 25)}\`\n${msg.lan.rolePage}: \`${
+          `${Data.rOptions.map((r) => `<@&${r.data.value}>`).join(', ')}\n\n${
+            msg.lan.categoryPage
+          }: \`${Data.cPage}/${Math.ceil(Data.cOptions.length / 25)}\`\n${msg.lan.rolePage}: \`${
             Data.rPage
           }/${Math.ceil(Data.rOptions.length / 25)}\``,
         );
@@ -191,11 +191,11 @@ module.exports = {
           url: msg.client.constants.standard.invite,
         })
         .setDescription(
-          `${Data.rOptions.map((r) => `<@&${r.value}>`).join(', ')}\n\n${msg.lan.categoryPage}: \`${
-            Data.cPage
-          }/${Math.ceil(Data.cOptions.length / 25)}\`\n${msg.lan.rolePage}: \`1/${Math.ceil(
-            (Data.rOptions.length + 1) / 25,
-          )}\``,
+          `${Data.rOptions.map((r) => `<@&${r.data.value}>`).join(', ')}\n\n${
+            msg.lan.categoryPage
+          }: \`${Data.cPage}/${Math.ceil(Data.cOptions.length / 25)}\`\n${
+            msg.lan.rolePage
+          }: \`1/${Math.ceil((Data.rOptions.length + 1) / 25)}\``,
         );
 
     const categoryMenuHandler = (clickButton) => {
@@ -240,7 +240,7 @@ module.exports = {
             url: msg.client.constants.standard.invite,
           })
           .setDescription(
-            `${Data.rOptions.map((r) => `<@&${r.value}>`).join(', ')}\n\n${
+            `${Data.rOptions.map((r) => `<@&${r.data.value}>`).join(', ')}\n\n${
               msg.lan.categoryPage
             }: \`${Data.cPage}/${Math.ceil(Data.cOptions.length / 25)}\`\n${msg.lan.rolePage}: \`${
               Data.rPage
@@ -268,9 +268,9 @@ module.exports = {
           url: msg.client.constants.standard.invite,
         })
         .setDescription(
-          `${Data.rOptions.map((r) => `<@&${r.value}>`).join(', ')}\n\n${msg.lan.categoryPage}: \`${
-            Data.cPage
-          }/${Math.ceil(Data.cOptions.length / 25)}\`\n${msg.lan.rolePage}: \`${
+          `${Data.rOptions.map((r) => `<@&${r.data.value}>`).join(', ')}\n\n${
+            msg.lan.categoryPage
+          }: \`${Data.cPage}/${Math.ceil(Data.cOptions.length / 25)}\`\n${msg.lan.rolePage}: \`${
             Data.rPage
           }/${Math.ceil((Data.rOptions.length + 1) / 25)}\``,
         );
@@ -283,7 +283,7 @@ module.exports = {
       if (increasePage) {
         const indexLast = Data.cOptions.findIndex(
           (r) =>
-            r.value ===
+            r.data.value ===
             clickButton.message.components[0].components[0].options[
               clickButton.message.components[0].components[0].options.length - 1
             ].value,
@@ -293,7 +293,7 @@ module.exports = {
         }
       } else {
         const indexFirst = Data.cOptions.findIndex(
-          (r) => r.value === clickButton.message.components[0].components[0].options[0].value,
+          (r) => r.data.value === clickButton.message.components[0].components[0].options[0].value,
         );
         for (let j = indexFirst - 25; j < indexFirst && j < Data.cOptions.length; j += 1) {
           Data.cTake.push(Data.cOptions[j]);
@@ -379,16 +379,13 @@ module.exports = {
         res.rows[i].disabled = disabled;
       });
 
-      for (let i = 0; i < res.rowCount; i += 1) {
-        const r = res.rows[i];
-        Data.cOptions.push(
-          new Builders.UnsafeSelectMenuOptionBuilder()
-            .setLabel(r.name)
-            .setValue(r.uniquetimestamp)
-            .setDescription(r.disabled ? msg.lan.disabled : null)
-            .setEmoji(r.disabled ? msg.client.objectEmotes.lock : msg.client.objectEmotes.unlock),
-        );
-      }
+      Data.cOptions = res.rows.map((r) =>
+        new Builders.UnsafeSelectMenuOptionBuilder()
+          .setLabel(r.name)
+          .setValue(r.uniquetimestamp)
+          .setDescription(r.disabled ? msg.lan.disabled : null)
+          .setEmoji(r.disabled ? msg.client.objectEmotes.lock : msg.client.objectEmotes.unlock),
+      );
 
       for (let i = 0; i < Data.cOptions.length && i < 25; i += 1) {
         Data.cTake.push(Data.cOptions[i]);
@@ -446,7 +443,7 @@ module.exports = {
     });
     buttonsCollector.on('end', (collected, reason) => {
       if (reason === 'time') {
-        msg.m.edit({ embeds: [embed], components: [] });
+        msg.client.ch.disableComponents(msg.m, [embed]);
       }
     });
   },
