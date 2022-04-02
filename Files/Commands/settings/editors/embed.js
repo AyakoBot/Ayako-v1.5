@@ -12,10 +12,9 @@ module.exports = {
 
     if (embeds.length) {
       embeds.forEach((embed) => {
-        const inserted = new msg.client.ch.SelectMenuOption({
-          label: `${embed.name}`,
-          value: `${embed.uniquetimestamp}`,
-        });
+        const inserted = new Builders.UnsafeSelectMenuOptionBuilder()
+          .setLabel(`${embed.name}`)
+          .setValue(`${embed.uniquetimestamp}`);
 
         if (
           Array.isArray(insertedValues[required.assinger]) &&
@@ -96,9 +95,9 @@ module.exports = {
     const menu = new Builders.UnsafeSelectMenuBuilder()
       .setCustomId(required.key)
       .addOptions(
-        ...(Objects.take.length
-          ? Objects.take
-          : new msg.client.ch.SelectMenuOption({ label: 'placeholder', value: 'placeholder' })),
+        ...(Objects.take.length ? Objects.take : new Builders.UnsafeSelectMenuOptionBuilder())
+          .setLabel('placeholder')
+          .setValue('placeholder'),
       )
       .setDisabled(!Objects.take.length)
       .setMinValues(1)
