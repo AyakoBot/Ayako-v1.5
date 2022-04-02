@@ -20,6 +20,7 @@ module.exports = {
   dm: false,
   takesFirstArg: false,
   type: 'fun',
+  queueAble: true,
   async execute(msg) {
     const [, prefix] = await require('../Events/messageEvents/messageCreate/commandHandler').prefix(
       msg,

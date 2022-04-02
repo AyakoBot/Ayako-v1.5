@@ -7,6 +7,7 @@ module.exports = {
   takesFirstArg: false,
   aliases: null,
   type: 'info',
+  queueAble: true,
   async execute(msg) {
     const { lan } = msg;
     const text = msg.args.slice(0).join(' ');
