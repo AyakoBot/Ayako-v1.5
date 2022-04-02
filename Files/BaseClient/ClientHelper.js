@@ -34,8 +34,12 @@ module.exports = {
   send: async (channel, rawPayload) => {
     if (!channel) return null;
 
-    const payload =
+    let payload =
       typeof rawPayload === 'string' ? { failIfNotExists: false, content: rawPayload } : rawPayload;
+
+    payload = await new Promise((resolve) => {
+      combineEmbeds({ channel }, payload, resolve);
+    });
 
     if (channel.type === 1) {
       return channel.send(payload).catch(() => null);
@@ -72,6 +76,12 @@ module.exports = {
     if (typeof msg.reply !== 'function') {
       const response = await module.exports.send(msg.channel, payload);
       return response ? response[0] : null;
+    }
+
+    if (msg.command && msg.command.queueAble) {
+      rawPayload = await new Promise((resolve) => {
+        combineEmbeds(msg, rawPayload, resolve);
+      });
     }
 
     const m = await msg.reply(rawPayload).catch((e) => {
@@ -1210,7 +1220,6 @@ module.exports = {
     });
   },
   Embed: require('./Other Client Files/Classes/CustomEmbed'),
-  SelectMenuOption: require('./Other Client Files/Classes/SelectMenuOption'),
 };
 
 const getCooldown = async (msg) => {
@@ -1265,9 +1274,7 @@ const deleteCommandHandler = async (msg, m) => {
 
   deleteRows.forEach((row) => {
     if (!row.commands.includes(msg.command.name)) return;
-    console.log(1);
     if (!row.deletetimeout || Number(row.deletetimeout) === 0) return;
-    console.log(2);
 
     jobs.scheduleJob(new Date(Date.now() + row.deletetimeout * 1000), () => {
       if (row.deletereply) {
@@ -1288,4 +1295,41 @@ const getDeleteRes = async (msg) => {
 
   if (res && res.rowCount) return res.rows;
   return [];
+};
+
+const pendingPayloads = new Map();
+
+// msg might not be a real message but { channel } instead
+const combineEmbeds = (msg, newPayload, resolve) => {
+  if (newPayload.components?.length) resolve(newPayload);
+
+  const doAssign = (channel) => {
+    if (pendingPayloads.has(channel.id)) {
+      const existingPayload = pendingPayloads.get(channel.id).payload;
+      existingPayload.embeds.push(...newPayload.embeds);
+      console.log(existingPayload.embeds);
+
+      if (existingPayload.content && newPayload.content) {
+        existingPayload.content += `\n\n${newPayload.content}`;
+      } else {
+        existingPayload.content = newPayload.content || existingPayload.content;
+      }
+    } else {
+      pendingPayloads.set(channel.id, {
+        payload: newPayload,
+        job: jobs.scheduleJob(new Date(Date.now() + 1000), () => {
+          resolve(pendingPayloads.get(channel.id).payload);
+          pendingPayloads.delete(channel.id);
+        }),
+      });
+    }
+  };
+
+  if (Array.isArray(msg.channel)) {
+    msg.channel.forEach((channel) => {
+      doAssign(channel);
+    });
+  } else {
+    doAssign(msg.channel);
+  }
 };
