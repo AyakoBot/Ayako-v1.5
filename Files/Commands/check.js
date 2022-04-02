@@ -372,7 +372,7 @@ module.exports = {
     });
 
     const ban = await msg.guild.bans.fetch(user.id).catch(() => {});
-    embed.fields = [];
+    embed.data.fields = [];
     if (ban && ban.guild) {
       embed.addFields({
         name: msg.client.ch.stp(lan.banned, { target: user }),
