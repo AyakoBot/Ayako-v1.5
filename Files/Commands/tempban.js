@@ -11,7 +11,7 @@ module.exports = {
     const proceed = async (doProceed, module) => {
       if (doProceed === false) {
         const modRoleRes = await msg.client.ch.modRoleWaiter(msg);
-        if (modRoleRes)
+        if (modRoleRes) {
           return msg.client.emit(
             `mod${msg.client.ch.CFL(module.name)}Add`,
             msg.author,
@@ -20,6 +20,7 @@ module.exports = {
             msg,
             duration,
           );
+        }
         msg.delete().catch(() => {});
       } else {
         return msg.client.emit(
@@ -40,7 +41,7 @@ module.exports = {
     let reason = msg.args.slice(2).join(' ') ? msg.args.slice(2).join(' ') : lan.reason;
     const guildmember = await msg.guild.members.fetch(user.id).catch(() => {});
     let duration = ms(msg.args[1]);
-        msg.args[1] = msg.args[1].replace(/,/g, '.');
+    msg.args[1] = msg.args[1].replace(/,/g, '.');
     if (duration === msg.args[1]) {
       duration = ms(`${msg.args[1]} ${msg.args[2]}`);
       reason = msg.args.slice(3).join(' ') ? msg.args.slice(3).join(' ') : lan.reason;
