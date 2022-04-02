@@ -19,7 +19,5 @@ module.exports = {
   perm: 0n,
   dm: true,
   takesFirstArg: false,
-  execute: async (msg) => {
-
-  },
+  execute: async (msg) => {},
 };
