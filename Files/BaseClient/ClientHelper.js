@@ -68,11 +68,9 @@ module.exports = {
       return response ? response[0] : null;
     }
 
-    if (msg.command && msg.command.queueAble) {
-      rawPayload = await new Promise((resolve) => {
-        combineEmbeds(msg, rawPayload, resolve);
-      });
-    }
+    rawPayload = await new Promise((resolve) => {
+      combineEmbeds(msg, rawPayload, resolve);
+    });
 
     const m = await msg.reply(rawPayload).catch((e) => {
       if (String(e).includes('Missing Permissions')) {
@@ -1295,7 +1293,16 @@ const combineEmbeds = (msg, newPayload, resolve) => {
 
   if (pendingPayloads.has(msg.channel.id)) {
     const existingPayload = pendingPayloads.get(msg.channel.id).payload;
-    existingPayload.embeds.push(...newPayload.embeds);
+    if (
+      existingPayload.embeds &&
+      existingPayload.embeds.length &&
+      newPayload.embeds &&
+      newPayload.embeds.length
+    ) {
+      existingPayload.embeds.push(...newPayload.embeds);
+    } else if (newPayload.embeds && newPayload.embeds.length) {
+      existingPayload.embeds = newPayload.embeds;
+    }
 
     if (existingPayload.content && newPayload.content) {
       existingPayload.content += `\n\n${newPayload.content}`;
