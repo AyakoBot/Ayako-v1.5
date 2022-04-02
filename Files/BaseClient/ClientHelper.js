@@ -46,26 +46,12 @@ module.exports = {
     });
 
     if (channel.type === 1) {
-      return channel.send(payload).catch(() => null);
+      return channel.send(payload).catch(() => {});
     }
 
-    let channels;
+    if (typeof channel.send !== 'function') throw new Error('Invalid Channel');
 
-    if (Array.isArray(channel)) {
-      channels = channel.map((c) => (typeof c.send === 'function' ? c : null));
-    } else {
-      if (typeof channel.send !== 'function') throw new Error('Invalid Channel');
-      channels = [channel];
-    }
-
-    if (!channels.length) return null;
-
-    if (channels.length === 1) {
-      return channels[0].send(payload).catch(() => null);
-    }
-
-    const sendPromises = channels.map((c) => c.send(payload).catch(() => null));
-    return Promise.all(sendPromises);
+    return channel.send(payload).catch(() => {});
   },
   /**
    * Replies to a Message.
