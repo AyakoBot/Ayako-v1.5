@@ -1583,11 +1583,18 @@
       "notValid": "That was not a valid Command",
       "inviteReason": "Command specific Help Command used on {{msg.guild.name}} in {{msg.channel.name}}",
       "dmsTrue": "Usable in DMs",
-      "dmsFalse": "Usable in Servers only"
+      "dmsFalse": "Usable in Servers only",
+      "notFound": "Command Help not found. Developer has been notified. Please try again later."
     },
     "ban": {
       "description": "Bans a User from the Server",
       "usage": ["ban [user ID or mention] (reason)"],
+      "category": "Moderation",
+      "reason": "No Reason given"
+    },
+    "tempban": {
+      "description": "Temp-Bans a User from the Server",
+      "usage": ["tempban [user ID or mention] [time] (reason)"],
       "category": "Moderation",
       "reason": "No Reason given"
     },
@@ -1599,7 +1606,7 @@
     },
     "tempmute": {
       "description": "Temporarily Mutes a User",
-      "usage": ["tempmute [user ID or mention] (time) (reason)"],
+      "usage": ["tempmute [user ID or mention] [time] (reason)"],
       "category": "Moderation",
       "reason": "No Reason given",
       "time": "No Time given",
