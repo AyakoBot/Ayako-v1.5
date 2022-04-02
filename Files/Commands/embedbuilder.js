@@ -334,20 +334,20 @@ const getComponents = async (msg, { page, Objects }, editing) => {
             .setDisabled(!Objects.embed.fields?.length)
             .addOptions(
               ...(Objects.embed.fields?.length
-                ? Objects.embed.fields.map(
-                    (field, i) =>
-                      new msg.client.ch.SelectMenuOption({
-                        value: i,
-                        label:
-                          field.name === '\u200b' ? msg.language.none : field.name.slice(0, 100),
-                        description:
-                          field.value === '\u200b' ? msg.language.none : field.value.slice(0, 100),
-                      }),
+                ? Objects.embed.fields.map((field, i) =>
+                    new Builders.UnsafeSelectMenuOptionBuilder()
+                      .setLabel(
+                        field.name === '\u200b' ? msg.language.none : field.name.slice(0, 100),
+                      )
+                      .setValue(i)
+                      .setDescription(
+                        field.value === '\u200b' ? msg.language.none : field.value.slice(0, 100),
+                      ),
                   )
-                : new msg.client.ch.SelectMenuOption({
-                    label: 'placeholder',
-                    value: 'placeholder',
-                  })),
+                : new Builders.UnsafeSelectMenuOptionBuilder()
+              )
+                .setLabel('placeholder')
+                .setValue('placeholder'),
             ),
         ],
         [
@@ -1992,15 +1992,15 @@ const handlePage = async ({ msg, answer }, Objects, { embed }, increasePage) => 
     )
     .addOptions(
       ...(Options.take?.length
-        ? Options.take.map(
-            (e) =>
-              new msg.client.ch.SelectMenuOption({
-                label: e.name.slice(0, 100),
-                value: `${e.value}`,
-                default: e.default,
-              }),
+        ? Options.take.map((e) =>
+          new Builders.UnsafeSelectMenuOptionBuilder()
+              .setLabel(e.name.slice(0, 100))
+              .setValue(`${e.value}`)
+              .setDefault(e.default),
           )
-        : new msg.client.ch.SelectMenuOption({ label: 'placeholder', value: 'placeholder' })),
+        : new Builders.UnsafeSelectMenuOptionBuilder()
+            .setLabel('placeholder')
+            .setValue('placeholder')),
     );
 
   const baseLan = msg.language.commands.embedbuilder;

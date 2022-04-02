@@ -740,13 +740,11 @@ const getUserComponents = (msg, page, users) => {
       .setCustomId('userSelection')
       .setOptions(
         ...users
-          .map(
-            (user) =>
-              new msg.client.ch.SelectMenuOption({
-                label: `${user.tag}`,
-                description: `${user.id}`,
-                value: `${user.id}`,
-              }),
+          .map((user) =>
+            new Builders.UnsafeSelectMenuOptionBuilder()
+              .setLabel(`${user.tag}`)
+              .setDescription(`${user.id}`)
+              .setValue(`${user.id}`),
           )
           .slice((page - 1) * 25, page * 25),
       ),

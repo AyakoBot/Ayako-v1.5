@@ -50,17 +50,18 @@ module.exports = {
         const dateOfWarn = new Date(Number(r.dateofwarn));
         if (r.type === 'Warn') {
           options.warns.push(
-            new msg.client.ch.SelectMenuOption({
-              label: `${msg.language.number}: ${r.row_number} | ${dateOfWarn.getDate()} ${
-                msg.language.months[dateOfWarn.getMonth()]
-              } ${dateOfWarn.getFullYear()}`,
-              value: r.row_number,
-            }),
+            new Builders.UnsafeSelectMenuOptionBuilder()
+              .setLabel(
+                `${msg.language.number}: ${r.row_number} | ${dateOfWarn.getDate()} ${
+                  msg.language.months[dateOfWarn.getMonth()]
+                } ${dateOfWarn.getFullYear()}`,
+              )
+              .setValue(r.row_number),
           );
         }
         if (r.type === 'Mute') {
           options.mutes.push(
-            new msg.client.ch.SelectMenuOption({
+            new Builders.UnsafeSelectMenuOptionBuilder({
               label: `${msg.language.number}: ${r.row_number} | ${dateOfWarn.getDate()} ${
                 msg.language.months[dateOfWarn.getMonth()]
               } ${dateOfWarn.getFullYear()}`,
