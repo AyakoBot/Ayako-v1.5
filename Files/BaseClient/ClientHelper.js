@@ -34,6 +34,10 @@ module.exports = {
   send: async (channel, rawPayload) => {
     if (!channel) return null;
 
+    if (Array.isArray(channel)) {
+      return channel.map((c) => module.exports.send(c, rawPayload));
+    }
+
     let payload =
       typeof rawPayload === 'string' ? { failIfNotExists: false, content: rawPayload } : rawPayload;
 
@@ -1303,33 +1307,22 @@ const pendingPayloads = new Map();
 const combineEmbeds = (msg, newPayload, resolve) => {
   if (newPayload.components?.length) resolve(newPayload);
 
-  const doAssign = (channel) => {
-    if (pendingPayloads.has(channel.id)) {
-      const existingPayload = pendingPayloads.get(channel.id).payload;
-      existingPayload.embeds.push(...newPayload.embeds);
-      console.log(existingPayload.embeds);
+  if (pendingPayloads.has(msg.channel.id)) {
+    const existingPayload = pendingPayloads.get(msg.channel.id).payload;
+    existingPayload.embeds.push(...newPayload.embeds);
 
-      if (existingPayload.content && newPayload.content) {
-        existingPayload.content += `\n\n${newPayload.content}`;
-      } else {
-        existingPayload.content = newPayload.content || existingPayload.content;
-      }
+    if (existingPayload.content && newPayload.content) {
+      existingPayload.content += `\n\n${newPayload.content}`;
     } else {
-      pendingPayloads.set(channel.id, {
-        payload: newPayload,
-        job: jobs.scheduleJob(new Date(Date.now() + 1000), () => {
-          resolve(pendingPayloads.get(channel.id).payload);
-          pendingPayloads.delete(channel.id);
-        }),
-      });
+      existingPayload.content = newPayload.content || existingPayload.content;
     }
-  };
-
-  if (Array.isArray(msg.channel)) {
-    msg.channel.forEach((channel) => {
-      doAssign(channel);
-    });
   } else {
-    doAssign(msg.channel);
+    pendingPayloads.set(msg.channel.id, {
+      payload: newPayload,
+      job: jobs.scheduleJob(new Date(Date.now() + 1000), () => {
+        resolve(pendingPayloads.get(msg.channel.id).payload);
+        pendingPayloads.delete(msg.channel.id);
+      }),
+    });
   }
 };
