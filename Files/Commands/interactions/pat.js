@@ -2,7 +2,7 @@ const getPurrAPIFetch = require('../../BaseClient/Other Client Files/purrAPIfetc
 
 module.exports = {
   name: 'pat',
-  aliases: null,
+  aliases: ['headpat'],
   execute: async (msg) => {
     const gif = await getGif(msg);
     const loneError = !msg.mentions.users.size && !msg.lan.lone[module.exports.name];
