@@ -78,13 +78,13 @@
     "animated": false,
     "link": "https://cdn.discordapp.com/emojis/902270930716340305.png"
   },
-  "check": {
+  "tick": {
     "name": "Tick",
     "id": "902269933860290650",
     "animated": false,
     "link": "https://cdn.discordapp.com/emojis/902269933860290650.png"
   },
-  "checkWithBackground": {
+  "tickWithBackground": {
     "name": "TickWithBackground",
     "id": "902273165525409872",
     "animated": false,
