@@ -16,8 +16,8 @@ module.exports = {
             msg.m?.delete().catch(() => {});
           });
         } else {
-          embed = new Builders.UnsafeEmbedBuilder(embed).setDescription(embed.fields[0].value);
-          embed.fields = [];
+          embed = new Builders.UnsafeEmbedBuilder(embed).setDescription(embed.data.fields[0].value);
+          embed.data.fields = [];
 
           jobs.scheduleJob(new Date(Date.now() + deleteTimeout), () => {
             msg.m.edit({ embeds: [embed] }).catch(() => {});
