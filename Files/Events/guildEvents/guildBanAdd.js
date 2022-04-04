@@ -51,7 +51,7 @@ module.exports = {
             value: ban.reason ? ban.reason : language.unknown,
           });
         }
-        ch.send(channels, { embeds: [embed] });
+        ch.send(channels, { embeds: [embed] }, 5000);
       }
     }
   },

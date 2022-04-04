@@ -216,7 +216,7 @@ module.exports = async (oldState, newState) => {
       embed.description = embed.description
         ? `${embed.description}\n\n${language.changes}: ${changedKey.map((o) => ` \`${o}\``)}`
         : `${language.changes}: ${changedKey.map((o) => ` \`${o}\``)}`;
-      if (embed.description) ch.send(channels, { embeds: [embed] });
+      if (embed.description) ch.send(channels, { embeds: [embed] }, 5000);
     }
   }
   async function getAudit(type) {

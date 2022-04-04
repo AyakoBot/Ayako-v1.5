@@ -91,7 +91,7 @@ module.exports = {
           });
         }
         if (invite.url) embed.addFields({ name: lan.url, value: `${invite.url}`, inline: true });
-        ch.send(channels, { embeds: [embed] });
+        ch.send(channels, { embeds: [embed] }, 5000);
       }
     }
   },

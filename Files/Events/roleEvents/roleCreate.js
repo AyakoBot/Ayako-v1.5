@@ -49,7 +49,7 @@ module.exports = {
             }),
           );
         } else embed.setDescription(ch.stp(lan.descriptionWithoutAudit, { role }));
-        ch.send(channels, { embeds: [embed] });
+        ch.send(channels, { embeds: [embed] }, 5000);
       }
     }
   },

@@ -53,7 +53,7 @@ module.exports = {
         } else {
           embed.setDescription(ch.stp(lan.description.withoutUser, { emoji }));
         }
-        ch.send(channels, { embeds: [embed], files });
+        ch.send(channels, { embeds: [embed], files }, 5000);
       }
     }
   },

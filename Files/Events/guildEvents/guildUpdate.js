@@ -311,7 +311,7 @@ module.exports = {
           }
         }
         if (embed.description) {
-          ch.send(channels, { embeds: [embed], files });
+          ch.send(channels, { embeds: [embed], files }, 5000);
         }
       }
     }

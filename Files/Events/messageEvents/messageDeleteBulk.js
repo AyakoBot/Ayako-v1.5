@@ -67,8 +67,8 @@ module.exports = {
             }),
           );
         }
-        if (attachment) ch.send(channels, { embeds: [embed], files: [attachment] });
-        else ch.send(channels, { embeds: [embed] });
+        if (attachment) ch.send(channels, { embeds: [embed], files: [attachment] }, 5000);
+        else ch.send(channels, { embeds: [embed] }, 5000);
       }
     }
   },

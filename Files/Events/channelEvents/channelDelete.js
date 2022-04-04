@@ -44,7 +44,7 @@ module.exports = {
             )
             .setColor(con.color)
             .setTimestamp();
-          ch.send(channels, { embeds: [embed] });
+          ch.send(channels, { embeds: [embed] }, 5000);
         } else {
           const embed = new Builders.UnsafeEmbedBuilder()
             .setAuthor({
@@ -57,7 +57,7 @@ module.exports = {
             })
             .setColor(con.color)
             .setTimestamp();
-          ch.send(channels, { embeds: [embed] });
+          ch.send(channels, { embeds: [embed] }, 5000);
         }
       }
     }

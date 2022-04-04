@@ -63,7 +63,7 @@ module.exports = {
             );
 
             if (embed.fields?.length || (embed.thumbnail && embed.thumbnail.url)) {
-              ch.send(channels, { embeds: [embed], files });
+              ch.send(channels, { embeds: [embed], files }, 5000);
             }
           }
         }

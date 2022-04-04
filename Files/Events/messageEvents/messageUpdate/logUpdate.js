@@ -61,7 +61,7 @@ module.exports = {
             embed.addFields({ name: lan.newContent, value: newMsg.content });
           }
         }
-        ch.send(channels, { embeds: [embed] });
+        ch.send(channels, { embeds: [embed] }, 5000);
       }
     }
   },

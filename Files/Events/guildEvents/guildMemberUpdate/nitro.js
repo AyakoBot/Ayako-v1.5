@@ -101,6 +101,7 @@ const logEnd = async (member, days) => {
     member.client.ch.send(
       row.logchannels.map((c) => member.client.channels.cache.get(c)),
       { embeds: [embed] },
+      5000,
     );
   }
 };
@@ -126,6 +127,7 @@ const logStart = async (member, days) => {
     member.client.ch.send(
       row.logchannels.map((c) => member.client.channels.cache.get(c)),
       { embeds: [embed] },
+      5000,
     );
   }
 };

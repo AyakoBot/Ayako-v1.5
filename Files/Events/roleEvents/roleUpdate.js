@@ -109,7 +109,7 @@ module.exports = {
               ChangedKey.map((o) => ` \`${o}\``),
           );
         }
-        if (embed.fields?.length) ch.send(channels, { embeds: [embed] });
+        if (embed.fields?.length) ch.send(channels, { embeds: [embed] }, 5000);
       }
     }
   },

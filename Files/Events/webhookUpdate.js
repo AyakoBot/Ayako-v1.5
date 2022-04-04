@@ -157,7 +157,7 @@ module.exports = {
             if (entry.reason) embed.addFields({ name: language.reason, value: entry.reason });
             embed.setDescription(ch.stp(lan.description, { user: entry.executor, channel: data }));
           }
-          if (embed.description) ch.send(channels, { embebs: [embed], files });
+          if (embed.description) ch.send(channels, { embebs: [embed], files }, 5000);
         }
       }
     }

@@ -386,5 +386,5 @@ function send(logchannel, embed, language, { client }) {
         .replace(re3, language.allow);
     }
   });
-  client.ch.send(logchannel, { embeds: [embed] });
+  client.ch.send(logchannel, { embeds: [embed] }, 5000);
 }
