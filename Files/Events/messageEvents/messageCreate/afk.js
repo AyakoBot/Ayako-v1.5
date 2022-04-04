@@ -35,7 +35,7 @@ module.exports = {
           );
         const m = await msg.client.ch.reply(msg, { embeds: [embed] });
 
-        if (m) {
+        if (m && !m.embeds.length > 1) {
           jobs.scheduleJob(new Date(Date.now() + 10000), async () => {
             m.delete().catch(() => {});
           });

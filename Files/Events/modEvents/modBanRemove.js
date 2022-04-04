@@ -56,7 +56,7 @@ module.exports = {
       } else {
         m?.delete().catch(() => {});
         if (mexisted) {
-          em.fields.pop();
+          em.data.fields.pop();
           em.addFields({
             name: '\u200b',
             value: `${msg.client.textEmotes.cross + lan.error} ${msg.client.ch.makeCodeBlock(err)}`,
@@ -76,7 +76,7 @@ module.exports = {
       }
     } else {
       if (mexisted) {
-        em.fields.pop();
+        em.data.fields.pop();
         em.addFields({
           name: '\u200b',
           value: `${msg.client.textEmotes.cross} ${lan.notBanned}`,
@@ -91,7 +91,7 @@ module.exports = {
       return false;
     }
     if (mexisted) {
-      em.fields.pop();
+      em.data.fields.pop();
       em.addFields({
         name: '\u200b',
         value: `${msg.client.textEmotes.tick} ${msg.client.ch.stp(lan.success, {

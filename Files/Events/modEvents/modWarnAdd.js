@@ -28,7 +28,7 @@ module.exports = {
       exec?.roles.highest.position === member?.roles.highest.position
     ) {
       if (mexisted) {
-        em.fields.pop();
+        em.data.fields.pop();
         em.addFields({
           name: '\u200b',
           value: `${msg.client.textEmotes.cross} ${lan.exeNoPerms}`,
@@ -84,7 +84,7 @@ module.exports = {
       ],
     );
     if (mexisted) {
-      em.fields.pop();
+      em.data.fields.pop();
       em.addFields({
         name: '\u200b',
         value: `${msg.client.textEmotes.tick} ${msg.client.ch.stp(lan.success, {
