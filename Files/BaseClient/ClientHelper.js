@@ -46,12 +46,16 @@ module.exports = {
     });
 
     if (channel.type === 1) {
-      return channel.send(payload).catch(() => {});
+      return channel.send(payload).catch((e) => {
+        console.log(e);
+      });
     }
 
     if (typeof channel.send !== 'function') throw new Error('Invalid Channel');
 
-    return channel.send(payload).catch(() => {});
+    return channel.send(payload).catch((e) => {
+      console.log(e);
+    });
   },
   /**
    * Replies to a Message.
@@ -1032,7 +1036,7 @@ module.exports = {
       },
       description: DBembed.description,
       thumbnail: {
-        url: DBembed.thumbnail,
+        url: DBembed.data.thumbnail,
       },
       fields:
         DBembed.fieldnames?.map((fieldName, i) => {
@@ -1079,12 +1083,14 @@ module.exports = {
       const embedToUse = embeds[embeds.length - 1];
       const embed = new Builders.UnsafeEmbedBuilder();
 
-      embed.color = embedToUse.color;
-      embed.title = embedToUse.title ? mod(embedToUse.title, { [option[0]]: option[1] }) : null;
-      embed.url = embedToUse.url ? mod(embedToUse.url, { [option[0]]: option[1] }) : null;
+      embed.data.color = embedToUse.color;
+      embed.data.title = embedToUse.title
+        ? mod(embedToUse.title, { [option[0]]: option[1] })
+        : null;
+      embed.data.url = embedToUse.url ? mod(embedToUse.url, { [option[0]]: option[1] }) : null;
 
       if (embedToUse.author) {
-        embed.author = {
+        embed.data.author = {
           name: embedToUse.author.name
             ? mod(embedToUse.author.name, { [option[0]]: option[1] })
             : null,
@@ -1097,26 +1103,26 @@ module.exports = {
         };
       }
 
-      embed.description = embedToUse.description
+      embed.data.description = embedToUse.description
         ? mod(embedToUse.description, { [option[0]]: option[1] })
         : null;
 
-      embed.thumbnail =
+      embed.data.data.thumbnail =
         embedToUse.thumbnail && embedToUse.thumbnail.url
           ? mod(embedToUse.thumbnail.url, { [option[0]]: option[1] })
           : null;
 
-      embed.image =
+      embed.data.image =
         embedToUse.image && embedToUse.image.url
           ? mod(embedToUse.image.url, { [option[0]]: option[1] })
           : null;
 
-      embed.timestamp = embedToUse.timestamp
+      embed.data.timestamp = embedToUse.timestamp
         ? Number(mod(`${embedToUse.timestamp}`, { [option[0]]: option[1] }))
         : null;
 
       if (embedToUse.footer) {
-        embed.footer = {
+        embed.data.footer = {
           name: embedToUse.footer.text
             ? mod(embedToUse.footer.text, { [option[0]]: option[1] })
             : null,
@@ -1128,7 +1134,7 @@ module.exports = {
 
       if (embedToUse.fields && embedToUse.fields.length) {
         embedToUse.fields.forEach(([name, value, inline]) => {
-          embed.fields.push({
+          embed.data.fields.push({
             name: name ? mod(name, { [option[0]]: option[1] }) : null,
             value: value ? mod(value, { [option[0]]: option[1] }) : null,
             inline,
@@ -1207,7 +1213,6 @@ module.exports = {
       ),
     });
   },
-  Embed: require('./Other Client Files/Classes/CustomEmbed'),
 };
 
 const getCooldown = async (msg) => {
