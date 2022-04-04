@@ -43,7 +43,7 @@ module.exports = {
         if (entry && entry.id) {
           embed.setDescription(ch.stp(lan.description.withUser, { user: entry.executor, emoji }));
         } else embed.setDescription(ch.stp(lan.description.withoutUser, { emoji }));
-        ch.send(channels, { embeds: [embed] });
+        ch.send(channels, { embeds: [embed] }, 5000);
       }
     }
   },

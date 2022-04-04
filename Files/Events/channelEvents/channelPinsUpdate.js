@@ -97,7 +97,7 @@ module.exports = {
             }),
           )
           .setColor(con.color);
-        ch.send(logchannel, { embeds: [embed], files });
+        ch.send(logchannel, { embeds: [embed], files }, 5000);
       } else {
         embed
           .setAuthor({
@@ -112,7 +112,7 @@ module.exports = {
             }),
           )
           .setColor(con.color);
-        ch.send(logchannel, { embeds: [embed], files });
+        ch.send(logchannel, { embeds: [embed], files }, 5000);
       }
     }
     async function caseUnPin(entryUnPin, embed, language, logchannel) {
@@ -162,7 +162,7 @@ module.exports = {
             }),
           )
           .setColor(con.color);
-        ch.send(logchannel, { embeds: [embed], files });
+        ch.send(logchannel, { embeds: [embed], files }, 5000);
       } else {
         embed
           .setAuthor({
@@ -177,7 +177,7 @@ module.exports = {
             }),
           )
           .setColor(con.color);
-        ch.send(logchannel, { embeds: [embed], files });
+        ch.send(logchannel, { embeds: [embed], files }, 5000);
       }
     }
     function caseUnknown(embed, language, logchannel) {
@@ -191,7 +191,7 @@ module.exports = {
         .setDescription(ch.stp(lan.description.withoutAuthor.withoutAudit, { channel }))
         .setColor(con.color)
         .setTimestamp();
-      ch.send(logchannel, { embeds: [embed] });
+      ch.send(logchannel, { embeds: [embed] }, 5000);
     }
   },
 };

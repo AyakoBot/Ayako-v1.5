@@ -53,7 +53,7 @@ module.exports = {
             }),
           );
         } else embed.setDescription(ch.stp(lan.description.withoutUser, { newEmoji, oldEmoji }));
-        ch.send(channels, { embeds: [embed] });
+        ch.send(channels, { embeds: [embed] }, 5000);
       }
     }
   },

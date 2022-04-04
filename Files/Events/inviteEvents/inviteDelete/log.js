@@ -108,7 +108,7 @@ module.exports = {
             inline: false,
           });
         }
-        ch.send(channels, { embeds: [embed] });
+        ch.send(channels, { embeds: [embed] }, 5000);
       }
     }
   },

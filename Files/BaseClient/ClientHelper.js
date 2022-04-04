@@ -31,7 +31,7 @@ module.exports = {
    *                           (supports Array of Channels).
    * @param {object|string} rawPayload - The Payload or String sent
    */
-  send: async (channel, rawPayload) => {
+  send: async (channel, rawPayload, timeout) => {
     if (!channel) return null;
 
     if (Array.isArray(channel)) {
@@ -42,7 +42,7 @@ module.exports = {
       typeof rawPayload === 'string' ? { failIfNotExists: false, content: rawPayload } : rawPayload;
 
     payload = await new Promise((resolve) => {
-      combineEmbeds({ channel }, payload, resolve);
+      combineMessages({ channel }, payload, resolve, timeout);
     });
 
     if (channel.type === 1) {
@@ -59,7 +59,7 @@ module.exports = {
    * @param {object} msg - The Message the Reply will be replied to.
    * @param {object|string} rawPayload - The Payload or String sent
    */
-  reply: async (msg, rawPayload) => {
+  reply: async (msg, rawPayload, timeout) => {
     const payload =
       typeof rawPayload === 'string' ? { failIfNotExists: false, content: rawPayload } : rawPayload;
 
@@ -69,7 +69,7 @@ module.exports = {
     }
 
     rawPayload = await new Promise((resolve) => {
-      combineEmbeds(msg, rawPayload, resolve);
+      combineMessages(msg, rawPayload, resolve, timeout);
     });
 
     const m = await msg.reply(rawPayload).catch((e) => {
@@ -1291,33 +1291,102 @@ const getDeleteRes = async (msg) => {
 const pendingPayloads = new Map();
 
 // msg might not be a real message but { channel } instead
-const combineEmbeds = (msg, newPayload, resolve) => {
-  if (newPayload.ephemeral) resolve(newPayload);
-  if (newPayload.components?.length) resolve(newPayload);
-
-  if (pendingPayloads.has(msg.channel.id)) {
-    const existingPayload = pendingPayloads.get(msg.channel.id).payload;
+const combineMessages = (msg, newPayload, resolve, timeout) => {
+  const combineEmbeds = (existingPayload) => {
     if (
       existingPayload.embeds &&
       existingPayload.embeds.length &&
       newPayload.embeds &&
       newPayload.embeds.length
     ) {
+      if (existingPayload.embeds.length + newPayload.embeds.length > 10) {
+        const earlierPayload = pendingPayloads.get(msg.channel.id);
+        earlierPayload.resolve(earlierPayload.payload);
+        earlierPayload.timeout.cancel();
+        pendingPayloads.delete(msg.channel.id);
+
+        resolve(newPayload);
+        return false;
+      }
+
       existingPayload.embeds.push(...newPayload.embeds);
     } else if (newPayload.embeds && newPayload.embeds.length) {
       existingPayload.embeds = newPayload.embeds;
     }
+    return true;
+  };
+  const combineContents = (existingPayload) => {
+    if (
+      existingPayload.content &&
+      existingPayload.content.length &&
+      newPayload.content &&
+      newPayload.content.length
+    ) {
+      if (existingPayload.content.length + newPayload.content.length > 4000) {
+        const earlierPayload = pendingPayloads.get(msg.channel.id);
+        earlierPayload.resolve(earlierPayload.payload);
+        earlierPayload.timeout.cancel();
+        pendingPayloads.delete(msg.channel.id);
 
-    if (existingPayload.content && newPayload.content) {
+        resolve(newPayload);
+        return false;
+      }
+
       existingPayload.content += `\n\n${newPayload.content}`;
-    } else {
-      existingPayload.content = newPayload.content || existingPayload.content;
+    } else if (newPayload.content && newPayload.content.length) {
+      existingPayload.content = newPayload.content;
     }
+    return true;
+  };
+  const combineFiles = (existingPayload) => {
+    if (
+      existingPayload.files &&
+      existingPayload.files.length &&
+      newPayload.files &&
+      newPayload.files.length
+    ) {
+      if (existingPayload.files.length + newPayload.files.length > 10) {
+        const earlierPayload = pendingPayloads.get(msg.channel.id);
+        earlierPayload.resolve(earlierPayload.payload);
+        earlierPayload.timeout.cancel();
+        pendingPayloads.delete(msg.channel.id);
+
+        resolve(newPayload);
+        return false;
+      }
+
+      existingPayload.files.push(...newPayload.files);
+    } else if (newPayload.files && newPayload.files.length) {
+      existingPayload.files = newPayload.files;
+    }
+    return true;
+  };
+
+  if (newPayload.ephemeral) resolve(newPayload);
+  if (newPayload.components?.length) resolve(newPayload);
+
+  if (pendingPayloads.has(msg.channel.id)) {
+    const existingPayload = pendingPayloads.get(msg.channel.id).payload;
+    console.log(1);
+
+    const proceedEmbeds = combineEmbeds(existingPayload);
+    if (!proceedEmbeds) return;
+    console.log(1);
+
+    const proceedContents = combineContents(existingPayload);
+    if (!proceedContents) return;
+    console.log(1);
+
+    combineFiles(existingPayload);
+  } else if (!timeout) {
+    resolve(newPayload);
   } else {
     pendingPayloads.set(msg.channel.id, {
+      resolve,
       payload: newPayload,
-      job: jobs.scheduleJob(new Date(Date.now() + 1000), () => {
-        resolve(pendingPayloads.get(msg.channel.id).payload);
+      job: jobs.scheduleJob(new Date(Date.now() + timeout), () => {
+        const thisPayload = pendingPayloads.get(msg.channel.id);
+        thisPayload.resolve(thisPayload.payload);
         pendingPayloads.delete(msg.channel.id);
       }),
     });

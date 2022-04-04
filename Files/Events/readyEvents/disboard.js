@@ -47,12 +47,16 @@ async function end(ch, guild, Constants, channel) {
         url: Constants.standard.invite,
       });
 
-    ch.send(channel, {
-      embeds: [embed],
-      content: `${row.roles.map((r) => `<@&${r}>`).join(' ')}\n${row.users
-        .map((u) => `<@${u}>`)
-        .join(' ')}`,
-    });
+    ch.send(
+      channel,
+      {
+        embeds: [embed],
+        content: `${row.roles.map((r) => `<@&${r}>`).join(' ')}\n${row.users
+          .map((u) => `<@${u}>`)
+          .join(' ')}`,
+      },
+      5000,
+    );
 
     ch.query('UPDATE disboard SET lastbump = NULL WHERE guildid = $1;', [guild.id]);
   }

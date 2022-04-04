@@ -28,7 +28,7 @@ module.exports = {
           })
           .setTimestamp()
           .setDescription(ch.stp(lan.description, { link: ch.stp(con.author.link, { msg }) }));
-        ch.send(channels, { embeds: [embed] });
+        ch.send(channels, { embeds: [embed] }, 5000);
       }
     }
   },

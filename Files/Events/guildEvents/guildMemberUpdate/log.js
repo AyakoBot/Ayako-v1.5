@@ -54,7 +54,7 @@ module.exports = {
               oldMember.nickname ? oldMember.nickname : user.username
             }\`\n${language.after}: \`${member.nickname ? member.nickname : user.username}\``,
           });
-          ch.send(channels, { embeds: [embed] });
+          ch.send(channels, { embeds: [embed] }, 5000);
           return;
         }
         if (
@@ -70,7 +70,7 @@ module.exports = {
             url: ch.stp(con.author.link, { user }),
           });
           embed.setDescription(ch.stp(lan.description, { user }));
-          ch.send(channels, { embeds: [embed] });
+          ch.send(channels, { embeds: [embed] }, 5000);
           return;
         }
         if (oldMember.roles.cache === newMember.roles.cache) return;
@@ -122,7 +122,7 @@ module.exports = {
               iconURL: con.author.image,
               url: ch.stp(con.author.link, { user }),
             });
-            ch.send(channels, { embeds: [embed] });
+            ch.send(channels, { embeds: [embed] }, 5000);
           }
         }
       }
