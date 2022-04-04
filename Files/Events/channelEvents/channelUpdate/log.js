@@ -347,7 +347,7 @@ module.exports = {
             });
           }
 
-          if (!embed.fields?.length) return;
+          if (!embed.data.fields?.length) return;
 
           if (changedKey.length) changedKey = [...new Set(changedKey)];
 
@@ -375,7 +375,7 @@ module.exports = {
 };
 
 function send(logchannel, embed, language, { client }) {
-  embed.fields.forEach((field) => {
+  embed.data.fields.forEach((field) => {
     if (field.value.length > 1024 || embed.length > 6000) {
       const re1 = new RegExp(client.textEmotes.switch.disable, 'g');
       const re2 = new RegExp(client.textEmotes.switch.neutral, 'g');

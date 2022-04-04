@@ -15,8 +15,8 @@ module.exports = {
     }
     for (let i = 0; i < msg.embeds.length; i += 1) {
       let text;
-      if (msg.embeds[i].title) text = msg.embeds[i].title;
-      else if (msg.embeds[i].author) text = msg.embeds[i].author.name;
+      if (msg.embeds[i].data.title) text = msg.embeds[i].data.title;
+      else if (msg.embeds[i].data.author) text = msg.embeds[i].data.author.name;
       else text = 'none';
       dmembed.addFields({ name: '\u200b', value: text });
     }

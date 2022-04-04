@@ -2,11 +2,11 @@ module.exports = {
   execute: async (msg) => {
     if (msg.author.id !== '302050872383242240') return;
     if (!msg.embeds[0]) return;
-    if (!msg.embeds[0].color) return;
+    if (!msg.embeds[0].data.color) return;
 
     if (
-      msg.embeds[0].color === '2406327' &&
-      msg.embeds[0].image?.url?.includes('bot-command-image-bump.png')
+      msg.embeds[0].data.color === '2406327' &&
+      msg.embeds[0].data.image?.url?.includes('bot-command-image-bump.png')
     ) {
       const res = await msg.client.ch.query(
         'SELECT * FROM disboard WHERE guildid = $1 AND active = true;',
@@ -43,7 +43,7 @@ const getUser = async (msg) => {
       .filter(
         (m) =>
           m.author.id === '302050872383242240' &&
-          m.embeds[0]?.image?.url?.includes('bot-command-image-bump.png'),
+          m.embeds[0]?.data?.image?.url?.includes('bot-command-image-bump.png'),
       )
       .first();
 

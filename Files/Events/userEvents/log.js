@@ -62,7 +62,7 @@ module.exports = {
               ch.stp(lan.description, { user: newUser }) + changedKey.map((o) => ` \`${o}\``),
             );
 
-            if (embed.fields?.length || (embed.thumbnail && embed.thumbnail.url)) {
+            if (embed.data.fields?.length || (embed.data.thumbnail && embed.data.thumbnail.url)) {
               ch.send(channels, { embeds: [embed], files }, 5000);
             }
           }
