@@ -213,8 +213,8 @@ module.exports = async (oldState, newState) => {
       embed.setDescription(
         ch.stp(lan.description, { user: newState ? newState.member.user : oldState.member.user }),
       );
-      embed.description = embed.description
-        ? `${embed.description}\n\n${language.changes}: ${changedKey.map((o) => ` \`${o}\``)}`
+      embed.data.description = embed.data.description
+        ? `${embed.data.description}\n\n${language.changes}: ${changedKey.map((o) => ` \`${o}\``)}`
         : `${language.changes}: ${changedKey.map((o) => ` \`${o}\``)}`;
       if (embed.description) ch.send(channels, { embeds: [embed] }, 5000);
     }
