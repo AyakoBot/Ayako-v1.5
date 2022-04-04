@@ -1265,11 +1265,14 @@ const deleteCommandHandler = async (msg, m) => {
     if (!row.deletetimeout || Number(row.deletetimeout) === 0) return;
 
     jobs.scheduleJob(new Date(Date.now() + row.deletetimeout * 1000), () => {
-      if (row.deletereply) {
-        m.delete().catch(() => {});
-      }
       if (row.deletecommand) {
         msg.delete().catch(() => {});
+      }
+      if (m.embeds.length > 1) {
+        return;
+      }
+      if (row.deletereply) {
+        m.delete().catch(() => {});
       }
     });
   });
@@ -1289,6 +1292,7 @@ const pendingPayloads = new Map();
 
 // msg might not be a real message but { channel } instead
 const combineEmbeds = (msg, newPayload, resolve) => {
+  if (newPayload.ephemeral) resolve(newPayload);
   if (newPayload.components?.length) resolve(newPayload);
 
   if (pendingPayloads.has(msg.channel.id)) {

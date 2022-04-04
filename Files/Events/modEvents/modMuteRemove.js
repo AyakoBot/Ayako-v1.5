@@ -27,7 +27,7 @@ module.exports = {
     const memberClient = msg.guild.me;
     if (!member) {
       if (mexisted) {
-        em.fields.pop();
+        em.data.fields.pop();
         em.addFields({
           name: '\u200b',
           value: `${msg.client.textEmotes.cross} ${lan.noMember}`,
@@ -65,7 +65,7 @@ module.exports = {
       exec?.roles.highest.position === member?.roles.highest.position
     ) {
       if (mexisted) {
-        em.fields.pop();
+        em.data.fields.pop();
         em.addFields({
           name: '\u200b',
           value: `${msg.client.textEmotes.cross} ${lan.exeNoPerms}`,
@@ -85,7 +85,7 @@ module.exports = {
       !memberClient.permissions.has(268435456n)
     ) {
       if (mexisted) {
-        em.fields.pop();
+        em.data.fields.pop();
         em.addFields({
           name: '\u200b',
           value: `${msg.client.textEmotes.cross} ${lan.meNoPerms}`,
@@ -102,7 +102,7 @@ module.exports = {
 
     if (!member?.communicationDisabledUntil) {
       if (mexisted) {
-        em.fields.pop();
+        em.data.fields.pop();
         em.addFields({
           name: '\u200b',
           value: `${msg.client.textEmotes.cross} ${lan.hasNoRole}`,
@@ -151,7 +151,7 @@ module.exports = {
       msg.client.ch.send(dmChannel, { embeds: [DMembed] });
     } else {
       if (mexisted) {
-        em.fields.pop();
+        em.data.fields.pop();
         em.addFields({
           name: '\u200b',
           value: `${msg.client.textEmotes.cross + lan.error} ${msg.client.ch.makeCodeBlock(err)}`,
@@ -170,7 +170,7 @@ module.exports = {
       return false;
     }
     if (mexisted) {
-      em.fields.pop();
+      em.data.fields.pop();
       em.addFields({
         name: '\u200b',
         value: `${msg.client.textEmotes.tick} ${msg.client.ch.stp(lan.success, {

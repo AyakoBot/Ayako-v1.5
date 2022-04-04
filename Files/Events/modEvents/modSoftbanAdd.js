@@ -25,7 +25,7 @@ module.exports = {
       const exec = await msg.guild.members.fetch(executor.id).catch(() => {});
       if (exec?.roles.highest.position <= member?.roles.highest.position) {
         if (mexisted) {
-          em.fields.pop();
+          em.data.fields.pop();
           em.addFields({
             name: '\u200b',
             value: `${msg.client.textEmotes.cross} ${lan.exeNoPerms}`,
@@ -41,7 +41,7 @@ module.exports = {
       }
       if (executor.id === target.id) {
         if (mexisted) {
-          em.fields.pop();
+          em.data.fields.pop();
           em.addFields({
             name: '\u200b',
             value: `${msg.client.textEmotes.cross} ${lan.selfBan}`,
@@ -57,7 +57,7 @@ module.exports = {
       }
       if (target.id === msg.client.user.id) {
         if (mexisted) {
-          em.fields.pop();
+          em.data.fields.pop();
           em.addFields({
             name: '\u200b',
             value: `${msg.client.textEmotes.cross} ${lan.meBan}`,
@@ -73,7 +73,7 @@ module.exports = {
       }
       if (member?.bannable === false) {
         if (mexisted) {
-          em.fields.pop();
+          em.data.fields.pop();
           em.addFields({
             name: '\u200b',
             value: `${msg.client.textEmotes.cross} ${lan.permissionError}`,
@@ -90,7 +90,7 @@ module.exports = {
       const banned = await msg.guild.bans.fetch(target).catch(() => {});
       if (banned) {
         if (mexisted) {
-          em.fields.pop();
+          em.data.fields.pop();
           em.addFields({
             name: '\u200b',
             value: `${msg.client.textEmotes.cross} ${msg.client.ch.stp(lan.alreadyBanned, {
@@ -152,7 +152,7 @@ module.exports = {
       if (!unban) {
         m?.delete().catch(() => {});
         if (mexisted) {
-          em.fields.pop();
+          em.data.fields.pop();
           em.addFields({
             name: '\u200b',
             value: `${msg.client.textEmotes.cross + lan.error} ${msg.client.ch.makeCodeBlock(err)}`,
@@ -173,7 +173,7 @@ module.exports = {
     } else {
       m?.delete().catch(() => {});
       if (mexisted) {
-        em.fields.pop();
+        em.data.fields.pop();
         em.addFields({
           name: '\u200b',
           value: `${msg.client.textEmotes.cross + lan.error} ${msg.client.ch.makeCodeBlock(err)}`,
@@ -192,7 +192,7 @@ module.exports = {
       return false;
     }
     if (mexisted) {
-      em.fields.pop();
+      em.data.fields.pop();
       em.addFields({
         name: '\u200b',
         value: `${msg.client.textEmotes.tick} ${msg.client.ch.stp(lan.success, {
