@@ -1367,15 +1367,12 @@ const combineMessages = (msg, newPayload, resolve, timeout) => {
 
   if (pendingPayloads.has(msg.channel.id)) {
     const existingPayload = pendingPayloads.get(msg.channel.id).payload;
-    console.log(1);
 
     const proceedEmbeds = combineEmbeds(existingPayload);
     if (!proceedEmbeds) return;
-    console.log(1);
 
     const proceedContents = combineContents(existingPayload);
     if (!proceedContents) return;
-    console.log(1);
 
     combineFiles(existingPayload);
   } else if (!timeout) {
