@@ -45,17 +45,9 @@ module.exports = {
       combineMessages({ channel }, payload, resolve, timeout);
     });
 
-    if (channel.type === 1) {
-      return channel.send(payload).catch((e) => {
-        console.log(e);
-      });
-    }
-
     if (typeof channel.send !== 'function') throw new Error('Invalid Channel');
 
-    return channel.send(payload).catch((e) => {
-      console.log(e);
-    });
+    return channel.send(payload).catch(() => {});
   },
   /**
    * Replies to a Message.
@@ -1297,6 +1289,8 @@ const pendingPayloads = new Map();
 
 // msg might not be a real message but { channel } instead
 const combineMessages = (msg, newPayload, resolve, timeout) => {
+  if (!newPayload) resolve(newPayload);
+
   const combineEmbeds = (existingPayload) => {
     if (
       existingPayload.embeds &&
