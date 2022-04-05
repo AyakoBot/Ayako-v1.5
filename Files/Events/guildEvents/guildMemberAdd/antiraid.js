@@ -46,7 +46,7 @@ module.exports = {
         time: cache.time,
         joins: cache.joins,
         timeout: jobs.scheduleJob(new Date(Date.now() + Number(r.time)), () => {
-          member.client.emit('antiraidHandler', member.guild, r);
+          member.client.emit('antiraidHandler', sendings.get(member.guild.id), member.guild, r);
           antiraidCache.delete(member.guild.id);
         }),
       });
