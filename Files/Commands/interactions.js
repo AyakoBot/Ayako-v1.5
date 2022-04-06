@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const Builders = require('@discordjs/builders');
 const jobs = require('node-schedule');
+const Discord = require('discord.js');
 
 const files = [];
 
@@ -27,25 +28,22 @@ module.exports = {
     );
     const args = msg.content.replace(/\\n/g, ' ').slice(prefix.length).split(/ +/);
     const usedCommandName = args.shift().toLowerCase();
-
     const interaction =
       msg.client.interactions.get(usedCommandName) ||
       msg.client.interactions.find((i) => i.aliases?.includes(usedCommandName));
-
-    const { gif, loneError } = await interaction.execute(msg);
-    const text = getMainText(msg, interaction.name);
+    const loneError = !msg.mentions.users.size && !msg.lan.lone[interaction.name];
 
     if (loneError) {
-      msg.client.ch.reply(msg, { content: msg.lan.loneError }).then((m) => {
-        jobs.scheduleJob(new Date(Date.now() + 10000), () => {
-          m.delete().catch(() => {});
-          msg.delete().catch(() => {});
-        });
-      });
-      return;
+      checkMentionFuckup(msg);
+      if (!msg.mentions.users.size) {
+        needMentions(msg);
+        return;
+      }
     }
 
+    const text = getMainText(msg, interaction.name);
     const small = await getMode(msg);
+    const gif = await getGif(msg, interaction);
 
     const embed = new Builders.UnsafeEmbedBuilder()
       .setDescription(text)
@@ -143,4 +141,38 @@ const getText = (msg, saidText, mentionText, usedCommandName) => {
   }
 
   return text;
+};
+
+const needMentions = (msg) => {
+  msg.client.ch.reply(msg, { content: msg.lan.loneError }).then((m) => {
+    jobs.scheduleJob(new Date(Date.now() + 10000), () => {
+      m.delete().catch(() => {});
+      msg.delete().catch(() => {});
+    });
+  });
+};
+
+const checkMentionFuckup = (msg) => {
+  if (!/@(.{2,})#(\d{4})/g.test(msg.content)) return;
+
+  const fuckups = msg.content.match(/@(.{2,})#(\d{4})/g);
+
+  const mentions = fuckups.map((fuckup) =>
+    msg.guild.members.cache.find((m) => m.user.tag === fuckup.slice(1, fuckup.length)),
+  );
+
+  const newCollection = new Discord.Collection();
+  mentions.forEach((m) => newCollection.set(m.user.id, m.user));
+  msg.mentions.users = newCollection;
+
+  fuckups.forEach((fuckup) => {
+    msg.args.splice(msg.args.indexOf(fuckup), 1);
+  });
+};
+
+const getGif = (msg, interaction) => {
+  if (interaction.isAsync) return interaction.gif(msg);
+
+  const random = Math.floor(Math.random() * interaction.gifs.length);
+  return interaction.gifs[random];
 };
