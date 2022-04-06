@@ -1364,7 +1364,7 @@ const combineMessages = (msg, newPayload, resolve, timeout) => {
   if (newPayload.ephemeral) resolve(newPayload);
   if (newPayload.components?.length) resolve(newPayload);
 
-  if (pendingPayloads.has(msg.channel.id)) {
+  if (pendingPayloads.has(msg.channel.id) && timeout) {
     const existingPayload = pendingPayloads.get(msg.channel.id).payload;
 
     const proceedEmbeds = combineEmbeds(existingPayload);
