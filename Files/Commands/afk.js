@@ -11,12 +11,14 @@ module.exports = {
   async execute(msg) {
     const { lan } = msg;
     const text = msg.args.slice(0).join(' ');
+
     if (
       text.toLowerCase().includes('http://') ||
       text.toLowerCase().includes('https://') ||
       text.toLowerCase().includes('discord.gg')
     ) {
-      return msg.client.ch.reply(msg, lan.noLinks);
+      msg.client.ch.reply(msg, lan.noLinks);
+      return;
     }
     const res = await msg.client.ch.query('SELECT * FROM afk WHERE userid = $1 AND guildid = $2;', [
       msg.author.id,
@@ -31,11 +33,11 @@ module.exports = {
         [text, msg.author.id, msg.guild.id, Date.now()],
       );
       if (msg.args[0]) {
-        embed.setDescription(msg.client.ch.stp(msg.lan.updatedTo, { text }));
+        embed.setDescription(msg.client.ch.stp(msg.lan.updatedTo, { text, user: msg.author }));
         msg.client.ch.reply(msg, { embeds: [embed] });
       }
       if (!msg.args[0]) {
-        embed.setDescription(msg.lan.updated);
+        embed.setDescription(msg.client.ch.stp(msg.lan.updated, { user: msg.author }));
         msg.client.ch.reply(msg, { embeds: [embed] });
       }
     } else {
@@ -44,14 +46,25 @@ module.exports = {
         [msg.author.id, text, Date.now(), msg.guild.id],
       );
       if (msg.args[0]) {
-        embed.setDescription(msg.client.ch.stp(msg.lan.setTo, { text }));
+        embed.setDescription(msg.client.ch.stp(msg.lan.setTo, { text, user: msg.author }));
         msg.client.ch.reply(msg, { embeds: [embed] });
       }
       if (!msg.args[0]) {
-        embed.setDescription(msg.lan.set);
+        embed.setDescription(msg.client.ch.stp(msg.lan.set, { user: msg.author }));
         msg.client.ch.reply(msg, { embeds: [embed] });
       }
     }
-    return null;
+
+    doNickname(msg);
   },
+};
+
+const doNickname = (msg) => {
+  const newNickname = `${msg.member.displayName} [AFK]`;
+
+  if (msg.member.displayName.length > 26) return;
+  if (msg.member.displayName.endsWith('[AFK]')) return;
+  if (!msg.guild.me.permissions.has(134217728n) || !msg.member.manageable) return;
+
+  msg.member.setNickname(newNickname, msg.language.commands.afkHandler.setAfk).catch(() => {});
 };
