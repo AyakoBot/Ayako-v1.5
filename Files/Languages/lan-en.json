@@ -1494,7 +1494,11 @@
       }
     },
     "afkHandler": {
-      "deletedAfk": "I've deleted your AFK\nYou have been AFK for {{time}}"
+      "deletedAfk": "I've deleted your AFK",
+      "footer": "You have been AFK for {{time}}",
+      "setAfk": "User went AFK",
+      "delAfk": "User returned from being AFK",
+      "forceDelAfk": "User's AFK was forcefully deleted by {{user.tag}} | {{reason}}"
     },
     "unmute": {
       "description": "Un-Mutes a User",
@@ -1620,8 +1624,8 @@
       "category": "Moderation",
       "reason": "No Reason given",
       "notAfk": "This User is not AFK",
-      "afkDeleted": "The AFK of this User was deleted",
-      "author": "{{user}}'s AFK was deleted",
+      "afkDeleted": "The AFK of {{user}} was deleted",
+      "author": "AFK forcefully deleted",
       "desc": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nAFK was deleted by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
       "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}"
     },
@@ -1706,13 +1710,12 @@
       "category": "Chat",
       "description": "Display a AFK text whenever someone pings you, automatically deleted if you send a Message 1 Minute after creating your AFK",
       "usage": ["afk (text)"],
-      "afkText": "{{username}} is AFK **since**",
-      "afkText2": "{{slice}}\n{{username}} is AFK **since**",
-      "updatedTo": "**AFK updated to:**\n{{text}}",
-      "updated": "**AFK updated**",
+      "footer": "{{user.username}} is AFK since {{time}}",
+      "updatedTo": "**{{user}}'s AFK updated to:**\n{{text}}",
+      "updated": "**{{user}}'s AFK updated**",
       "noLinks": "**You may not set Links as AFK.**",
-      "set": "**AFK set**",
-      "setTo": "**AFK set to:**\n{{text}}"
+      "set": "**{{user}}'s AFK set**",
+      "setTo": "**{{user}}'s AFK set to:**\n{{text}}"
     },
     "avatar": {
       "category": "User",

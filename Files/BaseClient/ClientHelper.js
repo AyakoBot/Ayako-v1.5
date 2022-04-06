@@ -1378,11 +1378,9 @@ const combineMessages = (msg, newPayload, resolve, timeout) => {
     resolve(newPayload);
   } else {
     pendingPayloads.set(msg.channel.id, {
-      resolve,
       payload: newPayload,
       job: jobs.scheduleJob(new Date(Date.now() + timeout), () => {
-        const thisPayload = pendingPayloads.get(msg.channel.id);
-        thisPayload.resolve(thisPayload.payload);
+        resolve(newPayload);
         pendingPayloads.delete(msg.channel.id);
       }),
     });

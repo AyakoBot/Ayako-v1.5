@@ -16,7 +16,7 @@ module.exports = {
 
     const afkRes = await getAFK(msg, user);
     if (!afkRes) {
-      msg.client.ch.reply(msg, msg.lan.notAFK);
+      msg.client.ch.reply(msg, msg.lan.notAfk);
       return;
     }
 
@@ -25,9 +25,15 @@ module.exports = {
       msg.guild.id,
     ]);
 
+    deleteNickname(
+      msg,
+      user,
+      msg.args.slice(1).join(' ') ? msg.args.slice(1).join(' ') : msg.lan.reason,
+    );
+
     const embed = new Builders.UnsafeEmbedBuilder()
       .setColor(msg.client.constants.colors.warning)
-      .setDescription(msg.lan.afkDeleted);
+      .setDescription(msg.client.ch.stp(msg.lan.afkDeleted, { user }));
 
     msg.client.ch.reply(msg, { embeds: [embed] });
 
@@ -38,11 +44,11 @@ module.exports = {
     const log = new Builders.UnsafeEmbedBuilder()
       .setColor(msg.client.constants.colors.warning)
       .setAuthor({
-        name: msg.client.ch.stp(msg.lan.author, { user }),
+        name: msg.lan.author,
         iconURL: user.displayAvatarURL({ size: 4096 }),
         url: msg.client.constants.standard.invite,
       })
-      .setDescription(msg.client.ch.stp(msg.lan.description, { user: msg.author, target: user }))
+      .setDescription(msg.client.ch.stp(msg.lan.desc, { user: msg.author, target: user }))
       .setTimestamp()
       .addFields({ name: msg.language.reason, value: `${reason}` })
       .setFooter({ text: msg.client.ch.stp(msg.lan.footer, { user: msg.author, target: user }) });
@@ -59,4 +65,26 @@ const getAFK = async (msg, user) => {
   ]);
   if (res && res.rowCount) return res.rows[0];
   return null;
+};
+
+const deleteNickname = async (msg, user, reason) => {
+  const member = await getMember(msg, user);
+
+  if (!member) return;
+  if (!member.nickname || !member.nickname.endsWith('[AFK]')) return;
+
+  const newNickname = member.nickname.slice(0, member.nickname - 6);
+  if (!msg.guild.me.permissions.has(134217728n) || !msg.member.manageable) return;
+  member
+    .setNickname(
+      newNickname,
+      msg.client.ch.stp(msg.language.commands.afkHandler.forceDelAfk, { user: msg.author, reason }),
+    )
+    .catch(() => {});
+};
+
+const getMember = async (msg, user) => {
+  let member = msg.guild.members.cache.get(user.id);
+  if (!member) member = await msg.guild.members.fetch(user.id).catch(() => {});
+  return member;
 };
