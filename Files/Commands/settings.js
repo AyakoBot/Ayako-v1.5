@@ -123,7 +123,7 @@ module.exports = {
             commands: categoryText,
           }),
         );
-      await replier({ msg, answer }, { embeds: [embed], rawButtons });
+      await replier({ msg, answer }, { embeds: [embed], rawButtons }, 1);
       categoryMenuHandler({ msg, answer }, false);
     } else {
       let settingsFile = msg.client.settings.get(msg.args[0].toLowerCase());
@@ -194,13 +194,13 @@ module.exports = {
         !msg.member.permissions.has(new Discord.PermissionsBitField(msg.file.perm)) &&
         msg.author.id !== '318453143476371456'
       ) {
-        if (embed2) return replier({ msg, answer }, { embeds: [embed2, embed] });
-        return replier({ msg, answer }, { embeds: [embed] });
+        if (embed2) return replier({ msg, answer }, { embeds: [embed2, embed] }, 2);
+        return replier({ msg, answer }, { embeds: [embed] }, 3);
       }
 
       if (embed2) {
-        await replier({ msg, answer }, { embeds: [embed2, embed], rawButtons: components });
-      } else await replier({ msg, answer }, { embeds: [embed], rawButtons: components });
+        await replier({ msg, answer }, { embeds: [embed2, embed], rawButtons: components }, 4);
+      } else await replier({ msg, answer }, { embeds: [embed], rawButtons: components }, 5);
       if (!msg.m) return null;
 
       const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
@@ -223,6 +223,7 @@ module.exports = {
                 row[msg.client.constants.commands.settings.identifiers[msg.file.childOf]]
               }`,
               msg,
+              1,
             );
 
             msg.file = msg.client.settings.get(interaction.customId);
@@ -340,7 +341,7 @@ module.exports = {
         rows.unshift(getRelatedSettingsButtons(msg));
       }
 
-      await replier({ msg, answer }, { rawButtons: rows, embeds: [embed] });
+      await replier({ msg, answer }, { rawButtons: rows, embeds: [embed] }, 6);
       if (!msg.m) return;
 
       const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
@@ -379,8 +380,11 @@ module.exports = {
             ) {
               buttonsCollector.stop();
               reassignMsg(
-                `${msg.client.constants.standard.prefix}${module.exports.name} ${interaction.customId}`,
+                `${msg.client.constants.standard.prefix}${module.exports.name} ${
+                  interaction.customId
+                } ${msg.args[1] ? msg.args[1] : ''} ${msg.args[2] ? msg.args[2] : ''}`,
                 msg,
+                2,
               );
 
               msg.file = msg.client.settings.get(interaction.customId);
@@ -457,7 +461,7 @@ const noEmbed = async (msg, answer, res) => {
     rawButtons.unshift(getRelatedSettingsButtons(msg));
   }
 
-  await replier({ msg, answer }, { embeds: [embed], rawButtons });
+  await replier({ msg, answer }, { embeds: [embed], rawButtons }, 7);
   if (!msg.m) return;
 
   const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
@@ -480,6 +484,7 @@ const noEmbed = async (msg, answer, res) => {
       reassignMsg(
         `${msg.client.constants.standard.prefix}${module.exports.name} ${interaction.customId} noedit ${msg.args[2]}`,
         msg,
+        3,
       );
 
       msg.file = msg.client.settings.get(interaction.customId);
@@ -498,8 +503,8 @@ const noEmbed = async (msg, answer, res) => {
  * @param {object} msgData - {answer, msg}.
  * @param {object} sendData - {rawButtons, embeds}.
  */
-const replier = async (msgData, sendData) => {
-  console.log('replied');
+const replier = async (msgData, sendData, originNumber) => {
+  console.log('replied', originNumber);
   const { msg, answer } = msgData;
   const { rawButtons, embeds } = sendData;
   let buttons = [];
@@ -833,7 +838,7 @@ const mmrEditList = async (msgData, sendData) => {
     rows.unshift(getRelatedSettingsButtons(msg));
   }
 
-  await replier({ msg, answer }, { rawButtons: rows, embeds: [embed] });
+  await replier({ msg, answer }, { rawButtons: rows, embeds: [embed] }, 8);
   if (!msg.m) return;
 
   const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
@@ -877,6 +882,7 @@ const mmrEditList = async (msgData, sendData) => {
           reassignMsg(
             `${msg.client.constants.standard.prefix}${module.exports.name} ${interaction.customId} edit ${msg.args[2]}`,
             msg,
+            4,
           );
 
           msg.file = msg.client.settings.get(interaction.customId);
@@ -934,8 +940,8 @@ const singleRowEdit = async (msgData, resData, embed, comesFromMMR) => {
     url: msg.client.constants.standard.invite,
   });
 
-  if (embed2) await replier({ msg, answer }, { embeds: [embed2, embed], rawButtons });
-  else await replier({ msg, answer }, { rawButtons, embeds: [embed] });
+  if (embed2) await replier({ msg, answer }, { embeds: [embed2, embed], rawButtons }, 9);
+  else await replier({ msg, answer }, { rawButtons, embeds: [embed] }, 10);
   if (!msg.m) return null;
 
   const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
@@ -956,6 +962,7 @@ const singleRowEdit = async (msgData, resData, embed, comesFromMMR) => {
           interaction.customId
         } edit ${row[msg.client.constants.commands.settings.identifiers[msg.file.childOf]]}`,
         msg,
+        5,
       );
 
       msg.file = msg.client.settings.get(interaction.customId);
@@ -1135,6 +1142,7 @@ const editorInteractionHandler = async (msgData, editorData, row, res, comesFrom
           ? await editor.buttons(msg, passObject, insertedValues, required, row)
           : await standardButtons(msg, passObject, insertedValues, required, row, editor),
     },
+    11,
   );
 
   let messageCollector;
@@ -1402,6 +1410,7 @@ const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
             interaction.customId
           } edit ${row[msg.client.constants.commands.settings.identifiers[msg.file.childOf]]}`,
           msg,
+          6,
         );
 
         msg.file = msg.client.settings.get(interaction.customId);
@@ -1450,6 +1459,7 @@ const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
                   : await standardButtons(msg, passObject, insertedValues, required, row, editor),
               embeds: [embed],
             },
+            12,
           );
           break;
         }
@@ -1489,6 +1499,7 @@ const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
                   : await standardButtons(msg, passObject, insertedValues, required, row, editor),
               embeds: [embed],
             },
+            13,
           );
           break;
         }
@@ -1589,6 +1600,7 @@ const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
                   : await standardButtons(msg, passObject, insertedValues, required, row, editor),
               embeds: [embed],
             },
+            14,
           );
           break;
         }
@@ -1615,6 +1627,7 @@ const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
         reassignMsg(
           `${msg.client.constants.standard.prefix}${module.exports.name} ${msg.file.name} ${msg.language.edit}`,
           msg,
+          7,
         );
       }
 
@@ -1677,6 +1690,7 @@ const messageHandler = async (msgData, editData, languageData, Objects) => {
             : await standardButtons(msg, passObject, insertedValues, required, row, editor),
         embeds: [returnEmbed],
       },
+      15,
     );
   });
 };
@@ -1843,7 +1857,7 @@ const setup = async (msg, answer) => {
     .setCustomId('no')
     .setStyle(Discord.ButtonStyle.Danger);
 
-  await replier({ msg, answer }, { rawButtons: [[yes, no]], embeds: [embed] });
+  await replier({ msg, answer }, { rawButtons: [[yes, no]], embeds: [embed] }, 16);
   if (!msg.m) return;
 
   const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
@@ -1881,7 +1895,7 @@ const setup = async (msg, answer) => {
             url: msg.client.constants.standard.invite,
           })
           .setDescription(lan.abort);
-        return replier({ msg, answer: interaction }, { embeds: [abort] });
+        return replier({ msg, answer: interaction }, { embeds: [abort] }, 17);
       }
       default: {
         return null;
@@ -1992,7 +2006,7 @@ const categoryDisplay = async (msg, answer, needsBack) => {
       .setPlaceholder(msg.language.commands.settings.menu.placeholder),
   ];
 
-  await replier({ msg, answer }, { embeds: [embed], rawButtons });
+  await replier({ msg, answer }, { embeds: [embed], rawButtons }, 18);
   categoryMenuHandler({ msg, answer }, needsBack);
 };
 
@@ -2006,6 +2020,7 @@ const categoryMenuHandler = async ({ msg, answer }, needsBack) => {
     reassignMsg(
       `${msg.client.constants.standard.prefix}${module.exports.name} ${interaction.values[0]}`,
       msg,
+      8,
     );
 
     return module.exports.execute(msg, interaction);
@@ -2023,7 +2038,7 @@ const categoryMenuHandler = async ({ msg, answer }, needsBack) => {
   }
 };
 
-const reassignMsg = (newContent, msg) => {
+const reassignMsg = (newContent, msg /* debugNumber */) => {
   msg.content = `${newContent}`;
   msg.args = msg.content.replace(/\\n/g, ' ').split(/ +/);
 
@@ -2077,6 +2092,7 @@ const reactionHandler = ({ msg, answer }, buttonsCollector, byData) => {
             reassignMsg(
               `${msg.client.constants.standard.prefix}${module.exports.name} ${folder}`,
               msg,
+              9,
             );
             msg.file = undefined;
             reaction.users.remove(user.id);
@@ -2086,7 +2102,7 @@ const reactionHandler = ({ msg, answer }, buttonsCollector, byData) => {
 
           switch (sendTo) {
             default: {
-              reassignMsg(`${msg.client.constants.standard.prefix}${module.exports.name}`, msg);
+              reassignMsg(`${msg.client.constants.standard.prefix}${module.exports.name}`, msg, 10);
               msg.m.reactions.removeAll().catch(() => {});
               module.exports.execute(msg, answer);
               return null;
@@ -2098,12 +2114,13 @@ const reactionHandler = ({ msg, answer }, buttonsCollector, byData) => {
           reassignMsg(
             `${msg.client.constants.standard.prefix}${module.exports.name} ${msg.file.folder}`,
             msg,
+            11,
           );
           msg.file = undefined;
           reaction.users.remove(user.id);
           module.exports.execute(msg, answer);
         } else {
-          reassignMsg(`${msg.client.constants.standard.prefix}${module.exports.name}`, msg);
+          reassignMsg(`${msg.client.constants.standard.prefix}${module.exports.name}`, msg, 12);
           msg.m.reactions.removeAll().catch(() => {});
           module.exports.execute(msg, answer);
         }

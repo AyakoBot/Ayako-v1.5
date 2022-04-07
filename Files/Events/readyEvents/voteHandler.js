@@ -18,6 +18,7 @@ module.exports = {
     });
 
     socket.on('TOP_GG_VOTE', async (voteData) => {
+      console.log(`User ${voteData.user} has voted`);
       const res = await client.ch.query(`SELECT * FROM votereminder WHERE userid = $1;`, [
         voteData.user,
       ]);
@@ -25,7 +26,6 @@ module.exports = {
       if (res && res.rowCount) return;
 
       const voter = await client.users.fetch(voteData.user);
-      console.log(`User ${voteData.user} has voted`);
 
       jobs.scheduleJob(new Date(Date.now() + 1000), () => {
         roleReward(voteData);
