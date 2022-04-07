@@ -71,9 +71,9 @@ const deleteNickname = async (msg, user, reason) => {
   const member = await getMember(msg, user);
 
   if (!member) return;
-  if (!member.nickname || !member.nickname.endsWith('[AFK]')) return;
+  if (!member.displayName || !member.displayName.endsWith(' [AFK]')) return;
 
-  const newNickname = member.nickname.slice(0, member.nickname - 6);
+  const newNickname = member.displayName.slice(0, member.displayName.length - 6);
   if (!msg.guild.me.permissions.has(134217728n) || !msg.member.manageable) return;
   member
     .setNickname(

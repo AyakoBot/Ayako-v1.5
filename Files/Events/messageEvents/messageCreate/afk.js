@@ -87,8 +87,8 @@ const getTime = (afkRow, language) =>
     .replace(/-/g, '');
 
 const deleteNickname = (msg, language) => {
-  if (!msg.member.nickname || !msg.member.nickname.endsWith('[AFK]')) return;
-  const newNickname = msg.member.nickname.slice(0, msg.member.nickname - 6);
+  if (!msg.member.nickname || !msg.member.nickname.endsWith(' [AFK]')) return;
+  const newNickname = msg.member.displayName.slice(0, msg.member.displayName.length - 6);
   if (!msg.guild.me.permissions.has(134217728n) || !msg.member.manageable) return;
   msg.member.setNickname(newNickname, language.commands.afkHandler.delAfk).catch(() => {});
 };
