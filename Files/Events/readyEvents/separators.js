@@ -26,7 +26,7 @@ module.exports = {
         msg.m = message;
         msg.language = language;
         msg.channel = client.channels.cache.get(row.channelid);
-        require('../guildevents/guildMemberUpdate/separator').oneTimeRunner(
+        require('../guildEvents/guildMemberUpdate/separator').oneTimeRunner(
           msg,
           new Builders.UnsafeEmbedBuilder(),
         );

@@ -3,7 +3,7 @@ const { Worker } = require('worker_threads');
 const jobs = require('node-schedule');
 const ch = require('../../../BaseClient/ClientHelper');
 
-const UpdateWorker = new Worker('./Files/Events/guildevents/guildMemberUpdate/separatorUpdater.js');
+const UpdateWorker = new Worker('./Files/Events/guildEvents/guildMemberUpdate/separatorUpdater.js');
 
 UpdateWorker.on('message', ({ text, data }) => {
   if (text === 'NO_SEP') {
@@ -215,7 +215,7 @@ module.exports = {
         });
       }
     });
-    const worker = new Worker('./Files/Events/guildevents/guildMemberUpdate/separatorWorker.js', {
+    const worker = new Worker('./Files/Events/guildEvents/guildMemberUpdate/separatorWorker.js', {
       workerData: { res: res.rows, obj },
     });
     let output;
