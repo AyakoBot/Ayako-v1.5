@@ -43,6 +43,6 @@
     "eslint-plugin-react-hooks": "^4.3.0"
   },
   "scripts": {
-    "lint": "S:/bots/ayako-v1.5/node_modules/.bin/eslint"
+    "lint": "/root/Bots/Ayako-v1.5/node_modules/.bin/eslint"
   }
 }

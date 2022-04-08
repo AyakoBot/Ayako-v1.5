@@ -172,7 +172,7 @@ const run = async ({
 
   if (attributes && !whitelist.includes(linkObject.baseURLhostname)) {
     fs.appendFile(
-      'S:/Bots/ws/CDN/antivirus/whitelisted.txt',
+      '/root/Bots/Website/CDN/antivirus/whitelisted.txt',
       `\n${linkObject.baseURLhostname}`,
       () => {},
     );
@@ -198,7 +198,7 @@ const run = async ({
     !whitelist.includes(linkObject.hostname) &&
     linkObject.hostname !== linkObject.baseURLhostname
   ) {
-    fs.appendFile('S:/Bots/ws/CDN/antivirus/whitelisted.txt', `\n${linkObject.hostname}`, () => {});
+    fs.appendFile('/root/Bots/Website/CDN/antivirus/whitelisted.txt', `\n${linkObject.hostname}`, () => {});
 
     parentPort.postMessage({
       type: 'send',

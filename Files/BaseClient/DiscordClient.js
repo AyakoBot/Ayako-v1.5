@@ -53,12 +53,12 @@ const getSettings = () => {
 const getInteractions = () => {
   const interactions = new Discord.Collection();
   const interactionFiles = fs
-    .readdirSync(`${appDir}/Files/Commands/Interactions`)
+    .readdirSync(`${appDir}/Files/Commands/interactions`)
     .filter((file) => file.endsWith('.js'));
 
   interactionFiles.forEach((file) => {
-    const interaction = require(`${appDir}/Files/Commands/Interactions/${file}`);
-    interaction.path = `${appDir}/Files/Commands/Interactions/${file}`;
+    const interaction = require(`${appDir}/Files/Commands/interactions/${file}`);
+    interaction.path = `${appDir}/Files/Commands/interactions/${file}`;
 
     interactions.set(interaction.name, interaction);
   });
