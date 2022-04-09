@@ -71,6 +71,7 @@ const logEnd = async (member, days) => {
 
 const logStart = async (member, days) => {
   const row = await getSettings(member);
+  if (!row) return;
   const language = await member.client.ch.languageSelector(member.guild);
 
   if (row.logchannels && row.logchannels.length) {
