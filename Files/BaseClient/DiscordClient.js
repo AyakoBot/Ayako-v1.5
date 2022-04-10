@@ -203,8 +203,8 @@ class Client extends Discord.Client {
     this.mutes = new Discord.Collection();
     this.bans = new Discord.Collection();
 
-    this.invites = new Map();
-    this.verificationCodes = new Map();
+    this.invites = new Discord.Collection();
+    this.verificationCodes = new Discord.Collection();
 
     this.eris = Eris;
     this.neko = require('./NekoClient');
