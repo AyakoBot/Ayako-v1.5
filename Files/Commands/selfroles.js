@@ -127,7 +127,7 @@ module.exports = {
 
       Data.rTake = [];
       const neededIndex = Data.rPage * 25 - 25;
-      for (let j = neededIndex + 1; j < neededIndex + 26 && j < Data.rOptions.length; j += 1) {
+      for (let j = neededIndex; j < neededIndex + 25 && j < Data.rOptions.length; j += 1) {
         if (msg.member.roles.cache.has(Data.rOptions[j].data.value) && Data.currentRow.onlyone) {
           Data.rTake.push(Data.rOptions[j]);
         } else if (
