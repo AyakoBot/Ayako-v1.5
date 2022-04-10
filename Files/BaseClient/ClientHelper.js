@@ -64,9 +64,11 @@ module.exports = {
       return response ? response[0] : null;
     }
 
-    rawPayload = await new Promise((resolve) => {
-      combineMessages(msg, rawPayload, resolve, timeout);
-    });
+    if (timeout) {
+      rawPayload = await new Promise((resolve) => {
+        combineMessages(msg, rawPayload, resolve, timeout);
+      });
+    }
 
     const m = await msg.reply(rawPayload).catch((e) => {
       if (String(e).includes('Missing Permissions')) {
@@ -1374,8 +1376,6 @@ const combineMessages = (msg, newPayload, resolve, timeout) => {
     if (!proceedContents) return;
 
     combineFiles(existingPayload);
-  } else if (!timeout) {
-    resolve(newPayload);
   } else {
     pendingPayloads.set(msg.channel.id, {
       payload: newPayload,
