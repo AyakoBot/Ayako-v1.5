@@ -183,9 +183,7 @@ module.exports = {
       embeds: message.embeds,
     };
 
-    message.edit(newMsg).catch((e) => {
-      console.log(e);
-    });
+    message.edit(newMsg).catch(() => {});
   },
 };
 

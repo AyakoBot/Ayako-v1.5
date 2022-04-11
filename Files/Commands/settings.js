@@ -509,8 +509,9 @@ const noEmbed = async (msg, answer, res) => {
  * @param {object} msgData - {answer, msg}.
  * @param {object} sendData - {rawButtons, embeds}.
  */
+// eslint-disable-next-line no-unused-vars
 const replier = async (msgData, sendData, originNumber) => {
-  console.log('replied', originNumber);
+  // console.log('replied', originNumber);
   const { msg, answer } = msgData;
   const { rawButtons, embeds } = sendData;
   let buttons = [];
