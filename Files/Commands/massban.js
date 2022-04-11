@@ -1,21 +1,21 @@
 const Builders = require('@discordjs/builders');
 const jobs = require('node-schedule');
+const confusables = require('confusables');
 
 module.exports = {
   name: 'massban',
   perm: 4n,
   dm: false,
   takesFirstArg: true,
-  aliases: null,
+  aliases: ['namemassban', 'massbannames', 'massbanname'],
   type: 'mod',
   async execute(msg, answer) {
-    const args = msg.args[0] === 'ids' ? null : msg.args;
-    if (msg.args[0] === 'ids' && !args[0]) return msg.client.ch.reply(msg, msg.lan.noRaidIDs);
+    const args = await getArgs(msg);
+    if (!args) return;
+
     const users = [];
     const failed = [];
     const reason = [];
-
-    await msg.guild.members.fetch().catch(() => {});
 
     args.forEach((rawArg) => {
       const arg = rawArg.toLowerCase();
@@ -71,10 +71,12 @@ module.exports = {
 
     let banreason = '';
     if (reason.length === 0) banreason = msg.lan.reason;
-    else {
-      reason.forEach((word) => {
-        banreason += ` ${word}`;
-      });
+    else banreason = reason.join(' ');
+
+    if (!users.length && !failed.length) {
+      msg.content = `${msg.client.constants.standard.prefix}${module.exports.name}`;
+      msg.client.emit('messageCreate', msg);
+      return;
     }
 
     const con = msg.client.constants.commands.massban;
@@ -236,7 +238,35 @@ module.exports = {
         interval.cancel();
       }
     });
-
-    return null;
   },
+};
+
+const getArgs = async (msg) => {
+  const result = await require('../Events/messageEvents/messageCreate/commandHandler').prefix(msg);
+  const [, prefix] = result;
+  const commandName = msg.content
+    .replace(/\\n/g, ' ')
+    .slice(prefix.length)
+    .split(/ +/)
+    .shift()
+    .toLowerCase();
+
+  await msg.guild.members.fetch().catch(() => {});
+
+  if (commandName === module.exports.name) return msg.args;
+
+  const usernameToFind = msg.args.slice(0).join(' ');
+
+  const members = msg.guild.members.cache.filter(
+    (m) =>
+      confusables.remove(m.user.username.toLowerCase()) ===
+      confusables.remove(usernameToFind.toLowerCase()),
+  );
+
+  if (!members.size) {
+    msg.client.ch.error(msg, msg.lan.noUsernameFound);
+    return null;
+  }
+
+  return members.map((m) => m.user.id);
 };
