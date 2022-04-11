@@ -1664,6 +1664,11 @@
         "reloadevent lan [language]"
       ]
     },
+    "restart": {
+      "category": "Owner",
+      "description": "Restarts the Client",
+      "usage": ["restart"]
+    },
     "reloadsettings": {
       "category": "Owner",
       "description": "Reloads a Settings File",
@@ -1841,11 +1846,6 @@
     },
     "uptime": {
       "text": "I am online since"
-    },
-    "restart": {
-      "category": "Owner",
-      "description": "Restart Ayako",
-      "usage": ["restart"]
     },
     "invite": {
       "description": "Displays Ayako's Invite and Support Server Invite",
