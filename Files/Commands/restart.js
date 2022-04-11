@@ -4,8 +4,8 @@ module.exports = {
   dm: true,
   takesFirstArg: false,
   aliases: ['reboot'],
-  execute: (msg) => {
-    msg.client.ch.reply(msg, 'Restarting Client');
+  execute: async (msg) => {
+    await msg.client.ch.reply(msg, 'Restarting Client');
     process.exit();
   },
 };
