@@ -3338,7 +3338,6 @@
         "type": "Reaction Role",
         "name": "Name",
         "roles": "Roles",
-        "lackingAccess": "I'm lacking access to these emotes: {{emotes}}",
         "emoteid": "Reaction Emote",
         "edit": {
           "active": {
@@ -3635,7 +3634,8 @@
     "guildCommand": "This Command is only available in Servers",
     "memberNotFound": "Member not found",
     "notAvailableAPI": "This Command is not yet available due to Discord API limitations",
-    "sendMessage": "I cannot send Messages in this Channel"
+    "sendMessage": "I cannot send Messages in this Channel",
+    "lackingAccess": "I'm lacking access to these emotes: {{emotes}}"
   },
   "expire": {
     "warnIssue": "Warn was issued at",

@@ -259,21 +259,27 @@ module.exports = {
         throw new Error(`Table Names for ${msg.file.name} missing in Constants.json`);
       }
 
-      const res = await msg.client.ch.query(
-        `SELECT * FROM ${
-          msg.client.constants.commands.settings.tablenames[msg.file.name][0]
-        } WHERE guildid = $1 ORDER BY uniquetimestamp ASC;`,
-        [msg.guild.id],
-      );
-
-      if (!res.rows[0]?.id) {
-        res?.rows?.forEach((row, i) => {
-          res.rows[i].id = i;
-        });
+      let res;
+      if (msg.file.manualResGetter) {
+        res = await msg.file.manualResGetter(msg);
+      } else {
+        res = await msg.client.ch.query(
+          `SELECT * FROM ${
+            msg.client.constants.commands.settings.tablenames[msg.file.name][0]
+          } WHERE guildid = $1 ORDER BY uniquetimestamp ASC;`,
+          [msg.guild.id],
+        );
       }
+
       let embed = new Builders.UnsafeEmbedBuilder();
 
       if (res && res.rowCount > 0) {
+        if (!res.rows[0].id) {
+          res.rows.forEach((row, i) => {
+            res.rows[i].id = i;
+          });
+        }
+
         if (msg.file.mmrEmbed[Symbol.toStringTag] === 'AsyncFunction') {
           embed = await msg.file.mmrEmbed(msg, res && res.rows ? res.rows : []);
         } else if (typeof msg.file.mmrEmbed === 'function') {
@@ -416,7 +422,7 @@ module.exports = {
     ) {
       singleRowDisplay(possibleRes, possibleRow);
     } else if (msg.file.setupRequired === false) {
-      return mmrDisplay(msgData.answer);
+      return mmrDisplay(msgData.answer, possibleRes, possibleRow);
     }
 
     let res;
