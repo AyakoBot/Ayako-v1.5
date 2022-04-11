@@ -3,7 +3,6 @@ const Builders = require('@discordjs/builders');
 
 module.exports = {
   async execute(executor, target, reason, msg) {
-    console.time('Ban Check');
     const mexisted = !!msg.m;
     const language = await msg.client.ch.languageSelector(msg.guild);
     const lan = language.mod.banAdd;
@@ -89,7 +88,6 @@ module.exports = {
         return false;
       }
       const banned = await msg.guild.bans.fetch(target).catch(() => {});
-      console.log(1);
       if (banned) {
         if (mexisted) {
           em.data.fields.pop();
@@ -115,7 +113,6 @@ module.exports = {
         return false;
       }
     }
-    console.log(2);
     const dmChannel = await target?.createDM().catch(() => {});
     const DMembed = new Builders.UnsafeEmbedBuilder()
       .setDescription(`**${language.reason}:** \n${reason}`)
