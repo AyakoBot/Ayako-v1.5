@@ -108,6 +108,14 @@ module.exports = {
     return [[active], [emoteid, buttontext], [roles]];
   },
   manualResGetter: async (msg) => {
+    if (!msg.args[2]) {
+      const res = await msg.client.ch.query(`SELECT * FROM rrbuttons WHERE guildid = $1;`, [
+        msg.guild.id,
+      ]);
+      if (res && res.rowCount) return res;
+      return null;
+    }
+
     const baseRes = await msg.client.ch.query(
       `SELECT * FROM rrsettings WHERE guildid = $1 AND messagelink = $2;`,
       [msg.guild.id, msg.args[2]],
@@ -115,13 +123,16 @@ module.exports = {
 
     if (!baseRes || !baseRes.rowCount) return null;
 
-    const res = await msg.client.ch.query(`SELECT * FROM rrbuttons WHERE messagelink = $1;`, [
-      baseRes.rows[0].messagelink,
-    ]);
+    const res = await msg.client.ch.query(
+      `SELECT * FROM rrbuttons WHERE messagelink = $1 AND guildid = $2;`,
+      [baseRes.rows[0].messagelink, msg.guild.id],
+    );
 
-    return res;
+    if (res && res.rowCount) return res;
+    return null;
   },
   doMoreThings: async (msg, insertedValues, changedKey, newRes, oldRes) => {
+    console.log(insertedValues);
     if (!newRes.rows || !oldRes.rows) return;
     const newRows = newRes.rows[0];
     const oldRows = oldRes.rows[0];
@@ -134,11 +145,13 @@ module.exports = {
       message.edit({ components: [] }).catch(() => {});
       return;
     }
-    const buttons = newRes
+    const buttons = newRes.rows
       .map((row) => {
-        if (row.messagelink !== insertedValues.messagelink) return null;
+        if (insertedValues.messagelink && row.messagelink !== insertedValues.messagelink) {
+          return null;
+        }
 
-        const button = new Builders.UnsafeButtonBuilder();
+        const button = new Builders.UnsafeButtonBuilder().setCustomId(row.uniquetimestamp);
         if (row.buttontext) button.setLabel(row.buttontext);
         if (row.emoteid) {
           const emote = msg.client.emojis.cache.get(row.emoteid);
@@ -159,13 +172,20 @@ module.exports = {
         actionRows.push(b);
         useIndex += 1;
       } else {
+        if (!actionRows[useIndex]) actionRows[useIndex] = [];
         actionRows[useIndex].push(b);
       }
     });
 
-    message.components = msg.client.ch.buttonRower(actionRows);
+    const newMsg = {
+      components: msg.client.ch.buttonRower(actionRows),
+      content: message.content.length ? message.content : undefined,
+      embeds: message.embeds,
+    };
 
-    message.edit(message).catch(() => {});
+    message.edit(newMsg).catch((e) => {
+      console.log(e);
+    });
   },
 };
 

@@ -80,7 +80,7 @@ module.exports = {
     return [[active], [emoteid], [roles]];
   },
   manualResGetter: async (msg) => {
-    if (!msg.args[3]) {
+    if (!msg.args[2]) {
       const res = await msg.client.ch.query(`SELECT * FROM rrreactions WHERE guildid = $1;`, [
         msg.guild.id,
       ]);
@@ -95,11 +95,13 @@ module.exports = {
 
     if (!baseRes || !baseRes.rowCount) return null;
 
-    const res = await msg.client.ch.query(`SELECT * FROM rrreactions WHERE messagelink = $1;`, [
-      baseRes.rows[0].messagelink,
-    ]);
+    const res = await msg.client.ch.query(
+      `SELECT * FROM rrreactions WHERE messagelink = $1 AND guildid = $2;`,
+      [baseRes.rows[0].messagelink, msg.guild.id],
+    );
 
-    return res;
+    if (res && res.rowCount) return res;
+    return null;
   },
   doMoreThings: async (msg, insertedValues, assigner, newRes, oldRes) => {
     if (!newRes.rows || !oldRes.rows) return;
@@ -110,7 +112,6 @@ module.exports = {
     const oldRow = oldRes.rows[0];
 
     if (message) {
-      console.log(newRow, oldRow);
       if (newRow.active === false && oldRow.active === true) {
         message.reactions.cache
           .get(oldRow.emoteid)

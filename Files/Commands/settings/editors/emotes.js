@@ -160,7 +160,9 @@ module.exports = {
     if (noAccessEmotes.length) {
       msg.client.ch
         .reply(message, {
-          content: msg.client.ch.stp(msg.lan.lackingAccess, { emotes: noAccessEmotes.join(', ') }),
+          content: msg.client.ch.stp(msg.language.errors.lackingAccess, {
+            emotes: noAccessEmotes.join(', '),
+          }),
         })
         .then((m) => {
           jobs.scheduleJob(new Date(Date.now() + 10000), async () => {
