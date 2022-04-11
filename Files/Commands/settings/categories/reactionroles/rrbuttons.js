@@ -150,7 +150,9 @@ module.exports = {
           return null;
         }
 
-        const button = new Builders.UnsafeButtonBuilder().setCustomId(row.uniquetimestamp);
+        const button = new Builders.UnsafeButtonBuilder().setCustomId(
+          `rrbuttons_${row.uniquetimestamp}`,
+        );
         if (row.buttontext) button.setLabel(row.buttontext);
         if (row.emoteid) {
           const emote = msg.client.emojis.cache.get(row.emoteid);
