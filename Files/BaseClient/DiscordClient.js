@@ -98,15 +98,29 @@ const getCommands = () => {
 const getSlashCommands = () => {
   const slashCommands = new Discord.Collection();
 
-  fs.readdirSync(`${appDir}/Files/Interactions`)
+  fs.readdirSync(`${appDir}/Files/Interactions/SlashCommands`)
     .filter((file) => file.endsWith('.js'))
     .forEach((file) => {
-      const interaction = require(`../Interactions/${file}`);
+      const interaction = require(`../Interactions/SlashCommands/${file}`);
 
       slashCommands.set(interaction.name, interaction);
     });
 
   return slashCommands;
+};
+
+const getNonSlashCommands = () => {
+  const nonSlashCommands = new Discord.Collection();
+
+  fs.readdirSync(`${appDir}/Files/Interactions/OtherInteractions`)
+    .filter((file) => file.endsWith('.js'))
+    .forEach((file) => {
+      const interaction = require(`../Interactions/OtherInteractions/${file}`);
+
+      nonSlashCommands.set(interaction.name, interaction);
+    });
+
+  return nonSlashCommands;
 };
 
 const getLanguages = () => {
@@ -198,6 +212,7 @@ class Client extends Discord.Client {
     this.settingsEditors = getSettingsEditors();
     this.settings = getSettings();
     this.slashCommands = getSlashCommands();
+    this.nonSlashCommands = getNonSlashCommands();
     this.interactions = getInteractions();
 
     this.mutes = new Discord.Collection();

@@ -13,15 +13,15 @@ module.exports = {
     }
     if (args[0].toLowerCase() === 'all') {
       const commandFiles = fs
-        .readdirSync('./Files/Interactions')
+        .readdirSync('./Files/Interactions/SlashCommands')
         .filter((file) => file.endsWith('.js'));
       let i = 0;
       let o = 0;
       commandFiles.forEach((file) => {
         i += 1;
-        delete require.cache[require.resolve(`../Interactions/${file}`)];
+        delete require.cache[require.resolve(`../Interactions/SlashCommands/${file}`)];
         try {
-          const newCommand = require(`../Interactions/${file}`);
+          const newCommand = require(`../Interactions/SlashCommands/${file}`);
           msg.client.slashCommands.set(newCommand.name, newCommand);
         } catch (error) {
           msg.channel.send(
@@ -49,9 +49,9 @@ module.exports = {
           `There is no Slash Command with name or alias \`${commandName}\`, ${msg.author}!`,
         );
       }
-      delete require.cache[require.resolve(`../Interactions/${command.name}.js`)];
+      delete require.cache[require.resolve(`../Interactions/SlashCommands/${command.name}.js`)];
       try {
-        const newCommand = require(`../Interactions/${command.name}.js`);
+        const newCommand = require(`../Interactions/SlashCommands/${command.name}.js`);
         msg.client.slashCommands.set(newCommand.name, newCommand);
         msg.channel.send(`Slash Command \`${command.name}\` was reloaded!`);
       } catch (error) {
