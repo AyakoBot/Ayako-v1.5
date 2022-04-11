@@ -5,7 +5,7 @@ module.exports = {
   takesFirstArg: false,
   aliases: ['reboot'],
   execute: (msg) => {
-    msg.client.ch.reply('Restarting Client');
+    msg.client.ch.reply(msg, 'Restarting Client');
     process.exit();
   },
 };
