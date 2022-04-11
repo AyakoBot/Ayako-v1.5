@@ -132,7 +132,6 @@ module.exports = {
     return null;
   },
   doMoreThings: async (msg, insertedValues, changedKey, newRes, oldRes) => {
-    console.log(insertedValues);
     if (!newRes.rows || !oldRes.rows) return;
     const newRows = newRes.rows[0];
     const oldRows = oldRes.rows[0];
