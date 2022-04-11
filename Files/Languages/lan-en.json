@@ -1747,7 +1747,7 @@
     "massban": {
       "category": "Moderation",
       "description": "Ban as many users from the server as the Discord Character limit lets you",
-      "usage": ["massban [user IDs or mentions] (reason)"],
+      "usage": ["massban [user IDs or mentions] (reason)", "namemassban [name to ban]"],
       "already": "(already banned)",
       "youCant": "(You can't ban this User)",
       "iCant": "(I can't ban this User)",
@@ -1767,7 +1767,8 @@
       "log": {
         "author": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nmassbanned {{amount}} Users",
         "desc": "{{amount}} Users have been banned"
-      }
+      },
+      "noUsernameFound": "No Users with matching Username found"
     },
     "pardon": {
       "category": "Moderation",
