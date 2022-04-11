@@ -41,9 +41,11 @@ module.exports = {
     let payload =
       typeof rawPayload === 'string' ? { failIfNotExists: false, content: rawPayload } : rawPayload;
 
-    payload = await new Promise((resolve) => {
-      combineMessages({ channel }, payload, resolve, timeout);
-    });
+    if (timeout) {
+      payload = await new Promise((resolve) => {
+        combineMessages({ channel }, payload, resolve, timeout);
+      });
+    }
 
     if (typeof channel.send !== 'function') throw new Error('Invalid Channel');
 
