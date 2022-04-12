@@ -35,7 +35,7 @@ module.exports = {
     if (!channel) return null;
 
     if (Array.isArray(channel)) {
-      return channel.map((c) => module.exports.send(c, rawPayload));
+      return channel.map((c) => module.exports.send(c, rawPayload, timeout));
     }
 
     let payload =
@@ -1225,35 +1225,33 @@ const getCooldown = async (msg) => {
 };
 
 const cooldownHandler = async (msg, m) => {
-  if (msg.cooldown && msg.cooldown > 2000) {
-    const res = await getCooldown(msg);
-    if (res) {
-      if (
-        !res?.bpuserid?.includes(msg.author.id) &&
-        !res?.bpchannelid?.includes(msg.channel.id) &&
-        !res?.bproleid?.some((id) => msg.member.roles.cache.has(id)) &&
-        (!res?.activechannelid?.length || !res?.activechannelid.includes(msg.channel.id))
-      ) {
-        let emote;
-        if (msg.cooldown <= 60000) emote = msg.client.objectEmotes.timers[msg.cooldown / 1000];
+  if (msg.noCommand) return;
+  if (!msg.cooldown || msg.cooldown < 2000) return;
+  const res = await getCooldown(msg);
+  if (
+    !res.bpuserid?.includes(msg.author.id) &&
+    !res.bpchannelid?.includes(msg.channel.id) &&
+    !res.bproleid?.some((id) => msg.member.roles.cache.has(id)) &&
+    (!res.activechannelid?.length || !res.activechannelid.includes(msg.channel.id))
+  ) {
+    let emote;
+    if (msg.cooldown <= 60000) emote = msg.client.objectEmotes.timers[msg.cooldown / 1000];
 
-        if (emote) {
-          m.react(emote.id).catch(() => {});
-        } else {
-          jobs.scheduleJob(new Date(Date.now() + (msg.cooldown - 60000)), () => {
-            m.react(msg.client.objectEmotes.timers[60].id).catch(() => {});
-          });
-        }
-
-        jobs.scheduleJob(new Date(Date.now() + msg.cooldown), () => {
-          const reaction = emote
-            ? m.reactions.cache.get(emote.id)
-            : m.reactions.cache.get(msg.client.objectEmotes.timers[60].id);
-
-          if (reaction) reaction.remove().catch(() => {});
-        });
-      }
+    if (emote) {
+      m.react(emote.id).catch(() => {});
+    } else {
+      jobs.scheduleJob(new Date(Date.now() + (msg.cooldown - 60000)), () => {
+        m.react(msg.client.objectEmotes.timers[60].id).catch(() => {});
+      });
     }
+
+    jobs.scheduleJob(new Date(Date.now() + msg.cooldown), () => {
+      const reaction = emote
+        ? m.reactions.cache.get(emote.id)
+        : m.reactions.cache.get(msg.client.objectEmotes.timers[60].id);
+
+      if (reaction) reaction.remove().catch(() => {});
+    });
   }
 };
 
