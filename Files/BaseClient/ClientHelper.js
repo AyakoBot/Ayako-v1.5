@@ -62,7 +62,7 @@ module.exports = {
       typeof rawPayload === 'string' ? { failIfNotExists: false, content: rawPayload } : rawPayload;
 
     if (typeof msg.reply !== 'function') {
-      const response = await module.exports.send(msg.channel, payload);
+      const response = await module.exports.send(msg.channel, payload, timeout);
       return response ? response[0] : null;
     }
 
@@ -74,20 +74,24 @@ module.exports = {
 
     const m = await msg.reply(rawPayload).catch((e) => {
       if (String(e).includes('Missing Permissions')) {
-        module.exports.send(msg.author, {
-          content: undefined,
-          embeds: [
-            new Builders.UnsafeEmbedBuilder()
-              .setAuthor({
-                name: msg.language.error,
-                iconURL: msg.client.objectEmotes.warning.link,
-                url: msg.client.constants.standard.invite,
-              })
-              .setColor(msg.client.constants.error)
-              .setDescription(msg.language.errors.sendMessage),
-          ],
-          components: [],
-        });
+        module.exports.send(
+          msg.author,
+          {
+            content: undefined,
+            embeds: [
+              new Builders.UnsafeEmbedBuilder()
+                .setAuthor({
+                  name: msg.language.error,
+                  iconURL: msg.client.objectEmotes.warning.link,
+                  url: msg.client.constants.standard.invite,
+                })
+                .setColor(msg.client.constants.error)
+                .setDescription(msg.language.errors.sendMessage),
+            ],
+            components: [],
+          },
+          timeout,
+        );
       } else {
         console.log(e);
       }
