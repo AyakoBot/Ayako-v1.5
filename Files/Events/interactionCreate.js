@@ -13,8 +13,12 @@ const otherInteractionHandler = async (interaction) => {
   const { args, nonSlashCommand } = getInteraction(interaction);
   if (!nonSlashCommand) return;
 
-  const language = await interaction.client.ch.languageSelector(interaction.guild);
-  args.shift();
+  let language;
+  if (nonSlashCommand.needsLang) {
+    language = await interaction.client.ch.languageSelector(interaction.guild);
+  }
+
+  if (args && args.length) args.shift();
   interaction.args = args;
 
   try {
@@ -25,13 +29,16 @@ const otherInteractionHandler = async (interaction) => {
 };
 
 const getInteraction = (interaction) => {
-  const nonSlashCommand = interaction.client.nonSlashCommands.find((cmd) =>
-    cmd.name === cmd.split ? interaction.customId.split(cmd.split) : interaction.customId,
+  const nonSlashCommand = interaction.client.nonSlashCommands.find(
+    (cmd) =>
+      cmd.name === (cmd.split ? interaction.customId.split(cmd.split)[0] : interaction.customId),
   );
+
+  if (!nonSlashCommand) return { args: [], nonSlashCommand: null };
 
   const args = nonSlashCommand.split
     ? interaction.customId.split(nonSlashCommand.split)
-    : interaction.customId;
+    : [interaction.customId];
 
   return { args, nonSlashCommand };
 };
