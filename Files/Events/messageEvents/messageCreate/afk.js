@@ -30,7 +30,7 @@ const doSelfAFKCheck = async (msg, checkedMsg, language) => {
   if (!isOldEnoug) return;
 
   const embed = getAFKdeletedEmbed(msg, language, afkRow);
-  const m = await msg.client.ch.reply(msg, { embeds: [embed] });
+  const m = await msg.client.ch.reply(msg, { embeds: [embed], noCommand: true });
 
   deleteM(m);
   deleteAfk(msg);
@@ -47,7 +47,7 @@ const doMentionAFKcheck = (msg, checkedMsg, language) => {
       if (!afkRow) return;
 
       const embed = getIsAFKEmbed(msg, language, mention, afkRow);
-      msg.client.ch.reply(msg, { embeds: [embed] });
+      msg.client.ch.reply(msg, { embeds: [embed], noCommand: true });
     });
 };
 
