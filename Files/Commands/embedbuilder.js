@@ -1431,6 +1431,18 @@ const handleSend = async (msg, answer, Objects) => {
         await replier({ msg, answer: interaction }, { embeds: [embed], components: [] }, Objects);
         return;
       }
+      case 'edit': {
+        buttonsCollector.stop();
+
+        const = options.selected.map((c) =>
+          msg.client.channels.cache
+            .get(c)
+            .send({ embeds: [Objects.embed] })
+            .catch((e) => [c, e])
+            .then(() => [c]),
+        );
+
+      }
       default: {
         interaction.values.forEach((v) => {
           if (options.selected.includes(v)) {
