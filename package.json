@@ -7,7 +7,7 @@
     "canvas": "^2.9.0",
     "captcha-canvas": "^3.1.0",
     "confusables": "^1.1.0",
-    "discord.js": "^14.0.0-dev.1649030898-5748dbe",
+    "discord.js": "^14.0.0-dev.1649505803-3c0bbac",
     "eris": "^0.16.1",
     "eslint-config-airbnb-base": "^15.0.0",
     "express": "^4.17.3",
