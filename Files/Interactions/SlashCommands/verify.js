@@ -170,7 +170,7 @@ module.exports = {
         ms?.delete().catch(() => {});
       });
       cmd.client.verificationCodes.delete(`${message.channel.id}-${cmd.guild.id}`);
-      module.exports.startProcess(cmd, null, logchannel);
+      module.exports.startProcess(cmd, null, logchannel, { lan, language });
     });
 
     buttonsCollector.on('end', async (collected, reason) => {
