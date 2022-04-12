@@ -1,4 +1,3 @@
-
 module.exports = {
   async execute(reaction, user) {
     require('./Giveaway').execute(reaction, user);
