@@ -1101,6 +1101,10 @@
           "blacklistedcommands": {
             "key": "commands",
             "required": false
+          },
+          "mutedurationdefault": {
+            "key": "minute",
+            "required": false
           }
         },
         "levelsettings": {
@@ -1595,8 +1599,10 @@
           "identType": "number"
         },
         "modroles": {
-          "cols": ["guildid, active, roleid, uniquetimestamp"],
-          "vals": [["{{msg.guild.id}}", false, "{{values.roleid}}", "{{values.uniquetimestamp}}"]],
+          "cols": ["guildid, active, roleid, uniquetimestamp, mutedurationdefault"],
+          "vals": [
+            ["{{msg.guild.id}}", false, "{{values.roleid}}", "{{values.uniquetimestamp}}", 60]
+          ],
           "add": ["roleid"],
           "ident": "roleid",
           "identType": "role"

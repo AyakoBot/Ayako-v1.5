@@ -8,7 +8,7 @@ module.exports = {
   perm: null,
   dm: false,
   takesFirstArg: false,
-  aliases: ['warnlog'],
+  aliases: ['warnlog', 'warnings'],
   type: 'mod',
   async execute(msg) {
     const user = msg.args[0]
