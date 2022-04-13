@@ -10,7 +10,7 @@ module.exports = {
   execute: async (msg) => {
     const user = await msg.client.users.fetch(msg.args[0].replace(/\D+/g, '')).catch(() => {});
     if (!user) {
-      msg.client.ch.error(msg, msg.language.noUser);
+      msg.client.ch.error(msg, msg.language.error.userNotFound);
       return;
     }
 

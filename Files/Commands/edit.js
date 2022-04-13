@@ -11,7 +11,7 @@ module.exports = {
   type: 'mod',
   async execute(msg) {
     const user = await msg.client.users.fetch(msg.args[0].replace(/\D+/g, '')).catch(() => {});
-    if (!user) return msg.client.ch.error(msg, msg.language.noUser);
+    if (!user) return msg.client.ch.error(msg, msg.language.error.userNotFound);
     const warnNr = msg.args[1];
     if (Number.isNaN(Number(warnNr))) {
       return msg.client.ch.reply(
