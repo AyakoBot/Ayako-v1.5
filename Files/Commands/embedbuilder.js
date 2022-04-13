@@ -37,7 +37,7 @@ module.exports = {
       edit: 'menu',
       category: null,
       embed: existingEmbed
-        ? new Builders.UnsafeEmbedBuilder(existingEmbed)
+        ? new Builders.UnsafeEmbedBuilder(existingEmbed.data)
         : new Builders.UnsafeEmbedBuilder(),
       page: page || 1,
       options,
@@ -136,22 +136,22 @@ const validate = (type, embed, constants) => {
     limits.totalOf.forEach((limit) => {
       switch (limit) {
         case 'field-names': {
-          embed.fieldNames?.forEach((field) => {
+          embed.data.fieldNames?.forEach((field) => {
             total += field.name.length;
             total += field.value.length;
           });
           break;
         }
         case 'footer-text': {
-          total += embed.footer?.name?.length || 0;
+          total += embed.data.footer?.name?.length || 0;
           break;
         }
         case 'author-name': {
-          total += embed.author?.name?.length || 0;
+          total += embed.data.author?.name?.length || 0;
           break;
         }
         default: {
-          total += embed[type]?.length || 0;
+          total += embed.data[type]?.length || 0;
           break;
         }
       }
@@ -162,13 +162,13 @@ const validate = (type, embed, constants) => {
 
   switch (type) {
     case 'author-name': {
-      return embed.author?.name?.length >= limits.fields[type];
+      return embed.data.author?.name?.length >= limits.fields[type];
     }
     case 'footer-text': {
-      return embed.footer?.text?.length >= limits.fields[type];
+      return embed.data.footer?.text?.length >= limits.fields[type];
     }
     case 'field-names' || 'field-values': {
-      const failed = embed.fields
+      const failed = embed.data.fields
         ?.map((field, i) => {
           if (field.name.length >= limits.fields[type]) return i;
           if (field.name.length >= limits.fields[type]) return i;
@@ -179,7 +179,7 @@ const validate = (type, embed, constants) => {
       return true;
     }
     default: {
-      return embed[type]?.length >= limits.fields[type];
+      return embed.data[type]?.length >= limits.fields[type];
     }
   }
 };
@@ -191,7 +191,7 @@ const getComponents = async (msg, { page, Objects }, editing) => {
 
   switch (page) {
     case 1: {
-      let authorNameStyle = Objects.embed.author?.name
+      let authorNameStyle = Objects.embed.data.author?.name
         ? Discord.ButtonStyle.Secondary
         : Discord.ButtonStyle.Primary;
       authorNameStyle = validate('author-name', Objects.embed, msg.client.constants)
@@ -199,7 +199,7 @@ const getComponents = async (msg, { page, Objects }, editing) => {
         : authorNameStyle;
       if (editing === 'author-name') authorNameStyle = Discord.ButtonStyle.Success;
 
-      let titleStyle = Objects.embed.title
+      let titleStyle = Objects.embed.data.title
         ? Discord.ButtonStyle.Secondary
         : Discord.ButtonStyle.Primary;
       titleStyle = validate('title', Objects.embed, msg.client.constants)
@@ -207,7 +207,7 @@ const getComponents = async (msg, { page, Objects }, editing) => {
         : titleStyle;
       if (editing === 'title') titleStyle = Discord.ButtonStyle.Success;
 
-      let descriptionStyle = Objects.embed.description
+      let descriptionStyle = Objects.embed.data.description
         ? Discord.ButtonStyle.Secondary
         : Discord.ButtonStyle.Primary;
       descriptionStyle = validate('description', Objects.embed, msg.client.constants)
@@ -215,7 +215,7 @@ const getComponents = async (msg, { page, Objects }, editing) => {
         : descriptionStyle;
       if (editing === 'description') descriptionStyle = Discord.ButtonStyle.Success;
 
-      let footerTextStyle = Objects.embed.footer?.text
+      let footerTextStyle = Objects.embed.data.footer?.text
         ? Discord.ButtonStyle.Secondary
         : Discord.ButtonStyle.Primary;
       footerTextStyle = validate('footer-text', Objects.embed, msg.client.constants)
@@ -223,42 +223,42 @@ const getComponents = async (msg, { page, Objects }, editing) => {
         : footerTextStyle;
       if (editing === 'footer-text') footerTextStyle = Discord.ButtonStyle.Success;
 
-      let authorIconUrlStyle = Objects.embed.author?.iconURL
+      let authorIconUrlStyle = Objects.embed.data.author?.iconURL
         ? Discord.ButtonStyle.Secondary
         : Discord.ButtonStyle.Primary;
       if (editing === 'author-iconURL') authorIconUrlStyle = Discord.ButtonStyle.Success;
 
-      let authorUrlStyle = Objects.embed.author?.url
+      let authorUrlStyle = Objects.embed.data.author?.url
         ? Discord.ButtonStyle.Secondary
         : Discord.ButtonStyle.Primary;
       if (editing === 'author-url') authorUrlStyle = Discord.ButtonStyle.Success;
 
-      let urlStyle = Objects.embed.url
+      let urlStyle = Objects.embed.data.url
         ? Discord.ButtonStyle.Secondary
         : Discord.ButtonStyle.Primary;
       if (editing === 'url') urlStyle = Discord.ButtonStyle.Success;
 
-      let thumbnailStyle = Objects.embed.thumbnail?.url
+      let thumbnailStyle = Objects.embed.data.thumbnail?.url
         ? Discord.ButtonStyle.Secondary
         : Discord.ButtonStyle.Primary;
       if (editing === 'thumbnail') thumbnailStyle = Discord.ButtonStyle.Success;
 
-      let imageStyle = Objects.embed.image?.url
+      let imageStyle = Objects.embed.data.image?.url
         ? Discord.ButtonStyle.Secondary
         : Discord.ButtonStyle.Primary;
       if (editing === 'image') imageStyle = Discord.ButtonStyle.Success;
 
-      let footerIconUrlStyle = Objects.embed.footer?.iconURL
+      let footerIconUrlStyle = Objects.embed.data.footer?.iconURL
         ? Discord.ButtonStyle.Secondary
         : Discord.ButtonStyle.Primary;
       if (editing === 'footer-iconURL') footerIconUrlStyle = Discord.ButtonStyle.Success;
 
-      let colorStyle = Objects.embed.color
+      let colorStyle = Objects.embed.data.color
         ? Discord.ButtonStyle.Secondary
         : Discord.ButtonStyle.Primary;
       if (editing === 'color') colorStyle = Discord.ButtonStyle.Success;
 
-      let timestampStyle = Objects.embed.timestamp
+      let timestampStyle = Objects.embed.data.timestamp
         ? Discord.ButtonStyle.Secondary
         : Discord.ButtonStyle.Primary;
       if (editing === 'timestamp') timestampStyle = Discord.ButtonStyle.Success;
@@ -324,6 +324,21 @@ const getComponents = async (msg, { page, Objects }, editing) => {
       break;
     }
     case 2: {
+      const options = Objects.embed.data.fields?.length
+        ? Objects.embed.data.fields.map((field, i) =>
+            new Builders.UnsafeSelectMenuOptionBuilder()
+              .setLabel(field.name === '\u200b' ? msg.language.none : field.name.slice(0, 100))
+              .setValue(i)
+              .setDescription(
+                field.value === '\u200b' ? msg.language.none : field.value.slice(0, 100),
+              ),
+          )
+        : [
+            new Builders.UnsafeSelectMenuOptionBuilder()
+              .setLabel('placeholder')
+              .setValue('placeholder'),
+          ];
+
       components.push(
         [
           new Builders.UnsafeSelectMenuBuilder()
@@ -331,31 +346,15 @@ const getComponents = async (msg, { page, Objects }, editing) => {
             .setMaxValues(1)
             .setMinValues(1)
             .setPlaceholder(baseLan.fieldsPlaceholder)
-            .setDisabled(!Objects.embed.fields?.length)
-            .addOptions(
-              ...(Objects.embed.fields?.length
-                ? Objects.embed.fields.map((field, i) =>
-                    new Builders.UnsafeSelectMenuOptionBuilder()
-                      .setLabel(
-                        field.name === '\u200b' ? msg.language.none : field.name.slice(0, 100),
-                      )
-                      .setValue(i)
-                      .setDescription(
-                        field.value === '\u200b' ? msg.language.none : field.value.slice(0, 100),
-                      ),
-                  )
-                : new Builders.UnsafeSelectMenuOptionBuilder()
-              )
-                .setLabel('placeholder')
-                .setValue('placeholder'),
-            ),
+            .setDisabled(!Objects.embed.data.fields?.length)
+            .addOptions(...options),
         ],
         [
           new Builders.UnsafeButtonBuilder()
             .setCustomId('add-field')
             .setLabel(baseLan.addFields)
             .setStyle(Discord.ButtonStyle.Primary)
-            .setDisabled(Objects.embed.fields?.length === 25),
+            .setDisabled(Objects.embed.data.fields?.length === 25),
         ],
       );
       break;
@@ -393,6 +392,11 @@ const getComponents = async (msg, { page, Objects }, editing) => {
             .setLabel(baseLan.send)
             .setStyle(Discord.ButtonStyle.Primary)
             .setDisabled(!(msg.command.name === module.exports.name && !cantBeSent(Objects))),
+          new Builders.UnsafeButtonBuilder()
+            .setCustomId('edit')
+            .setLabel(baseLan.editMsg)
+            .setStyle(Discord.ButtonStyle.Primary)
+            .setDisabled(!(msg.command.name === module.exports.name && !cantBeSent(Objects))),
         ],
       );
       break;
@@ -426,7 +430,7 @@ const getMenu = (savedEmbeds, baseLan, msg) => [
       !savedEmbeds.length || !msg.member.permissions.has(module.exports.insideCommandPerm),
     )
     .addOptions(
-      ...(savedEmbeds.length
+      savedEmbeds.length
         ? savedEmbeds
             .map((embed, i) => {
               if (i < 25) {
@@ -437,7 +441,7 @@ const getMenu = (savedEmbeds, baseLan, msg) => [
               return null;
             })
             .filter((r) => !!r)
-        : new Builders.SelectMenuOptionBuilder().setValue('0').setLabel('0')),
+        : new Builders.SelectMenuOptionBuilder().setValue('0').setLabel('0'),
     ),
 ];
 
@@ -639,7 +643,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
                   )),
               );
 
-              Objects.embed = new Builders.UnsafeEmbedBuilder(code);
+              Objects.embed = new Builders.UnsafeEmbedBuilder(code.data);
               inheritCodeEmbedMessageCollector.stop();
               resolve(
                 await module.exports.builder(msg, answer, Objects.embed, null, Objects.options),
@@ -669,6 +673,12 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           messageCollector.stop();
           buttonsCollector.stop();
           resolve(await handleSend(msg, interaction, Objects));
+          break;
+        }
+        case 'edit': {
+          messageCollector.stop();
+          buttonsCollector.stop();
+          resolve(await handleEdit(msg, interaction, Objects));
           break;
         }
         case 'save': {
@@ -826,8 +836,8 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
 
           Objects.embed.setAuthor({
             name: message.content,
-            url: Objects.embed.author?.url,
-            iconURL: Objects.embed.author?.iconURL,
+            url: Objects.embed.data.author?.url,
+            iconURL: Objects.embed.data.author?.iconURL,
           });
           break;
         }
@@ -863,10 +873,10 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
 
           Objects.embed.setAuthor({
             name:
-              Objects.embed.author && Objects.embed.author.name
-                ? Objects.embed.author.name
+              Objects.embed.data.author && Objects.embed.data.author.name
+                ? Objects.embed.data.author.name
                 : '\u200b',
-            url: Objects.embed.author?.url,
+            url: Objects.embed.data.author?.url,
             iconURL: message.content,
           });
           break;
@@ -900,11 +910,11 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
 
           Objects.embed.setAuthor({
             name:
-              Objects.embed.author && Objects.embed.author.name
-                ? Objects.embed.author.name
+              Objects.embed.data.author && Objects.embed.data.author.name
+                ? Objects.embed.data.author.name
                 : '\u200b',
             url: message.content,
-            iconURL: Objects.embed.author?.iconURL,
+            iconURL: Objects.embed.data.author?.iconURL,
           });
           break;
         }
@@ -1031,7 +1041,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
 
           Objects.embed.setFooter({
             text: message.content,
-            iconUrl: Objects.embed.footer?.iconUrl,
+            iconUrl: Objects.embed.data.footer?.iconUrl,
           });
           break;
         }
@@ -1068,8 +1078,8 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           Objects.embed.setFooter({
             iconURL: message.content,
             text:
-              Objects.embed.footer && Objects.embed.footer.text
-                ? Objects.embed.footer.text
+              Objects.embed.data.footer && Objects.embed.data.footer.text
+                ? Objects.embed.data.footer.text
                 : '\u200b',
           });
           break;
@@ -1108,7 +1118,7 @@ const postCode = (Objects, msg, answer, embed, noRemove) => {
     ]);
   }
 
-  const rawCode = new Builders.UnsafeEmbedBuilder(Objects.embed).toJSON();
+  const rawCode = new Builders.UnsafeEmbedBuilder(Objects.embed.data).toJSON();
   if (rawCode.length > 4000) {
     const attachment = msg.client.ch.txtFileWriter([rawCode]);
 
@@ -1218,7 +1228,7 @@ const handleSave = async (msg, answer, Objects) => {
         .setStyle(Discord.ButtonStyle.Primary)
         .setDisabled(!name);
 
-      embed.fields = [];
+      embed.data.fields = [];
       embed.addFields({
         name: msg.language.name,
         value: `\u200b${message.content.slice(0, 1024)}`,
@@ -1287,6 +1297,139 @@ const handleSave = async (msg, answer, Objects) => {
         postCode(Objects, msg);
       }
     });
+  });
+};
+
+const handleEdit = async (msg, answer, Objects) => {
+  const getButtons = (options) => {
+    const edit = new Builders.UnsafeButtonBuilder()
+      .setCustomId('edit')
+      .setLabel(msg.language.commands.embedbuilder.editMsg)
+      .setStyle(Discord.ButtonStyle.Primary)
+      .setDisabled(!options.selected);
+
+    return [edit];
+  };
+
+  const getEmbed = (options) => {
+    const embed = new Builders.UnsafeEmbedBuilder()
+      .setAuthor({
+        name: msg.language.commands.embedbuilder.author,
+        iconURL: msg.client.constants.commands.embedbuilder.author,
+        url: msg.client.constants.standard.invite,
+      })
+      .setDescription(
+        `${msg.language.commands.embedbuilder.editWhat}\n\n**${msg.language.selected}**:\n${
+          options.selected ? options.selected : msg.language.none
+        }`,
+      );
+
+    return embed;
+  };
+
+  const options = {
+    selected: null,
+  };
+
+  await replier(
+    { msg, answer },
+    { embeds: [getEmbed(options)], components: getButtons(options) },
+    Objects,
+  );
+
+  const messageCollector = msg.channel.createMessageCollector({ time: 60000 });
+  const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
+
+  messageCollector.on('collect', (m) => {
+    options.selected = m.content?.toLowerCase();
+    m.delete().catch(() => {});
+
+    replier(
+      { msg, answer },
+      { embeds: [getEmbed(options)], components: getButtons(options) },
+      Objects,
+    );
+  });
+
+  buttonsCollector.on('collect', async (interaction) => {
+    if (interaction.user.id !== msg.author.id) {
+      msg.client.ch.notYours(interaction);
+      return;
+    }
+    buttonsCollector.resetTimer();
+
+    switch (interaction.customId) {
+      case 'edit': {
+        const [, , , guildid, channelid, msgid] = options.selected.split(/\/+/);
+        const guild = msg.client.guilds.cache.get(guildid);
+        let channel;
+        let m;
+        let err;
+
+        if (guild) {
+          channel = guild.channels.cache.get(channelid);
+        } else {
+          err = `${msg.language.commands.embedbuilder.notMsgLink}\n${msg.language.commands.embedbuilder.noAccess}`;
+        }
+
+        if (channel) {
+          if (guild.id !== msg.guild.id) err = msg.language.commands.embedbuilder.notGuild;
+          else {
+            m = await channel.messages.fetch(msgid).catch((e) => {
+              err = e;
+            });
+
+            if (m) {
+              if (m.author.id !== msg.client.user.id) {
+                err = msg.language.commands.embedbuilder.notMine;
+              } else {
+                m = await m.edit({ embeds: [Objects.embed], content: null }).catch((e) => {
+                  err = e;
+                });
+              }
+            } else {
+              err = `${msg.language.commands.embedbuilder.notMsgLink}\n${msg.language.commands.embedbuilder.noAccess}`;
+            }
+          }
+        } else {
+          err = `${msg.language.commands.embedbuilder.notMsgLink}\n${msg.language.commands.embedbuilder.noAccess}`;
+        }
+
+        if (err) {
+          interaction.language = msg.language;
+          msg.client.ch.error(interaction, err);
+          return;
+        }
+        buttonsCollector.stop();
+        messageCollector.stop();
+
+        const embed = new Builders.UnsafeEmbedBuilder()
+          .setAuthor({
+            name: msg.language.commands.embedbuilder.author,
+            iconURL: msg.client.constants.commands.embedbuilder.author,
+            url: msg.client.constants.standard.invite,
+          })
+          .setDescription(
+            m
+              ? msg.client.ch.stp(`${msg.language.commands.embedbuilder.editSuccess}`, {
+                  message: options.selected,
+                })
+              : '',
+          );
+
+        await replier({ msg, answer: interaction }, { embeds: [embed], components: [] }, Objects);
+        return;
+      }
+      default: {
+        break;
+      }
+    }
+
+    await replier(
+      { msg, answer: interaction },
+      { embeds: [getEmbed(options)], components: getButtons(options) },
+      Objects,
+    );
   });
 };
 
@@ -1430,18 +1573,6 @@ const handleSend = async (msg, answer, Objects) => {
 
         await replier({ msg, answer: interaction }, { embeds: [embed], components: [] }, Objects);
         return;
-      }
-      case 'edit': {
-        buttonsCollector.stop();
-
-        const = options.selected.map((c) =>
-          msg.client.channels.cache
-            .get(c)
-            .send({ embeds: [Objects.embed] })
-            .catch((e) => [c, e])
-            .then(() => [c]),
-        );
-
       }
       default: {
         interaction.values.forEach((v) => {
@@ -1632,7 +1763,7 @@ const fieldSelect = async (msg, answer, Objects) => {
   const baseLan = msg.language.commands.embedbuilder;
 
   const index = answer.values[0];
-  const selected = Objects.embed.fields[index];
+  const selected = Objects.embed.data.fields[index];
   let editing = 'name';
 
   const getFieldComponents = () => [
@@ -1776,7 +1907,7 @@ const fieldSelect = async (msg, answer, Objects) => {
           break;
         }
         case 'remove-field': {
-          Objects.embed.fields.splice(index, 1);
+          Objects.embed.data.fields.splice(index, 1);
           buttonsCollector.stop();
           messageCollector.stop();
           resolve(
@@ -1798,7 +1929,7 @@ const fieldSelect = async (msg, answer, Objects) => {
           resolve(
             await module.exports.builder(msg, interaction, Objects.embed, 2, Objects.options),
           );
-          break;
+          return;
         }
         default: {
           break;
@@ -1806,7 +1937,7 @@ const fieldSelect = async (msg, answer, Objects) => {
       }
 
       await replier(
-        { msg, answer: interaction },
+        { msg, answer },
         { embeds: [getEmbed()], components: getFieldComponents() },
         Objects,
       );
@@ -2033,10 +2164,10 @@ const handlePage = async ({ msg, answer }, Objects, { embed }, increasePage) => 
 };
 
 const cantBeSent = (Objects) =>
-  !Objects.embed.title &&
-  (!Objects.embed.author || !Objects.embed.author.name) &&
-  !Objects.embed.description &&
-  (!Objects.embed.thumbnail || !Objects.embed.thumbnail.url) &&
-  !Objects.embed.fields?.length &&
-  (!Objects.embed.image || !Objects.embed.image.url) &&
-  (!Objects.embed.footer || !Objects.embed.footer.text);
+  !Objects.embed.data.title &&
+  (!Objects.embed.data.author || !Objects.embed.data.author.name) &&
+  !Objects.embed.data.description &&
+  (!Objects.embed.data.thumbnail || !Objects.embed.data.thumbnail.url) &&
+  !Objects.embed.data.fields?.length &&
+  (!Objects.embed.data.image || !Objects.embed.data.image.url) &&
+  (!Objects.embed.data.footer || !Objects.embed.data.footer.text);
