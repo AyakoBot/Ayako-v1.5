@@ -1157,7 +1157,7 @@ module.exports = {
       .setColor(msg.client.constants.error)
       .setDescription(content);
 
-    if ([20, 23].includes(msg.type)) {
+    if (msg.isRepliable()) {
       return msg.reply({ embeds: [embed], ephemeral: true });
     }
 
