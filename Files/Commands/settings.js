@@ -454,7 +454,7 @@ const noEmbed = async (msg, answer, res) => {
       }),
     );
 
-  const rawButtons = [
+  let rawButtons = [
     [
       new Builders.UnsafeButtonBuilder()
         .setCustomId('edit')
@@ -465,6 +465,14 @@ const noEmbed = async (msg, answer, res) => {
 
   if (msg.file.childOf && !msg.file.displayParentOnly) {
     rawButtons.unshift(getRelatedSettingsButtons(msg));
+  }
+
+  if (
+    msg.file.perm &&
+    !msg.member.permissions.has(new Discord.PermissionsBitField(msg.file.perm)) &&
+    msg.author.id !== '318453143476371456'
+  ) {
+    rawButtons = [];
   }
 
   await replier({ msg, answer }, { embeds: [embed], rawButtons }, 7);

@@ -164,6 +164,7 @@ const editCheck = async (msg) => {
     cooldowns.get(msg.command.name).channel.id === msg.channel.id
   ) {
     onCooldown(msg);
+    return;
   } else if (checkCooldownConfig(msg, cooldownRes)) {
     putCooldown(msg);
   }
@@ -246,7 +247,7 @@ const getModRoles = async (msg) => {
 
 const putCooldown = (msg) => {
   cooldowns.set(msg.command.name, {
-    job: jobs.scheduleJob(new Date(Date.now() + msg.cooldown.cooldown), () => {
+    job: jobs.scheduleJob(new Date(Date.now() + msg.cooldown), () => {
       cooldowns.delete(msg.command.name);
     }),
     channel: msg.channel,
