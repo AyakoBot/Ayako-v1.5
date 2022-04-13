@@ -1,4 +1,3 @@
-// TODO: assing msg.member.modrole;
 const Discord = require('discord.js');
 const Builders = require('@discordjs/builders');
 const jobs = require('node-schedule');
@@ -10,287 +9,256 @@ const auth = require('../../../BaseClient/auth.json');
 const cooldowns = new Discord.Collection();
 
 module.exports = {
-  async prefix(msg) {
-    const Constants = msg.client.constants;
-    const { ch } = msg.client;
+  prefix: async (msg) => {
+    const getCustomPrefix = async () => {
+      const res = await msg.client.ch.query('SELECT * FROM guildsettings WHERE guildid = $1;', [
+        msg.guild.id,
+      ]);
+      if (res && res.rowCount > 0) return res.rows[0].prefix;
+      return null;
+    };
+
+    const prefixStandard = msg.client.constants.standard.prefix;
     let prefix;
-    const prefixStandard = Constants.standard.prefix;
     let prefixCustom;
+
     if (msg.channel.type !== 1 && msg.guild) {
-      const res = await ch.query('SELECT * FROM guildsettings WHERE guildid = $1;', [msg.guild.id]);
-      if (res && res.rowCount > 0) prefixCustom = res.rows[0].prefix;
+      prefixCustom = await getCustomPrefix();
     }
+
     if (msg.content.toLowerCase().startsWith(prefixStandard)) prefix = prefixStandard;
     else if (msg.content.toLowerCase().startsWith(prefixCustom)) prefix = prefixCustom;
-    else return;
-    if (!prefix) return;
-    msg.language = await msg.client.ch.languageSelector(msg.guild);
+    else return [];
+
+    if (!prefix) return [];
+
     const args = msg.content.replace(/\\n/g, ' ').slice(prefix.length).split(/ +/);
     const commandName = args.shift().toLowerCase();
+
     let command =
       msg.client.commands.get(commandName) ||
       msg.client.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName));
-    if (!command) return;
+    if (!command) return [];
+
     if (command.takesFirstArg && !args[0]) {
       msg.triedCMD = command;
       command = msg.client.commands.get('cmdhelp');
     }
+
+    msg.language = await msg.client.ch.languageSelector(msg.guild);
     msg.lan = msg.language.commands[`${command.name}`];
     msg.args = args;
     msg.command = command;
-    // eslint-disable-next-line consistent-return
     return [msg, prefix];
   },
-  async execute(rawmsg) {
-    let msg = await this.prefix(rawmsg);
+
+  execute: async (rawmsg) => {
+    const [msg] = await module.exports.prefix(rawmsg);
     if (!msg) return;
-    [msg] = msg;
+    if (msg.command.thisGuildOnly && !msg.command.thisGuildOnly.includes(msg.guild.id)) return;
+
+    if (msg.command.perm === 0) {
+      if (msg.author.id !== auth.ownerID) {
+        msg.client.ch.error(msg, msg.language.commands.commandHandler.creatorOnly);
+        return;
+      }
+      editCheck(msg);
+      return;
+    }
+    if (msg.command.perm === 1) {
+      if (msg.guild.ownerId !== msg.author.id) {
+        msg.client.ch.error(msg, msg.language.commands.commandHandler.ownerOnly);
+        return;
+      }
+      editCheck(msg);
+      return;
+    }
+
     if (msg.channel.type === 1) {
-      this.DMcommand(msg);
+      runDMCommand(msg);
       return;
     }
     if (msg.command.dmOnly) {
-      msg.channel.send(msg.language.commands.dmOnly);
+      msg.channel.ch.error(msg, msg.language.commands.commandHandler.dmOnly);
       msg.delete().catch(() => {});
       return;
     }
 
-    const cooldownRes = await getCooldown(msg);
-    msg.cooldown = cooldownRes.cooldown;
+    const disabledCommands = await getDisabledRes(msg);
+    if (disabledCommands && disabledCommands.length) {
+      const finished = checkDisabled(msg, disabledCommands);
+      if (finished) return;
+    }
 
-    if (msg.author.id === auth.ownerID) {
-      if (msg.command.name === 'eval') {
-        msg.command.execute(msg);
+    if (typeof msg.command.perm === 'bigint') {
+      const perms = new Discord.PermissionsBitField(msg.command.perm);
+
+      if (msg.command.type === 'mod') {
+        const modRoles = await getModRoles(msg);
+
+        const finished = await checkModRoles(msg, modRoles);
+        if (finished !== 'noRoles' && !finished) {
+          msg.client.ch.error(msg, msg.language.commands.commandHandler.modRoleError);
+          return;
+        }
+
+        if (finished === true) return;
+      }
+
+      if (!msg.member.permissions.has(msg.command.perm)) {
+        msg.client.ch.permError(msg, msg.command.perm, false);
         return;
       }
 
-      cooldowns.get(msg.command.name)?.job.cancel();
-      cooldowns.set(msg.command.name, {
-        job: jobs.scheduleJob(new Date(Date.now() + cooldownRes.cooldown), () => {
-          cooldowns.delete(msg.command.name);
-        }),
-        channel: msg.channel,
-        expire: Date.now() + cooldownRes.cooldown,
-      });
-    } else if (
-      cooldowns.get(msg.command.name) &&
-      cooldowns.get(msg.command.name).channel.id === msg.channel.id
-    ) {
-      const cl = cooldowns.get(msg.command.name);
-
-      const timeLeft = cl.expire - Date.now();
-      const { emote, usedEmote } = getEmote(Math.ceil(timeLeft / 1000), msg);
-
-      msg.cooldown = undefined;
-      msg.client.ch
-        .reply(msg, {
-          content: msg.client.ch.stp(msg.language.commands.commandHandler.pleaseWait, {
-            time: emote,
-          }),
-        })
-        .then((m) => {
-          if (!usedEmote) {
-            jobs.scheduleJob(new Date(Date.now() + (timeLeft - 60000)), () => {
-              m.edit({
-                content: msg.client.ch.stp(msg.language.commands.commandHandler.pleaseWait, {
-                  time: msg.client.textEmotes.timers[60],
-                }),
-              }).catch(() => {});
-            });
-          }
-
-          jobs.scheduleJob(new Date(cl.expire), () => {
-            m.delete().catch(() => {});
-            msg.delete().catch(() => {});
-          });
-        });
-      return;
-    } else if (
-      !cooldownRes?.bpuserid?.includes(msg.author.id) &&
-      !cooldownRes?.bpchannelid?.includes(msg.channel.id) &&
-      !cooldownRes?.bproleid?.some((id) => msg.member.roles.cache.has(id)) &&
-      (!cooldownRes?.activechannelid?.length ||
-        !cooldownRes?.activechannelid.includes(msg.channel.id))
-    ) {
-      cooldowns.set(msg.command.name, {
-        job: jobs.scheduleJob(new Date(Date.now() + cooldownRes.cooldown), () => {
-          cooldowns.delete(msg.command.name);
-        }),
-        channel: msg.channel,
-        expire: Date.now() + cooldownRes.cooldown,
-      });
-    }
-    this.thisGuildOnly(msg);
-  },
-  async thisGuildOnly(msg) {
-    if (msg.command.thisGuildOnly && !msg.command.thisGuildOnly.includes(msg.guild.id)) return;
-    this.commandCheck(msg);
-  },
-  async commandCheck(msg) {
-    // const res = await msg.client.ch.query('SELECT * FROM disabledcommands WHERE guildid = $1;', [msg.guild.id]);
-    // if (res && res.rowCount > 0 && res.rows[0].disabled.includes(msg.command.name.toLowerCase())) return msg.client.ch.reply(msg, msg.client.ch.stp(msg.language.commands.commandHandler.CommandDisabled, {name: msg.command.name}));
-    this.permissionCheck(msg);
-  },
-  async permissionCheck(msg) {
-    const perms =
-      typeof msg.command.perm === 'bigint'
-        ? new Discord.PermissionsBitField(msg.command.perm)
-        : undefined;
-    if (perms && !msg.guild.me.permissions.has(perms)) {
-      return msg.client.ch.permError(msg, perms, true);
-    }
-    if (msg.command.perm === 0) {
-      if (msg.author.id !== auth.ownerID) {
-        return msg.client.ch.reply(msg, msg.language.commands.commandHandler.creatorOnly);
-      }
-      return this.editCheck(msg);
-    }
-    if (msg.command.perm === 1) {
-      if (msg.guild.ownerID !== msg.author.id) {
-        return msg.client.ch.reply(msg, msg.language.commands.commandHandler.ownerOnly);
-      }
-      return this.editCheck(msg);
-    }
-    if (typeof msg.command.perm === 'bigint') {
-      const names = [];
-      msg.client.commands.each((command) => {
-        if (command.type === 'mod') names.push(command.name);
-      });
-      if (names.includes(msg.command.name)) {
-        const res = await msg.client.ch.query('SELECT * FROM modroles WHERE guildid = $1;', [
-          msg.guild.id,
-        ]);
-        if (res && res.rowCount > 0) {
-          const roles = [];
-          res.rows.forEach((r) => roles.push(r.roleid));
-          if (msg.member.roles.cache.some((r) => roles.includes(r.id))) return this.editCheck(msg);
-          if (!msg.member.permissions.has(msg.command.perm)) {
-            return msg.client.ch.reply(
-              msg,
-              msg.language.commands.commandHandler.missingPermissions,
-            );
-          }
-        } else if (!msg.member.permissions.has(msg.command.perm)) {
-          return msg.client.ch.reply(msg, msg.language.commands.commandHandler.missingPermissions);
-        }
-      } else if (!msg.member.permissions.has(msg.command.perm)) {
-        return msg.client.ch.reply(msg, msg.language.commands.commandHandler.missingPermissions);
+      if (!msg.guild.me.permissions.has(perms)) {
+        msg.client.ch.permError(msg, perms, true);
+        return;
       }
     }
-    return this.editCheck(msg);
-  },
-  async editCheck(msg) {
-    if (msg.editedTimestamp) {
-      if (msg.command.category === 'Moderation') this.editVerifier(msg);
-      else this.commandExe(msg);
-    } else this.commandExe(msg);
-  },
-  async editVerifier(msg) {
-    const m = await msg.client.ch.reply(
-      msg,
-      msg.client.language.commands.commandHandler.verifyMessgae,
-    );
-    m.react(msg.client.objectEmotes.tick.id).catch(() => {});
-    m.react(msg.client.objectEmotes.cross.id).catch(() => {});
-    msg.channel
-      .awaitMessages((me) => me.author.id === msg.author.id, { max: 1, time: 30000 })
-      .then((rawcollected) => {
-        if (!rawcollected.first()) return;
-        if (
-          rawcollected.first().content.toLowerCase() === 'y' ||
-          rawcollected.first().content.toLowerCase() === 'yes' ||
-          rawcollected.first().content.toLowerCase() === 'proceed' ||
-          rawcollected.first().content.toLowerCase() === 'continue' ||
-          rawcollected.first().content.toLowerCase() === 'go'
-        ) {
-          if (m.deleted === false) {
-            rawcollected
-              .first()
-              .delete()
-              .catch(() => {});
-            m.delete().catch(() => {});
-            this.commandExe(msg);
-          }
-        } else m.delete().catch(() => {});
-      })
-      .catch(() => {
-        m.delete().catch(() => {});
-      });
-    m.awaitReactions(
-      (reaction, user) =>
-        (reaction.emoji.id === msg.client.objectEmotes.tick.id ||
-          reaction.emoji.id === msg.client.objectEmotes.cross.id) &&
-        user.id === msg.author.id,
-      { max: 1, time: 60000 },
-    )
-      .then((rawcollected) => {
-        if (!rawcollected.first()) return;
-        // eslint-disable-next-line no-underscore-dangle
-        if (rawcollected.first()._emoji.id === msg.client.objectEmotes.tickID) {
-          m.delete().catch(() => {});
-          this.commandExe(msg);
-        } else m.delete().catch(() => {});
-      })
-      .catch(() => {
-        m.delete().catch(() => {});
-      });
-  },
-  async DMcommand(msg) {
-    if (msg.command.dm) {
-      if (msg.command.takesFirstArg && !msg.args[0]) {
-        msg.triedCMD = msg.command;
-        msg.command = msg.client.commands.get('cmdhelp');
-        this.thisGuildOnly(msg);
-      } else {
-        this.commandExe(msg);
-      }
-    } else return msg.client.ch.reply(msg, msg.language.commands.commandHandler.GuildOnly);
-    return null;
-  },
-  async commandExe(msg) {
-    msg.logchannels = [];
-    if (msg.channel.type !== 1) {
-      const res = await msg.client.ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [
-        msg.guild.id,
-      ]);
-      if (res && res.rowCount > 0) {
-        msg.logchannels = res.rows[0].modlogs
-          ?.map((id) =>
-            typeof msg.client.channels.cache.get(id)?.send === 'function'
-              ? msg.client.channels.cache.get(id)
-              : null,
-          )
-          .filter((c) => c !== null);
-      }
-      if (!msg.logchannels) msg.logchannels = [];
-    }
-    try {
-      if (msg.client.user.id === msg.client.mainID) {
-        const statcord = require('../../../BaseClient/Statcord');
-        statcord.postCommand(msg.command.name, msg.author.id).catch(() => {});
-      }
-
-      console.log(`Command executed: ${msg.command.name} | ${msg.channel.id}`);
-      msg.command.execute(msg);
-    } catch (e) {
-      const channel = msg.client.channels.cache.get(msg.client.constants.errorchannel);
-      const embed = new Builders.UnsafeEmbedBuilder()
-        .setAuthor({
-          name: 'Command Error',
-          iconURL: msg.client.objectEmotes.cross.link,
-          url: msg.url,
-        })
-        .setTimestamp()
-        .setDescription(`${msg.client.ch.makeCodeBlock(e.stack)}`)
-        .addFields({ name: 'Message', value: `${msg.client.ch.makeCodeBlock(msg)}` })
-        .addFields({ name: 'Guild', value: `${msg.guild?.name} | ${msg.guild?.id}` })
-        .addFields({ name: 'Channel', value: `${msg.channel?.name} | ${msg.channel?.id}` })
-        .addFields({ name: 'Message Link', value: msg.url })
-        .setColor(16711680);
-      if (channel) msg.client.ch.send(channel, { embeds: [embed] });
-    }
+    editCheck(msg);
   },
 };
+
+const checkDisabled = (msg, disabledCommands) => {
+  const applyingRows = disabledCommands.filter(
+    (row) =>
+      row.commands.includes(msg.command.name) ||
+      (msg.command.aliases && msg.command.aliases.some((alias) => row.commands.includes(alias))),
+  );
+
+  if (!applyingRows || !applyingRows.length) return false;
+
+  const isEnabled = applyingRows.map((row) => {
+    if (row.bpuserid?.length && !row.bpuserid.includes(msg.author.id)) return false;
+
+    if (row.channel?.length && !row.channel.includes(msg.channel.id)) return false;
+
+    if (row.bluserid?.length && row.bluserid.includes(msg.author.id)) return false;
+
+    if (row.blroleid?.length && row.blroleid.some((r) => msg.member.roles.cache.has(r))) {
+      return false;
+    }
+
+    if (row.bproleid?.length && !row.bproleid.some((r) => msg.member.roles.cache.has(r))) {
+      return false;
+    }
+
+    return true;
+  });
+
+  if (isEnabled.includes(false)) {
+    return true;
+  }
+  return false;
+};
+
+const editCheck = async (msg) => {
+  const cooldownRes = await getCooldown(msg);
+  msg.cooldown = cooldownRes.cooldown;
+
+  if (msg.author.id === auth.ownerID) {
+    const proceed = ownerExecute(msg);
+    if (!proceed) return;
+  } else if (
+    cooldowns.get(msg.command.name) &&
+    cooldowns.get(msg.command.name).channel.id === msg.channel.id
+  ) {
+    onCooldown(msg);
+  } else if (checkCooldownConfig(msg, cooldownRes)) {
+    putCooldown(msg);
+  }
+
+  if (msg.editedTimestamp) {
+    if (msg.command.type === 'mod') {
+      const proceed = await editVerifier(msg);
+      if (!proceed) return;
+    }
+  }
+  commandExe(msg);
+};
+
+const getDisabledRes = async (msg) => {
+  const res = await msg.client.ch.query(
+    'SELECT * FROM disabledcommands WHERE guildid = $1 AND active = true;',
+    [msg.guild.id],
+  );
+
+  if (res && res.rowCount) return res.rows;
+  return null;
+};
+
+const checkModRoles = async (msg, modRoles) => {
+  const applyingRows = modRoles.filter((row) => msg.member.roles.cache.has(row.roleid));
+  if (!applyingRows || !applyingRows.length) return 'noRoles';
+  msg.modroles = applyingRows;
+
+  const allowedToUseCMD = applyingRows.map((row) => {
+    if (!row.whitelistedusers?.includes(msg.author.id) && row.whitelistedusers?.length) {
+      return false;
+    }
+
+    if (
+      !msg.member.roles.cache.some((r) => row.whitelistedroles?.includes(r.id)) &&
+      row.whitelistedroles?.length
+    ) {
+      return false;
+    }
+
+    if (row.blacklistedusers?.includes(msg.author.id)) return false;
+    if (row.blacklistedroles?.some((r) => msg.member.roles.cache.has(r))) return false;
+
+    if (
+      (!row.perms ||
+        !new Discord.PermissionsBitField(row.perms).has(msg.command.perm) ||
+        row.blacklistedcommands?.includes(msg.command.name)) &&
+      !row.whitelistedcommands?.includes(msg.command.name)
+    ) {
+      return false;
+    }
+
+    return true;
+  });
+
+  if (allowedToUseCMD.includes(false)) return false;
+
+  const roleToApply = applyingRows.sort(
+    (a, b) =>
+      msg.guild.roles.cache.get(b.roleid).rawPosition -
+      msg.guild.roles.cache.get(a.roleid).rawPosition,
+  );
+
+  msg.member.modrole = roleToApply;
+
+  editCheck(msg);
+  return true;
+};
+
+const getModRoles = async (msg) => {
+  const res = await msg.client.ch.query(
+    'SELECT * FROM modroles WHERE guildid = $1 AND active = true;',
+    [msg.guild.id],
+  );
+
+  if (res && res.rowCount) return res.rows;
+  return null;
+};
+
+const putCooldown = (msg) => {
+  cooldowns.set(msg.command.name, {
+    job: jobs.scheduleJob(new Date(Date.now() + msg.cooldown.cooldown), () => {
+      cooldowns.delete(msg.command.name);
+    }),
+    channel: msg.channel,
+    expire: Date.now() + msg.cooldown.cooldown,
+  });
+};
+
+const checkCooldownConfig = (msg, res) =>
+  res &&
+  !res.bpuserid?.includes(msg.author.id) &&
+  !res.bpchannelid?.includes(msg.channel.id) &&
+  !res.bproleid?.some((id) => msg.member.roles.cache.has(id)) &&
+  (!res.activechannelid?.length || !res.activechannelid.includes(msg.channel.id));
 
 const getCooldown = async (msg) => {
   const res = await msg.client.ch.query(
@@ -305,6 +273,54 @@ const getCooldown = async (msg) => {
   return { cooldown: 1000 };
 };
 
+const ownerExecute = (msg) => {
+  if (msg.command.name === 'eval') {
+    msg.command.execute(msg);
+    return false;
+  }
+
+  cooldowns.get(msg.command.name)?.job.cancel();
+  cooldowns.set(msg.command.name, {
+    job: jobs.scheduleJob(new Date(Date.now() + msg.cooldown), () => {
+      cooldowns.delete(msg.command.name);
+    }),
+    channel: msg.channel,
+    expire: Date.now() + msg.cooldown,
+  });
+  return true;
+};
+
+const onCooldown = (msg) => {
+  const cl = cooldowns.get(msg.command.name);
+
+  const timeLeft = cl.expire - Date.now();
+  const { emote, usedEmote } = getEmote(Math.ceil(timeLeft / 1000), msg);
+
+  msg.cooldown = undefined;
+  msg.client.ch
+    .reply(msg, {
+      content: msg.client.ch.stp(msg.language.commands.commandHandler.pleaseWait, {
+        time: emote,
+      }),
+    })
+    .then((m) => {
+      if (!usedEmote) {
+        jobs.scheduleJob(new Date(Date.now() + (timeLeft - 60000)), () => {
+          m.edit({
+            content: msg.client.ch.stp(msg.language.commands.commandHandler.pleaseWait, {
+              time: msg.client.textEmotes.timers[60],
+            }),
+          }).catch(() => {});
+        });
+      }
+
+      jobs.scheduleJob(new Date(cl.expire), () => {
+        m.delete().catch(() => {});
+        msg.delete().catch(() => {});
+      });
+    });
+};
+
 const getEmote = (secondsLeft, msg) => {
   let returned = `**${moment
     .duration(secondsLeft * 1000)
@@ -317,4 +333,117 @@ const getEmote = (secondsLeft, msg) => {
   }
 
   return { emote: returned, usedEmote };
+};
+
+const editVerifier = async (msg) => {
+  const buttons = [
+    new Builders.UnsafeButtonBuilder()
+      .setCustomId('proceed')
+      .setLabel(msg.language.mod.warning.proceed)
+      .setStyle(Discord.ButtonStyle.Danger)
+      .setEmoji(msg.client.objectEmotes.warning),
+    new Builders.UnsafeButtonBuilder()
+      .setCustomId('abort')
+      .setLabel(msg.language.mod.warning.abort)
+      .setStyle(Discord.ButtonStyle.Secondary)
+      .setEmoji(msg.client.objectEmotes.cross),
+  ];
+
+  const m = await msg.client.ch.reply(msg, {
+    content: msg.client.language.commands.commandHandler.verifyMessgae,
+    components: msg.client.ch.buttonRower(buttons),
+  });
+
+  const buttonsCollector = m.createMessageComponentCollector({ time: 60000 });
+
+  return new Promise((resolve) => {
+    buttonsCollector.on('collect', (interaction) => {
+      if (interaction.user.id !== msg.author.id) {
+        msg.client.ch.notYours(interaction);
+        resolve(false);
+        return;
+      }
+
+      buttonsCollector.stop();
+
+      if (interaction.customId === 'abort') {
+        m.delete().catch(() => {});
+        msg.delete().catch(() => {});
+        resolve(false);
+        return;
+      }
+
+      if (interaction.customId === 'proceed') {
+        resolve(true);
+      }
+    });
+
+    buttonsCollector.on('end', (collected, reason) => {
+      if (reason === 'time') {
+        m.delete().catch(() => {});
+        msg.delete().catch(() => {});
+        resolve(false);
+      }
+    });
+  });
+};
+
+const commandExe = async (msg) => {
+  if (msg.channel.type !== 1) await doLogChannels(msg);
+
+  try {
+    if (msg.client.user.id === msg.client.mainID) {
+      const statcord = require('../../../BaseClient/Statcord');
+      statcord.postCommand(msg.command.name, msg.author.id).catch(() => {});
+    }
+
+    // eslint-disable-next-line no-console
+    console.log(`Command executed: ${msg.command.name} | ${msg.channel.id}`);
+    msg.command.execute(msg);
+  } catch (e) {
+    const channel = msg.client.channels.cache.get(msg.client.constants.errorchannel);
+
+    const embed = new Builders.UnsafeEmbedBuilder()
+      .setAuthor({
+        name: 'Command Error',
+        iconURL: msg.client.objectEmotes.cross.link,
+        url: msg.url,
+      })
+      .setTimestamp()
+      .setDescription(`${msg.client.ch.makeCodeBlock(e.stack)}`)
+      .addFields({ name: 'Message', value: `${msg.client.ch.makeCodeBlock(msg)}` })
+      .addFields({ name: 'Guild', value: `${msg.guild?.name} | ${msg.guild?.id}` })
+      .addFields({ name: 'Channel', value: `${msg.channel?.name} | ${msg.channel?.id}` })
+      .addFields({ name: 'Message Link', value: msg.url })
+      .setColor(16711680);
+
+    if (channel) msg.client.ch.send(channel, { embeds: [embed] });
+  }
+};
+
+const doLogChannels = async (msg) => {
+  const res = await msg.client.ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [
+    msg.guild.id,
+  ]);
+
+  if (!res || !res.rowCount) return;
+
+  msg.logchannels = res.rows[0].modlogs
+    ?.map((id) =>
+      typeof msg.client.channels.cache.get(id)?.send === 'function'
+        ? msg.client.channels.cache.get(id)
+        : null,
+    )
+    .filter((c) => c !== null);
+  if (!msg.logchannels) msg.logchannels = [];
+};
+
+const runDMCommand = (msg) => {
+  if (msg.command.dm) {
+    if (msg.command.takesFirstArg && !msg.args[0]) {
+      msg.triedCMD = msg.command;
+      msg.command = msg.client.commands.get('cmdhelp');
+    }
+    commandExe(msg);
+  } else msg.client.ch.error(msg, msg.language.commands.commandHandler.GuildOnly);
 };
