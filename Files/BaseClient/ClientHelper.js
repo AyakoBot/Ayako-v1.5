@@ -1194,7 +1194,7 @@ module.exports = {
         inline: false,
       });
 
-    if ([20, 23].includes(msg.type)) {
+    if (msg.isRepliable()) {
       return msg.reply({ embeds: [embed], ephemeral: true });
     }
 
