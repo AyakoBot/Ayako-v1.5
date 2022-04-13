@@ -900,7 +900,7 @@
       }
     },
     "muteAdd": {
-      "author": "{{user}} was Muted",
+      "author": "{{user.tag}} was Muted",
       "description": "{{user}} has muted {{target}}",
       "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
       "activeMute": "Joined with an active Mute",
@@ -938,7 +938,7 @@
       "noMember": "This User is not a Member of this Server"
     },
     "muteRemove": {
-      "author": "{{user}} was Un-Muted",
+      "author": "{{user.tag}} was Un-Muted",
       "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas unmuted by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
       "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
       "dm": {
@@ -954,7 +954,7 @@
       "noMember": "This User is not a Member of this Server"
     },
     "banAdd": {
-      "author": "{{user}} was Banned",
+      "author": "{{user.tag}} was Banned",
       "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas banned by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
       "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
       "dm": {
@@ -970,7 +970,7 @@
       "meBan": "I won't ban myself"
     },
     "softbanAdd": {
-      "author": "{{user}} was Soft-Banned",
+      "author": "{{user.tag}} was Soft-Banned",
       "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas soft-banned by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
       "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
       "dm": {
@@ -987,7 +987,7 @@
       "unbanReason": "Soft-Ban"
     },
     "tempbanAdd": {
-      "author": "{{user}} was Temp-Banned",
+      "author": "{{user.tag}} was Temp-Banned",
       "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas Temp-Banned by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
       "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
       "dm": {
@@ -1002,8 +1002,38 @@
       "selfBan": "You can't ban yourself",
       "meBan": "I won't ban myself"
     },
+    "channelbanAdd": {
+      "author": "{{user.tag}} was Channel-Banned from {{channel.name}}",
+      "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas was Channel-Banned from\nChannel {{channel}} / `{{channel.name}}` / `{{channel.id}}`\nby\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
+      "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
+      "dm": {
+        "author": "You have been Channel-Banned in {{guild.name}}"
+      },
+      "exeNoPerms": "You can't Channel-Ban this User",
+      "permissionError": "I don't have enough permissions to Channel-Ban this User",
+      "error": "I wasn't able to Channel-Ban this User!",
+      "alreadyBanned": "User {{target}} is already Channel-Banned",
+      "success": "User {{target}} was Channel-Banned",
+      "loading": "Channel-Banning User...",
+      "selfBan": "You can't Channel-Ban yourself",
+      "meBan": "I won't Channel-Ban myself"
+    },
+    "channelbanRemove": {
+      "author": "{{user.tag}} was Channel-Unbanned",
+      "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas Channel-Unbanned from\nChannel {{channel}} / `{{channel.name}}` / `{{channel.id}}`\nby\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
+      "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
+      "dm": {
+        "author": "You have been Channel-Unbanned in {{guild.name}}"
+      },
+      "exeNoPerms": "You can't Channel-Unbanned this User",
+      "permissionError": "I don't have enough permissions to Channel-Unbanned this User",
+      "error": "I wasn't able to Channel-Unbanned this User!",
+      "notBanned": "This User isn't Channel-Banned",
+      "success": "User {{target}} was Channel-Unbanned",
+      "loading": "Channel-Unbanning User..."
+    },
     "banRemove": {
-      "author": "{{user}} was Un-Banned",
+      "author": "{{user.tag}} was Un-Banned",
       "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas unbanned by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
       "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
       "dm": {
@@ -1017,7 +1047,7 @@
       "loading": "Un-Banning User..."
     },
     "kickAdd": {
-      "author": "{{user}} was Kicked",
+      "author": "{{user.tag}} was Kicked",
       "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas kicked by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
       "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
       "dm": {
@@ -1607,6 +1637,15 @@
     "ban": {
       "description": "Bans a User from the Server",
       "usage": ["ban [user ID or mention] (reason)"],
+      "category": "Moderation",
+      "reason": "No Reason given"
+    },
+    "channelban": {
+      "description": "Bans a User from a Channel",
+      "usage": [
+        "channelban [user ID or mention] (Channel ID or mention) (reason)",
+        "channeltempban [user ID or mention] (Channel ID or mention) (duration) (reason)"
+      ],
       "category": "Moderation",
       "reason": "No Reason given"
     },
@@ -3655,7 +3694,8 @@
     "memberNotFound": "Member not found",
     "notAvailableAPI": "This Command is not yet available due to Discord API limitations",
     "sendMessage": "I cannot send Messages in this Channel",
-    "lackingAccess": "I'm lacking access to these emotes: {{emotes}}"
+    "lackingAccess": "I'm lacking access to these emotes: {{emotes}}",
+    "channelNotManageable": "I'm lacking permissions to edit that Channel"
   },
   "expire": {
     "warnIssue": "Warn was issued at",
