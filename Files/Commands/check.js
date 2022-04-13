@@ -14,7 +14,7 @@ module.exports = {
     const user = msg.args[0]
       ? await msg.client.users.fetch(msg.args[0].replace(/\D+/g, ''))
       : msg.author;
-    if (!user) return msg.client.ch.error(msg, msg.language.error.userNotFound);
+    if (!user) return msg.client.ch.error(msg, msg.language.errors.userNotFound);
     const member = await msg.guild.members.fetch(user.id).catch(() => {});
     const { lan } = msg;
     const con = msg.client.constants.commands[this.name];

@@ -36,7 +36,7 @@ module.exports = {
     };
 
     const user = await msg.client.users.fetch(msg.args[0].replace(/\D+/g, '')).catch(() => {});
-    if (!user) return msg.client.ch.error(msg, msg.language.error.userNotFound);
+    if (!user) return msg.client.ch.error(msg, msg.language.errors.userNotFound);
 
     const { lan } = msg;
     let reason = msg.args.slice(2).join(' ') ? msg.args.slice(2).join(' ') : lan.reason;
