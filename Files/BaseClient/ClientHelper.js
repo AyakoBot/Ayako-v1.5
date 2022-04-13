@@ -756,29 +756,32 @@ module.exports = {
    * @param {object} msg - The triggering Message of module.exports Awaiter.
    */
   modRoleWaiter: async (msg) => {
-    const SUCCESS = new Builders.UnsafeButtonBuilder()
-      .setCustomId('modProceedAction')
-      .setLabel(msg.language.mod.warning.proceed)
-      .setStyle(Discord.ButtonStyle.Primary)
-      .setEmoji(msg.client.objectEmotes.tickBG);
-    const DANGER = new Builders.UnsafeButtonBuilder()
-      .setCustomId('modAbortAction')
-      .setLabel(msg.language.mod.warning.abort)
-      .setEmoji(msg.client.objectEmotes.crossBG)
-      .setStyle(Discord.ButtonStyle.Danger);
+    const buttons = [
+      new Builders.UnsafeButtonBuilder()
+        .setCustomId('proceed')
+        .setLabel(msg.language.mod.warning.proceed)
+        .setStyle(Discord.ButtonStyle.Danger)
+        .setEmoji(msg.client.objectEmotes.warning),
+      new Builders.UnsafeButtonBuilder()
+        .setCustomId('abort')
+        .setLabel(msg.language.mod.warning.abort)
+        .setStyle(Discord.ButtonStyle.Secondary)
+        .setEmoji(msg.client.objectEmotes.cross),
+    ];
+
     const m = await module.exports.reply(msg, {
       content: msg.language.mod.warning.text,
-      components: module.exports.buttonRower([SUCCESS, DANGER]),
+      components: module.exports.buttonRower([buttons]),
       allowedMentions: { repliedUser: true },
     });
     const collector = m.createMessageComponentCollector({ time: 30000 });
     return new Promise((resolve) => {
       collector.on('collect', (answer) => {
         if (answer.user.id !== msg.author.id) module.exports.notYours(answer);
-        else if (answer.customId === 'modProceedAction') {
+        else if (answer.customId === 'proceed') {
           m.delete().catch(() => {});
           resolve(true);
-        } else if (answer.customId === 'modAbortAction') {
+        } else if (answer.customId === 'abort') {
           m.delete().catch(() => {});
           resolve();
         }

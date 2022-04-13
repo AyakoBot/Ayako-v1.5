@@ -220,15 +220,11 @@ const checkModRoles = async (msg, modRoles) => {
   if (
     (!roleToApply.perms ||
       !new Discord.PermissionsBitField(roleToApply.perms).has(msg.command.perm) ||
-      roleToApply.blacklistedcommands?.includes(msg.command.name)) &&
-    !roleToApply.whitelistedcommands?.includes(msg.command.name)
+      !roleToApply.blacklistedcommands ||
+      roleToApply.blacklistedcommands.includes(msg.command.name)) &&
+    roleToApply.whitelistedcommands &&
+    !roleToApply.whitelistedcommands.includes(msg.command.name)
   ) {
-    console.log(
-      !roleToApply.perms,
-      !new Discord.PermissionsBitField(roleToApply.perms).has(msg.command.perm),
-      roleToApply.blacklistedcommands?.includes(msg.command.name),
-      !roleToApply.whitelistedcommands?.includes(msg.command.name),
-    );
     return false;
   }
 
@@ -356,7 +352,7 @@ const editVerifier = async (msg) => {
 
   const m = await msg.client.ch.reply(msg, {
     content: msg.client.language.commands.commandHandler.verifyMessgae,
-    components: msg.client.ch.buttonRower(buttons),
+    components: msg.client.ch.buttonRower([buttons]),
   });
 
   const buttonsCollector = m.createMessageComponentCollector({ time: 60000 });
