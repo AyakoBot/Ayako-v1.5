@@ -7,8 +7,6 @@ module.exports = {
   takesFirstArg: true,
   aliases: [],
   type: 'info',
-  description: 'Send a suggestion vote',
-  usage: ['inv [mc or discord] [username]'],
   thisGuildOnly: ['692452151112368218'],
   async execute(msg) {
     const promotion = msg.args.slice(1).join(' ');
