@@ -4,7 +4,7 @@ const Builders = require('@discordjs/builders');
 require('moment-duration-format');
 
 module.exports = {
-  perm: null,
+  perm: 32n,
   type: 1,
   setupRequired: false,
   finished: true,
