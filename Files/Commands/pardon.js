@@ -11,7 +11,7 @@ module.exports = {
   type: 'mod',
   async execute(msg) {
     const user = await msg.client.users.fetch(msg.args[0].replace(/\D+/g, '')).catch(() => {});
-    if (!user) return msg.client.ch.error(msg, msg.language.error.userNotFound);
+    if (!user) return msg.client.ch.error(msg, msg.language.errors.userNotFound);
     const warnNr = msg.args[1];
     if (warnNr.toLowerCase() === msg.language.all) {
       return msg.client.commands.get('clearwarns').execute(msg);

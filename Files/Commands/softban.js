@@ -41,7 +41,7 @@ module.exports = {
     }
 
     const { lan } = msg;
-    if (!user) return msg.client.ch.error(msg, msg.language.error.userNotFound);
+    if (!user) return msg.client.ch.error(msg, msg.language.errors.userNotFound);
     const reason = `${msg.author.tag} | ${
       msg.args.slice(indexToUse).join(' ') ? msg.args.slice(indexToUse).join(' ') : lan.reason
     }`;
