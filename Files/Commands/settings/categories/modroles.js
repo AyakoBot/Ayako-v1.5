@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
+const moment = require('moment');
 const Builders = require('@discordjs/builders');
-
-// TODO: add default mute time when not provided
+require('moment-duration-format');
 
 module.exports = {
   perm: null,
@@ -55,6 +55,18 @@ module.exports = {
         name: msg.lan.perms,
         value: r.perms
           ? `\`${msg.client.ch.permCalc(r.perms, msg.language).join('`, `')}\``
+          : msg.language.none,
+        inline: false,
+      },
+      {
+        name: msg.lan.mutedurationdefault,
+        value: r.mutedurationdefault
+          ? `\`${moment
+              .duration(r.mutedurationdefault * 60 * 1000)
+              .format(
+                `Y [${msg.language.time.years}], M [${msg.language.time.months}], W [${msg.language.time.weeks}], d [${msg.language.time.days}], h [${msg.language.time.hours}], m [${msg.language.time.minutes}], s [${msg.language.time.seconds}]`,
+                { trim: 'all' },
+              )}\``
           : msg.language.none,
         inline: false,
       },
@@ -136,6 +148,11 @@ module.exports = {
       .setLabel(msg.lan.perms)
       .setStyle(r.perms ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Secondary);
 
+    const mutedurationdefault = new Builders.UnsafeButtonBuilder()
+      .setCustomId(msg.lan.edit.mutedurationdefault.name)
+      .setLabel(msg.lan.mutedurationdefault)
+      .setStyle(Discord.ButtonStyle.Secondary);
+
     const whitelistedcommands = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.whitelistedcommands.name)
       .setLabel(msg.lan.whitelistedcommands)
@@ -167,7 +184,7 @@ module.exports = {
       .setStyle(Discord.ButtonStyle.Primary);
 
     return [
-      [active, roleid, perms],
+      [active, roleid, perms, mutedurationdefault],
       [whitelistedcommands, blacklistedcommands],
       [whitelistedusers, blacklistedusers],
       [whitelistedroles, blacklistedroles],

@@ -3525,6 +3525,7 @@
         "whitelistedroles": "Whitelisted Roles",
         "blacklistedroles": "Blacklisted Roles",
         "clickview": "Click to view Permissions",
+        "mutedurationdefault": "Default Mute Duration",
         "edit": {
           "roleid": {
             "name": "Mod-Role",
@@ -3570,6 +3571,11 @@
             "name": "Whitelisted Commands",
             "answers": "`Ayako Commands or Aliases`",
             "recommended": "This is a Switch.\nIf the entered Comand is already whitelisted it will be removed.\nIf a Command is whitelisted __and__ would __not__ be allowed to be used according to the Mod-Role Permissions, it will be able to be used"
+          },
+          "mutedurationdefault": {
+            "name": "Default Mute Duration",
+            "answers": "Time in Minutes",
+            "recommended": "Mute Duration defined here will be used if a Member is muted without specifying a Duration"
           }
         },
         "otherEdits": {

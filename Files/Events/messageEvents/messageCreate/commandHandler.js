@@ -190,46 +190,51 @@ const getDisabledRes = async (msg) => {
 const checkModRoles = async (msg, modRoles) => {
   const applyingRows = modRoles.filter((row) => msg.member.roles.cache.has(row.roleid));
   if (!applyingRows || !applyingRows.length) return 'noRoles';
-  msg.modroles = applyingRows;
-
-  const allowedToUseCMD = applyingRows.map((row) => {
-    if (!row.whitelistedusers?.includes(msg.author.id) && row.whitelistedusers?.length) {
-      return false;
-    }
-
-    if (
-      !msg.member.roles.cache.some((r) => row.whitelistedroles?.includes(r.id)) &&
-      row.whitelistedroles?.length
-    ) {
-      return false;
-    }
-
-    if (row.blacklistedusers?.includes(msg.author.id)) return false;
-    if (row.blacklistedroles?.some((r) => msg.member.roles.cache.has(r))) return false;
-
-    if (
-      (!row.perms ||
-        !new Discord.PermissionsBitField(row.perms).has(msg.command.perm) ||
-        row.blacklistedcommands?.includes(msg.command.name)) &&
-      !row.whitelistedcommands?.includes(msg.command.name)
-    ) {
-      return false;
-    }
-
-    return true;
-  });
-
-  if (allowedToUseCMD.includes(false)) return false;
-
-  const roleToApply = applyingRows.sort(
+  const [roleToApply] = applyingRows.sort(
     (a, b) =>
       msg.guild.roles.cache.get(b.roleid).rawPosition -
       msg.guild.roles.cache.get(a.roleid).rawPosition,
   );
 
-  msg.member.modrole = roleToApply;
+  if (
+    !roleToApply.whitelistedusers?.includes(msg.author.id) &&
+    roleToApply.whitelistedusers?.length
+  ) {
+    return false;
+  }
+
+  if (
+    !msg.member.roles.cache.some((r) => roleToApply.whitelistedroles?.includes(r.id)) &&
+    roleToApply.whitelistedroles?.length
+  ) {
+    return false;
+  }
+
+  if (roleToApply.blacklistedusers?.includes(msg.author.id)) {
+    return false;
+  }
+  if (roleToApply.blacklistedroles?.some((r) => msg.member.roles.cache.has(r))) {
+    return false;
+  }
+
+  if (
+    (!roleToApply.perms ||
+      !new Discord.PermissionsBitField(roleToApply.perms).has(msg.command.perm) ||
+      roleToApply.blacklistedcommands?.includes(msg.command.name)) &&
+    !roleToApply.whitelistedcommands?.includes(msg.command.name)
+  ) {
+    console.log(
+      !roleToApply.perms,
+      !new Discord.PermissionsBitField(roleToApply.perms).has(msg.command.perm),
+      roleToApply.blacklistedcommands?.includes(msg.command.name),
+      !roleToApply.whitelistedcommands?.includes(msg.command.name),
+    );
+    return false;
+  }
 
   editCheck(msg);
+  msg.member.modrole = roleToApply;
+
   return true;
 };
 
