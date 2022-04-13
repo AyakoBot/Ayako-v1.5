@@ -721,8 +721,8 @@ module.exports = {
    */
   bitUniques: (bit1, bit2) => {
     const bit = new Discord.PermissionsBitField(bit1.bitfield & bit2.bitfield);
-    const newBit1 = bit1.remove([...bit]);
-    const newBit2 = bit2.remove([...bit]);
+    const newBit1 = new Discord.PermissionsBitField(bit1.bitfield).remove([...bit]);
+    const newBit2 = new Discord.PermissionsBitField(bit2.bitfield).remove([...bit]);
     return [newBit1, newBit2];
   },
   /**
@@ -1157,7 +1157,7 @@ module.exports = {
       .setColor(msg.client.constants.error)
       .setDescription(content);
 
-    if (msg.isRepliable()) {
+    if (msg.isRepliable && msg.isRepliable()) {
       return msg.reply({ embeds: [embed], ephemeral: true });
     }
 
@@ -1166,7 +1166,7 @@ module.exports = {
   },
   permError: (msg, bits, me) => {
     const [neededPerms] = module.exports.bitUniques(
-      bits,
+      { bitfield: bits },
       me ? msg.guild.me.permissions : msg.member.permissions,
     );
 
@@ -1177,11 +1177,7 @@ module.exports = {
         url: msg.client.constants.standard.invite,
       })
       .setColor(msg.client.constants.error)
-      .setDescription(
-        module.exports.makeUnderlined(
-          me ? msg.language.permissions.error.msg : msg.language.permissions.error.you,
-        ),
-      )
+      .setDescription(me ? msg.language.permissions.error.msg : msg.language.permissions.error.you)
       .addFields({
         name: module.exports.makeBold(msg.language.permissions.error.needed),
         value: `\u200b${
@@ -1194,7 +1190,7 @@ module.exports = {
         inline: false,
       });
 
-    if (msg.isRepliable()) {
+    if (msg.isRepliable && msg.isRepliable()) {
       return msg.reply({ embeds: [embed], ephemeral: true });
     }
 
