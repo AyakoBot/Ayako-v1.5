@@ -4,7 +4,7 @@ module.exports = {
     const { ch } = client;
     client.guilds.cache.forEach(async (guild) => {
       const res = await ch.query('SELECT * FROM warns WHERE type = $1 AND guildid = $2;', [
-        'Mute',
+        'ChannelBan',
         guild.id,
       ]);
       if (res && res.rowCount > 0) {
@@ -18,11 +18,12 @@ module.exports = {
                   if (user && user.id) {
                     const language = await ch.languageSelector(guild);
                     client.emit(
-                      'modMuteRemove',
+                      'modChannelbanRemove',
                       client.user,
                       user,
                       guild,
                       language.ready.unmute.reason,
+                      channel
                     );
                     closed(guild, user, end);
                   }
@@ -40,6 +41,6 @@ function closed(guild, user, end) {
   const { client } = guild;
   client.ch.query(
     'UPDATE warns SET closed = $1 WHERE guildid = $2 AND userid = $3 AND type = $4 AND duration = $5;',
-    [true, guild.id, user.id, 'Mute', end],
+    [true, guild.id, user.id, 'ChannelBan', end],
   );
 }
