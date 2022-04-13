@@ -19,7 +19,7 @@ module.exports = {
         });
       });
     } else {
-      const flags = Object.entries(Discord.Permissions.Flags);
+      const flags = Object.entries(Discord.PermissionsBitField.Flags);
       flags.forEach(([, bits]) => {
         msg.client.ch.permCalc(bits, msg.language).forEach((perm) => {
           permissions.push({ perm, bits: Number(bits) });
