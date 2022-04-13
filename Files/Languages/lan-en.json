@@ -1503,7 +1503,7 @@
     },
     "afkHandler": {
       "deletedAfk": "I've deleted your AFK",
-      "footer": "You have been AFK for {{time}}",
+      "footer": "Welcome back! You have been AFK for {{time}}",
       "setAfk": "User went AFK",
       "delAfk": "User returned from being AFK",
       "forceDelAfk": "User's AFK was forcefully deleted by {{user.tag}} | {{reason}}"
