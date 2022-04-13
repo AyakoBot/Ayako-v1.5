@@ -37,7 +37,7 @@ module.exports = {
 
     const user = await msg.client.users.fetch(msg.args[0].replace(/\D+/g, '')).catch(() => {});
     const { lan } = msg;
-    if (!user) return msg.client.ch.reply(msg, msg.language.noUser);
+    if (!user) return msg.client.ch.error(msg, msg.language.noUser);
     let reason = msg.args.slice(2).join(' ') ? msg.args.slice(2).join(' ') : lan.reason;
     const guildmember = await msg.guild.members.fetch(user.id).catch(() => {});
     let duration = ms(msg.args[1]);
