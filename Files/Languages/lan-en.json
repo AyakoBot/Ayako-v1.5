@@ -1237,6 +1237,11 @@
       "desktop": "Try Opening Profile | Desktop App",
       "mobile": "Try Opening Profile | Mobile"
     },
+    "inv": {
+      "description": "Send a suggestion vote",
+      "usage": ["inv [mc or discord] [username]"],
+      "category": "Info"
+    },
     "resetlevels": {
       "description": "Reset the XP of one or all Users",
       "usage": ["resetlevels all", "resetlevels [user]"],

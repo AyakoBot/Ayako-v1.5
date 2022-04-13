@@ -17,11 +17,11 @@ module.exports = {
     const { lan } = msg;
     const commandLan = language.commands[`${reqcommand.name}`];
     if (!commandLan) {
-      msg.client.ch.reply(msg, lan.notFound);
+      msg.client.ch.error(msg, lan.notFound);
       throw new Error(`Command ${reqcommand.name} not found in language file.`);
     }
 
-    if (!reqcommand || !reqcommand.name) return msg.client.ch.reply(msg, lan.notValid);
+    if (!reqcommand || !reqcommand.name) return msg.client.ch.error(msg, lan.notValid);
 
     let category;
     if (reqcommand.category) {
