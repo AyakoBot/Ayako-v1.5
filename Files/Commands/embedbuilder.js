@@ -3,7 +3,6 @@ const Builders = require('@discordjs/builders');
 const jobs = require('node-schedule');
 
 const testReg = /discord\.com\/channels\//gi;
-const colorReg = /[0-9A-Fa-f]{6}/g;
 
 module.exports = {
   name: 'embedbuilder',
@@ -385,18 +384,24 @@ const getComponents = async (msg, { page, Objects }, editing) => {
             .setDisabled(
               !(
                 msg.member.permissions.has(module.exports.insideCommandPerm) && !cantBeSent(Objects)
-              ),
+              ) || !msg.member.permissions.has(32n),
             ),
           new Builders.UnsafeButtonBuilder()
             .setCustomId('send')
             .setLabel(baseLan.send)
             .setStyle(Discord.ButtonStyle.Primary)
-            .setDisabled(!(msg.command.name === module.exports.name && !cantBeSent(Objects))),
+            .setDisabled(
+              !(msg.command.name === module.exports.name && !cantBeSent(Objects)) ||
+                !msg.member.permissions.has(32n),
+            ),
           new Builders.UnsafeButtonBuilder()
             .setCustomId('edit')
             .setLabel(baseLan.editMsg)
             .setStyle(Discord.ButtonStyle.Primary)
-            .setDisabled(!(msg.command.name === module.exports.name && !cantBeSent(Objects))),
+            .setDisabled(
+              !(msg.command.name === module.exports.name && !cantBeSent(Objects)) ||
+                !msg.member.permissions.has(32n),
+            ),
         ],
       );
       break;
@@ -420,30 +425,32 @@ const getComponents = async (msg, { page, Objects }, editing) => {
   return components;
 };
 
-const getMenu = (savedEmbeds, baseLan, msg) => [
-  new Builders.UnsafeSelectMenuBuilder()
-    .setCustomId('savedEmbedSelection')
-    .setMaxValues(1)
-    .setMinValues(1)
-    .setPlaceholder(baseLan.embedPlaceholder)
-    .setDisabled(
-      !savedEmbeds.length || !msg.member.permissions.has(module.exports.insideCommandPerm),
-    )
-    .addOptions(
-      savedEmbeds.length
-        ? savedEmbeds
-            .map((embed, i) => {
-              if (i < 25) {
-                return new Builders.SelectMenuOptionBuilder()
-                  .setLabel(embed.name.slice(0, 100))
-                  .setValue(String(embed.uniquetimestamp));
-              }
-              return null;
-            })
-            .filter((r) => !!r)
-        : new Builders.SelectMenuOptionBuilder().setValue('0').setLabel('0'),
-    ),
-];
+const getMenu = (savedEmbeds, baseLan, msg) => {
+  const options = savedEmbeds.length
+    ? savedEmbeds
+        .map((embed, i) => {
+          if (i < 25) {
+            return new Builders.SelectMenuOptionBuilder()
+              .setLabel(embed.name.slice(0, 100))
+              .setValue(String(embed.uniquetimestamp));
+          }
+          return null;
+        })
+        .filter((r) => !!r)
+    : [new Builders.SelectMenuOptionBuilder().setValue('0').setLabel('0')];
+
+  return [
+    new Builders.UnsafeSelectMenuBuilder()
+      .setCustomId('savedEmbedSelection')
+      .setMaxValues(1)
+      .setMinValues(1)
+      .setPlaceholder(baseLan.embedPlaceholder)
+      .setDisabled(
+        !savedEmbeds.length || !msg.member.permissions.has(module.exports.insideCommandPerm),
+      )
+      .addOptions(...options),
+  ];
+};
 
 const getNavigation = (msg, page) => [
   new Builders.UnsafeButtonBuilder()
@@ -643,7 +650,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
                   )),
               );
 
-              Objects.embed = new Builders.UnsafeEmbedBuilder(code.data);
+              Objects.embed = new Builders.UnsafeEmbedBuilder(code);
               inheritCodeEmbedMessageCollector.stop();
               resolve(
                 await module.exports.builder(msg, answer, Objects.embed, null, Objects.options),
@@ -739,26 +746,22 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
 
       switch (editing) {
         case 'color': {
-          const passesReg = colorReg.test(message.content);
-
+          const int = parseInt(message.content, 16);
           let e;
-          if (passesReg) {
-            try {
-              new Builders.UnsafeEmbedBuilder().setColor(message.content);
-            } catch (err) {
-              e = err;
-            }
+          try {
+            new Builders.UnsafeEmbedBuilder().setColor(int);
+          } catch (err) {
+            e = err;
           }
 
-          if (!passesReg || e) {
+          if (e) {
             let valid;
-            if (!passesReg) valid = 'regFail';
 
             await errorVal(msg, lan, valid, Objects, e, answer);
             break;
           }
 
-          Objects.embed.setColor(message.content);
+          Objects.embed.setColor(int);
           break;
         }
         case 'title': {
@@ -1306,7 +1309,7 @@ const handleEdit = async (msg, answer, Objects) => {
       .setCustomId('edit')
       .setLabel(msg.language.commands.embedbuilder.editMsg)
       .setStyle(Discord.ButtonStyle.Primary)
-      .setDisabled(!options.selected);
+      .setDisabled(!options.selected || !msg.member.permissions.has(32n));
 
     return [edit];
   };
@@ -1452,7 +1455,8 @@ const handleSend = async (msg, answer, Objects) => {
     const send = new Builders.UnsafeButtonBuilder()
       .setCustomId('send')
       .setLabel(msg.language.commands.embedbuilder.send)
-      .setStyle(Discord.ButtonStyle.Primary);
+      .setStyle(Discord.ButtonStyle.Primary)
+      .setDisabled(!msg.member.permissions.has(32n));
     const channels = new Builders.UnsafeSelectMenuBuilder()
       .setCustomId('channels')
       .addOptions(...options.take)
@@ -1721,10 +1725,6 @@ const errorVal = async (msg, lan, valid, Objects, error, answer) => {
   let lanError;
 
   switch (error) {
-    case 'regFail': {
-      lanError = lan.regFail;
-      break;
-    }
     case 'length': {
       lanError = msg.client.ch.stp(lan.lengthFail, { max: valid });
       break;
@@ -1907,6 +1907,7 @@ const fieldSelect = async (msg, answer, Objects) => {
 
       switch (interaction.customId) {
         case 'inline': {
+          await interaction.deferUpdate().catch(() => {});
           selected.inline = !selected.inline;
           break;
         }
@@ -1920,10 +1921,12 @@ const fieldSelect = async (msg, answer, Objects) => {
           return;
         }
         case 'name': {
+          await interaction.deferUpdate().catch(() => {});
           editing = 'name';
           break;
         }
         case 'value': {
+          await interaction.deferUpdate().catch(() => {});
           editing = 'value';
           break;
         }
@@ -1996,12 +1999,12 @@ const handleEmbedSelection = async ({ msg, answer }, Objects, { embed, component
               .setValue(String(e.value))
               .setDefault(e.default),
           )
-        : new Builders.SelectMenuOptionBuilder().setLabel('0').setValue('0')),
+        : [new Builders.SelectMenuOptionBuilder().setLabel('0').setValue('0')]),
     );
 
   const enableButtons = (customId, i, j) => {
     switch (customId) {
-      case newMenu.customId: {
+      case newMenu.data.custom_id: {
         if (typeof j === 'number') {
           components[i][j] = newMenu;
         } else {
@@ -2036,13 +2039,9 @@ const handleEmbedSelection = async ({ msg, answer }, Objects, { embed, component
   };
 
   components.forEach((c, i) => {
-    if (Array.isArray(c)) {
-      c.forEach((o, j) => {
-        enableButtons(o.customId, i, j);
-      });
-    } else if (c.customId === newMenu.customId) {
-      enableButtons(c.customId, i);
-    }
+    c.forEach((o, j) => {
+      enableButtons(o.data.custom_id, i, j);
+    });
   });
 
   await replier({ msg, answer }, { embeds: [embed], components }, Objects);
@@ -2062,7 +2061,7 @@ const handleInherit = async ({ msg, answer }, Objects) => {
     return null;
   });
 
-  const selectedValue = menu.options.find((o) => o.default === true);
+  const selectedValue = menu.data.options.find((o) => o.default === true);
   const embeds = await getSavedEmbeds(msg);
   const selectedEmbed = embeds.find((e) => e.uniquetimestamp === selectedValue.value);
   const embed = msg.client.ch.getDiscordEmbed(selectedEmbed);
