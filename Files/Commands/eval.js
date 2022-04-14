@@ -1,6 +1,8 @@
 // eslint-disable-next-line no-unused-vars
 const Discord = require('discord.js');
 // eslint-disable-next-line no-unused-vars
+const Builders = require('@discordjs/builders');
+// eslint-disable-next-line no-unused-vars
 const ms = require('ms');
 const util = require('util');
 const auth = require('../BaseClient/auth.json');
@@ -32,6 +34,7 @@ module.exports = {
 
       if (evaled.length > 2000) {
         msg.client.ch.reply(msg, 'Too long, check console');
+        // eslint-disable-next-line no-console
         console.log(evaled);
       } else if (clean(evaled) !== 'undefined') {
         msg.client.ch.reply(msg, `\n${msg.client.ch.makeCodeBlock(`q\n${clean(evaled)}`)}`);
@@ -39,6 +42,7 @@ module.exports = {
     } catch (err) {
       if (err.length > 2000) {
         msg.client.ch.reply(msg, 'Too long, check console');
+        // eslint-disable-next-line no-console
         console.log(err);
       } else if (clean(err) !== 'undefined') {
         msg.client.ch.reply(
