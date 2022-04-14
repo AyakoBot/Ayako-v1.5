@@ -1341,6 +1341,8 @@ const handleEdit = async (msg, answer, Objects) => {
   const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
 
   messageCollector.on('collect', (m) => {
+    if (m.author.id !== msg.author.id) return;
+
     options.selected = m.content?.toLowerCase();
     m.delete().catch(() => {});
 
@@ -1848,6 +1850,8 @@ const fieldSelect = async (msg, answer, Objects) => {
     });
 
     messageCollector.on('collect', async (message) => {
+      if (message.author.id !== msg.author.id) return;
+
       messageCollector.resetTimer();
       const collected = message.content;
 
