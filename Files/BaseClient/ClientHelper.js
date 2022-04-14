@@ -1039,7 +1039,7 @@ module.exports = {
       },
       description: DBembed.description,
       thumbnail: {
-        url: DBembed.data.thumbnail,
+        url: DBembed.thumbnail,
       },
       fields:
         DBembed.fieldnames?.map((fieldName, i) => {
