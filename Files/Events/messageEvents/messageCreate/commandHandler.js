@@ -251,7 +251,7 @@ const putCooldown = (msg) => {
       cooldowns.delete(msg.command.name);
     }),
     channel: msg.channel,
-    expire: Date.now() + msg.cooldown.cooldown,
+    expire: Date.now() + msg.cooldown,
   });
 };
 
