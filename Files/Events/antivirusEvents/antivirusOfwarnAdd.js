@@ -1,12 +1,17 @@
 module.exports = {
   async execute(msg) {
     const language = await msg.client.ch.languageSelector(msg.guild);
+
     msg.client.emit(
-      'modWarnAdd',
-      msg.client.user,
-      msg.author,
-      `${language.autotypes.antivirus} | ${language.maliciousLink}`,
-      msg,
+      'modBaseEvent',
+      {
+        executor: msg.client.user,
+        target: msg.author,
+        reason: language.autotypes.antivirus,
+        msg,
+        guild: msg.guild,
+      },
+      'warnAdd',
     );
   },
 };

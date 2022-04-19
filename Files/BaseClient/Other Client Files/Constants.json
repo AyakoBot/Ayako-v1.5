@@ -708,9 +708,9 @@
             "key": "language",
             "required": true
           },
-          "streamroles": {
-            "key": "roles",
-            "required": false
+          "errorchannel": {
+            "key": "channel",
+            "required": true
           }
         },
         "disabled": {
@@ -860,24 +860,44 @@
           }
         },
         "modsettings": {
-          "expirewarns": {
+          "warns": {
             "key": "boolean",
             "required": true
           },
-          "expiremutes": {
-            "key": "boolean",
-            "required": true
-          },
-          "expiremutesafter": {
+          "warnstime": {
             "key": "time",
             "required": true
           },
-          "expirewarnsafter": {
+          "mutes": {
+            "key": "boolean",
+            "required": true
+          },
+          "mutestime": {
             "key": "time",
             "required": true
           },
-          "muteban": {
+          "kicks": {
             "key": "boolean",
+            "required": true
+          },
+          "kickstime": {
+            "key": "time",
+            "required": true
+          },
+          "channelbans": {
+            "key": "boolean",
+            "required": true
+          },
+          "channelbanstime": {
+            "key": "time",
+            "required": true
+          },
+          "bans": {
+            "key": "boolean",
+            "required": true
+          },
+          "banstime": {
+            "key": "time",
             "required": true
           }
         },
@@ -1486,8 +1506,8 @@
           "ident": "command"
         },
         "overview": {
-          "cols": ["guildid, interactionsmode, lan"],
-          "vals": [["{{msg.guild.id}}", true, "en"]]
+          "cols": ["guildid, interactionsmode, lan, errorchannel"],
+          "vals": [["{{msg.guild.id}}", true, "en", "{{msg.channel.id}}"]]
         },
         "forcecooldowns": {
           "cols": null,
@@ -1543,8 +1563,8 @@
           "identType": "role"
         },
         "modsettings": {
-          "cols": ["guildid, expirewarns, expiremutes, muteban"],
-          "vals": [["{{msg.guild.id}}", false, false, false]]
+          "cols": ["guildid, warns, mutes, kicks, channelbans, bans"],
+          "vals": [["{{msg.guild.id}}", false, false, false, false, false]]
         },
         "autopunish": {
           "cols": ["guildid, active, uniquetimestamp, warnamount, confirmationreq, sendtof"],

@@ -38,12 +38,8 @@ module.exports = {
         inline: true,
       },
       {
-        name: `${msg.lan.streamroles}\u200b`,
-        value: `${
-          r.streamroles && r.streamroles.length
-            ? r.streamroles.map((id) => ` <@&${id}>`)
-            : msg.language.none
-        }`,
+        name: `${msg.lan.errorchannel}\u200b`,
+        value: `${r.errorchannel ? `<#${r.errorchannel}>` : msg.language.none}`,
         inline: false,
       },
     );
@@ -62,10 +58,10 @@ module.exports = {
       .setCustomId(msg.lan.edit.lan.name)
       .setLabel(msg.lan.lan)
       .setStyle(Discord.ButtonStyle.Secondary);
-    const streamroles = new Builders.UnsafeButtonBuilder()
-      .setCustomId(msg.lan.edit.streamroles.name)
-      .setLabel(msg.lan.streamroles)
+    const errorchannel = new Builders.UnsafeButtonBuilder()
+      .setCustomId(msg.lan.edit.errorchannel.name)
+      .setLabel(msg.lan.errorchannel)
       .setStyle(Discord.ButtonStyle.Secondary);
-    return [[prefix, interactionsmode, language, streamroles]];
+    return [[prefix, interactionsmode, language, errorchannel]];
   },
 };

@@ -6,57 +6,68 @@ module.exports = {
   execute: async () => {
     const client = require('../../../BaseClient/DiscordClient');
     const settingsRes = await client.ch.query(
-      `SELECT * FROM modsettings WHERE expirewarns = true AND expirewarnsafter IS NOT NULL OR expiremutes = true AND expiremutesafter IS NOT NULL;`,
+      `SELECT * FROM modsettings WHERE warns = true AND warnstime IS NOT NULL OR mutes = true AND mutestime IS NOT NULL OR kicks = true AND kickstime IS NOT NULL OR channelbans = true AND channelbanstime IS NOT NULL OR bans = true AND banstime IS NOT NULL;`,
     );
 
     if (!settingsRes || !settingsRes.rowCount) return;
 
     settingsRes.rows.forEach(async (settingsRow) => {
       if (!client.guilds.cache.get(settingsRow.guildid)) return;
-      if (settingsRow.expirewarns && settingsRow.expirewarnsafter) doWarns(settingsRow, client);
-      if (settingsRow.expiremutes && settingsRow.expiremutesafter) doMutes(settingsRow, client);
+      if (settingsRow.warns && settingsRow.warnstime) {
+        expire(
+          { expire: settingsRow.warnstime, guildid: settingsRow.guildid },
+          client,
+          'punish_warns',
+        );
+      }
+      if (settingsRow.mutes && settingsRow.mutestime) {
+        expire(
+          { expire: settingsRow.mutestime, guildid: settingsRow.guildid },
+          client,
+          'punish_mutes',
+        );
+      }
+      if (settingsRow.kicks && settingsRow.kickstime) {
+        expire(
+          { expire: settingsRow.kickstime, guildid: settingsRow.guildid },
+          client,
+          'punish_kicks',
+        );
+      }
+      if (settingsRow.bans && settingsRow.banstime) {
+        expire(
+          { expire: settingsRow.banstime, guildid: settingsRow.guildid },
+          client,
+          'punish_bans',
+        );
+      }
+      if (settingsRow.channelbans && settingsRow.channelbanstime) {
+        expire(
+          { expire: settingsRow.channelbans, guildid: settingsRow.guildid },
+          client,
+          'punish_channelbans',
+        );
+      }
     });
   },
 };
 
-const doWarns = async (settingsRow, client) => {
-  const { guildid } = settingsRow;
-
-  const warnRes = await client.ch.query(
-    `SELECT * FROM warns WHERE guildid = $1 AND dateofwarn < $2 AND type = 'Warn';`,
-    [guildid, Date.now() - settingsRow.expirewarnsafter],
+const expire = async (row, client, tableName) => {
+  const res = await client.ch.query(
+    `SELECT * FROM ${tableName} WHERE guildid = $1 AND uniquetimestamp < $2;`,
+    [row.guildid, Date.now() - row.expire],
   );
 
-  if (!warnRes || !warnRes.rowCount) return;
+  if (!res || !res.rowCount) return;
 
-  warnRes.rows.forEach((row) => {
-    client.ch.query(`DELETE FROM warns WHERE dateofwarn = $1 AND type = 'Warn' AND guildid = $2;`, [
-      row.dateofwarn,
-      guildid,
+  res.rows.forEach((r) => {
+    client.ch.query(`DELETE FROM ${tableName} WHERE uniquetimestamp = $1 AND guildid = $2;`, [
+      r.uniquetimestamp,
+      r.guildid,
     ]);
   });
 
-  logExpire(warnRes.rows, client, guildid);
-};
-
-const doMutes = async (settingsRow, client) => {
-  const { guildid } = settingsRow;
-
-  const muteRes = await client.ch.query(
-    `SELECT * FROM warns WHERE guildid = $1 AND dateofwarn < $2 AND type = 'Mute' AND closed = true;`,
-    [guildid, Date.now() - settingsRow.expiremutesafter],
-  );
-
-  if (!muteRes || !muteRes.rowCount) return;
-
-  muteRes.rows.forEach((row) => {
-    client.ch.query(`DELETE FROM warns WHERE dateofwarn = $1 AND type = 'Mute' AND guildid = $2;`, [
-      row.dateofwarn,
-      guildid,
-    ]);
-  });
-
-  logExpire(muteRes.rows, client, guildid);
+  logExpire(res.rows, client, row.guildid);
 };
 
 const logExpire = async (rows, client, guildid) => {
@@ -70,12 +81,12 @@ const logExpire = async (rows, client, guildid) => {
   const logchannels = logchannelRes.rows[0].modlogs.map((id) => client.channels.cache.get(id));
   const guild = client.guilds.cache.get(guildid);
 
-  await Promise.all(rows.map((warn) => client.users.fetch(warn.userid).catch(() => {})));
+  await Promise.all(rows.map((p) => client.users.fetch(p.userid).catch(() => {})));
   await Promise.all(
-    rows.map((warn) =>
+    rows.map((p) =>
       client.guilds.cache
         .get(guildid)
-        .members.fetch(warn.userid)
+        .members.fetch(p.userid)
         .catch(() => {}),
     ),
   );
@@ -84,119 +95,74 @@ const logExpire = async (rows, client, guildid) => {
   const lan = language.expire;
   const con = client.constants.expire;
 
-  const embeds = rows.map((warn, i) => {
-    warn.row_number = i;
+  await Promise.all(rows.map((r) => client.users.fetch(r.userid).catch(() => {})));
+
+  const embeds = rows.map((p) => {
     const embed = new Builders.UnsafeEmbedBuilder();
-    const user = client.users.cache.get(warn.userid);
+    const user = client.users.cache.get(p.userid);
 
-    if (warn.type === 'Warn') {
-      embed
-        .setDescription(`**${language.reason}:**\n${warn.reason}`)
-        .setAuthor({
-          name: client.ch.stp(lan.warnOf, { target: user }),
-          iconURL: con.log.image,
-          url: client.ch.stp(client.constants.standard.discordUrlDB, {
-            guildid: guild.id,
-            channelid: warn.warnedinchannelid,
-            msgid: warn.msgid,
-          }),
-        })
-        .addFields(
-          {
-            name: lan.date,
-            value: `<t:${warn.dateofwarn.slice(0, -3)}:F> (<t:${warn.dateofwarn.slice(0, -3)}:R>)`,
-            inline: false,
-          },
-          {
-            name: lan.warnedIn,
-            value: `<#${warn.warnedinchannelid}>\n\`${warn.warnedinchannelname}\` (\`${warn.warnedinchannelid}\`)`,
-            inline: false,
-          },
-          {
-            name: lan.warnedBy,
-            value: `<@${warn.warnedbyuserid}>\n\`${warn.warnedbyusername}\` (\`${warn.warnedbyuserid}\`)`,
-            inline: false,
-          },
-          {
-            name: lan.expired,
-            value: `${client.user.tag}\n\`${client.user.username}\` (\`${client.user.id}\`)`,
-            inline: false,
-          },
-        )
-        .setColor(con.log.color)
-        .setFooter({ text: lan.warnID + warn.row_number });
-    } else if (warn.type === 'Mute') {
-      const member = guild.members.cache.get(user.id).catch(() => {});
-      let notClosed = client.ch.stp(lan.notClosed, {
-        time: `<t:${warn.duration.slice(0, -3)}:F> (<t:${warn.duration.slice(0, -3)}:R>)`,
-      });
-      if (member && member.isCommunicationDisabled()) {
-        notClosed = client.ch.stp(lan.abortedMute, {
-          time: `<t:${warn.duration.slice(0, -3)}:F> (<t:${warn.duration.slice(0, -3)}:R>)`,
-        });
-      }
-      let warnClosedText;
-      if (warn.closed === true) {
-        warnClosedText = client.ch.stp(lan.closed, {
-          time: `<t:${warn.duration.slice(0, -3)}:F> (<t:${warn.duration.slice(0, -3)}:R>)`,
-        });
-      } else if (warn.closed === false) warnClosedText = notClosed;
-      else warnClosedText = language.never;
+    const endedAt = client.ch.stp(lan.endedAt, {
+      time: `<t:${(Number(p.uniquetimestamp) + Number(p.duration)).slice(0, -3)}:F> (<t:${(
+        Number(p.uniquetimestamp) + Number(p.duration)
+      ).slice(0, -3)}:R>)`,
+    });
 
-      embed
-        .setDescription(`**${language.reason}:**\n${warn.reason}`)
-        .setAuthor({
-          name: client.ch.stp(lan.muteOf, { target: user }),
-          iconURL: con.log.image,
-          url: client.ch.stp(client.constants.standard.discordUrlDB, {
-            guildid: guild.id,
-            channelid: warn.warnedinchannelid,
-            msgid: warn.msgid,
-          }),
-        })
-        .addFields(
-          {
-            name: lan.date,
-            value: `<t:${warn.dateofwarn.slice(0, -3)}:F> (<t:${warn.dateofwarn.slice(0, -3)}:R>)`,
-            inline: false,
-          },
-          {
-            name: lan.mutedIn,
-            value: `<#${warn.warnedinchannelid}>\n\`${warn.warnedinchannelname}\` (\`${warn.warnedinchannelid}\`)`,
-            inline: false,
-          },
-          {
-            name: lan.mutedBy,
-            value: `<@${warn.warnedbyuserid}>\n\`${warn.warnedbyusername}\` (\`${warn.warnedbyuserid}\`)`,
-            inline: false,
-          },
-          {
-            name: lan.duration,
-            value: `${
-              warn.duration
-                ? moment
-                    .duration(+warn.duration - +warn.dateofwarn)
-                    .format(
-                      `d [${language.time.days}], h [${language.time.hours}], m [${language.time.minutes}], s [${language.time.seconds}]`,
-                    )
-                : '∞'
-            }`,
-            inline: false,
-          },
-          {
-            name: lan.warnclosed,
-            value: warnClosedText,
-            inline: false,
-          },
-          {
-            name: lan.pardonedBy,
-            value: `${client.user.tag}\n\`${client.user.username}\` (\`${client.user.id}\`)`,
-            inline: false,
-          },
-        )
-        .setColor(con.log.color)
-        .setFooter({ text: lan.warnID + warn.row_number });
-    }
+    embed
+      .setDescription(`**${language.reason}:**\n${p.reason}`)
+      .setAuthor({
+        name: client.ch.stp(lan.punishmentOf, { target: user }),
+        iconURL: con.log.image,
+        url: client.ch.stp(client.constants.standard.discordUrlDB, {
+          guildid: guild.id,
+          channelid: p.channelid,
+          msgid: p.msgid,
+        }),
+      })
+      .addFields(
+        {
+          name: lan.punishmentIssue,
+          value: `<t:${p.uniquetimestamp.slice(0, -3)}:F> (<t:${p.uniquetimestamp.slice(
+            0,
+            -3,
+          )}:R>)`,
+          inline: false,
+        },
+        {
+          name: lan.punishmentIn,
+          value: `<#${p.channelid}>\n\`${p.channelname}\` (\`${p.channelid}\`)`,
+          inline: false,
+        },
+        {
+          name: lan.punishmentBy,
+          value: `<@${p.executorid}>\n\`${p.executorname}\` (\`${p.executorid}\`)`,
+          inline: false,
+        },
+        {
+          name: lan.duration,
+          value: `${
+            p.duration
+              ? moment
+                  .duration(Number(p.duration))
+                  .format(
+                    `d [${language.time.days}], h [${language.time.hours}], m [${language.time.minutes}], s [${language.time.seconds}]`,
+                  )
+              : '∞'
+          }`,
+          inline: false,
+        },
+        {
+          name: lan.end,
+          value: endedAt,
+          inline: false,
+        },
+        {
+          name: lan.pardonedBy,
+          value: `${client.user.tag}\n\`${client.user.username}\` (\`${client.user.id}\`)`,
+          inline: false,
+        },
+      )
+      .setColor(con.log.color);
+
     return embed;
   });
 

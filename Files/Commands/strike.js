@@ -9,7 +9,7 @@ module.exports = {
     const proceed = async (doProceed, module) => {
       if (doProceed === false) {
         const modRoleRes = await msg.client.ch.modRoleWaiter(msg);
-        if (modRoleRes)
+        if (modRoleRes) {
           return msg.client.emit(
             `mod${msg.client.ch.CFL(module.name)}Handler`,
             msg.author,
@@ -17,6 +17,7 @@ module.exports = {
             reason,
             msg,
           );
+        }
         msg.delete().catch(() => {});
       } else {
         return msg.client.emit(
