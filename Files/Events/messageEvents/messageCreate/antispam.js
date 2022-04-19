@@ -40,7 +40,7 @@ module.exports = {
     else return;
 
     const res2 = await msg.client.ch.query(
-      'SELECT * FROM warns WHERE guildid = $1 AND userid = $2;',
+      'SELECT * FROM punish_warns WHERE guildid = $1 AND userid = $2;',
       [msg.guild.id, msg.author.id],
     );
     if (res2 && res2.rowCount > 0) warnnr = res2.rowCount;
@@ -114,7 +114,7 @@ module.exports = {
           await muteUser(msg);
         } else msg.client.emit('antispamOfwarnAdd', msg);
       }
-      if (guildSettings.readofwarnstof === false) msg.client.emit('ofwarnAdd', msg);
+      if (guildSettings.readofwarnstof === false) msg.client.emit('antispamOfwarnAdd', msg);
     };
 
     data.messageCache.push({

@@ -5,19 +5,26 @@ module.exports = {
         limit: 100,
       })
       .catch(() => {});
-    const filterBy = msg.author.id;
+
     msgs = msgs
-      .filter((m) => m.author.id === filterBy)
+      .filter((m) => m.author.id === msg.author.id)
       .array()
       .slice(0, 18);
+
     msg.channel.bulkDelete(msgs).catch(() => {});
-    const language = await msg.client.ch.languageSelector(msg.guild);
+
+    msg.language = await msg.client.ch.languageSelector(msg.guild);
+
     msg.client.emit(
-      'modWarnAdd',
-      msg.client.user,
-      msg.author,
-      `${language.autotypes.antivirus} | ${language.spam}`,
-      msg,
+      'modBaseEvent',
+      {
+        executor: msg.client.user,
+        target: msg.author,
+        reason: msg.language.autotypes.antispam,
+        msg,
+        guild: msg.guild,
+      },
+      'warnAdd',
     );
   },
 };

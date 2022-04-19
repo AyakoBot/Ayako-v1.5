@@ -1,46 +1,30 @@
 module.exports = {
-  async execute() {
+  execute: async () => {
     const client = require('../../../BaseClient/DiscordClient');
-    const { ch } = client;
     client.guilds.cache.forEach(async (guild) => {
-      const res = await ch.query('SELECT * FROM warns WHERE type = $1 AND guildid = $2;', [
-        'ChannelBan',
-        guild.id,
-      ]);
-      if (res && res.rowCount > 0) {
-        res.rows.forEach(async (r) => {
-          if (r.closed === false) {
-            const user = await client.users.fetch(r.userid);
-            const end = r.duration;
-            if (end < Date.now()) {
-              if (guild && guild.id) {
-                if (guild && guild.id) {
-                  if (user && user.id) {
-                    const language = await ch.languageSelector(guild);
-                    client.emit(
-                      'modChannelbanRemove',
-                      client.user,
-                      user,
-                      guild,
-                      language.ready.unmute.reason,
-                      channel
-                    );
-                    closed(guild, user, end);
-                  }
-                }
-              }
-            }
-          }
-        });
-      }
+      const res = await client.ch.query(
+        'SELECT * FROM punish_tempchannelbans WHERE guildid = $2;',
+        [guild.id],
+      );
+      if (!res || !res.rowCount) return;
+
+      res.rows.forEach(async (r) => {
+        const end = r.duration + r.uniquetimestamp;
+
+        if (end > Date.now()) return;
+        if (!guild) return;
+
+        const user = await client.users.fetch(r.userid).catch(() => {});
+
+        if (!user) return;
+
+        const language = await client.ch.languageSelector(guild);
+        client.emit(
+          'modBaseEvent',
+          { executor: client.user, target: user, reason: language.ready.unmute.reason, guild },
+          'channelbanRemove',
+        );
+      });
     });
   },
 };
-
-function closed(guild, user, end) {
-  const { client } = guild;
-  client.ch.query(
-    'UPDATE warns SET closed = $1 WHERE guildid = $2 AND userid = $3 AND type = $4 AND duration = $5;',
-    [true, guild.id, user.id, 'ChannelBan', end],
-  );
-}
