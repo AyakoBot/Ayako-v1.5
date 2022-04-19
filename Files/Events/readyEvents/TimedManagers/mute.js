@@ -2,7 +2,7 @@ module.exports = {
   execute: async () => {
     const client = require('../../../BaseClient/DiscordClient');
     client.guilds.cache.forEach(async (guild) => {
-      const res = await client.ch.query('SELECT * FROM punish_tempmutes WHERE guildid = $2;', [
+      const res = await client.ch.query('SELECT * FROM punish_tempmutes WHERE guildid = $1;', [
         guild.id,
       ]);
       if (!res || !res.rowCount) return;
