@@ -132,6 +132,9 @@ const getText = (msg, saidText, mentionText, usedCommandName) => {
     if (!lan && msg.mentions.users.size === 1) lan = msg.lan.one[usedCommandName];
     if (!lan && msg.mentions.users.size > 1) lan = msg.lan.many[usedCommandName];
 
+    console.log(usedCommandName);
+    
+
     text = msg.client.ch.stp(lan, {
       msg,
       users: mentionText,

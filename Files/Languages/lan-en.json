@@ -908,7 +908,7 @@
       "dm": {
         "author": "You have been muted on {{guild.name}}"
       },
-      "hasRole": "This Member is already muted",
+      "alreadyApplied": "This Member is already muted",
       "exeNoPerms": "You can't mute this Member",
       "meNoPerms": "I can't mute this Member `Missing Permissions`",
       "success": "Member {{target}} was muted",
@@ -927,7 +927,7 @@
       "dm": {
         "author": "You have been Temp-Muted on {{guild.name}}"
       },
-      "hasRole": "This Member is already Temp-Mute",
+      "alreadyApplied": "This Member is already Temp-Mute",
       "exeNoPerms": "You can't Temp-Mute this Member",
       "meNoPerms": "I can't Temp-Mute this Member `Missing Permissions`",
       "success": "Member {{target}} was Temp-Muted",
@@ -945,7 +945,7 @@
         "author": "You have been unmuted on {{guild.name}}"
       },
       "exeNoPerms": "You can't mute this Member",
-      "hasNoRole": "This Member isn't muted",
+      "alreadyApplied": "This Member isn't muted",
       "success": "Member {{target}} was unmuted",
       "noRole": "I wasn't able to find a Mute Role\nVisit `h!settings overview` to set or create one",
       "loading": "Un-Muting User...",
@@ -963,7 +963,7 @@
       "exeNoPerms": "You can't ban this User",
       "permissionError": "I don't have enough permissions to ban this User",
       "error": "I wasn't able to ban this User!",
-      "alreadyBanned": "User {{target}} is already banned",
+      "alreadyApplied": "User {{target}} is already banned",
       "success": "User {{target}} was banned",
       "loading": "Banning User...",
       "selfBan": "You can't ban yourself",
@@ -979,7 +979,7 @@
       "exeNoPerms": "You can't soft-ban this User",
       "permissionError": "I don't have enough permissions to soft-ban this User",
       "error": "I wasn't able to soft-ban this User!",
-      "alreadyBanned": "User {{target}} is already banned",
+      "alreadyApplied": "User {{target}} is already banned",
       "success": "User {{target}} was soft-banned",
       "loading": "Soft-Banning User...",
       "selfBan": "You can't soft-ban yourself",
@@ -996,7 +996,7 @@
       "exeNoPerms": "You can't ban this User",
       "permissionError": "I don't have enough permissions to ban this User",
       "error": "I wasn't able to ban this User!",
-      "alreadyBanned": "User {{target}} is already banned",
+      "alreadyApplied": "User {{target}} is already banned",
       "success": "User {{target}} was banned",
       "loading": "Banning User...",
       "selfBan": "You can't ban yourself",
@@ -1012,7 +1012,7 @@
       "exeNoPerms": "You can't Channel-Ban this User",
       "permissionError": "I don't have enough permissions to Channel-Ban this User",
       "error": "I wasn't able to Channel-Ban this User!",
-      "alreadyBanned": "User {{target}} is already Channel-Banned",
+      "alreadyApplied": "User {{target}} is already Channel-Banned",
       "success": "User {{target}} was Channel-Banned",
       "loading": "Channel-Banning User...",
       "selfBan": "You can't Channel-Ban yourself",
@@ -1028,7 +1028,7 @@
       "exeNoPerms": "You can't Channel-Unbanned this User",
       "permissionError": "I don't have enough permissions to Channel-Unbanned this User",
       "error": "I wasn't able to Channel-Unbanned this User!",
-      "notBanned": "This User isn't Channel-Banned",
+      "alreadyApplied": "This User isn't Channel-Banned",
       "success": "User {{target}} was Channel-Unbanned",
       "loading": "Channel-Unbanning User..."
     },
@@ -1042,7 +1042,7 @@
       "exeNoPerms": "You can't unban this User",
       "permissionError": "I don't have enough permissions to unban this User",
       "error": "I wasn't able to unban this User!",
-      "notBanned": "This User isn't banned",
+      "alreadyApplied": "This User isn't banned",
       "success": "User {{target}} was unbanned",
       "loading": "Un-Banning User..."
     },
@@ -1054,7 +1054,7 @@
         "author": "You have been kicked from {{guild.name}}"
       },
       "exeNoPerms": "You can't kick this Member",
-      "noMember": "This User is not a Member of this Server",
+      "alreadyApplied": "This User is not a Member of this Server",
       "permissionError": "I don't have enough permissions to kick this Member",
       "error": "I wasn't able to kick this Member!",
       "success": "User {{target}} was kicked",
@@ -1124,17 +1124,16 @@
       },
       "one": {
         "handshake": "{{msg.author}} shakes {{users}}'s hand",
-        "holdhands": "{{msg.author}} holds {{users}}'s hand",
         "baka": "{{msg.author}} thinks {{users}} is a Baka!",
         "fluff": "{{msg.author}} fluffs {{users}} tail"
       },
       "many": {
         "handshake": "{{msg.author}} shakes {{users}}'s hands",
-        "holdhands": "{{msg.author}} holds {{users}} hands",
         "baka": "{{msg.author}} thinks {{users}} are Bakas!",
         "fluff": "{{msg.author}} fluffs {{users}} tails"
       },
       "all": {
+        "handhold": "{{msg.author}} holds {{users}}'s hand",
         "hug": "{{msg.author}} hugs {{users}}{{text}}",
         "pat": "{{msg.author}} pats {{users}}{{text}}",
         "kiss": "{{msg.author}} kisses {{users}}{{text}}",
