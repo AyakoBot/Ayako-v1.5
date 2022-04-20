@@ -31,29 +31,11 @@ module.exports = {
 
 const getWarn = async (msg, target, warnNr) => {
   const [warnRes, kickRes, muteRes, banRes, channelbanRes] = await Promise.all(
-    msg.client.ch.query(
-      'SELECT * FROM punish_warns WHERE guildid = $1 AND userid = $2 AND uniquetimestamp = $3;',
-      [msg.guild.id, target.id, warnNr],
-    ),
-    msg.client.ch.query(
-      'SELECT * FROM punish_kicks WHERE guildid = $1 AND userid = $2 AND uniquetimestamp = $3;',
-      [msg.guild.id, target.id, warnNr],
-    ),
-    msg.client.ch.query(
-      'SELECT * FROM punish_mutes WHERE guildid = $1 AND userid = $2 AND uniquetimestamp = $3;',
-      [msg.guild.id, target.id, warnNr],
-    ),
-    msg.client.ch.query(
-      'SELECT * FROM punish_mutes WHERE guildid = $1 AND userid = $2 AND uniquetimestamp = $3;',
-      [msg.guild.id, target.id, warnNr],
-    ),
-    msg.client.ch.query(
-      'SELECT * FROM punish_bans WHERE guildid = $1 AND userid = $2 AND uniquetimestamp = $3;',
-      [msg.guild.id, target.id, warnNr],
-    ),
-    msg.client.ch.query(
-      'SELECT * FROM punish_channelbans WHERE guildid = $1 AND userid = $2 AND uniquetimestamp = $3;',
-      [msg.guild.id, target.id, warnNr],
+    ['warns', 'kicks', 'mutes', 'mutes', 'bans', 'channelbans'].map((table) =>
+      msg.client.ch.query(
+        `SELECT * FROM punish_${table} WHERE guildid = $1 AND userid = $2 AND uniquetimestamp = $3;`,
+        [msg.guild.id, target.id, warnNr],
+      ),
     ),
   );
 
@@ -133,26 +115,12 @@ const doLog = (msg, user, warn, reason) => {
 };
 
 const editWarn = async (msg, warn, newReason) => {
-  await Promise.all([
-    msg.client.ch.query(
-      `UPDATE punish_warns SET reason = $4 WHERE guildid = $1 AND userid = $2 AND uniquetimestamp = $3;`,
-      [msg.guild.id, warn.userid, warn.uniquetimestamp, newReason],
+  await Promise.all(
+    ['warns', 'kicks', 'mutes', 'mutes', 'bans', 'channelbans'].map((table) =>
+      msg.client.ch.query(
+        `UPDATE punish_${table} SET reason = $4 WHERE guildid = $1 AND userid = $2 AND uniquetimestamp = $3;`,
+        [msg.guild.id, warn.userid, warn.uniquetimestamp, newReason],
+      ),
     ),
-    msg.client.ch.query(
-      `UPDATE punish_kicks SET reason = $4 WHERE guildid = $1 AND userid = $2 AND uniquetimestamp = $3;`,
-      [msg.guild.id, warn.userid, warn.uniquetimestamp, newReason],
-    ),
-    msg.client.ch.query(
-      `UPDATE punish_mutes SET reason = $4 WHERE guildid = $1 AND userid = $2 AND uniquetimestamp = $3;`,
-      [msg.guild.id, warn.userid, warn.uniquetimestamp, newReason],
-    ),
-    msg.client.ch.query(
-      `UPDATE punish_bans SET reason = $4 WHERE guildid = $1 AND userid = $2 AND uniquetimestamp = $3;`,
-      [msg.guild.id, warn.userid, warn.uniquetimestamp, newReason],
-    ),
-    msg.client.ch.query(
-      `UPDATE punish_channelbans SET reason = $4 WHERE guildid = $1 AND userid = $2 AND uniquetimestamp = $3;`,
-      [msg.guild.id, warn.userid, warn.uniquetimestamp, newReason],
-    ),
-  ]);
+  );
 };

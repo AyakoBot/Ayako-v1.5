@@ -145,30 +145,12 @@ const checkRoles = (roles, guild) => {
 
 const getWarns = async (msg, target) => {
   const [warnRes, kickRes, muteRes, banRes, channelbanRes] = await Promise.all(
-    msg.client.ch.query('SELECT * FROM punish_warns WHERE guildid = $1 AND userid = $2;', [
-      msg.guild.id,
-      target.id,
-    ]),
-    msg.client.ch.query('SELECT * FROM punish_kicks WHERE guildid = $1 AND userid = $2;', [
-      msg.guild.id,
-      target.id,
-    ]),
-    msg.client.ch.query('SELECT * FROM punish_mutes WHERE guildid = $1 AND userid = $2;', [
-      msg.guild.id,
-      target.id,
-    ]),
-    msg.client.ch.query('SELECT * FROM punish_mutes WHERE guildid = $1 AND userid = $2;', [
-      msg.guild.id,
-      target.id,
-    ]),
-    msg.client.ch.query('SELECT * FROM punish_bans WHERE guildid = $1 AND userid = $2;', [
-      msg.guild.id,
-      target.id,
-    ]),
-    msg.client.ch.query('SELECT * FROM punish_channelbans WHERE guildid = $1 AND userid = $2;', [
-      msg.guild.id,
-      target.id,
-    ]),
+    ['warns', 'kicks', 'mutes', 'mutes', 'bans', 'channelbans'].map((table) =>
+      msg.client.ch.query(`SELECT * FROM punish_${table} WHERE guildid = $1 AND userid = $2;`, [
+        msg.guild.id,
+        target.id,
+      ]),
+    ),
   );
 
   let totalWarns = 0;
