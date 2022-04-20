@@ -6,27 +6,15 @@ module.exports = {
   aliases: null,
   type: 'mod',
   async execute(msg) {
-    const proceed = async (doProceed, module) => {
+    const proceed = async (doProceed) => {
       if (doProceed === false) {
         const modRoleRes = await msg.client.ch.modRoleWaiter(msg);
         if (modRoleRes) {
-          return msg.client.emit(
-            `mod${msg.client.ch.CFL(module.name)}Handler`,
-            msg.author,
-            user,
-            reason,
-            msg,
-          );
+          return msg.client.emit(`modStrikeHandler`, msg.author, user, reason, msg);
         }
         msg.delete().catch(() => {});
       } else {
-        return msg.client.emit(
-          `mod${msg.client.ch.CFL(module.name)}Handler`,
-          msg.author,
-          user,
-          reason,
-          msg,
-        );
+        return msg.client.emit(`modStrikeHandler`, msg.author, user, reason, msg);
       }
       return null;
     };
@@ -49,11 +37,11 @@ module.exports = {
       if (res2 && res2.rowCount > 0) {
         const roles = [];
         res2.rows.forEach((r) => roles.push(r.roleid));
-        if (guildmember.roles.cache.some((r) => roles.includes(r.id))) return proceed(false, this);
-        return proceed(null, this);
+        if (guildmember.roles.cache.some((r) => roles.includes(r.id))) return proceed(false);
+        return proceed(null);
       }
-      return proceed(null, this);
+      return proceed(null);
     }
-    return proceed(null, this);
+    return proceed(null);
   },
 };

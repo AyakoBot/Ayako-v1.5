@@ -12,13 +12,36 @@ module.exports = {
   async execute(msg) {
     const user = msg.args[0].replace(/\D+/g, '');
     if (!user) return msg.client.ch.reply(msg, "Couldn't find that User");
+
     const Gameverse = msg.client.guilds.cache.get('366219406776336385');
     const Animekos = msg.client.guilds.cache.get('298954459172700181');
     const banReason = msg.args[1] ? msg.args.slice(1).join(' ') : 'No Reason given';
-        msg.guild = Gameverse;
-    msg.client.emit('modBanAdd', msg.author, user, banReason, msg);
-        msg.guild = Animekos;
-    msg.client.emit('modBanAdd', msg.author, user, banReason, msg);
+
+    msg.guild = Gameverse;
+    msg.client.emit(
+      'modBaseEvent',
+      {
+        target: user,
+        executor: msg.author,
+        reason: banReason,
+        msg,
+        guild: msg.guild,
+      },
+      'banAdd',
+    );
+
+    msg.guild = Animekos;
+    msg.client.emit(
+      'modBaseEvent',
+      {
+        target: user,
+        executor: msg.author,
+        reason: banReason,
+        msg,
+        guild: msg.guild,
+      },
+      'banAdd',
+    );
     return null;
   },
 };

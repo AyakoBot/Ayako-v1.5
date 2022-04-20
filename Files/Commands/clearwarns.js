@@ -6,7 +6,7 @@ module.exports = {
   perm: 8192n,
   dm: false,
   takesFirstArg: true,
-  aliases: null,
+  aliases: ['clearpunishments'],
   type: 'mod',
   async execute(msg) {
     const lan = msg.language.commands.clearwarns;
@@ -20,10 +20,7 @@ module.exports = {
       embed.setColor(con.fail);
       return msg.client.ch.reply(msg, { embeds: [embed] });
     }
-    const res = await msg.client.ch.query(
-      'SELECT * FROM warns WHERE userid = $1 AND guildid = $2;',
-      [user.id, msg.guild.id],
-    );
+    const res = await getRes(msg, user);
     if (!res || res.rowCount === 0) {
       embed.setDescription(lan.noWarns);
       embed.setColor(con.fail);
@@ -48,10 +45,8 @@ module.exports = {
     collector.on('collect', async (button) => {
       if (button.user.id === msg.author.id) {
         if (button.customId === 'yes') {
-          await msg.client.ch.query('DELETE FROM warns WHERE userid = $1 AND guildid = $2;', [
-            user.id,
-            msg.guild.id,
-          ]);
+          await deleteAll(msg, user);
+
           embed.setDescription(msg.client.ch.stp(lan.cleared, { user }));
           embed.setColor(con.success);
           msg.m.edit({ embeds: [embed], components: [] }).catch(() => {});
@@ -92,14 +87,15 @@ function log(msg, res, user, lan, con) {
         msgid: r.msgid,
       }),
     });
+
     logEmbed.addFields({
       name: msg.client.ch.stp(lan.log.title, {
         type: r.type,
-        user: r.warnedbyusername,
-        channel: r.warnedinchannelname,
+        user: r.executorname,
+        channel: r.channelname,
       }),
       value: msg.client.ch.stp(lan.log.value, {
-        time: `<t:${r.dateofwarn.slice(0, -3)}:F> (<t:${r.dateofwarn.slice(0, -3)}:R>)`,
+        time: `<t:${r.uniquetimestamp.slice(0, -3)}:F> (<t:${r.uniquetimestamp.slice(0, -3)}:R>)`,
         reason: r.reason,
       }),
     });
@@ -112,3 +108,66 @@ function log(msg, res, user, lan, con) {
   logEmbed.setDescription(description);
   if (msg.logchannels) msg.client.ch.send(msg.logchannels, { embeds: [logEmbed] });
 }
+
+const getRes = async (msg, target) => {
+  const [warnRes, kickRes, muteRes, banRes, channelbanRes] = await Promise.all(
+    msg.client.ch.query('SELECT * FROM punish_warns WHERE guildid = $1 AND userid = $2;', [
+      msg.guild.id,
+      target.id,
+    ]),
+    msg.client.ch.query('SELECT * FROM punish_kicks WHERE guildid = $1 AND userid = $2;', [
+      msg.guild.id,
+      target.id,
+    ]),
+    msg.client.ch.query('SELECT * FROM punish_mutes WHERE guildid = $1 AND userid = $2;', [
+      msg.guild.id,
+      target.id,
+    ]),
+    msg.client.ch.query('SELECT * FROM punish_mutes WHERE guildid = $1 AND userid = $2;', [
+      msg.guild.id,
+      target.id,
+    ]),
+    msg.client.ch.query('SELECT * FROM punish_bans WHERE guildid = $1 AND userid = $2;', [
+      msg.guild.id,
+      target.id,
+    ]),
+    msg.client.ch.query('SELECT * FROM punish_channelbans WHERE guildid = $1 AND userid = $2;', [
+      msg.guild.id,
+      target.id,
+    ]),
+  );
+
+  const allWarns = [];
+  if (warnRes && warnRes.rowCount) allWarns.concat(warnRes.rows);
+  if (kickRes && kickRes.rowCount) allWarns.concat(kickRes.rows);
+  if (muteRes && muteRes.rowCount) allWarns.concat(muteRes.rows);
+  if (banRes && banRes.rowCount) allWarns.concat(banRes.rows);
+  if (channelbanRes && channelbanRes.rowCount) allWarns.concat(channelbanRes.rows);
+
+  return allWarns;
+};
+
+const deleteAll = async (msg, target) => {
+  await Promise.all([
+    msg.client.ch.query(`DELETE FROM punish_warns WHERE guildid = $1 AND userid = $2;`, [
+      msg.guild.id,
+      target.id,
+    ]),
+    msg.client.ch.query(`DELETE FROM punish_kicks WHERE guildid = $1 AND userid = $2;`, [
+      msg.guild.id,
+      target.id,
+    ]),
+    msg.client.ch.query(`DELETE FROM punish_mutes WHERE guildid = $1 AND userid = $2;`, [
+      msg.guild.id,
+      target.id,
+    ]),
+    msg.client.ch.query(`DELETE FROM punish_bans WHERE guildid = $1 AND userid = $2;`, [
+      msg.guild.id,
+      target.id,
+    ]),
+    msg.client.ch.query(`DELETE FROM punish_channelbans WHERE guildid = $1 AND userid = $2;`, [
+      msg.guild.id,
+      target.id,
+    ]),
+  ]);
+};

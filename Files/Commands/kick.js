@@ -5,26 +5,35 @@ module.exports = {
   takesFirstArg: true,
   aliases: null,
   type: 'mod',
-  async execute(msg) {
-    const proceed = async (doProceed, module) => {
+  execute: async (msg) => {
+    const proceed = async (doProceed) => {
       if (doProceed === false) {
         const modRoleRes = await msg.client.ch.modRoleWaiter(msg);
-        if (modRoleRes)
+        if (modRoleRes) {
           return msg.client.emit(
-            `mod${msg.client.ch.CFL(module.name)}Add`,
-            msg.author,
-            user,
-            reason,
-            msg,
+            `modBaseEvent`,
+            {
+              target: user,
+              executor: msg.author,
+              reason,
+              msg,
+              guild: msg.guild,
+            },
+            'kickAdd',
           );
+        }
         msg.delete().catch(() => {});
       } else {
         return msg.client.emit(
-          `mod${msg.client.ch.CFL(module.name)}Add`,
-          msg.author,
-          user,
-          reason,
-          msg,
+          `modBaseEvent`,
+          {
+            target: user,
+            executor: msg.author,
+            reason,
+            msg,
+            guild: msg.guild,
+          },
+          'kickAdd',
         );
       }
       return null;
@@ -32,9 +41,12 @@ module.exports = {
 
     const user = await msg.client.users.fetch(msg.args[0].replace(/\D+/g, '')).catch(() => {});
     const { lan } = msg;
+
     if (!user) return msg.client.ch.error(msg, msg.language.errors.userNotFound);
+
     const reason = msg.args.slice(1).join(' ') ? msg.args.slice(1).join(' ') : lan.reason;
     const guildmember = await msg.guild.members.fetch(user.id).catch(() => {});
+
     if (guildmember) {
       const res = await msg.client.ch.query('SELECT * FROM modroles WHERE guildid = $1;', [
         msg.guild.id,
@@ -43,10 +55,10 @@ module.exports = {
         const roles = [];
         res.rows.forEach((r) => roles.push(r.roleid));
         if (guildmember.roles.cache.some((r) => roles.includes(r.id))) return proceed(false, this);
-        return proceed(null, this);
+        return proceed(null);
       }
-      return proceed(null, this);
+      return proceed(null);
     }
-    return proceed(null, this);
+    return proceed(null);
   },
 };
