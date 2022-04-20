@@ -111,30 +111,12 @@ function log(msg, res, user, lan, con) {
 
 const getRes = async (msg, target) => {
   const [warnRes, kickRes, muteRes, banRes, channelbanRes] = await Promise.all(
-    msg.client.ch.query('SELECT * FROM punish_warns WHERE guildid = $1 AND userid = $2;', [
-      msg.guild.id,
-      target.id,
-    ]),
-    msg.client.ch.query('SELECT * FROM punish_kicks WHERE guildid = $1 AND userid = $2;', [
-      msg.guild.id,
-      target.id,
-    ]),
-    msg.client.ch.query('SELECT * FROM punish_mutes WHERE guildid = $1 AND userid = $2;', [
-      msg.guild.id,
-      target.id,
-    ]),
-    msg.client.ch.query('SELECT * FROM punish_mutes WHERE guildid = $1 AND userid = $2;', [
-      msg.guild.id,
-      target.id,
-    ]),
-    msg.client.ch.query('SELECT * FROM punish_bans WHERE guildid = $1 AND userid = $2;', [
-      msg.guild.id,
-      target.id,
-    ]),
-    msg.client.ch.query('SELECT * FROM punish_channelbans WHERE guildid = $1 AND userid = $2;', [
-      msg.guild.id,
-      target.id,
-    ]),
+    ['warns', 'kicks', 'mutes', 'mutes', 'bans', 'channelbans'].map((table) =>
+      msg.client.ch.query(`SELECT * FROM punish_${table} WHERE guildid = $1 AND userid = $2;`, [
+        msg.guild.id,
+        target.id,
+      ]),
+    ),
   );
 
   const allWarns = [];
@@ -148,26 +130,12 @@ const getRes = async (msg, target) => {
 };
 
 const deleteAll = async (msg, target) => {
-  await Promise.all([
-    msg.client.ch.query(`DELETE FROM punish_warns WHERE guildid = $1 AND userid = $2;`, [
-      msg.guild.id,
-      target.id,
-    ]),
-    msg.client.ch.query(`DELETE FROM punish_kicks WHERE guildid = $1 AND userid = $2;`, [
-      msg.guild.id,
-      target.id,
-    ]),
-    msg.client.ch.query(`DELETE FROM punish_mutes WHERE guildid = $1 AND userid = $2;`, [
-      msg.guild.id,
-      target.id,
-    ]),
-    msg.client.ch.query(`DELETE FROM punish_bans WHERE guildid = $1 AND userid = $2;`, [
-      msg.guild.id,
-      target.id,
-    ]),
-    msg.client.ch.query(`DELETE FROM punish_channelbans WHERE guildid = $1 AND userid = $2;`, [
-      msg.guild.id,
-      target.id,
-    ]),
-  ]);
+  await Promise.all(
+    ['warns', 'kicks', 'mutes', 'mutes', 'bans', 'channelbans'].map((table) =>
+      msg.client.ch.query(`DELETE FROM punish_${table} WHERE guildid = $1 AND userid = $2;`, [
+        msg.guild.id,
+        target.id,
+      ]),
+    ),
+  );
 };

@@ -32,29 +32,11 @@ module.exports = {
 
 const getWarn = async (msg, target, warnNr) => {
   const [warnRes, kickRes, muteRes, banRes, channelbanRes] = await Promise.all(
-    msg.client.ch.query(
-      'SELECT * FROM punish_warns WHERE guildid = $1 AND userid = $2 AND uniquetimestamp = $3;',
-      [msg.guild.id, target.id, warnNr],
-    ),
-    msg.client.ch.query(
-      'SELECT * FROM punish_kicks WHERE guildid = $1 AND userid = $2 AND uniquetimestamp = $3;',
-      [msg.guild.id, target.id, warnNr],
-    ),
-    msg.client.ch.query(
-      'SELECT * FROM punish_mutes WHERE guildid = $1 AND userid = $2 AND uniquetimestamp = $3;',
-      [msg.guild.id, target.id, warnNr],
-    ),
-    msg.client.ch.query(
-      'SELECT * FROM punish_mutes WHERE guildid = $1 AND userid = $2 AND uniquetimestamp = $3;',
-      [msg.guild.id, target.id, warnNr],
-    ),
-    msg.client.ch.query(
-      'SELECT * FROM punish_bans WHERE guildid = $1 AND userid = $2 AND uniquetimestamp = $3;',
-      [msg.guild.id, target.id, warnNr],
-    ),
-    msg.client.ch.query(
-      'SELECT * FROM punish_channelbans WHERE guildid = $1 AND userid = $2 AND uniquetimestamp = $3;',
-      [msg.guild.id, target.id, warnNr],
+    ['warns', 'kicks', 'mutes', 'mutes', 'bans', 'channelbans'].map((table) =>
+      msg.client.ch.query(
+        `SELECT * FROM punish_${table} WHERE guildid = $1 AND userid = $2 AND uniquetimestamp = $3;`,
+        [msg.guild.id, target.id, warnNr],
+      ),
     ),
   );
 
@@ -176,26 +158,12 @@ const doLog = (msg, warn, user) => {
 };
 
 const deleteWarn = async (msg, warn) => {
-  await Promise.all([
-    msg.client.ch.query(
-      `DELETE FROM punish_warns WHERE guildid = $1 AND userid = $2 AND uniquetimestamp = $3;`,
-      [msg.guild.id, warn.userid, warn.uniquetimestamp],
+  await Promise.all(
+    ['warns', 'kicks', 'mutes', 'mutes', 'bans', 'channelbans'].map((table) =>
+      msg.client.ch.query(
+        `DELETE FROM punish_${table} WHERE guildid = $1 AND userid = $2 AND uniquetimestamp = $3;`,
+        [msg.guild.id, warn.userid, warn.uniquetimestamp],
+      ),
     ),
-    msg.client.ch.query(
-      `DELETE FROM punish_kicks WHERE guildid = $1 AND userid = $2 AND uniquetimestamp = $3;`,
-      [msg.guild.id, warn.userid, warn.uniquetimestamp],
-    ),
-    msg.client.ch.query(
-      `DELETE FROM punish_mutes WHERE guildid = $1 AND userid = $2 AND uniquetimestamp = $3;`,
-      [msg.guild.id, warn.userid, warn.uniquetimestamp],
-    ),
-    msg.client.ch.query(
-      `DELETE FROM punish_bans WHERE guildid = $1 AND userid = $2 AND uniquetimestamp = $3;`,
-      [msg.guild.id, warn.userid, warn.uniquetimestamp],
-    ),
-    msg.client.ch.query(
-      `DELETE FROM punish_channelbans WHERE guildid = $1 AND userid = $2 AND uniquetimestamp = $3;`,
-      [msg.guild.id, warn.userid, warn.uniquetimestamp],
-    ),
-  ]);
+  );
 };
