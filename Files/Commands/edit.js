@@ -1,6 +1,4 @@
 const Builders = require('@discordjs/builders');
-const moment = require('moment');
-require('moment-duration-format');
 
 module.exports = {
   name: 'edit',
@@ -11,135 +9,150 @@ module.exports = {
   type: 'mod',
   async execute(msg) {
     const user = await msg.client.users.fetch(msg.args[0].replace(/\D+/g, '')).catch(() => {});
-    if (!user) return msg.client.ch.error(msg, msg.language.errors.userNotFound);
+    if (!user) {
+      msg.client.ch.error(msg, msg.language.errors.userNotFound);
+      return;
+    }
+
     const warnNr = msg.args[1];
-    if (Number.isNaN(Number(warnNr))) {
-      return msg.client.ch.reply(
-        msg,
-        msg.client.ch.stp(msg.language.noNumber, { arg: msg.args[1] ? msg.args[1] : '-' }),
-      );
-    }
-    const res = await msg.client.ch.query(
-      'SELECT * FROM warns WHERE userid = $1 AND guildid = $2 ORDER BY dateofwarn ASC;',
-      [user.id, msg.guild.id],
-    );
-    if (!res || res.rowCount === 0) {
-      return msg.client.ch.reply(msg, msg.client.ch.stp(msg.lan.noWarn, { number: warnNr }));
-    }
-    res.rows.forEach((r, i) => {
-      res.rows[i].row_number = i;
-    });
-    const warn = res.rows[warnNr];
-    if (!warn) {
-      return msg.client.ch.reply(msg, msg.client.ch.stp(msg.lan.noWarn, { number: warnNr }));
-    }
-    const embed = new Builders.UnsafeEmbedBuilder()
-      .setDescription(msg.client.ch.stp(msg.lan.done, { number: warnNr, target: user }))
-      .setColor(msg.client.constants.commands.edit.success)
-      .setFooter({ text: msg.lan.warnIssue })
-      .setTimestamp(Number(warn.dateofwarn));
-    msg.client.ch.reply(msg, { embeds: [embed] });
+    const newReason = msg.args.slice(2).join(' ');
 
-    const logEmbed = new Builders.UnsafeEmbedBuilder();
-    const con = msg.client.constants.commands.edit;
+    const proceed = checkWarn(msg, warnNr);
+    if (!proceed) return;
 
-    if (warn.type === 'Warn') {
-      logEmbed
-        .setDescription(
-          `**${msg.language.oldReason}:**\n${warn.reason}\n\n**${
-            msg.language.newReason
-          }:**\n${msg.args.slice(2).join(' ')}`,
-        )
-        .setAuthor({
-          name: msg.client.ch.stp(msg.lan.warnOf, { target: user }),
-          iconURL: con.log.image,
-          url: msg.client.ch.stp(msg.client.constants.standard.discordUrlDB, {
-            guildid: msg.guild.id,
-            channelid: msg.channel.id,
-            msgid: warn.msgid,
-          }),
-        })
-        .addFields(
-          {
-            name: msg.lan.date,
-            value: `<t:${warn.dateofwarn.slice(0, -3)}:F> (<t:${warn.dateofwarn.slice(0, -3)}:R>)`,
-            inline: false,
-          },
-          {
-            name: msg.lan.warnedIn,
-            value: `<#${warn.warnedinchannelid}>\n\`${warn.warnedinchannelname}\` (\`${warn.warnedinchannelid}\`)`,
-            inline: false,
-          },
-          {
-            name: msg.lan.warnedBy,
-            value: `<@${warn.warnedbyuserid}>\n\`${warn.warnedbyusername}\` (\`${warn.warnedbyuserid}\`)`,
-            inline: false,
-          },
-          {
-            name: msg.lan.editedBy,
-            value: `${msg.author.tag}\n\`${msg.author.username}\` (\`${msg.author.id}\`)`,
-            inline: false,
-          },
-        )
-        .setColor(con.log.color)
-        .setFooter({ text: msg.lan.warnID + warn.row_number });
-    } else if (warn.type === 'Mute') {
-      logEmbed
-        .setDescription(`**${msg.language.reason}:**\n${warn.reason}`)
-        .setAuthor({
-          name: msg.client.ch.stp(msg.lan.muteOf, { target: user }),
-          iconURL: con.log.image,
-          url: msg.client.ch.stp(msg.client.constants.standard.discordUrlDB, {
-            guildid: msg.guild.id,
-            channelid: msg.channel.id,
-            msgid: warn.msgid,
-          }),
-        })
-        .addFields(
-          {
-            name: msg.lan.date,
-            value: `<t:${warn.dateofwarn.slice(0, -3)}:F> (<t:${warn.dateofwarn.slice(0, -3)}:R>)`,
-            inline: false,
-          },
-          {
-            name: msg.lan.mutedIn,
-            value: `<#${warn.warnedinchannelid}>\n\`${warn.warnedinchannelname}\``,
-            inline: false,
-          },
-          {
-            name: msg.lan.mutedBy,
-            value: `<@${warn.warnedbyuserid}>\n\`${warn.warnedbyusername}\` (\`${warn.warnedbyuserid}\`)`,
-            inline: false,
-          },
-          {
-            name: msg.lan.duration,
-            value: `${
-              warn.duration
-                ? moment
-                    .duration(+warn.duration - +warn.dateofwarn)
-                    .format(
-                      `d [${msg.language.time.days}], h [${msg.language.time.hours}], m [${msg.language.time.minutes}], s [${msg.language.time.seconds}]`,
-                    )
-                : '∞'
-            }`,
-            inline: false,
-          },
-          {
-            name: msg.lan.editedBy,
-            value: `${msg.author.tag}\n\`${msg.author.username}\` (\`${msg.author.id}\`)`,
-            inline: false,
-          },
-        )
-        .setColor(con.log.color)
-        .setFooter({ text: msg.lan.warnID + warn.row_number });
-    }
-    msg.client.ch.query(
-      'UPDATE warns SET reason = $4 WHERE userid = $1 AND guildid = $2 AND dateofwarn = $3;',
-      [user.id, msg.guild.id, warn.dateofwarn, msg.args.slice(2).join(' ')],
-    );
-    if (msg.logchannels) {
-      msg.logchannels.forEach((c) => msg.client.ch.send(c, { embeds: [logEmbed] }));
-    }
-    return null;
+    const warn = await getWarn(msg, user, warnNr);
+    if (!warn) return;
+
+    editWarn(msg, warn, newReason);
+    declareSuccess(msg, warn, user);
+    doLog(msg, user, warn, newReason);
   },
+};
+
+const getWarn = async (msg, target, warnNr) => {
+  const [warnRes, kickRes, muteRes, banRes, channelbanRes] = await Promise.all(
+    msg.client.ch.query(
+      'SELECT * FROM punish_warns WHERE guildid = $1 AND userid = $2 AND uniquetimestamp = $3;',
+      [msg.guild.id, target.id, warnNr],
+    ),
+    msg.client.ch.query(
+      'SELECT * FROM punish_kicks WHERE guildid = $1 AND userid = $2 AND uniquetimestamp = $3;',
+      [msg.guild.id, target.id, warnNr],
+    ),
+    msg.client.ch.query(
+      'SELECT * FROM punish_mutes WHERE guildid = $1 AND userid = $2 AND uniquetimestamp = $3;',
+      [msg.guild.id, target.id, warnNr],
+    ),
+    msg.client.ch.query(
+      'SELECT * FROM punish_mutes WHERE guildid = $1 AND userid = $2 AND uniquetimestamp = $3;',
+      [msg.guild.id, target.id, warnNr],
+    ),
+    msg.client.ch.query(
+      'SELECT * FROM punish_bans WHERE guildid = $1 AND userid = $2 AND uniquetimestamp = $3;',
+      [msg.guild.id, target.id, warnNr],
+    ),
+    msg.client.ch.query(
+      'SELECT * FROM punish_channelbans WHERE guildid = $1 AND userid = $2 AND uniquetimestamp = $3;',
+      [msg.guild.id, target.id, warnNr],
+    ),
+  );
+
+  const allWarns = [];
+  if (warnRes && warnRes.rowCount) allWarns.concat(warnRes.rows);
+  if (kickRes && kickRes.rowCount) allWarns.concat(kickRes.rows);
+  if (muteRes && muteRes.rowCount) allWarns.concat(muteRes.rows);
+  if (banRes && banRes.rowCount) allWarns.concat(banRes.rows);
+  if (channelbanRes && channelbanRes.rowCount) allWarns.concat(channelbanRes.rows);
+
+  if (!allWarns.length) {
+    msg.client.ch.error(msg, msg.client.ch.stp(msg.lan.noWarn, { number: warnNr }));
+    return false;
+  }
+
+  const warn = allWarns.rows.find((w) => w.uniquetimestamp === Number(warnNr));
+
+  return warn;
+};
+
+const checkWarn = (msg, warnNr) => {
+  if (Number.isNaN(Number(warnNr))) {
+    msg.client.ch.error(
+      msg,
+      msg.client.ch.stp(msg.language.noNumber, { arg: msg.args[1] ? msg.args[1] : '-' }),
+    );
+    return false;
+  }
+
+  return true;
+};
+
+const declareSuccess = (msg, warn, user) => {
+  const embed = new Builders.UnsafeEmbedBuilder()
+    .setDescription(msg.client.ch.stp(msg.lan.done, { number: warn.uniquetimestamp, target: user }))
+    .setColor(msg.client.constants.commands.edit.success)
+    .setFooter({ text: msg.lan.punishmentIssue })
+    .setTimestamp(Number(warn.uniquetimestamp));
+
+  msg.client.ch.reply(msg, { embeds: [embed] });
+};
+
+const doLog = (msg, user, warn, reason) => {
+  const logEmbed = new Builders.UnsafeEmbedBuilder();
+  const con = msg.client.constants.commands.edit;
+
+  logEmbed
+    .setDescription(`**${msg.language.reason}:**\n${warn.reason}`)
+    .setAuthor({
+      name: msg.client.ch.stp(msg.lan.muteOf, { target: user }),
+      iconURL: con.log.image,
+      url: msg.url,
+    })
+    .addFields(
+      {
+        name: msg.lan.oldReason,
+        value: warn.reason,
+        inline: false,
+      },
+      {
+        name: msg.lan.newReason,
+        value: reason,
+        inline: false,
+      },
+      {
+        name: msg.lan.editedBy,
+        value: `${msg.author.tag}\n\`${msg.author.username}\` (\`${msg.author.id}\`)`,
+        inline: false,
+      },
+    )
+    .setColor(con.log.color)
+    .setFooter({ text: `${msg.lan.punishmentID} ${warn.uniquetimestamp}` });
+
+  if (msg.logchannels) {
+    msg.logchannels.forEach((c) => msg.client.ch.send(c, { embeds: [logEmbed] }));
+  }
+};
+
+const editWarn = async (msg, warn, newReason) => {
+  await Promise.all([
+    msg.client.ch.query(
+      `UPDATE punish_warns SET reason = $4 WHERE guildid = $1 AND userid = $2 AND uniquetimestamp = $3;`,
+      [msg.guild.id, warn.userid, warn.uniquetimestamp, newReason],
+    ),
+    msg.client.ch.query(
+      `UPDATE punish_kicks SET reason = $4 WHERE guildid = $1 AND userid = $2 AND uniquetimestamp = $3;`,
+      [msg.guild.id, warn.userid, warn.uniquetimestamp, newReason],
+    ),
+    msg.client.ch.query(
+      `UPDATE punish_mutes SET reason = $4 WHERE guildid = $1 AND userid = $2 AND uniquetimestamp = $3;`,
+      [msg.guild.id, warn.userid, warn.uniquetimestamp, newReason],
+    ),
+    msg.client.ch.query(
+      `UPDATE punish_bans SET reason = $4 WHERE guildid = $1 AND userid = $2 AND uniquetimestamp = $3;`,
+      [msg.guild.id, warn.userid, warn.uniquetimestamp, newReason],
+    ),
+    msg.client.ch.query(
+      `UPDATE punish_channelbans SET reason = $4 WHERE guildid = $1 AND userid = $2 AND uniquetimestamp = $3;`,
+      [msg.guild.id, warn.userid, warn.uniquetimestamp, newReason],
+    ),
+  ]);
 };

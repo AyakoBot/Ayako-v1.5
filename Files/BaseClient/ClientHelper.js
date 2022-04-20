@@ -869,12 +869,6 @@ module.exports = {
       ? member.displayColor
       : member.client.constants.standard.color,
   /**
-   * Capitalizes the first Letter of a String.
-   * @constructor
-   * @param {string} string - The String of which to capitalize the first Letter.
-   */
-  CFL: (string) => string.charAt(0).toUpperCase() + string.slice(1),
-  /**
    * Creates a sample Loading Embed.
    * @constructor
    * @param {object} lan - The Language which is to be used.

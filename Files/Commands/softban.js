@@ -6,44 +6,45 @@ module.exports = {
   aliases: null,
   type: 'mod',
   async execute(msg) {
-    const proceed = async (doProceed, module, deleteDays) => {
+    const proceed = async (doProceed) => {
       if (doProceed === false) {
         const modRoleRes = await msg.client.ch.modRoleWaiter(msg);
-        if (modRoleRes)
+        if (modRoleRes) {
           return msg.client.emit(
-            `mod${msg.client.ch.CFL(module.name)}Add`,
-            msg.author,
-            user,
+            `modBaseEvent`,
+            {
+              target: user,
+              executor: msg.author,
+              reason,
+              msg,
+              guild: msg.guild,
+            },
+            'softbanAdd',
+          );
+        }
+        msg.delete().catch(() => {});
+      } else {
+        return msg.client.emit(
+          `modBaseEvent`,
+          {
+            target: user,
+            executor: msg.author,
             reason,
             msg,
-            deleteDays,
-          );
-        msg.delete().catch(() => {});
-      } else
-        return msg.client.emit(
-          `mod${msg.client.ch.CFL(module.name)}Add`,
-          msg.author,
-          user,
-          reason,
-          msg,
-          deleteDays,
+            guild: msg.guild,
+          },
+          'softbanAdd',
         );
+      }
       return null;
     };
 
     const user = await msg.client.users.fetch(msg.args[0].replace(/\D+/g, '')).catch(() => {});
-    let deleteDays = 7;
-    let indexToUse = 1;
-
-    if (!Number.isNaN(+msg.args[1])) {
-      deleteDays = Number(msg.args[1]);
-      indexToUse = 2;
-    }
 
     const { lan } = msg;
     if (!user) return msg.client.ch.error(msg, msg.language.errors.userNotFound);
     const reason = `${msg.author.tag} | ${
-      msg.args.slice(indexToUse).join(' ') ? msg.args.slice(indexToUse).join(' ') : lan.reason
+      msg.args.slice(1).join(' ') ? msg.args.slice(1).join(' ') : lan.reason
     }`;
     const guildmember = await msg.guild.members.fetch(user.id).catch(() => {});
     if (guildmember) {
@@ -53,12 +54,11 @@ module.exports = {
       if (res && res.rowCount > 0) {
         const roles = [];
         res.rows.forEach((r) => roles.push(r.roleid));
-        if (guildmember.roles.cache.some((r) => roles.includes(r.id)))
-          return proceed(false, this, deleteDays);
-        return proceed(null, this, deleteDays);
+        if (guildmember.roles.cache.some((r) => roles.includes(r.id))) return proceed(false);
+        return proceed(null);
       }
-      return proceed(null, this, deleteDays);
+      return proceed(null);
     }
-    return proceed(null, this, deleteDays);
+    return proceed(null);
   },
 };

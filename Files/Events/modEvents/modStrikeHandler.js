@@ -13,12 +13,9 @@ module.exports = {
         );
       return msg.client.ch.reply(msg, { embeds: [em] });
     }
-    let existingWarns = 0;
-    const res = await msg.client.ch.query(
-      'SELECT * FROM warns WHERE guildid = $1 AND userid = $2;',
-      [msg.guild.id, target.id],
-    );
-    if (res && res.rowCount > 0) existingWarns = res.rowCount;
+
+    const existingWarns = await getWarns(msg, target);
+
     let r = msg.res.rows.find((re) => re.warnamount === existingWarns);
     if (r.punishment === 6) doPunishment('modWarnAdd', executor, target, reason, msg);
     else if (r.punishment === 5) doPunishment('modBanAdd', executor, target, reason, msg);
@@ -144,4 +141,42 @@ const checkRoles = (roles, guild) => {
     if (!role || !role.id) roles.splice(i, 1);
   });
   return roles;
+};
+
+const getWarns = async (msg, target) => {
+  const [warnRes, kickRes, muteRes, banRes, channelbanRes] = await Promise.all(
+    msg.client.ch.query('SELECT * FROM punish_warns WHERE guildid = $1 AND userid = $2;', [
+      msg.guild.id,
+      target.id,
+    ]),
+    msg.client.ch.query('SELECT * FROM punish_kicks WHERE guildid = $1 AND userid = $2;', [
+      msg.guild.id,
+      target.id,
+    ]),
+    msg.client.ch.query('SELECT * FROM punish_mutes WHERE guildid = $1 AND userid = $2;', [
+      msg.guild.id,
+      target.id,
+    ]),
+    msg.client.ch.query('SELECT * FROM punish_mutes WHERE guildid = $1 AND userid = $2;', [
+      msg.guild.id,
+      target.id,
+    ]),
+    msg.client.ch.query('SELECT * FROM punish_bans WHERE guildid = $1 AND userid = $2;', [
+      msg.guild.id,
+      target.id,
+    ]),
+    msg.client.ch.query('SELECT * FROM punish_channelbans WHERE guildid = $1 AND userid = $2;', [
+      msg.guild.id,
+      target.id,
+    ]),
+  );
+
+  let totalWarns = 0;
+  if (warnRes && warnRes.rowCount) totalWarns += warnRes.rowCount;
+  if (kickRes && kickRes.rowCount) totalWarns += kickRes.rowCount;
+  if (muteRes && muteRes.rowCount) totalWarns += muteRes.rowCount;
+  if (banRes && banRes.rowCount) totalWarns += banRes.rowCount;
+  if (channelbanRes && channelbanRes.rowCount) totalWarns += channelbanRes.rowCount;
+
+  return totalWarns;
 };
