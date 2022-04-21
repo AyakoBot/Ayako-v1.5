@@ -19,9 +19,9 @@ module.exports = async () => {
 
     if (timeLeft <= 0) timeLeft = 100;
 
-    client.channelbans.set(
-      `${row.guildid}-${row.userid}`,
-      jobs.scheduleJob(`${row.guildid}-${row.userid}`, new Date(Date.now() + timeLeft), () =>
+    client.channelBans.set(
+      `${row.banchannelid}-${row.userid}`,
+      jobs.scheduleJob(`${row.banchannelid}-${row.userid}`, new Date(Date.now() + timeLeft), () =>
         client.emit(
           'modBaseEvent',
           {

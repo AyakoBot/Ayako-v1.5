@@ -59,7 +59,8 @@ module.exports = {
 
     if (Number.isNaN(+duration)) {
       reason = msg.args.slice(1).join(' ') ? msg.args.slice(1).join(' ') : lan.reason;
-      duration = Number(msg.member.modrole.mutedurationdefault) * 60 * 1000;
+      duration =
+        Number(msg.member.modrole ? msg.member.modrole.mutedurationdefault : 60) * 60 * 1000;
     }
 
     if (guildmember) {

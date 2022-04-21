@@ -37,7 +37,7 @@ module.exports = {
               channel,
               duration,
             },
-            'channeltempbanAdd',
+            'tempchannelbanAdd',
           );
         }
         msg.delete().catch(() => {});
@@ -67,7 +67,7 @@ module.exports = {
           channel,
           duration,
         },
-        'channeltempbanAdd',
+        'tempchannelbanAdd',
       );
     };
 
@@ -85,11 +85,9 @@ module.exports = {
       durationArg = 1;
     }
 
-    const duration = getDuration(msg, channel, durationArg);
-    const reason = getReason(msg, channel, durationArg);
+    const duration = getDuration(msg, durationArg);
+    const reason = getReason(msg, durationArg);
     const guildmember = await msg.guild.members.fetch(user.id).catch(() => {});
-
-    console.log(reason, duration, channel.name);
 
     if (guildmember) {
       const res = await msg.client.ch.query('SELECT * FROM modroles WHERE guildid = $1;', [
@@ -107,7 +105,7 @@ module.exports = {
   },
 };
 
-const getDuration = (msg, channel, durationArg) => {
+const getDuration = (msg, durationArg) => {
   let args = [];
 
   if (msg.args[durationArg]) args = [msg.args[durationArg].replace(/,/g, '.')];
@@ -118,18 +116,14 @@ const getDuration = (msg, channel, durationArg) => {
     args[1] = msg.args[durationArg + 1].replace(/,/g, '.');
 
     duration = ms(`${args[0]} ${args[1]}`);
-    durationArg = 3;
-  } else {
+    durationArg += 1;
+  } else if (duration === args[0]) {
     duration = null;
+    durationArg = 0;
   }
 
   return duration;
 };
 
-const getReason = (msg, channel, duration) => {
-  let reasonArg = 3;
-  if (!channel || !duration) reasonArg = 2;
-  if (!channel && !duration) reasonArg = 1;
-
-  return msg.args.slice(reasonArg).join(' ') ? msg.args.slice(reasonArg).join(' ') : msg.lan.reason;
-};
+const getReason = (msg, duration) =>
+  msg.args.slice(duration + 1).join(' ') ? msg.args.slice(duration + 1).join(' ') : msg.lan.reason;

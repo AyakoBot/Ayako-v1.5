@@ -384,6 +384,13 @@
         "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
       }
     },
+    "tempchannelbanAdd": {
+      "color": 16711680,
+      "author": {
+        "image": "",
+        "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
+      }
+    },
     "channelbanRemove": {
       "color": 65280,
       "author": {
@@ -392,7 +399,11 @@
       }
     },
     "warnAdd": {
-      "color": 16711680
+      "color": 16711680,
+      "author": {
+        "image": "",
+        "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
+      }
     }
   },
   "customembeds": {

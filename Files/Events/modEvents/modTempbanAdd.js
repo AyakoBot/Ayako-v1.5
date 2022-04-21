@@ -211,7 +211,7 @@ module.exports = {
             'modBanRemove',
             msg.client.user,
             target,
-            language.ready.unmute.reason,
+            language.ready.unban.reason,
             msg,
           );
         }),

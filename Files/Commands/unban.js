@@ -9,9 +9,33 @@ module.exports = {
     const proceed = async (doProceed) => {
       if (doProceed === false) {
         const modRoleRes = await msg.client.ch.modRoleWaiter(msg);
-        if (modRoleRes) return msg.client.emit('modBanRemove', msg.author, user, reason, msg);
+        if (modRoleRes) {
+          return msg.client.emit(
+            'modBaseEvent',
+            {
+              target: user,
+              executor: msg.author,
+              reason,
+              msg,
+              guild: msg.guild,
+            },
+            'banRemove',
+          );
+        }
         msg.delete().catch(() => {});
-      } else return msg.client.emit('modBanRemove', msg.author, user, reason, msg);
+      } else {
+        return msg.client.emit(
+          'modBaseEvent',
+          {
+            target: user,
+            executor: msg.author,
+            reason,
+            msg,
+            guild: msg.guild,
+          },
+          'banRemove',
+        );
+      }
       return null;
     };
 
