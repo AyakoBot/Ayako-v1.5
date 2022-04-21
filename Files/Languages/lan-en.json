@@ -412,8 +412,8 @@
     "isNotDefault": "Not a Default Command"
   },
   "ready": {
-    "unmute": {
-      "reason": "Automatically Un-Muted"
+    "channelunban": {
+      "reason": "Automatically Channel-Unbanned"
     },
     "unban": {
       "reason": "Automatically Un-Banned"
@@ -901,19 +901,18 @@
     },
     "muteAdd": {
       "author": "{{args.target.tag}} was Muted",
-      "description": "{{user}} has muted {{args.target}}",
+      "description": "{{user}} has Muted {{args.target}}",
       "footer": "Executor ID {{user.id}}\nTarget ID {{args.target.id}}",
       "activeMute": "Joined with an active Mute",
       "activeMuteError": "This User joined with an active Mute.\nHowever I wasn't able to Mute them.\nMissing Permissions",
       "dm": {
-        "author": "You have been muted on {{guild.name}}"
+        "author": "You have been Muted on {{guild.name}}"
       },
-      "alreadyApplied": "This Member is already muted",
+      "alreadyApplied": "This Member is already Muted",
       "exeNoPerms": "You can't Mute this Member",
       "meNoPerms": "I can't Mute this Member `Missing Permissions`",
       "success": "Member {{target}} was Muted",
       "loading": "Muting User...",
-      "noMemberHint": "This User is not a Member of this Server\n\n**Do you want to Mute them anyways?**\nThey will be automatically Muted if they Re-Join",
       "noMember": "This User is not a Member of this Server",
       "error": "I wasn't able to Mute this User!",
       "permissionError": "I don't have enough permissions to Mute this User",
@@ -932,10 +931,8 @@
       "exeNoPerms": "You can't Temp-Mute this Member",
       "meNoPerms": "I can't Temp-Mute this Member `Missing Permissions`",
       "success": "Member {{target}} was Temp-Muted",
-      "noRole": "I wasn't able to find a Mute Role\nVisit `h!settings overview` to set or create one",
       "loading": "Temp-Muting User...",
       "error": "I wasn't able to Temp-Mute this User!",
-      "noMemberHint": "This User is not a Member of this Server\n\n**Do you want to Temp-Mute them anyways?**\nThey will be automatically Muted if they Re-Join before their Mute ends",
       "noMember": "This User is not a Member of this Server",
       "mePunish": "I won't Temp-Mute myself",
       "permissionError": "I don't have enough permissions to Temp-Mute this User"
@@ -947,13 +944,11 @@
       "dm": {
         "author": "You have been Un-Muted on {{guild.name}}"
       },
-      "exeNoPerms": "You can't mute this Member",
+      "exeNoPerms": "You can't Un-Mute this Member",
       "alreadyApplied": "This Member isn't muted",
       "success": "Member {{target}} was Un-Mute",
-      "noRole": "I wasn't able to find a Mute Role\nVisit `h!settings overview` to set or create one",
       "loading": "Un-Muting User...",
       "error": "I wasn't able to Un-Mute this User!",
-      "noMemberHint": "This User is not a Member of this Server\n\n**Do you want to Remove their Mute anyways?**\nOtherwise they will be Re-Muted if they Re-Join before their Mute ends",
       "noMember": "This User is not a Member of this Server",
       "mePunish": "I can't Un-Mute myself",
       "permissionError": "I don't have enough permissions to Un-Mute this User"
@@ -1023,6 +1018,22 @@
       "selfPunish": "You can't Channel-Ban yourself",
       "mePunish": "I won't Channel-Ban myself"
     },
+    "tempchannelbanAdd": {
+      "author": "{{args.target.tag}} was Temp-Channel-Banned from {{args.channel.name}}",
+      "description": "Target {{args.target}} / `{{args.target.tag}}` / `{{args.target.id}}`\nwas was Temp-Channel-Banned from\nChannel {{args.channel}} / `{{args.channel.name}}` / `{{args.channel.id}}`\nby\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
+      "footer": "Executor ID {{user.id}}\nTarget ID {{args.target.id}}",
+      "dm": {
+        "author": "You have been Temp-Channel-Banned in {{guild.name}}"
+      },
+      "exeNoPerms": "You can't Temp-Channel-Ban this User",
+      "permissionError": "I don't have enough permissions to Temp-Channel-Ban this User",
+      "error": "I wasn't able to Temp-Channel-Ban this User!",
+      "alreadyApplied": "User {{target}} is already Channel-Banned",
+      "success": "User {{target}} was Temp-Channel-Banned",
+      "loading": "Temp-Channel-Banning User...",
+      "selfPunish": "You can't Temp-Channel-Ban yourself",
+      "mePunish": "I won't Temp-Channel-Ban myself"
+    },
     "channelbanRemove": {
       "author": "{{args.target.tag}} was Channel-Unbanned from {{args.channel.name}}",
       "description": "Target {{args.target}} / `{{args.target.tag}}` / `{{args.target.id}}`\nwas Channel-Unbanned from\nChannel {{args.channel}} / `{{args.channel.name}}` / `{{args.channel.id}}`\nby\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
@@ -1072,20 +1083,20 @@
       "mePunish": "I won't Kick myself"
     },
     "warnAdd": {
-      "reply": "{{user}} was Warned",
-      "DMtitle": "You have been warned on the Server __{{guild.name}}__",
-      "log": {
-        "author": "{{target.username}} has been warned",
-        "description": "Target {{args.target}} / `{{args.target.tag}}` / `{{args.target.id}}`\nwas warned by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`"
+      "dm": {
+        "author": "You have been Warned on the Server {{guild.name}}"
       },
-      "exeNoPerms": "You can't warn this Member",
+      "footer": "Executor ID {{user.id}}\nTarget ID {{args.target.id}}",
+      "author": "{{args.target.tag}} was Warned",
+      "description": "Target {{args.target}} / `{{args.target.tag}}` / `{{args.target.id}}`\nwas Warned by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
+      "exeNoPerms": "You can't Warn this Member",
       "antispam": {
         "description": "**Please stop Spamming**"
       },
       "antivirus": {
         "description": "**Please do not post Malicious Links**"
       },
-      "success": "User {{target}} was warned",
+      "success": "User {{target}} was Warned",
       "loading": "Warning User...",
       "selfPunish": "You can't Warn yourself",
       "mePunish": "I won't Warn myself"
@@ -3986,5 +3997,6 @@
   "oldReason": "Old Reason",
   "newReason": "New Reason",
   "bot": "Bot",
-  "message": "Message"
+  "message": "Message",
+  "duration": "Duration"
 }

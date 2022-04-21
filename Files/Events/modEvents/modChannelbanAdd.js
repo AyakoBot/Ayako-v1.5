@@ -215,13 +215,13 @@ module.exports = {
     if (res2 && res2.rowCount > 0) {
       [msg.r] = res2.rows;
       msg.client.channelBans.set(
-        `${msg.guild.id}-${target.id}`,
-        jobs.scheduleJob(`${msg.guild.id}-${target.id}`, new Date(Date.now() + duration), () => {
+        `${channel.id}-${target.id}`,
+        jobs.scheduleJob(`${channel.id}-${target.id}`, new Date(Date.now() + duration), () => {
           msg.client.emit(
             'modChannelbanRemove',
             msg.client.user,
             target,
-            language.ready.unmute.reason,
+            language.ready.channelunban.reason,
             msg,
             channel,
           );

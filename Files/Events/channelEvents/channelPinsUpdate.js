@@ -4,6 +4,7 @@ module.exports = {
   async execute(channel) {
     const { client } = channel;
     const { guild } = channel;
+    if (!channel.guild) return;
     const ch = require('../../BaseClient/ClientHelper');
     const Constants = require('../../BaseClient/Other Client Files/Constants.json');
     const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);

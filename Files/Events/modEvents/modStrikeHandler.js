@@ -16,13 +16,15 @@ module.exports = {
 
     const existingWarns = await getWarns(msg, target);
 
+    // todo: something wrong with choosing the correct punishment (selecting r)
+
     let r = msg.res.rows.find((re) => re.warnamount === existingWarns);
-    if (r.punishment === 6) doPunishment('modWarnAdd', executor, target, reason, msg);
-    else if (r.punishment === 5) doPunishment('modBanAdd', executor, target, reason, msg);
-    else if (r && r.punishment === 4) doPunishment('modTempbanAdd', executor, target, reason, msg);
-    else if (r && r.punishment === 3) doPunishment('modKickAdd', executor, target, reason, msg);
-    else if (r && r.punishment === 2) doPunishment('modMuteAdd', executor, target, reason, msg);
-    else if (r && r.punishment === 1) doPunishment('modTempmuteAdd', executor, target, reason, msg);
+    if (r && r.punishment === 6) doPunishment('warnAdd', executor, target, reason, msg);
+    else if (r && r.punishment === 5) doPunishment('banAdd', executor, target, reason, msg);
+    else if (r && r.punishment === 4) doPunishment('tempbanAdd', executor, target, reason, msg);
+    else if (r && r.punishment === 3) doPunishment('kickAdd', executor, target, reason, msg);
+    else if (r && r.punishment === 2) doPunishment('tempmuteAdd', executor, target, reason, msg);
+    else if (r && r.punishment === 1) doPunishment('tempmuteAdd', executor, target, reason, msg);
     else {
       const higher = isHigher(
         existingWarns,
@@ -34,24 +36,28 @@ module.exports = {
           msg.res.rows.map((re) => +re.warnamount),
         );
         r = msg.res.rows.find((re) => re.warnamount === neededPunishmentWarnNr);
-        if (r.punishment === 6) doPunishment('modWarnAdd', executor, target, reason, msg);
-        else if (r.punishment === 5) doPunishment('modBanAdd', executor, target, reason, msg);
-        else if (r.punishment === 4) doPunishment('modTempbanAdd', executor, target, reason, msg);
-        else if (r.punishment === 3) doPunishment('modKickAdd', executor, target, reason, msg);
-        else if (r.punishment === 2) doPunishment('modMuteAdd', executor, target, reason, msg);
-        else if (r.punishment === 1) doPunishment('modTempmuteAdd', executor, target, reason, msg);
-        else doPunishment('modWarnAdd', executor, target, reason, msg);
-      } else doPunishment('modWarnAdd', executor, target, reason, msg);
+        if (r && r.punishment === 6) doPunishment('warnAdd', executor, target, reason, msg);
+        else if (r && r.punishment === 5) doPunishment('banAdd', executor, target, reason, msg);
+        else if (r && r.punishment === 4) {
+          doPunishment('tempbanAdd', executor, target, reason, msg);
+        } else if (r && r.punishment === 3) {
+          doPunishment('kickadd', executor, target, reason, msg);
+        } else if (r && r.punishment === 2) {
+          doPunishment('tempmuteAdd', executor, target, reason, msg);
+        } else if (r && r.punishment === 1) {
+          doPunishment('tempmuteAdd', executor, target, reason, msg);
+        } else doPunishment('warnAdd', executor, target, reason, msg);
+      } else doPunishment('warnAdd', executor, target, reason, msg);
     }
 
     return true;
   },
 };
 
-const doRoles = async (r, msg) => {
-  const member = msg.guild.members.cache.get(member.id);
+const doRoles = async (r, msg, user) => {
+  const member = await msg.guild.members.fetch(user.id);
   if (member) {
-    if (r.addroles && r.addroles.length) {
+    if (r && r.addroles && r.addroles.length) {
       const roles = checkRoles(r.addroles, msg.guild);
       await member.roles.add(roles, msg.language.autotypes.autopunish);
     }
@@ -65,9 +71,9 @@ const doRoles = async (r, msg) => {
 const doPunishment = async (punishment, executor, target, reason, msg, r) => {
   const lan = msg.language.mod.strike;
   const con = msg.client.constants.mod.strike;
-  await doRoles(r, msg);
-  if (punishment === 'modWarnAdd') {
-    msg.client.emit(punishment, executor, target, reason, msg, r.duration ? r.duration : 3600000);
+  await doRoles(r, msg, target);
+  if (punishment === 'warnAdd') {
+    msg.client.emit('modBaseEvent', { executor, target, reason, msg, guild: msg.guild }, 'warnAdd');
   } else {
     const embed = new Builders.UnsafeEmbedBuilder()
       .setAuthor({
@@ -109,8 +115,31 @@ const doPunishment = async (punishment, executor, target, reason, msg, r) => {
       });
     });
     if (agreed) {
-      msg.client.emit(punishment, executor, target, reason, msg, r.duration ? r.duration : 3600000);
-    } else msg.client.emit('modWarnAdd', executor, target, reason, msg);
+      msg.client.emit(
+        'modBaseEvent',
+        {
+          executor,
+          target,
+          reason,
+          msg,
+          duration: r.duration ? r.duration : 60,
+          guild: msg.guild,
+        },
+        punishment,
+      );
+    } else {
+      msg.client.emit(
+        'modBaseEvent',
+        {
+          target,
+          executor,
+          reason,
+          msg,
+          guild: msg.guild,
+        },
+        'warnAdd',
+      );
+    }
   }
 };
 
