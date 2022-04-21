@@ -10,446 +10,350 @@ module.exports = {
   takesFirstArg: false,
   aliases: ['warnlog', 'warnings'],
   type: 'mod',
-  async execute(msg) {
+  execute: async (msg) => {
     const user = msg.args[0]
-      ? await msg.client.users.fetch(msg.args[0].replace(/\D+/g, ''))
+      ? await msg.client.users.fetch(msg.args[0].replace(/\D+/g, '')).catch(() => {})
       : msg.author;
-    if (!user) return msg.client.ch.error(msg, msg.language.errors.userNotFound);
+
+    if (!user) {
+      msg.client.ch.error(msg, msg.language.errors.userNotFound);
+      return;
+    }
+
     const member = await msg.guild.members.fetch(user.id).catch(() => {});
-    const { lan } = msg;
-    const con = msg.client.constants.commands[this.name];
-    msg.con = con;
+    const allPunishments = await getAllPunishments(msg, user);
+    const { m, embed } = await baseMessage(msg, allPunishments, user);
 
-    msg.pages = {
-      warn: 0,
-      mute: 0,
-      warnMax: 0,
-      muteMax: 0,
-    };
+    const punishmentStatus = await getCurrentPunishments(msg, user, member, allPunishments);
 
-    const embed = new Builders.UnsafeEmbedBuilder()
-      .setAuthor({
-        name: msg.client.ch.stp(lan.author, { target: user }),
-        iconURL: con.author.image,
-        url: con.author.url,
-      })
-      .addFields({ name: lan.banLoad, value: msg.client.textEmotes.loading });
-
-    const count = { warns: 0, mutes: 0 };
-    const options = { warns: [], mutes: [] };
-
-    const res = await msg.client.ch.query(
-      'SELECT * FROM warns WHERE userid = $1 AND guildid = $2 ORDER BY dateofwarn ASC;',
-      [user.id, msg.guild.id],
-    );
-    if (res && res.rowCount > 0) {
-      res.rows.forEach((r, i) => {
-        res.rows[i].row_number = i;
-      });
-      res.rows.forEach((r) => {
-        const dateOfWarn = new Date(Number(r.dateofwarn));
-        if (r.type === 'Warn') {
-          options.warns.push(
-            new Builders.UnsafeSelectMenuOptionBuilder()
-              .setLabel(
-                `${msg.language.number}: ${r.row_number} | ${dateOfWarn.getDate()} ${
-                  msg.language.months[dateOfWarn.getMonth()]
-                } ${dateOfWarn.getFullYear()}`,
-              )
-              .setValue(r.row_number),
-          );
-        }
-        if (r.type === 'Mute') {
-          options.mutes.push(
-            new Builders.UnsafeSelectMenuOptionBuilder({
-              label: `${msg.language.number}: ${r.row_number} | ${dateOfWarn.getDate()} ${
-                msg.language.months[dateOfWarn.getMonth()]
-              } ${dateOfWarn.getFullYear()}`,
-              value: r.row_number,
-            }),
-          );
-        }
-      });
-      if (res.rows.filter((row) => row.type === 'Warn').length) {
-        count.warns = res.rows.filter((row) => row.type === 'Warn').length;
-        msg.pages.warn = 1;
-        msg.pages.warnMax = Math.ceil(options.warns.length / 25);
-      }
-      if (res.rows.filter((row) => row.type === 'Mute').length) {
-        count.mutes = res.rows.filter((row) => row.type === 'Mute').length;
-        msg.pages.mute = 1;
-        msg.pages.muteMax = Math.ceil(options.mutes.length / 25);
-      }
-    }
-    const take = { warns: [], mutes: [] };
-    options.warns.forEach((r) => {
-      take.warns.push(r);
-    });
-    options.mutes.forEach((r) => {
-      take.mutes.push(r);
-    });
-
-    embed.setDescription(
-      `${msg.client.ch.stp(lan.text, { warns: `${count.warns}`, mutes: `${count.mutes}` })}\n\n${
-        msg.lan.warnsPage
-      }: \`${msg.pages.warn}/${msg.pages.warnMax}\`\n${msg.lan.mutesPage}: \`${msg.pages.mute}/${
-        msg.pages.muteMax
-      }\``,
-    );
-
-    msg.m = await msg.client.ch.reply(msg, {
-      embeds: [embed],
-      components: buttonOrder(take, msg, options, { mutes: [], warns: [] }),
-    });
-
-    const collector = msg.m.createMessageComponentCollector({ time: 60000 });
-    const answered = { mutes: [], warns: [] };
-    collector.on('collect', async (clickButton) => {
-      if (clickButton.user.id !== msg.author.id) return msg.client.ch.notYours(clickButton);
-      if (clickButton.customId === 'muteNext' || clickButton.customId === 'mutePrev') {
-        let indexLast;
-        let indexFirst;
-        options.mutes.forEach((r, j) => {
-          if (
-            r.value ===
-            clickButton.message.components[0].components[0].options[
-              clickButton.message.components[0].components[0].options.length - 1
-            ].value
-          ) {
-            indexLast = j;
-          }
-          if (
-            options.mutes[j] &&
-            options.mutes[j].value ===
-              clickButton.message.components[0].components[0].options[0].value
-          ) {
-            indexFirst = j;
-          }
-        });
-        take.mutes.splice(0, take.mutes.length);
-        if (clickButton.customId === 'muteNext') {
-          for (let j = indexLast + 1; j < indexLast + 26; j += 1) {
-            if (options.mutes[j]) take.mutes.push(options.mutes[j]);
-          }
-        }
-        if (clickButton.customId === 'mutePrev') {
-          for (let j = indexFirst - 25; j < indexFirst; j += 1) {
-            if (options.mutes[j]) take.mutes.push(options.mutes[j]);
-          }
-        }
-
-        if (clickButton.customId === 'muteNext') {
-          msg.pages.mute = +msg.pages.mute + 1;
-        } else {
-          msg.pages.mute = +msg.pages.mute - 1;
-        }
-        const newEmbed = new Builders.UnsafeEmbedBuilder()
-          .setAuthor({
-            name: msg.client.ch.stp(msg.lan.author, { target: user }),
-            iconURL: msg.con.author.image,
-            url: msg.con.author.url,
-          })
-          .setDescription(
-            `${msg.language.select.id.desc}\n\n${msg.lan.warnsPage}: \`${msg.pages.warn}/${msg.pages.warnMax}\`\n${msg.lan.mutesPage}: \`${msg.pages.mute}/${msg.pages.muteMax}\``,
-          );
-        clickButton
-          .update({
-            embeds: [newEmbed],
-            components: buttonOrder(take, msg, options, answered, msg.pages.mute, null),
-          })
-          .catch(() => {});
-      } else if (clickButton.customId === 'warnNext' || clickButton.customId === 'warnPrev') {
-        let indexLast;
-        let indexFirst;
-        options.warns.forEach((r, j) => {
-          if (
-            r.value ===
-            clickButton.message.components[0].components[0].options[
-              clickButton.message.components[0].components[0].options.length - 1
-            ].value
-          ) {
-            indexLast = j;
-          }
-          if (r.value === clickButton.message.components[0].components[0].options[0].value) {
-            indexFirst = j;
-          }
-        });
-        take.warns.splice(0, take.warns.length);
-        if (clickButton.customId === 'warnNext') {
-          for (let j = indexLast + 1; j < indexLast + 26; j += 1) {
-            if (options.warns[j]) take.warns.push(options.warns[j]);
-          }
-        }
-        if (clickButton.customId === 'warnPrev') {
-          for (let j = indexFirst - 25; j < indexFirst; j += 1) {
-            if (options.warns[j]) take.warns.push(options.warns[j]);
-          }
-        }
-        if (clickButton.customId === 'warnNext') {
-          msg.pages.warn = +msg.pages.warn + 1;
-        } else {
-          msg.pages.warn = +msg.pages.warn - 1;
-        }
-        const newEmbed = new Builders.UnsafeEmbedBuilder()
-          .setAuthor({
-            name: msg.client.ch.stp(msg.lan.author, { target: user }),
-            iconURL: msg.con.author.image,
-            url: msg.con.author.url,
-          })
-          .setDescription(
-            `${msg.language.select.id.desc}\n\n${msg.lan.warnsPage}: \`${msg.pages.warn}/${msg.pages.warnMax}\`\n${msg.lan.mutesPage}: \`${msg.pages.mute}/${msg.pages.muteMax}\``,
-          );
-        clickButton
-          .update({ embeds: [newEmbed], components: buttonOrder(take, msg, options, answered) })
-          .catch(() => {});
-      } else if (clickButton.customId === 'muteMenu') {
-        clickButton.values.forEach((val) => {
-          if (!answered.mutes.includes(val)) answered.mutes.push(val);
-          else answered.mutes.splice(answered.mutes.indexOf(val), 1);
-        });
-        const newEmbed = new Builders.UnsafeEmbedBuilder()
-          .setAuthor({
-            name: msg.client.ch.stp(msg.lan.author, { target: user }),
-            iconURL: msg.con.author.image,
-            url: msg.con.author.url,
-          })
-          .setDescription(
-            `${msg.language.select.id.desc}\n\n${msg.lan.warnsPage}: \`${msg.pages.warn}/${msg.pages.warnMax}\`\n${msg.lan.mutesPage}: \`${msg.pages.mute}/${msg.pages.muteMax}\``,
-          );
-        if (answered.mutes.length === 0) newEmbed.fields = [];
-        clickButton
-          .update({ embeds: [newEmbed], components: buttonOrder(take, msg, options, answered) })
-          .catch(() => {});
-      } else if (clickButton.customId === 'warnMenu') {
-        clickButton.values.forEach((val) => {
-          if (!answered.warns.includes(val)) answered.warns.push(val);
-          else answered.warns.splice(answered.warns.indexOf(val), 1);
-        });
-        const newEmbed = new Builders.UnsafeEmbedBuilder()
-          .setAuthor({
-            name: msg.client.ch.stp(msg.lan.author, { target: user }),
-            iconURL: msg.con.author.image,
-            url: msg.con.author.url,
-          })
-          .setDescription(
-            `${msg.language.select.id.desc}\n\n${msg.lan.warnsPage}: \`${msg.pages.warn}/${msg.pages.warnMax}\`\n${msg.lan.mutesPage}: \`${msg.pages.mute}/${msg.pages.muteMax}\``,
-          );
-        if (answered.warns.length === 0) newEmbed.fields = [];
-        clickButton
-          .update({ embeds: [newEmbed], components: buttonOrder(take, msg, options, answered) })
-          .catch(() => {});
-      } else if (clickButton.customId === 'done') {
-        if (answered.mutes.length || answered.warns.length) {
-          const embeds = [];
-          if (answered.warns.length) {
-            const WarnTitleEmbed = new Builders.UnsafeEmbedBuilder()
-              .setTitle(msg.lan.warns)
-              .setColor(16777215);
-            embeds.push(WarnTitleEmbed);
-            answered.warns.forEach((number) => {
-              const warn = res.rows.filter((r) => r.row_number === Number(number))[0];
-              const warnEmbed = new Builders.UnsafeEmbedBuilder()
-                .setDescription(`**${msg.language.reason}:**\n${warn.reason}`)
-                .setAuthor({
-                  name: msg.lan.warnOf + user.tag,
-                  iconURL: msg.con.author.image,
-                  url: msg.client.ch.stp(msg.client.constants.standard.discordUrlDB, {
-                    guildid: msg.guild.id,
-                    channelid: msg.channel.id,
-                    msgid: warn.msgid,
-                  }),
-                })
-                .addFields(
-                  {
-                    name: msg.lan.date,
-                    value: `<t:${warn.dateofwarn.slice(0, -3)}:F> (<t:${warn.dateofwarn.slice(
-                      0,
-                      -3,
-                    )}:R>)`,
-                    inline: false,
-                  },
-                  {
-                    name: msg.lan.warnedIn,
-                    value: `<#${warn.warnedinchannelid}>\n\`${warn.warnedinchannelname}\``,
-                    inline: false,
-                  },
-                  {
-                    name: msg.lan.warnedBy,
-                    value: `<@${warn.warnedbyuserid}>\n\`${warn.warnedbyusername}\` (\`${warn.warnedbyuserid}\`)`,
-                    inline: false,
-                  },
-                )
-                .setFooter({ text: msg.lan.warnID + warn.row_number });
-              embeds.push(warnEmbed);
-            });
-          }
-          if (answered.mutes.length) {
-            const MuteTitleEmbed = new Builders.UnsafeEmbedBuilder()
-              .setTitle(msg.lan.mutes)
-              .setColor(16777215);
-            embeds.push(MuteTitleEmbed);
-            answered.mutes.forEach((number) => {
-              const mute = res.rows.filter((r) => r.row_number === Number(number))[0];
-              let notClosed = msg.client.ch.stp(msg.lan.notClosed, {
-                time: `<t:${mute.duration.slice(0, -3)}:F> (<t:${mute.duration.slice(0, -3)}:R>)`,
-              });
-              if (member && member.isCommunicationDisabled()) {
-                notClosed = msg.client.ch.stp(msg.lan.abortedMute, {
-                  time: `<t:${mute.duration.slice(0, -3)}:F> (<t:${mute.duration.slice(0, -3)}:R>)`,
-                });
-              }
-              let muteCloseText;
-              if (mute.closed === true) {
-                muteCloseText = msg.client.ch.stp(msg.lan.closed, {
-                  time: `<t:${mute.duration.slice(0, -3)}:F> (<t:${mute.duration.slice(0, -3)}:R>)`,
-                });
-              } else if (mute.closed === false) {
-                muteCloseText = notClosed;
-              } else {
-                muteCloseText = msg.language.never;
-              }
-              const muteEmbed = new Builders.UnsafeEmbedBuilder()
-                .setDescription(`**${msg.language.reason}:**\n${mute.reason}`)
-                .setAuthor({
-                  name: msg.lan.muteOf + user.tag,
-                  iconURL: msg.con.author.image,
-                  url: msg.client.ch.stp(msg.client.constants.standard.discordUrlDB, {
-                    guildid: msg.guild.id,
-                    channelid: msg.channel.id,
-                    msgid: mute.msgid,
-                  }),
-                })
-                .addFields(
-                  {
-                    name: msg.lan.date,
-                    value: `<t:${mute.dateofwarn.slice(0, -3)}:F> (<t:${mute.dateofwarn.slice(
-                      0,
-                      -3,
-                    )}:R>)`,
-                    inline: false,
-                  },
-                  {
-                    name: msg.lan.mutedIn,
-                    value: `<#${mute.warnedinchannelid}>\n\`${mute.warnedinchannelname}\``,
-                    inline: false,
-                  },
-                  {
-                    name: msg.lan.mutedBy,
-                    value: `<@${mute.warnedbyuserid}>\n\`${mute.warnedbyusername}\` (\`${mute.warnedbyuserid}\`)`,
-                    inline: false,
-                  },
-                  {
-                    name: msg.lan.duration,
-                    value: `${
-                      mute.duration
-                        ? moment
-                            .duration(+mute.duration - +mute.dateofwarn)
-                            .format(
-                              `d [${msg.language.time.days}], h [${msg.language.time.hours}], m [${msg.language.time.minutes}], s [${msg.language.time.seconds}]`,
-                              { trim: 'all' },
-                            )
-                        : '∞'
-                    }`,
-                    inline: false,
-                  },
-                  {
-                    name: msg.lan.muteclosed,
-                    value: muteCloseText,
-                    inline: false,
-                  },
-                )
-                .setFooter({ text: msg.lan.warnID + mute.row_number });
-              embeds.push(muteEmbed);
-            });
-          }
-          clickButton.update({ embeds, components: [] });
-        }
-        collector.stop('finished');
-      }
-      return null;
-    });
-    collector.on('end', (collected, reason) => {
-      if (reason === 'time') msg.m.edit({ embeds: msg.m.embeds, components: [] });
-    });
-
-    const ban = await msg.guild.bans.fetch(user.id).catch(() => {});
+    const currentStatusField = getCurrentStatusField(msg, embed, user, punishmentStatus);
     embed.data.fields = [];
-    if (ban && ban.guild) {
-      embed.addFields({
-        name: msg.client.ch.stp(lan.banned, { target: user }),
-        value: `${msg.language.reason}:\n${ban.reason}`,
-      });
-    } else {
-      embed.addFields({
-        name: '\u200b',
-        value: `**${msg.client.ch.stp(lan.notbanned, { target: user })}**`,
-      });
-    }
-    return msg.m.edit({ embeds: [embed] });
+    embed.setFields(currentStatusField);
+
+    const page = 1;
+    const baseButtons = getBaseButtons(msg, null, allPunishments, page);
+
+    await m.edit({ embeds: [embed], components: msg.client.ch.buttonRower(baseButtons) });
+
+    const buttonsCollector = m.createMessageComponentCollector({ time: 60000 });
+
+    handleEnd(buttonsCollector, msg, m);
+    handleInteractions(buttonsCollector, msg, m);
   },
 };
 
-function buttonOrder(take, msg, options, answered) {
-  const rawRows = [];
-  if (take.warns.length) {
-    const warnMenu = new Builders.UnsafeSelectMenuBuilder()
-      .setCustomId('warnMenu')
-      .addOptions(...take.warns)
-      .setMinValues(1)
-      .setMaxValues(take.warns.length < 8 ? take.warns.length : 8)
-      .setPlaceholder(
-        `${answered.warns.length ? answered.warns.sort((a, b) => a - b) : msg.lan.selWarns}`,
-      );
-    const warnNext = new Builders.UnsafeButtonBuilder()
-      .setCustomId('warnNext')
-      .setLabel(msg.language.next)
-      .setDisabled(options.warns.length < msg.pages.warn * 25 + 26)
-      .setStyle(Discord.ButtonStyle.Primary);
-    const warnPrev = new Builders.UnsafeButtonBuilder()
-      .setCustomId('warnPrev')
-      .setLabel(msg.language.prev)
-      .setDisabled(msg.pages.warn === 1)
-      .setStyle(Discord.ButtonStyle.Danger);
-    rawRows.push([warnMenu], [warnPrev, warnNext]);
-    if (msg.pages.warn >= Math.ceil(+options.warns.length / 25)) warnNext.setDisabled(true);
-    else warnNext.setDisabled(false);
-    if (msg.pages.warn > 1) warnPrev.setDisabled(false);
-    else warnPrev.setDisabled(true);
+const baseMessage = async (msg, allPunishments, user) => {
+  const embed = new Builders.UnsafeEmbedBuilder()
+    .setDescription(
+      msg.client.ch.stp(msg.lan.text, {
+        warns: String(
+          Number(allPunishments.length ? allPunishments.filter((p) => p.type === 0).length : 0),
+        ),
+        mutes: String(
+          Number(allPunishments.length ? allPunishments.filter((p) => p.type === 1).length : 0),
+        ),
+        kicks: String(
+          Number(allPunishments.length ? allPunishments.filter((p) => p.type === 2).length : 0),
+        ),
+        channelbans: String(
+          Number(allPunishments.length ? allPunishments.filter((p) => p.type === 3).length : 0),
+        ),
+        bans: String(
+          Number(allPunishments.length ? allPunishments.filter((p) => p.type === 4).length : 0),
+        ),
+      }),
+    )
+    .addFields({
+      name: '\u200b',
+      value: `${msg.client.textEmotes.timedoutUpdated} ${msg.lan.muteLoad} ${msg.client.textEmotes.loading}\n${msg.client.textEmotes.banUpdated} ${msg.lan.banLoad} ${msg.client.textEmotes.loading}\n${msg.client.textEmotes.mutedUpdated} ${msg.lan.channelbanLoad} ${msg.client.textEmotes.loading}`,
+      inline: false,
+    })
+    .setAuthor({
+      name: msg.client.ch.stp(msg.lan.author, { target: user }),
+      iconURL: msg.client.objectEmotes.warning.link,
+      url: msg.client.constants.standard.invite,
+    })
+    .setColor(msg.client.ch.colorSelector(msg.guild.me));
+
+  return { m: await msg.client.ch.reply(msg, { embeds: [embed] }), embed };
+};
+
+const getAllPunishments = async (msg, target) => {
+  const res = await Promise.all(
+    ['warns', 'mutes', 'kicks', 'channelbans', 'bans'].map((table) =>
+      msg.client.ch.query(`SELECT * FROM punish_${table} WHERE guildid = $1 AND userid = $2;`, [
+        msg.guild.id,
+        target.id,
+      ]),
+    ),
+  );
+
+  res.forEach((r, i) =>
+    r.rows?.forEach((row) => {
+      row.type = i;
+    }),
+  );
+
+  const [warnRes, kickRes, muteRes, banRes, channelbanRes] = res;
+
+  const allWarns = [];
+  if (warnRes && warnRes.rowCount) allWarns.concat(warnRes.rows);
+  if (kickRes && kickRes.rowCount) allWarns.concat(kickRes.rows);
+  if (muteRes && muteRes.rowCount) allWarns.concat(muteRes.rows);
+  if (banRes && banRes.rowCount) allWarns.concat(banRes.rows);
+  if (channelbanRes && channelbanRes.rowCount) allWarns.concat(channelbanRes.rows);
+
+  return allWarns;
+};
+
+const getCurrentPunishments = async (msg, user, member, allPunishments) => {
+  const getChannelBans = async () => {
+    const getPendingTempChannelbans = async () => {
+      const getTempRes = async () => {
+        const res = await msg.client.ch.query(
+          `SELECT * FROM punish_tempchannelbans WHERE guildid = $1 AND userid = $2;`,
+          [msg.guild.id, user.id],
+        );
+        if (res && res.rowCount) return res.rows;
+        return [];
+      };
+
+      const dbEntries = await getTempRes();
+
+      const tempBans = dbEntries
+        .map((dbEntry) => {
+          const channel = msg.client.channels.cache.get(dbEntry.banchannelid);
+
+          if (
+            channel.permissionOverwrites.cache.get(user.id)?.deny.has(2048n) ||
+            channel.permissionOverwrites.cache.get(user.id)?.deny.has(1048576n)
+          ) {
+            return true;
+          }
+          return false;
+        })
+        .filter((b) => !!b);
+
+      return tempBans.length;
+    };
+
+    const getPendingChannelbans = () => {
+      const channelbans = allPunishments.filter((p) => p.type === 3);
+
+      const bans = channelbans
+        .map((ban) => {
+          const channel = msg.client.channels.cache.get(ban.banchannelid);
+
+          if (channel.permissionOverwrites.cache.get(user.id)?.deny.has(1050624n)) {
+            return true;
+          }
+          return false;
+        })
+        .filter((b) => !!b);
+
+      return bans.length;
+    };
+
+    const currentTempBans = await getPendingTempChannelbans();
+    const currentBans = getPendingChannelbans();
+
+    return currentTempBans + currentBans;
+  };
+
+  let banError;
+  const isBanned = await msg.guild.bans.fetch(user.id).catch((e) => {
+    banError = String(e).includes('50013') ? true : null;
+  });
+
+  const isMuted = member?.isCommunicationDisabled();
+
+  const isChannelBanned = await getChannelBans();
+
+  return [[isBanned, banError], [isMuted, !member], isChannelBanned];
+};
+
+const getCurrentStatusField = (
+  msg,
+  embed,
+  user,
+  [[isBanned, banError], [isMuted, muteError], isChannelbanned],
+) => {
+  let fieldValue = '';
+  embed.data.fields = [];
+
+  if (isBanned) {
+    fieldValue += `${msg.client.textEmotes.banTick} ${msg.client.ch.stp(msg.lan.banned, {
+      target: user,
+    })}\n`;
+  } else if (banError) {
+    fieldValue += `${msg.client.textEmotes.banError} ${msg.client.ch.stp(msg.lan.banError, {
+      target: user,
+    })}\n`;
+  } else {
+    fieldValue += `${msg.client.textEmotes.banCross} ${msg.client.ch.stp(msg.lan.notbanned, {
+      target: user,
+    })}\n`;
   }
-  if (take.mutes.length) {
-    const muteMenu = new Builders.UnsafeSelectMenuBuilder()
-      .setCustomId('muteMenu')
-      .addOptions(...take.mutes)
-      .setMinValues(1)
-      .setMaxValues(take.mutes.length < 8 ? take.mutes.length : 8)
-      .setPlaceholder(
-        `${answered.mutes.length ? answered.mutes.sort((a, b) => a - b) : msg.lan.selMutes}`,
-      );
-    const muteNext = new Builders.UnsafeButtonBuilder()
-      .setCustomId('muteNext')
-      .setLabel(msg.language.next)
-      .setDisabled(options.mutes.length < msg.pages.mute * 25 + 26)
-      .setStyle(Discord.ButtonStyle.Primary);
-    const mutePrev = new Builders.UnsafeButtonBuilder()
-      .setCustomId('mutePrev')
-      .setLabel(msg.language.prev)
-      .setDisabled(msg.pages.mute === 1)
-      .setStyle(Discord.ButtonStyle.Danger);
-    rawRows.push([muteMenu], [mutePrev, muteNext]);
-    if (msg.pages.mute >= Math.ceil(+options.mutes.length / 25)) muteNext.setDisabled(true);
-    else muteNext.setDisabled(false);
-    if (msg.pages.mute > 1) mutePrev.setDisabled(false);
-    else mutePrev.setDisabled(true);
+
+  if (isMuted) {
+    fieldValue += `\n${msg.client.textEmotes.timedoutTick} ${msg.client.ch.stp(msg.lan.muted, {
+      target: user,
+    })}\n`;
+  } else if (muteError) {
+    fieldValue += `${msg.client.textEmotes.timedoutError} ${msg.client.ch.stp(msg.lan.muteError, {
+      target: user,
+    })}\n`;
+  } else {
+    fieldValue += `${msg.client.textEmotes.timedoutCross} ${msg.client.ch.stp(msg.lan.notmuted, {
+      target: user,
+    })}\n`;
   }
-  if (take.warns.length || take.mutes.length) {
-    const done = new Builders.UnsafeButtonBuilder()
-      .setCustomId('done')
-      .setLabel(msg.language.done)
-      .setStyle(Discord.ButtonStyle.Primary);
-    if (answered.warns.length || answered.mutes.length) done.setDisabled(false);
-    else done.setDisabled(true);
-    rawRows.push([done]);
+
+  if (isChannelbanned) {
+    fieldValue += `\n${msg.client.textEmotes.mutedTick} ${msg.client.ch.stp(msg.lan.channelbanned, {
+      target: user,
+    })}\n`;
+  } else {
+    fieldValue += `${msg.client.textEmotes.mutedCross} ${msg.client.ch.stp(
+      msg.lan.notchannelbanned,
+      {
+        target: user,
+      },
+    )}\n`;
   }
-  const rows = msg.client.ch.buttonRower(rawRows);
-  return rows;
-}
+
+  return { name: '\u200b', value: fieldValue, inline: false };
+};
+
+const getBaseButtons = (msg, selected, allPunishments, page) => {
+  const getAllOptions = () => {
+    if (!selected) {
+      return [
+        new Builders.UnsafeSelectMenuOptionBuilder()
+          .setDefault(false)
+          .setLabel('placeholder')
+          .setValue('placeholder'),
+      ];
+    }
+
+    if (allPunishments.length) {
+      return allPunishments
+        .filter((p) => {
+          if (selected === 'warns') return p.type === 0;
+          if (selected === 'mutes') return p.type === 1;
+          if (selected === 'kicks') return p.type === 2;
+          if (selected === 'channelbans') return p.type === 3;
+          if (selected === 'bans') return p.type === 4;
+          return null;
+        })
+        .map((p) =>
+          new Builders.UnsafeSelectMenuOptionBuilder()
+            .setDefault(false)
+            .setDescription(p.reason.slice(0, 100))
+            .setLabel(`ID: ${p.uniquetimestamp} | ${msg.lan.executor}: ${p.executorname}`)
+            .setValue(String(p.uniquetimestamp)),
+        );
+    }
+
+    return [
+      new Builders.UnsafeSelectMenuOptionBuilder()
+        .setDefault(true)
+        .setLabel(msg.lan.noPunishments)
+        .setValue('placeholder'),
+    ];
+  };
+
+  const allOptions = getAllOptions();
+  const takeOptions = allOptions.splice(page - 1 * 25, 25);
+
+  const buttons = [
+    ['warns', 'mutes', 'kicks', 'channelbans', 'bans'].map((name, i) =>
+      new Builders.UnsafeButtonBuilder()
+        .setLabel(msg.lan[name])
+        .setCustomId(name)
+        .setStyle(selected === name ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Primary)
+        .setDisabled(selected === name || !allPunishments.find((p) => p.type === i)),
+    ),
+    [
+      new Builders.UnsafeSelectMenuBuilder()
+        .setCustomId(`menu_${selected}`)
+        .setDisabled(!selected)
+        .setMaxValues(takeOptions.length < 9 ? takeOptions.length : 9)
+        .setMinValues(1)
+        .setPlaceholder(msg.lan.placeholder)
+        .setOptions(...takeOptions),
+    ],
+    [
+      new Builders.UnsafeButtonBuilder()
+        .setLabel('\u200b')
+        .setCustomId('left')
+        .setStyle(Discord.ButtonStyle.Secondary)
+        .setEmoji(msg.client.objectEmotes.back)
+        .setDisabled(page === 1),
+      new Builders.UnsafeButtonBuilder()
+        .setLabel('\u200b')
+        .setCustomId('right')
+        .setStyle(Discord.ButtonStyle.Secondary)
+        .setEmoji(msg.client.objectEmotes.forth)
+        .setDisabled(Math.ceil(allOptions.length / 25) < page),
+    ],
+  ];
+
+  return buttons;
+};
+
+const handleEnd = (buttonsCollector, msg, m) => {
+  buttonsCollector.on('end', (collected, reason) => {
+    if (reason === 'time') {
+      msg.client.ch.disableComponents(m, [m.embeds]);
+    }
+  });
+};
+
+const handleInteractions = (buttonsCollector, msg, m, allPunishments) => {
+  buttonsCollector.on('collect', async (interaction) => {
+    if (interaction.user.id !== msg.author.id) {
+      msg.client.ch.notYours(interaction);
+      return;
+    }
+
+    let page = 1;
+    let selected;
+
+    switch (interaction.customId) {
+      case 'left': {
+        page -= 1;
+        const baseButtons = getBaseButtons(msg, selected, allPunishments, page);
+        await interaction
+          .update({ components: msg.client.ch.buttonRower(baseButtons) })
+          .catch(() => {});
+        break;
+      }
+      case 'right': {
+        page += 1;
+        const baseButtons = getBaseButtons(msg, selected, allPunishments, page);
+        await interaction
+          .update({ components: msg.client.ch.buttonRower(baseButtons) })
+          .catch(() => {});
+        break;
+      }
+      default: {
+        if (interaction.customId.startsWith('menu')) {
+          // const name = interaction.customId.split('_')[1];
+          const punishmentsToDisplay = allPunishments.some((p) =>
+            interaction.values.includes(p.uniquetimestamp),
+          );
+
+          console.log(punishmentsToDisplay);
+        } else {
+          selected = interaction.customId;
+          const baseButtons = getBaseButtons(msg, selected, allPunishments, page);
+          await interaction
+            .update({ components: msg.client.ch.buttonRower(baseButtons) })
+            .catch(() => {});
+        }
+        break;
+      }
+    }
+  });
+};

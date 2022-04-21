@@ -147,5 +147,18 @@
     "60": "<a:60s:910140485883031572>"
   },
   "lock": "🔒",
-  "unlock": "🔓"
+  "unlock": "🔓",
+  "ban": "<:AuditLogBan:966670641455595610>",
+  "banCross": "<:AuditLogBanCross:966676108282052638>",
+  "banError": "<:AuditLogBanError:966676108315602964>",
+  "banTick": "<:AuditLogBanTick:966676108202377247>",
+  "banUpdated": "<:AuditLogBanUpdated:966676108579844146>",
+  "timedoutCross": "<:TimedOutCross:966683453997326367>",
+  "timedoutError": "<:TimedOutError:966683453976363028>",
+  "timedoutTick": "<:TimedOutTick:966683455020748883>",
+  "timedoutUpdated": "<:TimedOutUpdated:966683455452749864>",
+  "mutedCross": "<:MutedCross:966689832795521054>",
+  "mutedError": "<:MutedError:966689832778752050>",
+  "mutedTick": "<:MutedTick:966689832472559637>",
+  "mutedUpdated": "<:MutedUpdated:966689832875229194>"
 }

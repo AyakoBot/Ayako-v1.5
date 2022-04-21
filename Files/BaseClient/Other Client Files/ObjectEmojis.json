@@ -275,5 +275,83 @@
     "60": { "name": "60s", "id": "910140485883031572", "animated": true }
   },
   "lock": { "name": "🔒" },
-  "unlock": { "name": "🔓" }
+  "unlock": { "name": "🔓" },
+  "ban": {
+    "name": "AuditLogBan",
+    "id": "966670641455595610",
+    "animated": false,
+    "link": "https://cdn.discordapp.com/emojis/966670641455595610.png"
+  },
+  "banCross": {
+    "name": "AuditLogBanCross",
+    "id": "966676108282052638",
+    "animated": false,
+    "link": "https://cdn.discordapp.com/emojis/966676108282052638.png"
+  },
+  "banError": {
+    "name": "AuditLogBanError",
+    "id": "966676108315602964",
+    "animated": false,
+    "link": "https://cdn.discordapp.com/emojis/966676108315602964.png"
+  },
+  "banTick": {
+    "name": "AuditLogBanTick",
+    "id": "966676108202377247",
+    "animated": false,
+    "link": "https://cdn.discordapp.com/emojis/966676108202377247.png"
+  },
+  "banUpdate": {
+    "name": "AuditLogBanUpdated",
+    "id": "966676108579844146",
+    "animated": false,
+    "link": "https://cdn.discordapp.com/emojis/966676108579844146.png"
+  },
+  "timedoutCross": {
+    "name": "TimedOutCross",
+    "id": "966683453997326367",
+    "animated": false,
+    "link": "https://cdn.discordapp.com/emojis/966683453997326367.png"
+  },
+  "timedoutError": {
+    "name": "TimedOutError",
+    "id": "966683453976363028",
+    "animated": false,
+    "link": "https://cdn.discordapp.com/emojis/966683453976363028.png"
+  },
+  "timedoutTick": {
+    "name": "TimedOutTick",
+    "id": "966683455020748883",
+    "animated": false,
+    "link": "https://cdn.discordapp.com/emojis/966683455020748883.png"
+  },
+  "timedoutUpdated": {
+    "name": "TimedOutUpdated",
+    "id": "966683455452749864",
+    "animated": false,
+    "link": "https://cdn.discordapp.com/emojis/966683455452749864.png"
+  },
+  "mutedCross": {
+    "name": "MutedCross",
+    "id": "966689832795521054",
+    "animated": false,
+    "link": "https://cdn.discordapp.com/emojis/966689832795521054.png"
+  },
+  "mutedError": {
+    "name": "MutedError",
+    "id": "966689832778752050",
+    "animated": false,
+    "link": "https://cdn.discordapp.com/emojis/966689832778752050.png"
+  },
+  "mutedTick": {
+    "name": "MutedTick",
+    "id": "966689832472559637",
+    "animated": false,
+    "link": "https://cdn.discordapp.com/emojis/966689832472559637.png"
+  },
+  "mutedUpdated": {
+    "name": "MutedUpdated",
+    "id": "966689832875229194",
+    "animated": false,
+    "link": "https://cdn.discordapp.com/emojis/966689832875229194.png"
+  }
 }
