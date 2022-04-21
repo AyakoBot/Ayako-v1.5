@@ -2,7 +2,7 @@ const jobs = require('node-schedule');
 
 module.exports = async () => {
   const client = require('../../BaseClient/DiscordClient');
-  const res = await client.ch.query('SELECT * FROM punish_tempbans;');
+  const res = await client.ch.query('SELECT * FROM punish_tempchannelbans;');
 
   if (!res || !res.rowCount) return;
 
@@ -19,7 +19,7 @@ module.exports = async () => {
 
     if (timeLeft <= 0) timeLeft = 100;
 
-    client.bans.set(
+    client.channelbans.set(
       `${row.guildid}-${row.userid}`,
       jobs.scheduleJob(`${row.guildid}-${row.userid}`, new Date(Date.now() + timeLeft), () =>
         client.emit(
@@ -30,9 +30,10 @@ module.exports = async () => {
             reason: language.ready.unban.reason,
             guild,
             msg,
+            channel: client.channels.cache.get(row.banchannelid),
             forceFinish: true,
           },
-          'banRemove',
+          'channelbanRemove',
         ),
       ),
     );

@@ -1,4 +1,3 @@
-const Discord = require('discord.js');
 const jobs = require('node-schedule');
 const Builders = require('@discordjs/builders');
 
@@ -142,9 +141,8 @@ const commitUnban = async (msg, target, executor, reason, channel, resolve, reje
   if (ended) return;
 
   if (
-    new Discord.PermissionsBitField(Discord.PermissionsBitField.Default).equals(
-      edit.permissionOverwrites.cache.get(target.id),
-    )
+    edit.permissionOverwrites.cache.get(target.id).deny.bitfield === 0n &&
+    edit.permissionOverwrites.cache.get(target.id).allow.bitfield === 0n
   ) {
     await channel.permissionOverwrites
       .delete(target.id, `${executor.tag} | ${reason}`)

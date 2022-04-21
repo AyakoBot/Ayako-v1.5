@@ -305,7 +305,7 @@ const getBaseButtons = (msg, selected, allPunishments, page) => {
 const handleEnd = (buttonsCollector, msg, m) => {
   buttonsCollector.on('end', (collected, reason) => {
     if (reason === 'time') {
-      msg.client.ch.disableComponents(m, [m.embeds]);
+      msg.client.ch.disableComponents(m, m.embeds);
     }
   });
 };

@@ -18,8 +18,13 @@ process.setMaxListeners(2);
 
 [...client.events.entries()].forEach((rawevent) => {
   const event = client.events.get(rawevent[0]);
-  if (event.once) client.once(rawevent[0], (...args) => event.execute(...args));
-  else client.on(rawevent[0], (...args) => event.execute(...args));
+  if (event.once) {
+    client.once(rawevent[0], (...args) =>
+      event.execute ? event.execute(...args) : event(...args),
+    );
+  } else {
+    client.on(rawevent[0], (...args) => (event.execute ? event.execute(...args) : event(...args)));
+  }
 });
 
 process.on('unhandledRejection', (error) => {
