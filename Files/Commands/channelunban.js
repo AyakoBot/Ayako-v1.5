@@ -1,6 +1,6 @@
 module.exports = {
   name: 'channelunban',
-  perm: 268435456n,
+  perm: 16n,
   dm: false,
   takesFirstArg: true,
   aliases: [],
@@ -10,11 +10,33 @@ module.exports = {
       if (doProceed === false) {
         const modRoleRes = await msg.client.ch.modRoleWaiter(msg);
         if (modRoleRes) {
-          return msg.client.emit(`modChannelbanRemove`, msg.author, user, reason, msg, channel);
+          return msg.client.emit(
+            `modBaseEvent`,
+            {
+              reason,
+              channel,
+              executor: msg.author,
+              target: user,
+              msg,
+              guild: msg.guild,
+            },
+            'channelbanRemove',
+          );
         }
         msg.delete().catch(() => {});
       } else {
-        return msg.client.emit(`modChannelbanRemove`, msg.author, user, reason, msg, channel);
+        return msg.client.emit(
+          `modBaseEvent`,
+          {
+            reason,
+            channel,
+            executor: msg.author,
+            target: user,
+            msg,
+            guild: msg.guild,
+          },
+          'channelbanRemove',
+        );
       }
       return null;
     };
@@ -22,12 +44,17 @@ module.exports = {
     const user = await msg.client.users.fetch(msg.args[0].replace(/\D+/g, '')).catch(() => {});
     if (!user) return msg.client.ch.error(msg, msg.language.errors.userNotFound);
 
-    let channel = msg.client.channels.cache.get(msg.args[1].replace(/\D+/g, ''));
+    let channel = msg.args[1]
+      ? msg.client.channels.cache.get(msg.args[1].replace(/\D+/g, ''))
+      : null;
+
+    if (!channel) {
+      channel = msg.channel;
+    }
 
     const reason = getReason(msg, channel);
-    if (!channel) channel = msg.channel;
-
     const guildmember = await msg.guild.members.fetch(user.id).catch(() => {});
+
     if (guildmember) {
       const res = await msg.client.ch.query('SELECT * FROM modroles WHERE guildid = $1;', [
         msg.guild.id,

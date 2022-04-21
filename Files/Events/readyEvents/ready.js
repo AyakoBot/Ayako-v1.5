@@ -23,35 +23,37 @@ module.exports = {
       }
       if (new Date().getHours() === 0) {
         client.guilds.cache.forEach((g) => {
-          require('./nitro').execute(g);
+          require('./nitro')(g);
         });
         client.ch.query('DELETE FROM toxicitycheck;');
       }
     });
 
-    require('./slashcommands').execute();
-    require('./reminder').execute();
-    require('./disboard').execute();
-    require('./giveaway').execute();
-    require('./separators').execute();
-    require('./antivirusBlocklistCacher').execute();
-    require('./voteHandler').execute();
+    require('./reminder')();
+    require('./disboard')();
+    require('./giveaway')();
+    require('./separators')();
+    require('./antivirusBlocklistCacher')();
+    require('./voteHandler')();
     require('./inviteLogger')();
+    require('./banManager')();
+    require('./channelbanManager')();
 
     jobs.scheduleJob('*/2 * * * * *', () => {
-      require('./TimedManagers/TimedManagerSplitter').execute();
+      require('./TimedManagers/TimedManagerSplitter')();
     });
     jobs.scheduleJob('*/2 * * * *', () => {
-      require('./prunelog').execute();
+      require('./prunelog')();
     });
     jobs.scheduleJob('*/1 * * * *', () => {
-      require('./presence').execute();
-      require('./verification').execute();
+      require('./presence')();
+      require('./verification')();
     });
     jobs.scheduleJob('*/30 * * * *', () => {
-      require('./antivirusBlocklistCacher').execute();
+      require('./antivirusBlocklistCacher')();
     });
     jobs.scheduleJob('*/10 * * * *', () => {
+      // eslint-disable-next-line no-console
       console.log(new Date().toLocaleString());
     });
   },

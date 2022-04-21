@@ -1,6 +1,5 @@
 const jobs = require('node-schedule');
 const Builders = require('@discordjs/builders');
-const Discord = require('discord.js');
 
 module.exports = async (args, type) => {
   const { executor, target, reason, msg, guild } = args;
@@ -103,12 +102,6 @@ const declareSuccess = async (embed, mExistedPreviously, lan, args) => {
 const errorEmbed = (embed, lan, mExistedPreviously, dm, err, args) => {
   if (!args.msg && !args.msg.id) return;
 
-  const deleter = () => {
-    jobs.scheduleJob(new Date(Date.now() + 10000), () => {
-      if (args.msg.m) args.msg.m.delete().catch(() => {});
-    });
-  };
-
   if (dm) dm.delete().catch(() => {});
 
   if (mExistedPreviously) {
@@ -120,7 +113,7 @@ const errorEmbed = (embed, lan, mExistedPreviously, dm, err, args) => {
       } ${args.guild.client.ch.makeCodeBlock(err)}`,
     });
 
-    deleter();
+    deleter(args);
   } else {
     embed.setDescription(
       `${args.guild.client.textEmotes.cross + lan.error} ${args.guild.client.ch.makeCodeBlock(
@@ -128,7 +121,7 @@ const errorEmbed = (embed, lan, mExistedPreviously, dm, err, args) => {
       )}`,
     );
 
-    deleter();
+    deleter(args);
   }
 
   if (args.msg.m) args.msg.m.edit({ embeds: [embed] }).catch(() => {});
@@ -150,14 +143,14 @@ const logEmbed = async (lan, language, executingMember, con, reason, args) => {
   const embed = new Builders.UnsafeEmbedBuilder()
     .setColor(con.color)
     .setAuthor({
-      name: args.guild.client.ch.stp(lan.author, { user: args.target }),
+      name: args.guild.client.ch.stp(lan.author, { args }),
       iconURL: args.target.displayAvatarURL({ size: 4096 }),
       url: args.guild.client.constants.standard.invite,
     })
     .setDescription(
       args.guild.client.ch.stp(lan.description, {
         user: executingMember.user,
-        target: args.target,
+        args,
       }),
     )
     .setTimestamp()
@@ -165,7 +158,7 @@ const logEmbed = async (lan, language, executingMember, con, reason, args) => {
     .setFooter({
       text: args.guild.client.ch.stp(lan.footer, {
         user: executingMember.user,
-        target: args.target,
+        args,
       }),
     });
 
@@ -198,12 +191,6 @@ const roleCheck = (embed, mExistedPreviously, lan, targetMember, executingMember
   }
   if (!args.msg && !args.msg.id) return false;
 
-  const deleter = () => {
-    jobs.scheduleJob(new Date(Date.now() + 10000), () => {
-      if (args.msg.m) args.msg.m.delete().catch(() => {});
-    });
-  };
-
   if (mExistedPreviously) {
     embed.data.fields.pop();
     embed.addFields({
@@ -211,11 +198,11 @@ const roleCheck = (embed, mExistedPreviously, lan, targetMember, executingMember
       value: `${args.guild.client.textEmotes.cross} ${lan.exeNoPerms}`,
     });
 
-    deleter();
+    deleter(args);
   } else {
     embed.setDescription(`${args.guild.client.textEmotes.cross} ${lan.exeNoPerms}`);
 
-    deleter();
+    deleter(args);
   }
 
   args.msg.m.edit({ embeds: [embed] }).catch(() => {});
@@ -226,12 +213,6 @@ const checkSelfPunish = (embed, mExistedPreviously, lan, targetMember, executing
   if (executingMember.id !== targetMember.id) return false;
   if (!args.msg && !args.msg.id) return true;
 
-  const deleter = () => {
-    jobs.scheduleJob(new Date(Date.now() + 10000), () => {
-      if (args.msg.m) args.msg.m.delete().catch(() => {});
-    });
-  };
-
   if (mExistedPreviously) {
     embed.data.fields.pop();
     embed.addFields({
@@ -239,11 +220,11 @@ const checkSelfPunish = (embed, mExistedPreviously, lan, targetMember, executing
       value: `${args.guild.client.textEmotes.cross} ${lan.selfPunish}`,
     });
 
-    deleter();
+    deleter(args);
   } else {
     embed.setDescription(`${args.guild.client.textEmotes.cross} ${lan.selfPunish}`);
 
-    deleter();
+    deleter(args);
   }
 
   if (mExistedPreviously) {
@@ -256,12 +237,6 @@ const checkMePunish = (embed, mExistedPreviously, lan, targetMember, args) => {
   if (targetMember.id !== args.guild.client.user.id) return false;
   if (!args.msg && !args.msg.id) return true;
 
-  const deleter = () => {
-    jobs.scheduleJob(new Date(Date.now() + 10000), () => {
-      if (args.msg.m) args.msg.m.delete().catch(() => {});
-    });
-  };
-
   if (mExistedPreviously) {
     embed.data.fields.pop();
     embed.addFields({
@@ -269,11 +244,11 @@ const checkMePunish = (embed, mExistedPreviously, lan, targetMember, args) => {
       value: `${args.guild.client.textEmotes.cross} ${lan.mePunish}`,
     });
 
-    deleter();
+    deleter(args);
   } else {
     embed.setDescription(`${args.guild.client.textEmotes.cross} ${lan.mePunish}`);
 
-    deleter();
+    deleter(args);
   }
 
   if (args.msg.m) args.msg.m.edit({ embeds: [embed] });
@@ -312,7 +287,7 @@ const checkPunishable = (embed, mExistedPreviously, lan, targetMember, punishmen
       }
       break;
     }
-    case 'channelbanAdd': {
+    case 'channelbanAdd' || 'tempchannelbanAdd': {
       if (args.channel.manageable && targetMember) return true;
       break;
     }
@@ -337,24 +312,18 @@ const checkPunishable = (embed, mExistedPreviously, lan, targetMember, punishmen
 
   if (!args.msg && !args.msg.id) return false;
 
-  const deleter = () => {
-    jobs.scheduleJob(new Date(Date.now() + 10000), () => {
-      if (args.msg.m) args.msg.m.delete().catch(() => {});
-    });
-  };
-
   if (mExistedPreviously) {
     embed.data.fields.pop();
     embed.addFields({
       name: '\u200b',
-      value: `${args.guild.client.textEmotes.cross} ${lan.permissionError}}`,
+      value: `${args.guild.client.textEmotes.cross} ${lan.permissionError}`,
     });
 
-    deleter();
+    deleter(args);
   } else {
     embed.setDescription(`${args.guild.client.textEmotes.cross} ${lan.permissionError}`);
 
-    deleter();
+    deleter(args);
   }
   if (args.msg.m) args.msg.m.edit({ embeds: [embed] });
   return false;
@@ -404,9 +373,10 @@ const checkActionTaken = async (
       break;
     }
     case 'tempbanAdd': {
+      punished = await args.guild.bans.fetch(args.target).catch(() => {});
       break;
     }
-    case 'channelbanAdd': {
+    case 'channelbanAdd' || 'tempchannelbanAdd': {
       punished =
         args.channel.permissionOverwrites.cache.get(args.target.id)?.deny.has(2048n) &&
         args.channel.permissionOverwrites.cache.get(args.target.id)?.deny.has(1048576n);
@@ -414,8 +384,8 @@ const checkActionTaken = async (
     }
     case 'channelbanRemove': {
       punished =
-        args.channel.permissionOverwrites.cache.get(args.target.id)?.deny.has(2048n) &&
-        args.channel.permissionOverwrites.cache.get(args.target.id)?.deny.has(1048576n);
+        !args.channel.permissionOverwrites.cache.get(args.target.id)?.deny.has(2048n) ||
+        !args.channel.permissionOverwrites.cache.get(args.target.id)?.deny.has(1048576n);
       break;
     }
     case 'banRemove': {
@@ -437,6 +407,7 @@ const checkActionTaken = async (
     const deleter = () => {
       jobs.scheduleJob(new Date(Date.now() + 10000), () => {
         if (args.msg.m) args.msg.m.delete().catch(() => {});
+        if (args.msg) args.msg.delete().catch(() => {});
       });
     };
 
@@ -452,7 +423,7 @@ const checkActionTaken = async (
         )}`,
       });
 
-      deleter();
+      deleter(args);
     } else {
       embed.setDescription(
         `${args.guild.client.textEmotes.cross} ${args.guild.client.ch.stp(lan.alreadyApplied, {
@@ -460,7 +431,7 @@ const checkActionTaken = async (
         })}`,
       );
 
-      deleter();
+      deleter(args);
     }
     if (args.msg.m) args.msg.m.edit({ embeds: [embed] });
     return true;
@@ -518,8 +489,6 @@ const takeAction = async (punishmentType, targetMember, executingMember, args, l
       break;
     }
     case 'tempbanAdd': {
-      const { user } = targetMember;
-
       punished = await targetMember
         .ban({ deleteMessageDays: 7, reason: `${args.executor.tag} | ${args.reason}` })
         .catch((err) => {
@@ -527,24 +496,29 @@ const takeAction = async (punishmentType, targetMember, executingMember, args, l
         });
 
       guild.client.bans.set(
-        `${guild.id}-${user.id}`,
-        jobs.scheduleJob(`${guild.id}-${user.id}`, new Date(Date.now() + args.duration), () => {
-          targetMember.client.emit(
-            'modBaseEvent',
-            {
-              target: user,
-              reason: language.ready.unmute.reason,
-              executor: executingMember,
-              msg: args.msg,
-              guild,
-            },
-            'banRemove',
-          );
-        }),
+        `${guild.id}-${args.target.id}`,
+        jobs.scheduleJob(
+          `${guild.id}-${args.target.id}`,
+          new Date(Date.now() + args.duration),
+          () => {
+            targetMember.client.emit(
+              'modBaseEvent',
+              {
+                target: args.target,
+                reason: language.ready.unmute.reason,
+                executor: executingMember,
+                msg: args.msg,
+                guild,
+                forceFinish: true,
+              },
+              'banRemove',
+            );
+          },
+        ),
       );
       break;
     }
-    case 'channelbanAdd': {
+    case 'channelbanAdd' || 'tempchannelbanAdd': {
       if (!args.channel.permissionOverwrites.cache.has(args.target.id)) {
         punished = await args.channel.permissionOverwrites
           .create(
@@ -574,6 +548,31 @@ const takeAction = async (punishmentType, targetMember, executingMember, args, l
             error = err;
           });
       }
+
+      if (punishmentType === 'tempchannelbanAdd') {
+        guild.client.channelBans.set(
+          `${guild.id}-${args.target.id}`,
+          jobs.scheduleJob(
+            `${guild.id}-${args.target.id}`,
+            new Date(Date.now() + args.duration),
+            () => {
+              targetMember.client.emit(
+                'modBaseEvent',
+                {
+                  target: args.target,
+                  reason: language.ready.unmute.reason,
+                  executor: executingMember,
+                  msg: args.msg,
+                  guild,
+                  channel: args.channel,
+                  forceFinish: true,
+                },
+                'channelbanRemove',
+              );
+            },
+          ),
+        );
+      }
       break;
     }
     case 'channelbanRemove': {
@@ -592,9 +591,8 @@ const takeAction = async (punishmentType, targetMember, executingMember, args, l
 
       if (
         punished &&
-        new Discord.PermissionsBitField(Discord.PermissionsBitField.Default).equals(
-          punished.permissionOverwrites.cache.get(args.target.id),
-        )
+        punished.permissionOverwrites.cache.get(args.target.id).deny.bitfield === 0n &&
+        punished.permissionOverwrites.cache.get(args.target.id).allow.bitfield === 0n
       ) {
         punished = await args.channel.permissionOverwrites
           .delete(args.target.id, `${args.executor.tag} | ${args.reason}`)
@@ -677,15 +675,10 @@ const doDataBaseAction = async (punishmentType, client, args, guild) => {
           ];
 
       await client.ch.query(
-        `
-      INSERT INTO ${table} (guildid, userid, reason, uniquetimestamp, channelid, channelname, executorid, executorname, msgid${
+        `INSERT INTO ${table} (guildid, userid, reason, uniquetimestamp, channelid, channelname, executorid, executorname, msgid${
           extraInsertArgNames ? `${extraInsertArgNames.map((arg) => `, ${arg}`).join('')}` : ''
         }) VALUES
-      ($1, $2, $3, $4, $5, $6, $7, $8, $9${
-        extraInsertArgNames
-          ? `${extraInsertArgNames.map((arg, i) => `, $${i + 10}`).join('')}}`
-          : ''
-      });`,
+      (${insertArgs ? `${insertArgs.map((arg, i) => `$${i + 1}`).join(', ')}` : ''});`,
         insertArgs,
       );
       return row;
@@ -723,8 +716,7 @@ const doDataBaseAction = async (punishmentType, client, args, guild) => {
       `INSERT INTO ${table} (guildid, userid, reason, uniquetimestamp, channelid, channelname, executorid, executorname, msgid${
         extraArgNames ? `${extraArgNames.map((arg) => `, ${arg}`).join('')}` : ''
       }) VALUES (
-        $1, $2, $3, $4, $5, $6, $7, $8, $9
-      );`,
+        ${insertArgs ? `${insertArgs.map((arg, i) => `$${i + 1}`).join(', ')}` : ''});`,
       insertArgs,
     );
   };
@@ -751,20 +743,23 @@ const doDataBaseAction = async (punishmentType, client, args, guild) => {
       break;
     }
     case 'channelbanAdd': {
-      insertRow('punish_channelbans', ['banchannelid'], [args.banchannelid]);
+      insertRow('punish_channelbans', ['banchannelid'], [args.channel.id]);
+      break;
+    }
+    case 'tempchannelbanAdd': {
+      insertRow(
+        'punish_tempchannelbans',
+        ['banchannelid', 'duration'],
+        [args.channel.id, args.duration],
+      );
       break;
     }
     case 'channelbanRemove': {
-      getAndDeleteRow('punish_tempchannelbans', 'AND channelid = $3', [args.banchannelid]);
+      getAndDeleteRow('punish_tempchannelbans', 'AND banchannelid = $3', [args.channel.id]);
       break;
     }
     case 'banRemove': {
-      getAndDeleteRow(
-        'punish_tempbans',
-        'AND channelid = $3',
-        ['banchannelid'],
-        [args.banchannelid],
-      );
+      getAndDeleteRow('punish_tempbans');
       break;
     }
     case 'kickAdd': {
@@ -779,4 +774,11 @@ const doDataBaseAction = async (punishmentType, client, args, guild) => {
       break;
     }
   }
+};
+
+const deleter = (args) => {
+  jobs.scheduleJob(new Date(Date.now() + 10000), () => {
+    if (args.msg.m) args.msg.m.delete().catch(() => {});
+    if (args.msg) args.msg.delete().catch(() => {});
+  });
 };

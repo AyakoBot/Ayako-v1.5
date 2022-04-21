@@ -1,46 +1,44 @@
 const Builders = require('@discordjs/builders');
 
-module.exports = {
-  execute: async (guild) => {
-    await guild.members.fetch().catch(() => {});
+module.exports = async (guild) => {
+  await guild.members.fetch().catch(() => {});
 
-    const res = await guild.client.ch.query(`SELECT * FROM nitrousers WHERE guildid = $1;`, [
-      guild.id,
-    ]);
+  const res = await guild.client.ch.query(`SELECT * FROM nitrousers WHERE guildid = $1;`, [
+    guild.id,
+  ]);
 
-    if (!res || !res.rowCount) return;
-    res.rows.forEach(async (row) => {
-      if (
-        row.booststarts?.length > row.boostends?.length &&
-        !guild.members.cache.get(row.userid)?.premiumSinceTimestamp
-      ) {
-        await guild.client.ch.query(
-          `UPDATE nitrousers SET boostends = array_append(nitrousers.boostends, $1) WHERE guildid = $2 AND userid = $3;`,
-          [Date.now(), guild.id, row.userid],
-        );
+  if (!res || !res.rowCount) return;
+  res.rows.forEach(async (row) => {
+    if (
+      row.booststarts?.length > row.boostends?.length &&
+      !guild.members.cache.get(row.userid)?.premiumSinceTimestamp
+    ) {
+      await guild.client.ch.query(
+        `UPDATE nitrousers SET boostends = array_append(nitrousers.boostends, $1) WHERE guildid = $2 AND userid = $3;`,
+        [Date.now(), guild.id, row.userid],
+      );
 
-        logEnd(
-          guild.members.cache.get(row.userid),
-          await getDays(guild.members.cache.get(row.userid)),
-        );
-      }
+      logEnd(
+        guild.members.cache.get(row.userid),
+        await getDays(guild.members.cache.get(row.userid)),
+      );
+    }
 
-      if (
-        row.booststarts?.length === row.boostends?.length &&
-        guild.members.cache.get(row.userid)?.premiumSinceTimestamp
-      ) {
-        await guild.client.ch.query(
-          `UPDATE nitrousers SET booststarts = array_append(nitrousers.booststarts, $1) WHERE guildid = $2 AND userid = $3;`,
-          [guild.members.cache.get(row.userid).premiumSinceTimestamp, guild.id, row.userid],
-        );
+    if (
+      row.booststarts?.length === row.boostends?.length &&
+      guild.members.cache.get(row.userid)?.premiumSinceTimestamp
+    ) {
+      await guild.client.ch.query(
+        `UPDATE nitrousers SET booststarts = array_append(nitrousers.booststarts, $1) WHERE guildid = $2 AND userid = $3;`,
+        [guild.members.cache.get(row.userid).premiumSinceTimestamp, guild.id, row.userid],
+      );
 
-        logStart(
-          guild.members.cache.get(row.userid),
-          await getDays(guild.members.cache.get(row.userid)),
-        );
-      }
-    });
-  },
+      logStart(
+        guild.members.cache.get(row.userid),
+        await getDays(guild.members.cache.get(row.userid)),
+      );
+    }
+  });
 };
 
 const logEnd = async (member, days) => {

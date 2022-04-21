@@ -2,54 +2,48 @@ const Builders = require('@discordjs/builders');
 const moment = require('moment');
 require('moment-duration-format');
 
-module.exports = {
-  execute: async () => {
-    const client = require('../../../BaseClient/DiscordClient');
-    const settingsRes = await client.ch.query(
-      `SELECT * FROM modsettings WHERE warns = true AND warnstime IS NOT NULL OR mutes = true AND mutestime IS NOT NULL OR kicks = true AND kickstime IS NOT NULL OR channelbans = true AND channelbanstime IS NOT NULL OR bans = true AND banstime IS NOT NULL;`,
-    );
+module.exports = async () => {
+  const client = require('../../../BaseClient/DiscordClient');
+  const settingsRes = await client.ch.query(
+    `SELECT * FROM modsettings WHERE warns = true AND warnstime IS NOT NULL OR mutes = true AND mutestime IS NOT NULL OR kicks = true AND kickstime IS NOT NULL OR channelbans = true AND channelbanstime IS NOT NULL OR bans = true AND banstime IS NOT NULL;`,
+  );
 
-    if (!settingsRes || !settingsRes.rowCount) return;
+  if (!settingsRes || !settingsRes.rowCount) return;
 
-    settingsRes.rows.forEach(async (settingsRow) => {
-      if (!client.guilds.cache.get(settingsRow.guildid)) return;
-      if (settingsRow.warns && settingsRow.warnstime) {
-        expire(
-          { expire: settingsRow.warnstime, guildid: settingsRow.guildid },
-          client,
-          'punish_warns',
-        );
-      }
-      if (settingsRow.mutes && settingsRow.mutestime) {
-        expire(
-          { expire: settingsRow.mutestime, guildid: settingsRow.guildid },
-          client,
-          'punish_mutes',
-        );
-      }
-      if (settingsRow.kicks && settingsRow.kickstime) {
-        expire(
-          { expire: settingsRow.kickstime, guildid: settingsRow.guildid },
-          client,
-          'punish_kicks',
-        );
-      }
-      if (settingsRow.bans && settingsRow.banstime) {
-        expire(
-          { expire: settingsRow.banstime, guildid: settingsRow.guildid },
-          client,
-          'punish_bans',
-        );
-      }
-      if (settingsRow.channelbans && settingsRow.channelbanstime) {
-        expire(
-          { expire: settingsRow.channelbans, guildid: settingsRow.guildid },
-          client,
-          'punish_channelbans',
-        );
-      }
-    });
-  },
+  settingsRes.rows.forEach(async (settingsRow) => {
+    if (!client.guilds.cache.get(settingsRow.guildid)) return;
+    if (settingsRow.warns && settingsRow.warnstime) {
+      expire(
+        { expire: settingsRow.warnstime, guildid: settingsRow.guildid },
+        client,
+        'punish_warns',
+      );
+    }
+    if (settingsRow.mutes && settingsRow.mutestime) {
+      expire(
+        { expire: settingsRow.mutestime, guildid: settingsRow.guildid },
+        client,
+        'punish_mutes',
+      );
+    }
+    if (settingsRow.kicks && settingsRow.kickstime) {
+      expire(
+        { expire: settingsRow.kickstime, guildid: settingsRow.guildid },
+        client,
+        'punish_kicks',
+      );
+    }
+    if (settingsRow.bans && settingsRow.banstime) {
+      expire({ expire: settingsRow.banstime, guildid: settingsRow.guildid }, client, 'punish_bans');
+    }
+    if (settingsRow.channelbans && settingsRow.channelbanstime) {
+      expire(
+        { expire: settingsRow.channelbans, guildid: settingsRow.guildid },
+        client,
+        'punish_channelbans',
+      );
+    }
+  });
 };
 
 const expire = async (row, client, tableName) => {

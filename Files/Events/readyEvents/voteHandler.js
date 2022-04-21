@@ -6,33 +6,31 @@ const client = require('../../BaseClient/DiscordClient');
 
 const timeouts = new Map();
 
-module.exports = {
-  execute: () => {
-    queryCheck();
+module.exports = async () => {
+  queryCheck();
 
-    const socket = io('https://ayakobot.com', {
-      transports: ['websocket'],
-      auth: {
-        reason: 'top_gg_votes',
-      },
+  const socket = io('https://ayakobot.com', {
+    transports: ['websocket'],
+    auth: {
+      reason: 'top_gg_votes',
+    },
+  });
+
+  socket.on('TOP_GG_VOTE', async (voteData) => {
+    console.log(`User ${voteData.user} has voted`);
+    const res = await client.ch.query(`SELECT * FROM votereminder WHERE userid = $1;`, [
+      voteData.user,
+    ]);
+
+    if (res && res.rowCount) return;
+
+    const voter = await client.users.fetch(voteData.user);
+
+    jobs.scheduleJob(new Date(Date.now() + 1000), () => {
+      roleReward(voteData);
+      reminder(voter);
     });
-
-    socket.on('TOP_GG_VOTE', async (voteData) => {
-      console.log(`User ${voteData.user} has voted`);
-      const res = await client.ch.query(`SELECT * FROM votereminder WHERE userid = $1;`, [
-        voteData.user,
-      ]);
-
-      if (res && res.rowCount) return;
-
-      const voter = await client.users.fetch(voteData.user);
-
-      jobs.scheduleJob(new Date(Date.now() + 1000), () => {
-        roleReward(voteData);
-        reminder(voter);
-      });
-    });
-  },
+  });
 };
 
 const roleReward = async (voteData) => {

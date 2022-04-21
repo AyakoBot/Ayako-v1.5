@@ -2,7 +2,7 @@ const ms = require('ms');
 
 module.exports = {
   name: 'channelban',
-  perm: 268435456n,
+  perm: 16n,
   dm: false,
   takesFirstArg: true,
   aliases: ['channeltempban'],
@@ -12,6 +12,20 @@ module.exports = {
       if (doProceed === false) {
         const modRoleRes = await msg.client.ch.modRoleWaiter(msg);
         if (modRoleRes) {
+          if (!duration) {
+            return msg.client.emit(
+              'modBaseEvent',
+              {
+                target: user,
+                executor: msg.author,
+                reason,
+                msg,
+                guild: msg.guild,
+                channel,
+              },
+              'channelbanAdd',
+            );
+          }
           return msg.client.emit(
             'modBaseEvent',
             {
@@ -20,12 +34,15 @@ module.exports = {
               reason,
               msg,
               guild: msg.guild,
+              channel,
+              duration,
             },
-            'channelbanAdd',
+            'channeltempbanAdd',
           );
         }
         msg.delete().catch(() => {});
-      } else {
+      }
+      if (!duration) {
         return msg.client.emit(
           'modBaseEvent',
           {
@@ -34,23 +51,46 @@ module.exports = {
             reason,
             msg,
             guild: msg.guild,
+            channel,
           },
           'channelbanAdd',
         );
       }
-      return null;
+      return msg.client.emit(
+        'modBaseEvent',
+        {
+          target: user,
+          executor: msg.author,
+          reason,
+          msg,
+          guild: msg.guild,
+          channel,
+          duration,
+        },
+        'channeltempbanAdd',
+      );
     };
 
     const user = await msg.client.users.fetch(msg.args[0].replace(/\D+/g, '')).catch(() => {});
     if (!user) return msg.client.ch.error(msg, msg.language.errors.userNotFound);
 
-    let channel = msg.client.channels.cache.get(msg.args[1].replace(/\D+/g, ''));
+    let channel = msg.args[1]
+      ? msg.client.channels.cache.get(msg.args[1].replace(/\D+/g, ''))
+      : null;
 
-    const duration = getDuration(msg, channel);
-    const reason = getReason(msg, channel, duration);
-    if (!channel) channel = msg.channel;
+    let durationArg = 2;
 
+    if (!channel) {
+      channel = msg.channel;
+      durationArg = 1;
+    }
+
+    const duration = getDuration(msg, channel, durationArg);
+    const reason = getReason(msg, channel, durationArg);
     const guildmember = await msg.guild.members.fetch(user.id).catch(() => {});
+
+    console.log(reason, duration, channel.name);
+
     if (guildmember) {
       const res = await msg.client.ch.query('SELECT * FROM modroles WHERE guildid = $1;', [
         msg.guild.id,
@@ -67,11 +107,9 @@ module.exports = {
   },
 };
 
-const getDuration = (msg, channel) => {
-  let durationArg = 2;
+const getDuration = (msg, channel, durationArg) => {
   let args = [];
 
-  if (!channel) durationArg = 1;
   if (msg.args[durationArg]) args = [msg.args[durationArg].replace(/,/g, '.')];
 
   let duration = args[0] ? ms(args[0]) : null;

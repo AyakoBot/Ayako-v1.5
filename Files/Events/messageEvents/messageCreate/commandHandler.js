@@ -189,7 +189,9 @@ const getDisabledRes = async (msg) => {
 };
 
 const checkModRoles = async (msg, modRoles) => {
-  const applyingRows = modRoles.filter((row) => msg.member.roles.cache.has(row.roleid));
+  const applyingRows = modRoles
+    ? modRoles.filter((row) => msg.member.roles.cache.has(row.roleid))
+    : [];
   if (!applyingRows || !applyingRows.length) return 'noRoles';
   const [roleToApply] = applyingRows.sort(
     (a, b) =>
@@ -352,7 +354,7 @@ const editVerifier = async (msg) => {
   ];
 
   const m = await msg.client.ch.reply(msg, {
-    content: msg.client.language.commands.commandHandler.verifyMessgae,
+    content: msg.language.commands.commandHandler.verifyMessgae,
     components: msg.client.ch.buttonRower([buttons]),
   });
 
@@ -371,11 +373,13 @@ const editVerifier = async (msg) => {
       if (interaction.customId === 'abort') {
         m.delete().catch(() => {});
         msg.delete().catch(() => {});
+        interaction.deferUpdate();
         resolve(false);
         return;
       }
 
       if (interaction.customId === 'proceed') {
+        interaction.deferUpdate();
         resolve(true);
       }
     });

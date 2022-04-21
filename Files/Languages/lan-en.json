@@ -900,9 +900,9 @@
       }
     },
     "muteAdd": {
-      "author": "{{user.tag}} was Muted",
-      "description": "{{user}} has muted {{target}}",
-      "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
+      "author": "{{args.target.tag}} was Muted",
+      "description": "{{user}} has muted {{args.target}}",
+      "footer": "Executor ID {{user.id}}\nTarget ID {{args.target.id}}",
       "activeMute": "Joined with an active Mute",
       "activeMuteError": "This User joined with an active Mute.\nHowever I wasn't able to Mute them.\nMissing Permissions",
       "dm": {
@@ -916,12 +916,13 @@
       "noMemberHint": "This User is not a Member of this Server\n\n**Do you want to Mute them anyways?**\nThey will be automatically Muted if they Re-Join",
       "noMember": "This User is not a Member of this Server",
       "error": "I wasn't able to Mute this User!",
+      "permissionError": "I don't have enough permissions to Mute this User",
       "mePunish": "I won't Mute myself"
     },
     "tempmuteAdd": {
-      "author": "{{user.tag}} was Temp-Muted",
-      "description": "{{user}} has Temp-Muted {{target}}",
-      "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
+      "author": "{{args.target.tag}} was Temp-Muted",
+      "description": "{{user}} has Temp-Muted {{args.target}}",
+      "footer": "Executor ID {{user.id}}\nTarget ID {{args.target.id}}",
       "activeMute": "Joined with an active Mute",
       "activeMuteError": "This User joined with an active Mute.\nHowever I wasn't able to Mute them.\nMissing Permissions",
       "dm": {
@@ -936,12 +937,13 @@
       "error": "I wasn't able to Temp-Mute this User!",
       "noMemberHint": "This User is not a Member of this Server\n\n**Do you want to Temp-Mute them anyways?**\nThey will be automatically Muted if they Re-Join before their Mute ends",
       "noMember": "This User is not a Member of this Server",
-      "mePunish": "I won't Temp-Mute myself"
+      "mePunish": "I won't Temp-Mute myself",
+      "permissionError": "I don't have enough permissions to Temp-Mute this User"
     },
     "muteRemove": {
-      "author": "{{user.tag}} was Un-Muted",
-      "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas Un-Muted by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
-      "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
+      "author": "{{args.target.tag}} was Un-Muted",
+      "description": "Target {{args.target}} / `{{args.target.tag}}` / `{{args.target.id}}`\nwas Un-Muted by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
+      "footer": "Executor ID {{user.id}}\nTarget ID {{args.target.id}}",
       "dm": {
         "author": "You have been Un-Muted on {{guild.name}}"
       },
@@ -953,12 +955,13 @@
       "error": "I wasn't able to Un-Mute this User!",
       "noMemberHint": "This User is not a Member of this Server\n\n**Do you want to Remove their Mute anyways?**\nOtherwise they will be Re-Muted if they Re-Join before their Mute ends",
       "noMember": "This User is not a Member of this Server",
-      "mePunish": "I can't Un-Mute myself"
+      "mePunish": "I can't Un-Mute myself",
+      "permissionError": "I don't have enough permissions to Un-Mute this User"
     },
     "banAdd": {
-      "author": "{{user.tag}} was Banned",
-      "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas Banned by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
-      "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
+      "author": "{{args.target.tag}} was Banned",
+      "description": "Target {{args.target}} / `{{args.target.tag}}` / `{{args.target.id}}`\nwas Banned by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
+      "footer": "Executor ID {{user.id}}\nTarget ID {{args.target.id}}",
       "dm": {
         "author": "You have been Banned from {{guild.name}}"
       },
@@ -972,9 +975,9 @@
       "mePunish": "I won't Ban myself"
     },
     "softbanAdd": {
-      "author": "{{user.tag}} was Soft-Banned",
-      "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas Soft-Banned by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
-      "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
+      "author": "{{args.target.tag}} was Soft-Banned",
+      "description": "Target {{args.target}} / `{{args.target.tag}}` / `{{args.target.id}}`\nwas Soft-Banned by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
+      "footer": "Executor ID {{user.id}}\nTarget ID {{args.target.id}}",
       "dm": {
         "author": "You have been Soft-Banned from {{guild.name}}"
       },
@@ -989,9 +992,9 @@
       "unbanReason": "Soft-Ban"
     },
     "tempbanAdd": {
-      "author": "{{user.tag}} was Temp-Banned",
-      "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas Temp-Banned by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
-      "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
+      "author": "{{args.target.tag}} was Temp-Banned",
+      "description": "Target {{args.target}} / `{{args.target.tag}}` / `{{args.target.id}}`\nwas Temp-Banned by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
+      "footer": "Executor ID {{user.id}}\nTarget ID {{args.target.id}}",
       "dm": {
         "author": "You have been Temp-Banned from {{guild.name}}"
       },
@@ -1005,9 +1008,9 @@
       "mePunish": "I won't Temp-Ban myself"
     },
     "channelbanAdd": {
-      "author": "{{user.tag}} was Channel-Banned from {{channel.name}}",
-      "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas was Channel-Banned from\nChannel {{channel}} / `{{channel.name}}` / `{{channel.id}}`\nby\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
-      "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
+      "author": "{{args.target.tag}} was Channel-Banned from {{args.channel.name}}",
+      "description": "Target {{args.target}} / `{{args.target.tag}}` / `{{args.target.id}}`\nwas was Channel-Banned from\nChannel {{args.channel}} / `{{args.channel.name}}` / `{{args.channel.id}}`\nby\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
+      "footer": "Executor ID {{user.id}}\nTarget ID {{args.target.id}}",
       "dm": {
         "author": "You have been Channel-Banned in {{guild.name}}"
       },
@@ -1021,9 +1024,9 @@
       "mePunish": "I won't Channel-Ban myself"
     },
     "channelbanRemove": {
-      "author": "{{user.tag}} was Channel-Unbanned",
-      "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas Channel-Unbanned from\nChannel {{channel}} / `{{channel.name}}` / `{{channel.id}}`\nby\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
-      "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
+      "author": "{{args.target.tag}} was Channel-Unbanned from {{args.channel.name}}",
+      "description": "Target {{args.target}} / `{{args.target.tag}}` / `{{args.target.id}}`\nwas Channel-Unbanned from\nChannel {{args.channel}} / `{{args.channel.name}}` / `{{args.channel.id}}`\nby\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
+      "footer": "Executor ID {{user.id}}\nTarget ID {{args.target.id}}",
       "dm": {
         "author": "You have been Channel-Unbanned in {{guild.name}}"
       },
@@ -1037,9 +1040,9 @@
       "mePunish": "I won't Channel-Unban myself"
     },
     "banRemove": {
-      "author": "{{user.tag}} was Un-Banned",
-      "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas Un-Banned by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
-      "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
+      "author": "{{args.target.tag}} was Un-Banned",
+      "description": "Target {{args.target}} / `{{args.target.tag}}` / `{{args.target.id}}`\nwas Un-Banned by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
+      "footer": "Executor ID {{user.id}}\nTarget ID {{args.target.id}}",
       "dm": {
         "author": "You have been Un-Banned from {{guild.name}}"
       },
@@ -1053,9 +1056,9 @@
       "mePunish": "I won't Un-Ban myself"
     },
     "kickAdd": {
-      "author": "{{user.tag}} was Kicked",
-      "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas Kicked by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
-      "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}",
+      "author": "{{args.target.tag}} was Kicked",
+      "description": "Target {{args.target}} / `{{args.target.tag}}` / `{{args.target.id}}`\nwas Kicked by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
+      "footer": "Executor ID {{user.id}}\nTarget ID {{args.target.id}}",
       "dm": {
         "author": "You have been Kicked from {{guild.name}}"
       },
@@ -1073,7 +1076,7 @@
       "DMtitle": "You have been warned on the Server __{{guild.name}}__",
       "log": {
         "author": "{{target.username}} has been warned",
-        "description": "Target {{target}} / `{{target.tag}}` / `{{target.id}}`\nwas warned by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`"
+        "description": "Target {{args.target}} / `{{args.target.tag}}` / `{{args.target.id}}`\nwas warned by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`"
       },
       "exeNoPerms": "You can't warn this Member",
       "antispam": {
@@ -1661,6 +1664,12 @@
       "category": "Moderation",
       "reason": "No Reason given"
     },
+    "channelunban": {
+      "description": "Un-Bans a User from a Channel",
+      "usage": ["channelunban [user ID or mention] (Channel ID or mention) (reason)"],
+      "category": "Moderation",
+      "reason": "No Reason given"
+    },
     "tempban": {
       "description": "Temp-Bans a User from the Server",
       "usage": ["tempban [user ID or mention] [time] (reason)"],
@@ -1891,7 +1900,7 @@
       "executor": "Executor",
       "noPunishments": "No Punishments found for this Option",
       "placeholder": "Select up to 9 Punishments",
-      
+
       "punishmentsPage": "Punishments Page",
       "warnOf": "Warn of: ",
       "muteOf": "Mute of: ",
