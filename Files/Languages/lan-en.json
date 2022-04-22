@@ -418,6 +418,9 @@
     "unban": {
       "reason": "Automatically Un-Banned"
     },
+    "unmute": {
+      "reason": "Automatically Un-Muted"
+    },
     "disboard": {
       "bumpMsg": "You can now Bump this server again!\n\n`!d bump`",
       "title": "Ayako DISBOARD Bump Reminder"
@@ -900,28 +903,9 @@
         "description": "You are about to strike **{{user}}**\nDue to their Amount of Warns, this will {{punishment}} them\n**Do you want to proceed?**"
       }
     },
-    "muteAdd": {
-      "author": "{{args.target.tag}} was Muted",
-      "description": "{{user}} has Muted {{args.target}}",
-      "footer": "Executor ID {{user.id}}\nTarget ID {{args.target.id}}",
-      "activeMute": "Joined with an active Mute",
-      "activeMuteError": "This User joined with an active Mute.\nHowever I wasn't able to Mute them.\nMissing Permissions",
-      "dm": {
-        "author": "You have been Muted on {{guild.name}}"
-      },
-      "alreadyApplied": "This Member is already Muted",
-      "exeNoPerms": "You can't Mute this Member",
-      "meNoPerms": "I can't Mute this Member `Missing Permissions`",
-      "success": "Member {{target}} was Muted",
-      "loading": "Muting User...",
-      "noMember": "This User is not a Member of this Server",
-      "error": "I wasn't able to Mute this User!",
-      "permissionError": "I don't have enough permissions to Mute this User",
-      "mePunish": "I won't Mute myself"
-    },
     "tempmuteAdd": {
       "author": "{{args.target.tag}} was Temp-Muted",
-      "description": "{{user}} has Temp-Muted {{args.target}}",
+      "description": "Target {{args.target}} / `{{args.target.tag}}` / `{{args.target.id}}`\nwas Temp-Muted by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
       "footer": "Executor ID {{user.id}}\nTarget ID {{args.target.id}}",
       "activeMute": "Joined with an active Mute",
       "activeMuteError": "This User joined with an active Mute.\nHowever I wasn't able to Mute them.\nMissing Permissions",
@@ -1893,47 +1877,33 @@
       "usage": ["check [user ID or mention]"],
       "author": "Punishments of {{target.tag}}",
       "banLoad": "Fetching Bans",
-      "banned": "{{target.username}} is Banned",
+      "banned": "{{target.username}} **is Banned**",
       "banError": "I'm lacking Permissions to view Bans",
-      "notbanned": "{{target.username}} is not Banned",
+      "notbanned": "{{target.username}} **is not Banned**",
       "muteLoad": "Fetching Mutes",
       "muteError": "Not a Member",
-      "muted": "{{target.username}} is Muted",
-      "notmuted": "{{target.username}} is not Muted",
+      "muted": "{{target.username}} **is Muted**",
+      "notmuted": "{{target.username}} **is not Muted**",
       "channelbanLoad": "Fetching Channel-Bans",
-      "channelbanned": "{{target.username}} is Banned from {{amount}} Channels",
-      "notchannelbanned": "{{target.username}} is not Banned from any Channels",
-      "text": "Amount of Warns: **{{warns}}**\nAmount of Mutes: **{{mutes}}**\nAmount of Kicks: **{{kicks}}**\nAmount of Channel-Bans: **{{channelbans}}**\nAmount of Bans: **{{bans}}**",
-      "mutes": "Mutes",
-      "warns": "Warns",
-      "kicks": "Kicks",
-      "bans": "Bans",
-      "channelbans": "Channel-Bans",
+      "channelbanned": "{{target.username}} **is Banned from {{amount}} Channels**",
+      "notchannelbanned": "{{target.username}} **is not Banned from any Channels**",
+      "text": "__**Currently running Temporary Punishments are not listed**__\nThey can only be removed with their according Un-Punish Command\n\nAmount of Warns: **{{warns}}**\nAmount of Mutes: **{{mutes}}**\nAmount of Kicks: **{{kicks}}**\nAmount of Channel-Bans: **{{channelbans}}**\nAmount of Bans: **{{bans}}**",
+      "mutes": "Mute",
+      "warns": "Warn",
+      "kicks": "Kick",
+      "bans": "Ban",
+      "channelbans": "Channel-Ban",
       "executor": "Executor",
       "noPunishments": "No Punishments found for this Option",
-      "placeholder": "Select up to 9 Punishments",
-
-      "punishmentsPage": "Punishments Page",
-      "warnOf": "Warn of: ",
-      "muteOf": "Mute of: ",
-      "kickOf": "Kick of: ",
-      "banOf": "Ban of: ",
-      "channelbanOf": "Channel-Ban of: ",
-      "warnedIn": "Warned in",
-      "mutedIn": "Muted in",
-      "kickedIn": "Kicked in",
-      "bannedIn": "Banned in",
-      "channelbannedIn": "Channel-Banned in",
-      "warnedBy": "Warned by",
-      "kickedBy": "Kicked by",
-      "bannedBy": "Banned by",
-      "mutedBy": "Muted by",
-      "channelbannedBy": "Channel-Banned by",
+      "placeholder": "(Page {{currentPage}} of {{maxPages}}) Select up to 9 Punishments",
       "date": "Date of Punishment",
+      "channel": "The Channel this Punishment was executed in",
+      "executor2": "The Executor of this Punishment",
+      "punishmentID": "Punishment ID",
+      "executorMessage": "The Message which triggered this Punishment",
       "duration": "Punishment Duration",
-      "closed": "Punishment ended {{time}}",
-      "notClosed": "Punishment will end {{time}}",
-      "punishmenID": "Punishment ID: "
+      "permanent": "This Punishment was Permanent",
+      "end": "Punishment End Date"
     },
     "uptime": {
       "text": "I am online since"
