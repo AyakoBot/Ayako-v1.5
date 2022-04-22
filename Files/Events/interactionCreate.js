@@ -31,7 +31,7 @@ const otherInteractionHandler = async (interaction) => {
 const getInteraction = (interaction) => {
   const nonSlashCommand = interaction.client.nonSlashCommands.find(
     (cmd) =>
-      cmd.name === (cmd.split ? interaction.customId.split(cmd.split)[0] : interaction.customId),
+      cmd.name === (cmd.split ? interaction.customId?.split(cmd.split)[0] : interaction.customId),
   );
 
   if (!nonSlashCommand) return { args: [], nonSlashCommand: null };

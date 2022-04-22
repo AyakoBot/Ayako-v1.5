@@ -113,21 +113,30 @@ const errorEmbed = (embed, lan, mExistedPreviously, dm, err, args) => {
 
   if (dm) dm.delete().catch(() => {});
 
-  if (mExistedPreviously) {
+  if (mExistedPreviously && args.msg?.source) {
     embed.data.fields.pop();
     embed.addFields({
       name: '\u200b',
-      value: `${
-        args.executor.client.textEmotes.cross + lan.error
+      value: `${args.executor.client.textEmotes.cross} ${
+        lan.error
       } ${args.executor.client.ch.makeCodeBlock(err)}`,
     });
 
     deleter(args);
+  } else if (mExistedPreviously) {
+    embed.data.fields.pop();
+    embed.setDescription(
+      `${args.executor.client.textEmotes.cross} ${
+        lan.error
+      } ${args.executor.client.ch.makeCodeBlock(err)}`,
+    );
+
+    deleter(args);
   } else {
     embed.setDescription(
-      `${args.executor.client.textEmotes.cross + lan.error} ${args.executor.client.ch.makeCodeBlock(
-        err,
-      )}`,
+      `${args.executor.client.textEmotes.cross} ${
+        lan.error
+      } ${args.executor.client.ch.makeCodeBlock(err)}`,
     );
 
     deleter(args);
@@ -192,14 +201,27 @@ const logEmbed = async (lan, language, con, reason, args) => {
 
 const loadingEmbed = (mExistedPreviously, lan, con, args) => {
   if (!args.msg && !args.msg.id) return null;
-  return mExistedPreviously
-    ? new Builders.UnsafeEmbedBuilder(args.msg.m.embeds[0]).setColor(con.color).addFields({
+
+  if (mExistedPreviously && args.msg?.source) {
+    args.msg.m.embeds[0].data.fields.pop();
+
+    return new Builders.UnsafeEmbedBuilder(args.msg.m.embeds[0].data)
+      .setColor(con.color)
+      .addFields({
         name: '\u200b',
         value: `${args.executor.client.textEmotes.loading} ${lan.loading}`,
-      })
-    : new Builders.UnsafeEmbedBuilder()
-        .setColor(con.color)
-        .setDescription(`${args.executor.client.textEmotes.loading} ${lan.loading}`);
+      });
+  }
+  if (mExistedPreviously) {
+    args.msg.m.embeds[0].data.fields.pop();
+
+    return new Builders.UnsafeEmbedBuilder(args.msg.m.embeds[0].data)
+      .setColor(con.color)
+      .setDescription(`${args.executor.client.textEmotes.loading} ${lan.loading}`);
+  }
+  return new Builders.UnsafeEmbedBuilder(args.msg.m.embeds[0].data)
+    .setColor(con.color)
+    .setDescription(`${args.executor.client.textEmotes.loading} ${lan.loading}`);
 };
 
 const roleCheck = (embed, mExistedPreviously, lan, targetMember, executingMember, args) => {
@@ -215,12 +237,17 @@ const roleCheck = (embed, mExistedPreviously, lan, targetMember, executingMember
 
   if (!args.msg && !args.msg.id) return false;
 
-  if (mExistedPreviously) {
+  if (mExistedPreviously && args.msg?.source) {
     embed.data.fields.pop();
     embed.addFields({
       name: '\u200b',
       value: `${args.executor.client.textEmotes.cross} ${lan.exeNoPerms}`,
     });
+
+    deleter(args);
+  } else if (mExistedPreviously) {
+    embed.data.fields.pop();
+    embed.setDescription(`${args.executor.client.textEmotes.cross} ${lan.exeNoPerms}`);
 
     deleter(args);
   } else {
@@ -238,12 +265,17 @@ const checkSelfPunish = (embed, mExistedPreviously, lan, targetMember, executing
   if (executingMember.id !== targetMember?.id) return false;
   if (!args.msg && !args.msg.id) return true;
 
-  if (mExistedPreviously) {
+  if (mExistedPreviously && args.msg?.source) {
     embed.data.fields.pop();
     embed.addFields({
       name: '\u200b',
       value: `${args.executor.client.textEmotes.cross} ${lan.selfPunish}`,
     });
+
+    deleter(args);
+  } else if (mExistedPreviously) {
+    embed.data.fields.pop();
+    embed.setDescription(`${args.executor.client.textEmotes.cross} ${lan.selfPunish}`);
 
     deleter(args);
   } else {
@@ -263,12 +295,17 @@ const checkMePunish = (embed, mExistedPreviously, lan, targetMember, args) => {
   if (targetMember?.id !== args.executor.client.user.id) return false;
   if (!args.msg && !args.msg.id) return true;
 
-  if (mExistedPreviously) {
+  if (mExistedPreviously && args.msg?.source) {
     embed.data.fields.pop();
     embed.addFields({
       name: '\u200b',
       value: `${args.executor.client.textEmotes.cross} ${lan.mePunish}`,
     });
+
+    deleter(args);
+  } else if (mExistedPreviously) {
+    embed.data.fields.pop();
+    embed.setDescription(`${args.executor.client.textEmotes.cross} ${lan.mePunish}`);
 
     deleter(args);
   } else {
@@ -322,7 +359,7 @@ const checkPunishable = (embed, mExistedPreviously, lan, targetMember, punishmen
   if (args.forceFinish) return true;
   if (!args.msg && !args.msg.id) return false;
 
-  if (mExistedPreviously) {
+  if (mExistedPreviously && args.msg?.source) {
     embed.data.fields.pop();
     embed.addFields({
       name: '\u200b',
@@ -330,11 +367,17 @@ const checkPunishable = (embed, mExistedPreviously, lan, targetMember, punishmen
     });
 
     deleter(args);
+  } else if (mExistedPreviously) {
+    embed.data.fields.pop();
+    embed.setDescription(`${args.executor.client.textEmotes.cross} ${lan.permissionError}`);
+
+    deleter(args);
   } else {
     embed.setDescription(`${args.executor.client.textEmotes.cross} ${lan.permissionError}`);
 
     deleter(args);
   }
+
   if (args.msg.m) args.msg.m.edit({ embeds: [embed] });
   return false;
 };
@@ -419,7 +462,7 @@ const checkActionTaken = async (
       });
     };
 
-    if (mExistedPreviously) {
+    if (mExistedPreviously && args.msg?.source) {
       embed.data.fields.pop();
       embed.addFields({
         name: '\u200b',
@@ -430,6 +473,18 @@ const checkActionTaken = async (
           },
         )}`,
       });
+
+      deleter(args);
+    } else if (mExistedPreviously) {
+      embed.data.fields.pop();
+      embed.setDescription(
+        `${args.executor.client.textEmotes.cross} ${args.executor.client.ch.stp(
+          lan.alreadyApplied,
+          {
+            target: args.target,
+          },
+        )}`,
+      );
 
       deleter(args);
     } else {
@@ -444,6 +499,7 @@ const checkActionTaken = async (
 
       deleter(args);
     }
+
     if (args.msg.m) args.msg.m.edit({ embeds: [embed] });
     return true;
   }
@@ -466,7 +522,7 @@ const takeAction = async (punishmentType, targetMember, executingMember, args, l
     }
     case 'tempmuteAdd': {
       punished = await targetMember
-        ?.timeout(args.duration, `${args.executor.tag} | ${args.reason}`)
+        ?.timeout(Number(args.duration), `${args.executor.tag} | ${args.reason}`)
         .catch((err) => {
           error = err;
         });

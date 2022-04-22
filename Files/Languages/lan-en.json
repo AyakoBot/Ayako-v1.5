@@ -700,11 +700,12 @@
   },
   "autopunish": {
     "1": "Temp-Mute",
-    "2": "Mute",
-    "3": "Kick",
-    "4": "Temp-Ban",
-    "5": "Ban",
-    "6": "Warn"
+    "2": "Kick",
+    "3": "Temp-Ban",
+    "4": "Ban",
+    "5": "Warn",
+    "6": "Temp-Channel-Ban",
+    "7": "Channel-Ban"
   },
   "months": {
     "0": "January",
