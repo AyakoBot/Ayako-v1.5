@@ -407,7 +407,7 @@ const getPunishmentEmbeds = (punishments, msg, name) =>
               ? moment
                   .duration(p.duration)
                   .format(
-                    `y [${msg.language.time.years}], M [${msg.language.time.months}], d [${msg.language.time.days}], h [${msg.language.time.hours}], m [${msg.language.time.minutes}], s [${msg.language.time.seconds}]`,
+                    `y [${msg.language.time.years}], M [${msg.language.time.months}], d [pa${msg.language.time.days}], h [${msg.language.time.hours}], m [${msg.language.time.minutes}], s [${msg.language.time.seconds}]`,
                     { trim: 'all' },
                   )
               : msg.lan.permanent
