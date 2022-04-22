@@ -48,11 +48,13 @@ module.exports = {
       ? msg.client.channels.cache.get(msg.args[1].replace(/\D+/g, ''))
       : null;
 
+    let reasonArg = 2;
     if (!channel) {
       channel = msg.channel;
+      reasonArg -= 1;
     }
 
-    const reason = getReason(msg, channel);
+    const reason = getReason(msg, reasonArg);
     const guildmember = await msg.guild.members.fetch(user.id).catch(() => {});
 
     if (guildmember) {
@@ -71,9 +73,5 @@ module.exports = {
   },
 };
 
-const getReason = (msg, channel) => {
-  let reasonArg = 3;
-  if (!channel) reasonArg = 2;
-
-  return msg.args.slice(reasonArg).join(' ') ? msg.args.slice(reasonArg).join(' ') : msg.lan.reason;
-};
+const getReason = (msg, arg) =>
+  msg.args.slice(arg).join(' ') ? msg.args.slice(arg).join(' ') : msg.lan.reason;

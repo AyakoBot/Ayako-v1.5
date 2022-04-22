@@ -79,14 +79,18 @@ module.exports = {
       : null;
 
     let durationArg = 2;
+    let reasonArg = 3;
 
     if (!channel) {
       channel = msg.channel;
-      durationArg = 1;
+      durationArg -= 1;
+      reasonArg -= 1;
     }
 
     const duration = getDuration(msg, durationArg);
-    const reason = getReason(msg, durationArg);
+    if (!duration) reasonArg -= 1;
+
+    const reason = getReason(msg, reasonArg);
     const guildmember = await msg.guild.members.fetch(user.id).catch(() => {});
 
     if (guildmember) {
@@ -119,11 +123,10 @@ const getDuration = (msg, durationArg) => {
     durationArg += 1;
   } else if (duration === args[0]) {
     duration = null;
-    durationArg = 0;
   }
 
   return duration;
 };
 
-const getReason = (msg, duration) =>
-  msg.args.slice(duration + 1).join(' ') ? msg.args.slice(duration + 1).join(' ') : msg.lan.reason;
+const getReason = (msg, arg) =>
+  msg.args.slice(arg).join(' ') ? msg.args.slice(arg).join(' ') : msg.lan.reason;
