@@ -219,7 +219,7 @@ const loadingEmbed = (mExistedPreviously, lan, con, args) => {
       .setColor(con.color)
       .setDescription(`${args.executor.client.textEmotes.loading} ${lan.loading}`);
   }
-  return new Builders.UnsafeEmbedBuilder(args.msg.m.embeds[0].data)
+  return new Builders.UnsafeEmbedBuilder()
     .setColor(con.color)
     .setDescription(`${args.executor.client.textEmotes.loading} ${lan.loading}`);
 };
