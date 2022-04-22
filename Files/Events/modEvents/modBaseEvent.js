@@ -11,64 +11,72 @@ module.exports = async (args, type) => {
   const lan = language.mod[type];
   const con = args.executor.client.constants.mod[type];
 
-  const embed = loadingEmbed(mExistedPreviously, lan, con, args);
+  let action;
+  let embed;
+  let error;
+  let dm;
 
-  if (msg && mExistedPreviously && msg.m.id) await msg.m.edit({ embeds: [embed] }).catch(() => {});
-  else if (msg) msg.m = await args.executor.client.ch.reply(msg, { embeds: [embed] });
+  if (!args.doDBonly) {
+    embed = loadingEmbed(mExistedPreviously, lan, con, args);
 
-  const targetMember = await guild?.members.fetch(target.id).catch(() => {});
-  const executingMember = await guild?.members.fetch(executor.id).catch(() => {});
+    if (msg && mExistedPreviously && msg.m.id) {
+      await msg.m.edit({ embeds: [embed] }).catch(() => {});
+    } else if (msg) msg.m = await args.executor.client.ch.reply(msg, { embeds: [embed] });
 
-  const roleCheckAllowed = roleCheck(
-    embed,
-    mExistedPreviously,
-    lan,
-    targetMember,
-    executingMember,
-    args,
-  );
-  if (!roleCheckAllowed) return;
+    const targetMember = await guild?.members.fetch(target.id).catch(() => {});
+    const executingMember = await guild?.members.fetch(executor.id).catch(() => {});
 
-  const selfPunish = checkSelfPunish(
-    embed,
-    mExistedPreviously,
-    lan,
-    targetMember,
-    executingMember,
-    args,
-  );
-  if (selfPunish) return;
+    const roleCheckAllowed = roleCheck(
+      embed,
+      mExistedPreviously,
+      lan,
+      targetMember,
+      executingMember,
+      args,
+    );
+    if (!roleCheckAllowed) return;
 
-  const mePunish = checkMePunish(embed, mExistedPreviously, lan, targetMember, args);
-  if (mePunish) return;
+    const selfPunish = checkSelfPunish(
+      embed,
+      mExistedPreviously,
+      lan,
+      targetMember,
+      executingMember,
+      args,
+    );
+    if (selfPunish) return;
 
-  const punishable = checkPunishable(embed, mExistedPreviously, lan, targetMember, type, args);
-  if (!punishable) return;
+    const mePunish = checkMePunish(embed, mExistedPreviously, lan, targetMember, args);
+    if (mePunish) return;
 
-  const actionTaken = await checkActionTaken(
-    embed,
-    mExistedPreviously,
-    lan,
-    targetMember,
-    type,
-    args,
-  );
-  if (actionTaken) return;
+    const punishable = checkPunishable(embed, mExistedPreviously, lan, targetMember, type, args);
+    if (!punishable) return;
 
-  const dm = await doDM({ lan, language }, targetMember, reason, con, args);
+    const actionTaken = await checkActionTaken(
+      embed,
+      mExistedPreviously,
+      lan,
+      targetMember,
+      type,
+      args,
+    );
+    if (actionTaken) return;
 
-  const { action, error } = await takeAction(
-    type,
-    targetMember,
-    executingMember,
-    args,
-    language,
-    guild,
-  );
+    dm = await doDM({ lan, language }, targetMember, reason, con, args);
 
-  if (action) {
+    ({ action, error } = await takeAction(
+      type,
+      targetMember,
+      executingMember,
+      args,
+      language,
+      guild,
+    ));
+  }
+
+  if (action || args.doDBonly) {
     logEmbed(lan, language, con, reason, args);
-    await declareSuccess(embed, mExistedPreviously, lan, args);
+    if (!args.doDBonly) await declareSuccess(embed, mExistedPreviously, lan, args);
   } else if (error) {
     errorEmbed(embed, lan, mExistedPreviously, dm, error, args);
     return;
@@ -83,7 +91,7 @@ const declareSuccess = async (embed, mExistedPreviously, lan, args) => {
   if (!args.msg && !args.msg.id) return;
 
   if (mExistedPreviously && args.msg?.source) {
-    embed.data.fields.pop();
+    embed.data.fields?.pop();
     embed.addFields({
       name: '\u200b',
       value: `${args.executor.client.textEmotes.tick} ${args.executor.client.ch.stp(lan.success, {
@@ -91,7 +99,7 @@ const declareSuccess = async (embed, mExistedPreviously, lan, args) => {
       })}`,
     });
   } else if (mExistedPreviously) {
-    embed.data.fields.pop();
+    embed.data.fields?.pop();
     embed.setDescription(
       `${args.executor.client.textEmotes.tick} ${args.executor.client.ch.stp(lan.success, {
         target: args.target,
@@ -114,7 +122,7 @@ const errorEmbed = (embed, lan, mExistedPreviously, dm, err, args) => {
   if (dm) dm.delete().catch(() => {});
 
   if (mExistedPreviously && args.msg?.source) {
-    embed.data.fields.pop();
+    embed.data.fields?.pop();
     embed.addFields({
       name: '\u200b',
       value: `${args.executor.client.textEmotes.cross} ${
@@ -124,7 +132,7 @@ const errorEmbed = (embed, lan, mExistedPreviously, dm, err, args) => {
 
     deleter(args);
   } else if (mExistedPreviously) {
-    embed.data.fields.pop();
+    embed.data.fields?.pop();
     embed.setDescription(
       `${args.executor.client.textEmotes.cross} ${
         lan.error
@@ -203,7 +211,7 @@ const loadingEmbed = (mExistedPreviously, lan, con, args) => {
   if (!args.msg && !args.msg.id) return null;
 
   if (mExistedPreviously && args.msg?.source) {
-    args.msg.m.embeds[0].data.fields.pop();
+    args.msg.m.embeds[0].data.fields?.pop();
 
     return new Builders.UnsafeEmbedBuilder(args.msg.m.embeds[0].data)
       .setColor(con.color)
@@ -213,7 +221,7 @@ const loadingEmbed = (mExistedPreviously, lan, con, args) => {
       });
   }
   if (mExistedPreviously) {
-    args.msg.m.embeds[0].data.fields.pop();
+    args.msg.m.embeds[0].data.fields?.pop();
 
     return new Builders.UnsafeEmbedBuilder(args.msg.m.embeds[0].data)
       .setColor(con.color)
@@ -238,7 +246,7 @@ const roleCheck = (embed, mExistedPreviously, lan, targetMember, executingMember
   if (!args.msg && !args.msg.id) return false;
 
   if (mExistedPreviously && args.msg?.source) {
-    embed.data.fields.pop();
+    embed.data.fields?.pop();
     embed.addFields({
       name: '\u200b',
       value: `${args.executor.client.textEmotes.cross} ${lan.exeNoPerms}`,
@@ -246,7 +254,7 @@ const roleCheck = (embed, mExistedPreviously, lan, targetMember, executingMember
 
     deleter(args);
   } else if (mExistedPreviously) {
-    embed.data.fields.pop();
+    embed.data.fields?.pop();
     embed.setDescription(`${args.executor.client.textEmotes.cross} ${lan.exeNoPerms}`);
 
     deleter(args);
@@ -266,7 +274,7 @@ const checkSelfPunish = (embed, mExistedPreviously, lan, targetMember, executing
   if (!args.msg && !args.msg.id) return true;
 
   if (mExistedPreviously && args.msg?.source) {
-    embed.data.fields.pop();
+    embed.data.fields?.pop();
     embed.addFields({
       name: '\u200b',
       value: `${args.executor.client.textEmotes.cross} ${lan.selfPunish}`,
@@ -274,7 +282,7 @@ const checkSelfPunish = (embed, mExistedPreviously, lan, targetMember, executing
 
     deleter(args);
   } else if (mExistedPreviously) {
-    embed.data.fields.pop();
+    embed.data.fields?.pop();
     embed.setDescription(`${args.executor.client.textEmotes.cross} ${lan.selfPunish}`);
 
     deleter(args);
@@ -296,7 +304,7 @@ const checkMePunish = (embed, mExistedPreviously, lan, targetMember, args) => {
   if (!args.msg && !args.msg.id) return true;
 
   if (mExistedPreviously && args.msg?.source) {
-    embed.data.fields.pop();
+    embed.data.fields?.pop();
     embed.addFields({
       name: '\u200b',
       value: `${args.executor.client.textEmotes.cross} ${lan.mePunish}`,
@@ -304,7 +312,7 @@ const checkMePunish = (embed, mExistedPreviously, lan, targetMember, args) => {
 
     deleter(args);
   } else if (mExistedPreviously) {
-    embed.data.fields.pop();
+    embed.data.fields?.pop();
     embed.setDescription(`${args.executor.client.textEmotes.cross} ${lan.mePunish}`);
 
     deleter(args);
@@ -360,7 +368,7 @@ const checkPunishable = (embed, mExistedPreviously, lan, targetMember, punishmen
   if (!args.msg && !args.msg.id) return false;
 
   if (mExistedPreviously && args.msg?.source) {
-    embed.data.fields.pop();
+    embed.data.fields?.pop();
     embed.addFields({
       name: '\u200b',
       value: `${args.executor.client.textEmotes.cross} ${lan.permissionError}`,
@@ -368,7 +376,7 @@ const checkPunishable = (embed, mExistedPreviously, lan, targetMember, punishmen
 
     deleter(args);
   } else if (mExistedPreviously) {
-    embed.data.fields.pop();
+    embed.data.fields?.pop();
     embed.setDescription(`${args.executor.client.textEmotes.cross} ${lan.permissionError}`);
 
     deleter(args);
@@ -463,7 +471,7 @@ const checkActionTaken = async (
     };
 
     if (mExistedPreviously && args.msg?.source) {
-      embed.data.fields.pop();
+      embed.data.fields?.pop();
       embed.addFields({
         name: '\u200b',
         value: `${args.executor.client.textEmotes.cross} ${args.executor.client.ch.stp(
@@ -476,7 +484,7 @@ const checkActionTaken = async (
 
       deleter(args);
     } else if (mExistedPreviously) {
-      embed.data.fields.pop();
+      embed.data.fields?.pop();
       embed.setDescription(
         `${args.executor.client.textEmotes.cross} ${args.executor.client.ch.stp(
           lan.alreadyApplied,
@@ -526,6 +534,29 @@ const takeAction = async (punishmentType, targetMember, executingMember, args, l
         .catch((err) => {
           error = err;
         });
+
+      args.executor.client.mutes.set(
+        `${guild?.id}-${args.target.id}`,
+        jobs.scheduleJob(
+          `${guild?.id}-${args.target.id}`,
+          new Date(Date.now() + args.duration),
+          () => {
+            args.executor.client.emit(
+              'modBaseEvent',
+              {
+                target: args.target,
+                reason: language.ready.unmute.reason,
+                executor: args.executor.client.user,
+                msg: args.msg,
+                guild,
+                forceFinish: true,
+                doDBonly: true,
+              },
+              'muteRemove',
+            );
+          },
+        ),
+      );
       break;
     }
     case 'banAdd': {
@@ -571,7 +602,7 @@ const takeAction = async (punishmentType, targetMember, executingMember, args, l
               {
                 target: args.target,
                 reason: language.ready.unban.reason,
-                executor: args.executor,
+                executor: args.executor.client.user,
                 msg: args.msg,
                 guild,
                 forceFinish: true,
@@ -627,7 +658,7 @@ const takeAction = async (punishmentType, targetMember, executingMember, args, l
                 {
                   target: args.target,
                   reason: language.ready.channelunban.reason,
-                  executor: args.executor,
+                  executor: args.executor.client.user,
                   msg: args.msg,
                   guild,
                   channel: args.channel,
@@ -745,6 +776,24 @@ const doDataBaseAction = async (punishmentType, client, args, guild) => {
             row.msgid,
           ];
 
+      if (
+        !extraInsertArgs ||
+        (extraInsertArgNames && extraInsertArgs.length < extraInsertArgNames.length)
+      ) {
+        const cloneArr = extraInsertArgNames.slice();
+        cloneArr.splice(
+          0,
+          Math.abs(
+            (extraInsertArgs ? extraInsertArgs.length : 0) -
+              (extraInsertArgs ? extraInsertArgNames.length : 0),
+          ),
+        );
+
+        const mergeArr = cloneArr.map((arg) => row[arg]);
+
+        insertArgs.push(...mergeArr);
+      }
+
       await client.ch.query(
         `INSERT INTO ${insertTable} (guildid, userid, reason, uniquetimestamp, channelid, channelname, executorid, executorname, msgid${
           extraInsertArgNames ? `, ${extraInsertArgNames.join(', ')}` : ''
@@ -794,7 +843,7 @@ const doDataBaseAction = async (punishmentType, client, args, guild) => {
 
   switch (punishmentType) {
     case 'muteRemove': {
-      getAndDeleteRow('punish_tempmutes', 'punish_mutes');
+      getAndDeleteRow('punish_tempmutes', 'punish_mutes', null, null, ['duration']);
       break;
     }
     case 'tempmuteAdd': {
@@ -828,13 +877,13 @@ const doDataBaseAction = async (punishmentType, client, args, guild) => {
         'punish_channelbans',
         ['banchannelid'],
         [args.channel?.id],
-        ['banchannelid'],
+        ['banchannelid', 'duration'],
         [args.channel?.id],
       );
       break;
     }
     case 'banRemove': {
-      getAndDeleteRow('punish_tempbans', 'punish_bans');
+      getAndDeleteRow('punish_tempbans', 'punish_bans', null, null, ['duration']);
       break;
     }
     case 'kickAdd': {
