@@ -1286,7 +1286,7 @@ const getDeleteRes = async (msg) => {
 
 const pendingPayloads = new Map();
 
-// msg might not be a real message but { channel } instead
+// msg might not be a real message but "{ channel }" instead
 const combineMessages = (msg, newPayload, resolve, timeout) => {
   if (!newPayload) resolve(newPayload);
 
@@ -1298,11 +1298,7 @@ const combineMessages = (msg, newPayload, resolve, timeout) => {
       newPayload.embeds.length
     ) {
       if (existingPayload.embeds.length + newPayload.embeds.length > 10) {
-        const earlierPayload = pendingPayloads.get(msg.channel.id);
-        earlierPayload.resolve(earlierPayload.payload);
-        earlierPayload.timeout.cancel();
-        pendingPayloads.delete(msg.channel.id);
-
+        console.log(pendingPayloads.get(msg.channel.id));
         resolve(newPayload);
         return false;
       }
@@ -1321,11 +1317,7 @@ const combineMessages = (msg, newPayload, resolve, timeout) => {
       newPayload.content.length
     ) {
       if (existingPayload.content.length + newPayload.content.length > 4000) {
-        const earlierPayload = pendingPayloads.get(msg.channel.id);
-        earlierPayload.resolve(earlierPayload.payload);
-        earlierPayload.timeout.cancel();
-        pendingPayloads.delete(msg.channel.id);
-
+        console.log(pendingPayloads.get(msg.channel.id));
         resolve(newPayload);
         return false;
       }
@@ -1344,11 +1336,7 @@ const combineMessages = (msg, newPayload, resolve, timeout) => {
       newPayload.files.length
     ) {
       if (existingPayload.files.length + newPayload.files.length > 10) {
-        const earlierPayload = pendingPayloads.get(msg.channel.id);
-        earlierPayload.resolve(earlierPayload.payload);
-        earlierPayload.timeout.cancel();
-        pendingPayloads.delete(msg.channel.id);
-
+        console.log(pendingPayloads.get(msg.channel.id));
         resolve(newPayload);
         return false;
       }

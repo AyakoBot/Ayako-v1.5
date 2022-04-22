@@ -2,10 +2,10 @@ const Discord = require('discord.js');
 const Builders = require('@discordjs/builders');
 
 module.exports = {
-  async execute(executor, target, reason, msg) {
+  async execute(executor, target, reason, msg, rows) {
     const lan = msg.language.mod.strike;
     const con = msg.client.constants.mod.strike;
-    if (!msg.res) {
+    if (!rows || !rows.length) {
       const em = new Builders.UnsafeEmbedBuilder()
         .setColor(con.color)
         .setDescription(
@@ -16,38 +16,39 @@ module.exports = {
 
     const existingWarns = await getWarns(msg, target);
 
-    // todo: something wrong with choosing the correct punishment (selecting r)
+    const startPunish = (type) => {
+      doPunishment(type, executor, target, reason, msg, r);
+    };
 
-    let r = msg.res.rows.find((re) => re.warnamount === existingWarns);
-    if (r && r.punishment === 6) doPunishment('warnAdd', executor, target, reason, msg);
-    else if (r && r.punishment === 5) doPunishment('banAdd', executor, target, reason, msg);
-    else if (r && r.punishment === 4) doPunishment('tempbanAdd', executor, target, reason, msg);
-    else if (r && r.punishment === 3) doPunishment('kickAdd', executor, target, reason, msg);
-    else if (r && r.punishment === 2) doPunishment('tempmuteAdd', executor, target, reason, msg);
-    else if (r && r.punishment === 1) doPunishment('tempmuteAdd', executor, target, reason, msg);
+    let r = rows.find((re) => Number(re.warnamount) === existingWarns);
+    if (r && Number(r.punishment) === 7) startPunish('channelbanAdd');
+    else if (r && Number(r.punishment) === 6) startPunish('tempchannelbanAdd');
+    else if (r && Number(r.punishment) === 5) startPunish('warnAdd');
+    else if (r && Number(r.punishment) === 4) startPunish('banAdd');
+    else if (r && Number(r.punishment) === 3) startPunish('tempbanAdd');
+    else if (r && Number(r.punishment) === 2) startPunish('kickAdd');
+    else if (r && Number(r.punishment) === 1) startPunish('tempmuteAdd');
     else {
       const higher = isHigher(
         existingWarns,
-        msg.res.rows.map((re) => +re.warnamount),
+        rows.map((re) => Number(re.warnamount)),
       );
+
       if (higher) {
         const neededPunishmentWarnNr = getClosest(
           existingWarns,
-          msg.res.rows.map((re) => +re.warnamount),
+          rows.map((re) => Number(re.warnamount)),
         );
-        r = msg.res.rows.find((re) => re.warnamount === neededPunishmentWarnNr);
-        if (r && r.punishment === 6) doPunishment('warnAdd', executor, target, reason, msg);
-        else if (r && r.punishment === 5) doPunishment('banAdd', executor, target, reason, msg);
-        else if (r && r.punishment === 4) {
-          doPunishment('tempbanAdd', executor, target, reason, msg);
-        } else if (r && r.punishment === 3) {
-          doPunishment('kickadd', executor, target, reason, msg);
-        } else if (r && r.punishment === 2) {
-          doPunishment('tempmuteAdd', executor, target, reason, msg);
-        } else if (r && r.punishment === 1) {
-          doPunishment('tempmuteAdd', executor, target, reason, msg);
-        } else doPunishment('warnAdd', executor, target, reason, msg);
-      } else doPunishment('warnAdd', executor, target, reason, msg);
+        r = rows.find((re) => Number(re.warnamount) === neededPunishmentWarnNr);
+        if (r && Number(r.punishment) === 7) startPunish('channelbanAdd');
+        else if (r && Number(r.punishment) === 6) startPunish('tempchannelbanAdd');
+        else if (r && Number(r.punishment) === 5) startPunish('warnAdd');
+        else if (r && Number(r.punishment) === 4) startPunish('banAdd');
+        else if (r && Number(r.punishment) === 3) startPunish('tempbanAdd');
+        else if (r && Number(r.punishment) === 2) startPunish('kickAdd');
+        else if (r && Number(r.punishment) === 1) startPunish('tempmuteAdd');
+        else startPunish('warnAdd');
+      } else startPunish('warnAdd');
     }
 
     return true;
@@ -55,9 +56,11 @@ module.exports = {
 };
 
 const doRoles = async (r, msg, user) => {
+  if (!r) return;
+
   const member = await msg.guild.members.fetch(user.id);
   if (member) {
-    if (r && r.addroles && r.addroles.length) {
+    if (r.addroles && r.addroles.length) {
       const roles = checkRoles(r.addroles, msg.guild);
       await member.roles.add(roles, msg.language.autotypes.autopunish);
     }
@@ -82,7 +85,7 @@ const doPunishment = async (punishment, executor, target, reason, msg, r) => {
       .setDescription(
         msg.client.ch.stp(lan.confirmEmbed.description, {
           user: target,
-          punishment: msg.language.autopunish[r.punishment],
+          punishment: msg.language.autopunish[Number(r.punishment)],
         }),
       )
       .setColor(con.confirmEmbed.color);
@@ -96,16 +99,19 @@ const doPunishment = async (punishment, executor, target, reason, msg, r) => {
       .setCustomId('no');
     msg.m = await msg.client.ch.reply(msg, {
       embeds: [embed],
-      components: msg.client.ch.buttonRower([yes, no]),
+      components: msg.client.ch.buttonRower([[yes, no]]),
     });
     const agreed = await new Promise((resolve) => {
       const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
-      buttonsCollector.on((button) => {
+      buttonsCollector.on('collect', (button) => {
         if (button.user.id === msg.author.id) {
           if (button.customId === 'yes') {
+            buttonsCollector.stop();
+            button.update({ components: [] }).catch(() => {});
             resolve(true);
           } else if (button.customId === 'no') {
             buttonsCollector.stop();
+            button.update({ components: [] }).catch(() => {});
             resolve(false);
           }
         } else msg.client.ch.notYours(button);
