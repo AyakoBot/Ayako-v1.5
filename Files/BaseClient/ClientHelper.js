@@ -104,8 +104,15 @@ module.exports = {
     return m;
   },
   /**
-   * Places Objects or Strings of the Objects Option into the Expressions option,
-   * replacing same named variables marked by "{{variable Name}}".
+   * Inserts Strings given via Object parameter into the expression parameter
+   * Can access Object Children
+   * Replace keys need to be named the same as their Object parameter
+   * Replace keys need to be surrouned by {{ }}
+   *
+   * example:
+   * stp("My Name is {{msg.client.user.username}}", { msg })
+   *
+   *
    * @constructor
    * @param {string} expression - The String following Strings/Objects will be put into.
    * @param {object} Object - The Object containing all Strings/Objects
