@@ -52,7 +52,7 @@ const getWarn = async (msg, target, warnNr) => {
     return false;
   }
 
-  const warn = allWarns.rows.find((w) => w.uniquetimestamp === Number(warnNr));
+  const warn = allWarns.find((w) => w.uniquetimestamp === Number(warnNr));
 
   return warn;
 };
