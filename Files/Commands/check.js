@@ -252,7 +252,11 @@ const getBaseButtons = (msg, selected, allPunishments, page) => {
           new Builders.UnsafeSelectMenuOptionBuilder()
             .setDefault(false)
             .setDescription(p.reason.slice(0, 100))
-            .setLabel(`ID: ${p.uniquetimestamp} | ${msg.lan.executor}: ${p.executorname}`)
+            .setLabel(
+              `ID: ${Number(p.uniquetimestamp).toString(32)} | ${msg.lan.executor}: ${
+                p.executorname
+              }`,
+            )
             .setValue(String(p.uniquetimestamp)),
         );
     }
@@ -397,7 +401,7 @@ const getPunishmentEmbeds = (punishments, msg, name) =>
         },
         {
           name: msg.lan.punishmentID,
-          value: `\`${p.uniquetimestamp}\``,
+          value: `\`${Number(p.uniquetimestamp).toString(32)}\``,
           inline: true,
         },
         {
