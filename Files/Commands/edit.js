@@ -39,12 +39,12 @@ const getWarn = async (msg, target, warnNr) => {
     ),
   );
 
-  const allWarns = [];
-  if (warnRes && warnRes.rowCount) allWarns.concat(warnRes.rows);
-  if (kickRes && kickRes.rowCount) allWarns.concat(kickRes.rows);
-  if (muteRes && muteRes.rowCount) allWarns.concat(muteRes.rows);
-  if (banRes && banRes.rowCount) allWarns.concat(banRes.rows);
-  if (channelbanRes && channelbanRes.rowCount) allWarns.concat(channelbanRes.rows);
+  let allWarns = [];
+  if (warnRes && warnRes.rowCount) allWarns = allWarns.concat(warnRes.rows);
+  if (kickRes && kickRes.rowCount) allWarns = allWarns.concat(kickRes.rows);
+  if (muteRes && muteRes.rowCount) allWarns = allWarns.concat(muteRes.rows);
+  if (banRes && banRes.rowCount) allWarns = allWarns.concat(banRes.rows);
+  if (channelbanRes && channelbanRes.rowCount) allWarns = allWarns.concat(channelbanRes.rows);
 
   if (!allWarns.length) {
     msg.client.ch.error(msg, msg.client.ch.stp(msg.lan.noWarn, { number: warnNr }));
