@@ -8,7 +8,7 @@ module.exports = {
   takesFirstArg: true,
   aliases: ['clearpunishments'],
   type: 'mod',
-  async execute(msg) {
+  execute: async (msg) => {
     const lan = msg.language.commands.clearwarns;
     const con = msg.client.constants.commands.clearwarns;
     const user = await msg.client.users.fetch(msg.args[0].replace(/\D+/g, '')).catch(() => {});
@@ -16,15 +16,14 @@ module.exports = {
     const embed = new Builders.UnsafeEmbedBuilder().setColor(con.loading);
 
     if (!user) {
-      embed.setDescription(lan.noUser);
-      embed.setColor(con.fail);
-      return msg.client.ch.reply(msg, { embeds: [embed] });
+      msg.client.ch.error(msg, lan.noUser);
+      return;
     }
+
     const rows = await getRes(msg, user);
     if (!rows || !rows.length) {
-      embed.setDescription(lan.noWarns);
-      embed.setColor(con.fail);
-      return msg.client.ch.reply(msg, { embeds: [embed] });
+      msg.client.ch.error(msg, lan.noWarns);
+      return;
     }
 
     embed.setDescription(msg.client.ch.stp(lan.sure, { user }));
@@ -36,6 +35,7 @@ module.exports = {
       .setCustomId('no')
       .setLabel(msg.language.No)
       .setStyle(Discord.ButtonStyle.Danger);
+
     msg.m = await msg.client.ch.reply(msg, {
       embeds: [embed],
       components: msg.client.ch.buttonRower([[yes, no]]),
@@ -64,11 +64,10 @@ module.exports = {
       if (reason === 'time') return msg.client.ch.collectorEnd(msg);
       return null;
     });
-    return null;
   },
 };
 
-function log(msg, rows, user, lan, con) {
+const log = (msg, rows, user, lan, con) => {
   const logEmbed = new Builders.UnsafeEmbedBuilder()
     .setAuthor({
       name: msg.client.ch.stp(lan.log.author, { user }),
@@ -90,7 +89,6 @@ function log(msg, rows, user, lan, con) {
 
     logEmbed.addFields({
       name: msg.client.ch.stp(lan.log.title, {
-        type: r.type,
         user: r.executorname,
         channel: r.channelname,
       }),
@@ -107,11 +105,11 @@ function log(msg, rows, user, lan, con) {
   });
   logEmbed.setDescription(description);
   if (msg.logchannels) msg.client.ch.send(msg.logchannels, { embeds: [logEmbed] });
-}
+};
 
 const getRes = async (msg, target) => {
   const [warnRes, kickRes, muteRes, banRes, channelbanRes] = await Promise.all(
-    ['warns', 'kicks', 'mutes', 'mutes', 'bans', 'channelbans'].map((table) =>
+    ['warns', 'kicks', 'mutes', 'bans', 'channelbans'].map((table) =>
       msg.client.ch.query(`SELECT * FROM punish_${table} WHERE guildid = $1 AND userid = $2;`, [
         msg.guild.id,
         target.id,
@@ -131,7 +129,7 @@ const getRes = async (msg, target) => {
 
 const deleteAll = async (msg, target) => {
   await Promise.all(
-    ['warns', 'kicks', 'mutes', 'mutes', 'bans', 'channelbans'].map((table) =>
+    ['warns', 'kicks', 'mutes', 'bans', 'channelbans'].map((table) =>
       msg.client.ch.query(`DELETE FROM punish_${table} WHERE guildid = $1 AND userid = $2;`, [
         msg.guild.id,
         target.id,
