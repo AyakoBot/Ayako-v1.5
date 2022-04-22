@@ -3,39 +3,13 @@ const Builders = require('@discordjs/builders');
 
 module.exports = {
   async execute(guild) {
-    const Constants = guild.client.constants;
-    const { ch } = guild.client;
     const language = await guild.client.ch.languageSelector(guild);
     const lan = language.guildCreate;
-    const joinembed = new Builders.UnsafeEmbedBuilder()
-      .setAuthor({
-        name: lan.author,
-        iconURL: Constants.standard.image,
-        url: Constants.standard.invite,
-      })
-      .setColor(guild.me.displayColor)
-      .addFields({
-        name: ch.stp(lan.fields.one.name, { prefix: Constants.standard.prefix }),
-        value: lan.fields.one.value,
-      })
-      .addFields({
-        name: ch.stp(lan.fields.two.name, { prefix: Constants.standard.prefix }),
-        value: lan.fields.two.value,
-      })
-      .addFields({
-        name: ch.stp(lan.fields.three.name, { prefix: Constants.standard.prefix }),
-        value: lan.fields.three.value,
-      })
-      .addFields({
-        name: ch.stp(lan.fields.four.name, { prefix: Constants.standard.prefix }),
-        value: lan.fields.four.value,
-      })
-      .addFields({
-        name: ch.stp(lan.fields.five.name, { prefix: Constants.standard.prefix }),
-        value: lan.fields.five.value,
-      });
+
+    const embed = getEmbed(lan, guild);
 
     let entry;
+
     if (guild.me.permissions.has(128n)) {
       const audits = await guild.fetchAuditLogs({ limit: 3, type: 28 }).catch(() => {});
       if (audits && audits.entries) {
@@ -44,14 +18,15 @@ module.exports = {
         entry = entry.first();
       }
     }
+
     let sent = false;
-    const textchannels = guild.channels.cache.filter((c) => c.type === 'text');
+    const textchannels = guild.channels.cache.filter((c) => c.type === 0);
     const map = textchannels.map((x) => x);
     if (entry && entry.id) {
       for (let i = 0; map.length > i; i += 1) {
         if (sent === true) return;
-        const m = await ch.send(map[i], {
-          embeds: [joinembed],
+        const m = await guild.client.ch.send(map[i], {
+          embeds: [embed],
           content: `Thank you for adding me! ${entry.executor}`,
         });
         if (m && m.id) sent = true;
@@ -59,9 +34,48 @@ module.exports = {
     } else {
       for (let i = 0; map.length > i; i += 1) {
         if (sent === true) return;
-        const m = await ch.send(map[i], { embeds: [joinembed] });
+        const m = await guild.client.ch.send(map[i], { embeds: [embed] });
         if (m && m.id) sent = true;
       }
     }
   },
 };
+
+const getEmbed = (lan, guild) =>
+  new Builders.UnsafeEmbedBuilder()
+    .setAuthor({
+      name: lan.author,
+      iconURL: guild.client.constants.standard.image,
+      url: guild.client.constants.standard.invite,
+    })
+    .setColor(guild.me.displayColor)
+    .addFields({
+      name: guild.client.ch.stp(lan.fields.one.name, {
+        prefix: guild.client.constants.standard.prefix,
+      }),
+      value: lan.fields.one.value,
+    })
+    .addFields({
+      name: guild.client.ch.stp(lan.fields.two.name, {
+        prefix: guild.client.constants.standard.prefix,
+      }),
+      value: lan.fields.two.value,
+    })
+    .addFields({
+      name: guild.client.ch.stp(lan.fields.three.name, {
+        prefix: guild.client.constants.standard.prefix,
+      }),
+      value: lan.fields.three.value,
+    })
+    .addFields({
+      name: guild.client.ch.stp(lan.fields.four.name, {
+        prefix: guild.client.constants.standard.prefix,
+      }),
+      value: lan.fields.four.value,
+    })
+    .addFields({
+      name: guild.client.ch.stp(lan.fields.five.name, {
+        prefix: guild.client.constants.standard.prefix,
+      }),
+      value: lan.fields.five.value,
+    });
