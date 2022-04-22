@@ -180,7 +180,7 @@ const checkRoles = (roles, guild) => {
 
 const getWarns = async (msg, target) => {
   const [warnRes, kickRes, muteRes, banRes, channelbanRes] = await Promise.all(
-    ['warns', 'kicks', 'mutes', 'mutes', 'bans', 'channelbans'].map((table) =>
+    ['warns', 'kicks', 'mutes', 'bans', 'channelbans'].map((table) =>
       msg.client.ch.query(`SELECT * FROM punish_${table} WHERE guildid = $1 AND userid = $2;`, [
         msg.guild.id,
         target.id,
