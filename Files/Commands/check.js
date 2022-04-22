@@ -37,8 +37,9 @@ module.exports = {
 
     const buttonsCollector = m.createMessageComponentCollector({ time: 60000 });
 
+    let selected;
     handleEnd(buttonsCollector, msg, m);
-    handleInteractions(buttonsCollector, msg, m);
+    handleInteractions(buttonsCollector, msg, allPunishments, selected, page, embed);
   },
 };
 
@@ -96,12 +97,12 @@ const getAllPunishments = async (msg, target) => {
 
   const [warnRes, kickRes, muteRes, banRes, channelbanRes] = res;
 
-  const allWarns = [];
-  if (warnRes && warnRes.rowCount) allWarns.concat(warnRes.rows);
-  if (kickRes && kickRes.rowCount) allWarns.concat(kickRes.rows);
-  if (muteRes && muteRes.rowCount) allWarns.concat(muteRes.rows);
-  if (banRes && banRes.rowCount) allWarns.concat(banRes.rows);
-  if (channelbanRes && channelbanRes.rowCount) allWarns.concat(channelbanRes.rows);
+  let allWarns = [];
+  if (warnRes && warnRes.rowCount) allWarns = allWarns.concat(warnRes.rows);
+  if (kickRes && kickRes.rowCount) allWarns = allWarns.concat(kickRes.rows);
+  if (muteRes && muteRes.rowCount) allWarns = allWarns.concat(muteRes.rows);
+  if (banRes && banRes.rowCount) allWarns = allWarns.concat(banRes.rows);
+  if (channelbanRes && channelbanRes.rowCount) allWarns = allWarns.concat(channelbanRes.rows);
 
   return allWarns;
 };
@@ -196,7 +197,7 @@ const getCurrentStatusField = (
   }
 
   if (isMuted) {
-    fieldValue += `\n${msg.client.textEmotes.timedoutTick} ${msg.client.ch.stp(msg.lan.muted, {
+    fieldValue += `${msg.client.textEmotes.timedoutTick} ${msg.client.ch.stp(msg.lan.muted, {
       target: user,
     })}\n`;
   } else if (muteError) {
@@ -210,8 +211,9 @@ const getCurrentStatusField = (
   }
 
   if (isChannelbanned) {
-    fieldValue += `\n${msg.client.textEmotes.mutedTick} ${msg.client.ch.stp(msg.lan.channelbanned, {
+    fieldValue += `${msg.client.textEmotes.mutedTick} ${msg.client.ch.stp(msg.lan.channelbanned, {
       target: user,
+      amount: isChannelbanned,
     })}\n`;
   } else {
     fieldValue += `${msg.client.textEmotes.mutedCross} ${msg.client.ch.stp(
@@ -264,7 +266,8 @@ const getBaseButtons = (msg, selected, allPunishments, page) => {
   };
 
   const allOptions = getAllOptions();
-  const takeOptions = allOptions.splice(page - 1 * 25, 25);
+  const cloneArr = allOptions.slice();
+  const takeOptions = cloneArr.splice(page - 1 * 25, 25);
 
   const buttons = [
     ['warns', 'mutes', 'kicks', 'channelbans', 'bans'].map((name, i) =>
@@ -280,7 +283,12 @@ const getBaseButtons = (msg, selected, allPunishments, page) => {
         .setDisabled(!selected)
         .setMaxValues(takeOptions.length < 9 ? takeOptions.length : 9)
         .setMinValues(1)
-        .setPlaceholder(msg.lan.placeholder)
+        .setPlaceholder(
+          msg.client.ch.stp(msg.lan.placeholder, {
+            currentPage: String(page),
+            maxPages: String(Math.ceil(allOptions.length / 25)),
+          }),
+        )
         .setOptions(...takeOptions),
     ],
     [
@@ -295,7 +303,7 @@ const getBaseButtons = (msg, selected, allPunishments, page) => {
         .setCustomId('right')
         .setStyle(Discord.ButtonStyle.Secondary)
         .setEmoji(msg.client.objectEmotes.forth)
-        .setDisabled(Math.ceil(allOptions.length / 25) < page),
+        .setDisabled(Math.ceil(allOptions.length / 25) <= page),
     ],
   ];
 
@@ -310,15 +318,14 @@ const handleEnd = (buttonsCollector, msg, m) => {
   });
 };
 
-const handleInteractions = (buttonsCollector, msg, m, allPunishments) => {
+const handleInteractions = (buttonsCollector, msg, allPunishments, selected, page, embed) => {
   buttonsCollector.on('collect', async (interaction) => {
     if (interaction.user.id !== msg.author.id) {
       msg.client.ch.notYours(interaction);
       return;
     }
 
-    let page = 1;
-    let selected;
+    buttonsCollector.resetTimer();
 
     switch (interaction.customId) {
       case 'left': {
@@ -339,12 +346,13 @@ const handleInteractions = (buttonsCollector, msg, m, allPunishments) => {
       }
       default: {
         if (interaction.customId.startsWith('menu')) {
-          // const name = interaction.customId.split('_')[1];
-          const punishmentsToDisplay = allPunishments.some((p) =>
+          const name = interaction.customId.split('_')[1];
+          const punishmentsToDisplay = allPunishments.filter((p) =>
             interaction.values.includes(p.uniquetimestamp),
           );
 
-          console.log(punishmentsToDisplay);
+          const embeds = getPunishmentEmbeds(punishmentsToDisplay, msg, name);
+          interaction.update({ embeds: [embed, ...embeds] });
         } else {
           selected = interaction.customId;
           const baseButtons = getBaseButtons(msg, selected, allPunishments, page);
@@ -357,3 +365,74 @@ const handleInteractions = (buttonsCollector, msg, m, allPunishments) => {
     }
   });
 };
+
+const getPunishmentEmbeds = (punishments, msg, name) =>
+  punishments.map((p) =>
+    new Builders.UnsafeEmbedBuilder()
+      .setAuthor({
+        name: msg.lan[name],
+        iconUrl: msg.client.objectEmotes.warning.link,
+        url: msg.client.ch.stp(msg.client.constants.standard.discordUrlDB, {
+          guildid: msg.guild.id,
+          channelid: p.channelid,
+          msgid: p.msgid,
+        }),
+      })
+      .setDescription(`**__${msg.language.reason}__**:\n${p.reason}`)
+      .addFields(
+        {
+          name: msg.lan.date,
+          value: `<t:${p.uniquetimestamp.slice(0, -3)}> (<t:${p.uniquetimestamp.slice(0, -3)}:R>)`,
+          inline: true,
+        },
+        {
+          name: msg.lan.executor2,
+          value: `<@${p.executorid}> / \`${p.executorname}\` / \`${p.executorid}\``,
+          inline: true,
+        },
+        {
+          name: msg.lan.channel,
+          value: `<#${p.channelid}> / \`${p.channelname}\` / \`${p.channelid}\``,
+          inline: true,
+        },
+        {
+          name: msg.lan.punishmentID,
+          value: `\`${p.uniquetimestamp}\``,
+          inline: true,
+        },
+        {
+          name: msg.lan.duration,
+          value: `${
+            p.duration
+              ? moment
+                  .duration(p.duration)
+                  .format(
+                    `y [${msg.language.time.years}], M [${msg.language.time.months}], d [${msg.language.time.days}], h [${msg.language.time.hours}], m [${msg.language.time.minutes}], s [${msg.language.time.seconds}]`,
+                    { trim: 'all' },
+                  )
+              : msg.lan.permanent
+          }`,
+          inline: true,
+        },
+        {
+          name: msg.lan.end,
+          value: p.duration
+            ? `<t:${
+                Number(p.uniquetimestamp.slice(0, -3)) + Number(p.duration.slice(0, -3))
+              }> (<t:${
+                Number(p.uniquetimestamp.slice(0, -3)) + Number(p.duration.slice(0, -3))
+              }:R>)`
+            : msg.lan.permanent,
+          inline: true,
+        },
+        {
+          name: msg.lan.executorMessage,
+          value: msg.client.ch.stp(msg.client.constants.standard.discordUrlDB, {
+            guildid: msg.guild.id,
+            channelid: p.channelid,
+            msgid: p.msgid,
+          }),
+          inline: false,
+        },
+      ),
+  );
