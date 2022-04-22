@@ -20,8 +20,8 @@ module.exports = {
       embed.setColor(con.fail);
       return msg.client.ch.reply(msg, { embeds: [embed] });
     }
-    const res = await getRes(msg, user);
-    if (!res || res.rowCount === 0) {
+    const rows = await getRes(msg, user);
+    if (!rows || !rows.length) {
       embed.setDescription(lan.noWarns);
       embed.setColor(con.fail);
       return msg.client.ch.reply(msg, { embeds: [embed] });
@@ -50,7 +50,7 @@ module.exports = {
           embed.setDescription(msg.client.ch.stp(lan.cleared, { user }));
           embed.setColor(con.success);
           msg.m.edit({ embeds: [embed], components: [] }).catch(() => {});
-          log(msg, res, user, lan, con);
+          log(msg, rows, user, lan, con);
           collector.stop();
         } else if (button.customId === 'no') {
           embed.setDescription(lan.fail);
@@ -68,7 +68,7 @@ module.exports = {
   },
 };
 
-function log(msg, res, user, lan, con) {
+function log(msg, rows, user, lan, con) {
   const logEmbed = new Builders.UnsafeEmbedBuilder()
     .setAuthor({
       name: msg.client.ch.stp(lan.log.author, { user }),
@@ -79,7 +79,7 @@ function log(msg, res, user, lan, con) {
     .setFooter({ text: msg.client.ch.stp(lan.log.footer, { author: msg.author }) });
 
   let description = null;
-  res.rows.forEach((r) => {
+  rows.forEach((r) => {
     const msgLink = msg.client.ch.stp(lan.log.details, {
       link: msg.client.ch.stp(msg.client.constants.standard.discordUrlDB, {
         guildid: r.guildid,
