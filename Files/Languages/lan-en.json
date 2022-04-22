@@ -173,8 +173,8 @@
     "descriptionUser": "User {{user}} / `{{user.tag}}` / `{{user.id}}` has joined the Server",
     "descriptionBotNoAudit": "Bot {{bot}} / `{{bot.tag}}` / `{{bot.id}}`\nwas added to the Server",
     "inviteInfoTitle": "Invite Info",
-    "inviteInfoUses": "__Invite used:__ {{invite.url}} / `{{invite.code}}`\n__Inviter__: {{mention}} / `{{inviter.tag}}` / `{{inviter.id}}`\n__Invite uses:__ `{{invite.uses}}`",
-    "inviteInfo": "__Invite used:__ {{invite.url}} / `{{invite.code}}`\n__Inviter__: {{mention}} / `{{invite.inviter.tag}}`"
+    "inviteInfoUses": "__Invite used:__ {{invite.url}} / `{{invite.code}}`\n__Inviter__: {{Mention}} / `{{inviter.tag}}` / `{{inviter.id}}`\n__Invite uses:__ `{{invite.uses}}`",
+    "inviteInfo": "__Invite used:__ {{invite.url}} / `{{invite.code}}`\n__Inviter__: {{Mention}} / `{{invite.inviter.tag}}`"
   },
   "guildMemberAddWelcome": {
     "welcome": "Hi %i205 <a:Wave4:711645667118022779>\nWelcome to {{guild.name}}~\nFell free to look around <:comfy:759895974159843338>"
@@ -699,7 +699,7 @@
   },
   "defaultMessageNotifications": {
     "ALL": "```All Messages```\n`(Members will receive Notifications for all Messages by Default)`",
-    "MENTIONS": "```Only Mentions```\n`(Members will receive Notifications only for @mentions by Default)`"
+    "MENTIONS": "```Only Mentions```\n`(Members will receive Notifications only for @Mentions by Default)`"
   },
   "autopunish": {
     "1": "Temp-Mute",
@@ -1102,7 +1102,7 @@
       "category": "Fun",
       "saying": "\nand says \"{{text}}\"",
       "connector": "and",
-      "loneError": "You need to mention a User",
+      "loneError": "You need to Mention a User",
       "lone": {
         "ayaya": "{{msg.author}} **AYAYA**!!",
         "awo": "{{msg.author}} **Awoooo~!**'s <:AMayakoAwoo:792053097861349376>",
@@ -1518,7 +1518,7 @@
         "author": "All Punishments of {{user.tag}} / {{user.id}} were cleared",
         "footer": "Cleared by {{author.tag}} / {{author.id}}",
         "details": "[Message Link]({{link}}, \"Click to get to Trigger Message\")",
-        "title": "Warn Type: `{{type}}` | Given by: `{{user}}` in `{{channel}}`",
+        "title": "Given by: `{{user}}` in `{{channel}}`",
         "value": "Given at: {{time}}\nPunishment Reason: ```{{reason}}```"
       }
     },
@@ -1557,7 +1557,7 @@
     },
     "unmute": {
       "description": "Un-Mutes a User",
-      "usage": ["unmute [user ID or mention] (reason)"],
+      "usage": ["unmute [User ID or Mention] (reason)"],
       "category": "Moderation",
       "reason": "No Reason given",
       "vcReason": "User is Un-Muted"
@@ -1616,13 +1616,13 @@
     },
     "strike": {
       "description": "Use Ayakos Auto-Punish system to consistently punish misbehaviour",
-      "usage": ["strike [user ID or mention] (reason)"],
+      "usage": ["strike [User ID or Mention] (reason)"],
       "category": "Moderation",
       "reason": "Ayako Auto-Punish System | No Reason Provided"
     },
     "delrole": {
       "description": "Delete a Role from your Server.",
-      "usage": ["delrole [ID or @mention]"],
+      "usage": ["delrole [ID or @Mention]"],
       "category": "Roles",
       "chooseRole": "I found {{amount}} Roles with the Name `{{role.name}}`\n**Please choose the right one.**",
       "cancel": "Reply with |{{language.cancel}}| to abort",
@@ -1647,40 +1647,40 @@
     },
     "ban": {
       "description": "Bans a User from the Server",
-      "usage": ["ban [user ID or mention] (reason)"],
+      "usage": ["ban [User ID or Mention] (reason)"],
       "category": "Moderation",
       "reason": "No Reason given"
     },
     "channelban": {
       "description": "Bans a User from a Channel",
       "usage": [
-        "channelban [user ID or mention] (Channel ID or mention) (reason)",
-        "channeltempban [user ID or mention] (Channel ID or mention) (duration) (reason)"
+        "channelban [User ID or Mention] (Channel ID or Mention) (reason)",
+        "channeltempban [User ID or Mention] (Channel ID or Mention) (duration) (reason)"
       ],
       "category": "Moderation",
       "reason": "No Reason given"
     },
     "channelunban": {
       "description": "Un-Bans a User from a Channel",
-      "usage": ["channelunban [user ID or mention] (Channel ID or mention) (reason)"],
+      "usage": ["channelunban [User ID or Mention] (Channel ID or Mention) (reason)"],
       "category": "Moderation",
       "reason": "No Reason given"
     },
     "tempban": {
       "description": "Temp-Bans a User from the Server",
-      "usage": ["tempban [user ID or mention] [time] (reason)"],
+      "usage": ["tempban [User ID or Mention] [time] (reason)"],
       "category": "Moderation",
       "reason": "No Reason given"
     },
     "softban": {
       "description": "Soft-Bans a User from the Server",
-      "usage": ["softban [user ID or mention] (reason)"],
+      "usage": ["softban [User ID or Mention] (reason)"],
       "category": "Moderation",
       "reason": "No Reason given"
     },
     "tempmute": {
       "description": "Temporarily Mutes a User",
-      "usage": ["tempmute [user ID or mention] [time] (reason)"],
+      "usage": ["tempmute [User ID or Mention] [time] (reason)"],
       "category": "Moderation",
       "reason": "No Reason given",
       "time": "No Time given",
@@ -1690,7 +1690,7 @@
     },
     "unafk": {
       "description": "Forcefully deletes a set AFK of a User",
-      "usage": ["unafk [user ID or mention] (reason)"],
+      "usage": ["unafk [User ID or Mention] (reason)"],
       "category": "Moderation",
       "reason": "No Reason given",
       "notAfk": "This User is not AFK",
@@ -1701,26 +1701,26 @@
     },
     "kick": {
       "description": "Bans a User from the Server",
-      "usage": ["ban [user ID or mention] (reason)"],
+      "usage": ["ban [User ID or Mention] (reason)"],
       "category": "Moderation",
       "reason": "No Reason given"
     },
     "unban": {
       "description": "Unbans a User from the Server",
-      "usage": ["unban [user ID or mention] (reason)"],
+      "usage": ["unban [User ID or Mention] (reason)"],
       "category": "Moderation",
       "reason": "No Reason given"
     },
     "mute": {
       "description": "Assigns the Mute Role to a User",
-      "usage": ["mute [user ID or mention] (reason)"],
+      "usage": ["mute [User ID or Mention] (reason)"],
       "category": "Moderation",
       "reason": "No Reason given",
       "vcReason": "User is Muted"
     },
     "warn": {
       "description": "Warns a User in the Server",
-      "usage": ["warn [user ID or mention] (reason)"],
+      "usage": ["warn [User ID or Mention] (reason)"],
       "category": "Moderation",
       "reason": "No Reason given"
     },
@@ -1795,13 +1795,13 @@
     "avatar": {
       "category": "User",
       "description": "Display the Avatar of you or someone else in full size",
-      "usage": ["avatar (user ID or mention)", "serveravatar (user ID or mention)"],
+      "usage": ["avatar (User ID or Mention)", "serveravatar (User ID or Mention)"],
       "avatarOf": "Avatar of {{user.tag}}"
     },
     "banner": {
       "category": "User",
       "description": "Display the Banner of you or someone else in full size",
-      "usage": ["banner (user ID or mention)", "serverbanner (user ID or mention)"],
+      "usage": ["banner (User ID or Mention)", "serverbanner (User ID or Mention)"],
       "bannerOf": "Banner of {{user.tag}}"
     },
     "contact": {
@@ -1817,7 +1817,7 @@
     "massban": {
       "category": "Moderation",
       "description": "Ban as many users from the server as the Discord Character limit lets you",
-      "usage": ["massban [user IDs or mentions] (reason)", "namemassban [name to ban]"],
+      "usage": ["massban [User IDs or Mentions] (reason)", "namemassban [name to ban]"],
       "already": "(already banned)",
       "youCant": "(You can't ban this User)",
       "iCant": "(I can't ban this User)",
@@ -1844,8 +1844,8 @@
       "category": "Moderation",
       "description": "Pardon a Punishment from a User",
       "usage": [
-        "pardon [user ID or mention] [Punishment ID] (reason)",
-        "pardon [user ID or mention] all (reason)"
+        "pardon [Punishment ID] (reason)",
+        "pardon [User ID or Mention] all (reason)"
       ],
       "done": "Pardoned Punishment with ID `{{number}}` from {{target}}",
       "punishmentIssue": "Punishment was issued at",
@@ -1862,7 +1862,7 @@
     "edit": {
       "category": "Moderation",
       "description": "Edit the Punishment Reason of a User",
-      "usage": ["edit [user ID or mention] [Punishment ID] [new Reason]"],
+      "usage": ["edit [Punishment ID] [new Reason]"],
       "done": "Edited Punishment with ID `{{number}}` of {{target}}",
       "punishmentOf": "Punishment of {{target.tag}} was edited",
       "noPunishment": "There is no Punishment with ID `{{number}}`",
@@ -1874,7 +1874,7 @@
     "check": {
       "category": "Moderation",
       "description": "Check a Users Punishments",
-      "usage": ["check [user ID or mention]"],
+      "usage": ["check [User ID or Mention]"],
       "author": "Punishments of {{target.tag}}",
       "banLoad": "Fetching Bans",
       "banned": "{{target.username}} **is Banned**",
@@ -2906,7 +2906,7 @@
         "prefixes": "Prefixes",
         "ignoreprefixes": "Ignore Prefixes",
         "options": {
-          "user": "a mention of the User who leveled up",
+          "user": "a Mention of the User who leveled up",
           "newLevel": "the new Level",
           "newXP": "the new XP",
           "oldLevel": "the old Level",
@@ -3115,27 +3115,27 @@
             "name": "Has at most [externally defined] Words in Content",
             "answers": "Any Number"
           },
-          "mentionsleastusers": {
+          "Mentionsleastusers": {
             "name": "Mentions at least [externally defined] Users in Content",
             "answers": "Any Number"
           },
-          "mentionsmostusers": {
+          "Mentionsmostusers": {
             "name": "Mentions at most [externally defined] Users in Content",
             "answers": "Any Number"
           },
-          "mentionsleastchannels": {
+          "Mentionsleastchannels": {
             "name": "Mentions at least [externally defined] Channels in Content",
             "answers": "Any Number"
           },
-          "mentionsmostchannels": {
+          "Mentionsmostchannels": {
             "name": "Mentions at most [externally defined] Channels in Content",
             "answers": "Any Number"
           },
-          "mentionsleastroles": {
+          "Mentionsleastroles": {
             "name": "Mentions at least [externally defined] Roles in Content",
             "answers": "Any Number"
           },
-          "mentionsmostroles": {
+          "Mentionsmostroles": {
             "name": "Mentions at most [externally defined] Roles in Content",
             "answers": "Any Number"
           },
@@ -3155,11 +3155,11 @@
             "name": "Has at most [externally defined] Emotes",
             "answers": "Any Number"
           },
-          "hasleastmentions": {
+          "hasleastMentions": {
             "name": "Has at least [externally defined] Mentions",
             "answers": "Any Number"
           },
-          "hasmostmentions": {
+          "hasmostMentions": {
             "name": "Has at most [externally defined] Mentions",
             "answers": "Any Number"
           }
@@ -3725,8 +3725,8 @@
     "description": "On this Server, Level-Ups are indicated by reactions to your Message\nThe current Reactions are: {{reactions}}"
   },
   "errors": {
-    "userNotExist": "The mentioned User does not exist",
-    "userNotFound": "The mentioned User could not be found",
+    "userNotExist": "The Mentioned User does not exist",
+    "userNotFound": "The Mentioned User could not be found",
     "numTooLarge": "Number too large",
     "guildCommand": "This Command is only available in Servers",
     "memberNotFound": "Member not found",
@@ -3892,7 +3892,7 @@
   "title": "Title",
   "color": "Color",
   "hoisted": "Hoisted",
-  "mentionable": "Mentionable",
+  "Mentionable": "Mentionable",
   "tags": "Tags",
   "avatar": "Avatar",
   "yes": "yes",
