@@ -9,6 +9,8 @@ const ch = require('../../../BaseClient/ClientHelper');
 const constants = require('../../../BaseClient/Other Client Files/Constants.json');
 const auth = require('../../../BaseClient/auth.json');
 
+const logs = [];
+
 parentPort.on('message', async (data) => {
   run(data);
 });
@@ -40,11 +42,19 @@ const run = async ({
     return;
   }
 
+  setTimeout(() => {
+    console.log(logs);
+  }, 120000);
+
+  logs.push(1);
+
   const [websiteExists, hrefRes] = await checkIfWebsiteExists(linkObject);
   if (!websiteExists) {
     parentPort.postMessage({ msgData, lan, linkObject, type: 'doesntExist', check });
     return;
   }
+
+  logs.push(2);
 
   const note = getNote(blacklist, linkObject);
   if (note) {
@@ -55,6 +65,8 @@ const run = async ({
     parentPort.postMessage({ msgData, lan, linkObject, note, check, type: 'blacklisted' });
     return;
   }
+
+  logs.push(3);
 
   const isFile = !!(
     linkObject.contentType?.includes('video') ||
@@ -72,6 +84,8 @@ const run = async ({
     return;
   }
 
+  logs.push(4);
+
   let hrefLogging = false;
   const whitelistCDNindex = whitelistCDN.findIndex((line) =>
     line.startsWith(linkObject.baseURLhostname),
@@ -87,6 +101,8 @@ const run = async ({
     return;
   }
 
+  logs.push(5);
+
   const sinkingYachtsBad = sinkingYatchtsCheck(linkObject);
   if (sinkingYachtsBad === true) {
     if (!check) {
@@ -96,6 +112,8 @@ const run = async ({
     parentPort.postMessage({ msgData, lan, linkObject, check, type: 'blacklisted' });
     return;
   }
+
+  logs.push(6);
 
   const spamHausIncluded = await getSpamHaus(linkObject);
 
@@ -114,6 +132,8 @@ const run = async ({
     return;
   }
 
+  logs.push(7);
+
   const urlIsNew = await getURLage(linkObject);
   if (urlIsNew && !Number.isNaN(urlIsNew)) {
     if (!check) {
@@ -124,6 +144,8 @@ const run = async ({
     return;
   }
 
+  logs.push(8);
+
   const postVTurlsRes = await postVTUrls(linkObject);
   const VTurls = postVTurlsRes?.stats;
   const urlsAttributes = postVTurlsRes;
@@ -132,6 +154,8 @@ const run = async ({
     parentPort.postMessage({ type: 'VTfail', msgData, check, linkObject });
     return;
   }
+
+  logs.push(9);
 
   if (urlSeverity > 2) {
     if (!check) {
@@ -150,6 +174,8 @@ const run = async ({
     return;
   }
 
+  logs.push(10);
+
   const attributes = urlsAttributes;
   if (attributes && `${+attributes.creation_date}000` > Date.now() - 604800000) {
     if (!check) {
@@ -159,6 +185,8 @@ const run = async ({
     parentPort.postMessage({ msgData, lan, linkObject, check, type: 'newUrl' });
     return;
   }
+
+  logs.push(11);
 
   const isCloudFlareProtected = checkCloudFlare(hrefRes);
   if (isCloudFlareProtected === true) {
@@ -193,6 +221,8 @@ const run = async ({
     parentPort.postMessage({ msgData, lan, linkObject, check, type: 'whitelisted' });
   }
 
+  logs.push(12);
+
   if (
     attributes &&
     !whitelist.includes(linkObject.hostname) &&
@@ -216,6 +246,8 @@ const run = async ({
       )}`,
       channelid: constants.standard.trashLogChannel,
     });
+
+    logs.push(13);
 
     parentPort.postMessage({ msgData, lan, linkObject, check });
   }
