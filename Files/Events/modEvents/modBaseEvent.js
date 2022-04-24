@@ -435,12 +435,16 @@ const checkActionTaken = async (
     case 'tempchannelbanAdd': {
       punished =
         args.channel?.permissionOverwrites.cache.get(args.target.id)?.deny.has(2048n) &&
+        args.channel?.permissionOverwrites.cache.get(args.target.id)?.deny.has(274877906944n) &&
+        args.channel?.permissionOverwrites.cache.get(args.target.id)?.deny.has(1024n) &&
         args.channel?.permissionOverwrites.cache.get(args.target.id)?.deny.has(1048576n);
       break;
     }
     case 'channelbanRemove': {
       punished =
         !args.channel?.permissionOverwrites.cache.get(args.target.id)?.deny.has(2048n) ||
+        !args.channel?.permissionOverwrites.cache.get(args.target.id)?.deny.has(274877906944n) ||
+        !args.channel?.permissionOverwrites.cache.get(args.target.id)?.deny.has(1024n) ||
         !args.channel?.permissionOverwrites.cache.get(args.target.id)?.deny.has(1048576n);
       break;
     }
@@ -635,7 +639,12 @@ const takeAction = async (punishmentType, targetMember, executingMember, args, l
         punished = await args.channel?.permissionOverwrites
           .edit(
             args.target.id,
-            { SendMessages: false, Connect: false },
+            {
+              SendMessages: false,
+              Connect: false,
+              ViewChannel: false,
+              SendMessagesInThreads: false,
+            },
             {
               reason: `${args.executor.tag} | ${args.reason}`,
               type: 1,
@@ -676,7 +685,7 @@ const takeAction = async (punishmentType, targetMember, executingMember, args, l
       punished = await args.channel?.permissionOverwrites
         .edit(
           args.target.id,
-          { SendMessages: null, Connect: null },
+          { SendMessages: null, Connect: null, ViewChannel: null, SendMessagesInThreads: null },
           {
             reason: `${args.executor.tag} | ${args.reason}`,
             type: 1,
