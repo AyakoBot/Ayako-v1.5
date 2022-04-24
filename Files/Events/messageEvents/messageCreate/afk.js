@@ -32,6 +32,7 @@ const doSelfAFKCheck = async (msg, checkedMsg, language) => {
   const embed = getAFKdeletedEmbed(msg, language, afkRow);
   const m = await msg.client.ch.reply(msg, { embeds: [embed], noCommand: true });
 
+  handleReactions(m, msg);
   deleteM(m);
   deleteAfk(msg);
   deleteNickname(msg, language);
@@ -114,3 +115,22 @@ const getAFKdeletedEmbed = (msg, language, afkRow) =>
       time: getTime(afkRow, language),
     }),
   });
+
+const handleReactions = async (m, msg) => {
+  if (!m) return;
+
+  const reaction = await m.react(m.client.objectEmotes.cross).catch(() => {});
+  if (!reaction) return;
+
+  const reactionsCollector = m.createReactionCollector({ time: 20000 });
+
+  reactionsCollector.on('end', (collected, reason) => {
+    if (reason === 'time') reaction.users.remove(m.client.user.id).catch(() => {});
+  });
+
+  reactionsCollector.on('collect', (r, user) => {
+    if (user.id !== msg.author.id) return;
+
+    m.delete().catch(() => {});
+  });
+};
