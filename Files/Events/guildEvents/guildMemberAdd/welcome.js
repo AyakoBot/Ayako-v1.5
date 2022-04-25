@@ -27,7 +27,7 @@ module.exports = async (member) => {
 };
 
 const getWelcomeRes = async (member) => {
-  const res = await member.client.ch.query(`SELECT * FROM welcome WHERE guildid = $1;`, [
+  const res = await member.client.ch.query(`SELECT * FROM welcome WHERE guildid = $1 AND active = true;`, [
     member.guild.id,
   ]);
   if (res && res.rowCount) return res.rows[0];
