@@ -2095,6 +2095,7 @@
         "lan": "Bot Language",
         "errorchannel": "Error Channel",
         "vanity": "Vanity",
+        "missingPermissions": "⚠️ I require __Administrator Permissions__ to set Vanity URLs",
         "edit": {
           "interactionsmode": {
             "name": "Interactions Mode",

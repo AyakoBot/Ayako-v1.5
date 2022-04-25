@@ -1,5 +1,3 @@
-/* eslint-disable no-nested-ternary */
-
 const Discord = require('discord.js');
 const Builders = require('@discordjs/builders');
 
@@ -13,6 +11,13 @@ module.exports = {
     if (r.prefix && r.prefix.startsWith('{"') && r.prefix.endsWith('"}')) {
       r.prefix = r.prefix.slice(2, r.prefix.length - 2);
     }
+
+    let { vanity } = r;
+    if (!msg.guild.me.permissions.has(8n)) {
+      vanity = msg.lan.missingPermissions;
+    }
+    if (!vanity) vanity = msg.language.none;
+
     const embed = new Builders.UnsafeEmbedBuilder().addFields(
       {
         name: msg.lan.prefix,
@@ -22,11 +27,7 @@ module.exports = {
       {
         name: msg.lan.interactionsmode,
         value: `${
-          r.interactionsmode === false || r.interactionsmode === true
-            ? r.interactionsmode === true
-              ? small
-              : big
-            : small
+          typeof r.interactionsmode !== 'boolean' || r.interactionsmode === true ? small : big
         }`,
         inline: true,
       },
@@ -44,7 +45,7 @@ module.exports = {
       },
       {
         name: `${msg.lan.vanity}\u200b`,
-        value: `${r.vanity ? r.vanity : msg.language.none}`,
+        value: `${vanity}`,
         inline: false,
       },
     );
