@@ -42,6 +42,11 @@ module.exports = {
         value: `${r.errorchannel ? `<#${r.errorchannel}>` : msg.language.none}`,
         inline: false,
       },
+      {
+        name: `${msg.lan.vanity}\u200b`,
+        value: `${r.vanity ? r.vanity : msg.language.none}`,
+        inline: false,
+      },
     );
     return embed;
   },
@@ -62,6 +67,10 @@ module.exports = {
       .setCustomId(msg.lan.edit.errorchannel.name)
       .setLabel(msg.lan.errorchannel)
       .setStyle(Discord.ButtonStyle.Secondary);
-    return [[prefix, interactionsmode, language, errorchannel]];
+    const vanity = new Builders.UnsafeButtonBuilder()
+      .setCustomId(msg.lan.edit.vanity.name)
+      .setLabel(msg.lan.vanity)
+      .setStyle(Discord.ButtonStyle.Secondary);
+    return [[prefix, interactionsmode, language, errorchannel, vanity]];
   },
 };

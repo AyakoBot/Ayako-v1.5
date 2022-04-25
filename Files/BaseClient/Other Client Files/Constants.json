@@ -715,6 +715,10 @@
           "errorchannel": {
             "key": "channel",
             "required": true
+          },
+          "vanity": {
+            "key": "string",
+            "required": false
           }
         },
         "disabled": {
