@@ -211,7 +211,7 @@ module.exports = async (oldState, newState) => {
       }
       if (changedKey.length < 1) return;
       embed.setDescription(
-        ch.stp(lan.description, { user: newState ? newState.member.user : oldState.member.user }),
+        ch.stp(lan.description, { user: newState ? newState.member?.user : oldState.member?.user }),
       );
       embed.data.description = embed.data.description
         ? `${embed.data.description}\n\n${language.changes}: ${changedKey.map((o) => ` \`${o}\``)}`
@@ -225,7 +225,7 @@ module.exports = async (oldState, newState) => {
       const audits = await guild.fetchAuditLogs({ limit: 3, type });
       if (audits && audits.entries) {
         const audit = audits.entries.filter((a) => {
-          if (a.target) return a.target.id === newState.member.user.id;
+          if (a.target) return a.target.id === newState.member?.user.id;
           if (a.extra.channel) return a.extra.channel.id;
           if (newState.channel === '') return newState.channel.id;
           return oldState.channel.id;
