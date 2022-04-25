@@ -27,9 +27,10 @@ module.exports = async (member) => {
 };
 
 const getWelcomeRes = async (member) => {
-  const res = await member.client.ch.query(`SELECT * FROM welcome WHERE guildid = $1 AND active = true;`, [
-    member.guild.id,
-  ]);
+  const res = await member.client.ch.query(
+    `SELECT * FROM welcome WHERE guildid = $1 AND active = true;`,
+    [member.guild.id],
+  );
   if (res && res.rowCount) return res.rows[0];
   return null;
 };
@@ -63,8 +64,6 @@ const getEmbed = async (r, member) => {
 
   if (res && res.rowCount) {
     const partialEmbed = member.client.ch.getDiscordEmbed(res.rows[0]);
-    console.log(res.rows[0]);
-
     embed = member.client.ch.dynamicToEmbed(partialEmbed, options);
   } else {
     embed = member.client.ch.dynamicToEmbed(await getDefaultEmbed(), options);
