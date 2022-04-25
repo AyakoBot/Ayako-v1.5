@@ -437,6 +437,7 @@ const checkActionTaken = async (
         args.channel?.permissionOverwrites.cache.get(args.target.id)?.deny.has(2048n) &&
         args.channel?.permissionOverwrites.cache.get(args.target.id)?.deny.has(274877906944n) &&
         args.channel?.permissionOverwrites.cache.get(args.target.id)?.deny.has(1024n) &&
+        args.channel?.permissionOverwrites.cache.get(args.target.id)?.deny.has(64n) &&
         args.channel?.permissionOverwrites.cache.get(args.target.id)?.deny.has(1048576n);
       break;
     }
@@ -445,6 +446,7 @@ const checkActionTaken = async (
         !args.channel?.permissionOverwrites.cache.get(args.target.id)?.deny.has(2048n) ||
         !args.channel?.permissionOverwrites.cache.get(args.target.id)?.deny.has(274877906944n) ||
         !args.channel?.permissionOverwrites.cache.get(args.target.id)?.deny.has(1024n) ||
+        !args.channel?.permissionOverwrites.cache.get(args.target.id)?.deny.has(64n) ||
         !args.channel?.permissionOverwrites.cache.get(args.target.id)?.deny.has(1048576n);
       break;
     }
@@ -644,6 +646,7 @@ const takeAction = async (punishmentType, targetMember, executingMember, args, l
               Connect: false,
               ViewChannel: false,
               SendMessagesInThreads: false,
+              AddReactions: false,
             },
             {
               reason: `${args.executor.tag} | ${args.reason}`,
@@ -685,7 +688,13 @@ const takeAction = async (punishmentType, targetMember, executingMember, args, l
       punished = await args.channel?.permissionOverwrites
         .edit(
           args.target.id,
-          { SendMessages: null, Connect: null, ViewChannel: null, SendMessagesInThreads: null },
+          {
+            SendMessages: null,
+            Connect: null,
+            ViewChannel: null,
+            SendMessagesInThreads: null,
+            AddReactions: null,
+          },
           {
             reason: `${args.executor.tag} | ${args.reason}`,
             type: 1,
