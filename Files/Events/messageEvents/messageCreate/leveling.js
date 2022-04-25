@@ -308,10 +308,12 @@ const doReact = async (msg, row, levelData, language) => {
 };
 
 const doEmbed = async (msg, settinsgrow, language, levelData, row) => {
-  const getDefaultEmbed = () =>
-    new Builders.UnsafeEmbedBuilder()
-      .setAuthor({ name: language.leveling.author })
-      .setColor(msg.client.ch.colorSelector(msg.member));
+  const getDefaultEmbed = () => ({
+    author: {
+      name: language.leveling.author,
+    },
+    color: msg.client.ch.colorSelector(msg.member),
+  });
 
   let embed;
 

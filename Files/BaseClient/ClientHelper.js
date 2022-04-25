@@ -1111,7 +1111,7 @@ module.exports = {
         ? mod(embedToUse.description, { [option[0]]: option[1] })
         : null;
 
-      embed.data.data.thumbnail =
+      embed.data.thumbnail =
         embedToUse.thumbnail && embedToUse.thumbnail.url
           ? mod(embedToUse.thumbnail.url, { [option[0]]: option[1] })
           : null;
