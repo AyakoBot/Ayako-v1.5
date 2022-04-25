@@ -95,9 +95,11 @@ module.exports = {
     const menu = new Builders.UnsafeSelectMenuBuilder()
       .setCustomId(required.key)
       .addOptions(
-        ...(Objects.take.length ? Objects.take : new Builders.UnsafeSelectMenuOptionBuilder())
-          .setLabel('placeholder')
-          .setValue('placeholder'),
+        ...(Objects.take.length
+          ? Objects.take
+          : new Builders.UnsafeSelectMenuOptionBuilder()
+              .setLabel('placeholder')
+              .setValue('placeholder')),
       )
       .setDisabled(!Objects.take.length)
       .setMinValues(1)
@@ -148,6 +150,10 @@ module.exports = {
         return { returnEmbed };
       }
       default: {
+        if (!msg.language.commands.settings[msg.file.name].options) {
+          throw new Error('Missing Options Language Definition');
+        }
+
         const options = Object.entries(msg.language.commands.settings[msg.file.name].options);
 
         msg.m.reactions.removeAll().catch(() => {});

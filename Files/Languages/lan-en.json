@@ -1843,10 +1843,7 @@
     "pardon": {
       "category": "Moderation",
       "description": "Pardon a Punishment from a User",
-      "usage": [
-        "pardon [Punishment ID] (reason)",
-        "pardon [User ID or Mention] all (reason)"
-      ],
+      "usage": ["pardon [Punishment ID] (reason)", "pardon [User ID or Mention] all (reason)"],
       "done": "Pardoned Punishment with ID `{{number}}` from {{target}}",
       "punishmentIssue": "Punishment was issued at",
       "punishmentOf": "Punishment of {{target.tag}} was pardoned",
@@ -1984,96 +1981,112 @@
           "guildevents": {
             "name": "Guild Events",
             "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
+            "answers": "Channels",
             "select": "Select 1 or more Channels",
             "desc": "Select the Channel(s) you want to Log this in Event below"
           },
           "emojievents": {
             "name": "Emoji Events",
             "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
+            "answers": "Channels",
             "select": "Select 1 or more Channels",
             "desc": "Select the Channel(s) you want to Log this in Event below"
           },
           "inviteevents": {
             "name": "Invite Events",
             "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
+            "answers": "Channels",
             "select": "Select 1 or more Channels",
             "desc": "Select the Channel(s) you want to Log this in Event below"
           },
           "messageevents": {
             "name": "Message Events",
             "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
+            "answers": "Channels",
             "select": "Select 1 or more Channels",
             "desc": "Select the Channel(s) you want to Log this in Event below"
           },
           "roleevents": {
             "name": "Role Events",
             "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
+            "answers": "Channels",
             "select": "Select 1 or more Channels",
             "desc": "Select the Channel(s) you want to Log this in Event below"
           },
           "userevents": {
             "name": "User Events",
             "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
+            "answers": "Channels",
             "select": "Select 1 or more Channels",
             "desc": "Select the Channel(s) you want to Log this in Event below"
           },
           "voiceevents": {
             "name": "Voice Events",
             "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
+            "answers": "Channels",
             "select": "Select 1 or more Channels",
             "desc": "Select the Channel(s) you want to Log this in Event below"
           },
           "webhookevents": {
             "name": "Webhook Events",
             "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
+            "answers": "Channels",
             "select": "Select 1 or more Channels",
             "desc": "Select the Channel(s) you want to Log this in Event below"
           },
           "channelevents": {
             "name": "Channel Events",
             "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
+            "answers": "Channels",
             "select": "Select 1 or more Channels",
             "desc": "Select the Channel(s) you want to Log this in Event below"
           },
           "applicationevents": {
             "name": "Application Events",
             "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
+            "answers": "Channels",
             "select": "Select 1 or more Channels",
             "desc": "Select the Channel(s) you want to Log this in Event below"
           },
           "stageinstanceevents": {
             "name": "Stage Instance Events",
             "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
+            "answers": "Channels",
             "select": "Select 1 or more Channels",
             "desc": "Select the Channel(s) you want to Log this in Event below"
           },
           "stickerevents": {
             "name": "Sticker Events",
             "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
+            "answers": "Channels",
             "select": "Select 1 or more Channels",
             "desc": "Select the Channel(s) you want to Log this in Event below"
           },
           "threadevents": {
             "name": "Thread Events",
             "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
+            "answers": "Channels",
             "select": "Select 1 or more Channels",
             "desc": "Select the Channel(s) you want to Log this in Event below"
           },
           "guildmemberevents": {
             "name": "Guild Member Events",
             "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
+            "answers": "Channels",
             "select": "Select 1 or more Channels",
             "desc": "Select the Channel(s) you want to Log this in Event below"
           },
           "modlogs": {
             "name": "Moderation Logs",
             "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
+            "answers": "Channels",
             "select": "Select 1 or more Channels",
             "desc": "Select the Channel(s) you want to Log this in Event below"
           },
           "settingslog": {
             "name": "Settings Logs",
             "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
+            "answers": "Channels",
             "select": "Select 1 or more Channels",
             "desc": "Select the Channel(s) you want to Log this in Event below"
           }
@@ -2189,6 +2202,49 @@
           }
         }
       },
+      "welcome": {
+        "type": "Welcome",
+        "channelid": "Welcome Channel",
+        "pingroles": "Ping Roles",
+        "pingusers": "Ping Users",
+        "embed": "Welcome Embed",
+        "options": {
+          "member": "a Mention of the Member who joined",
+          "username": "the Username of the joined Member",
+          "usertag": "the Tag of the joined Member",
+          "user": "a Mention of the User who joined",
+          "serverName": "the Servers Name"
+        },
+        "edit": {
+          "active": {
+            "name": "Active",
+            "answers": "`True` or `False`",
+            "recommended": "Recommended: `True`"
+          },
+          "channelid": {
+            "name": "Welcome Channel",
+            "answers": "Channels",
+            "recommended": "The Channel where new Users will be welcomed in",
+            "select": "Select a Channel"
+          },
+          "pingroles": {
+            "name": "Ping Roles",
+            "recommended": "Roles Pinged upon join\nThis is a Switch.\nIf the entered Role is already added it will be removed.",
+            "answers": "Roles",
+            "select": "Select 1 or more Roles",
+            "desc": "Select the Role(s) you want to add below"
+          },
+          "pingusers": {
+            "name": "Ping Users",
+            "answers": "`Mention(s) or ID(s)`",
+            "recommended": "Users Pinged upon join\nThis is a Switch.\nIf the entered User is already added they will be removed."
+          },
+          "embed": {
+            "name": "Welcome Embed",
+            "answers": "Choose an Embed from the List below or create a new one"
+          }
+        }
+      },
       "antispam": {
         "type": "Anti-Spam",
         "banenabledtof": "Ban Members",
@@ -2246,12 +2302,14 @@
           "bpchannelid": {
             "name": "Whitelisted Channels",
             "recommended": "This is a Switch.\nIf the entered Channel is already bypassed it will be removed.",
+            "answers": "Channels",
             "select": "Select 1 or more Channels",
             "desc": "Select the Channel(s) you want to bypass below"
           },
           "bproleid": {
             "name": "Whitelisted Roles",
             "recommended": "This is a Switch.\nIf the entered Role is already bypassed it will be removed.",
+            "answers": "Roles",
             "select": "Select 1 or more Roles",
             "desc": "Select the Role(s) you want to bypass below"
           },
@@ -2303,6 +2361,7 @@
           "postchannel": {
             "name": "TB post Channel",
             "recommended": "When the Join Threshold is breached, I will post a Message in this Channel",
+            "answers": "Channels",
             "select": "Select a Channel",
             "desc": "Select the Channel you want me to use below"
           },
@@ -2319,6 +2378,7 @@
           "pingroles": {
             "name": "TB Roles to Ping",
             "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.\nWhen the Join Threshold is breached, I will Mention these Roles in a Message",
+            "answers": "Roles",
             "select": "Select 1 or more Roles",
             "desc": "Select the Role(s) you want to add below"
           },
@@ -2375,12 +2435,14 @@
           "removeroles": {
             "name": "Roles to Remove from Striked User",
             "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.",
+            "answers": "Roles",
             "select": "Select 1 or more Roles",
             "desc": "Select the Role(s) you want to add below"
           },
           "addroles": {
             "name": "Roles to Add to Striked User",
             "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.",
+            "answers": "Roles",
             "select": "Select 1 or more Roles",
             "desc": "Select the Role(s) you want to add below"
           },
@@ -2505,6 +2567,7 @@
           "channel": {
             "name": "Channel",
             "recommended": "The Channel this Statistic will be applied to",
+            "answers": "Channels",
             "select": "Select 1 Channel",
             "desc": "Select the Channel you want to use below"
           },
@@ -2917,7 +2980,8 @@
           "newLevel": "the new Level",
           "newXP": "the new XP",
           "oldLevel": "the old Level",
-          "oldXP": "the old XP"
+          "oldXP": "the old XP",
+          "msg": "any Object Children from Discord.js Message Object.\n([Click here to find out what you can access](https://discord.js.org/#/docs/discord.js/stable/class/Message))\nYou can test this by using the `h!stp` Command"
         },
         "edit": {
           "active": {
@@ -3721,15 +3785,12 @@
     },
     "help": {}
   },
-  "replaceOptions": {
-    "msg": [
-      "msg.[children]",
-      "any Object Children from Discord.js Message Object.\n([Click here to find out what you can access](https://discord.js.org/#/docs/discord.js/stable/class/Message))\nYou can test this by using the `h!stp` Command"
-    ]
-  },
   "leveling": {
-    "author": "{{msg.author.tag}} has leveled up to Level {{newLevel}}",
+    "author": "Welcome {{member.user.tag}} to {{member.guild.name}}",
     "description": "On this Server, Level-Ups are indicated by reactions to your Message\nThe current Reactions are: {{reactions}}"
+  },
+  "welcome": {
+    "author": "Welcome {{member.user.tag}} to {{member.guild.name}} <:AMayakowave:924071188957913108>"
   },
   "errors": {
     "userNotExist": "The Mentioned User does not exist",
