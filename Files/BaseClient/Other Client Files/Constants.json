@@ -1215,6 +1215,24 @@
             "required": false
           }
         },
+        "welcome": {
+          "embed": {
+            "key": "embed",
+            "required": true
+          },
+          "pingroles": {
+            "key": "roles",
+            "required": false
+          },
+          "pingusers": {
+            "key": "users",
+            "required": false
+          },
+          "channelid": {
+            "key": "channel",
+            "required": true
+          }
+        },
         "nitrosettings": {
           "roleid": {
             "key": "role",

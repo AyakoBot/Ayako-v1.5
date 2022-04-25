@@ -49,7 +49,9 @@ module.exports = {
 
     if (typeof channel.send !== 'function') throw new Error('Invalid Channel');
 
-    return channel.send(payload).catch(() => {});
+    return channel.send(payload).catch((e) => {
+      console.log(e);
+    });
   },
   /**
    * Replies to a Message.
@@ -1067,10 +1069,8 @@ module.exports = {
    * @param {object} embed - An existing embed which can be edited
    * @param {number} page - An Page to instantly navigate to upon calling this
    */
-  embedBuilder: (msg, answer, options, embed, page) => {
-    options.push(msg.language.replaceOptions.msg);
-    return msg.client.commands.get('embedbuilder').builder(msg, answer, embed, page, options);
-  },
+  embedBuilder: (msg, answer, options, embed, page) =>
+    msg.client.commands.get('embedbuilder').builder(msg, answer, embed, page, options),
   /**
    * Converts a DB embed and its Dynamic Options to a Discord Embed
    * @constructor
@@ -1084,7 +1084,9 @@ module.exports = {
     const mod = module.exports.stp;
 
     options.forEach((option) => {
-      const embedToUse = embeds[embeds.length - 1];
+      let embedToUse = embeds[embeds.length - 1];
+      if (embedToUse.data) embedToUse = embedToUse.data;
+
       const embed = new Builders.UnsafeEmbedBuilder();
 
       embed.data.color = embedToUse.color;
