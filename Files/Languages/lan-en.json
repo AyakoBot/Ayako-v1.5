@@ -1249,6 +1249,13 @@
         "quack": "{{msg.author}} quacks around"
       }
     },
+    "channelinfo": {
+      "description": "Display a lot of Information about a Channel",
+      "usage": ["channelinfo", "channelinfo (channel)"],
+      "category": "Info",
+      "unknownChannelType": "Unknown Channel Type",
+      "author": "Ayako {{channelType}} Channel Info"
+    },
     "userinfo": {
       "description": "Display a lot of Information about a User",
       "usage": ["whois", "whois (user)"],
@@ -3849,9 +3856,9 @@
     "5": "Announcements Channel",
     "6": "Store Channel",
     "13": "Stage Channel",
-    "10": "News Channels public Thread Channel",
-    "11": "Channels public Thread Channel",
-    "12": "Channels private Thread Channel"
+    "10": "Public Thread Channel",
+    "11": "Public Thread Channel",
+    "12": "Private Thread Channel"
   },
   "featuresName": "Features",
   "none": "None",
