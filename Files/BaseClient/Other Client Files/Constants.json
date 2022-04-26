@@ -397,6 +397,13 @@
         "image": "",
         "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
       }
+    },
+    "softwarnAdd": {
+      "color": 16711680,
+      "author": {
+        "image": "",
+        "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
+      }
     }
   },
   "customembeds": {

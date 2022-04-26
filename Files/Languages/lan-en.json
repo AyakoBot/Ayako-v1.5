@@ -1085,6 +1085,19 @@
       "loading": "Warning User...",
       "selfPunish": "You can't Warn yourself",
       "mePunish": "I won't Warn myself"
+    },
+    "softwarnAdd": {
+      "dm": {
+        "author": "You have been Soft-Warned on the Server {{guild.name}}"
+      },
+      "footer": "Executor ID {{user.id}}\nTarget ID {{args.target.id}}",
+      "author": "{{args.target.tag}} was Soft-Warned",
+      "description": "Target {{args.target}} / `{{args.target.tag}}` / `{{args.target.id}}`\nwas Soft-Warned by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
+      "exeNoPerms": "You can't Soft-Warn this Member",
+      "success": "User {{target}} was Soft-Warned",
+      "loading": "Soft-Warning User...",
+      "selfPunish": "You can't Soft-Warn yourself",
+      "mePunish": "I won't Soft-Warn myself"
     }
   },
   "antiraid": {
@@ -1728,6 +1741,12 @@
     "warn": {
       "description": "Warns a User in the Server",
       "usage": ["warn [User ID or Mention] (reason)"],
+      "category": "Moderation",
+      "reason": "No Reason given"
+    },
+    "softwarn": {
+      "description": "Soft-Warns a User in the Server",
+      "usage": ["softwarnwarn [User ID or Mention] (reason)"],
       "category": "Moderation",
       "reason": "No Reason given"
     },
