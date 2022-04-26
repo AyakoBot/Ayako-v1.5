@@ -12,7 +12,7 @@ module.exports = {
   async execute(msg) {
     const pNr = parseInt(msg.args[0], 32);
 
-    const proceed = checkWarn(msg, pNr);
+    const proceed = await checkWarn(msg, pNr);
     if (!proceed) return;
 
     const p = await getWarn(msg, pNr);
@@ -33,7 +33,6 @@ const getWarn = async (msg, pNr) => {
       msg.client.ch.query(
         `SELECT * FROM punish_${table} WHERE guildid = $1 AND uniquetimestamp = $2;`,
         [msg.guild.id, String(pNr)],
-        true,
       ),
     ),
   );
@@ -55,8 +54,8 @@ const getWarn = async (msg, pNr) => {
   return p;
 };
 
-const checkWarn = async (msg, pNr) => {
-  if (String(pNr).toLowerCase() === msg.language.all) {
+const checkWarn = async (msg) => {
+  if (msg.args[0].toLowerCase() === msg.language.all) {
     const user = await msg.client.users.fetch(msg.args[0].replace(/\D+/g, '')).catch(() => {});
     if (!user) {
       msg.client.ch.error(msg, msg.language.errors.userNotFound);
