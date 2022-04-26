@@ -45,15 +45,8 @@ module.exports = {
       }
     }
   },
-  startProcess: async (cmd, answer, logchannel, { lan, language }) => {
+  startProcess: async (cmd, answer, logchannel, { lan, language }, alreadyStarted) => {
     if (cmd.m) await cmd.m.removeAttachments();
-    else {
-      cmd.client.ch.reply(cmd, {
-        content: lan.checkDMs,
-        ephemeral: true,
-      });
-    }
-
     if (cmd.r.logchannel) logchannel = cmd.guild.channels.cache.get(cmd.r.logchannel);
     if (logchannel) {
       const log = new Builders.UnsafeEmbedBuilder()
@@ -110,8 +103,9 @@ module.exports = {
         files: [file],
       });
     }
+
     if (!cmd.m || !cmd.m.id) {
-      return cmd.client.ch.reply(cmd, cmd.client.channels.cache.get(r.startchannel), {
+      return cmd.client.ch.reply(cmd, {
         content: cmd.client.ch.stp(lan.openDMs, {
           user: cmd.user,
           prefix: cmd.client.constants.standard.prefix,
@@ -119,6 +113,14 @@ module.exports = {
         ephemeral: true,
       });
     }
+
+    if (!alreadyStarted) {
+      cmd.client.ch.reply(cmd, {
+        content: lan.checkDMs,
+        ephemeral: true,
+      });
+    }
+
     const buttonsCollector = cmd.m.createMessageComponentCollector({ time: 120000 });
     const messageCollector = cmd.DM.createMessageCollector({ time: 120000 });
     buttonsCollector.on('collect', (clickButton) => {
@@ -128,7 +130,7 @@ module.exports = {
 
         cmd.client.verificationCodes.delete(`${clickButton.channel.id}-${cmd.guild.id}`);
 
-        return module.exports.startProcess(cmd, clickButton, logchannel, { lan, language });
+        return module.exports.startProcess(cmd, clickButton, logchannel, { lan, language }, true);
       }
       return null;
     });
@@ -170,7 +172,7 @@ module.exports = {
         ms?.delete().catch(() => {});
       });
       cmd.client.verificationCodes.delete(`${message.channel.id}-${cmd.guild.id}`);
-      module.exports.startProcess(cmd, null, logchannel, { lan, language });
+      module.exports.startProcess(cmd, null, logchannel, { lan, language }, true);
     });
 
     buttonsCollector.on('end', async (collected, reason) => {
