@@ -2,8 +2,6 @@ const Builders = require('@discordjs/builders');
 
 module.exports = {
   execute: async (oldMember, newMember) => {
-    await checkInserts(oldMember, newMember);
-
     if (oldMember.premiumSinceTimestamp && newMember.premiumSinceTimestamp) {
       return;
     }
@@ -32,36 +30,6 @@ const stoppedBoost = (member) => {
     `UPDATE nitrousers SET boostend = $1 WHERE userid = $2 AND guildid = $3 AND boostend IS NULL AND booststart = $4;`,
     [Date.now(), member.user.id, member.guild.id, member.premiumSinceTimestamp],
   );
-};
-
-const checkInserts = async (oM, nM) => {
-  const timestamp = oM.premiumSinceTimestamp || nM.premiumSinceTimestamp;
-
-  const res = await oM.client.ch.query(
-    `SELECT * FROM nitrousers WHERE userid = $1 AND guildid = $2;`,
-    [nM.user.id, nM.guild.id],
-  );
-
-  if (res && res.rowCount) {
-    const [row] = res.rows;
-
-    if (!row.booststarts) row.booststarts = [];
-
-    if (!row.booststarts.includes(timestamp)) {
-      row.booststarts.push(timestamp);
-    }
-
-    if (!timestamp && row.booststarts.length !== row.boostends?.length) {
-      if (row.boostends?.length) {
-        row.boostends.push(Date.now());
-      } else row.boostends = [Date.now()];
-    }
-
-    await oM.client.ch.query(
-      `UPDATE nitrousers SET booststarts = $1, boostends = $2 WHERE userid = $3 AND guildid = $4;`,
-      [row.booststarts, row.boostends, nM.user.id, nM.guild.id],
-    );
-  }
 };
 
 const logEnd = async (member) => {
