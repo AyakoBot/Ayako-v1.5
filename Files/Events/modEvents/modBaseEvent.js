@@ -6,8 +6,8 @@ require('moment-duration-format');
 module.exports = async (args, type) => {
   const { executor, target, reason, msg, guild } = args;
   const client = args.client || args.executor.client;
-  const mExistedPreviously = !!msg.m;
-  const language = msg.language || (await client.ch.languageSelector(args.guild));
+  const mExistedPreviously = !!msg?.m;
+  const language = msg?.language || (await client.ch.languageSelector(args.guild));
   const lan = language.mod[type];
   const con = args.executor.client.constants.mod[type];
 
