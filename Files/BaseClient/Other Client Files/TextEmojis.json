@@ -31,8 +31,8 @@
     "Boost24": "<:24Months:945984202820702238>"
   },
   "channelTypes": {
-    "2": "<:Voice:946108239072878682>",
     "0": "<:Text:946108242155667526>",
+    "2": "<:Voice:946108239072878682>",
     "4": "<:Category:946108238817030174>",
     "5": "<:News:946108238737338388>",
     "10": "<:NewsThread:946325567513440367>",
@@ -160,5 +160,8 @@
   "mutedCross": "<:MutedCross:966689832795521054>",
   "mutedError": "<:MutedError:966689832778752050>",
   "mutedTick": "<:MutedTick:966689832472559637>",
-  "mutedUpdated": "<:MutedUpdated:966689832875229194>"
+  "mutedUpdated": "<:MutedUpdated:966689832875229194>",
+  "invis": "<:invis:644684654741422080>",
+  "underCategory": "<:UnderCategory:968487821704822804>",
+  "lastUnderCategory": "<:LastUnderCategory:968488315659632690>"
 }
