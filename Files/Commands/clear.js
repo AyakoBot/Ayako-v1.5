@@ -92,7 +92,7 @@ module.exports = {
           const next100Msgs = await normalFetch();
 
           messages.push(
-            ...(next100Msgs.filter((m) => m.author.id === filterBy.id) && m.id !== msg.id),
+            ...next100Msgs.filter((m) => m.author.id === filterBy.id && m.id !== msg.id),
           );
           break;
         }
