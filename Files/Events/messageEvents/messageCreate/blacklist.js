@@ -1,4 +1,3 @@
-const regex = /\/[^ w]+\//g;
 const Builders = require('@discordjs/builders');
 
 const jobs = require('node-schedule');
@@ -6,35 +5,39 @@ const jobs = require('node-schedule');
 module.exports = {
   async execute(msg) {
     if (!msg.channel) return;
-    if (!msg.channel.type || msg.channel.type === 1) return;
+    if (typeof msg.channel.type !== 'number' || msg.channel.type === 1) return;
     if (!msg.author || msg.author.bot) return;
     if (!msg.member) return;
     if (!msg.member.manageable) return;
 
-    const result = await msg.client.ch.query(
+    const res = await msg.client.ch.query(
       'SELECT * FROM blacklists WHERE guildid = $1 AND active = true;',
       [msg.guild.id],
     );
 
-    if (!result || !result.rowCount) return;
-    if (result.rows[0].bpchannelid?.includes(msg.channel.id)) return;
-    if (result.rows[0].bpuserid?.includes(msg.author.id)) return;
-    if (msg.member.roles.cache.some((r) => result.rows[0].bproleid?.includes(r.id))) return;
-    if (!result.rows[0].words) return;
+    if (!res || !res.rowCount) return;
 
-    const args = msg.content.split(/ +/);
+    const row = res.rows[0];
+
+    if (row.bpchannelid?.includes(msg.channel.id)) return;
+    if (row.bpuserid?.includes(msg.author.id)) return;
+    if (msg.member.roles.cache.some((r) => row.bproleid?.includes(r.id))) return;
+    if (!row.words) return;
+
+    const blwords = row.words;
     const words = [];
 
-    const blwords = result.rows[0].words;
-    for (let i = 0; i < args.length; i += 1) {
-      const argr = `${args[i]}`.replace(regex, '');
+    const included = blwords
+      .map((w) => {
+        if (msg.content.toLowerCase().includes(w.toLowerCase())) {
+          words.push(w);
+          return true;
+        }
+        return false;
+      })
+      .filter((s) => !!s);
 
-      if (blwords.includes(argr.toLowerCase())) {
-        if (`${blwords[i]}` !== '') words.push(argr.toLowerCase());
-      }
-    }
-
-    if (!words.length) return;
+    if (!included.length) return;
 
     await msg.delete().catch(() => {});
 
@@ -55,11 +58,7 @@ module.exports = {
 
     const amount = await getAmount(msg);
 
-    if (
-      result.rows[0].warntof === true &&
-      amount === +result.rows[0].warnafter &&
-      amount !== +result.rows[0].muteafter
-    ) {
+    if (row.warntof === true && amount === +row.warnafter && amount !== +row.muteafter) {
       msg.client.emit(
         'modBaseEvent',
         {
@@ -74,11 +73,7 @@ module.exports = {
       return;
     }
 
-    if (
-      result.rows[0].mutetof === true &&
-      amount % +result.rows[0].muteafter === 0 &&
-      amount !== +result.rows[0].kickafter
-    ) {
+    if (row.mutetof === true && amount % +row.muteafter === 0 && amount !== +row.kickafter) {
       msg.client.emit(
         'modBaseEvent',
         {
@@ -94,11 +89,7 @@ module.exports = {
       return;
     }
 
-    if (
-      result.rows[0].kicktof === true &&
-      amount % +result.rows[0].kickafter === 0 &&
-      amount !== +result.rows[0].banafter
-    ) {
+    if (row.kicktof === true && amount % +row.kickafter === 0 && amount !== +row.banafter) {
       msg.client.emit(
         'modBaseEvent',
         {
@@ -113,7 +104,7 @@ module.exports = {
       return;
     }
 
-    if (result.rows[0].bantof === true && amount >= result.rows[0].banafter) {
+    if (row.bantof === true && amount >= +row.banafter) {
       msg.client.emit(
         'modBaseEvent',
         {
@@ -157,8 +148,8 @@ const getAmount = async (msg) => {
 const sendDm = async (msg, words, language) => {
   const embed = new Builders.UnsafeEmbedBuilder()
     .setAuthor({
-      name: msg.client.constants.standard.image,
-      iconURL: language.commands.toxicityCheck.author,
+      name: language.commands.toxicityCheck.author,
+      iconURL: msg.client.objectEmotes.warning.link,
       url: msg.client.constants.standard.invite,
     })
     .setDescription(
