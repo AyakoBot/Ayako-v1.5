@@ -198,6 +198,9 @@ const run = async ({
     return;
   }
 
+  let either;
+  let or;
+
   if (attributes && !whitelist.includes(linkObject.baseURLhostname)) {
     fs.appendFile(
       '/root/Bots/Website/CDN/antivirus/whitelisted.txt',
@@ -219,6 +222,7 @@ const run = async ({
     });
 
     parentPort.postMessage({ msgData, lan, linkObject, check, type: 'whitelisted' });
+    either = true;
   }
 
   logs.push(12);
@@ -250,7 +254,10 @@ const run = async ({
     logs.push(13);
 
     parentPort.postMessage({ msgData, lan, linkObject, check });
+    or = true;
   }
+
+  if (!either && !or) console.log(attributes);
 };
 
 const checkIfWebsiteExists = async (linkObject) => {
