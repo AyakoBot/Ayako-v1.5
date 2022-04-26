@@ -22,13 +22,11 @@ module.exports = {
         require('./WebsiteFetcher')();
       }
       if (new Date().getHours() === 0) {
-        client.guilds.cache.forEach((g) => {
-          require('./nitro')(g);
-        });
         client.ch.query('DELETE FROM toxicitycheck;');
       }
     });
 
+    require('./nitro')();
     require('./reminder')();
     require('./disboard')();
     require('./giveaway')();

@@ -213,8 +213,8 @@
       "nameStart": "Member Started Boosting",
       "nameEnd": "Member Stopped Boosting"
     },
-    "descriptionStart": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas started Boosting the Server\nTheir Nitro Boost Count will continue at {{days}} Days",
-    "descriptionEnd": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas stopped Boosting the Server\nTheir Nitro Boost Count will stay at {{days}} Days"
+    "descriptionStart": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas started Boosting the Server",
+    "descriptionEnd": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas stopped Boosting the Server"
   },
   "guildUpdate": {
     "author": {

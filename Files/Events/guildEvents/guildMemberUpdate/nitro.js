@@ -9,38 +9,29 @@ module.exports = {
     }
 
     if (newMember.premiumSinceTimestamp && !oldMember.premiumSinceTimestamp) {
-      await newMember.client.ch.query(
-        `INSERT INTO nitrousers (guildid, userid, stillboosting, booststarts) VALUES ($1, $2, true, $3)
-        ON CONFLICT (guildid, userid) DO
-        UPDATE SET booststarts = array_append(nitrousers.booststarts, $4), stillboosting = false;`,
-        [
-          newMember.guild.id,
-          newMember.user.id,
-          [newMember.premiumSinceTimestamp],
-          newMember.premiumSinceTimestamp,
-        ],
-      );
-
-      logStart(oldMember, await getDays(newMember));
+      startedBoost(newMember);
+      logStart(oldMember);
     }
 
     if (oldMember.premiumSinceTimestamp && !newMember.premiumSinceTimestamp) {
-      await newMember.client.ch.query(
-        `INSERT INTO nitrousers (guildid, userid, stillboosting, boostends, days) VALUES ($1, $2, false, $3, $4)
-        ON CONFLICT (guildid, userid) DO
-        UPDATE SET boostends = array_append(nitrousers.boostends, $5), days = nitrousers.days + $4;`,
-        [
-          newMember.guild.id,
-          newMember.user.id,
-          [Date.now()],
-          dateDiffInDays(new Date(oldMember.premiumSinceTimestamp, new Date())),
-          Date.now(),
-        ],
-      );
-
-      logEnd(newMember, await getDays(newMember));
+      stoppedBoost(oldMember);
+      logEnd(newMember);
     }
   },
+};
+
+const startedBoost = (member) => {
+  member.client.ch.query(
+    `INSERT INTO nitrousers (guildid, userid, booststart) VALUES ($1, $2, $3);`,
+    [member.guild.id, member.user.id, member.premiumSinceTimestamp],
+  );
+};
+
+const stoppedBoost = (member) => {
+  member.client.ch.query(
+    `UPDATE nitrousers SET boostend = $1 WHERE userid = $2 AND guildid = $3 AND boostend IS NULL AND booststart = $4;`,
+    [Date.now(), member.user.id, member.guild.id, member.premiumSinceTimestamp],
+  );
 };
 
 const checkInserts = async (oM, nM) => {
@@ -73,14 +64,7 @@ const checkInserts = async (oM, nM) => {
   }
 };
 
-const dateDiffInDays = (a, b) => {
-  const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
-  const utc2 = b ? Date.UTC(b.getFullYear(), b.getMonth(), b.getDate()) : Date.UTC();
-
-  return Math.floor((utc2 - utc1) / 86400000);
-};
-
-const logEnd = async (member, days) => {
+const logEnd = async (member) => {
   const row = await getSettings(member);
   const language = await member.client.ch.languageSelector(member.guild);
 
@@ -93,7 +77,6 @@ const logEnd = async (member, days) => {
         member.client.ch
           .stp(language.guildMemberUpdateNitro.descriptionEnd, {
             user: member.user,
-            days: Number(days),
           })
           .setColor(member.client.constants.guildMemberUpdate.color),
       );
@@ -106,7 +89,7 @@ const logEnd = async (member, days) => {
   }
 };
 
-const logStart = async (member, days) => {
+const logStart = async (member) => {
   const row = await getSettings(member);
   const language = await member.client.ch.languageSelector(member.guild);
 
@@ -119,7 +102,6 @@ const logStart = async (member, days) => {
         member.client.ch
           .stp(language.guildMemberUpdateNitro.descriptionStart, {
             user: member.user,
-            days: Number(days),
           })
           .setColor(member.client.constants.guildMemberUpdate.color),
       );
@@ -138,14 +120,5 @@ const getSettings = async (member) => {
     [member.guild.id],
   );
   if (res && res.rowCount) return res.rows[0];
-  return null;
-};
-
-const getDays = async (member) => {
-  const res = await member.client.ch.query(
-    `SELECT * FROM nitrousers WHERE guildid = $1 AND userid = $2;`,
-    [member.guild.id, member.user.id],
-  );
-  if (res && res.rowCount) return res.rows[0].days;
   return null;
 };
