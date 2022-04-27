@@ -1572,15 +1572,10 @@
           "vals": [["{{msg.guild.id}}", true, true]]
         },
         "nitroroles": {
-          "cols": ["guildid, uniquetimestamp, days, roles"],
-          "vals": [
-            [
-              "{{msg.guild.id}}",
-              "{{values.uniquetimestamp}}",
-              "{{values.days}}",
-              "{{values.roles}}"
-            ]
-          ]
+          "cols": ["guildid, uniquetimestamp"],
+          "vals": [["{{msg.guild.id}}", "{{values.uniquetimestamp}}"]],
+          "add": [],
+          "ident": ""
         },
         "logs": {
           "cols": ["guildid"],

@@ -17,7 +17,9 @@ module.exports = {
       statcord.autopost();
     }
 
-    jobs.scheduleJob('*/1 */1 * * *', () => {
+    jobs.scheduleJob('*/1 */1 */1 * *', () => {
+      require('./nitroCycle')();
+
       if (client.user.id === client.mainID) {
         require('./WebsiteFetcher')();
       }

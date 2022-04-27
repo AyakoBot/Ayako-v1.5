@@ -47,6 +47,8 @@ module.exports = {
       });
     }
 
+    if (!payload) throw new Error('No Payload!');
+
     if (typeof channel.send !== 'function') throw new Error('Invalid Channel');
 
     return channel.send(payload).catch((e) => {
@@ -64,7 +66,7 @@ module.exports = {
    * @param {object|string} rawPayload - The Payload or String sent
    */
   reply: async (msg, rawPayload, timeout) => {
-    const payload =
+    let payload =
       typeof rawPayload === 'string' ? { failIfNotExists: false, content: rawPayload } : rawPayload;
 
     if (typeof msg.reply !== 'function') {
@@ -73,12 +75,14 @@ module.exports = {
     }
 
     if (timeout) {
-      rawPayload = await new Promise((resolve) => {
-        combineMessages(msg, rawPayload, resolve, timeout);
+      payload = await new Promise((resolve) => {
+        combineMessages(msg, payload, resolve, timeout);
       });
     }
 
-    const m = await msg.reply(rawPayload).catch((e) => {
+    if (!payload) throw new Error('No Payload!');
+
+    const m = await msg.reply(payload).catch((e) => {
       if (String(e).includes('Missing Permissions')) {
         module.exports.send(
           msg.author,
