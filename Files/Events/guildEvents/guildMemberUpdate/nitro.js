@@ -67,12 +67,11 @@ const logStart = async (member) => {
         name: language.guildMemberUpdateNitro.author.nameStart,
       })
       .setDescription(
-        member.client.ch
-          .stp(language.guildMemberUpdateNitro.descriptionStart, {
-            user: member.user,
-          })
-          .setColor(member.client.constants.guildMemberUpdate.color),
-      );
+        member.client.ch.stp(language.guildMemberUpdateNitro.descriptionStart, {
+          user: member.user,
+        }),
+      )
+      .setColor(member.client.constants.guildMemberUpdate.color);
 
     member.client.ch.send(
       row.logchannels.map((c) => member.client.channels.cache.get(c)),

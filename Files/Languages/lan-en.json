@@ -3007,6 +3007,16 @@
             "answers": "Roles",
             "recommended": "The Roles to apply"
           }
+        },
+        "otherEdits": {
+          "add": {
+            "name": "Add a Nitro Role",
+            "process": {}
+          },
+          "remove": {
+            "name": "Remove a Nitro Role",
+            "process": {}
+          }
         }
       },
       "sticky": {
@@ -3376,15 +3386,6 @@
             }
           }
         }
-      },
-      "nitro": {
-        "type": "Nitro Base",
-        "role": "Booster Role",
-        "channel": "Boost Log-Channel",
-        "allBoosters": "All Boosters",
-        "activeBoosters": "Active Boosters",
-        "inactiveBoosters": "Inactive Boosters",
-        "info": "The stats arent corrent? Wait until {{time}}"
       },
       "selfroles": {
         "type": "Self-Roles",
@@ -4001,6 +4002,10 @@
     "roleVoteBlacklisted": "One of your Roles is Blacklisted from Voting on Suggestions",
     "userVoteBlacklisted": "You are Blacklisted from Voting on Suggestions",
     "anon": "The Votes on this Suggestion are Anonymous"
+  },
+  "nitro": {
+    "given": "{{user}} has been given\n{{roles}}\nfor boosting {{days}}",
+    "taken": "{{user}} has been taken\n{{roles}}\nfrom"
   },
   "featuresName": "Features",
   "none": "None",
