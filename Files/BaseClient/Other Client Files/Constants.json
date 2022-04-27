@@ -304,7 +304,8 @@
     "discordUrl": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}",
     "discordUrlDB": "https://discord.com/channels/{{guildid}}/{{channelid}}/{{msgid}}",
     "permissionsViewer": "https://discordapi.com/permissions.html#{{permission}}",
-    "ephemeralColor": 3092790
+    "ephemeralColor": 3092790,
+    "suggestionsDataChannel": "968628817688133662"
   },
   "error": 16711680,
   "mod": {
@@ -993,16 +994,28 @@
             "key": "channel",
             "required": true
           },
-          "bluserid": {
+          "novoteusers": {
             "key": "users",
             "required": false
           },
-          "blroleid": {
+          "novoteroles": {
+            "key": "roles",
+            "required": false
+          },
+          "nosendusers": {
+            "key": "users",
+            "required": false
+          },
+          "nosendroles": {
             "key": "roles",
             "required": false
           },
           "approverroleid": {
             "key": "roles",
+            "required": true
+          },
+          "anon": {
+            "key": "boolean",
             "required": true
           }
         },
@@ -1541,6 +1554,10 @@
         "overview": {
           "cols": ["guildid, interactionsmode, lan, errorchannel"],
           "vals": [["{{msg.guild.id}}", true, "en", "{{msg.channel.id}}"]]
+        },
+        "suggestions": {
+          "cols": ["guildid, active, anon"],
+          "vals": [["{{msg.guild.id}}", false, false]]
         },
         "forcecooldowns": {
           "cols": null,

@@ -13,16 +13,15 @@ const otherInteractionHandler = async (interaction) => {
   const { args, nonSlashCommand } = getInteraction(interaction);
   if (!nonSlashCommand) return;
 
-  let language;
   if (nonSlashCommand.needsLang) {
-    language = await interaction.client.ch.languageSelector(interaction.guild);
+    interaction.language = await interaction.client.ch.languageSelector(interaction.guild);
   }
 
   if (args && args.length) args.shift();
   interaction.args = args;
 
   try {
-    nonSlashCommand.execute(interaction, language);
+    nonSlashCommand.execute(interaction);
   } catch (e) {
     error(interaction, e);
   }
