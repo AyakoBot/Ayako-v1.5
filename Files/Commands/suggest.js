@@ -33,8 +33,6 @@ module.exports = {
     const text = msg.content.split(/ /).slice(1).join(' ');
     const attachmentUrls = await getAttachments(msg);
 
-    msg.delete().catch(() => {});
-
     const embed = new Builders.UnsafeEmbedBuilder()
       .setAuthor({
         name: `${msg.lan.author} | ${msg.author.tag}`,
@@ -59,6 +57,11 @@ module.exports = {
 
     const buttons = getButtons(msg, settings);
 
+    const isSure = await areYouSure(msg, m, embed);
+    if (!isSure) return;
+
+    msg.delete().catch(() => {});
+
     const reply = await msg.client.ch.send(channel, { embeds: [embed], components: buttons });
     if (!reply) return;
 
@@ -73,6 +76,7 @@ module.exports = {
           .setDescription(msg.lan.sentSuccess)
           .setColor(await msg.client.ch.colorSelector(msg.guild.me)),
       ],
+      components: [],
     });
   },
 };
@@ -153,14 +157,58 @@ const getButtons = (msg, settings) =>
     ],
     [
       new Builders.UnsafeButtonBuilder()
-        .setCustomId('suggestion_edit')
+        .setCustomId('suggestion_delete')
         .setStyle(Discord.ButtonStyle.Danger)
         .setLabel('\u200b')
         .setEmoji(msg.client.objectEmotes.trash),
       new Builders.UnsafeButtonBuilder()
-        .setCustomId('suggestion_delete')
+        .setCustomId('suggestion_edit')
         .setStyle(Discord.ButtonStyle.Primary)
         .setLabel('\u200b')
         .setEmoji(msg.client.objectEmotes.edit),
     ],
   ]);
+
+const areYouSure = async (msg, m, embed) => {
+  const buttons = msg.client.ch.buttonRower([
+    [
+      new Builders.UnsafeButtonBuilder()
+        .setLabel(msg.language.Yes)
+        .setCustomId('yes')
+        .setStyle(Discord.ButtonStyle.Primary),
+      new Builders.UnsafeButtonBuilder()
+        .setLabel(msg.language.No)
+        .setCustomId('no')
+        .setStyle(Discord.ButtonStyle.Secondary),
+    ],
+  ]);
+
+  await m.edit({ content: msg.lan.sure, embeds: [embed], components: buttons }).catch(() => {});
+  const buttonsCollector = m.createMessageComponentCollector({ time: 60000 });
+
+  return new Promise((resolve) => {
+    buttonsCollector.on('collect', async (i) => {
+      if (i.user.id !== msg.author.id) {
+        msg.client.ch.notYours(i);
+        return;
+      }
+
+      buttonsCollector.stop();
+
+      await i.deferUpdate().catch(() => {});
+
+      if (i.customId === 'yes') resolve(true);
+      else {
+        m.delete().catch(() => {});
+        resolve(false);
+      }
+    });
+
+    buttonsCollector.on('end', (c, reason) => {
+      if (reason === 'time') {
+        msg.client.ch.collectorEnd(msg, m);
+        resolve(false);
+      }
+    });
+  });
+};

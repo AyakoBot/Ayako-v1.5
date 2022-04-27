@@ -53,7 +53,7 @@ module.exports = {
       console.log(
         e,
         payload.content,
-        payload.embeds.map((em) => em.data),
+        payload.embeds?.map((em) => em.data),
       );
     });
   },
@@ -102,7 +102,7 @@ module.exports = {
         console.log(
           e,
           payload.content,
-          payload.embeds.map((em) => em.data),
+          payload.embeds?.map((em) => em.data),
         );
       }
       return null;
