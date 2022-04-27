@@ -1317,7 +1317,8 @@
       "votes": "Votes",
       "author": "Ayako Suggestions",
       "viewVotes": "View Votes",
-      "sentSuccess": "Suggestion Sent Successfully!\nTo Edit or Delete your Suggestion use the Buttons on your Suggestion Message"
+      "sentSuccess": "Suggestion Sent Successfully!\nTo Edit or Delete your Suggestion use the Buttons on your Suggestion Message",
+      "sure": "Are you sure you want to Submit this Suggestion?"
     },
     "resetlevels": {
       "description": "Reset the XP of one or all Users",
@@ -3972,7 +3973,31 @@
       "added": "Down-Vote Added!",
       "removed": "Down-Vote Removed!"
     },
-    "votes": "Votes"
+    "votes": "Votes",
+    "noUpvotes": "There are no Up-Votes yet",
+    "noDownvotes": "There are no Down-Votes yet",
+    "upvotes": "Up-Votes",
+    "downvotes": "Down-Votes",
+    "systemDisabled": "The Suggestion-System is currently Disabled",
+    "noApproverRole": "You are not Permitted to Approve/Deny Suggestions",
+    "approve": "Approve",
+    "deny": "Deny",
+    "againstApproverVote": "Are you sure you want to {{type}} this Suggestion against the majority of Votes?",
+    "approverVote": "Are you sure you want to {{type}} this Suggestion?",
+    "approved": "This Suggestion was Approved",
+    "denied": "This Suggestion was Denied",
+    "reasonInput": "Enter the Reason for your Decision",
+    "tldrInput": "Enter a TL;DR for your Decision",
+    "optional": "(optional)",
+    "tldr": "TL;DR",
+    "modalTitle": "Add Reasons for your Decision",
+    "cantDeleteSuggestion": "You can't Delete Suggestions of other Users",
+    "tooSlow": "You were too slow! Someone else already Approved/Denied this Suggestion",
+    "deleteSure": "Are you sure you want to Delete your Suggestion?",
+    "deleted": "Suggestion was Deleted",
+    "cantEditSuggestion": "You can't Edit Suggestions of other Users",
+    "editTitle": "Edit your Suggestion",
+    "editLabel": "New Suggestion Content"
   },
   "featuresName": "Features",
   "none": "None",
