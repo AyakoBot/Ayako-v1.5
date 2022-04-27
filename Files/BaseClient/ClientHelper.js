@@ -50,7 +50,11 @@ module.exports = {
     if (typeof channel.send !== 'function') throw new Error('Invalid Channel');
 
     return channel.send(payload).catch((e) => {
-      console.log(e);
+      console.log(
+        e,
+        payload.content,
+        payload.embeds.map((em) => em.data),
+      );
     });
   },
   /**
@@ -95,7 +99,11 @@ module.exports = {
           timeout,
         );
       } else {
-        console.log(e);
+        console.log(
+          e,
+          payload.content,
+          payload.embeds.map((em) => em.data),
+        );
       }
       return null;
     });
