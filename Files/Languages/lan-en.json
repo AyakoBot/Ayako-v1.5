@@ -1303,6 +1303,22 @@
       "usage": ["inv [mc or discord] [username]"],
       "category": "Info"
     },
+    "suggest": {
+      "category": "Utility",
+      "description": "Sends a Suggestion out for Public Voting\nNote: You can attach files to your Message",
+      "usage": ["suggest [suggestion]"],
+      "notEnabled": "The Suggestion System is not Enabled on this Server",
+      "roleSendBlacklisted": "One of your Roles is Blacklisted from sending Suggestions",
+      "userSendBlacklisted": "You are Blacklisted from sending Suggestions",
+      "misconfigured": "The Suggestion Settings are Mis-Configured!\nPlease ask a Server Administrator to Fix them.\nError: Missing Suggestions Channel",
+      "attachedFiles": "Files Attached to this Suggestion:",
+      "approve": "Approve",
+      "deny": "Deny",
+      "votes": "Votes",
+      "author": "Ayako Suggestions",
+      "viewVotes": "View Votes",
+      "sentSuccess": "Suggestion Sent Successfully!\nTo Edit or Delete your Suggestion use the Buttons on your Suggestion Message"
+    },
     "resetlevels": {
       "description": "Reset the XP of one or all Users",
       "usage": ["resetlevels all", "resetlevels [user]"],
@@ -3441,8 +3457,10 @@
       "suggestions": {
         "type": "Suggestions",
         "channelid": "Suggestion Channel",
-        "bluserid": "Blacklisted Users",
-        "blroleid": "Blacklisted Roles",
+        "novoteusers": "No Vote Users",
+        "novoteroles": "No Vote Roles",
+        "nosendusers": "No Send Users",
+        "nosendroles": "No Send Roles",
         "approverroleid": "Approver / Denyer Roles",
         "anon": "Anonymous Votes",
         "edit": {
@@ -3451,14 +3469,24 @@
             "answers": "`True` or `False`",
             "recommended": "Recommended: `True`"
           },
-          "blroleid": {
-            "name": "Blacklisted Roles",
-            "answers": "`Mentions or IDs`",
+          "novoteusers": {
+            "name": "No Vote Users",
+            "answers": "`User Mentions or IDs`",
+            "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.\nUsers with one of these Roles won't be able to Vote on Suggestions"
+          },
+          "novoteroles": {
+            "name": "No Vote Roles",
+            "answers": "`Roles`",
+            "recommended": "This is a Switch.\nIf the entered User is already added it will be removed.\nThese Users won't be able to Vote on Suggestions"
+          },
+          "nosendroles": {
+            "name": "No Send Roles",
+            "answers": "`Roles`",
             "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.\nUsers with one of these Roles won't be able to send Suggestions"
           },
-          "bluserid": {
-            "name": "Blacklisted Users",
-            "answers": "`Mentions or IDs`",
+          "nosendusers": {
+            "name": "No Send Users",
+            "answers": "`User Mentions or IDs`",
             "recommended": "This is a Switch.\nIf the entered User is already added it will be removed.\nThese Users won't be able to send Suggestions"
           },
           "channelid": {
@@ -3931,6 +3959,20 @@
     "10": "Public Thread Channel",
     "11": "Public Thread Channel",
     "12": "Private Thread Channel"
+  },
+  "suggestion": {
+    "unkownSuggestion": "Unknown Suggestion",
+    "ended": "You can't Vote on Suggestions that have Ended",
+    "voteSelf": "You can't Vote on your own Suggestions",
+    "upvoted": {
+      "added": "Up-Vote Added!",
+      "removed": "Up-Vote Removed!"
+    },
+    "downvoted": {
+      "added": "Down-Vote Added!",
+      "removed": "Down-Vote Removed!"
+    },
+    "votes": "Votes"
   },
   "featuresName": "Features",
   "none": "None",

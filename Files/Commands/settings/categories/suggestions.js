@@ -4,7 +4,7 @@ const Builders = require('@discordjs/builders');
 module.exports = {
   perm: 32n,
   type: 0,
-  finished: false,
+  finished: true,
   category: ['automation'],
   displayEmbed(msg, r) {
     const embed = new Builders.UnsafeEmbedBuilder().addFields(
@@ -42,16 +42,38 @@ module.exports = {
         inline: false,
       },
       {
-        name: msg.lan.bluserid,
+        name: msg.lan.novoteusers,
         value: `${
-          r.bluserid && r.bluserid.length ? r.bluserid.map((id) => ` <@${id}>`) : msg.language.none
+          r.novoteusers && r.novoteusers.length
+            ? r.novoteusers.map((id) => ` <@${id}>`)
+            : msg.language.none
         }`,
         inline: false,
       },
       {
-        name: msg.lan.blroleid,
+        name: msg.lan.novoteroles,
         value: `${
-          r.blroleid && r.blroleid.length ? r.blroleid.map((id) => ` <@&${id}>`) : msg.language.none
+          r.novoteroles && r.novoteroles.length
+            ? r.novoteroles.map((id) => ` <@&${id}>`)
+            : msg.language.none
+        }`,
+        inline: false,
+      },
+      {
+        name: msg.lan.nosendusers,
+        value: `${
+          r.nosendusers && r.nosendusers.length
+            ? r.nosendusers.map((id) => ` <@${id}>`)
+            : msg.language.none
+        }`,
+        inline: false,
+      },
+      {
+        name: msg.lan.nosendroles,
+        value: `${
+          r.nosendroles && r.nosendroles.length
+            ? r.nosendroles.map((id) => ` <@&${id}>`)
+            : msg.language.none
         }`,
         inline: false,
       },
@@ -67,18 +89,34 @@ module.exports = {
       .setCustomId(msg.lan.edit.channelid.name)
       .setLabel(msg.lan.channelid)
       .setStyle(Discord.ButtonStyle.Primary);
-    const bluserid = new Builders.UnsafeButtonBuilder()
-      .setCustomId(msg.lan.edit.bluserid.name)
-      .setLabel(msg.lan.bluserid)
+    const anon = new Builders.UnsafeButtonBuilder()
+      .setCustomId(msg.lan.edit.anon.name)
+      .setLabel(msg.lan.anon)
+      .setStyle(r.anon ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Secondary);
+    const novoteusers = new Builders.UnsafeButtonBuilder()
+      .setCustomId(msg.lan.edit.novoteusers.name)
+      .setLabel(msg.lan.novoteusers)
       .setStyle(Discord.ButtonStyle.Primary);
-    const blroleid = new Builders.UnsafeButtonBuilder()
-      .setCustomId(msg.lan.edit.blroleid.name)
-      .setLabel(msg.lan.blroleid)
+    const novoteroles = new Builders.UnsafeButtonBuilder()
+      .setCustomId(msg.lan.edit.novoteroles.name)
+      .setLabel(msg.lan.novoteroles)
+      .setStyle(Discord.ButtonStyle.Primary);
+    const nosendusers = new Builders.UnsafeButtonBuilder()
+      .setCustomId(msg.lan.edit.nosendusers.name)
+      .setLabel(msg.lan.nosendusers)
+      .setStyle(Discord.ButtonStyle.Primary);
+    const nosendroles = new Builders.UnsafeButtonBuilder()
+      .setCustomId(msg.lan.edit.nosendroles.name)
+      .setLabel(msg.lan.nosendroles)
       .setStyle(Discord.ButtonStyle.Primary);
     const approverroleid = new Builders.UnsafeButtonBuilder()
       .setCustomId(msg.lan.edit.approverroleid.name)
       .setLabel(msg.lan.approverroleid)
       .setStyle(Discord.ButtonStyle.Primary);
-    return [[active], [channelid, approverroleid], [blroleid, bluserid]];
+    return [
+      [active],
+      [channelid, approverroleid, anon],
+      [novoteusers, novoteroles, nosendusers, nosendroles],
+    ];
   },
 };
