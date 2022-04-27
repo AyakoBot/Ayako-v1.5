@@ -82,7 +82,9 @@ module.exports = {
             inline: true,
           });
         }
-        if (invite.maxUses) embed.addFields(lan.uses, `\u200B${invite.maxUses}`, true);
+        if (invite.maxUses) {
+          embed.addFields({ name: lan.uses, value: `\u200B${invite.maxUses}`, inline: true });
+        }
         if (invite.targetUser) {
           embed.addFields({
             name: lan.targetedUser,
