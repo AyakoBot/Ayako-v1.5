@@ -154,7 +154,7 @@ const log = async (rolesToAdd, rolesToRemove, guild, settings, user, days) => {
     }
 
     const logChannels = settings.logchannels.map((c) => guild.channels.cache.get(c));
-    if (logChannels?.length) {
+    if (logChannels?.length && embeds.length) {
       guild.client.ch.send(logChannels, { embeds }, 5000);
     }
   }
