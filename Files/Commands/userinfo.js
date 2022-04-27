@@ -154,13 +154,13 @@ module.exports = {
             name: msg.lan.timeout,
             value: `${
               member.communicationDisabledUntil && member.isCommunicationDisabled()
-                ? `${msg.client.textEmotes.tickBG} ${msg.language.Yes}\n${
+                ? `${msg.client.textEmotes.tickWithBackground} ${msg.language.Yes}\n${
                     msg.lan.communicationDisabledUntil
                   } <t:${String(member.communicationDisabledUntilTimestamp).slice(
                     0,
                     -3,
                   )}:F> (<t:${String(member.communicationDisabledUntilTimestamp).slice(0, -3)}:R>)`
-                : `${msg.client.textEmotes.crossBG} ${msg.language.No}`
+                : `${msg.client.textEmotes.crossWithBackground} ${msg.language.No}`
             }`,
             inline: false,
           },
@@ -174,12 +174,12 @@ module.exports = {
             name: `${getBoostEmote(member)} ${msg.lan.boosting}`,
             value: `${
               member.premiumSinceTimestamp
-                ? `${msg.client.textEmotes.tickBG} ${msg.language.Yes}\n${
+                ? `${msg.client.textEmotes.tickWithBackground} ${msg.language.Yes}\n${
                     msg.lan.boostingSince
                   } <t:${String(member.premiumSinceTimestamp).slice(0, -3)}:F> (<t:${String(
                     member.premiumSinceTimestamp,
                   ).slice(0, -3)}:R>)`
-                : `${msg.client.textEmotes.crossBG} ${msg.language.No}`
+                : `${msg.client.textEmotes.crossWithBackground} ${msg.language.No}`
             }`,
           },
         );
