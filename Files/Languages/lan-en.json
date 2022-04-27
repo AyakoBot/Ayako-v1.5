@@ -3997,7 +3997,10 @@
     "deleted": "Suggestion was Deleted",
     "cantEditSuggestion": "You can't Edit Suggestions of other Users",
     "editTitle": "Edit your Suggestion",
-    "editLabel": "New Suggestion Content"
+    "editLabel": "New Suggestion Content",
+    "roleVoteBlacklisted": "One of your Roles is Blacklisted from Voting on Suggestions",
+    "userVoteBlacklisted": "You are Blacklisted from Voting on Suggestions",
+    "anon": "The Votes on this Suggestion are Anonymous"
   },
   "featuresName": "Features",
   "none": "None",

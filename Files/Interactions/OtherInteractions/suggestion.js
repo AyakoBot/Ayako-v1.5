@@ -82,6 +82,18 @@ const handleVote = async (cmd, isUp) => {
     return;
   }
 
+  const settings = await getSettings(cmd);
+  if (!settings) return;
+
+  if (settings.novoteroles?.some((r) => cmd.member.roles.cache.has(r))) {
+    cmd.client.ch.error(cmd, cmd.language.suggestion.roleVoteBlacklisted);
+    return;
+  }
+  if (settings.novoteusers?.includes(cmd.user.id)) {
+    cmd.client.ch.error(cmd, cmd.language.suggestion.userVoteBlacklisted);
+    return;
+  }
+
   const type = isUp ? 'upvoted' : 'downvoted';
   const oppositeType = !isUp ? 'upvoted' : 'downvoted';
 
@@ -128,6 +140,14 @@ const updateVoteCount = (cmd, votes) => {
 const handleViewVotes = async (cmd) => {
   const votes = await getVotes(cmd);
   if (!votes) return;
+
+  const settings = await getSettings(cmd);
+  if (!settings) return;
+
+  if (settings.anon) {
+    cmd.client.ch.error(cmd, cmd.language.suggestion.anon);
+    return;
+  }
 
   const embeds = [
     new Builders.UnsafeEmbedBuilder()
