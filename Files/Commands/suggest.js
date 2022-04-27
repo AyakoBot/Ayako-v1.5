@@ -53,7 +53,7 @@ module.exports = {
 
     embed.addFields({
       name: msg.lan.votes,
-      value: `${msg.client.textEmotes.tickBG}: 0\n${msg.client.textEmotes.crossBG}: 0`,
+      value: `${msg.client.textEmotes.tickWithBackground}: 0\n${msg.client.textEmotes.crossWithBackground}: 0`,
       inline: false,
     });
 
