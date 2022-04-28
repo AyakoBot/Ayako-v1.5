@@ -1368,6 +1368,19 @@
       "diff": "XP Difference",
       "duration": "This will take an average of about\n`{{amount}}` counted Messages\nor\n`{{duration}}`\nsince only 1 Message per Minute is counted"
     },
+    "boosterleaderboard": {
+      "description": "Displays the top 30 Users by Boosting Days",
+      "usage": ["blb"],
+      "category": "Nitro",
+      "disabled": "Nitro Monitoring is disabled on this Server",
+      "author": "Ayako Nitro Monitoring",
+      "yourPosition": "Your Position",
+      "toggle": "Toggle User Type",
+      "noUsers": "There are no Boosters on this Server yet",
+      "allBoosters": "All Boosters",
+      "currentBoosters": "Current Boosters",
+      "inactiveBoosters": "Inactive Boosters"
+    },
     "leaderboard": {
       "description": "Displays the top 30 Users by Levels",
       "usage": ["lvls"],
