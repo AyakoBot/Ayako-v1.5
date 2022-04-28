@@ -628,15 +628,37 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
             lan.inheritCodeDescription,
           );
 
+          const back = new Builders.ButtonBuilder()
+            .setLabel('\u200b')
+            .setEmoji(msg.client.objectEmotes.back)
+            .setStyle(Discord.ButtonStyle.Primary)
+            .setCustomId('back');
+
           await replier(
             { msg, answer: interaction },
-            { embeds: [inheritCodeEmbed], components: [] },
+            { embeds: [inheritCodeEmbed], components: [back] },
             Objects,
           );
 
           const inheritCodeEmbedMessageCollector = msg.channel.createMessageCollector({
             time: 900000,
           });
+          const inheritCodeEmbedButtonsCollector = msg.m.createMessageComponentCollector({
+            time: 60000,
+          });
+
+          inheritCodeEmbedButtonsCollector.on('collect', async (i) => {
+            if (i.user.id !== msg.author.id) {
+              msg.client.ch.notYours(i);
+              return;
+            }
+            if (i.customId === 'back') {
+              inheritCodeEmbedMessageCollector.stop();
+              inheritCodeEmbedButtonsCollector.stop();
+              resolve(await module.exports.builder(msg, i, Objects.embed, 3, Objects.options));
+            }
+          });
+
           inheritCodeEmbedMessageCollector.on('collect', async (inheritCodeEmbedMessage) => {
             if (msg.author.id !== inheritCodeEmbedMessage.author.id) return;
 
@@ -652,6 +674,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
 
               Objects.embed = new Builders.UnsafeEmbedBuilder(code);
               inheritCodeEmbedMessageCollector.stop();
+              inheritCodeEmbedButtonsCollector.stop();
               resolve(
                 await module.exports.builder(msg, answer, Objects.embed, null, Objects.options),
               );
@@ -1216,7 +1239,7 @@ const handleSave = async (msg, answer, Objects) => {
       if (interaction.customId === 'back') {
         messageCollector.stop();
         buttonsCollector.stop();
-        resolve(await module.exports.build({ msg, answer }, Objects, 3));
+        resolve(await module.exports.builder(msg, answer, Objects.embed, 3, Objects.options));
       }
     });
 
@@ -1602,7 +1625,7 @@ const handleSend = async (msg, answer, Objects) => {
 };
 
 const handleOtherMsgRaw = async (msg, answer, Objects) => {
-  const noFound = () => {
+  const noFound = async (resolve) => {
     const embed = new Builders.UnsafeEmbedBuilder()
       .setAuthor({
         name: msg.language.commands.embedbuilder.author,
@@ -1611,7 +1634,36 @@ const handleOtherMsgRaw = async (msg, answer, Objects) => {
       })
       .setDescription(msg.language.commands.embedbuilder.noUrlFound);
 
-    return replier({ msg, answer }, { embeds: [embed], components: [] }, Objects);
+    const back = new Builders.ButtonBuilder()
+      .setLabel('\u200b')
+      .setEmoji(msg.client.objectEmotes.back)
+      .setStyle(Discord.ButtonStyle.Primary)
+      .setCustomId('back');
+
+    await replier({ msg, answer }, { embeds: [embed], components: [back] }, Objects);
+
+    const buttonsCollector = msg.m.createMessageComponentCollector({
+      time: 60000,
+    });
+
+    buttonsCollector.on('collect', async (i) => {
+      if (i.user.id !== msg.author.id) {
+        msg.client.ch.notYours(i);
+        return;
+      }
+      if (i.customId === 'back') {
+        buttonsCollector.stop();
+        resolve(await module.exports.builder(msg, i, Objects.embed, 3, Objects.options));
+      }
+    });
+
+    buttonsCollector.on('end', (c, reason) => {
+      if (reason === 'time') {
+        postCode(Objects, msg, answer);
+
+        resolve();
+      }
+    });
   };
 
   const embed = new Builders.UnsafeEmbedBuilder()
@@ -1666,7 +1718,7 @@ const handleOtherMsgRaw = async (msg, answer, Objects) => {
       message.delete().catch(() => {});
 
       if (!testReg.test(message.content)) {
-        noFound(msg);
+        noFound(resolve);
       }
 
       const args = message.content.replace(/\n/g, ' ').split(/ +/);
@@ -1695,28 +1747,34 @@ const handleOtherMsgRaw = async (msg, answer, Objects) => {
         if (ids[0] === 'https:' || ids[0] === 'http:') ids.shift();
 
         if (Number.isNaN(+ids[0]) && ids[0] === '@me') {
-          return (await msg.client.guilds.cache.channels.fetch(ids[1]).catch((e) => e))?.messages
+          return (await msg.client.channels.fetch(ids[1]).catch((e) => e))?.messages
             ?.fetch(ids[2])
             ?.catch((e) => e);
         }
         return msg.client.channels.cache
           .get(ids[1])
-          .messages?.fetch(ids[2])
+          ?.messages?.fetch(ids[2])
           .catch((e) => e);
       });
 
       const messages = await Promise.all(messagePromises);
 
       const messageEmbedJSONs = [];
-      messages.forEach((m) => {
-        m.embeds.forEach((membed) => {
-          messageEmbedJSONs.push(`${m.url}\n${JSON.stringify(membed, null, 1)}`);
-        });
+      messages.forEach((m, i) => {
+        if (m && m.embeds && m.embeds.length) {
+          m.embeds?.forEach((membed) => {
+            messageEmbedJSONs.push(
+              `${m.url}\n${membed ? JSON.stringify(membed.data, null, 1) : msg.lan.noEmbedFound}`,
+            );
+          });
+        } else {
+          messageEmbedJSONs.push(`${m ? m.url : messageUrls[i]}\n${msg.lan.noEmbedFound}`);
+        }
       });
 
-      const attachment = msg.client.ch.txtFileWriter(messageEmbedJSONs);
+      const files = [msg.client.ch.txtFileWriter(messageEmbedJSONs)];
 
-      await replier({ msg, answer }, { files: [attachment], embeds: [embed] });
+      await replier({ msg, answer }, { files, embeds: [embed] });
     });
   });
 };
