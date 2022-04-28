@@ -189,33 +189,6 @@ const handleApproverVote = async (cmd, isApproved) => {
   const votes = await getVotes(cmd);
   if (!votes) return;
 
-  let question;
-  if (
-    (votes.upvoted.length > votes.downvoted.length && !isApproved) ||
-    (votes.upvoted.length < votes.downvoted.length && isApproved)
-  ) {
-    question = cmd.client.ch.stp(cmd.language.suggestion.againstApproverVote, {
-      type: isApproved ? cmd.language.suggestion.approve : cmd.language.suggestion.deny,
-    });
-  } else {
-    question = cmd.client.ch.stp(cmd.language.suggestion.approverVote, {
-      type: isApproved ? cmd.language.suggestion.approve : cmd.language.suggestion.deny,
-    });
-  }
-
-  const buttons = cmd.client.ch.buttonRower([
-    [
-      new Builders.UnsafeButtonBuilder()
-        .setLabel(cmd.language.Yes)
-        .setCustomId('yes')
-        .setStyle(Discord.ButtonStyle.Primary),
-      new Builders.UnsafeButtonBuilder()
-        .setLabel(cmd.language.No)
-        .setCustomId('no')
-        .setStyle(Discord.ButtonStyle.Secondary),
-    ],
-  ]);
-
   const getReasonModal = (i) =>
     new Builders.UnsafeModalBuilder()
       .setCustomId(`suggestionReason_${i.createdTimestamp}`)
@@ -243,73 +216,56 @@ const handleApproverVote = async (cmd, isApproved) => {
         ),
       );
 
-  const m = await cmd.client.ch.reply(cmd, {
-    components: buttons,
-    content: question,
-    ephemeral: true,
-    fetchReply: true,
-  });
-  const buttonsCollector = m.createMessageComponentCollector({ time: 60000 });
+  const reasonModal = getReasonModal(cmd);
+  await cmd.showModal(reasonModal);
 
-  buttonsCollector.on('collect', async (interaction) => {
-    buttonsCollector.stop();
+  const submit = await cmd
+    .awaitModalSubmit({
+      filter: (modalSubmit) => modalSubmit.customId === `suggestionReason_${cmd.createdTimestamp}`,
+      time: 300000,
+    })
+    .catch(() => {});
 
-    if (interaction.customId === 'yes') {
-      const reasonModal = getReasonModal(interaction);
-      await interaction.showModal(reasonModal);
+  if (!submit) return;
 
-      const submit = await interaction
-        .awaitModalSubmit({
-          filter: (modalSubmit) =>
-            modalSubmit.customId === `suggestionReason_${interaction.createdTimestamp}`,
-          time: 300000,
-        })
-        .catch(() => {});
+  const newSettings = await getSettings(cmd);
+  if (newSettings?.ended) {
+    cmd.client.ch.error(cmd, cmd.language.suggestion.tooSlow);
+    return;
+  }
 
-      if (!submit) return;
+  await cmd.client.ch.query(
+    `UPDATE suggestionvotes SET ended = true WHERE guildid = $1 AND msgid = $2;`,
+    [cmd.guild.id, cmd.message.id],
+  );
 
-      const newSettings = await getSettings(cmd);
-      if (newSettings?.ended) {
-        cmd.client.ch.error(cmd, cmd.language.suggestion.tooSlow);
-        return;
-      }
+  const embed = new Builders.UnsafeEmbedBuilder()
+    .setTitle(isApproved ? cmd.language.suggestion.approved : cmd.language.suggestion.denied)
+    .setColor(
+      isApproved ? cmd.client.constants.colors.success : cmd.client.constants.colors.warning,
+    );
 
-      await cmd.client.ch.query(
-        `UPDATE suggestionvotes SET ended = true WHERE guildid = $1 AND msgid = $2;`,
-        [cmd.guild.id, cmd.message.id],
-      );
+  if (submit.fields.getField('longReason')?.value.length) {
+    embed.setDescription(
+      `**${cmd.language.reason}**:\n${submit.fields.getField('longReason').value}`,
+    );
+  }
 
-      const embed = new Builders.UnsafeEmbedBuilder()
-        .setTitle(isApproved ? cmd.language.suggestion.approved : cmd.language.suggestion.denied)
-        .setColor(
-          isApproved ? cmd.client.constants.colors.success : cmd.client.constants.colors.warning,
-        );
+  if (submit.fields.getField('tldrReason')?.value.length) {
+    embed.addFields({
+      name: cmd.language.suggestion.tldr,
+      value: `${submit.fields.getField('tldrReason').value}`,
+      inline: false,
+    });
+  }
 
-      if (submit.fields.getField('longReason')?.value.length) {
-        embed.setDescription(
-          `**${cmd.language.reason}**:\n${submit.fields.getField('longReason').value}`,
-        );
-      }
+  await cmd.message
+    .edit({ components: [], embeds: [cmd.message.embeds[0], embed] })
+    .catch(() => {});
 
-      if (submit.fields.getField('tldrReason')?.value.length) {
-        embed.addFields({
-          name: cmd.language.suggestion.tldr,
-          value: `${submit.fields.getField('tldrReason').value}`,
-          inline: false,
-        });
-      }
-
-      await cmd.message
-        .edit({ components: [], embeds: [cmd.message.embeds[0], embed] })
-        .catch(() => {});
-
-      await submit.update({
-        content: isApproved ? cmd.language.suggestion.approved : cmd.language.suggestion.denied,
-        components: [],
-      });
-    } else {
-      await interaction.update({ content: cmd.language.aborted, components: [] });
-    }
+  await submit.update({
+    content: isApproved ? cmd.language.suggestion.approved : cmd.language.suggestion.denied,
+    components: [],
   });
 };
 
