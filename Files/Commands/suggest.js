@@ -39,7 +39,7 @@ module.exports = {
         url: msg.client.constants.standard.invite,
       })
       .setDescription(text)
-      .setColor(msg.client.constants.standard.ephemeralColor);
+      .setColor(Math.round(Math.random() * 16777215));
 
     if (attachmentUrls.length) {
       embed.addFields({
