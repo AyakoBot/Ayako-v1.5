@@ -170,7 +170,7 @@ const prepare = async (msg, lan, check, language, res) => {
     jobs.scheduleJob(new Date(Date.now() + 180000), () => {
       if (!exited) {
         AVworker.terminate();
-        timedOut({ msg, lan, check, linkObject, language });
+        // timedOut({ msg, lan, check, linkObject, language });
       }
     });
   });
@@ -550,6 +550,7 @@ const VTfail = ({ msg, lan, check, linkObject, language }, res) => {
   );
 };
 
+/*
 const timedOut = ({ msg, lan, check, linkObject, language }, res) => {
   msg.client.ch.send(msg.client.channels.cache.get('726252103302905907'), {
     content: `${linkObject.href}\n${msg.url}\nTimed Out`,
@@ -577,6 +578,7 @@ const timedOut = ({ msg, lan, check, linkObject, language }, res) => {
     res,
   );
 };
+*/
 
 const linkLog = (msg, lan, color, url, text, row) => {
   if (!row || !row.linklogging || !row.linklogchannels.length) return;
