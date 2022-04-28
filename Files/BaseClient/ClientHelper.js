@@ -38,13 +38,12 @@ module.exports = {
       return channel.map((c) => module.exports.send(c, rawPayload, timeout));
     }
 
-    let payload =
+    const payload =
       typeof rawPayload === 'string' ? { failIfNotExists: false, content: rawPayload } : rawPayload;
 
     if (timeout) {
-      payload = await new Promise((resolve) => {
-        combineMessages({ channel }, payload, resolve, timeout);
-      });
+      combineMessages({ channel }, payload, timeout);
+      return null;
     }
 
     if (!payload) throw new Error('No Payload!');
@@ -55,7 +54,7 @@ module.exports = {
       console.log(
         e,
         payload.content,
-        payload.embeds?.map((em) => em.data),
+        payload.embeds?.map((em) => em?.data),
       );
     });
   },
@@ -66,7 +65,7 @@ module.exports = {
    * @param {object|string} rawPayload - The Payload or String sent
    */
   reply: async (msg, rawPayload, timeout) => {
-    let payload =
+    const payload =
       typeof rawPayload === 'string' ? { failIfNotExists: false, content: rawPayload } : rawPayload;
 
     if (typeof msg.reply !== 'function') {
@@ -75,9 +74,8 @@ module.exports = {
     }
 
     if (timeout) {
-      payload = await new Promise((resolve) => {
-        combineMessages(msg, payload, resolve, timeout);
-      });
+      combineMessages(msg, payload, timeout);
+      return null;
     }
 
     if (!payload) throw new Error('No Payload!');
@@ -1305,90 +1303,109 @@ const getDeleteRes = async (msg) => {
   return [];
 };
 
-const pendingPayloads = new Map();
+const channelQueue = new Map();
+const channelTimeout = new Map();
+const channelCharLimit = new Map();
 
 // msg might not be a real message but "{ channel }" instead
-const combineMessages = (msg, newPayload, resolve, timeout) => {
-  if (!newPayload) resolve(newPayload);
-
-  const combineEmbeds = (existingPayload) => {
-    if (
-      existingPayload.embeds &&
-      existingPayload.embeds.length &&
-      newPayload.embeds &&
-      newPayload.embeds.length
-    ) {
-      if (existingPayload.embeds.length + newPayload.embeds.length > 10) {
-        console.log(pendingPayloads.get(msg.channel.id));
-        resolve(newPayload);
-        return false;
-      }
-
-      existingPayload.embeds.push(...newPayload.embeds);
-    } else if (newPayload.embeds && newPayload.embeds.length) {
-      existingPayload.embeds = newPayload.embeds;
-    }
-    return true;
-  };
-  const combineContents = (existingPayload) => {
-    if (
-      existingPayload.content &&
-      existingPayload.content.length &&
-      newPayload.content &&
-      newPayload.content.length
-    ) {
-      if (existingPayload.content.length + newPayload.content.length > 4000) {
-        console.log(pendingPayloads.get(msg.channel.id));
-        resolve(newPayload);
-        return false;
-      }
-
-      existingPayload.content += `\n\n${newPayload.content}`;
-    } else if (newPayload.content && newPayload.content.length) {
-      existingPayload.content = newPayload.content;
-    }
-    return true;
-  };
-  const combineFiles = (existingPayload) => {
-    if (
-      existingPayload.files &&
-      existingPayload.files.length &&
-      newPayload.files &&
-      newPayload.files.length
-    ) {
-      if (existingPayload.files.length + newPayload.files.length > 10) {
-        console.log(pendingPayloads.get(msg.channel.id));
-        resolve(newPayload);
-        return false;
-      }
-
-      existingPayload.files.push(...newPayload.files);
-    } else if (newPayload.files && newPayload.files.length) {
-      existingPayload.files = newPayload.files;
-    }
-    return true;
-  };
-
-  if (newPayload.ephemeral) resolve(newPayload);
-  if (newPayload.components?.length) resolve(newPayload);
-
-  if (pendingPayloads.has(msg.channel.id) && timeout) {
-    const existingPayload = pendingPayloads.get(msg.channel.id).payload;
-
-    const proceedEmbeds = combineEmbeds(existingPayload);
-    if (!proceedEmbeds) return;
-
-    const proceedContents = combineContents(existingPayload);
-    if (!proceedContents) return;
-
-    combineFiles(existingPayload);
-  } else {
-    pendingPayloads.set(msg.channel.id, {
-      payload: newPayload,
-      job: jobs.scheduleJob(new Date(Date.now() + timeout), () => {
-        resolve(newPayload);
-        pendingPayloads.delete(msg.channel.id);
-      }),
-    });
+const combineMessages = async (msg, payload, timeout) => {
+  if (!payload.embeds || !payload.embeds.length) {
+    module.exports.send(msg.channel, payload);
+    return;
   }
+
+  if (channelQueue.has(msg.channel.id)) {
+    const updatedQueue = channelQueue.get(msg.channel.id);
+    const charsToPush = getEmbedCharLens(payload.embeds);
+
+    if (updatedQueue.length < 10 && channelCharLimit.get(msg.channel.id) + charsToPush <= 5000) {
+      updatedQueue.push(payload);
+      channelCharLimit.set(msg.channel.id, channelCharLimit.get(msg.channel.id) + charsToPush);
+      channelQueue.set(msg.channel.id, updatedQueue);
+
+      channelTimeout.get(msg.channel.id)?.cancel();
+
+      channelTimeout.set(
+        msg.channel.id,
+        jobs.scheduleJob(new Date(Date.now() + timeout), () => {
+          module.exports.send(msg.channel, {
+            embeds: channelQueue
+              .get(msg.channel.id)
+              .map((p) => p.embeds)
+              .flat(1),
+          });
+
+          channelQueue.delete(msg.channel.id);
+          channelTimeout.delete(msg.channel.id);
+          channelCharLimit.delete(msg.channel.id);
+        }),
+      );
+    } else if (
+      updatedQueue.length === 10 ||
+      channelCharLimit.get(msg.channel.id) + charsToPush >= 5000
+    ) {
+      module.exports.send(msg.channel, { embeds: updatedQueue.map((p) => p.embeds).flat(1) });
+      channelQueue.set(msg.channel.id, [payload]);
+
+      channelTimeout.get(msg.channel.id)?.cancel();
+
+      channelCharLimit.set(msg.channel.id, getEmbedCharLens(payload.embeds));
+      channelTimeout.set(
+        msg.channel.id,
+        jobs.scheduleJob(new Date(Date.now() + timeout), () => {
+          module.exports.send(msg.channel, {
+            embeds: channelQueue
+              .get(msg.channel.id)
+              .map((p) => p.embeds)
+              .flat(1),
+          });
+
+          channelQueue.delete(msg.channel.id);
+          channelTimeout.delete(msg.channel.id);
+          channelCharLimit.delete(msg.channel.id);
+        }),
+      );
+    }
+  } else {
+    channelQueue.set(msg.channel.id, [payload]);
+    channelCharLimit.set(msg.channel.id, getEmbedCharLens(payload.embeds));
+
+    channelTimeout.get(msg.channel.id)?.cancel();
+
+    channelTimeout.set(
+      msg.channel.id,
+      jobs.scheduleJob(new Date(Date.now() + timeout), () => {
+        module.exports.send(msg.channel, {
+          embeds: channelQueue
+            .get(msg.channel.id)
+            .map((p) => p.embeds)
+            .flat(1),
+        });
+        channelQueue.delete(msg.channel.id);
+        channelTimeout.delete(msg.channel.id);
+        channelCharLimit.delete(msg.channel.id);
+      }),
+    );
+  }
+};
+
+const getEmbedCharLens = (embeds) => {
+  let total = 0;
+  embeds.forEach((embed) => {
+    Object.values(embed.data).forEach((data) => {
+      if (typeof data === 'string') {
+        total += data.length;
+      }
+    });
+
+    for (let i = 0; i < (embed.data.fields ? embed.data.fields.length : 0); i += 1) {
+      if (typeof embed.data.fields[i].name === 'string') {
+        total += embed.data.fields[i].name.length;
+      }
+      if (typeof embed.data.fields[i].value === 'string') {
+        total += embed.data.fields[i].value.length;
+      }
+    }
+  });
+  return total > 6000 ? 1000 : total;
 };
