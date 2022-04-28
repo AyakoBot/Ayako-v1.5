@@ -1460,6 +1460,7 @@
       "deleteSavedEmbed": "Delete Saved Embed",
       "replacedOptions": "Dynamically Replaced Options",
       "replacedOptionsDescription": "Argument `{{{{option}}}}` will be replaced with {{value}}",
+      "noEmbedFound": "No Embed found on this Message or Missing Access to Message",
       "edit": {
         "color": {
           "name": "Color",
