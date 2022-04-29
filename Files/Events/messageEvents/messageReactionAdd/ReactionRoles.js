@@ -1,9 +1,9 @@
 module.exports = {
-  async execute(reaction, user) {
+  execute: async (reaction, user) => {
     if (user.id === reaction.client.user.id) return;
     if (!reaction.message.guild) return;
 
-    const emoteIdentifier = reaction.client.ch.containsNonLatinCodepoints(reaction.emoji.name)
+    const emoteIdentifier = reaction.emoji.name.match(reaction.client.ch.regexes.emojiTester)
       ? reaction.emoji.name
       : reaction.emoji.id;
 
@@ -16,12 +16,10 @@ module.exports = {
     const member = await reaction.message.guild.members.fetch(user.id).catch(() => {});
     if (!member) return;
 
-    const relatedReactions = await getRelatedReactions(reaction, baseRow, reactionRow);
+    const relatedReactions = await getRelatedReactions(reaction, baseRow);
     const hasAnyOfRelated = getHasAnyOfRelated(relatedReactions, member);
 
-    const hasOne = member.roles.cache.some((r) => reactionRow.roles.includes(r.id));
-
-    if (!hasOne) {
+    if (!hasAnyOfRelated && baseRow.onlyone) {
       giveRoles(reaction, reactionRow, baseRow, hasAnyOfRelated, member);
     }
   },
@@ -29,22 +27,24 @@ module.exports = {
 
 const getBaseRow = async (reaction, reactionRow) => {
   const res = await reaction.client.ch.query(
-    `SELECT * FROM rrsettings WHERE messagelink = $1 AND guildid = $2;`,
+    `SELECT * FROM rrsettings WHERE messagelink = $1 AND guildid = $2 AND active = true;`,
     [reactionRow.messagelink, reaction.message.guild.id],
   );
 
-  if (!res || !res.rowCount) return null;
+  if (!res || !res.rowCount) return [];
   return res.rows[0];
 };
 
-const getRelatedReactions = async (reaction, baseRow, reactionRow) => {
+const getRelatedReactions = async (reaction, baseRow) => {
   const res = await reaction.client.ch.query(
-    `SELECT * FROM rrbuttons WHERE guildid = $1 AND messagelink = $2 AND uniquetimestamp != $3;`,
-    [reaction.message.guild.id, baseRow.messagelink, reactionRow.uniquetimestamp],
+    `SELECT * FROM rrbuttons WHERE guildid = $1 AND messagelink = $2 AND active = true;`,
+    [reaction.message.guild.id, baseRow.messagelink],
   );
 
-  if (!res || !res.rowCount) return null;
-  return res.rows;
+  const reactionRows = await getReactionRows(reaction);
+  const buttonRows = res ? res.rows : [];
+
+  return [...reactionRows, ...buttonRows];
 };
 
 const getHasAnyOfRelated = (relatedReactions, member) => {
@@ -82,10 +82,20 @@ const giveRoles = async (reaction, reactionRow, baseRow, hasAnyOfRelated, member
 
 const getReactionRow = async (reaction, emoteIdentifier) => {
   const res = await reaction.client.ch.query(
-    'SELECT * FROM rrreactions WHERE messagelink = $1 AND emoteid = $2 AND guildid = $3;',
+    'SELECT * FROM rrreactions WHERE messagelink = $1 AND emoteid = $2 AND guildid = $3 AND active = true;',
     [reaction.message.url, emoteIdentifier, reaction.message.guild.id],
   );
 
   if (!res || !res.rowCount) return [];
   return res.rows[0];
+};
+
+const getReactionRows = async (reaction) => {
+  const res = await reaction.client.ch.query(
+    'SELECT * FROM rrreactions WHERE messagelink = $1 AND guildid = $2 AND active = true;',
+    [reaction.message.url, reaction.message.guild.id],
+  );
+
+  if (!res || !res.rowCount) return [];
+  return res.rows;
 };
