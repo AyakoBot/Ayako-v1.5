@@ -76,6 +76,7 @@ module.exports = {
           .setDescription(msg.lan.sentSuccess)
           .setColor(await msg.client.ch.colorSelector(msg.guild.me)),
       ],
+      content: null,
       components: [],
     });
   },
