@@ -14,7 +14,12 @@ module.exports = {
     const embed = new Builders.UnsafeEmbedBuilder();
 
     rows.forEach((row) => {
-      const emote = msg.client.emojis.cache.get(row.emoteid);
+      let emote;
+      if (Number.isNaN(Number(row.emoteid))) {
+        emote = row.emoteid;
+      } else {
+        emote = msg.client.emojis.cache.get(row.emoteid);
+      }
 
       embed.addFields({
         name: `${emote || msg.client.textEmotes.warning}`,
