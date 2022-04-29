@@ -264,7 +264,6 @@ const handleApproverVote = async (cmd, isApproved) => {
     .catch(() => {});
 
   await submit.update({
-    content: isApproved ? cmd.language.suggestion.approved : cmd.language.suggestion.denied,
     components: [],
   });
 };
