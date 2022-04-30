@@ -94,31 +94,24 @@ module.exports = {
     return [[active], [name, messagelink], [onlyone, anyroles]];
   },
   doMoreThings: async (msg, insertedValues, changedKey, res, oldRes) => {
-    if (res && res.rowCount) {
-      handleNewRes(msg, res);
-      if (oldRes && oldRes.rowCount) {
-        handleOldRes(oldRes, res, msg);
-        reactionChanger(res, msg);
-      }
-    }
+    if (!oldRes || !oldRes.rowCount || !res || !res.rowCount) return;
 
-    if (res?.rows?.rowCount === oldRes?.rows?.rowCount) {
-      res.rows.forEach((newRow) => {
-        const oldRow =
-          oldRes.rows[res.rows.findIndex((r) => r.uniquetimestamp === newRow.uniquetimestamp)];
+    const nR = res.rows[0];
+    const oR = oldRes.rows[oldRes.rows.findIndex((r) => r.uniquetimestamp === nR.uniquetimestamp)];
 
-        if (newRow.messagelink !== oldRow.messagelink) {
-          msg.client.ch.query(`UPDATE rrbuttons SET messagelink = $1 WHERE messagelink = $2;`, [
-            newRow.messagelink,
-            oldRow.messagelink,
-          ]);
+    await switchMsgReactions(msg, oR, nR);
+    await switchMsgButtons(msg, oR, nR);
 
-          msg.client.ch.query(`UPDATE rrreactions SET messagelink = $1 WHERE messagelink = $2;`, [
-            newRow.messagelink,
-            oldRow.messagelink,
-          ]);
-        }
-      });
+    if (oR.messagelink !== nR.messagelink) {
+      msg.client.ch.query(`UPDATE rrbuttons SET messagelink = $1 WHERE messagelink = $2;`, [
+        nR.messagelink,
+        oR.messagelink,
+      ]);
+
+      msg.client.ch.query(`UPDATE rrreactions SET messagelink = $1 WHERE messagelink = $2;`, [
+        nR.messagelink,
+        oR.messagelink,
+      ]);
     }
   },
   manualResGetter: async (msg) => {
@@ -140,24 +133,51 @@ module.exports = {
   },
 };
 
-const handleNewRes = async (msg, r) => {
-  const newRes = await msg.client.ch.query(
-    `SELECT * FROM rrbuttons WHERE messagelink = $1 AND guildid = $2;`,
-    [r.rows[0].messagelink, msg.guild.id],
-  );
-  if (!newRes || !newRes.rowCount) return;
+const switchMsgReactions = async (msg, oldRow, newRow) => {
+  const oldReactionRows = await getReactionRows(msg, oldRow);
 
-  const [, , message] = await linkToIDs(msg, newRes.rows[0].messagelink);
+  const [, , oldMessage] = await linkToIDs(msg, oldRow.messagelink);
+
+  if (oldMessage && oldMessage.reactions) {
+    oldMessage.reactions.removeAll().catch(() => {});
+  }
+
+  oldReactionRows.forEach(async (row) => {
+    const [, , newMessage] = await linkToIDs(msg, newRow.messagelink);
+
+    if (newMessage) {
+      newMessage.react(row.emoteid).catch(() => {});
+    }
+  });
+};
+
+const switchMsgButtons = async (msg, oldRow, newRow) => {
+  const [, , oldMessage] = await linkToIDs(msg, oldRow.messagelink);
+  if (
+    oldMessage &&
+    oldMessage.components?.length &&
+    oldMessage.author &&
+    oldMessage.author.id === msg.client.user.id
+  ) {
+    oldMessage.edit({ components: [] }).catch(() => {});
+  }
+
+  const newRows = await getButtonRows(msg, oldRow);
+
+  const [, , message] = await linkToIDs(msg, newRow.messagelink);
   if (!message || !message.author || message.author.id !== msg.client.user.id) return;
 
-  const buttons = newRes.rows
+  const buttons = newRows
     .map((row) => {
-      if (row.active === false) return null;
+      if (!row.active || !newRow.active) return null;
 
       const button = new Builders.UnsafeButtonBuilder().setCustomId(
         `rrbuttons_${row.uniquetimestamp}`,
       );
+
       if (row.buttontext) button.setLabel(row.buttontext);
+      else button.setLabel('\u200b');
+
       if (row.emoteid) {
         const emote = msg.client.emojis.cache.get(row.emoteid);
         if (emote) button.setEmoji(emote);
@@ -171,7 +191,7 @@ const handleNewRes = async (msg, r) => {
   const actionRows = [];
   let useIndex = 0;
   buttons.forEach((b, i) => {
-    if (i >= 24) return;
+    if (i >= 24 || useIndex > 4) return;
 
     if (actionRows[useIndex]?.length === 5) {
       actionRows.push([b]);
@@ -184,21 +204,31 @@ const handleNewRes = async (msg, r) => {
 
   const newMsg = {
     components: msg.client.ch.buttonRower(actionRows),
-    content: message.content.length ? message.content : undefined,
+    content: message.content?.length ? message.content : undefined,
     embeds: message.embeds,
   };
 
   message.edit(newMsg).catch(() => {});
 };
 
-const handleOldRes = async (oldRes, newRes, msg) => {
-  const nR = newRes.rows[0];
-  const oR = oldRes.rows[oldRes.rows.findIndex((r) => r.uniquetimestamp === nR.uniquetimestamp)];
-  if (oR.messagelink !== nR.messagelink) {
-    const [, , message] = await linkToIDs(msg, oR.messagelink);
-    if (!message || !message.author || message.author.id !== msg.client.user.id) return;
-    message.edit({ components: [] }).catch(() => {});
-  }
+const getReactionRows = async (msg, r) => {
+  const res = await msg.client.ch.query(
+    `SELECT * FROM rrreactions WHERE messagelink = $1 AND guildid = $2;`,
+    [r.messagelink, msg.guild.id],
+  );
+
+  if (res && res.rowCount) return res.rows;
+  return [];
+};
+
+const getButtonRows = async (msg, r) => {
+  const res = await msg.client.ch.query(
+    `SELECT * FROM rrbuttons WHERE messagelink = $1 AND guildid = $2;`,
+    [r.messagelink, msg.guild.id],
+  );
+
+  if (res && res.rowCount) return res.rows;
+  return [];
 };
 
 const linkToIDs = async (msg, link) => {
@@ -209,36 +239,4 @@ const linkToIDs = async (msg, link) => {
   const message = channel ? await channel.messages.fetch(messageid).catch(() => {}) : null;
 
   return [guild, channel, message];
-};
-
-const reactionChanger = async (newRes, msg) => {
-  const [, , message] = await linkToIDs(msg, newRes.rows[0].messagelink);
-
-  const baseRow = newRes.rows[0];
-  const newRows = await getNewRow(msg, baseRow);
-
-  newRows.forEach((newRow) => {
-    if (message) {
-      if (newRow.active === false || baseRow.active === false) {
-        message.reactions.cache
-          .get(newRow.emoteid)
-          ?.remove()
-          .catch(() => {});
-      }
-
-      if (newRow.active === true && baseRow.active === true) {
-        message.react(newRow.emoteid).catch(() => {});
-      }
-    }
-  });
-};
-
-const getNewRow = async (msg, r) => {
-  const res = await msg.client.ch.query(
-    `SELECT * FROM rrreactions WHERE messagelink = $1 AND guildid = $2;`,
-    [r.messagelink, msg.guild.id],
-  );
-
-  if (res && res.rowCount) return res.rows;
-  return [];
 };

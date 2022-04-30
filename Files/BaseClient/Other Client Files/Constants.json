@@ -1492,17 +1492,18 @@
           "ident": "buttontext"
         },
         "rrreactions": {
-          "cols": ["guildid, uniquetimestamp, active, messagelink, emoteid"],
+          "cols": ["guildid, uniquetimestamp, active, messagelink, emoteid, roles"],
           "vals": [
             [
               "{{msg.guild.id}}",
               "{{values.uniquetimestamp}}",
               true,
               "{{values.messagelink}}",
-              "{{values.emoteid}}"
+              "{{values.emoteid}}",
+              "{{{values.roles}}}"
             ]
           ],
-          "add": ["emoteid"],
+          "add": ["roles", "emoteid"],
           "remove": ["uniquetimestamp"],
           "ident": "emoteid"
         },
