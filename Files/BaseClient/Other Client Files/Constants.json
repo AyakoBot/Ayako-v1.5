@@ -512,24 +512,24 @@
       "baseSettings": {
         "leveling": "levelsettings",
         "nitro": "nitrosettings",
-        "reactionroles": "reactionsettings"
+        "reactionsettings": "reactionroles"
       },
       "childSettings": {
         "leveling": ["levelsettings", "levelroles", "multichannels", "multiroles", "ruleschannels"],
         "nitro": ["nitroroles", "nitrosettings"],
-        "reactionroles": ["reactionsettings", "rrreactions", "rrbuttons"]
+        "reactionsettings": ["reactionroles", "rrreactions", "rrbuttons"]
       },
       "identifiers": {
         "leveling": "guildid",
         "nitro": "guildid",
-        "reactionroles": "messagelink"
+        "reactionsettings": "messagelink"
       },
       "edit": {
         "active": {
           "key": "boolean",
           "required": true
         },
-        "reactionsettings": {
+        "reactionroles": {
           "messagelink": {
             "key": "messagelink",
             "required": true
@@ -1446,7 +1446,7 @@
         "prefix": ["prefix"],
         "interactions": ["interactions"],
         "modroles": ["modroles"],
-        "reactionsettings": ["rrsettings"],
+        "reactionroles": ["rrsettings"],
         "rrbuttons": ["rrbuttons"],
         "rrreactions": ["rrreactions"]
       },
@@ -1459,7 +1459,7 @@
           "remove": ["uniquetimestamp"],
           "ident": "commands"
         },
-        "reactionsettings": {
+        "reactionroles": {
           "cols": ["guildid, uniquetimestamp, name, onlyone, active, messagelink"],
           "vals": [
             [
@@ -1476,13 +1476,20 @@
           "ident": "name"
         },
         "rrbuttons": {
-          "cols": ["guildid, uniquetimestamp, active, messagelink"],
+          "cols": ["guildid, uniquetimestamp, active, messagelink, roles, buttontext"],
           "vals": [
-            ["{{msg.guild.id}}", "{{values.uniquetimestamp}}", false, "{{values.messagelink}}"]
+            [
+              "{{msg.guild.id}}",
+              "{{values.uniquetimestamp}}",
+              true,
+              "{{values.messagelink}}",
+              "{{{values.roles}}}",
+              "{{values.buttontext}}"
+            ]
           ],
-          "add": [],
+          "add": ["roles", "buttontext"],
           "remove": ["uniquetimestamp"],
-          "ident": "emoteid"
+          "ident": "buttontext"
         },
         "rrreactions": {
           "cols": ["guildid, uniquetimestamp, active, messagelink, emoteid"],
@@ -1490,7 +1497,7 @@
             [
               "{{msg.guild.id}}",
               "{{values.uniquetimestamp}}",
-              false,
+              true,
               "{{values.messagelink}}",
               "{{values.emoteid}}"
             ]

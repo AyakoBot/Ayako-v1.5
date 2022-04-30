@@ -7,7 +7,7 @@ module.exports = {
   setupRequired: false,
   finished: true,
   category: ['automation'],
-  childOf: 'reactionroles',
+  childOf: 'reactionsettings',
   noArrows: true,
   canBe1Row: true,
   mmrEmbed: async (msg, rows) => {
@@ -132,59 +132,10 @@ module.exports = {
     return null;
   },
   doMoreThings: async (msg, insertedValues, changedKey, newRes, oldRes) => {
-    if (!newRes.rows || !oldRes.rows) return;
-    const newRows = newRes.rows[0];
-    const oldRows = oldRes.rows[0];
-
-    const [, , message] = await linkToIDs(msg, newRows.messagelink);
-
-    if (!message || !message.author || message.author.id !== msg.client.user.id) return;
-
-    if (oldRows.active === true && newRows.active === false) {
-      message.edit({ components: [] }).catch(() => {});
-      return;
+    if (newRes && newRes.rowCount) {
+      handleNewRes(msg, newRes);
+      if (oldRes && oldRes.rowCount) handleOldRes(oldRes, newRes, msg);
     }
-    const buttons = newRes.rows
-      .map((row) => {
-        if (insertedValues.messagelink && row.messagelink !== insertedValues.messagelink) {
-          return null;
-        }
-
-        const button = new Builders.UnsafeButtonBuilder().setCustomId(
-          `rrbuttons_${row.uniquetimestamp}`,
-        );
-        if (row.buttontext) button.setLabel(row.buttontext);
-        if (row.emoteid) {
-          const emote = msg.client.emojis.cache.get(row.emoteid);
-          if (emote) button.setEmoji(emote);
-        }
-        if (row.active === false) button.setDisabled(true);
-
-        button.setStyle(Discord.ButtonStyle.Secondary);
-
-        return button;
-      })
-      .filter((b) => !!b);
-
-    const actionRows = [];
-    let useIndex = 0;
-    buttons.forEach((b, i) => {
-      if ((5 / i) % 1 === 0) {
-        actionRows.push(b);
-        useIndex += 1;
-      } else {
-        if (!actionRows[useIndex]) actionRows[useIndex] = [];
-        actionRows[useIndex].push(b);
-      }
-    });
-
-    const newMsg = {
-      components: msg.client.ch.buttonRower(actionRows),
-      content: message.content.length ? message.content : undefined,
-      embeds: message.embeds,
-    };
-
-    message.edit(newMsg).catch(() => {});
   },
 };
 
@@ -196,4 +147,65 @@ const linkToIDs = async (msg, link) => {
   const message = channel ? await channel.messages.fetch(messageid).catch(() => {}) : null;
 
   return [guild, channel, message];
+};
+
+const handleNewRes = async (msg, r) => {
+  const newRes = await msg.client.ch.query(
+    `SELECT * FROM rrbuttons WHERE messagelink = $1 AND guildid = $2;`,
+    [r.rows[0].messagelink, msg.guild.id],
+  );
+  if (!newRes || !newRes.rowCount) return;
+
+  const [, , message] = await linkToIDs(msg, newRes.rows[0].messagelink);
+  if (!message || !message.author || message.author.id !== msg.client.user.id) return;
+
+  const buttons = newRes.rows
+    .map((row) => {
+      if (row.active === false) return null;
+
+      const button = new Builders.UnsafeButtonBuilder().setCustomId(
+        `rrbuttons_${row.uniquetimestamp}`,
+      );
+      if (row.buttontext) button.setLabel(row.buttontext);
+      if (row.emoteid) {
+        const emote = msg.client.emojis.cache.get(row.emoteid);
+        if (emote) button.setEmoji(emote);
+      }
+      button.setStyle(Discord.ButtonStyle.Secondary);
+
+      return button;
+    })
+    .filter((b) => !!b);
+
+  const actionRows = [];
+  let useIndex = 0;
+  buttons.forEach((b, i) => {
+    if (i >= 24) return;
+
+    if (actionRows[useIndex]?.length === 5) {
+      actionRows.push([b]);
+      useIndex += 1;
+    } else {
+      if (!actionRows[useIndex]) actionRows[useIndex] = [];
+      actionRows[useIndex].push(b);
+    }
+  });
+
+  const newMsg = {
+    components: msg.client.ch.buttonRower(actionRows),
+    content: message.content.length ? message.content : undefined,
+    embeds: message.embeds,
+  };
+
+  message.edit(newMsg).catch(() => {});
+};
+
+const handleOldRes = async (oldRes, newRes, msg) => {
+  const nR = newRes.rows[0];
+  const oR = oldRes.rows[oldRes.rows.findIndex((r) => r.uniquetimestamp === nR.uniquetimestamp)];
+  if (oR.messagelink !== nR.messagelink) {
+    const [, , message] = await linkToIDs(msg, oR.messagelink);
+    if (!message || !message.author || message.author.id !== msg.client.user.id) return;
+    message.edit({ components: [] }).catch(() => {});
+  }
 };
