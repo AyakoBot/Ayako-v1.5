@@ -7,7 +7,7 @@ module.exports = {
   setupRequired: false,
   finished: true,
   category: ['automation'],
-  childOf: 'reactionroles',
+  childOf: 'reactionsettings',
   noArrows: true,
   canBe1Row: true,
   mmrEmbed: (msg, rows) => {

@@ -3522,7 +3522,7 @@
           }
         }
       },
-      "reactionsettings": {
+      "reactionroles": {
         "type": "Reaction Base",
         "channelid": "Reaction Channel",
         "name": "Name",
@@ -3609,7 +3609,10 @@
         },
         "otherEdits": {
           "add": {
-            "name": "Why is this displayed"
+            "name": "Add a Reaction Role Button",
+            "process": {
+              "0": "Select the Roles this Button should show"
+            }
           },
           "remove": {
             "name": "Remove a Reaction Role Button",
