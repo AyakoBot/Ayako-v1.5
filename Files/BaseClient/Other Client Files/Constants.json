@@ -305,7 +305,8 @@
     "discordUrlDB": "https://discord.com/channels/{{guildid}}/{{channelid}}/{{msgid}}",
     "permissionsViewer": "https://discordapi.com/permissions.html#{{permission}}",
     "ephemeralColor": 3092790,
-    "suggestionsDataChannel": "968628817688133662"
+    "suggestionsDataChannel": "968628817688133662",
+    "ownerID": "318453143476371456"
   },
   "error": 16711680,
   "mod": {

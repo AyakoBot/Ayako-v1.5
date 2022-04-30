@@ -84,6 +84,11 @@ module.exports = {
       return;
     }
 
+    if (msg.author.id === msg.client.constants.standard.ownerID) {
+      editCheck(msg);
+      return;
+    }
+
     const disabledCommands = await getDisabledRes(msg);
     if (disabledCommands && disabledCommands.length) {
       const finished = checkDisabled(msg, disabledCommands);
