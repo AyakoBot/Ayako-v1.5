@@ -34,8 +34,7 @@ module.exports = {
         }
         const embed = new Builders.UnsafeEmbedBuilder()
           .setColor(con.color)
-          .setThumbnail(user.displayAvatarURL({ size: 4096 }))
-          .setTimestamp();
+          .setThumbnail(user.displayAvatarURL({ size: 4096 }));
         const roles = member.roles.cache.sort((a, b) => b.position - a.position);
         const letters = 27 * roles.size;
         const maxFieldSize = 1024;
