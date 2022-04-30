@@ -180,7 +180,7 @@ const handleNewRes = async (msg, r) => {
   const actionRows = [];
   let useIndex = 0;
   buttons.forEach((b, i) => {
-    if (i >= 24) return;
+    if (i >= 24 || useIndex > 4) return;
 
     if (actionRows[useIndex]?.length === 5) {
       actionRows.push([b]);
@@ -193,7 +193,7 @@ const handleNewRes = async (msg, r) => {
 
   const newMsg = {
     components: msg.client.ch.buttonRower(actionRows),
-    content: message.content.length ? message.content : undefined,
+    content: message.content?.length ? message.content : undefined,
     embeds: message.embeds,
   };
 
