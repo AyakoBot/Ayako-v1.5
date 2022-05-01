@@ -33,6 +33,7 @@ process.on('unhandledRejection', (error) => {
 process.on('uncaughtException', (error) => {
   client.ch.logger('Unhandled Exception', error);
 });
+process.on('promiseRejectionHandledWarning', () => {});
 
 client.rest.on('request', (request) => {
   require('./Files/Events/REST Events/request')(request);
