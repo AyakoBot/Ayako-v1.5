@@ -1113,7 +1113,7 @@
       "description": "Interact with any User",
       "usage": ["pat [user]"],
       "category": "Fun",
-      "saying": "\nand says \"{{text}}\"",
+      "saying": "\"{{text}}\"",
       "connector": "and",
       "loneError": "You need to Mention a User",
       "lone": {
@@ -1127,6 +1127,7 @@
         "dance": "{{msg.author}} dances",
         "sleep": "{{msg.author}} sleeps",
         "blush": "{{msg.author}} blushes",
+        "comfy": "{{msg.author}} is comfy",
         "pout": "{{msg.author}} pouts *Hmpf!*",
         "smile": "{{msg.author}} smiles >^<",
         "yawn": "{{msg.author}} yawns",
@@ -1155,6 +1156,7 @@
         "fluff": "{{msg.author}} fluffs {{users}} tails"
       },
       "all": {
+        "comfy": "{{msg.author}} makes themselves comfy with {{users}}",
         "handhold": "{{msg.author}} holds {{users}}'s hand",
         "hug": "{{msg.author}} hugs {{users}}{{text}}",
         "pat": "{{msg.author}} pats {{users}}{{text}}",
