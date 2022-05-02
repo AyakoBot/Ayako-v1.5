@@ -1,4 +1,3 @@
-
 module.exports = {
   async execute(msg) {
     if (msg.channel.type === 1) return;
