@@ -51,11 +51,7 @@ module.exports = {
     if (typeof channel.send !== 'function') throw new Error('Invalid Channel');
 
     return channel.send(payload).catch((e) => {
-      console.log(
-        e,
-        payload.content,
-        payload.embeds?.map((em) => em?.data),
-      );
+      console.log(e, payload.content, payload.embeds);
     });
   },
   /**
@@ -1325,21 +1321,7 @@ const combineMessages = async (msg, payload, timeout) => {
 
       channelTimeout.get(msg.channel.id)?.cancel();
 
-      channelTimeout.set(
-        msg.channel.id,
-        jobs.scheduleJob(new Date(Date.now() + timeout), () => {
-          module.exports.send(msg.channel, {
-            embeds: channelQueue
-              .get(msg.channel.id)
-              .map((p) => p.embeds)
-              .flat(1),
-          });
-
-          channelQueue.delete(msg.channel.id);
-          channelTimeout.delete(msg.channel.id);
-          channelCharLimit.delete(msg.channel.id);
-        }),
-      );
+      queueSend(msg, timeout);
     } else if (
       updatedQueue.length === 10 ||
       channelCharLimit.get(msg.channel.id) + charsToPush >= 5000
@@ -1350,42 +1332,15 @@ const combineMessages = async (msg, payload, timeout) => {
       channelTimeout.get(msg.channel.id)?.cancel();
 
       channelCharLimit.set(msg.channel.id, getEmbedCharLens(payload.embeds));
-      channelTimeout.set(
-        msg.channel.id,
-        jobs.scheduleJob(new Date(Date.now() + timeout), () => {
-          module.exports.send(msg.channel, {
-            embeds: channelQueue
-              .get(msg.channel.id)
-              .map((p) => p.embeds)
-              .flat(1),
-          });
-
-          channelQueue.delete(msg.channel.id);
-          channelTimeout.delete(msg.channel.id);
-          channelCharLimit.delete(msg.channel.id);
-        }),
-      );
+      queueSend(msg, timeout);
     }
   } else {
     channelQueue.set(msg.channel.id, [payload]);
     channelCharLimit.set(msg.channel.id, getEmbedCharLens(payload.embeds));
 
-    channelTimeout.get(msg.channel.id)?.cancel();
+    queueSend(msg, timeout);
 
-    channelTimeout.set(
-      msg.channel.id,
-      jobs.scheduleJob(new Date(Date.now() + timeout), () => {
-        module.exports.send(msg.channel, {
-          embeds: channelQueue
-            .get(msg.channel.id)
-            .map((p) => p.embeds)
-            .flat(1),
-        });
-        channelQueue.delete(msg.channel.id);
-        channelTimeout.delete(msg.channel.id);
-        channelCharLimit.delete(msg.channel.id);
-      }),
-    );
+    channelTimeout.get(msg.channel.id)?.cancel();
   }
 };
 
@@ -1409,3 +1364,26 @@ const getEmbedCharLens = (embeds) => {
   });
   return total > 6000 ? 1000 : total;
 };
+
+const queueSend = (msg, timeout) =>
+  channelTimeout.set(
+    msg.channel.id,
+    jobs.scheduleJob(new Date(Date.now() + timeout), () => {
+      module.exports.send(msg.channel, {
+        embeds: channelQueue
+          .get(msg.channel.id)
+          .map((p) => p.embeds)
+          ?.flat(1)
+          .filter((p) => !!p),
+        files: channelQueue
+          .get(msg.channel.id)
+          .map((p) => p.files)
+          ?.flat(1)
+          .filter((p) => !!p),
+      });
+
+      channelQueue.delete(msg.channel.id);
+      channelTimeout.delete(msg.channel.id);
+      channelCharLimit.delete(msg.channel.id);
+    }),
+  );
