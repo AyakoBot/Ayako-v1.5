@@ -51,7 +51,12 @@ module.exports = {
     if (typeof channel.send !== 'function') throw new Error('Invalid Channel');
 
     return channel.send(payload).catch((e) => {
+      if (String(e).includes('AbortError: The user aborted a request')) {
+        return module.exports.send(payload);
+      }
+
       console.log(e, payload.content, payload.embeds);
+      return null;
     });
   },
   /**
@@ -77,8 +82,12 @@ module.exports = {
     if (!payload) throw new Error('No Payload!');
 
     const m = await msg.reply(payload).catch((e) => {
+      if (String(e).includes('AbortError: The user aborted a request')) {
+        return module.exports.reply(payload);
+      }
+
       if (String(e).includes('Missing Permissions')) {
-        module.exports.send(
+        return module.exports.send(
           msg.author,
           {
             content: undefined,
@@ -96,13 +105,12 @@ module.exports = {
           },
           timeout,
         );
-      } else {
-        console.log(
-          e,
-          payload.content,
-          payload.embeds?.map((em) => em.data),
-        );
       }
+      console.log(
+        e,
+        payload.content,
+        payload.embeds?.map((em) => em.data),
+      );
       return null;
     });
 
