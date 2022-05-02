@@ -4,7 +4,6 @@ const fs = require('fs');
 const { dirname } = require('path');
 const Constants = require('./Other Client Files/Constants.json');
 const Eris = require('./ErisClient');
-const CircleAPI = require('./CircleAPI');
 
 const appDir = dirname(require.main.filename);
 
@@ -230,8 +229,6 @@ class Client extends Discord.Client {
     this.textEmotes = require('./Other Client Files/TextEmojis.json');
 
     this.mainID = '650691698409734151';
-
-    this.Circle = new CircleAPI();
 
     this.setMaxListeners(this.events.size);
   }
