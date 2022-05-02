@@ -189,8 +189,9 @@ module.exports = {
       }
 
       embeds.push(memberEmbed);
-      components = getComponents(msg, member, 1);
     }
+
+    components = getComponents(msg, member, user, 1);
 
     if (answer) {
       answer
@@ -234,7 +235,7 @@ const interactionHandler = (msg, m, embeds, member) => {
         interaction
           .update({
             embeds,
-            components: msg.client.ch.buttonRower(getComponents(msg, member, page)),
+            components: msg.client.ch.buttonRower(getComponents(msg, member, member.user, page)),
           })
           .catch(() => {});
         break;
@@ -244,7 +245,7 @@ const interactionHandler = (msg, m, embeds, member) => {
         interaction
           .update({
             embeds,
-            components: msg.client.ch.buttonRower(getComponents(msg, member, page)),
+            components: msg.client.ch.buttonRower(getComponents(msg, member, member.user, page)),
           })
           .catch(() => {});
         break;
@@ -262,52 +263,67 @@ const interactionHandler = (msg, m, embeds, member) => {
   });
 };
 
-const getComponents = (msg, member, page) => [
-  [
-    new Builders.UnsafeButtonBuilder()
-      .setLabel(msg.lan.viewRoles)
-      .setDisabled(member.roles.cache.size <= 1)
-      .setStyle(Discord.ButtonStyle.Secondary)
-      .setCustomId('roles'),
-    new Builders.UnsafeButtonBuilder()
-      .setLabel(msg.lan.viewBasicPermissions)
-      .setCustomId('basicPerms')
-      .setStyle(Discord.ButtonStyle.Secondary),
-  ],
-  [
-    new Builders.UnsafeSelectMenuBuilder()
-      .setPlaceholder(msg.lan.viewChannelPermissions)
-      .setMaxValues(1)
-      .setMinValues(1)
-      .setCustomId('perms')
-      .setOptions(...getChannelOptions(msg).slice((page - 1) * 25, page * 25)),
-  ],
-  [
-    new Builders.UnsafeButtonBuilder()
-      .setCustomId('back')
-      .setEmoji(msg.client.objectEmotes.back)
-      .setStyle(Discord.ButtonStyle.Secondary)
-      .setDisabled(page === 1),
-    new Builders.UnsafeButtonBuilder()
-      .setCustomId('next')
-      .setEmoji(msg.client.objectEmotes.forth)
-      .setStyle(Discord.ButtonStyle.Secondary)
-      .setDisabled(page === Math.ceil(msg.guild.channels.cache.size / 25)),
-  ],
-  [
-    new Builders.UnsafeButtonBuilder()
-      .setStyle(Discord.ButtonStyle.Link)
-      .setLabel(msg.lan.desktop)
-      .setURL(`discord://-/users/${member.user.id}`),
-    new Builders.UnsafeButtonBuilder()
-      .setStyle(Discord.ButtonStyle.Link)
-      .setLabel(msg.lan.browser)
-      .setURL(`https://discord.com/users/${member.user.id}`),
-    new Builders.UnsafeButtonBuilder()
-      .setStyle(Discord.ButtonStyle.Link)
-      .setLabel(msg.lan.mobile)
-      .setURL(`https://discord.com/users/${member.user.id}`),
-  ],
+const getComponents = (msg, member, user, page) => [
+  member
+    ? ([
+        new Builders.UnsafeButtonBuilder()
+          .setLabel(msg.lan.viewRoles)
+          .setDisabled(member.roles.cache.size <= 1)
+          .setStyle(Discord.ButtonStyle.Secondary)
+          .setCustomId('roles'),
+        new Builders.UnsafeButtonBuilder()
+          .setLabel(msg.lan.viewBasicPermissions)
+          .setCustomId('basicPerms')
+          .setStyle(Discord.ButtonStyle.Secondary),
+      ],
+      [
+        new Builders.UnsafeSelectMenuBuilder()
+          .setPlaceholder(msg.lan.viewChannelPermissions)
+          .setMaxValues(1)
+          .setMinValues(1)
+          .setCustomId('perms')
+          .setOptions(...getChannelOptions(msg).slice((page - 1) * 25, page * 25)),
+      ],
+      [
+        new Builders.UnsafeButtonBuilder()
+          .setCustomId('back')
+          .setEmoji(msg.client.objectEmotes.back)
+          .setStyle(Discord.ButtonStyle.Secondary)
+          .setDisabled(page === 1),
+        new Builders.UnsafeButtonBuilder()
+          .setCustomId('next')
+          .setEmoji(msg.client.objectEmotes.forth)
+          .setStyle(Discord.ButtonStyle.Secondary)
+          .setDisabled(page === Math.ceil(msg.guild.channels.cache.size / 25)),
+      ],
+      [
+        new Builders.UnsafeButtonBuilder()
+          .setStyle(Discord.ButtonStyle.Link)
+          .setLabel(msg.lan.desktop)
+          .setURL(`discord://-/users/${user.id}`),
+        new Builders.UnsafeButtonBuilder()
+          .setStyle(Discord.ButtonStyle.Link)
+          .setLabel(msg.lan.browser)
+          .setURL(`https://discord.com/users/${user.id}`),
+        new Builders.UnsafeButtonBuilder()
+          .setStyle(Discord.ButtonStyle.Link)
+          .setLabel(msg.lan.mobile)
+          .setURL(`https://discord.com/users/${user.id}`),
+      ])
+    : [
+        new Builders.UnsafeButtonBuilder()
+          .setStyle(Discord.ButtonStyle.Link)
+          .setLabel(msg.lan.desktop)
+          .setURL(`discord://-/users/${user.id}`),
+        new Builders.UnsafeButtonBuilder()
+          .setStyle(Discord.ButtonStyle.Link)
+          .setLabel(msg.lan.browser)
+          .setURL(`https://discord.com/users/${user.id}`),
+        new Builders.UnsafeButtonBuilder()
+          .setStyle(Discord.ButtonStyle.Link)
+          .setLabel(msg.lan.mobile)
+          .setURL(`https://discord.com/users/${user.id}`),
+      ],
 ];
 
 const getChannelOptions = (msg) => {
