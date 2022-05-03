@@ -1861,6 +1861,17 @@
       "description": "Reloads an Editor File",
       "usage": ["reloadeditor [editor Name]"]
     },
+    "reminder": {
+      "category": "Info",
+      "description": "Set, view and delete Reminders Ayako will remind you of",
+      "usage": ["reminder [duration] [text]", "reminder delete [reminder ID]", "reminder list"],
+      "set": "set",
+      "delete": "delete",
+      "list": "list",
+      "created": "Successfully created Reminder with ID `{{ID}}`\nReminder will end {{time}}",
+      "invalidTime": "The given Time was not valid",
+      "noReason": "Please provide a Reason to Remind you of"
+    },
     "ping": {
       "category": "Info",
       "description": "Calculates Ayako's Ping",
