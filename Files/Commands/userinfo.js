@@ -263,9 +263,10 @@ const interactionHandler = (msg, m, embeds, member) => {
   });
 };
 
-const getComponents = (msg, member, user, page) => [
-  member
-    ? ([
+const getComponents = (msg, member, user, page) => {
+  if (member) {
+    return [
+      [
         new Builders.UnsafeButtonBuilder()
           .setLabel(msg.lan.viewRoles)
           .setDisabled(member.roles.cache.size <= 1)
@@ -309,22 +310,27 @@ const getComponents = (msg, member, user, page) => [
           .setStyle(Discord.ButtonStyle.Link)
           .setLabel(msg.lan.mobile)
           .setURL(`https://discord.com/users/${user.id}`),
-      ])
-    : [
-        new Builders.UnsafeButtonBuilder()
-          .setStyle(Discord.ButtonStyle.Link)
-          .setLabel(msg.lan.desktop)
-          .setURL(`discord://-/users/${user.id}`),
-        new Builders.UnsafeButtonBuilder()
-          .setStyle(Discord.ButtonStyle.Link)
-          .setLabel(msg.lan.browser)
-          .setURL(`https://discord.com/users/${user.id}`),
-        new Builders.UnsafeButtonBuilder()
-          .setStyle(Discord.ButtonStyle.Link)
-          .setLabel(msg.lan.mobile)
-          .setURL(`https://discord.com/users/${user.id}`),
       ],
-];
+    ];
+  }
+
+  return [
+    [
+      new Builders.UnsafeButtonBuilder()
+        .setStyle(Discord.ButtonStyle.Link)
+        .setLabel(msg.lan.desktop)
+        .setURL(`discord://-/users/${user.id}`),
+      new Builders.UnsafeButtonBuilder()
+        .setStyle(Discord.ButtonStyle.Link)
+        .setLabel(msg.lan.browser)
+        .setURL(`https://discord.com/users/${user.id}`),
+      new Builders.UnsafeButtonBuilder()
+        .setStyle(Discord.ButtonStyle.Link)
+        .setLabel(msg.lan.mobile)
+        .setURL(`https://discord.com/users/${user.id}`),
+    ],
+  ];
+};
 
 const getChannelOptions = (msg) => {
   const channelsWithoutCategory = msg.guild.channels.cache.filter(
