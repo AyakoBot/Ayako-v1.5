@@ -212,9 +212,13 @@ const interactionHandler = (msg, m, allReminders) => {
 
         await submit.deferUpdate();
 
-        const newTime = submit.fields.getField('editTime').value;
+        let newTime = submit.fields.getField('editTime').value;
         const newReason = submit.fields.getField('editLabel').value;
-        if (!newTime || !newReason) return;
+        if (!newReason) return;
+
+        if (!ms(newTime)) {
+          newTime = ms(Math.abs(Number(selected.endtime) - Date.now()));
+        }
 
         await msg.client.ch.query(
           `UPDATE reminders SET reason = $1, endtime = $4 WHERE uniquetimestamp = $2 AND userid = $3;`,
@@ -318,7 +322,7 @@ const createReminder = async (msg) => {
 };
 
 const getEndTime = (msg, startArg, now) => {
-  let reasonArg = startArg + 1;
+  let reasonArg = Number(String(startArg));
 
   const args = msg.args
     .slice(startArg)
