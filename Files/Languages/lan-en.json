@@ -4049,6 +4049,12 @@
     "given": "{{user}} has been given\n{{roles}}\nfor boosting {{days}}",
     "taken": "{{user}} has been taken\n{{roles}}\nfrom"
   },
+  "slashCommands": {
+    "giveaway": {
+      "description": "Create a Giveaway",
+      "usage": ["giveaway"],
+      "category": "Giveaway",
+  },
   "featuresName": "Features",
   "none": "None",
   "before": "Before",
@@ -4233,5 +4239,6 @@
   "newReason": "New Reason",
   "bot": "Bot",
   "message": "Message",
-  "duration": "Duration"
+  "duration": "Duration",
+  "slashCommand": "Slash Command"
 }

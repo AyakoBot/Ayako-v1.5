@@ -28,6 +28,25 @@ module.exports = {
       Objects.options.push(inserted);
     });
 
+    msg.client.slashCommands.forEach((command) => {
+      const inserted = {
+        label: command.name,
+        value: command.name,
+        description: `(${msg.language.slashCommand})`,
+      };
+
+      if (
+        Array.isArray(insertedValues[required.assinger]) &&
+        insertedValues[required.assinger].includes(command.name)
+      ) {
+        inserted.emoji = msg.client.objectEmotes.minusBG;
+      } else {
+        inserted.emoji = msg.client.objectEmotes.plusBG;
+      }
+
+      Objects.options.push(inserted);
+    });
+
     for (let i = 0; i < 25 && i < Objects.options.length; i += 1) {
       Objects.take.push(Objects.options[i]);
     }

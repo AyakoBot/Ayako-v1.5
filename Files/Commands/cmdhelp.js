@@ -12,10 +12,13 @@ module.exports = {
     const reqcommand = msg.triedCMD
       ? msg.triedCMD
       : msg.client.commands.get(commandName) ||
-        msg.client.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName));
+        msg.client.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName)) ||
+        msg.client.slashCommands.get(commandName);
+
     const { language } = msg;
     const { lan } = msg;
-    const commandLan = language.commands[`${reqcommand.name}`];
+    const commandLan =
+      language.commands[reqcommand.name] || language.slashCommands[reqcommand.name];
     if (!commandLan) {
       msg.client.ch.error(msg, lan.notFound);
       throw new Error(`Command ${reqcommand.name} not found in language file.`);
