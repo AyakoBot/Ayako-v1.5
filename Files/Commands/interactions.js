@@ -109,7 +109,10 @@ const getText = (msg, saidText, mentionText, usedCommandName) => {
   if (saidText !== ' '.repeat(saidText.length)) {
     uncutContent = `${saidText}`;
     saidText = msg.client.ch.stp(msg.lan.saying, { text: saidText });
-  } else saidText = ' ';
+  } else {
+    saidText = ' ';
+    uncutContent = ' ';
+  }
 
   if (msg.mentions.users.size === 1 && msg.mentions.has(msg.author.id)) {
     text = msg.client.ch.stp(`${msg.lan.self[usedCommandName]}`, {
