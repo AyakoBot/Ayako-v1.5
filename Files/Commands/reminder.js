@@ -161,13 +161,12 @@ const interactionHandler = (msg, m, allReminders) => {
       case 'delete': {
         buttonsCollector.stop();
 
-        const id = allReminders.find(
+        const selected = allReminders.find(
           (r) =>
             r.uniquetimestamp ===
             interaction.message.components[0].components[0].data.options.find((o) => o.default)
-              .label,
+              .value,
         );
-        const selected = allReminders.find((r) => r.id === id);
 
         msg.client.reminders
           .get(`${selected.channelid}-${selected.msgid}-${selected.uniquetimestamp}`)
@@ -182,6 +181,8 @@ const interactionHandler = (msg, m, allReminders) => {
           [selected.uniquetimestamp, selected.userid],
         );
 
+        await interaction.deferUpdate();
+
         module.exports.execute(msg, m);
 
         break;
@@ -189,13 +190,12 @@ const interactionHandler = (msg, m, allReminders) => {
       case 'edit': {
         buttonsCollector.stop();
 
-        const id = allReminders.find(
+        const selected = allReminders.find(
           (r) =>
             r.uniquetimestamp ===
             interaction.message.components[0].components[0].data.options.find((o) => o.default)
-              .label,
+              .value,
         );
-        const selected = allReminders.find((r) => r.id === id);
 
         const modal = getModal(interaction, selected);
         await interaction.showModal(modal);
@@ -318,22 +318,28 @@ const createReminder = async (msg) => {
 };
 
 const getEndTime = (msg, startArg, now) => {
-  let arg = msg.args[startArg];
-  let endTime = arg ? ms(arg) : null;
   let reasonArg = startArg + 1;
 
-  if (arg) arg = arg.replace(/,/g, '.');
+  const args = msg.args
+    .slice(startArg)
+    .map((a) => (ms(a.replace(/,/g, '.')) ? ms(a.replace(/,/g, '.')) : a));
 
-  if (endTime === arg) {
-    endTime = ms(`${arg} ${msg.args[startArg + 1]}`);
-    reasonArg += 1;
-  }
+  let skip;
+  const timeArgs = args.map((a, i) => {
+    if (i === skip) return null;
+    if (ms(`${a} ${args[i + 1]}`)) {
+      skip = i + 1;
+      return ms(`${a} ${args[i + 1]}`);
+    }
+    return ms(`${a}`);
+  });
 
-  if (Number.isNaN(endTime)) {
-    msg.client.ch.error(msg, msg.lan.invalidTime);
-    return {};
-  }
-  return { reasonArg, endTime: endTime + now };
+  const unusableArgs = timeArgs.filter((a) => !a);
+  reasonArg += unusableArgs.length;
+
+  const endTime = timeArgs.filter((a) => !!a).reduce((a, b) => a + b, now);
+
+  return { reasonArg, endTime };
 };
 
 const setReminder = (client, reminder) => {
