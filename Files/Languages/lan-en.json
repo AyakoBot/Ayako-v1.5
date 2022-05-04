@@ -1870,7 +1870,19 @@
       "list": "list",
       "created": "Successfully created Reminder with ID `{{ID}}`\nReminder will end {{time}}",
       "invalidTime": "The given Time was not valid",
-      "noReason": "Please provide a Reason to Remind you of"
+      "noReason": "Please provide a Reason to Remind you of",
+      "reminderEnded": "__Your Reminder has ended:__\n{{reason}}",
+      "placeholder": "Select a Reminder to Edit/Delete",
+      "editReason": "Edit",
+      "del": "Delete Reminder",
+      "desc": "Use the Buttons below to Select a Reminder to Edit or Delete\nTo create a Reminder use the `reminder [duration] [text]` Command",
+      "author": "Ayako Reminders",
+      "ends": "Ends",
+      "editTitle": "Edit a Reminder",
+      "timeLabel": "Insert new Time Below",
+      "editLabel": "Insert new Text Below",
+      "editPlaceholder": "Remind me to Vote for Ayako!",
+      "timePlaceholder": "11 hours 30 minutes"
     },
     "ping": {
       "category": "Info",

@@ -38,8 +38,7 @@ module.exports = {
       return channel.map((c) => module.exports.send(c, rawPayload, timeout));
     }
 
-    const payload =
-      typeof rawPayload === 'string' ? { failIfNotExists: false, content: rawPayload } : rawPayload;
+    const payload = typeof rawPayload === 'string' ? { content: rawPayload } : rawPayload;
 
     if (timeout) {
       combineMessages({ channel }, payload, timeout);
@@ -51,6 +50,8 @@ module.exports = {
     if (typeof channel.send !== 'function') throw new Error('Invalid Channel');
 
     return channel.send(payload).catch((e) => {
+      if (String(e).includes('50007')) return null;
+
       if (String(e).includes('AbortError: The user aborted a request')) {
         return module.exports.send(payload);
       }
@@ -66,8 +67,7 @@ module.exports = {
    * @param {object|string} rawPayload - The Payload or String sent
    */
   reply: async (msg, rawPayload, timeout) => {
-    const payload =
-      typeof rawPayload === 'string' ? { failIfNotExists: false, content: rawPayload } : rawPayload;
+    const payload = typeof rawPayload === 'string' ? { content: rawPayload } : rawPayload;
 
     if (typeof msg.reply !== 'function') {
       const response = await module.exports.send(msg.channel, payload, timeout);
@@ -82,6 +82,8 @@ module.exports = {
     if (!payload) throw new Error('No Payload!');
 
     const m = await msg.reply(payload).catch((e) => {
+      if (String(e).includes('50007')) return null;
+
       if (String(e).includes('AbortError: The user aborted a request')) {
         return module.exports.reply(payload);
       }
@@ -1218,7 +1220,7 @@ module.exports = {
   },
   disableComponents: async (m, embeds) => {
     await m.edit({
-      embeds,
+      embeds: embeds || m.embeds,
       components: module.exports.buttonRower(
         m.components.map((c, i) =>
           c.components.map((_, j) => {
