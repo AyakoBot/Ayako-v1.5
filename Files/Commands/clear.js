@@ -94,6 +94,7 @@ module.exports = {
           messages.push(
             ...next100Msgs.filter((m) => m.author.id === filterBy.id && m.id !== msg.id),
           );
+
           break;
         }
         case 'between': {
@@ -325,6 +326,11 @@ const delMsgs = async (msg, amountOrMessages, channel, requestedAmount) => {
 
   if (!messages || !messages.length) messages = amountOrMessages;
 
+  messages = messages.filter((m) => {
+    if (m.createdAt > Date.now() - 1209600000) return true;
+    return false;
+  });
+
   if (!messages || !messages.length) {
     msg.client.ch.error(msg, msg.lan.noMessages);
     return;
@@ -335,7 +341,8 @@ const delMsgs = async (msg, amountOrMessages, channel, requestedAmount) => {
       messages.map((m) => m.id),
       `${msg.author.tag} / ${msg.author.id}`,
     )
-    .catch(() => {});
+    .catch(() => {
+    });
 
   let m;
   if (messages.length !== Number(requestedAmount)) {
