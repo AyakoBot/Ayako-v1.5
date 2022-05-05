@@ -55,6 +55,11 @@ const stickyperms = async (member, user) => {
     [user.id, member.guild.id],
   );
 
+  await member.client.ch.query(
+    `DELETE FROM stickypermmembers WHERE userid = $1 AND guildid = $2;`,
+    [user.id, member.guild.id],
+  );
+
   if (!memberRes || !memberRes.rowCount) return;
 
   const settingsRes = await member.client.ch.query(
