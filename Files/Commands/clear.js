@@ -341,8 +341,7 @@ const delMsgs = async (msg, amountOrMessages, channel, requestedAmount) => {
       messages.map((m) => m.id),
       `${msg.author.tag} / ${msg.author.id}`,
     )
-    .catch(() => {
-    });
+    .catch(() => {});
 
   let m;
   if (messages.length !== Number(requestedAmount)) {
