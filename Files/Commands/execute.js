@@ -21,7 +21,6 @@ module.exports = {
   dm: true,
   takesFirstArg: false,
   execute: async (msg) => {
-
     if (msg.author.id !== '318453143476371456') return;
     msg.client.channels.cache.get('827302309368561715').send({
       content: `This is a Channel about Support for <@650691698409734151>\n**Do not send Messages here if you don't need help with Ayako**\nThis is not a general Support Channel`,
@@ -30,7 +29,6 @@ module.exports = {
 };
 
 /*
-
     msg.client.application.commands.edit('971536827079082054', {
       name: 'giveaway',
       description: 'Giveaway related Commands',
@@ -77,7 +75,8 @@ module.exports = {
             {
               type: 3,
               name: 'time',
-              description: 'The Time after which the Winner will be chosen',
+              description:
+                'The Time after which the Winner will be chosen (Example: 5 days 20h 15 mins)',
               required: false,
             },
             {
@@ -121,6 +120,12 @@ module.exports = {
               type: 7,
             },
             {
+              type: 3,
+              name: 'prize-description',
+              description: 'A Description of the Prize the Winners will win',
+              required: true,
+            },
+            {
               max_value: 9999999,
               min_value: 1,
               type: 4,
@@ -131,13 +136,8 @@ module.exports = {
             {
               type: 3,
               name: 'time',
-              description: 'The Time after which the Winner will be chosen',
-              required: true,
-            },
-            {
-              type: 3,
-              name: 'prize-description',
-              description: 'A Description of the Prize the Winners will win',
+              description:
+                'The Time after which the Winner will be chosen (Example: 5 days 20h 15 mins)',
               required: true,
             },
             {
