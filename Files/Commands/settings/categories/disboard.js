@@ -9,7 +9,7 @@ module.exports = {
   finished: true,
   category: ['automation'],
   displayEmbed(msg, r) {
-    const embed = new Builders.UnsafeEmbedBuilder().addFields(
+    const embed = new Builders.UnsafeEmbedBuilder().setDescription(msg.lan.desc).addFields(
       {
         name: msg.lanSettings.active,
         value: r.active

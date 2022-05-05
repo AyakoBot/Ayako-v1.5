@@ -1,65 +1,90 @@
+const Builders = require('@discordjs/builders');
+const jobs = require('node-schedule');
+
 module.exports = {
   execute: async (msg) => {
     if (msg.author.id !== '302050872383242240') return;
+    console.log(1);
     if (!msg.embeds[0]) return;
+    console.log(1);
     if (!msg.embeds[0].data.color) return;
-
+    console.log(1);
     if (
-      msg.embeds[0].data.color === '2406327' &&
-      msg.embeds[0].data.image?.url?.includes('bot-command-image-bump.png')
+      msg.embeds[0].data.color !== '2406327' ||
+      !msg.embeds[0].data.image?.url?.includes('bot-command-image-bump.png')
     ) {
-      const res = await msg.client.ch.query(
-        'SELECT * FROM disboard WHERE guildid = $1 AND active = true;',
-        [msg.guild.id],
-      );
-
-      if (res && res.rowCount > 0) {
-        if (res.rows[0].enabled) msg.react(msg.client.objectEmotes.tick.id).catch(() => {});
-
-        if (res.rows[0].channelid) {
-          msg.client.ch.query(
-            'UPDATE disboard SET lastbump = $2, channelid = $3 WHERE guildid = $1;',
-            [msg.guild.id, +Date.now() + 7200000, res.rows[0].channelid],
-          );
-        } else {
-          msg.client.ch.query(
-            'UPDATE disboard SET lastbump = $2, channelid = $3 WHERE guildid = $1;',
-            [msg.guild.id, +Date.now() + 7200000, msg.channel.id],
-          );
-        }
-
-        getUser(msg);
-      }
+      return;
     }
+    console.log(1);
+
+    const settings = await getSettings(msg);
+    if (!settings) return;
+    console.log(1);
+
+    const channel = msg.client.channels.cache.get(settings.channelid) || msg.channel;
+
+    msg.client.disboardBumpReminders.get(msg.guild.id)?.cancel();
+    msg.client.disboardBumpReminders.delete(msg.guild.id);
+
+    await msg.react(msg.client.objectEmotes.tick.id).catch(() => {});
+
+    await msg.client.ch.query(
+      `UPDATE disboard SET lastbump = $1, tempchannelid = $2 WHERE guildid = $3;`,
+      [msg.createdTimestamp, channel.id, msg.guild.id],
+    );
+
+    setReminder();
   },
 };
 
-const getUser = async (msg) => {
-  const msgs = await msg.channel.messages.fetch({ limit: 10 }).catch(() => []);
+const getSettings = async (msg) => {
+  const res = await msg.client.ch.query(
+    'SELECT * FROM disboard WHERE guildid = $1 AND active = true;',
+    [msg.guild.id],
+  );
 
-  if (msgs.size) {
-    const possibleMsgs = msgs.filter((m) => m.content === '!d bump');
-    const answer = msgs
-      .filter(
-        (m) =>
-          m.author.id === '302050872383242240' &&
-          m.embeds[0]?.data?.image?.url?.includes('bot-command-image-bump.png'),
-      )
-      .first();
+  if (res && res.rowCount) return res.rows[0];
+  return null;
+};
 
-    const timestamp = possibleMsgs
-      .map((m) => m.createdTimestamp)
-      .reduce((prev, curr) =>
-        Math.abs(curr - answer.createdTimestamp) < Math.abs(prev - answer.createdTimestamp)
-          ? curr
-          : prev,
-      )[0];
+const setReminder = (msg, isBump, settings) => {
+  if (!isBump && !settings.repeatreminder) return;
 
-    const m = msgs.find((me) => me.createdTimestamp === timestamp);
+  msg.client.disboardBumpReminders.set(
+    msg.guild.id,
+    jobs.scheduleJob(new Date(Date.now() + isBump ? 7200000 : settings.repeatreminder), () => {
+      endReminder();
+    }),
+  );
+};
 
-    msg.client.ch.query(
-      `INSERT INTO disboardleaderboard (guildid, userid, bumps) VALUES ($1, $2, 1) ON CONFLICT (guildid, userid) DO UPDATE SET bumps = bumps + 1;`,
-      [msg.guild.id, m.author.id],
-    );
-  }
+const endReminder = async (msg) => {
+  const settings = await getSettings(msg);
+  if (!settings) return;
+
+  const channel =
+    msg.client.channels.cache.get(settings.channelid) ||
+    msg.client.channels.cache.get(settings.tempchannelid);
+
+  if (!channel) return;
+
+  const language = await msg.client.ch.languageSelector(msg.guild);
+  const lan = language.ready.disboard;
+
+  const embed = new Builders.UnsafeEmbedBuilder()
+    .setAuthor({
+      name: lan.title,
+      iconURL:
+        'https://cdn.discordapp.com/avatars/302050872383242240/67342a774a9f2d20d62bfc8553bb98e0.webp?size=4096',
+      url: msg.client.constants.standard.invite,
+    })
+    .setDescription(lan.desc)
+    .setColor(msg.client.ch.colorSelector(msg.guild.me));
+
+  const users = settings.users?.map((u) => `<@${u}>`).join(', ') || '';
+  const roles = settings.roles?.map((r) => `<@&${r}>`).join(', ') || '';
+
+  await msg.client.ch.send(channel, { embeds: [embed], content: `${users}\n${roles}` });
+
+  setReminder(msg, false, settings);
 };

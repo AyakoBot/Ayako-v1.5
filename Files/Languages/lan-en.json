@@ -422,7 +422,7 @@
       "reason": "Automatically Un-Muted"
     },
     "disboard": {
-      "bumpMsg": "You can now Bump this server again!\n\n`!d bump`",
+      "desc": "You can now Bump this server again!\n\n`!d bump`",
       "title": "Ayako DISBOARD Bump Reminder"
     },
     "reminder": {
@@ -1394,16 +1394,6 @@
       "toggle": "Toggle User Type",
       "noLevels": "There are no Levels on this Server yet"
     },
-    "disboardleaderboard": {
-      "description": "Displays the top 30 Users by DISBOARD Bumps",
-      "usage": ["lvls"],
-      "category": "Fun",
-      "disabled": "Disboard is disabled on this Server",
-      "author": "Ayako DISBOARD Leaderboards",
-      "yourPosition": "Your Position",
-      "toggle": "Toggle User Type",
-      "noBumps": "No one Bumped the Server yet"
-    },
     "stp": {
       "description": "Test what kind of stuff you can invoke using {{msg}}",
       "usage": ["stp {{msg.[children]}}"],
@@ -1821,7 +1811,7 @@
       "tooLittle": "You have to Delete more than 1 Message",
       "noMessages": "No Messages found to Bulk Delete",
       "invalidMessage": "Message with ID {{ID}} does not exist",
-      "limitedSuccess": "I was only able to Delete {{amount}} Messages\nas there were no other Messages in the last 500 sent which matched your cirterias",
+      "limitedSuccess": "I was only able to Delete {{amount}} Messages\nas there were no other Messages in the last 500 sent which matched your criterias",
       "success": "Successfully Deleted {{amount}} Messages"
     },
     "warn": {
@@ -2962,6 +2952,7 @@
         "users": "Ping Users",
         "channelid": "Reminder Channel",
         "repeatreminder": "Repeat Reminder",
+        "desc": "As per DISBOARD's Guidelines, Servers are not allowed to reward Users for Actions on their Service.\nTherefore Functions like `Reward Roles` or `Bump Leaderboards` will not be added.",
         "edit": {
           "active": {
             "name": "Active",
