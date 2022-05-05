@@ -34,7 +34,9 @@ const stickyroles = async (member, user) => {
 
   const language = await member.guild.client.ch.languageSelector(member.guild);
   if (rolesToAdd.length) {
-    await member.roles.add(rolesToAdd, language.commands.settings.sticky.roleReason);
+    await member.roles
+      .add(rolesToAdd, language.commands.settings.sticky.roleReason)
+      .catch(() => {});
   }
 };
 
@@ -42,11 +44,13 @@ const getRoles = (mode, roles, memberRoles, guild) => {
   if (mode) {
     return memberRoles
       .filter((id) => !roles?.includes(id))
-      .filter((id) => !!guild.roles.cache.get(id));
+      .filter((id) => !!guild.roles.cache.get(id))
+      .filter((id) => guild.roles.cache.get(id).rawPosition < guild.me.roles.highest.rawPosition);
   }
   return memberRoles
     .filter((id) => roles?.includes(id))
-    .filter((id) => !!guild.roles.cache.get(id));
+    .filter((id) => !!guild.roles.cache.get(id))
+    .filter((id) => guild.roles.cache.get(id).rawPosition < guild.me.roles.highest.rawPosition);
 };
 
 const stickyperms = async (member, user) => {
