@@ -223,11 +223,6 @@ module.exports = {
       .setDescription(cmd.client.ch.stp(lan.finishDesc, { guild: cmd.guild }))
       .setColor(cmd.client.constants.standard.color);
     cmd.client.ch.send(cmd.DM, { embeds: [embed] });
-    if (cmd.guild.id === '298954459172700181') {
-      cmd.client.ch.send(cmd.DM, {
-        content: `**Also worth checking out:**\n💁‍♀️ Kimetsu No Yaiba┊Demon Slayer┊500 Demon Slayer Emojis & Stickers┊Unique & Fun┊Active┊Chatting┊VC┊& much more! 💜 \nㅤㅤㅤ╰─ ʚ ୨୧ ɞ ─╮\nF✧· 🐛 https://discord.gg/k76uPAzsSW ☂️ ·✧`,
-      });
-    }
     if (cmd.guild.id === '366219406776336385') {
       cmd.client.ch.send(cmd.DM, {
         content: `**Also worth checking out:**\n<:AMcatbaby:774005429469708300> **Animekos | Anime & Art | Ayako Bot Support | 400+ Emotes | Self Promotion Channels** <:AMcatlove:774010328978686052>\n🌸 https://discord.gg/tMb3QZaWHA 🌸`,

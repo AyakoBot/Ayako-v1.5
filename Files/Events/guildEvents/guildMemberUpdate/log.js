@@ -73,7 +73,6 @@ module.exports = {
           ch.send(channels, { embeds: [embed] }, 5000);
           return;
         }
-        if (oldMember.roles.cache === newMember.roles.cache) return;
         let entry;
         if (guild.me.permissions.has(128n)) {
           const audit = await guild.fetchAuditLogs({ limit: 10, type: 25 }).catch(() => {});
