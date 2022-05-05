@@ -52,9 +52,12 @@ const setReminder = (msg, isBump, settings) => {
 
   msg.client.disboardBumpReminders.set(
     msg.guild.id,
-    jobs.scheduleJob(new Date(Date.now() + isBump ? 7200000 : settings.repeatreminder), () => {
-      endReminder();
-    }),
+    jobs.scheduleJob(
+      new Date(Date.now() + isBump ? 7200000 : settings.repeatreminder * 60 * 1000),
+      () => {
+        endReminder();
+      },
+    ),
   );
 };
 
