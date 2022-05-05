@@ -5,5 +5,8 @@ module.exports = (member) => {
   newMember.premiumSinceTimestamp = null;
   newMember.premiumSince = null;
 
+  oldMember.client = member.client;
+  newMember.client = member.client;
+
   member.client.emit('guildMemberUpdate', oldMember, newMember);
 };
