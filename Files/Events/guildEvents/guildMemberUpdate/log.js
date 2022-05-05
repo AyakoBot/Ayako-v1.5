@@ -30,7 +30,7 @@ module.exports = {
           });
 
           let entry;
-          if (guild.me.permissions.has(128n)) {
+          if (guild.members.cache.get(client.user.id).permissions.has(128n)) {
             const audit = await guild.fetchAuditLogs({ limit: 5, type: 24 });
             if (audit && audit.entries) {
               entry = audit.entries.filter((e) => e.target.id === user.id);
@@ -74,7 +74,7 @@ module.exports = {
           return;
         }
         let entry;
-        if (guild.me.permissions.has(128n)) {
+        if (guild.members.cache.get(client.user.id).permissions.has(128n)) {
           const audit = await guild.fetchAuditLogs({ limit: 10, type: 25 }).catch(() => {});
           if (audit && audit.entries) {
             entry = audit.entries.filter((e) => e.target.id === user.id);
