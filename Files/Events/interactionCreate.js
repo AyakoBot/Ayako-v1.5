@@ -3,10 +3,9 @@ const Discord = require('discord.js');
 const jobs = require('node-schedule');
 const moment = require('moment');
 require('moment-duration-format');
-
 const auth = require('../BaseClient/auth.json');
 
-const cooldowns = new Set();
+const cooldowns = new Map();
 
 module.exports = {
   execute: async (interaction) => {
@@ -51,20 +50,21 @@ const getInteraction = (interaction) => {
 };
 
 const slashCommandHandler = async (interaction) => {
-  interaction.command =
+  interaction.cmd =
     interaction.client.slashCommands.get(interaction.customId) ||
-    interaction.client.slashCommands.get(interaction.commandName);
-  if (!interaction.command) return;
+    interaction.client.slashCommands.find((c) => c.name === interaction.commandName);
+
+  if (!interaction.cmd) return;
   interaction.language = await interaction.client.ch.languageSelector(interaction.guild);
 
   if (
-    interaction.command.thisGuildOnly &&
-    !interaction.command.thisGuildOnly.includes(interaction.guild?.id)
+    interaction.cmd.thisGuildOnly &&
+    !interaction.cmd.thisGuildOnly.includes(interaction.guild?.id)
   ) {
     return;
   }
 
-  if (interaction.command.perm === 0) {
+  if (interaction.cmd.perm === 0) {
     if (interaction.user.id !== auth.ownerID) {
       interaction.client.ch.error(
         interaction,
@@ -75,7 +75,7 @@ const slashCommandHandler = async (interaction) => {
     editCheck(interaction);
     return;
   }
-  if (interaction.command.perm === 1) {
+  if (interaction.cmd.perm === 1) {
     if (interaction.guild?.ownerId !== interaction.user.id) {
       interaction.client.ch.error(
         interaction,
@@ -91,7 +91,7 @@ const slashCommandHandler = async (interaction) => {
     runDMCommand(interaction);
     return;
   }
-  if (interaction.command.dmOnly) {
+  if (interaction.cmd.dmOnly) {
     interaction.channel.ch.error(interaction, interaction.language.commands.commandHandler.dmOnly);
     return;
   }
@@ -107,10 +107,10 @@ const slashCommandHandler = async (interaction) => {
     if (finished) return;
   }
 
-  if (typeof interaction.command.perm === 'bigint') {
-    const perms = new Discord.PermissionsBitField(interaction.command.perm);
+  if (typeof interaction.cmd.perm === 'bigint') {
+    const perms = new Discord.PermissionsBitField(interaction.cmd.perm);
 
-    if (interaction.command.type === 'mod') {
+    if (interaction.cmd.type === 'mod') {
       const modRoles = await getModRoles(interaction);
 
       const finished = await checkModRoles(interaction, modRoles);
@@ -125,8 +125,8 @@ const slashCommandHandler = async (interaction) => {
       if (finished === true) return;
     }
 
-    if (!interaction.member.permissions.has(interaction.command.perm)) {
-      interaction.client.ch.permError(interaction, interaction.command.perm, false);
+    if (!interaction.member.permissions.has(interaction.cmd.perm)) {
+      interaction.client.ch.permError(interaction, interaction.cmd.perm, false);
       return;
     }
 
@@ -172,9 +172,9 @@ const error = (interaction, e) => {
 const checkDisabled = (interaction, disabledCommands) => {
   const applyingRows = disabledCommands.filter(
     (row) =>
-      row.commands.includes(interaction.command.name) ||
-      (interaction.command.aliases &&
-        interaction.command.aliases.some((alias) => row.commands.includes(alias))),
+      row.commands.includes(interaction.cmd.name) ||
+      (interaction.cmd.aliases &&
+        interaction.cmd.aliases.some((alias) => row.commands.includes(alias))),
   );
 
   if (!applyingRows || !applyingRows.length) return false;
@@ -211,8 +211,8 @@ const editCheck = async (interaction) => {
     const proceed = ownerExecute(interaction);
     if (!proceed) return;
   } else if (
-    cooldowns.get(interaction.command.name) &&
-    cooldowns.get(interaction.command.name).channel.id === interaction.channel.id
+    cooldowns.get(interaction.cmd.name) &&
+    cooldowns.get(interaction.cmd.name).channel.id === interaction.channel.id
   ) {
     onCooldown(interaction);
     return;
@@ -267,11 +267,11 @@ const checkModRoles = async (interaction, modRoles) => {
 
   if (
     (!roleToApply.perms ||
-      !new Discord.PermissionsBitField(roleToApply.perms).has(interaction.command.perm) ||
+      !new Discord.PermissionsBitField(roleToApply.perms).has(interaction.cmd.perm) ||
       !roleToApply.blacklistedcommands ||
-      roleToApply.blacklistedcommands.includes(interaction.command.name)) &&
+      roleToApply.blacklistedcommands.includes(interaction.cmd.name)) &&
     roleToApply.whitelistedcommands &&
-    !roleToApply.whitelistedcommands.includes(interaction.command.name)
+    !roleToApply.whitelistedcommands.includes(interaction.cmd.name)
   ) {
     return false;
   }
@@ -293,9 +293,9 @@ const getModRoles = async (interaction) => {
 };
 
 const putCooldown = (interaction) => {
-  cooldowns.set(interaction.command.name, {
+  cooldowns.set(interaction.cmd.name, {
     job: jobs.scheduleJob(new Date(Date.now() + interaction.cooldown), () => {
-      cooldowns.delete(interaction.command.name);
+      cooldowns.delete(interaction.cmd.name);
     }),
     channel: interaction.channel,
     expire: Date.now() + interaction.cooldown,
@@ -312,7 +312,7 @@ const checkCooldownConfig = (interaction, res) =>
 const getCooldown = async (interaction) => {
   const res = await interaction.client.ch.query(
     `SELECT * FROM cooldowns WHERE guildid = $1 AND active = true AND command = $2;`,
-    [interaction.guild.id, interaction.command.name],
+    [interaction.guild.id, interaction.cmd.name],
   );
 
   if (res && res.rowCount) {
@@ -323,15 +323,15 @@ const getCooldown = async (interaction) => {
 };
 
 const ownerExecute = (interaction) => {
-  if (interaction.command.name === 'eval') {
-    interaction.command.execute(interaction);
+  if (interaction.cmd.name === 'eval') {
+    interaction.cmd.execute(interaction);
     return false;
   }
 
-  cooldowns.get(interaction.command.name)?.job.cancel();
-  cooldowns.set(interaction.command.name, {
+  cooldowns.get(interaction.cmd.name)?.job.cancel();
+  cooldowns.set(interaction.cmd.name, {
     job: jobs.scheduleJob(new Date(Date.now() + interaction.cooldown), () => {
-      cooldowns.delete(interaction.command.name);
+      cooldowns.delete(interaction.cmd.name);
     }),
     channel: interaction.channel,
     expire: Date.now() + interaction.cooldown,
@@ -340,7 +340,7 @@ const ownerExecute = (interaction) => {
 };
 
 const onCooldown = (interaction) => {
-  const cl = cooldowns.get(interaction.command.name);
+  const cl = cooldowns.get(interaction.cmd.name);
 
   const timeLeft = cl.expire - Date.now();
   const { emote, usedEmote } = getEmote(Math.ceil(timeLeft / 1000), interaction);
@@ -389,17 +389,17 @@ const getEmote = (secondsLeft, interaction) => {
 const commandExe = async (interaction) => {
   if (interaction.channel.type !== 1) await doLogChannels(interaction);
 
-  interaction.lan = interaction.language.slashCommands[interaction.command.name];
+  interaction.lan = interaction.language.slashCommands[interaction.cmd.name];
 
   try {
     if (interaction.client.user.id === interaction.client.mainID) {
       const statcord = require('../BaseClient/Statcord');
-      statcord.postCommand(interaction.command.name, interaction.user.id).catch(() => {});
+      statcord.postCommand(interaction.cmd.name, interaction.user.id).catch(() => {});
     }
 
     // eslint-disable-next-line no-console
-    console.log(`Slash-Command executed: ${interaction.command.name} | ${interaction.channel.id}`);
-    interaction.command.execute(interaction, interaction.language);
+    console.log(`Slash-Command executed: ${interaction.cmd.name} | ${interaction.channel.id}`);
+    interaction.cmd.execute(interaction, interaction.language);
   } catch (e) {
     const channel = interaction.client.channels.cache.get(
       interaction.client.constants.errorchannel,
@@ -444,7 +444,7 @@ const doLogChannels = async (interaction) => {
 };
 
 const runDMCommand = (interaction) => {
-  if (interaction.command.dm) commandExe(interaction);
+  if (interaction.cmd.dm) commandExe(interaction);
   else {
     interaction.client.ch.error(
       interaction,
