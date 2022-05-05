@@ -1,0 +1,9 @@
+module.exports = (member) => {
+  const oldMember = member.client.ch.objectClone(member);
+  const newMember = member.client.ch.objectClone(member);
+
+  newMember.premiumSinceTimestamp = null;
+  newMember.premiumSince = null;
+
+  member.client.emit('guildMemberUpdate', oldMember, newMember);
+};
