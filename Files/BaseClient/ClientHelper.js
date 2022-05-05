@@ -1309,48 +1309,52 @@ const getDeleteRes = async (msg) => {
   return [];
 };
 
-const channelQueue = new Map();
-const channelTimeout = new Map();
-const channelCharLimit = new Map();
-
 // msg might not be a real message but "{ channel }" instead
 const combineMessages = async (msg, payload, timeout) => {
+  if (!msg.client) msg.client = require('./DiscordClient');
+
   if (!payload.embeds || !payload.embeds.length) {
     module.exports.send(msg.channel, payload);
     return;
   }
 
-  if (channelQueue.has(msg.channel.id)) {
-    const updatedQueue = channelQueue.get(msg.channel.id);
+  if (msg.client.channelQueue.has(msg.channel.id)) {
+    const updatedQueue = msg.client.channelQueue.get(msg.channel.id);
     const charsToPush = getEmbedCharLens(payload.embeds);
 
-    if (updatedQueue.length < 10 && channelCharLimit.get(msg.channel.id) + charsToPush <= 5000) {
+    if (
+      updatedQueue.length < 10 &&
+      msg.client.channelCharLimit.get(msg.channel.id) + charsToPush <= 5000
+    ) {
       updatedQueue.push(payload);
-      channelCharLimit.set(msg.channel.id, channelCharLimit.get(msg.channel.id) + charsToPush);
-      channelQueue.set(msg.channel.id, updatedQueue);
+      msg.client.channelCharLimit.set(
+        msg.channel.id,
+        msg.client.channelCharLimit.get(msg.channel.id) + charsToPush,
+      );
+      msg.client.channelQueue.set(msg.channel.id, updatedQueue);
 
-      channelTimeout.get(msg.channel.id)?.cancel();
+      msg.client.channelTimeout.get(msg.channel.id)?.cancel();
 
       queueSend(msg, timeout);
     } else if (
       updatedQueue.length === 10 ||
-      channelCharLimit.get(msg.channel.id) + charsToPush >= 5000
+      msg.client.channelCharLimit.get(msg.channel.id) + charsToPush >= 5000
     ) {
       module.exports.send(msg.channel, { embeds: updatedQueue.map((p) => p.embeds).flat(1) });
-      channelQueue.set(msg.channel.id, [payload]);
+      msg.client.channelQueue.set(msg.channel.id, [payload]);
 
-      channelTimeout.get(msg.channel.id)?.cancel();
+      msg.client.channelTimeout.get(msg.channel.id)?.cancel();
 
-      channelCharLimit.set(msg.channel.id, getEmbedCharLens(payload.embeds));
+      msg.client.channelCharLimit.set(msg.channel.id, getEmbedCharLens(payload.embeds));
       queueSend(msg, timeout);
     }
   } else {
-    channelQueue.set(msg.channel.id, [payload]);
-    channelCharLimit.set(msg.channel.id, getEmbedCharLens(payload.embeds));
+    msg.client.channelQueue.set(msg.channel.id, [payload]);
+    msg.client.channelCharLimit.set(msg.channel.id, getEmbedCharLens(payload.embeds));
 
     queueSend(msg, timeout);
 
-    channelTimeout.get(msg.channel.id)?.cancel();
+    msg.client.channelTimeout.get(msg.channel.id)?.cancel();
   }
 };
 
@@ -1376,24 +1380,24 @@ const getEmbedCharLens = (embeds) => {
 };
 
 const queueSend = (msg, timeout) =>
-  channelTimeout.set(
+  msg.client.channelTimeout.set(
     msg.channel.id,
     jobs.scheduleJob(new Date(Date.now() + timeout), () => {
       module.exports.send(msg.channel, {
-        embeds: channelQueue
+        embeds: msg.client.channelQueue
           .get(msg.channel.id)
           .map((p) => p.embeds)
           ?.flat(1)
           .filter((p) => !!p),
-        files: channelQueue
+        files: msg.client.channelQueue
           .get(msg.channel.id)
           .map((p) => p.files)
           ?.flat(1)
           .filter((p) => !!p),
       });
 
-      channelQueue.delete(msg.channel.id);
-      channelTimeout.delete(msg.channel.id);
-      channelCharLimit.delete(msg.channel.id);
+      msg.client.channelQueue.delete(msg.channel.id);
+      msg.client.channelTimeout.delete(msg.channel.id);
+      msg.client.channelCharLimit.delete(msg.channel.id);
     }),
   );
