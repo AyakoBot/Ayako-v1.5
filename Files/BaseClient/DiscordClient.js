@@ -232,6 +232,10 @@ class Client extends Discord.Client {
 
     this.mainID = '650691698409734151';
 
+    this.channelQueue = new Map();
+    this.channelTimeout = new Map();
+    this.channelCharLimit = new Map();
+
     this.setMaxListeners(this.events.size);
   }
 }
