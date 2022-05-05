@@ -4053,7 +4053,8 @@
     "giveaway": {
       "description": "Create a Giveaway",
       "usage": ["giveaway"],
-      "category": "Giveaway",
+      "category": "Giveaway"
+    }
   },
   "featuresName": "Features",
   "none": "None",

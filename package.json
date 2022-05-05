@@ -7,6 +7,7 @@
     "canvas": "^2.9.0",
     "captcha-canvas": "^3.1.0",
     "chai": "^4.3.6",
+    "clone": "^2.1.2",
     "confusables": "^1.1.0",
     "discord.js": "^14.0.0-dev.1650931749-df64d3e",
     "eris": "^0.16.1",
@@ -32,7 +33,6 @@
     "tenorjs": "^1.0.8",
     "topgg-autoposter": "^2.0.1",
     "util": "^0.12.4",
-    "v8": "^0.1.0",
     "valid-url": "^1.0.9"
   },
   "devDependencies": {

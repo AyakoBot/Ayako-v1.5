@@ -26,6 +26,8 @@ module.exports = async () => {
     }
 
     guild.members.cache.forEach((member) => {
+      member.client = client;
+
       if (member.premiumSinceTimestamp) {
         if (!res || !res.rowCount) {
           client.ch.query(

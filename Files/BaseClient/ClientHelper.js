@@ -3,10 +3,10 @@ const https = require('https');
 const http = require('http');
 const Discord = require('discord.js');
 const Builders = require('@discordjs/builders');
-const v8 = require('v8');
 const fs = require('fs');
 const SA = require('superagent');
 const jobs = require('node-schedule');
+const clone = require('clone');
 
 const auth = require('./auth.json');
 const ChannelRules = require('./Other Client Files/Classes/ChannelRules');
@@ -947,7 +947,7 @@ module.exports = {
    * @constructor
    * @param {object} obj - The Object to clone
    */
-  objectClone: (obj) => v8.deserialize(v8.serialize(obj)),
+  objectClone: (obj) => clone(obj),
   /**
    * Converts a File URL into a string if URL leads to a .txt File
    * @constructor
