@@ -1379,7 +1379,9 @@ const getEmbedCharLens = (embeds) => {
   return total > 6000 ? 1000 : total;
 };
 
-const queueSend = (msg, timeout) =>
+const queueSend = (msg, timeout) => {
+  if (!timeout) throw new Error('No Timeout Provided!');
+
   msg.client.channelTimeout.set(
     msg.channel.id,
     jobs.scheduleJob(new Date(Date.now() + timeout), () => {
@@ -1401,3 +1403,4 @@ const queueSend = (msg, timeout) =>
       msg.client.channelCharLimit.delete(msg.channel.id);
     }),
   );
+};
