@@ -373,9 +373,15 @@
     "link": "https://cdn.discordapp.com/emojis/968488315659632690.png"
   },
   "edit": {
-    "name": "edit",
+    "name": "Edit",
     "id": "968643140493930577",
     "animated": false,
     "link": "https://cdn.discordapp.com/emojis/968643140493930577.png"
+  },
+  "gift": {
+    "name": "Gift",
+    "id": "971922434901024798",
+    "animated": false,
+    "link": "https://cdn.discordapp.com/emojis/971922434901024798.png"
   }
 }

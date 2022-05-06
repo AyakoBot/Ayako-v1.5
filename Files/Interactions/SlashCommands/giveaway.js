@@ -7,6 +7,26 @@ module.exports = {
   dm: false,
   type: 'giveaway',
   execute: async (cmd) => {
-    console.log(cmd);
+    switch (cmd.options._subcommand) {
+      case 'create': {
+        require('./giveaway/create')(cmd);
+        break;
+      }
+      case 'edit': {
+        require('./giveaway/edit')(cmd);
+        break;
+      }
+      case 'list': {
+        require('./giveaway/list')(cmd);
+        break;
+      }
+      case 'end': {
+        require('./giveaway/end')(cmd);
+        break;
+      }
+      default: {
+        break;
+      }
+    }
   },
 };
