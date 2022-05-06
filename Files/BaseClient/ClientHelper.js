@@ -88,6 +88,10 @@ module.exports = {
         return module.exports.reply(payload);
       }
 
+      if (String(e).includes('50035')) {
+        return module.exports.send(msg.channel, payload, timeout);
+      }
+
       if (String(e).includes('Missing Permissions')) {
         return module.exports.send(
           msg.author,
@@ -122,6 +126,7 @@ module.exports = {
     return m;
   },
   /**
+   * STP (String Template Replacer)
    * Inserts Strings given via Object parameter into the expression parameter
    * Can access Object Children
    * Replace keys need to be named the same as their Object parameter
