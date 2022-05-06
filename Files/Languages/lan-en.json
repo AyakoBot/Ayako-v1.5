@@ -433,25 +433,6 @@
       "author": "12 Hours are over!",
       "description": "If you want to keep your multiplyer streak up, ([click and vote](https://top.gg/bot/650691698409734151/vote))\nYour multiplyer is currently {{votegain}}x"
     },
-    "giveaway": {
-      "description": {
-        "role": "{{desc}}\n\n**Requirement:**\nYou should have the Role\n{{role}}",
-        "guild": {
-          "withInvite": "{{desc}}\n\n**Requirement:**\nYou should be Member of\n[{{servername}}]({{invitelink}} \"Join {{servername}} to claim the prize\")",
-          "withoutInvite": "{{desc}}\n\n\n\n**Requirement**\nYou should be member of\n{{servername}}"
-        }
-      },
-      "name": "Ayako Giveaways",
-      "endedAt": "Ended At",
-      "endAt": "End At",
-      "winners": "Winner(s)",
-      "roleInaccessible": "Giveaway cancelled, the required Role is deleted or inaccessible\n(You can edit the Giveaway Requirements in `h!giveawayedit` and then reroll the Giveaway)",
-      "leftServer": "Giveaway cancelled, Ayako left requirement Server\n(You can re-invite Ayako and then reroll the Giveaway)",
-      "noparticipants": "Giveaway cancelled, no valid participations",
-      "congraz": "Congratulations, {{usermap}}! You won:",
-      "guide": "React with 🎉 to participate!",
-      "remaining": "Time remaining: {{timeleft}}"
-    },
     "nitro": {
       "gotRole": "{{user}} has been given the {{role}} role for boosting longer than {{days}} days"
     },
@@ -3794,16 +3775,6 @@
           }
         }
       },
-      "giveaway": {
-        "embed": {
-          "list": "`{{prefix}}list` - List all running Giveaways on your Server",
-          "create": "`{{prefix}}create` - Create a Giveaway (step by step)",
-          "createOne": "`{{prefix}}createone [winners] [duration] [prize]` - Create a Giveaway (single Command)",
-          "edit": "`{{prefix}}edit [message ID]` - Edit a Giveaway",
-          "delete": "`{{prefix}}delete [message ID]` - Delete a Giveaway",
-          "reroll": "`{{prefix}}reroll [message ID]` - Reroll a Giveaway"
-        }
-      },
       "modroles": {
         "type": "Mod-Roles",
         "roleid": "Mod-Role",
@@ -4044,7 +4015,20 @@
     "giveaway": {
       "description": "Create a Giveaway",
       "usage": ["giveaway"],
-      "category": "Giveaway"
+      "category": "Giveaway",
+      "create": {
+        "missingPermissions": "I can't send or view Messages in this Channel",
+        "invalidTime": "The provided Time was invalid",
+        "author": "Ayako Giveaways",
+        "participants": "Participants",
+        "winners": "Possible Winners: ",
+        "end": "Ends",
+        "host": "Giveaway Host",
+        "roleRequire": "Required Role to enter this Giveaway",
+        "participate": "Participate",
+        "sent": "Giveaway started in {{channel}}",
+        "error": "Failed to create Giveaway"
+      }
     }
   },
   "featuresName": "Features",
