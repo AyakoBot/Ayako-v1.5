@@ -216,7 +216,7 @@ const editCheck = async (interaction) => {
   ) {
     onCooldown(interaction);
     return;
-  } else if (checkCooldownConfig(interaction, cooldownRes)) {
+  } else if (checkCooldownConfig(interaction, cooldownRes) && interaction.cooldown) {
     putCooldown(interaction);
   }
 
@@ -319,7 +319,7 @@ const getCooldown = async (interaction) => {
     res.rows[0].cooldown = Number(res.rows[0].cooldown) * 1000;
     return res.rows[0];
   }
-  return { cooldown: 1000 };
+  return { cooldown: 0 };
 };
 
 const ownerExecute = (interaction) => {
