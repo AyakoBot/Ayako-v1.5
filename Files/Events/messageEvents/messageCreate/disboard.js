@@ -4,22 +4,12 @@ const jobs = require('node-schedule');
 module.exports = {
   execute: async (msg) => {
     if (msg.author.id !== '302050872383242240') return;
-    console.log(1);
     if (!msg.embeds[0]) return;
-    console.log(1);
     if (!msg.embeds[0].data.color) return;
-    console.log(1);
-    if (
-      msg.embeds[0].data.color !== '2406327' ||
-      !msg.embeds[0].data.image?.url?.includes('bot-command-image-bump.png')
-    ) {
-      return;
-    }
-    console.log(1);
+    if (!msg.embeds[0].data.image?.url?.includes('bot-command-image-bump.png')) return;
 
     const settings = await getSettings(msg);
     if (!settings) return;
-    console.log(1);
 
     const channel = msg.client.channels.cache.get(settings.channelid) || msg.channel;
 
@@ -33,7 +23,7 @@ module.exports = {
       [msg.createdTimestamp, channel.id, msg.guild.id],
     );
 
-    setReminder();
+    setReminder(msg, true, settings);
   },
 };
 
@@ -55,7 +45,7 @@ const setReminder = (msg, isBump, settings) => {
     jobs.scheduleJob(
       new Date(Date.now() + isBump ? 7200000 : settings.repeatreminder * 60 * 1000),
       () => {
-        endReminder();
+        endReminder(msg);
       },
     ),
   );
