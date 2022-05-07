@@ -4,7 +4,7 @@ const Builders = require('@discordjs/builders');
 module.exports = {
   name: 'suggestion',
   split: /_+/,
-  needsLang: true,
+  needsLanguage: true,
   execute: async (cmd) => {
     const [type] = cmd.args;
 
