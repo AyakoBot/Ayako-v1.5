@@ -26,7 +26,14 @@ module.exports = async (cmd) => {
     return;
   }
 
-  const m = createGiveaway(cmd, lan, { description, role, endtime, winnerCount, host, channel });
+  const m = await createGiveaway(cmd, lan, {
+    description,
+    role,
+    endtime,
+    winnerCount,
+    host,
+    channel,
+  });
 
   if (!m) {
     cmd.client.ch.error(cmd, lan.error);
@@ -41,16 +48,36 @@ module.exports = async (cmd) => {
 
   cmd.client.giveaways.set(
     m.id,
-    jobs.scheduleJob(new Date(endtime), () => {
-      require('./end')(cmd, m);
+    jobs.scheduleJob(new Date(Number(endtime)), () => {
+      require('./end')({
+        guildid: cmd.guild.id,
+        channelid: channel.id,
+        msgid: m.id,
+        description,
+        winnercount: winnerCount,
+        endtime,
+        reqrole: role?.id,
+        actualprize: actualPrize,
+        host: host.id,
+      });
     }),
   );
 
   await cmd.client.ch.query(
-    `INSERT INTO giveaway 
-  (guildid, msgid, description, winnercount, endtime, reqrole, actualprize, host) VALUES 
-  ($1, $2, $3, $4, $5, $6, $7, $8);`,
-    [cmd.guild.id, m.id, description, winnerCount, endtime, role?.id, actualPrize, host.id],
+    `INSERT INTO giveaways
+  (guildid, msgid, description, winnercount, endtime, reqrole, actualprize, host, ended, channelid) VALUES 
+  ($1, $2, $3, $4, $5, $6, $7, $8, false, $9);`,
+    [
+      cmd.guild.id,
+      m.id,
+      description,
+      winnerCount,
+      endtime,
+      role?.id,
+      actualPrize,
+      host.id,
+      channel.id,
+    ],
   );
 };
 

@@ -39,6 +39,7 @@ module.exports = {
     require('./banManager')();
     require('./channelbanManager')();
     require('./muteManager')();
+    require('./giveawayManager')();
 
     jobs.scheduleJob('*/2 * * * * *', () => {
       require('./TimedManagers/TimedManagerSplitter')();
