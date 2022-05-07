@@ -1,8 +1,6 @@
 const Builders = require('@discordjs/builders');
 const Discord = require('discord.js');
 const jobs = require('node-schedule');
-const moment = require('moment');
-require('moment-duration-format');
 const auth = require('../BaseClient/auth.json');
 
 const cooldowns = new Map();
