@@ -1174,7 +1174,7 @@ module.exports = {
 
     return embeds.pop();
   },
-  error: (msg, content, m) => {
+  error: (msg, content, m, timeout) => {
     const embed = new Builders.UnsafeEmbedBuilder()
       .setAuthor({
         name: msg.language.error,
@@ -1189,7 +1189,7 @@ module.exports = {
     }
 
     if (m) return m.edit({ embeds: [embed] }).catch(() => {});
-    return module.exports.reply(msg, { embeds: [embed] });
+    return module.exports.reply(msg, { embeds: [embed] }, timeout);
   },
   permError: (msg, bits, me) => {
     const [neededPerms] = module.exports.bitUniques(
@@ -1357,9 +1357,9 @@ const combineMessages = async (msg, payload, timeout) => {
     msg.client.channelQueue.set(msg.channel.id, [payload]);
     msg.client.channelCharLimit.set(msg.channel.id, getEmbedCharLens(payload.embeds));
 
-    queueSend(msg, timeout);
-
     msg.client.channelTimeout.get(msg.channel.id)?.cancel();
+
+    queueSend(msg, timeout);
   }
 };
 
@@ -1385,8 +1385,6 @@ const getEmbedCharLens = (embeds) => {
 };
 
 const queueSend = (msg, timeout) => {
-  if (!timeout) throw new Error('No Timeout Provided!');
-
   msg.client.channelTimeout.set(
     msg.channel.id,
     jobs.scheduleJob(new Date(Date.now() + timeout), () => {
