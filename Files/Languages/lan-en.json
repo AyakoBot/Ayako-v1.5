@@ -1839,7 +1839,7 @@
       "set": "set",
       "delete": "delete",
       "list": "list",
-      "created": "Successfully created Reminder with ID `{{ID}}`\nReminder will end {{time}}",
+      "created": "Successfully created Reminder with ID `{{ID}}`\nReminder End: {{time}}",
       "invalidTime": "The given Time was not valid",
       "noReason": "Please provide a Reason to Remind you of",
       "reminderEnded": "__Your Reminder has ended:__\n{{reason}}",
@@ -4022,12 +4022,24 @@
         "author": "Ayako Giveaways",
         "participants": "Participants",
         "winners": "Possible Winners: ",
-        "end": "Ends",
+        "end": "End:",
         "host": "Giveaway Host",
         "roleRequire": "Required Role to enter this Giveaway",
         "participate": "Participate",
         "sent": "Giveaway started in {{channel}}",
         "error": "Failed to create Giveaway"
+      },
+      "end": {
+        "ended": "Ended",
+        "winner": "Winner",
+        "winners": "Winners",
+        "author": "Ayako Giveaways",
+        "title": "Congratulations! You won a Giveaway! [Click me to get to the Giveaway]",
+        "trouble": "If you have trouble with your Giveaway, DM or Mention the User below",
+        "getPrize": "To get your Prize, DM or Mention the User below",
+        "couldntDM": "I was unable to DM {{user}} / `{{user.tag}}` / `{{user.id}}`",
+        "noValidEntries": "No valid Entries | No Winner picked",
+        "checkDMs": "Check your DMs! | If you had your DMs closed, DM or Mention the User below"
       }
     }
   },
