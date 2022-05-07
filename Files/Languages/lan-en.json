@@ -4040,6 +4040,12 @@
         "couldntDM": "I was unable to DM {{user}} / `{{user.tag}}` / `{{user.id}}`",
         "noValidEntries": "No valid Entries | No Winner picked",
         "checkDMs": "Check your DMs! | If you had your DMs closed, DM or Mention the User below"
+      },
+      "participate": {
+        "cantEnter": "You don't meet the requirements for this Giveaway to participate",
+        "entered": "You are now participate in this Giveaway",
+        "left": "You are no longer participating in this Giveaway",
+        "participants": "Participants"
       }
     }
   },
