@@ -6,6 +6,7 @@ require('moment-duration-format');
 const auth = require('../BaseClient/auth.json');
 
 const cooldowns = new Map();
+const nonSlashCommandCooldowns = new Map();
 
 module.exports = {
   execute: async (interaction) => {
@@ -19,6 +20,27 @@ module.exports = {
 const otherInteractionHandler = async (interaction) => {
   const { args, nonSlashCommand } = getInteraction(interaction);
   if (!nonSlashCommand) return;
+
+  if (nonSlashCommand.cooldown) {
+    if (nonSlashCommandCooldowns.has(interaction.user.id)) {
+      const timeleft = Math.abs(nonSlashCommandCooldowns.get(interaction.user.id) - Date.now());
+
+      interaction.client.ch.reply(interaction, {
+        content: interaction.client.ch.stp(
+          interaction.language.commands.commandHandler.pleaseWait,
+          {
+            time: `${Math.ceil(timeleft / 1000)} ${interaction.language.time.seconds}`,
+          },
+        ),
+        ephemeral: true,
+      });
+      return;
+    }
+    nonSlashCommandCooldowns.set(interaction.user.id, Date.now());
+    jobs.scheduleJob(new Date(Date.now() + nonSlashCommand.cooldown), () => {
+      nonSlashCommandCooldowns.delete(interaction.user.id);
+    });
+  }
 
   if (nonSlashCommand.needsLanguage) {
     interaction.language = await interaction.client.ch.languageSelector(interaction.guild);
@@ -205,7 +227,7 @@ const checkDisabled = (interaction, disabledCommands) => {
 
 const editCheck = async (interaction) => {
   const cooldownRes = await getCooldown(interaction);
-  interaction.cooldown = cooldownRes.cooldown;
+  interaction.cooldown = cooldownRes.cooldown || interaction.cmd.cooldown;
 
   if (interaction.user.id === auth.ownerID) {
     const proceed = ownerExecute(interaction);
@@ -216,7 +238,7 @@ const editCheck = async (interaction) => {
   ) {
     onCooldown(interaction);
     return;
-  } else if (checkCooldownConfig(interaction, cooldownRes) && interaction.cooldown) {
+  } else if (checkCooldownConfig(interaction, cooldownRes) || interaction.cooldown) {
     putCooldown(interaction);
   }
 
@@ -298,7 +320,7 @@ const putCooldown = (interaction) => {
       cooldowns.delete(interaction.cmd.name);
     }),
     channel: interaction.channel,
-    expire: Date.now() + interaction.cooldown,
+    expire: Date.now() + Number(interaction.cooldown),
   });
 };
 
@@ -334,7 +356,7 @@ const ownerExecute = (interaction) => {
       cooldowns.delete(interaction.cmd.name);
     }),
     channel: interaction.channel,
-    expire: Date.now() + interaction.cooldown,
+    expire: Date.now() + Number(interaction.cooldown),
   });
   return true;
 };
@@ -342,48 +364,15 @@ const ownerExecute = (interaction) => {
 const onCooldown = (interaction) => {
   const cl = cooldowns.get(interaction.cmd.name);
 
-  const timeLeft = cl.expire - Date.now();
-  const { emote, usedEmote } = getEmote(Math.ceil(timeLeft / 1000), interaction);
+  const timeLeft = Math.abs(Number(cl.expire) - Date.now());
 
   interaction.cooldown = undefined;
-  interaction.client.ch
-    .reply(interaction, {
-      content: interaction.client.ch.stp(interaction.language.commands.commandHandler.pleaseWait, {
-        time: emote,
-      }),
-    })
-    .then((m) => {
-      if (!usedEmote) {
-        jobs.scheduleJob(new Date(Date.now() + (timeLeft - 60000)), () => {
-          m.edit({
-            content: interaction.client.ch.stp(
-              interaction.language.commands.commandHandler.pleaseWait,
-              {
-                time: interaction.client.textEmotes.timers[60],
-              },
-            ),
-          }).catch(() => {});
-        });
-      }
-
-      jobs.scheduleJob(new Date(cl.expire), () => {
-        m.delete().catch(() => {});
-      });
-    });
-};
-
-const getEmote = (secondsLeft, interaction) => {
-  let returned = `**${moment
-    .duration(secondsLeft * 1000)
-    .format(`s [${interaction.language.time.seconds}]`)}**`;
-  let usedEmote = false;
-
-  if (secondsLeft <= 60) {
-    returned = `${interaction.client.textEmotes.timers[secondsLeft]} **${interaction.language.time.seconds}**`;
-    usedEmote = true;
-  }
-
-  return { emote: returned, usedEmote };
+  interaction.client.ch.reply(interaction, {
+    content: interaction.client.ch.stp(interaction.language.commands.commandHandler.pleaseWait, {
+      time: `${Math.ceil(timeLeft / 1000)} ${interaction.language.time.seconds}`,
+    }),
+    ephemeral: true,
+  });
 };
 
 const commandExe = async (interaction) => {
