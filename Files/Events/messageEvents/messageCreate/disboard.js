@@ -19,8 +19,8 @@ module.exports = {
     await msg.react(msg.client.objectEmotes.tick.id).catch(() => {});
 
     await msg.client.ch.query(
-      `UPDATE disboard SET lastbump = $1, tempchannelid = $2 WHERE guildid = $3;`,
-      [msg.createdTimestamp, channel.id, msg.guild.id],
+      `UPDATE disboard SET nextbump = $1, tempchannelid = $2 WHERE guildid = $3;`,
+      [msg.createdTimestamp + 7200000, channel.id, msg.guild.id],
     );
 
     setReminder(msg, true, settings);
@@ -40,10 +40,15 @@ const getSettings = async (msg) => {
 const setReminder = (msg, isBump, settings) => {
   if (!isBump && !settings.repeatreminder) return;
 
+  msg.client.ch.query(`UPDATE disboard SET nextbump = $1 WHERE guildid = $2;`, [
+    Date.now() + (isBump ? 7200000 : settings.repeatreminder * 60 * 1000),
+    msg.guild.id,
+  ]);
+
   msg.client.disboardBumpReminders.set(
     msg.guild.id,
     jobs.scheduleJob(
-      new Date(Date.now() + isBump ? 7200000 : settings.repeatreminder * 60 * 1000),
+      new Date(Date.now() + (isBump ? 7200000 : settings.repeatreminder * 60 * 1000)),
       () => {
         endReminder(msg);
       },
