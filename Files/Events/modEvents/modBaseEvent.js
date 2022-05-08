@@ -16,7 +16,10 @@ module.exports = async (args, type) => {
   let error;
   let dm;
 
+  console.log('Base event called');
+
   if (!args.doDBonly) {
+    console.log('loadingEmbed');
     embed = loadingEmbed(mExistedPreviously, lan, con, args);
 
     if (msg && mExistedPreviously && msg.m.id) {
@@ -26,6 +29,7 @@ module.exports = async (args, type) => {
     const targetMember = await guild?.members.fetch(target.id).catch(() => {});
     const executingMember = await guild?.members.fetch(executor.id).catch(() => {});
 
+    console.log('roleCheck');
     const roleCheckAllowed = roleCheck(
       embed,
       mExistedPreviously,
@@ -36,6 +40,7 @@ module.exports = async (args, type) => {
     );
     if (!roleCheckAllowed) return;
 
+    console.log('checkSelfPunish');
     const selfPunish = checkSelfPunish(
       embed,
       mExistedPreviously,
@@ -46,12 +51,15 @@ module.exports = async (args, type) => {
     );
     if (selfPunish) return;
 
+    console.log('checkMePunish');
     const mePunish = checkMePunish(embed, mExistedPreviously, lan, targetMember, args);
     if (mePunish) return;
 
+    console.log('checkPunishable');
     const punishable = checkPunishable(embed, mExistedPreviously, lan, targetMember, type, args);
     if (!punishable) return;
 
+    console.log('checkActionTaken');
     const actionTaken = await checkActionTaken(
       embed,
       mExistedPreviously,
@@ -64,6 +72,7 @@ module.exports = async (args, type) => {
 
     dm = await doDM({ lan, language }, targetMember, reason, con, args);
 
+    console.log('takeAction');
     ({ action, error } = await takeAction(
       type,
       targetMember,
@@ -75,13 +84,19 @@ module.exports = async (args, type) => {
   }
 
   if (action || args.doDBonly) {
+    console.log('logEmbed');
     logEmbed(lan, language, con, reason, args);
-    if (!args.doDBonly) await declareSuccess(embed, mExistedPreviously, lan, args);
+    if (!args.doDBonly) {
+      console.log('declareSuccess');
+      await declareSuccess(embed, mExistedPreviously, lan, args);
+    }
   } else if (error) {
+    console.log('errorEmbed');
     errorEmbed(embed, lan, mExistedPreviously, dm, error, args);
     return;
   }
 
+  console.log('doDataBaseAction');
   doDataBaseAction(type, client, args, guild);
 
   if (msg && msg.source) args.executor.client.emit('modSourceHandler', msg, embed);
@@ -338,6 +353,7 @@ const checkPunishable = (embed, mExistedPreviously, lan, targetMember, punishmen
     case 'banAdd':
     case 'softbanAdd':
     case 'tempbanAdd': {
+      console.log('Perm Check');
       if (targetMember?.bannable || (!targetMember && args.guild?.me.permissions.has(4n))) {
         return true;
       }
@@ -428,6 +444,7 @@ const checkActionTaken = async (
     case 'banAdd':
     case 'softbanAdd':
     case 'tempbanAdd': {
+      console.log('Check if banned');
       punished = await args.guild?.bans.fetch(args.target.id).catch(() => {});
       break;
     }
@@ -566,6 +583,7 @@ const takeAction = async (punishmentType, targetMember, executingMember, args, l
       break;
     }
     case 'banAdd': {
+      console.log('Do ban');
       punished = await targetMember
         ?.ban({ deleteMessageDays: 7, reason: `${args.executor.tag} | ${args.reason}` })
         .catch((err) => {
@@ -870,6 +888,7 @@ const doDataBaseAction = async (punishmentType, client, args, guild) => {
     }
     case 'banAdd':
     case 'softbanAdd': {
+      console.log('logging');
       insertRow('punish_bans');
       break;
     }
