@@ -422,7 +422,7 @@
       "reason": "Automatically Un-Muted"
     },
     "disboard": {
-      "desc": "You can now Bump this server again!\n\n`!d bump`",
+      "desc": "You can now Bump this server again!\n\n`/bump`",
       "title": "Ayako DISBOARD Bump Reminder"
     },
     "reminder": {
@@ -2943,12 +2943,12 @@
           "roles": {
             "name": "Ping Roles",
             "answers": "`Mentions or IDs`",
-            "recommended": "**This is not required**\n\nThe Roles that will be pinged once you can use `!d bump` again"
+            "recommended": "**This is not required**\n\nThe Roles that will be pinged once you can use `/bump` again"
           },
           "users": {
             "name": "Ping Users",
             "answers": "`Mentions or IDs`",
-            "recommended": "**This is not required**\n\nThe Users that will be pinged once you can use `!d bump` again"
+            "recommended": "**This is not required**\n\nThe Users that will be pinged once you can use `/bump` again"
           },
           "channelid": {
             "name": "Channel",
@@ -4042,10 +4042,16 @@
         "checkDMs": "Check your DMs! | If you had your DMs closed, DM or Mention the User below"
       },
       "participate": {
-        "cantEnter": "You don't meet the requirements for this Giveaway to participate",
+        "cantEnter": "You don't meet the Requirements to participate in this Giveaway",
         "entered": "You are now participate in this Giveaway",
         "left": "You are no longer participating in this Giveaway",
         "participants": "Participants"
+      },
+      "edit": {
+        "invalidTime": "The given Time was not valid",
+        "noChanges": "No valid changes were made",
+        "success": "Successfully edited Giveaway",
+        "button": "Get to Giveaway"
       }
     }
   },
