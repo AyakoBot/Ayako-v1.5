@@ -1,6 +1,3 @@
-const Discord = require('discord.js');
-const Builders = require('@discordjs/builders');
-
 module.exports = {
   name: 'giveaway',
   perm: 32n,
@@ -22,7 +19,11 @@ module.exports = {
         break;
       }
       case 'end': {
-        require('./giveaway/end')(cmd);
+        require('./giveaway/end').manualEnd(cmd);
+        break;
+      }
+      case 'reroll': {
+        require('./giveaway/reroll')(cmd);
         break;
       }
       default: {
@@ -64,8 +65,8 @@ const getExistingGiveaways = async (cmd) => {
 
 const getGiveaways = async (cmd) => {
   const res = await cmd.client.ch.query(
-    `SELECT * FROM giveaways WHERE guildid = $1 AND ended = false;`,
-    [cmd.guild.id],
+    `SELECT * FROM giveaways WHERE guildid = $1 AND ended = $2;`,
+    [cmd.guild.id, cmd.options._subcommand === 'reroll'],
   );
 
   if (res && res.rowCount) return res.rows;

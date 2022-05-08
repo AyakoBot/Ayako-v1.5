@@ -1,36 +1,78 @@
 const Builders = require('@discordjs/builders');
+const Discord = require('discord.js');
 const client = require('../../../BaseClient/DiscordClient');
 
-module.exports = async (row) => {
-  const guild = client.guilds.cache.get(row.guildid);
-  if (!guild) return;
+module.exports = {
+  manualEnd: async (cmd) => {
+    const options = cmd.options._hoistedOptions;
+    const msgid = options.find((o) => o.name === 'giveaway').value;
 
-  const channel = client.channels.cache.get(row.channelid);
-  if (!channel) return;
+    const res = await cmd.client.ch.query(`SELECT * FROM giveaways WHERE msgid = $1;`, [msgid]);
+    if (!res || !res.rowCount) return;
 
-  const giveaway = await getGiveaway(row);
-  if (!giveaway) return;
+    const row = res.rows[0];
 
-  const msg = await channel.messages.fetch(giveaway.msgid).catch(() => {});
-  if (!msg) return;
+    cmd.client.giveaways.get(msgid)?.cancel();
+    cmd.client.giveaways.delete(msgid);
 
-  const language = await client.ch.languageSelector(guild);
-  msg.language = language;
-  const lan = language.slashCommands.giveaway.end;
-  const winners = await getWinners(guild, giveaway);
+    const lan = cmd.language.slashCommands.giveaway.end;
 
-  await editGiveaway(msg, giveaway, lan, winners);
+    const embed = new Builders.UnsafeEmbedBuilder()
+      .setColor(cmd.client.constants.colors.success)
+      .setDescription(lan.manuallyEnded);
 
-  await client.ch.query(`UPDATE giveaways SET ended = true WHERE msgid = $1 AND guildid = $2;`, [
-    msg.id,
-    guild.id,
-  ]);
-  if (!winners.length) return;
+    cmd.client.ch.reply(cmd, {
+      embeds: [embed],
+      ephemeral: true,
+      components: cmd.client.ch.buttonRower([
+        [
+          new Builders.UnsafeButtonBuilder()
+            .setURL(
+              cmd.client.ch.stp(cmd.client.constants.standard.discordUrlDB, {
+                guildid: row.guildid,
+                channelid: row.channelid,
+                messageid: row.msgid,
+              }),
+            )
+            .setLabel(lan.button)
+            .setStyle(Discord.ButtonStyle.Link),
+        ],
+      ]),
+    });
 
-  const host = await client.users.fetch(giveaway.host).catch(() => {});
+    module.exports.end(row);
+  },
+  end: async (row, isReroll) => {
+    const guild = client.guilds.cache.get(row.guildid);
+    if (!guild) return;
 
-  await sendCongraz(msg, giveaway, lan, winners, host);
-  await reward(msg, giveaway, lan, winners, host);
+    const channel = client.channels.cache.get(row.channelid);
+    if (!channel) return;
+
+    const giveaway = await getGiveaway(row);
+    if (!giveaway) return;
+
+    const msg = await channel.messages.fetch(giveaway.msgid).catch(() => {});
+    if (!msg) return;
+
+    const language = await client.ch.languageSelector(guild);
+    msg.language = language;
+    const lan = language.slashCommands.giveaway.end;
+    const winners = await getWinners(guild, giveaway);
+
+    await editGiveaway(msg, giveaway, lan, winners, isReroll);
+
+    await client.ch.query(`UPDATE giveaways SET ended = true WHERE msgid = $1 AND guildid = $2;`, [
+      msg.id,
+      guild.id,
+    ]);
+    if (!winners.length) return;
+
+    const host = await client.users.fetch(giveaway.host).catch(() => {});
+
+    await sendCongraz(msg, giveaway, lan, winners, host);
+    await reward(msg, giveaway, lan, winners, host);
+  },
 };
 
 const sendCongraz = async (msg, giveaway, lan, winners, host) => {
@@ -82,8 +124,11 @@ const getGiveaway = async (row) => {
   return res.rows[0];
 };
 
-const editGiveaway = async (msg, giveaway, lan, winners) => {
-  const embed = new Builders.UnsafeEmbedBuilder(msg.embeds[0].data).addFields({
+const editGiveaway = async (msg, giveaway, lan, winners, isReroll) => {
+  const embedData = msg.embeds[0].data;
+  if (isReroll) embedData.fields.pop();
+
+  const embed = new Builders.UnsafeEmbedBuilder(embedData).addFields({
     name: giveaway.winnercount === 1 ? lan.winner : lan.winners,
     value: `${
       winners.length
