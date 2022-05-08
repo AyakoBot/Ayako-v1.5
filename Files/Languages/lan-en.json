@@ -4039,7 +4039,9 @@
         "getPrize": "To get your Prize, DM or Mention the User below",
         "couldntDM": "I was unable to DM {{user}} / `{{user.tag}}` / `{{user.id}}`",
         "noValidEntries": "No valid Entries | No Winner picked",
-        "checkDMs": "Check your DMs! | If you had your DMs closed, DM or Mention the User below"
+        "checkDMs": "Check your DMs! | If you had your DMs closed, DM or Mention the User below",
+        "button": "Get to Giveaway",
+        "manuallyEnded": "Manually Ended Giveaway"
       },
       "participate": {
         "cantEnter": "You don't meet the Requirements to participate in this Giveaway",
@@ -4051,6 +4053,10 @@
         "invalidTime": "The given Time was not valid",
         "noChanges": "No valid changes were made",
         "success": "Successfully edited Giveaway",
+        "button": "Get to Giveaway"
+      },
+      "reroll": {
+        "rerolled": "Successfully re-rolled Giveaway",
         "button": "Get to Giveaway"
       }
     }
