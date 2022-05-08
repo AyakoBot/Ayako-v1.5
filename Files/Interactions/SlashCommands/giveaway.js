@@ -21,10 +21,6 @@ module.exports = {
         require('./giveaway/edit')(cmd);
         break;
       }
-      case 'list': {
-        require('./giveaway/list')(cmd);
-        break;
-      }
       case 'end': {
         require('./giveaway/end')(cmd);
         break;
