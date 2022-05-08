@@ -49,7 +49,7 @@ module.exports = async (cmd) => {
   cmd.client.giveaways.set(
     m.id,
     jobs.scheduleJob(new Date(Number(endtime)), () => {
-      require('./end')({
+      require('./end').end({
         guildid: cmd.guild.id,
         channelid: channel.id,
         msgid: m.id,

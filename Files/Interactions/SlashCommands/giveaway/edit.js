@@ -11,7 +11,7 @@ module.exports = async (cmd) => {
   const rawTime = options.find((o) => o.name === 'time')?.value;
   const actualPrize = options.find((o) => o.name === 'actual-prize')?.value;
   const host = options.find((o) => o.name === 'host')?.user;
-  const msgid = options.find((o) => o.name === 'giveaway')?.value;
+  const msgid = options.find((o) => o.name === 'giveaway').value;
   const lan = cmd.lan.edit;
 
   const insert = {};
@@ -79,7 +79,7 @@ const rescheduleGiveaway = (cmd, giveaway, msgid) => {
   cmd.client.giveaways.set(
     msgid,
     jobs.scheduleJob(new Date(Number(giveaway.endtime)), () => {
-      require('./end')(giveaway);
+      require('./end').end(giveaway);
     }),
   );
 };

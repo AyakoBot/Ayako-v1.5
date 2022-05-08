@@ -8,10 +8,10 @@ module.exports = async () => {
   res.rows.forEach((row) => {
     if (Number(row.endtime) > Date.now()) {
       const job = jobs.scheduleJob(new Date(Number(row.endtime)), () => {
-        require('../../Interactions/SlashCommands/giveaway/end')(row);
+        require('../../Interactions/SlashCommands/giveaway/end').end(row);
       });
 
       client.giveaways.set(row.msgid, job);
-    } else require('../../Interactions/SlashCommands/giveaway/end')(row);
+    } else require('../../Interactions/SlashCommands/giveaway/end').end(row);
   });
 };
