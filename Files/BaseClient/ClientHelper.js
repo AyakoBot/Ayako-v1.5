@@ -40,6 +40,16 @@ module.exports = {
 
     const payload = typeof rawPayload === 'string' ? { content: rawPayload } : rawPayload;
 
+    if (
+      !payload ||
+      (!payload.embeds?.length &&
+        !payload.content?.length &&
+        !payload.files?.length &&
+        !payload.components?.length)
+    ) {
+      throw new Error('No Payload');
+    }
+
     if (timeout) {
       combineMessages({ channel }, payload, timeout);
       return null;
@@ -1318,7 +1328,7 @@ const getDeleteRes = async (msg) => {
 const combineMessages = async (msg, payload, timeout) => {
   if (!msg.client) msg.client = require('./DiscordClient');
 
-  if (!payload.embeds || !payload.embeds.length) {
+  if (!payload.embeds || !payload.embeds.length || !payload.files || !payload.files.length) {
     module.exports.send(msg.channel, payload);
     return;
   }
@@ -1391,12 +1401,12 @@ const queueSend = (msg, timeout) => {
       module.exports.send(msg.channel, {
         embeds: msg.client.channelQueue
           .get(msg.channel.id)
-          .map((p) => p.embeds)
+          ?.map((p) => p.embeds)
           ?.flat(1)
           .filter((p) => !!p),
         files: msg.client.channelQueue
           .get(msg.channel.id)
-          .map((p) => p.files)
+          ?.map((p) => p.files)
           ?.flat(1)
           .filter((p) => !!p),
       });
