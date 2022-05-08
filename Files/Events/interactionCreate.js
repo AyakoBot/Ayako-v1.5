@@ -225,7 +225,7 @@ const checkDisabled = (interaction, disabledCommands) => {
 
 const editCheck = async (interaction) => {
   const cooldownRes = await getCooldown(interaction);
-  interaction.cooldown = cooldownRes.cooldown || interaction.cmd.cooldown;
+  interaction.cooldown = cooldownRes?.cooldown || interaction.cmd.cooldown;
 
   if (interaction.user.id === auth.ownerID) {
     const proceed = ownerExecute(interaction);
@@ -339,7 +339,7 @@ const getCooldown = async (interaction) => {
     res.rows[0].cooldown = Number(res.rows[0].cooldown) * 1000;
     return res.rows[0];
   }
-  return { cooldown: 0 };
+  return null;
 };
 
 const ownerExecute = (interaction) => {
