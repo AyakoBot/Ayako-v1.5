@@ -29,6 +29,7 @@ module.exports = {
 };
 
 /*
+
     msg.client.application.commands.edit('971536827079082054', {
       name: 'giveaway',
       description: 'Giveaway related Commands',
@@ -42,7 +43,7 @@ module.exports = {
               autocomplete: true,
               type: 3,
               name: 'giveaway',
-              description: 'The Message Link of the Giveaway to edit',
+              description: 'The Giveaway to edit',
               required: true,
             },
             {
@@ -102,7 +103,7 @@ module.exports = {
               autocomplete: true,
               type: 3,
               name: 'giveaway',
-              description: 'The Message Link of the Giveaway to edit',
+              description: 'The Giveaway to end',
               required: true,
             },
           ],
@@ -161,147 +162,23 @@ module.exports = {
             },
           ],
         },
+        {
+          type: 1,
+          name: 'reroll',
+          description: 'Re-rolls a Giveaway and picks a new Winner',
+          options: [
+            {
+              autocomplete: true,
+              type: 3,
+              name: 'giveaway',
+              description: 'The Giveaway to re-roll',
+              required: true,
+            },
+          ],
+        },
       ],
       default_permission: true,
     });
 
-    return;
-
-    const command = new Builders.SlashCommandBuilder()
-      .setName('giveaway')
-      .setDescription('Giveaway related Commands')
-      .setDefaultPermission(true)
-      .addSubcommand(
-        new Builders.SlashCommandSubcommandBuilder()
-          .addStringOption(
-            new Builders.SlashCommandStringOption()
-              .setName('message-link')
-              .setDescription('The Message Link of the Giveaway to edit')
-              .setAutocomplete(true)
-              .setRequired(true),
-          )
-          .setName('edit')
-          .setDescription('Edits a Giveaway')
-          .addIntegerOption(
-            new Builders.SlashCommandIntegerOption()
-              .setDescription('The Amount of Winners this Giveaway has')
-              .setMaxValue(9999999)
-              .setMinValue(1)
-              .setName('winners')
-              .setAutocomplete(true)
-              .setRequired(false),
-          )
-          .addRoleOption(
-            new Builders.SlashCommandRoleOption()
-              .setDescription('Role required to participate in this Giveaway')
-              .setName('role')
-              .setRequired(false),
-          )
-          .addStringOption(
-            new Builders.SlashCommandStringOption()
-              .setDescription('A Description of the Prize the Winners will win')
-              .setName('prize-description')
-              .setAutocomplete(true)
-              .setRequired(false),
-          )
-          .addStringOption(
-            new Builders.SlashCommandStringOption()
-              .setDescription(
-                'The actual Prize (If given, the Prize will be sent to winners automatically)',
-              )
-              .setName('actual-prize')
-              .setAutocomplete(true)
-              .setRequired(false),
-          )
-          .addStringOption(
-            new Builders.SlashCommandStringOption()
-              .setDescription('The Time after which the Winner will be chosen')
-              .setName('time')
-              .setAutocomplete(true)
-              .setRequired(false),
-          )
-          .addUserOption(
-            new Builders.SlashCommandUserOption()
-              .setDescription('The User who hosts the Giveaway')
-              .setName('host')
-              .setRequired(false),
-          ),
-      )
-      .addSubcommand(
-        new Builders.SlashCommandSubcommandBuilder()
-          .setName('list')
-          .setDescription('List running Giveaways'),
-      )
-      .addSubcommand(
-        new Builders.SlashCommandSubcommandBuilder()
-          .addStringOption(
-            new Builders.SlashCommandStringOption()
-              .setName('message-link')
-              .setDescription('The Message Link of the Giveaway to edit')
-              .setAutocomplete(true)
-              .setRequired(true),
-          )
-          .setName('end')
-          .setDescription('Ends a Giveaway manually'),
-      )
-      .addSubcommand(
-        new Builders.SlashCommandSubcommandBuilder()
-          .setDescription('Create a Giveaway')
-          .setName('create')
-          .addChannelOption(
-            new Builders.SlashCommandChannelOption()
-              .addChannelTypes(...[0, 5])
-              .setDescription('The Channel to start the Giveaway in')
-              .setName('channel')
-              .setRequired(true),
-          )
-          .addIntegerOption(
-            new Builders.SlashCommandIntegerOption()
-              .setDescription('The Amount of Winners this Giveaway has')
-              .setMaxValue(9999999)
-              .setMinValue(1)
-              .setName('winners')
-              .setAutocomplete(true)
-              .setRequired(true),
-          )
-          .addStringOption(
-            new Builders.SlashCommandStringOption()
-              .setDescription('The Time after which the Winner will be chosen')
-              .setName('time')
-              .setAutocomplete(true)
-              .setRequired(true),
-          )
-          .addStringOption(
-            new Builders.SlashCommandStringOption()
-              .setDescription('A Description of the Prize the Winners will win')
-              .setName('prize-description')
-              .setAutocomplete(true)
-              .setRequired(true),
-          )
-          .addRoleOption(
-            new Builders.SlashCommandRoleOption()
-              .setDescription('Role required to participate in this Giveaway')
-              .setName('role')
-              .setRequired(false),
-          )
-          .addStringOption(
-            new Builders.SlashCommandStringOption()
-              .setDescription(
-                'The actual Prize (If given, the Prize will be sent to winners automatically)',
-              )
-              .setName('actual-prize')
-              .setAutocomplete(true)
-              .setRequired(false),
-          )
-          .addUserOption(
-            new Builders.SlashCommandUserOption()
-              .setDescription('The User who hosts the Giveaway')
-              .setName('host')
-              .setRequired(false),
-          ),
-      );
-
-    console.log(JSON.stringify(command.toJSON(), null, 2));
-    return;
 
     */
