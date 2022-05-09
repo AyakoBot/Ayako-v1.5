@@ -29,7 +29,7 @@ module.exports = {
 
 const getSettings = async (msg) => {
   const res = await msg.client.ch.query(
-    'SELECT * FROM disboard WHERE guildid = $1 AND active = true AND nextbump IS NOT NULL;',
+    'SELECT * FROM disboard WHERE guildid = $1 AND active = true;',
     [msg.guild.id],
   );
 
@@ -38,7 +38,10 @@ const getSettings = async (msg) => {
 };
 
 const setReminder = (msg, isBump, settings) => {
-  if (!isBump && !settings.repeatreminder) return;
+  if (!isBump && !Number(settings.repeatreminder)) {
+    msg.client.ch.query(`UPDATE disboard SET nextbump = NULL WHERE guildid = $1;`, [msg.guild.id]);
+    return;
+  }
 
   msg.client.ch.query(`UPDATE disboard SET nextbump = $1 WHERE guildid = $2;`, [
     Date.now() + (isBump ? 7200000 : settings.repeatreminder * 60 * 1000),
