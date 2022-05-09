@@ -7,7 +7,7 @@ module.exports = {
   dm: true,
   takesFirstArg: false,
   aliases: ['gleaderboard', 'lb', 'glb', 'lvls', 'levels', 'glevels', 'glvls'],
-  type: 'fun',
+  type: 'leveling',
   async execute(msg) {
     let isGuild =
       !msg.content.split(' ')[0].includes(module.exports.aliases[0]) &&

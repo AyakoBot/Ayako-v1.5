@@ -6,13 +6,8 @@ module.exports = {
   type: 2,
   finished: true,
   category: ['automation'],
+  helpCategory: 'util',
   displayEmbed(msg, r) {
-    if (r.greetdesc && r.greetdesc.startsWith('{"') && r.greetdesc.endsWith('"}')) {
-      r.greetdesc = r.greetdesc.slice(2, r.greetdesc.length - 2);
-    }
-    if (r.finishdesc && r.finishdesc.startsWith('{"') && r.finishdesc.endsWith('"}')) {
-      r.finishdesc = r.finishdesc.slice(2, r.finishdesc.length - 2);
-    }
     const embed = new Builders.UnsafeEmbedBuilder().addFields(
       {
         name: msg.lanSettings.active,

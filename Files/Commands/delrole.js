@@ -6,7 +6,7 @@ module.exports = {
   perm: 268435456n,
   takesFirstArg: true,
   dm: false,
-  type: 'util',
+  type: 'roles',
   async execute(msg) {
     const { language, lan } = msg;
 

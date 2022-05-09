@@ -9,6 +9,7 @@ module.exports = {
   setupRequired: false,
   finished: true,
   category: ['moderation'],
+  helpCategory: 'mod',
   async mmrEmbed(msg, res) {
     res.sort((a, b) => a.uniquetimestamp - b.uniquetimestamp);
     const embed = new Builders.UnsafeEmbedBuilder();

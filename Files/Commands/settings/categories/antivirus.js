@@ -8,6 +8,7 @@ module.exports = {
   type: 1,
   finished: true,
   category: ['auto-moderation'],
+  helpCategory: 'mod',
   displayEmbed(msg, r) {
     const embed = new Builders.UnsafeEmbedBuilder().addFields(
       {

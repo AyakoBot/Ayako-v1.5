@@ -6,6 +6,7 @@ module.exports = {
   type: 1,
   finished: true,
   category: ['auto-moderation'],
+  helpCategory: 'mod',
   displayEmbed(msg, r) {
     let wordText = '';
     const wordArr = [];

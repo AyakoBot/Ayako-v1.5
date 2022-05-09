@@ -12,6 +12,7 @@ module.exports = {
   takesFirstArg: false,
   aliases: ['chi', 'chinfo'],
   type: 'info',
+  unfinished: true,
   execute: async (msg) => {
     const channel = msg.guild.channels.cache.get(
       msg.args[0] ? msg.args[0].replace(/\D+/g, '') : msg.channel.id,

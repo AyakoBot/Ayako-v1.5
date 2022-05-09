@@ -8,6 +8,7 @@ module.exports = {
   type: 0,
   finished: true,
   category: ['automation'],
+  helpCategory: 'util',
   displayEmbed(msg, r) {
     const embed = new Builders.UnsafeEmbedBuilder().setDescription(msg.lan.desc).addFields(
       {

@@ -9,6 +9,7 @@ module.exports = {
   setupRequired: false,
   finished: true,
   category: ['auto-moderation'],
+  helpCategory: 'mod',
   async mmrEmbed(msg, res) {
     const embed = new Builders.UnsafeEmbedBuilder().setDescription(
       msg.client.ch.stp(msg.lan.description, { prefix: msg.client.constants.standard.prefix }),

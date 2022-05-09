@@ -5,6 +5,7 @@ module.exports = {
   perm: 32n,
   finished: true,
   category: ['none'],
+  helpCategory: 'util',
   displayEmbed(msg, r) {
     const small = `${msg.client.textEmotes.small1}${msg.client.textEmotes.small2} ${msg.language.small}`;
     const big = `${msg.client.textEmotes.big} ${msg.language.big}`;

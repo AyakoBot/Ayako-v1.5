@@ -9,6 +9,7 @@ module.exports = {
   type: 3,
   finished: true,
   category: ['moderation'],
+  helpCategory: 'mod',
   displayEmbed: (msg, r) => {
     const embed = new Builders.UnsafeEmbedBuilder().setDescription(msg.lan.description).addFields(
       {

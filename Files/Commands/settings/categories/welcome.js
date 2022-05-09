@@ -6,6 +6,7 @@ module.exports = {
   type: 1,
   finished: true,
   category: ['automation'],
+  helpCategory: 'util',
   async displayEmbed(msg, r) {
     const customEmbed = await embedName(msg, r);
 

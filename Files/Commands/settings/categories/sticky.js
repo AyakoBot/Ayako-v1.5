@@ -6,6 +6,7 @@ module.exports = {
   type: 2,
   finished: true,
   category: ['automation'],
+  helpCategory: 'roles',
   displayEmbed(msg, r) {
     const embed = new Builders.UnsafeEmbedBuilder();
 
