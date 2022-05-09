@@ -4297,7 +4297,7 @@
   "message": "Message",
   "duration": "Duration",
   "slashCommand": "Slash Command",
-  "SlashCommands": "Slash Command",
+  "SlashCommands": "Slash Commands",
   "Commands": "Commands",
   "Settings": "Settings"
 }

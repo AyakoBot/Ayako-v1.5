@@ -49,10 +49,10 @@ const getBaseEmbed = (msg) => {
       .map((s) => `\`${s.name}\``);
 
     embed.addFields({
-      name: `${msg.lan.categoryNames[category]} - \`${msg.client.constants.standard.prefix}help ${category}\``,
+      name: `${msg.lan.categoryNames[category]}\n\`${msg.client.constants.standard.prefix}help ${category}\``,
       value: `${commands.length ? `${msg.language.Commands}\n${commands.join(', ')}` : ''}${
         settings.length ? `\n\n${msg.language.Settings}\n${settings.join(', ')}` : ''
-      }\n${
+      }\n\n${
         slashCommands.length ? `${msg.language.SlashCommands}\n${slashCommands.join(', ')}` : ''
       }`,
       inline: true,
