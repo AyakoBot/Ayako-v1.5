@@ -8,7 +8,7 @@ module.exports = {
   setupRequired: false,
   childOf: 'leveling',
   category: ['automation'],
-  helpCategory: module.exports.childOf,
+  helpCategory: 'leveling',
   mmrEmbed(msg, res) {
     const embed = new Builders.UnsafeEmbedBuilder();
     for (let i = 0; i < res.length; i += 1) {
