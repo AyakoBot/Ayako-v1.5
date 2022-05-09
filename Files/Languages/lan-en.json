@@ -1712,7 +1712,9 @@
     "bypass": {
       "description": "Bypasses a User through Verification",
       "usage": ["bypass [User ID or Mention]"],
-      "category": "Moderation"
+      "category": "Moderation",
+      "bypass": "You have been manually verified by a Staff Member",
+      "notEnabled": "Verification is not enabled on this Server"
     },
     "channelban": {
       "description": "Bans a User from a Channel",
