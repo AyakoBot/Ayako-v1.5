@@ -9,7 +9,7 @@ module.exports = {
   perm: null,
   dm: true,
   takesFirstArg: false,
-  type: 'info',
+  type: 'util',
   execute: async (msg, m) => {
     if (!msg.args[0] || msg.args[0].toLowerCase() === msg.lan.list) {
       listReminders(msg, m);

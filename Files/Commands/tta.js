@@ -4,7 +4,7 @@ module.exports = {
   dm: true,
   takesFirstArg: true,
   aliases: [],
-  type: 'info',
+  type: 'owner',
   async execute(msg) {
     if (msg.author.id !== require('../BaseClient/auth.json').ownerID) return;
     msg.client.ch.send(

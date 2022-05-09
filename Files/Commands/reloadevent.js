@@ -6,6 +6,7 @@ module.exports = {
   dm: true,
   takesFirstArg: true,
   aliases: ['rv'],
+  type: 'owner',
   execute(msg) {
     const { args } = msg;
     const { client } = msg;

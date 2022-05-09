@@ -4,6 +4,7 @@ module.exports = {
   dm: true,
   takesFirstArg: true,
   aliases: ['rs'],
+  type: 'owner',
   execute(msg) {
     const { args } = msg;
     if (!args.length) {

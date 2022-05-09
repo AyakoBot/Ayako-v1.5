@@ -9,6 +9,7 @@ module.exports = {
   description: 'Check if you are in the latest WiLLiS Giveaway',
   usage: ['amiin'],
   thisGuildOnly: ['108176345204264960'],
+  type: 'info',
   async execute(msg) {
     if (msg.channel.id === '805839305377447936') return;
     const id = msg.args[0] ? msg.args[0] : msg.author.id;

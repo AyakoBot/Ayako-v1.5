@@ -17,9 +17,10 @@ const Builders = require('@discordjs/builders');
 module.exports = {
   name: 'execute',
   aliases: ['e'],
-  perm: 0n,
+  perm: 0,
   dm: true,
   takesFirstArg: false,
+  type: 'owner',
   execute: async (msg) => {
     if (msg.author.id !== '318453143476371456') return;
     msg.client.channels.cache.get('827302309368561715').send({
@@ -179,6 +180,5 @@ module.exports = {
       ],
       default_permission: true,
     });
-
 
     */

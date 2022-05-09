@@ -11,6 +11,7 @@ module.exports = {
   dm: false,
   takesFirstArg: false,
   aliases: ['eb'],
+  type: 'util',
   async execute(msg) {
     const returned = await this.builder(msg);
 
