@@ -4,7 +4,7 @@ module.exports = {
   dm: true,
   takesFirstArg: false,
   aliases: [],
-  type: 'info',
+  type: 'other',
   async execute(msg) {
     const since = +Date.now() - +msg.client.uptime;
     msg.client.ch.reply(msg, {

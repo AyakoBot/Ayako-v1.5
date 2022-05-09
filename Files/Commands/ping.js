@@ -4,7 +4,7 @@ module.exports = {
   dm: true,
   takesFirstArg: false,
   aliases: [],
-  type: 'info',
+  type: 'other',
   async execute(msg) {
     const m = await msg.client.ch.reply(msg, '🏓​');
     msg.react('🏓').catch(() => {});

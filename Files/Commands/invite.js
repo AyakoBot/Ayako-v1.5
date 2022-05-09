@@ -6,7 +6,7 @@ module.exports = {
   dm: true,
   takesFirstArg: false,
   aliases: ['support'],
-  type: 'info',
+  type: 'other',
   async execute(msg) {
     const embed = new Builders.UnsafeEmbedBuilder()
       .setAuthor({

@@ -8,6 +8,7 @@ module.exports = {
   takesFirstArg: false,
   aliases: ['synclevels'],
   type: 'leveling',
+  unfinished: true,
   async execute(msg) {
     const method = getMethod(msg);
   },

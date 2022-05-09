@@ -7,6 +7,7 @@ module.exports = {
   setupRequired: false,
   finished: false,
   category: ['automation', 'none'],
+  helpCategory: 'util',
   mmrEmbed(msg, res) {
     const embed = new Builders.UnsafeEmbedBuilder();
     for (let i = 0; i < res.length; i += 1) {

@@ -9,6 +9,7 @@ module.exports = {
   category: ['automation'],
   childOf: 'reactionsettings',
   displayParentOnly: true,
+  helpCategory: 'roles',
   mmrEmbed: (msg, rows) => {
     const embed = new Builders.UnsafeEmbedBuilder();
 

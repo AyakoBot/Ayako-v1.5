@@ -306,7 +306,8 @@
     "permissionsViewer": "https://discordapi.com/permissions.html#{{permission}}",
     "ephemeralColor": 3092790,
     "suggestionsDataChannel": "968628817688133662",
-    "ownerID": "318453143476371456"
+    "ownerID": "318453143476371456",
+    "patreon": "https://www.patreon.com/Lars_und_so"
   },
   "error": 16711680,
   "mod": {

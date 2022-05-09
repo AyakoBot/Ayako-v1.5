@@ -13,6 +13,7 @@ module.exports = {
   finished: true,
   childOf: 'leveling',
   category: ['automation'],
+  helpCategory: module.exports.childOf,
   async displayEmbed(msg, r) {
     let lvlupmode;
     switch (r.lvlupmode) {

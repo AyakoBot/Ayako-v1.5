@@ -6,7 +6,7 @@ require('moment-duration-format');
 module.exports = {
   perm: 32n,
   type: 0,
-  finished: true,
+  finished: false,
   category: ['auto-moderation'],
   displayEmbed(msg, r) {
     const embed = new Builders.UnsafeEmbedBuilder().addFields(

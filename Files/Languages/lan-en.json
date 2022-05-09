@@ -20,7 +20,7 @@
   "channelPin": {
     "description": {
       "withAuthor": {
-        "withAudit": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\npinned [This Message](https://discord.com/channels/{{guild.id}}/{{channel.id}}/{{msg.id}} \"Click to jump to Message\")\nfrom {{author}} / `{{author.tag}}` / `{{author.id}}`\nin Channel {{channel}} / `{{channel.name}}` / `{{channel.id}}`"
+        "withAudit": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\npinned [this Message](https://discord.com/channels/{{guild.id}}/{{channel.id}}/{{msg.id}} \"Click to jump to Message\")\nfrom {{author}} / `{{author.tag}}` / `{{author.id}}`\nin Channel {{channel}} / `{{channel.name}}` / `{{channel.id}}`"
       },
       "withoutAuthor": {
         "withAudit": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas pinned a Message\nin Channel {{channel}} / `{{channel.name}}` / `{{channel.id}}`"
@@ -33,7 +33,7 @@
   "channelUnPin": {
     "description": {
       "withAuthor": {
-        "withAudit": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nunpinned [This Message](https://discord.com/channels/{{guild.id}}/{{channel.id}}/{{msg.id}} \"Click to jump to Message\")\nfrom {{author}} / `{{author.tag}}` / `{{author.id}}`\nin Channel {{channel}} / `{{channel.name}}` / `{{channel.id}}`"
+        "withAudit": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nunpinned [this Message](https://discord.com/channels/{{guild.id}}/{{channel.id}}/{{msg.id}} \"Click to jump to Message\")\nfrom {{author}} / `{{author.tag}}` / `{{author.id}}`\nin Channel {{channel}} / `{{channel.name}}` / `{{channel.id}}`"
       },
       "withoutAuthor": {
         "withAudit": "User {{user}} / `{{user.tag}}` / `{{user.id}}`\nhas unpinned a Message\nin Channel {{channel}} / `{{channel.name}}` / `{{channel.id}}`"
@@ -422,12 +422,12 @@
       "reason": "Automatically Un-Muted"
     },
     "disboard": {
-      "desc": "You can now Bump this server again!\n\n`/bump`",
+      "desc": "You can now Bump this Server again!\n\n`/bump`",
       "title": "Ayako DISBOARD Bump Reminder"
     },
     "reminder": {
       "description": "Your reminder is due!",
-      "failedMsg": "I tried to send a message in the channel you set the Reminder in {{channel}}, but I failed."
+      "failedMsg": "I tried to send a Message in the Channel you set the Reminder in {{channel}}, but I failed."
     },
     "vote": {
       "author": "12 Hours are over!",
@@ -1094,7 +1094,6 @@
       "description": "Interact with any User",
       "usage": ["pat [user]"],
       "category": "Fun",
-      "saying": "\"{{text}}\"",
       "connector": "and",
       "loneError": "You need to Mention a User",
       "lone": {
@@ -1245,6 +1244,11 @@
         "quack": "{{msg.author}} quacks around"
       }
     },
+    "shop": {
+      "description": "Displays the Server's Role Shop",
+      "usage": ["shop"],
+      "category": "Roles"
+    },
     "channelinfo": {
       "description": "Display a lot of Information about a Channel",
       "usage": ["channelinfo", "channelinfo (channel)"],
@@ -1383,6 +1387,7 @@
       "warn": "You can only invoke children marked as \"Properties\""
     },
     "embedbuilder": {
+      "description": "Build Custom Embeds and Send/Edit them into any Channel/Message",
       "author": "Ayako Embed Builder",
       "warns": {
         "error": "**{{name}}** is exceeding {{limit}} Characters by {{tooMany}}",
@@ -1554,7 +1559,7 @@
       "creatorOnly": "Only my Creator can use this Command (`Lars_und_so#0666`)",
       "ownerOnly": "Only the Owner of this Server can use this Command",
       "missingPermissions": "You don't have enough Permissions to use this Command",
-      "verifyMessage": "You just issued a **moderation command** by **editing your message**. \nDo you want to **proceed or abort**.",
+      "verifyMessage": "You just issued a **moderation command** by **editing your Message**. \nDo you want to **proceed or abort**.",
       "DMonly": "This Command is not made for Servers, please try again in DMs",
       "modRoleError": "One of your Roles does not allow you to use this Command"
     },
@@ -1589,7 +1594,7 @@
     "levelsettings": {
       "levelUp": {
         "author": "{{user.tag}} just advanced to level {{level}}",
-        "description": "Level-Ups are indicated by me reacting to your message with {{emote1}}{{emote2}}",
+        "description": "Level-Ups are indicated by me reacting to your Message with {{emote1}}{{emote2}}",
         "footer": "You will only be notified every 10 Levels."
       }
     },
@@ -1673,18 +1678,38 @@
       "description": "Information about all Features Ayako has",
       "usage": ["help", "help (sub category)"],
       "category": "Info",
-      "author": "Ayako Command Help",
+      "author": "Ayako Command Help - {{type}}",
+      "authorNoType": "Ayako Command Help",
       "fun": "Fun",
-      "leveling": "Leveling",
-      "moderation": "Moderation",
+      "owner": "Owner",
+      "util": "Utility",
       "info": "Information",
-      "owner": "Owner"
+      "mod": "Moderation",
+      "leveling": "Leveling",
+      "roles": "Roles",
+      "other": "Other",
+      "settingsName": "__Settings related to {{type}}__",
+      "noCommands": "No Commands related to this Category found",
+      "noSettings": "No Settings related to this Category found",
+      "listSettings": "View `{{prefix}}settings` for a List of Settings",
+      "patreon": "Support Ayako (and its Dev) on Patreon - {{patreon}}"
     },
     "ban": {
       "description": "Bans a User from the Server",
       "usage": ["ban [User ID or Mention] (reason)"],
       "category": "Moderation",
       "reason": "No Reason given"
+    },
+    "xban": {
+      "description": "Cross-Bans a User from Animekos and Gameverse",
+      "usage": ["xban [User ID or Mention] (reason)"],
+      "category": "Moderation",
+      "reason": "No Reason given"
+    },
+    "bypass": {
+      "description": "Bypasses a User through Verification",
+      "usage": ["bypass [User ID or Mention]"],
+      "category": "Moderation"
     },
     "channelban": {
       "description": "Bans a User from a Channel",
@@ -1754,7 +1779,7 @@
       "vcReason": "User is Muted"
     },
     "clear": {
-      "description": "Deletes a specified Amount of messages",
+      "description": "Deletes a specified Amount of Messages",
       "usage": [
         "clear [Amount of Messages]",
         "clear user [user ID] [Amount of Messages]",
@@ -1828,6 +1853,16 @@
         "reloadevent lan [language]"
       ]
     },
+    "reloadinteraction": {
+      "category": "Owner",
+      "description": "Reloads an Interaction File",
+      "usage": ["reloadinteraction [interaction Name]"]
+    },
+    "reloadslashcommand": {
+      "category": "Owner",
+      "description": "Reloads a Slash Command",
+      "usage": ["reloadslashcommand [Slash Command Name]"]
+    },
     "restart": {
       "category": "Owner",
       "description": "Restarts the Client",
@@ -1900,7 +1935,7 @@
     },
     "afk": {
       "category": "Chat",
-      "description": "Display a AFK text whenever someone pings you, automatically deleted if you send a Message 1 Minute after creating your AFK",
+      "description": "Display a AFK text whenever someone pings you.\nAutomatically deleted if you send a Message 1 Minute after creating your AFK",
       "usage": ["afk (text)"],
       "footer": "{{user.username}} is AFK since {{time}}",
       "updatedTo": "**{{user}}'s AFK updated to:**\n{{text}}",
@@ -1923,7 +1958,7 @@
     },
     "contact": {
       "category": "Info",
-      "description": "Contact the Ayako Bot Devs and send them a Message",
+      "description": "Contact the Ayako Bot Dev and send him a Message",
       "usage": ["contact [message]"],
       "thanks": {
         "thanks": "Thank you for contacting us!",
@@ -2020,13 +2055,16 @@
       "end": "Punishment End Date"
     },
     "uptime": {
-      "text": "I am online since"
+      "description": "Displays since when Ayako is online",
+      "text": "I am online since",
+      "category": "Info"
     },
     "invite": {
       "description": "Displays Ayako's Invite and Support Server Invite",
       "usage": ["invite"],
       "author": "Ayakos Invites",
-      "desc": "Invite me: [Click]({{invite}})\nSupport Server: [Click]({{help}})"
+      "desc": "Invite me: [Click]({{invite}})\nSupport Server: [Click]({{help}})",
+      "category": "Info"
     },
     "tta": {
       "description": "Adds something to the To-Do list of the Ayako Bot Dev\nTTA stands for \"Things to add\"",
@@ -3100,7 +3138,7 @@
         "lvlupchannels": "Level-Up Channels",
         "lvlupdeltimeout": "Level-Up Message Delete Timeout",
         "lvlupemotes": "Level-Up Emotes",
-        "actualXP": "Actual XP per message (with multiplier)",
+        "actualXP": "Actual XP per Message (with multiplier)",
         "prefixes": "Prefixes",
         "ignoreprefixes": "Ignore Prefixes",
         "options": {

@@ -8,6 +8,7 @@ module.exports = {
   childOf: 'nitro',
   finished: true,
   setupRequired: false,
+  helpCategory: module.exports.childOf,
   mmrEmbed(msg, res) {
     const embed = new Builders.UnsafeEmbedBuilder();
     for (let i = 0; i < res.length; i += 1) {

@@ -8,7 +8,7 @@ module.exports = {
   category: 'Moderation',
   description: 'Let a User skip the Verification',
   usage: ['bypass [user ID or mention]'],
-  type: 'mod',
+  type: 'util',
   async execute(msg) {
     const user = msg.args[0].replace(/\D+/g, '');
     const BypassRole = msg.guild.roles.cache.find((role) => role.id === '389470002992119810');
