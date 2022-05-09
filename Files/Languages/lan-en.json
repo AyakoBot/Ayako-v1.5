@@ -1669,6 +1669,17 @@
       "dmsFalse": "Usable in Servers only",
       "notFound": "Command Help not found. Developer has been notified. Please try again later."
     },
+    "help": {
+      "description": "Information about all Features Ayako has",
+      "usage": ["help", "help (sub category)"],
+      "category": "Info",
+      "author": "Ayako Command Help",
+      "fun": "Fun",
+      "leveling": "Leveling",
+      "moderation": "Moderation",
+      "info": "Information",
+      "owner": "Owner"
+    },
     "ban": {
       "description": "Bans a User from the Server",
       "usage": ["ban [User ID or Mention] (reason)"],
@@ -3895,8 +3906,7 @@
           }
         }
       }
-    },
-    "help": {}
+    }
   },
   "leveling": {
     "author": "Welcome {{member.user.tag}} to {{member.guild.name}}",

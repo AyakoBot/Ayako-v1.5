@@ -3,6 +3,7 @@ module.exports = {
   perm: 0,
   dm: true,
   takesFirstArg: true,
+  type: 'owner',
   execute(msg) {
     const { args } = msg;
     if (!args[0]) return msg.client.ch.reply(msg, 'Please enter a valid command');

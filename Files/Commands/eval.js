@@ -14,6 +14,7 @@ module.exports = {
   perm: 0,
   dm: true,
   takesFirstArg: true,
+  type: 'owner',
   async execute(msg) {
     if (msg.author.id !== auth.ownerID) return;
     const clean = (text) => {

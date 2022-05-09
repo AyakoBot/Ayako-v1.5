@@ -7,7 +7,7 @@ module.exports = {
   dm: true,
   takesFirstArg: true,
   aliases: [],
-  type: 'debugging',
+  type: 'owner',
   async execute(msg) {
     let returned;
 

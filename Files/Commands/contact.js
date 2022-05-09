@@ -7,6 +7,7 @@ module.exports = {
   dm: true,
   takesFirstArg: true,
   aliases: null,
+  type: 'info',
   execute(msg) {
     const tta = msg.args.slice(0).join(' ');
     const SuggestEmbed = new Builders.UnsafeEmbedBuilder()

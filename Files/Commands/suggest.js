@@ -7,7 +7,7 @@ module.exports = {
   dm: false,
   takesFirstArg: true,
   aliases: [],
-  type: 'utility',
+  type: 'util',
   execute: async (msg) => {
     const isEnabled = await getSettings(msg);
     if (!isEnabled) {
