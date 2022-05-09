@@ -29,7 +29,7 @@ module.exports = {
 
 const getSettings = async (msg) => {
   const res = await msg.client.ch.query(
-    'SELECT * FROM disboard WHERE guildid = $1 AND active = true;',
+    'SELECT * FROM disboard WHERE guildid = $1 AND active = true AND nextbump IS NOT NULL;',
     [msg.guild.id],
   );
 
