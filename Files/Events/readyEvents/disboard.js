@@ -68,12 +68,8 @@ const getSettings = async (msg) => {
 };
 
 const setReminder = (msg, isBump, settings) => {
-  if (!isBump && !settings.repeatreminder) {
-    msg.client.ch.query(`UPDATE disboard SET nextbump = $1 WHERE guildid = $2;`, [
-      null,
-      msg.guild.id,
-    ]);
-
+  if (!isBump && !Number(settings.repeatreminder)) {
+    msg.client.ch.query(`UPDATE disboard SET nextbump = NULL WHERE guildid = $1;`, [msg.guild.id]);
     return;
   }
 
