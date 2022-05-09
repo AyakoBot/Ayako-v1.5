@@ -7,7 +7,6 @@ module.exports = {
   name: 'verify_message_button',
   perm: null,
   dm: false,
-  type: 'auto',
   cooldown: 5000,
   execute: async (cmd, language) => {
     const lan = language.verification;

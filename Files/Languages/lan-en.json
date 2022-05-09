@@ -111,20 +111,12 @@
     "author": "Recommended Commands you should check out first:",
     "fields": {
       "one": {
-        "name": "`{{prefix}}help setup`",
+        "name": "`{{prefix}}help`",
         "value": "All Commands to get started on setting up my behavior"
       },
       "two": {
-        "name": "`{{prefix}}help settings`",
+        "name": "`{{prefix}}settings`",
         "value": "All Settings related Commands"
-      },
-      "three": {
-        "name": "`{{prefix}}help logging`",
-        "value": "All Logging related Commands"
-      },
-      "four": {
-        "name": "`{{prefix}}help`",
-        "value": "The basic Help Embed"
       },
       "five": {
         "name": "`{{prefix}}contact` `{{prefix}}invite` `{{prefix}}support`",
@@ -1689,7 +1681,8 @@
         "leveling": "Leveling",
         "roles": "Roles",
         "other": "Other",
-        "nitro": "Nitro"
+        "nitro": "Nitro",
+        "giveaway": "Giveaway"
       },
       "settingsName": "__Settings related to {{type}}__",
       "noCommands": "No Commands related to this Category found",
@@ -4070,6 +4063,7 @@
       "usage": ["giveaway"],
       "category": "Giveaway",
       "create": {
+        "description": "Create a Giveaway",
         "missingPermissions": "I can't send or view Messages in this Channel",
         "invalidTime": "The provided Time was invalid",
         "author": "Ayako Giveaways",
@@ -4083,6 +4077,7 @@
         "error": "Failed to create Giveaway"
       },
       "end": {
+        "description": "End a Giveaway manually",
         "ended": "Ended",
         "winner": "Winner",
         "winners": "Winners",
@@ -4103,12 +4098,14 @@
         "participants": "Participants"
       },
       "edit": {
+        "description": "Edit a Giveaway",
         "invalidTime": "The given Time was not valid",
         "noChanges": "No valid changes were made",
         "success": "Successfully edited Giveaway",
         "button": "Get to Giveaway"
       },
       "reroll": {
+        "description": "Re-roll a Giveaway",
         "rerolled": "Successfully re-rolled Giveaway",
         "button": "Get to Giveaway"
       }
@@ -4300,6 +4297,7 @@
   "message": "Message",
   "duration": "Duration",
   "slashCommand": "Slash Command",
+  "SlashCommands": "Slash Command",
   "Commands": "Commands",
   "Settings": "Settings"
 }

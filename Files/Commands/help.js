@@ -8,7 +8,7 @@ module.exports = {
   aliases: ['h', 'commands'],
   type: 'info',
   execute: async (msg) => {
-    const embed = msg.args[0] ? getEmbed(msg, msg.args[0].toLowerCase()) : getBaseEmbed(msg);
+    const embed = msg.args[0] ? await getEmbed(msg, msg.args[0].toLowerCase()) : getBaseEmbed(msg);
 
     msg.client.ch.reply(msg, { embeds: [embed], ephemeral: true });
   },
@@ -31,6 +31,7 @@ const getBaseEmbed = (msg) => {
     ...new Set([
       ...msg.client.settings.filter((s) => s.helpCategory).map((s) => s.helpCategory),
       ...msg.client.commands.filter((s) => s.type).map((s) => s.type),
+      ...msg.client.slashCommands.filter((s) => s.type).map((s) => s.type),
     ]),
   ];
 
@@ -43,11 +44,17 @@ const getBaseEmbed = (msg) => {
       .filter((s) => s.type === category)
       .map((s) => `\`${s.name}\``);
 
+    const slashCommands = msg.client.slashCommands
+      .filter((s) => s.type === category)
+      .map((s) => `\`${s.name}\``);
+
     embed.addFields({
       name: `${msg.lan.categoryNames[category]} - \`${msg.client.constants.standard.prefix}help ${category}\``,
       value: `${commands.length ? `${msg.language.Commands}\n${commands.join(', ')}` : ''}${
         settings.length ? `\n\n${msg.language.Settings}\n${settings.join(', ')}` : ''
-      }\n`,
+      }\n${
+        slashCommands.length ? `${msg.language.SlashCommands}\n${slashCommands.join(', ')}` : ''
+      }`,
       inline: true,
     });
   });
@@ -55,7 +62,7 @@ const getBaseEmbed = (msg) => {
   return embed;
 };
 
-const getEmbed = (msg, category) => {
+const getEmbed = async (msg, category) => {
   const commands = msg.client.commands.filter(
     (c) =>
       c.type === category &&
@@ -65,6 +72,13 @@ const getEmbed = (msg, category) => {
 
   const settings = msg.client.settings.filter(
     (s) => s.helpCategory === category && (s.finished || typeof s.finished !== 'boolean'),
+  );
+
+  const slashCommands = msg.client.slashCommands.filter(
+    (c) =>
+      c.type === category &&
+      !c.unfinished &&
+      (!c.thisGuildOnly || c.thisGuildOnly.includes(msg.guild.id)),
   );
 
   const embed = new Builders.UnsafeEmbedBuilder()
@@ -99,7 +113,23 @@ const getEmbed = (msg, category) => {
     });
   });
 
-  if (!commands.size) {
+  if (slashCommands.size) await msg.client.application.commands.fetch().catch(() => {});
+
+  slashCommands.forEach((slashCommand) => {
+    const sC = msg.client.application.commands.cache.find((c) => c.name === slashCommand.name);
+
+    sC.options.forEach((c) => {
+      const lan = msg.language.slashCommands[slashCommand.name][c.name];
+
+      embed.addFields({
+        name: `\`/${c.name}\``,
+        value: `${lan.description}`,
+        inline: lan.description.length < 50,
+      });
+    });
+  });
+
+  if (!commands.size && !slashCommands.size) {
     embed.addFields({ name: msg.lan.noCommands, value: '\u200b', inline: false });
   }
 
@@ -107,7 +137,7 @@ const getEmbed = (msg, category) => {
     embed.setDescription(msg.lan.noSettings);
   }
 
-  if (!commands.size && !settings.size) {
+  if (!commands.size && !settings.size && !slashCommands.size) {
     embed.setAuthor({ name: msg.lan.authorNoType, url: msg.client.constants.standard.invite });
   }
 
