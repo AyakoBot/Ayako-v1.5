@@ -27,8 +27,9 @@ module.exports = {
       member.roles.remove(pendingRole).catch(() => {});
     }
 
-    if (finishedRole && !member.roles.cache.has(finishedRole.id)){ member.roles.add(finishedRole).catch(() => {});
-}
+    if (finishedRole && !member.roles.cache.has(finishedRole.id)) {
+      member.roles.add(finishedRole).catch(() => {});
+    }
     doLog(msg, settings, member);
 
     msg.client.ch.send(member.user, { content: msg.lan.bypass });
