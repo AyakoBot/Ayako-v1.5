@@ -79,7 +79,7 @@ const getEmbed = (msg, category) => {
       text: msg.client.ch.stp(msg.lan.patreon, { patreon: msg.client.constants.standard.patreon }),
     });
 
-  if (settings.length) {
+  if (settings.size) {
     embed.setDescription(
       `${msg.client.ch.stp(msg.lan.settingsName, { type: msg.lan.categoryNames[category] })}\n`,
     );
@@ -99,12 +99,16 @@ const getEmbed = (msg, category) => {
     });
   });
 
-  if (!embed.data.fields?.length) {
+  if (!commands.size) {
     embed.addFields({ name: msg.lan.noCommands, value: '\u200b', inline: false });
   }
 
-  if (!embed.data.description?.length) {
+  if (!settings.size) {
     embed.setDescription(msg.lan.noSettings);
+  }
+
+  if (!commands.size && !settings.size) {
+    embed.setAuthor({ name: msg.lan.authorNoType, url: msg.client.constants.standard.invite });
   }
 
   embed.data.description += `\n${msg.client.ch.stp(msg.lan.listSettings, {

@@ -1678,7 +1678,7 @@
       "description": "Information about all Features Ayako has",
       "usage": ["help", "help (sub category)"],
       "category": "Info",
-      "author": "Ayako Command Help - {{type}}",
+      "author": "Ayako Help - {{type}}",
       "authorNoType": "Ayako Help",
       "categoryNames": {
         "fun": "Fun",
