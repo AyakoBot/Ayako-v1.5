@@ -220,7 +220,7 @@ module.exports = {
         })
         .setTimestamp()
         .setColor();
-      cmd.client.ch.send(logchannel, { embeds: [log] });
+      cmd.client.ch.send(logchannel, { embeds: [log] }, 5000);
     }
     const embed = new Builders.UnsafeEmbedBuilder()
       .setTitle(
