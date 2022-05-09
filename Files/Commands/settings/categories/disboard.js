@@ -38,11 +38,15 @@ module.exports = {
       },
       {
         name: msg.lan.repeatreminder,
-        value: `${moment
-          .duration(r.repeatreminder * 60000)
-          .format(
-            `h [${msg.language.time.hours}], m [${msg.language.time.minutes}], s [${msg.language.time.seconds}]`,
-          )}`,
+        value: `${
+          Number(r.repeatreminder)
+            ? moment
+                .duration(r.repeatreminder * 60000)
+                .format(
+                  `h [${msg.language.time.hours}], m [${msg.language.time.minutes}], s [${msg.language.time.seconds}]`,
+                )
+            : msg.language.disabled
+        }`,
         inline: false,
       },
     );
