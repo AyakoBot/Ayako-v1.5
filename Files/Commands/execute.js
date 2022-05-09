@@ -91,12 +91,6 @@ module.exports = {
         },
         {
           type: 1,
-          name: 'list',
-          description: 'List running Giveaways',
-          options: [],
-        },
-        {
-          type: 1,
           name: 'end',
           description: 'Ends a Giveaway manually',
           options: [
