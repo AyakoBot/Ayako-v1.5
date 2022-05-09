@@ -1679,15 +1679,18 @@
       "usage": ["help", "help (sub category)"],
       "category": "Info",
       "author": "Ayako Command Help - {{type}}",
-      "authorNoType": "Ayako Command Help",
-      "fun": "Fun",
-      "owner": "Owner",
-      "util": "Utility",
-      "info": "Information",
-      "mod": "Moderation",
-      "leveling": "Leveling",
-      "roles": "Roles",
-      "other": "Other",
+      "authorNoType": "Ayako Help",
+      "categoryNames": {
+        "fun": "Fun",
+        "owner": "Owner",
+        "util": "Utility",
+        "info": "Information",
+        "mod": "Moderation",
+        "leveling": "Leveling",
+        "roles": "Roles",
+        "other": "Other",
+        "nitro": "Nitro"
+      },
       "settingsName": "__Settings related to {{type}}__",
       "noCommands": "No Commands related to this Category found",
       "noSettings": "No Settings related to this Category found",
@@ -1968,7 +1971,7 @@
     },
     "massban": {
       "category": "Moderation",
-      "description": "Ban as many users from the server as the Discord Character limit lets you",
+      "description": "Ban as many Users from the Server as the Discord Character Limit let's you",
       "usage": ["massban [User IDs or Mentions] (reason)", "namemassban [name to ban]"],
       "already": "(already banned)",
       "youCant": "(You can't ban this User)",
@@ -4294,5 +4297,7 @@
   "bot": "Bot",
   "message": "Message",
   "duration": "Duration",
-  "slashCommand": "Slash Command"
+  "slashCommand": "Slash Command",
+  "Commands": "Commands",
+  "Settings": "Settings"
 }
