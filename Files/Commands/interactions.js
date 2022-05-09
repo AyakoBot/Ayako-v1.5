@@ -108,7 +108,7 @@ const getText = (msg, saidText, mentionText, usedCommandName) => {
 
   if (saidText !== ' '.repeat(saidText.length)) {
     uncutContent = `${saidText}`;
-    saidText = msg.client.ch.stp(msg.lan.saying, { text: saidText });
+    saidText = ` "${uncutContent}"`;
   } else {
     saidText = ' ';
     uncutContent = ' ';
