@@ -31,7 +31,7 @@ module.exports = async () => {
       if (member.premiumSinceTimestamp) {
         if (!res || !res.rowCount) {
           client.ch.query(
-            `INSERT INTO nitrousers (guildid, userid, booststart) VALUES ($1, $2, $3);`,
+            `INSERT INTO nitrousers (guildid, userid, booststart) VALUES ($1, $2, $3) ON CONFLICT (booststart) DO NOTHING;`,
             [guild.id, member.id, member.premiumSinceTimestamp],
           );
 
@@ -43,7 +43,7 @@ module.exports = async () => {
           );
           if (!row) {
             client.ch.query(
-              `INSERT INTO nitrousers (guildid, userid, booststart) VALUES ($1, $2, $3);`,
+              `INSERT INTO nitrousers (guildid, userid, booststart) VALUES ($1, $2, $3) ON CONFLICT (booststart) DO NOTHING;`,
               [guild.id, member.id, member.premiumSinceTimestamp],
             );
 
