@@ -17,9 +17,7 @@ module.exports = {
     }
 
     if (log.toLowerCase().includes('heartbeat') && log.includes('latency')) {
-      client.ch.query('UPDATE stats SET heartbeat = $1;', [
-        log.replace(/\D+/g, '').slice(1, log.replace(/\D+/g, '').length),
-      ]);
+      client.ch.query('UPDATE stats SET heartbeat = $1;', [log.split(']')[1].replace(/\D+/g, '')]);
       return;
     }
     if (log.toLowerCase().includes('heartbeat')) return;
