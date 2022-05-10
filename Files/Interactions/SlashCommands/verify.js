@@ -18,12 +18,6 @@ module.exports = {
     if (res && res.rowCount > 0) {
       const [r] = res.rows;
 
-      cmd.member.roles.add(r.finishedrole);
-      cmd.member.roles.remove(r.pendingrole);
-
-      cmd.deferUpdate();
-
-      return;
       let logchannel;
       if (r.startchannel !== cmd.channel.id) return;
       if (r.pendingrole && !cmd.member.roles.cache.has(r.pendingrole)) {
