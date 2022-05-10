@@ -19,8 +19,11 @@ module.exports = {
     const relatedReactions = await getRelatedReactions(reaction, baseRow);
     const hasAnyOfRelated = getHasAnyOfRelated(relatedReactions, member);
 
-    if (!hasAnyOfRelated && baseRow.onlyone) {
-      giveRoles(reaction, reactionRow, baseRow, hasAnyOfRelated, member);
+    if (
+      (!hasAnyOfRelated && baseRow.onlyone && reactionRow.roles) ||
+      (!baseRow.onlyone && reactionRow.roles)
+    ) {
+      giveRoles(reactionRow, baseRow, hasAnyOfRelated, member);
     }
   },
 };
@@ -62,7 +65,7 @@ const getHasAnyOfRelated = (relatedReactions, member) => {
   return hasAnyOfRelated;
 };
 
-const giveRoles = async (reaction, reactionRow, baseRow, hasAnyOfRelated, member) => {
+const giveRoles = async (reactionRow, baseRow, hasAnyOfRelated, member) => {
   const rolesToAdd = [];
 
   reactionRow.roles.forEach((rID) => {

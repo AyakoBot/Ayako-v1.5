@@ -17,9 +17,12 @@ module.exports = {
     }
 
     if (log.toLowerCase().includes('heartbeat') && log.includes('latency')) {
-      client.ch.query('UPDATE stats SET heartbeat = $1;', [log.slice(0, -10).replace(/\D+/g, '')]);
+      client.ch.query('UPDATE stats SET heartbeat = $1;', [
+        log.replace(/\D+/g, '').slice(1, log.replace(/\D+/g, '').length),
+      ]);
       return;
     }
+    if (log.toLowerCase().includes('heartbeat')) return;
     const res = await client.ch.query('SELECT * FROM stats;');
     if (res?.rows[0]?.verbosity) console.log(log);
   },
