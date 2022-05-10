@@ -33,7 +33,7 @@ module.exports = {
                 );
                 settingCategories.push(s.folder);
               }
-            } else {
+            } else if (!options.find((o) => o.data.label === s.name)) {
               options.push(
                 new Builders.UnsafeSelectMenuOptionBuilder().setLabel(s.name).setValue(s.name),
               );
@@ -124,6 +124,7 @@ module.exports = {
             commands: categoryText,
           }),
         );
+
       await replier({ msg, answer }, { embeds: [embed], rawButtons }, 1);
       categoryMenuHandler({ msg, answer }, false);
     } else {
