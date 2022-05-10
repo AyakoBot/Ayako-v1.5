@@ -22,6 +22,9 @@ module.exports = {
   takesFirstArg: false,
   type: 'owner',
   execute: async (msg) => {
+
+    console.log(msg.args, msg.args.slice(0));
+    return;
     if (msg.author.id !== '318453143476371456') return;
     msg.client.channels.cache.get('827302309368561715').send({
       content: `This is a Channel about Support for <@650691698409734151>\n**Do not send Messages here if you don't need help with Ayako**\nThis is not a general Support Channel`,
