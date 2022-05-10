@@ -1660,7 +1660,7 @@
       "category": "Owner"
     },
     "addrole": {
-      "description": "Create a new Role in your Server with standard Permissions.",
+      "description": "Create a new Role in your Server with standard Permissions",
       "usage": ["addrole (Hex Color Code) [name of the new Role]"],
       "category": "Roles",
       "reason": "addRole Command executed by {{user.tag}}",
@@ -1674,7 +1674,7 @@
       "reason": "Ayako Auto-Punish System | No Reason Provided"
     },
     "delrole": {
-      "description": "Delete a Role from your Server.",
+      "description": "Delete a Role from your Server",
       "usage": ["delrole [ID or @Mention]"],
       "category": "Roles",
       "chooseRole": "I found {{amount}} Roles with the Name `{{role.name}}`\n**Please choose the right one.**",
