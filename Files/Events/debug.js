@@ -16,11 +16,10 @@ module.exports = {
       return;
     }
 
-    if (log.includes('Heartbeat') && log.includes('latency')) {
-      client.ch.query('UPDATE stats SET heartbeat = $1;', [log.replace(/\D+/g, '')]);
+    if (log.toLowerCase().includes('heartbeat') && log.includes('latency')) {
+      client.ch.query('UPDATE stats SET heartbeat = $1;', [log.slice(0, -10).replace(/\D+/g, '')]);
     }
-    // const res = await client.ch.query('SELECT * FROM stats;');
-    // if (res?.rows[0]?.verbosity)
-    console.log(log);
+    const res = await client.ch.query('SELECT * FROM stats;');
+    if (res?.rows[0]?.verbosity) console.log(log);
   },
 };

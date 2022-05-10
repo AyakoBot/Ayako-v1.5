@@ -68,7 +68,6 @@ module.exports = {
         'UPDATE roleseparatorsettings SET stillrunning = $2 WHERE guildid = $1;',
         [msg.guild.id, true],
       );
-      await msg.guild.members.fetch();
       membersWithRoles = await this.getNewMembers(msg.guild, res);
     }
     if (clickButton) await clickButton.deleteReply().catch(() => {});
@@ -245,7 +244,7 @@ module.exports = {
           async () => {
             const giveRoles = raw.giveTheseRoles;
             const takeRoles = raw.takeTheseRoles;
-            const member = await msg.guild.members.fetch(raw.id).catch(() => {});
+            const member = msg.guild.members.cache.get(raw.id);
             if (member) {
               const roles = giveRoles ? [...member._roles, ...giveRoles] : member._roles;
               if (takeRoles) takeRoles.forEach((r) => roles.splice(roles.indexOf(r), 1));

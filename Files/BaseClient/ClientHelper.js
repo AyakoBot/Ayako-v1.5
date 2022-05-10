@@ -1265,6 +1265,7 @@ const getCooldown = async (msg) => {
 
 const cooldownHandler = async (msg, m) => {
   if (msg.noCommand) return;
+  if (!msg.command) return;
   if (!msg.cooldown || msg.cooldown < 2000) return;
   const res = await getCooldown(msg);
   if (

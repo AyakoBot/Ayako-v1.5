@@ -35,7 +35,7 @@ module.exports = async () => {
     const rolesUserQualifiesFor = roleSettings.filter((role) => role.days <= rawUser.days);
     if (!rolesUserQualifiesFor) return;
 
-    const member = await guild.members.fetch(user.id).catch(() => {});
+    const member = guild.members.cache.get(user.id);
     if (!member) return;
 
     const [rolesToAdd, rolesToRemove] = getRolesToAssign(
