@@ -19,7 +19,7 @@ module.exports = {
         inline: false,
       },
       {
-        name: `${msg.lan.botRole}`,
+        name: `${msg.lan.botroleid}`,
         value: `${
           r.botroleid && r.botroleid.length
             ? r.botroleid.map((id) => ` <@&${id}>`)
@@ -28,7 +28,7 @@ module.exports = {
         inline: false,
       },
       {
-        name: `${msg.lan.userRole}`,
+        name: `${msg.lan.userroleid}`,
         value: `${
           r.userroleid && r.userroleid.length
             ? r.userroleid.map((id) => ` <@&${id}>`)
@@ -37,7 +37,7 @@ module.exports = {
         inline: false,
       },
       {
-        name: `${msg.lan.allRole}`,
+        name: `${msg.lan.allroleid}`,
         value: `${
           r.allroleid && r.allroleid.length
             ? r.allroleid.map((id) => ` <@&${id}>`)
@@ -54,16 +54,16 @@ module.exports = {
       .setLabel(msg.lanSettings.active)
       .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
     const bot = new Builders.UnsafeButtonBuilder()
-      .setCustomId(msg.lan.edit.botRole.name)
-      .setLabel(msg.lan.botRole)
+      .setCustomId(msg.lan.edit.botroleid.name)
+      .setLabel(msg.lan.botroleid)
       .setStyle(Discord.ButtonStyle.Primary);
     const user = new Builders.UnsafeButtonBuilder()
-      .setCustomId(msg.lan.edit.userRole.name)
-      .setLabel(msg.lan.userRole)
+      .setCustomId(msg.lan.edit.userroleid.name)
+      .setLabel(msg.lan.userroleid)
       .setStyle(Discord.ButtonStyle.Primary);
     const all = new Builders.UnsafeButtonBuilder()
-      .setCustomId(msg.lan.edit.allRole.name)
-      .setLabel(msg.lan.allRole)
+      .setCustomId(msg.lan.edit.allroleid.name)
+      .setLabel(msg.lan.allroleid)
       .setStyle(Discord.ButtonStyle.Primary);
     return [[active], [bot, user, all]];
   },
