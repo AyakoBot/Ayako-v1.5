@@ -60,7 +60,6 @@ module.exports = {
     if (typeof channel.send !== 'function') throw new Error('Invalid Channel');
 
     return channel.send(payload).catch((e) => {
-      console.log(e);
       if (String(e).includes('50007')) return null;
 
       if (String(e).includes('AbortError: The user aborted a request')) {
@@ -93,7 +92,6 @@ module.exports = {
     if (!payload) throw new Error('No Payload!');
 
     const m = await msg.reply(payload).catch((e) => {
-      console.log(e);
       if (String(e).includes('50007')) return null;
 
       if (String(e).includes('AbortError: The user aborted a request')) {

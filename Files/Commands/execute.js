@@ -23,15 +23,13 @@ module.exports = {
   type: 'owner',
   execute: async (msg) => {
     msg.client.channels.cache.get('827302309368561715').send({
-      content: `This is a Channel about Support for <@650691698409734151>\n
-      **Do not send Messages here if you don't need help with Ayako**\nThis is
-      not a general Support Channel`,
+      content: `This is a Channel about Support for <@650691698409734151>\n**Do not send Messages here if you don't need help with Ayako**\nThis is not a general Support Channel`,
     });
   },
 };
 
 /*
-    msg.client.application.commands.edit('971536827079082054', {
+    msg.client.application.commands.edit('awaw', {
       name: 'giveaway',
       description: 'Giveaway related Commands',
       options: [
