@@ -20,7 +20,7 @@ module.exports = {
 
 const startedBoost = (member) => {
   member.client.ch.query(
-    `INSERT INTO nitrousers (guildid, userid, booststart) VALUES ($1, $2, $3);`,
+    `INSERT INTO nitrousers (guildid, userid, booststart) VALUES ($1, $2, $3) ON CONFLICT (booststart) DO NOTHING;`,
     [member.guild.id, member.user.id, member.premiumSinceTimestamp],
   );
 };
