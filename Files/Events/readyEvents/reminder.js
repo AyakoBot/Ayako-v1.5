@@ -32,7 +32,7 @@ const endReminder = async (client, reminder) => {
 
   let channel = await client.channels.cache
     .get(reminder.channelid)
-    .messages.fetch(reminder.msgid)
+    ?.messages.fetch(reminder.msgid)
     .catch(() => {});
   let method = 'reply';
 
