@@ -26,7 +26,7 @@ module.exports = async () => {
     }
 
     guild.members.cache.forEach((member) => {
-      member.client = client;
+      if (!member) return;
 
       if (member.premiumSinceTimestamp) {
         if (!res || !res.rowCount) {
@@ -53,14 +53,14 @@ module.exports = async () => {
       }
     });
 
-    [...new Set(addedMembers)].forEach((m) => logStart(m));
-    [...new Set(removedMembers)].forEach((m) => logEnd(m));
+    [...new Set(addedMembers)].forEach((m) => logStart(m, guild, client));
+    [...new Set(removedMembers)].forEach((m) => logEnd(m, guild, client));
   });
 };
 
-const logEnd = async (member) => {
-  const row = await getSettings(member);
-  const language = await member.client.ch.languageSelector(member.guild);
+const logEnd = async (member, guild, client) => {
+  const row = await getSettings(member, guild, client);
+  const language = await client.ch.languageSelector(guild);
 
   if (row?.logchannels && row.logchannels.length) {
     const embed = new Builders.UnsafeEmbedBuilder()
@@ -68,25 +68,25 @@ const logEnd = async (member) => {
         name: language.guildMemberUpdateNitro.author.nameEnd,
       })
       .setDescription(
-        member.client.ch
+        client.ch
           .stp(language.guildMemberUpdateNitro.descriptionEnd, {
             user: member.user,
           })
-          .setColor(member.client.constants.guildMemberUpdate.color),
+          .setColor(client.constants.guildMemberUpdate.color),
       );
 
-    member.client.ch.send(
-      row.logchannels.map((c) => member.client.channels.cache.get(c)),
+    client.ch.send(
+      row.logchannels.map((c) => client.channels.cache.get(c)),
       { embeds: [embed] },
       5000,
     );
   }
 };
 
-const logStart = async (member) => {
-  const row = await getSettings(member);
+const logStart = async (member, guild, client) => {
+  const row = await getSettings(member, guild, client);
   if (!row) return;
-  const language = await member.client.ch.languageSelector(member.guild);
+  const language = await client.ch.languageSelector(guild);
 
   if (row.logchannels && row.logchannels.length) {
     const embed = new Builders.UnsafeEmbedBuilder()
@@ -94,26 +94,25 @@ const logStart = async (member) => {
         name: language.guildMemberUpdateNitro.author.nameStart,
       })
       .setDescription(
-        member.client.ch
+        client.ch
           .stp(language.guildMemberUpdateNitro.descriptionStart, {
             user: member.user,
           })
-          .setColor(member.client.constants.guildMemberUpdate.color),
+          .setColor(client.constants.guildMemberUpdate.color),
       );
 
-    member.client.ch.send(
-      row.logchannels.map((c) => member.client.channels.cache.get(c)),
+    client.ch.send(
+      row.logchannels.map((c) => client.channels.cache.get(c)),
       { embeds: [embed] },
       5000,
     );
   }
 };
 
-const getSettings = async (member) => {
-  const res = member.client.ch.query(
-    `SELECT * FROM nitrosettings WHERE guildid = $1 AND active = true;`,
-    [member.guild.id],
-  );
+const getSettings = async (member, guild, client) => {
+  const res = client.ch.query(`SELECT * FROM nitrosettings WHERE guildid = $1 AND active = true;`, [
+    guild.id,
+  ]);
   if (res && res.rowCount) return res.rows[0];
   return null;
 };

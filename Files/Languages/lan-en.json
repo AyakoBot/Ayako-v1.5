@@ -4103,7 +4103,7 @@
     "anon": "The Votes on this Suggestion are Anonymous"
   },
   "nitro": {
-    "given": "{{user}} has been given\n{{roles}}\nfor boosting {{days}}",
+    "given": "{{user}} has been given\n{{roles}}\nfor boosting {{days}} Days",
     "taken": "{{user}} has been taken\n{{roles}}\nfrom"
   },
   "slashCommands": {

@@ -157,6 +157,10 @@ const checkDisabled = (msg, disabledCommands) => {
 };
 
 const editCheck = async (msg) => {
+  if (msg.channel.type === 1) {
+    runDMCommand(msg);
+    return;
+  }
   const cooldownRes = await getCooldown(msg);
   msg.cooldown = cooldownRes.cooldown;
 
