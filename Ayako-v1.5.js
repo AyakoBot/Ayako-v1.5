@@ -1,12 +1,7 @@
 const readline = require('readline');
 const auth = require('./Files/BaseClient/auth.json');
 const client = require('./Files/BaseClient/DiscordClient');
-
-// Connect to Discord
-client.login(auth.token).then(() => {
-  // eslint-disable-next-line no-console
-  console.log(`| Discord Client connected at ${new Date().toUTCString()}`);
-});
+require('./Files/BaseClient/DataBase');
 
 client.ch = require('./Files/BaseClient/ClientHelper');
 
@@ -47,5 +42,8 @@ client.rest.on('rateLimited', (rateLimitInfo) => {
   require('./Files/Events/REST Events/rateLimited')(rateLimitInfo);
 });
 
-// AP.on('posted', () => {console.log('Posted stats to Top.gg!')})
-// const { AP } = require('./Files/BaseClient/DBL');
+// Connect to Discord
+client.login(auth.token).then(() => {
+  // eslint-disable-next-line no-console
+  console.log(`| Discord Client connected at ${new Date().toUTCString()}`);
+});
