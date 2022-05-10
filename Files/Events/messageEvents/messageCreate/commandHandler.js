@@ -91,8 +91,8 @@ module.exports = {
 
     const disabledCommands = await getDisabledRes(msg);
     if (disabledCommands && disabledCommands.length) {
-      const finished = checkDisabled(msg, disabledCommands);
-      if (finished) return;
+      const disabled = checkDisabled(msg, disabledCommands);
+      if (disabled) return;
     }
 
     if (typeof msg.command.perm === 'bigint') {
@@ -127,13 +127,15 @@ module.exports = {
 const checkDisabled = (msg, disabledCommands) => {
   const applyingRows = disabledCommands.filter(
     (row) =>
-      row.commands.includes(msg.command.name) ||
-      (msg.command.aliases && msg.command.aliases.some((alias) => row.commands.includes(alias))),
+      (row.commands.includes(msg.command.name) ||
+        (msg.command.aliases &&
+          msg.command.aliases.some((alias) => row.commands.includes(alias)))) &&
+      row.channels?.includes(msg.channel.id),
   );
 
   if (!applyingRows || !applyingRows.length) return false;
 
-  const isEnabled = applyingRows.map((row) => {
+  const isDisabled = applyingRows.map((row) => {
     if (row.bpuserid?.length && !row.bpuserid.includes(msg.author.id)) return false;
 
     if (row.channel?.length && !row.channel.includes(msg.channel.id)) return false;
@@ -151,10 +153,7 @@ const checkDisabled = (msg, disabledCommands) => {
     return true;
   });
 
-  if (isEnabled.includes(false)) {
-    return true;
-  }
-  return false;
+  return isDisabled.includes(true);
 };
 
 const editCheck = async (msg) => {
