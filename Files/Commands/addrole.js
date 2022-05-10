@@ -15,13 +15,20 @@ module.exports = {
     else RoleName = msg.args.slice(1).join(' ');
     const { lan } = msg;
     if (!RoleName) return msg.client.ch.reply(msg, lan.noName);
+
+    let err;
     const role = await msg.guild.roles
       .create({
         name: `${RoleName}`,
         color: color.replace('||', ''),
         reason: msg.client.ch.stp(lan.reason, { user: msg.author }),
       })
-      .catch(() => {});
+      .catch((e) => {
+        err = e;
+      });
+
+    if (!role && err) return msg.client.ch.error(msg, err);
+
     const embed = new Builders.UnsafeEmbedBuilder()
       .setDescription(msg.client.ch.stp(lan.created, { role }))
       .setColor(parseInt(color, 16));

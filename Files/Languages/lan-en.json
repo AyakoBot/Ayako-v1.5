@@ -558,10 +558,10 @@
     "HasLeastEmotesShort": "least Emotes count",
     "HasMostEmotes": "Has at most [externally defined] Emotes",
     "HasMostEmotesShort": "most Emotes count",
-    "HasLeastMentions": "Has at least [externally defined] Mentions",
-    "HasLeastMentionsShort": "least Mentions count",
-    "HasMostMentions": "Has at most [externally defined] Mentions",
-    "HasMostMentionsShort": "most Mentions count"
+    "HasLeastMentions": "Has at least [externally defined] @Mentions",
+    "HasLeastMentionsShort": "least @Mentions count",
+    "HasMostMentions": "Has at most [externally defined] @Mentions",
+    "HasMostMentionsShort": "most @Mentions count"
   },
   "channelsNrSorted": {
     "0": "Text Channel",
@@ -620,7 +620,7 @@
     "verify": "Verify",
     "checkDMs": "Verification Started, please Check our DMs",
     "startchannelmessage": "Please **open your DMs** so I can DM you a verification Captcha.\nAfter you opened them, press the Button below to re-/start Verification!.",
-    "description": "<a:AMtoiletspin:709805618030182510> **Welcome to {{guild.name}}!**",
+    "description": "<a:AMtoiletspin:709805618030182510> **Welcome to `{{guild.name}}`!**",
     "finishDesc": "**Thank you for verifying!**\nVerification Finished!",
     "kickMsg": "You have been kicked from `{{guild.name}}` because you didn't verify.\nYou can rejoin anytime with a valid Invite Link",
     "hintmsg": "Type out the traced colored Characters from left to right ➡️\nIgnore all gray decoy Characters\nIgnore Character Cases (upper & lower case)\nThe captcha contains 5 digits",
@@ -672,7 +672,7 @@
   },
   "defaultMessageNotifications": {
     "ALL": "```All Messages```\n`(Members will receive Notifications for all Messages by Default)`",
-    "MENTIONS": "```Only Mentions```\n`(Members will receive Notifications only for @Mentions by Default)`"
+    "MENTIONS": "```Only @Mentions```\n`(Members will receive Notifications only for @Mentions by Default)`"
   },
   "autopunish": {
     "1": "Temp-Mute",
@@ -792,7 +792,7 @@
       "desc": "Select the Channel you want to add/remove below"
     },
     "users": {
-      "select": "Type 1 or more User IDs or Mentions"
+      "select": "Type 1 or more User IDs or @Mentions"
     },
     "number": {
       "select": "Select the Number",
@@ -883,7 +883,7 @@
       "activeMute": "Joined with an active Mute",
       "activeMuteError": "This User joined with an active Mute.\nHowever I wasn't able to Mute them.\nMissing Permissions",
       "dm": {
-        "author": "You have been Temp-Muted on {{guild.name}}"
+        "author": "You have been Temp-Muted on `{{guild.name}}`"
       },
       "alreadyApplied": "This Member is already Temp-Mute",
       "exeNoPerms": "You can't Temp-Mute this Member",
@@ -893,14 +893,14 @@
       "error": "I wasn't able to Temp-Mute this User!",
       "noMember": "This User is not a Member of this Server",
       "mePunish": "I won't Temp-Mute myself",
-      "permissionError": "I don't have enough permissions to Temp-Mute this User"
+      "permissionError": "I don't have enough Permissions to Temp-Mute this User"
     },
     "muteRemove": {
       "author": "{{args.target.tag}} was Un-Muted",
       "description": "Target {{args.target}} / `{{args.target.tag}}` / `{{args.target.id}}`\nwas Un-Muted by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
       "footer": "Executor ID {{user.id}}\nTarget ID {{args.target.id}}",
       "dm": {
-        "author": "You have been Un-Muted on {{guild.name}}"
+        "author": "You have been Un-Muted on `{{guild.name}}`"
       },
       "exeNoPerms": "You can't Un-Mute this Member",
       "alreadyApplied": "This Member isn't muted",
@@ -909,17 +909,17 @@
       "error": "I wasn't able to Un-Mute this User!",
       "noMember": "This User is not a Member of this Server",
       "mePunish": "I can't Un-Mute myself",
-      "permissionError": "I don't have enough permissions to Un-Mute this User"
+      "permissionError": "I don't have enough Permissions to Un-Mute this User"
     },
     "banAdd": {
       "author": "{{args.target.tag}} was Banned",
       "description": "Target {{args.target}} / `{{args.target.tag}}` / `{{args.target.id}}`\nwas Banned by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
       "footer": "Executor ID {{user.id}}\nTarget ID {{args.target.id}}",
       "dm": {
-        "author": "You have been Banned from {{guild.name}}"
+        "author": "You have been Banned from `{{guild.name}}`"
       },
       "exeNoPerms": "You can't Ban this User",
-      "permissionError": "I don't have enough permissions to Ban this User",
+      "permissionError": "I don't have enough Permissions to Ban this User",
       "error": "I wasn't able to Ban this User!",
       "alreadyApplied": "User {{target}} is already Banned",
       "success": "User {{target}} was Banned",
@@ -927,15 +927,47 @@
       "selfPunish": "You can't Ban yourself",
       "mePunish": "I won't Ban myself"
     },
+    "roleAdd": {
+      "author": "{{args.target.tag}} has been added to {{args.role.name}}",
+      "description": "Target {{args.target}} / `{{args.target.tag}}` / `{{args.target.id}}`\nhas been added to\nRole {{args.role}} / `{{args.role.name}}` / `{{args.role.id}}`\nby\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
+      "footer": "Executor ID {{user.id}}\nTarget ID {{args.target.id}}",
+      "dm": {
+        "author": "You have been added to `{{args.role.name}}` on `{{guild.name}}`"
+      },
+      "exeNoPerms": "You can't add this User to Roles",
+      "permissionError": "I don't have enough Permissions to add this User to Roles",
+      "error": "I wasn't able to add this User to Roles!",
+      "alreadyApplied": "User {{target}} already has Role {{args.role}} added",
+      "success": "{{target}} added to Role {{args.role}}",
+      "loading": "Adding User to Role...",
+      "selfPunish": "You can't add yourself to Roles",
+      "mePunish": "I won't add myself to Roles"
+    },
+    "roleRemove": {
+      "author": "{{args.target.tag}} has been removed from {{args.role.name}}",
+      "description": "Target {{args.target}} / `{{args.target.tag}}` / `{{args.target.id}}`\nhas been removed from\nRole {{args.role}} / `{{args.role.name}}` / `{{args.role.id}}`\nby\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
+      "footer": "Executor ID {{user.id}}\nTarget ID {{args.target.id}}",
+      "dm": {
+        "author": "You have been removed from `{{args.role.name}}` on `{{guild.name}}`"
+      },
+      "exeNoPerms": "You can't remove this User from Roles",
+      "permissionError": "I don't have enough Permissions to remove this User from Roles",
+      "error": "I wasn't able to remove this User from Roles!",
+      "alreadyApplied": "User {{target}} doesn't have Role {{args.role}} added",
+      "success": "{{target}} removed from Role {{args.role}}",
+      "loading": "Removing User from Role...",
+      "selfPunish": "You can't remove yourself from Roles",
+      "mePunish": "I won't remove myself from Roles"
+    },
     "softbanAdd": {
       "author": "{{args.target.tag}} was Soft-Banned",
       "description": "Target {{args.target}} / `{{args.target.tag}}` / `{{args.target.id}}`\nwas Soft-Banned by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
       "footer": "Executor ID {{user.id}}\nTarget ID {{args.target.id}}",
       "dm": {
-        "author": "You have been Soft-Banned from {{guild.name}}"
+        "author": "You have been Soft-Banned from `{{guild.name}}`"
       },
       "exeNoPerms": "You can't Soft-Ban this User",
-      "permissionError": "I don't have enough permissions to Soft-Ban this User",
+      "permissionError": "I don't have enough Permissions to Soft-Ban this User",
       "error": "I wasn't able to Soft-Ban this User!",
       "alreadyApplied": "User {{target}} is already banned",
       "success": "User {{target}} was Soft-Banned",
@@ -949,10 +981,10 @@
       "description": "Target {{args.target}} / `{{args.target.tag}}` / `{{args.target.id}}`\nwas Temp-Banned by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
       "footer": "Executor ID {{user.id}}\nTarget ID {{args.target.id}}",
       "dm": {
-        "author": "You have been Temp-Banned from {{guild.name}}"
+        "author": "You have been Temp-Banned from `{{guild.name}}`"
       },
       "exeNoPerms": "You can't Temp-Ban this User",
-      "permissionError": "I don't have enough permissions to Temp-Ban this User",
+      "permissionError": "I don't have enough Permissions to Temp-Ban this User",
       "error": "I wasn't able to Temp-Ban this User!",
       "alreadyApplied": "User {{target}} is already Temp-Banned",
       "success": "User {{target}} was Temp-Banned",
@@ -965,10 +997,10 @@
       "description": "Target {{args.target}} / `{{args.target.tag}}` / `{{args.target.id}}`\nwas was Channel-Banned from\nChannel {{args.channel}} / `{{args.channel.name}}` / `{{args.channel.id}}`\nby\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
       "footer": "Executor ID {{user.id}}\nTarget ID {{args.target.id}}",
       "dm": {
-        "author": "You have been Channel-Banned in {{guild.name}}"
+        "author": "You have been Channel-Banned in `{{guild.name}}`"
       },
       "exeNoPerms": "You can't Channel-Ban this User",
-      "permissionError": "I don't have enough permissions to Channel-Ban this User",
+      "permissionError": "I don't have enough Permissions to Channel-Ban this User",
       "error": "I wasn't able to Channel-Ban this User!",
       "alreadyApplied": "User {{target}} is already Channel-Banned",
       "success": "User {{target}} was Channel-Banned",
@@ -981,10 +1013,10 @@
       "description": "Target {{args.target}} / `{{args.target.tag}}` / `{{args.target.id}}`\nwas was Temp-Channel-Banned from\nChannel {{args.channel}} / `{{args.channel.name}}` / `{{args.channel.id}}`\nby\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
       "footer": "Executor ID {{user.id}}\nTarget ID {{args.target.id}}",
       "dm": {
-        "author": "You have been Temp-Channel-Banned in {{guild.name}}"
+        "author": "You have been Temp-Channel-Banned in `{{guild.name}}`"
       },
       "exeNoPerms": "You can't Temp-Channel-Ban this User",
-      "permissionError": "I don't have enough permissions to Temp-Channel-Ban this User",
+      "permissionError": "I don't have enough Permissions to Temp-Channel-Ban this User",
       "error": "I wasn't able to Temp-Channel-Ban this User!",
       "alreadyApplied": "User {{target}} is already Channel-Banned",
       "success": "User {{target}} was Temp-Channel-Banned",
@@ -997,10 +1029,10 @@
       "description": "Target {{args.target}} / `{{args.target.tag}}` / `{{args.target.id}}`\nwas Channel-Unbanned from\nChannel {{args.channel}} / `{{args.channel.name}}` / `{{args.channel.id}}`\nby\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
       "footer": "Executor ID {{user.id}}\nTarget ID {{args.target.id}}",
       "dm": {
-        "author": "You have been Channel-Unbanned in {{guild.name}}"
+        "author": "You have been Channel-Unbanned in `{{guild.name}}`"
       },
       "exeNoPerms": "You can't Channel-Unbanned this User",
-      "permissionError": "I don't have enough permissions to Channel-Unbanned this User",
+      "permissionError": "I don't have enough Permissions to Channel-Unbanned this User",
       "error": "I wasn't able to Channel-Unbanned this User!",
       "alreadyApplied": "This User isn't Channel-Banned",
       "success": "User {{target}} was Channel-Unbanned",
@@ -1013,10 +1045,10 @@
       "description": "Target {{args.target}} / `{{args.target.tag}}` / `{{args.target.id}}`\nwas Un-Banned by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
       "footer": "Executor ID {{user.id}}\nTarget ID {{args.target.id}}",
       "dm": {
-        "author": "You have been Un-Banned from {{guild.name}}"
+        "author": "You have been Un-Banned from `{{guild.name}}`"
       },
       "exeNoPerms": "You can't Un-Ban this User",
-      "permissionError": "I don't have enough permissions to Un-Ban this User",
+      "permissionError": "I don't have enough Permissions to Un-Ban this User",
       "error": "I wasn't able to Un-Ban this User!",
       "alreadyApplied": "This User isn't banned",
       "success": "User {{target}} was Un-Banned",
@@ -1029,11 +1061,11 @@
       "description": "Target {{args.target}} / `{{args.target.tag}}` / `{{args.target.id}}`\nwas Kicked by\nExecutor {{user}} / `{{user.tag}}` / `{{user.id}}`",
       "footer": "Executor ID {{user.id}}\nTarget ID {{args.target.id}}",
       "dm": {
-        "author": "You have been Kicked from {{guild.name}}"
+        "author": "You have been Kicked from `{{guild.name}}`"
       },
       "exeNoPerms": "You can't Kick this Member",
       "alreadyApplied": "This User is not a Member of this Server",
-      "permissionError": "I don't have enough permissions to Kick this Member",
+      "permissionError": "I don't have enough Permissions to Kick this Member",
       "error": "I wasn't able to Kick this Member!",
       "success": "User {{target}} was Kicked",
       "loading": "Kicking User...",
@@ -1042,7 +1074,7 @@
     },
     "warnAdd": {
       "dm": {
-        "author": "You have been Warned on the Server {{guild.name}}"
+        "author": "You have been Warned on the Server `{{guild.name}}`"
       },
       "footer": "Executor ID {{user.id}}\nTarget ID {{args.target.id}}",
       "author": "{{args.target.tag}} was Warned",
@@ -1061,7 +1093,7 @@
     },
     "softwarnAdd": {
       "dm": {
-        "author": "You have been Soft-Warned on the Server {{guild.name}}"
+        "author": "You have been Soft-Warned on the Server `{{guild.name}}`"
       },
       "footer": "Executor ID {{user.id}}\nTarget ID {{args.target.id}}",
       "author": "{{args.target.tag}} was Soft-Warned",
@@ -1087,7 +1119,7 @@
       "usage": ["pat [user]"],
       "category": "Fun",
       "connector": "and",
-      "loneError": "You need to Mention a User",
+      "loneError": "You need to @Mention a User",
       "lone": {
         "ayaya": "{{msg.author}} **AYAYA**!!",
         "awo": "{{msg.author}} **Awoooo~!**'s <:AMayakoAwoo:792053097861349376>",
@@ -1314,7 +1346,7 @@
       "category": "Leveling",
       "success": "Added {{amountAdded}} {{type}} to {{targets}}",
       "author": "Ayako Leveling-Settings",
-      "selectUser": "Reply with a User ID or Mention",
+      "selectUser": "Reply with a User ID or @Mention",
       "resetLevel": "Reset Level",
       "resetXP": "Reset XP",
       "remove": "Remove 0",
@@ -1440,7 +1472,7 @@
         "title": {
           "name": "Title",
           "answers": "Any Text",
-          "recommended": "Does __not__ accept Mentions"
+          "recommended": "Does __not__ accept @Mentions"
         },
         "url": {
           "name": "URL",
@@ -1450,7 +1482,7 @@
         "author-name": {
           "name": "Author Name",
           "answers": "Any Text",
-          "recommended": "Does __not__ accept Mentions"
+          "recommended": "Does __not__ accept @Mentions"
         },
         "author-iconURL": {
           "name": "Author Icon URL",
@@ -1469,7 +1501,7 @@
         "field-names": {
           "name": "Field Name",
           "answers": "Any Text",
-          "recommended": "Does __not__ accept Mentions"
+          "recommended": "Does __not__ accept @Mentions"
         },
         "field-values": {
           "name": "Field Value",
@@ -1578,7 +1610,7 @@
     },
     "unmute": {
       "description": "Un-Mutes a User",
-      "usage": ["unmute [User ID or Mention] (reason)"],
+      "usage": ["unmute [User ID or @Mention] (reason)"],
       "category": "Moderation",
       "reason": "No Reason given",
       "vcReason": "User is Un-Muted"
@@ -1594,7 +1626,7 @@
       "warning": "{{user}} Please do not use this word!",
       "warnReason": "Repeatedly sending Blacklisted words",
       "author": "Ayako Blacklist",
-      "info": "The following words are Blacklisted on **{{guild.name}}**:\n"
+      "info": "The following Words are Blacklisted on **`{{guild.name}}`**:\n"
     },
     "8ball": {
       "description": "Let 8ball decide",
@@ -1637,7 +1669,7 @@
     },
     "strike": {
       "description": "Use Ayakos Auto-Punish system to consistently punish misbehaviour",
-      "usage": ["strike [User ID or Mention] (reason)"],
+      "usage": ["strike [User ID or @Mention] (reason)"],
       "category": "Moderation",
       "reason": "Ayako Auto-Punish System | No Reason Provided"
     },
@@ -1692,19 +1724,31 @@
     },
     "ban": {
       "description": "Bans a User from the Server",
-      "usage": ["ban [User ID or Mention] (reason)"],
+      "usage": ["ban [User ID or @Mention] (reason)"],
       "category": "Moderation",
+      "reason": "No Reason given"
+    },
+    "giverole": {
+      "description": "Gives a Role to a User",
+      "usage": ["giverole [User ID or @Mention] [Role ID, Mention or Name]"],
+      "category": "Roles",
+      "reason": "No Reason given"
+    },
+    "takerole": {
+      "description": "Takes a Role from a User",
+      "usage": ["takerole [User ID or @Mention] [Role ID, Mention or Name]"],
+      "category": "Roles",
       "reason": "No Reason given"
     },
     "xban": {
       "description": "Cross-Bans a User from Animekos and Gameverse",
-      "usage": ["xban [User ID or Mention] (reason)"],
+      "usage": ["xban [User ID or @Mention] (reason)"],
       "category": "Moderation",
       "reason": "No Reason given"
     },
     "bypass": {
       "description": "Bypasses a User through Verification",
-      "usage": ["bypass [User ID or Mention]"],
+      "usage": ["bypass [User ID or @Mention]"],
       "category": "Moderation",
       "bypass": "You have been manually verified by a Staff Member",
       "notEnabled": "Verification is not enabled on this Server"
@@ -1712,33 +1756,33 @@
     "channelban": {
       "description": "Bans a User from a Channel",
       "usage": [
-        "channelban [User ID or Mention] (Channel ID or Mention) (reason)",
-        "channeltempban [User ID or Mention] (Channel ID or Mention) (duration) (reason)"
+        "channelban [User ID or @Mention] (Channel ID or @Mention) (reason)",
+        "channeltempban [User ID or @Mention] (Channel ID or @Mention) (duration) (reason)"
       ],
       "category": "Moderation",
       "reason": "No Reason given"
     },
     "channelunban": {
       "description": "Un-Bans a User from a Channel",
-      "usage": ["channelunban [User ID or Mention] (Channel ID or Mention) (reason)"],
+      "usage": ["channelunban [User ID or @Mention] (Channel ID or @Mention) (reason)"],
       "category": "Moderation",
       "reason": "No Reason given"
     },
     "tempban": {
       "description": "Temp-Bans a User from the Server",
-      "usage": ["tempban [User ID or Mention] [time] (reason)"],
+      "usage": ["tempban [User ID or @Mention] [time] (reason)"],
       "category": "Moderation",
       "reason": "No Reason given"
     },
     "softban": {
       "description": "Soft-Bans a User from the Server",
-      "usage": ["softban [User ID or Mention] (reason)"],
+      "usage": ["softban [User ID or @Mention] (reason)"],
       "category": "Moderation",
       "reason": "No Reason given"
     },
     "tempmute": {
       "description": "Temporarily Mutes a User",
-      "usage": ["tempmute [User ID or Mention] [time] (reason)"],
+      "usage": ["tempmute [User ID or @Mention] [time] (reason)"],
       "category": "Moderation",
       "reason": "No Reason given",
       "time": "No Time given",
@@ -1748,7 +1792,7 @@
     },
     "unafk": {
       "description": "Forcefully deletes a set AFK of a User",
-      "usage": ["unafk [User ID or Mention] (reason)"],
+      "usage": ["unafk [User ID or @Mention] (reason)"],
       "category": "Moderation",
       "reason": "No Reason given",
       "notAfk": "This User is not AFK",
@@ -1759,19 +1803,19 @@
     },
     "kick": {
       "description": "Bans a User from the Server",
-      "usage": ["ban [User ID or Mention] (reason)"],
+      "usage": ["ban [User ID or @Mention] (reason)"],
       "category": "Moderation",
       "reason": "No Reason given"
     },
     "unban": {
       "description": "Unbans a User from the Server",
-      "usage": ["unban [User ID or Mention] (reason)"],
+      "usage": ["unban [User ID or @Mention] (reason)"],
       "category": "Moderation",
       "reason": "No Reason given"
     },
     "mute": {
       "description": "Assigns the Mute Role to a User",
-      "usage": ["mute [User ID or Mention] (reason)"],
+      "usage": ["mute [User ID or @Mention] (reason)"],
       "category": "Moderation",
       "reason": "No Reason given",
       "vcReason": "User is Muted"
@@ -1793,7 +1837,7 @@
         "clear videos [Amount of Messages]",
         "clear files [Amount of Messages]",
         "clear audio [Amount of Messages]",
-        "clear mentions [Amount of Messages]",
+        "clear @Mentions [Amount of Messages]",
         "clear stickers [Amount of Messages]",
         "clear embeds [Amount of Messages]",
         "clear text [Amount of Messages]",
@@ -1831,13 +1875,13 @@
     },
     "warn": {
       "description": "Warns a User in the Server",
-      "usage": ["warn [User ID or Mention] (reason)"],
+      "usage": ["warn [User ID or @Mention] (reason)"],
       "category": "Moderation",
       "reason": "No Reason given"
     },
     "softwarn": {
       "description": "Soft-Warns a User in the Server",
-      "usage": ["softwarnwarn [User ID or Mention] (reason)"],
+      "usage": ["softwarnwarn [User ID or @Mention] (reason)"],
       "category": "Moderation",
       "reason": "No Reason given"
     },
@@ -1945,13 +1989,13 @@
     "avatar": {
       "category": "User",
       "description": "Display the Avatar of you or someone else in full size",
-      "usage": ["avatar (User ID or Mention)", "serveravatar (User ID or Mention)"],
+      "usage": ["avatar (User ID or @Mention)", "serveravatar (User ID or @Mention)"],
       "avatarOf": "Avatar of {{user.tag}}"
     },
     "banner": {
       "category": "User",
       "description": "Display the Banner of you or someone else in full size",
-      "usage": ["banner (User ID or Mention)", "serverbanner (User ID or Mention)"],
+      "usage": ["banner (User ID or @Mention)", "serverbanner (User ID or @Mention)"],
       "bannerOf": "Banner of {{user.tag}}"
     },
     "contact": {
@@ -1967,7 +2011,7 @@
     "massban": {
       "category": "Moderation",
       "description": "Ban as many Users from the Server as the Discord Character Limit let's you",
-      "usage": ["massban [User IDs or Mentions] (reason)", "namemassban [name to ban]"],
+      "usage": ["massban [User IDs or @Mentions] (reason)", "namemassban [name to ban]"],
       "already": "(already banned)",
       "youCant": "(You can't ban this User)",
       "iCant": "(I can't ban this User)",
@@ -1993,7 +2037,7 @@
     "pardon": {
       "category": "Moderation",
       "description": "Pardon a Punishment from a User",
-      "usage": ["pardon [Punishment ID] (reason)", "pardon [User ID or Mention] all (reason)"],
+      "usage": ["pardon [Punishment ID] (reason)", "pardon [User ID or @Mention] all (reason)"],
       "done": "Pardoned Punishment with ID `{{number}}` from {{target}}",
       "punishmentIssue": "Punishment was issued at",
       "punishmentOf": "Punishment of {{target.tag}} was pardoned",
@@ -2021,7 +2065,7 @@
     "check": {
       "category": "Moderation",
       "description": "Check a Users Punishments",
-      "usage": ["check [User ID or Mention]"],
+      "usage": ["check [User ID or @Mention]"],
       "author": "Punishments of {{target.tag}}",
       "banLoad": "Fetching Bans",
       "banned": "{{target.username}} **is Banned**",
@@ -2362,10 +2406,10 @@
         "pingusers": "Ping Users",
         "embed": "Welcome Embed",
         "options": {
-          "member": "a Mention of the Member who joined",
+          "member": "a @Mention of the Member who joined",
           "username": "the Username of the joined Member",
           "usertag": "the Tag of the joined Member",
-          "user": "a Mention of the User who joined",
+          "user": "a @Mention of the User who joined",
           "serverName": "the Servers Name"
         },
         "edit": {
@@ -2530,7 +2574,7 @@
           },
           "pingroles": {
             "name": "TB Roles to Ping",
-            "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.\nWhen the Join Threshold is breached, I will Mention these Roles in a Message",
+            "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.\nWhen the Join Threshold is breached, I will @Mention these Roles in a Message",
             "answers": "Roles",
             "select": "Select 1 or more Roles",
             "desc": "Select the Role(s) you want to add below"
@@ -2538,7 +2582,7 @@
           "pingusers": {
             "name": "TB Users to Ping",
             "answers": "`Mention(s) or ID(s)`",
-            "recommended": "This is a Switch.\nIf the entered User is already added they will be removed.\nWhen the Join Threshold is breached, I will Mention these Users in a Message"
+            "recommended": "This is a Switch.\nIf the entered User is already added they will be removed.\nWhen the Join Threshold is breached, I will @Mention these Users in a Message"
           }
         }
       },
@@ -2642,7 +2686,7 @@
           },
           "linklogchannels": {
             "name": "Link Log Channels",
-            "answers": "Channel Mention(s) or ID(s)",
+            "answers": "Channel @Mention(s) or ID(s)",
             "recommended": "This is a Switch.\nIf the entered Channel is already added it will be removed."
           },
           "active": {
@@ -3140,7 +3184,7 @@
         "prefixes": "Prefixes",
         "ignoreprefixes": "Ignore Prefixes",
         "options": {
-          "user": "a Mention of the User who leveled up",
+          "user": "a @Mention of the User who leveled up",
           "newLevel": "the new Level",
           "newXP": "the new XP",
           "oldLevel": "the old Level",
@@ -3202,7 +3246,7 @@
           },
           "blusers": {
             "name": "Blacklisted Users",
-            "answers": "User IDs or Mentions",
+            "answers": "User IDs or @Mentions",
             "recommended": "Users which will not gain any XP"
           },
           "wlchannels": {
@@ -3217,7 +3261,7 @@
           },
           "wlusers": {
             "name": "Whitelisted Users",
-            "answers": "User IDs or Mentions",
+            "answers": "User IDs or @Mentions",
             "recommended": "Users which bypass every Blacklist"
           },
           "xppermsg": {
@@ -3313,8 +3357,8 @@
         "HasMostLinks": "Has at most [externally defined] Links",
         "HasLeastEmotes": "Has at least [externally defined] Emotes",
         "HasMostEmotes": "Has at most [externally defined] Emotes",
-        "HasLeastMentions": "Has at least [externally defined] Mentions",
-        "HasMostMentions": "Has at most [externally defined] Mentions",
+        "HasLeastMentions": "Has at least [externally defined] @Mentions",
+        "HasMostMentions": "Has at most [externally defined] @Mentions",
         "edit": {
           "channels": {
             "name": "Channels",
@@ -3391,11 +3435,11 @@
             "answers": "Any Number"
           },
           "hasleastMentions": {
-            "name": "Has at least [externally defined] Mentions",
+            "name": "Has at least [externally defined] @Mentions",
             "answers": "Any Number"
           },
           "hasmostMentions": {
-            "name": "Has at most [externally defined] Mentions",
+            "name": "Has at most [externally defined] @Mentions",
             "answers": "Any Number"
           }
         },
@@ -3531,7 +3575,7 @@
           },
           "novoteusers": {
             "name": "No Vote Users",
-            "answers": "`User Mentions or IDs`",
+            "answers": "`User @Mentions or IDs`",
             "recommended": "This is a Switch.\nIf the entered Role is already added it will be removed.\nUsers with one of these Roles won't be able to Vote on Suggestions"
           },
           "novoteroles": {
@@ -3546,7 +3590,7 @@
           },
           "nosendusers": {
             "name": "No Send Users",
-            "answers": "`User Mentions or IDs`",
+            "answers": "`User @Mentions or IDs`",
             "recommended": "This is a Switch.\nIf the entered User is already added it will be removed.\nThese Users won't be able to send Suggestions"
           },
           "channelid": {
@@ -3741,7 +3785,7 @@
           "pendingrole": {
             "name": "Pending Verification Role",
             "answers": "`Mention or ID`",
-            "recommended": "**This is not required\n\nHowever:** If you don't use this Role be sure @everyone does not have permissions to send Messages in any Channel"
+            "recommended": "**This is not required\n\nHowever:** If you don't use this Role be sure @everyone does not have Permissions to send Messages in any Channel"
           },
           "startchannel": {
             "name": "Verify Channel",
@@ -3952,15 +3996,16 @@
     "author": "Welcome {{member.user.tag}} to {{member.guild.name}} <:AMayakowave:924071188957913108>"
   },
   "errors": {
-    "userNotExist": "The Mentioned User does not exist",
-    "userNotFound": "The Mentioned User could not be found",
+    "userNotExist": "The @Mentioned User does not exist",
+    "userNotFound": "The @Mentioned User could not be found",
     "numTooLarge": "Number too large",
     "guildCommand": "This Command is only available in Servers",
     "memberNotFound": "Member not found",
     "notAvailableAPI": "This Command is not yet available due to Discord API limitations",
     "sendMessage": "I cannot send Messages in this Channel",
     "lackingAccess": "I'm lacking access to these emotes: {{emotes}}",
-    "channelNotManageable": "I'm lacking permissions to edit that Channel"
+    "channelNotManageable": "I'm lacking Permissions to edit that Channel",
+    "roleNotFound": "Role not Found"
   },
   "expire": {
     "punishmentIssue": "Punishment was issued at",
@@ -4083,11 +4128,11 @@
         "winners": "Winners",
         "author": "Ayako Giveaways",
         "title": "Congratulations! You won a Giveaway! [Click me to get to the Giveaway]",
-        "trouble": "If you have trouble with your Giveaway, DM or Mention the User below",
-        "getPrize": "To get your Prize, DM or Mention the User below",
+        "trouble": "If you have trouble with your Giveaway, DM or @Mention the User below",
+        "getPrize": "To get your Prize, DM or @Mention the User below",
         "couldntDM": "I was unable to DM {{user}} / `{{user.tag}}` / `{{user.id}}`",
         "noValidEntries": "No valid Entries | No Winner picked",
-        "checkDMs": "Check your DMs! | If you had your DMs closed, DM or Mention the User below",
+        "checkDMs": "Check your DMs! | If you had your DMs closed, DM or @Mention the User below",
         "button": "Get to Giveaway",
         "manuallyEnded": "Manually Ended Giveaway"
       },

@@ -30,7 +30,7 @@ module.exports = async (args, type) => {
     const executingMember = await guild?.members.fetch(executor.id).catch(() => {});
 
     console.log('roleCheck');
-    const roleCheckAllowed = roleCheck(
+    const roleCheckAllowed = await roleCheck(
       embed,
       mExistedPreviously,
       lan,
@@ -41,7 +41,7 @@ module.exports = async (args, type) => {
     if (!roleCheckAllowed) return;
 
     console.log('checkSelfPunish');
-    const selfPunish = checkSelfPunish(
+    const selfPunish = await checkSelfPunish(
       embed,
       mExistedPreviously,
       lan,
@@ -52,11 +52,18 @@ module.exports = async (args, type) => {
     if (selfPunish) return;
 
     console.log('checkMePunish');
-    const mePunish = checkMePunish(embed, mExistedPreviously, lan, targetMember, args);
+    const mePunish = await checkMePunish(embed, mExistedPreviously, lan, targetMember, args);
     if (mePunish) return;
 
     console.log('checkPunishable');
-    const punishable = checkPunishable(embed, mExistedPreviously, lan, targetMember, type, args);
+    const punishable = await checkPunishable(
+      embed,
+      mExistedPreviously,
+      lan,
+      targetMember,
+      type,
+      args,
+    );
     if (!punishable) return;
 
     console.log('checkActionTaken');
@@ -73,15 +80,19 @@ module.exports = async (args, type) => {
     dm = await doDM({ lan, language }, targetMember, reason, con, args);
 
     console.log('takeAction');
-    ({ action, error } = await takeAction(
+    const actionReply = await takeAction(
       type,
       targetMember,
       executingMember,
       args,
       language,
       guild,
-    ));
+    );
+
+    ({ action, error } = actionReply);
   }
+
+  console.log(action);
 
   if (action || args.doDBonly) {
     console.log('logEmbed');
@@ -92,7 +103,7 @@ module.exports = async (args, type) => {
     }
   } else if (error) {
     console.log('errorEmbed');
-    errorEmbed(embed, lan, mExistedPreviously, dm, error, args);
+    await errorEmbed(embed, lan, mExistedPreviously, dm, error, args);
     return;
   }
 
@@ -111,6 +122,7 @@ const declareSuccess = async (embed, mExistedPreviously, lan, args) => {
       name: '\u200b',
       value: `${args.executor.client.textEmotes.tick} ${args.executor.client.ch.stp(lan.success, {
         target: args.target,
+        args,
       })}`,
     });
   } else if (mExistedPreviously) {
@@ -118,12 +130,14 @@ const declareSuccess = async (embed, mExistedPreviously, lan, args) => {
     embed.setDescription(
       `${args.executor.client.textEmotes.tick} ${args.executor.client.ch.stp(lan.success, {
         target: args.target,
+        args,
       })}`,
     );
   } else {
     embed.setDescription(
       `${args.executor.client.textEmotes.tick} ${args.executor.client.ch.stp(lan.success, {
         target: args.target,
+        args,
       })}`,
     );
   }
@@ -131,7 +145,7 @@ const declareSuccess = async (embed, mExistedPreviously, lan, args) => {
   if (args.msg.m) await args.msg.m.edit({ embeds: [embed] }).catch(() => {});
 };
 
-const errorEmbed = (embed, lan, mExistedPreviously, dm, err, args) => {
+const errorEmbed = async (embed, lan, mExistedPreviously, dm, err, args) => {
   if (!args.msg && !args.msg.id) return;
 
   if (dm) dm.delete().catch(() => {});
@@ -165,7 +179,7 @@ const errorEmbed = (embed, lan, mExistedPreviously, dm, err, args) => {
     deleter(args);
   }
 
-  if (args.msg.m) args.msg.m.edit({ embeds: [embed] }).catch(() => {});
+  if (args.msg.m) await args.msg.m.edit({ embeds: [embed] }).catch(() => {});
 };
 
 const logEmbed = async (lan, language, con, reason, args) => {
@@ -218,7 +232,7 @@ const logEmbed = async (lan, language, con, reason, args) => {
 
   const logchannels = await getLogchannels();
   if (logchannels && logchannels.length) {
-    args.executor.client.ch.send(logchannels, { embeds: [embed] });
+    await args.executor.client.ch.send(logchannels, { embeds: [embed] });
   }
 };
 
@@ -247,7 +261,7 @@ const loadingEmbed = (mExistedPreviously, lan, con, args) => {
     .setDescription(`${args.executor.client.textEmotes.loading} ${lan.loading}`);
 };
 
-const roleCheck = (embed, mExistedPreviously, lan, targetMember, executingMember, args) => {
+const roleCheck = async (embed, mExistedPreviously, lan, targetMember, executingMember, args) => {
   if (args.forceFinish) return true;
   if (
     !executingMember ||
@@ -279,11 +293,18 @@ const roleCheck = (embed, mExistedPreviously, lan, targetMember, executingMember
     deleter(args);
   }
 
-  args.msg.m.edit({ embeds: [embed] }).catch(() => {});
+  await args.msg.m.edit({ embeds: [embed] }).catch(() => {});
   return false;
 };
 
-const checkSelfPunish = (embed, mExistedPreviously, lan, targetMember, executingMember, args) => {
+const checkSelfPunish = async (
+  embed,
+  mExistedPreviously,
+  lan,
+  targetMember,
+  executingMember,
+  args,
+) => {
   if (args.forceFinish) return false;
   if (executingMember.id !== targetMember?.id) return false;
   if (!args.msg && !args.msg.id) return true;
@@ -308,12 +329,12 @@ const checkSelfPunish = (embed, mExistedPreviously, lan, targetMember, executing
   }
 
   if (mExistedPreviously) {
-    if (args.msg.m) args.msg.m.edit({ embeds: [embed] }).catch(() => {});
+    if (args.msg.m) await args.msg.m.edit({ embeds: [embed] }).catch(() => {});
   }
   return true;
 };
 
-const checkMePunish = (embed, mExistedPreviously, lan, targetMember, args) => {
+const checkMePunish = async (embed, mExistedPreviously, lan, targetMember, args) => {
   if (args.forceFinish) return false;
   if (targetMember?.id !== args.executor.client.user.id) return false;
   if (!args.msg && !args.msg.id) return true;
@@ -337,11 +358,18 @@ const checkMePunish = (embed, mExistedPreviously, lan, targetMember, args) => {
     deleter(args);
   }
 
-  if (args.msg.m) args.msg.m.edit({ embeds: [embed] });
+  if (args.msg.m) await args.msg.m.edit({ embeds: [embed] });
   return true;
 };
 
-const checkPunishable = (embed, mExistedPreviously, lan, targetMember, punishmentType, args) => {
+const checkPunishable = async (
+  embed,
+  mExistedPreviously,
+  lan,
+  targetMember,
+  punishmentType,
+  args,
+) => {
   switch (punishmentType) {
     case 'muteRemove':
     case 'tempmuteAdd': {
@@ -375,6 +403,24 @@ const checkPunishable = (embed, mExistedPreviously, lan, targetMember, punishmen
       }
       break;
     }
+    case 'roleAdd': {
+      if (
+        args.role.rawPosition < args.guild?.me.roles.highest.rawPosition &&
+        targetMember?.manageable
+      ) {
+        return true;
+      }
+      break;
+    }
+    case 'roleRemove': {
+      if (
+        args.role.rawPosition < args.guild?.me.roles.highest.rawPosition &&
+        targetMember?.manageable
+      ) {
+        return true;
+      }
+      break;
+    }
     default: {
       return true;
     }
@@ -402,7 +448,7 @@ const checkPunishable = (embed, mExistedPreviously, lan, targetMember, punishmen
     deleter(args);
   }
 
-  if (args.msg.m) args.msg.m.edit({ embeds: [embed] });
+  if (args.msg.m) await args.msg.m.edit({ embeds: [embed] });
   return false;
 };
 
@@ -413,9 +459,9 @@ const doDM = async ({ lan, language }, targetMember, reason, con, args) => {
     .setColor(con.color)
     .setTimestamp()
     .setAuthor({
-      name: args.executor.client.ch.stp(lan.dm.author, { guild: args.guild }),
+      name: args.executor.client.ch.stp(lan.dm.author, { guild: args.guild, args }),
       iconURL: con.author.image,
-      url: args.executor.client.ch.stp(con.author.link, { guild: args.guild }),
+      url: args.executor.client.ch.stp(con.author.link, { guild: args.guild, args }),
     });
   const m = await args.executor.client.ch.send(dmChannel, { embeds: [DMembed] });
 
@@ -475,6 +521,14 @@ const checkActionTaken = async (
       punished = !args.guild?.members.cache.has(args.target.id);
       break;
     }
+    case 'roleAdd': {
+      punished = targetMember?.roles.cache.has(args.role.id);
+      break;
+    }
+    case 'roleRemove': {
+      punished = !targetMember?.roles.cache.has(args.role.id);
+      break;
+    }
     default: {
       punished = false;
       break;
@@ -501,6 +555,7 @@ const checkActionTaken = async (
           lan.alreadyApplied,
           {
             target: args.target,
+            args,
           },
         )}`,
       });
@@ -513,6 +568,7 @@ const checkActionTaken = async (
           lan.alreadyApplied,
           {
             target: args.target,
+            args,
           },
         )}`,
       );
@@ -524,6 +580,7 @@ const checkActionTaken = async (
           lan.alreadyApplied,
           {
             target: args.target,
+            args,
           },
         )}`,
       );
@@ -531,7 +588,7 @@ const checkActionTaken = async (
       deleter(args);
     }
 
-    if (args.msg.m) args.msg.m.edit({ embeds: [embed] });
+    if (args.msg.m) await args.msg.m.edit({ embeds: [embed] });
     return true;
   }
 
@@ -745,6 +802,18 @@ const takeAction = async (punishmentType, targetMember, executingMember, args, l
     }
     case 'kickAdd': {
       punished = await targetMember?.kick(`${args.executor.tag} | ${args.reason}`).catch((err) => {
+        error = err;
+      });
+      break;
+    }
+    case 'roleAdd': {
+      punished = targetMember?.roles.add(args.role.id).catch((err) => {
+        error = err;
+      });
+      break;
+    }
+    case 'roleRemove': {
+      punished = targetMember?.roles.remove(args.role.id).catch((err) => {
         error = err;
       });
       break;

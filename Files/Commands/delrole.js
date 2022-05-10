@@ -10,15 +10,15 @@ module.exports = {
   async execute(msg) {
     const { language, lan } = msg;
 
-    let role = msg.guild.roles.cache.get(msg.args[0].replace(/\D+/g, ''));
+    let role = msg.guild.roles.cache.get(msg.args.slice(0).join(' ').replace(/\D+/g, ''));
     if (!role) {
       const roles = msg.guild.roles.cache.filter((r) =>
-        r.name.toLowerCase().includes(msg.args[0].toLowerCase()),
+        r.name.toLowerCase().includes(msg.args.slice(0).join(' ').toLowerCase()),
       );
       if (roles.size === 1) role = roles.first();
       else if (roles.size > 1) {
         const res = stringSimilarity.findBestMatch(
-          msg.args[0].toLowerCase(),
+          msg.args.slice(0).join(' ').toLowerCase(),
           roles.map((r) => r.name.toLowerCase()),
         );
         if (res.bestMatch.rating > 0.7) role = roles.find((r) => r.name === res.bestMatch.target);
