@@ -5,7 +5,7 @@ module.exports = {
   perm: 8192n,
   type: 1,
   setupRequired: false,
-  finished: false,
+  finished: true,
   category: ['automation', 'none'],
   helpCategory: 'util',
   mmrEmbed(msg, res) {
@@ -20,7 +20,7 @@ module.exports = {
             ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
             : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`
         }`,
-        value: `${msg.lan.channels}: ${r.channels.map((c) => ` <#${c}>`)}`,
+        value: `${msg.lan.channels}: ${r.channels && r.channels.length ? r.channels.map((c) => ` <#${c}>`) : msg.language.none}`,
         inline: true,
       });
     }
