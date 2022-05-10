@@ -861,6 +861,10 @@
     "embed": {
       "select": "Select the Embed",
       "desc": "Select the Embed below"
+    },
+    "language": {
+      "select": "Select a Language",
+      "desc": "Select a Language below"
     }
   },
   "mod": {
