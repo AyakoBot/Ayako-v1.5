@@ -145,7 +145,7 @@ const editGiveaway = async (msg, giveaway, lan, winners, isReroll) => {
 };
 
 const getWinners = async (guild, giveaway) => {
-  await guild.members.fetch().catch(() => {});
+  await Promise.all(giveaway.participants.map((p) => guild.members.fetch(p).catch(() => {})));
 
   const validEntries =
     giveaway.participants && giveaway.participants.length

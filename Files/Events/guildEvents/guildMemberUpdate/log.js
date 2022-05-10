@@ -8,6 +8,15 @@ module.exports = {
     const member = newMember;
     const { user } = member;
     const { guild } = member;
+    const auditLogged = false;
+    /* !ch.arrayEquals(
+        oldMember.roles.cache.map((r) => r.id),
+        member.roles.cache.map((r) => r.id),
+      ) ||
+      oldMember.nickname !== newMember.nickname ||
+      oldMember.communicationDisabledUntilTimestamp !==
+        newMember.communicationDisabledUntilTimestamp; */
+
     const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);
     if (res && res.rowCount > 0) {
       const channels = res.rows[0].guildmemberevents
@@ -30,7 +39,7 @@ module.exports = {
           });
 
           let entry;
-          if (guild.members.cache.get(client.user.id).permissions.has(128n)) {
+          if (guild.members.cache.get(client.user.id).permissions.has(128n) && auditLogged) {
             const audit = await guild.fetchAuditLogs({ limit: 5, type: 24 });
             if (audit && audit.entries) {
               entry = audit.entries.filter((e) => e.target.id === user.id);
@@ -74,7 +83,7 @@ module.exports = {
           return;
         }
         let entry;
-        if (guild.members.cache.get(client.user.id).permissions.has(128n)) {
+        if (guild.members.cache.get(client.user.id).permissions.has(128n) && auditLogged) {
           const audit = await guild.fetchAuditLogs({ limit: 10, type: 25 }).catch(() => {});
           if (audit && audit.entries) {
             entry = audit.entries.filter((e) => e.target.id === user.id);

@@ -1,3 +1,4 @@
+const Discord = require('discord.js');
 const jobs = require('node-schedule');
 
 module.exports = {
@@ -7,9 +8,12 @@ module.exports = {
     console.log(`|Logged in as Ayako\n|-> Bot: ${client.user.tag}`);
     console.log(`Login at ${new Date(Date.now()).toLocaleString()}`);
 
-    client.guilds.cache.forEach(async (guild) => {
-      client.invites.set(guild.id, await client.ch.getErisInvites(guild));
-      client.ch.getErisBans(guild);
+    jobs.scheduleJob('*/30 * * * *', () => {
+      require('./antivirusBlocklistCacher')();
+    });
+    jobs.scheduleJob('*/10 * * * *', () => {
+      // eslint-disable-next-line no-console
+      console.log(new Date().toLocaleString());
     });
 
     if (client.user.id === client.mainID) {
@@ -28,35 +32,29 @@ module.exports = {
       }
     });
 
-    require('./nitro')();
-    require('./reminder')();
-    require('./disboard')();
-    require('./giveaway')();
-    require('./separators')();
-    require('./antivirusBlocklistCacher')();
-    require('./voteHandler')();
-    require('./inviteLogger')();
-    require('./banManager')();
-    require('./channelbanManager')();
-    require('./muteManager')();
-    require('./giveawayManager')();
-
-    jobs.scheduleJob('*/2 * * * * *', () => {
-      require('./TimedManagers/TimedManagerSplitter')();
-    });
-    jobs.scheduleJob('*/2 * * * *', () => {
-      require('./prunelog')();
-    });
     jobs.scheduleJob('*/1 * * * *', () => {
       require('./presence')();
       require('./verification')();
     });
-    jobs.scheduleJob('*/30 * * * *', () => {
-      require('./antivirusBlocklistCacher')();
+
+    jobs.scheduleJob('*/2 * * * * *', () => {
+      require('./TimedManagers/TimedManagerSplitter')();
     });
-    jobs.scheduleJob('*/10 * * * *', () => {
-      // eslint-disable-next-line no-console
-      console.log(new Date().toLocaleString());
+
+    require('./giveawayManager')();
+    require('./muteManager')();
+    require('./channelbanManager')();
+    require('./banManager')();
+    require('./voteHandler')();
+    require('./antivirusBlocklistCacher')();
+    require('./nitro')();
+    require('./reminder')();
+    require('./disboard')();
+    require('./separators')();
+    require('./inviteLogger')();
+
+    client.guilds.cache.forEach(async (guild, i) => {
+      client.invites.set(guild.id, await client.ch.getErisInvites(guild));
     });
   },
 };

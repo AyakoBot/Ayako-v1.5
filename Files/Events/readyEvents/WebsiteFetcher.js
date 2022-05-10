@@ -1,5 +1,6 @@
 const { AutoPoster } = require('topgg-autoposter');
 const jobs = require('node-schedule');
+const fetch = require('node-fetch');
 const auth = require('../../BaseClient/auth.json');
 
 const APIDiscordBotList = 'https://discordbotlist.com/api/v1/bots/650691698409734151/stats';

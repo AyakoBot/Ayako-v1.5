@@ -164,8 +164,6 @@ const getSimilarUsers = (ids, guild) => {
 };
 
 const getMemberIDs = async (guild, timestamp, { time }) => {
-  await guild.members.fetch().catch(() => {});
-
   const memberIDs = guild.members.cache
     .map((member) => {
       if (member.joinedTimestamp > timestamp - time) {

@@ -15,9 +15,9 @@ module.exports = {
         value: `\u200b${guild.memberCount}`,
         inline: true,
       })
-      .addFields({ name: con.logEmbed.guildOwner, value: `\u200b${guild.ownerID}`, inline: true })
+      .addFields({ name: con.logEmbed.guildOwner, value: `\u200b${guild.ownerId}`, inline: true })
       .setFooter({ text: ch.stp(con.logEmbed.currentGuildCount, { client }) })
-      .setColor(con.logEmbed.color);
+      .setColor(guild.client.constants.colors.success);
     ch.send(
       client.channels.cache.get(Constants.standard.guildLogChannel),
       { embeds: [logEmbed] },

@@ -1,8 +1,5 @@
 module.exports = {
   async execute(msg) {
-    if (msg.guild && msg.author.discriminator !== '0000') {
-      msg.member = await msg.guild.members.fetch(msg.author.id).catch(() => {});
-    }
     if (msg.author.discriminator === '0000') return;
 
     e(msg);
@@ -18,11 +15,11 @@ module.exports = {
     require('./nadeko').execute(msg);
     require('./antivirus').execute(msg);
     require('./autothreading').execute(msg);
-    //require('./cirlce')(msg);
+    // require('./cirlce')(msg);
     if (!msg.editedAt) {
       if (msg.client.uptime > 10000) {
         const res = await msg.client.ch.query('SELECT * FROM stats;');
-        if (res.rows[0].antispam === true) require('./antispam').execute(msg);
+        if (res?.rows[0]?.antispam === true) require('./antispam').execute(msg);
       }
     }
   },
