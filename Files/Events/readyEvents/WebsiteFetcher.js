@@ -36,7 +36,7 @@ module.exports = async () => {
     });
   });
 
-  AutoPoster(auth.topGGtoken, client).catch(() => {});
+  AutoPoster(auth.topGGtoken, client);
 };
 
 const getAllUsers = async (client) => {
