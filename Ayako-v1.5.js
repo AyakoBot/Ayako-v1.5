@@ -38,6 +38,10 @@ client.rest.on('response', (request, response) => {
   require('./Files/Events/REST Events/response')(request, response);
 });
 
+client.eris.on('rawREST', (response) => {
+  require('./Files/Events/REST Events/response')(null, response);
+});
+
 client.rest.on('rateLimited', (rateLimitInfo) => {
   require('./Files/Events/REST Events/rateLimited')(rateLimitInfo);
 });

@@ -53,7 +53,7 @@ module.exports = {
     require('./separators')();
     require('./inviteLogger')();
 
-    client.guilds.cache.forEach(async (guild, i) => {
+    client.guilds.cache.forEach(async (guild) => {
       client.invites.set(guild.id, await client.ch.getErisInvites(guild));
     });
   },
