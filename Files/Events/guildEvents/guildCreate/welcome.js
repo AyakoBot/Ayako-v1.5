@@ -60,22 +60,4 @@ const getEmbed = (lan, guild) =>
         prefix: guild.client.constants.standard.prefix,
       }),
       value: lan.fields.two.value,
-    })
-    .addFields({
-      name: guild.client.ch.stp(lan.fields.three.name, {
-        prefix: guild.client.constants.standard.prefix,
-      }),
-      value: lan.fields.three.value,
-    })
-    .addFields({
-      name: guild.client.ch.stp(lan.fields.four.name, {
-        prefix: guild.client.constants.standard.prefix,
-      }),
-      value: lan.fields.four.value,
-    })
-    .addFields({
-      name: guild.client.ch.stp(lan.fields.five.name, {
-        prefix: guild.client.constants.standard.prefix,
-      }),
-      value: lan.fields.five.value,
     });
