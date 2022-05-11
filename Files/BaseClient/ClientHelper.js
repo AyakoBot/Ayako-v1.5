@@ -904,10 +904,13 @@ module.exports = {
    * @constructor
    * @param {object} member - The Client User Member of module.exports Guild.
    */
-  colorSelector: (member) =>
-    member && member.displayColor !== 0
+  colorSelector: (member) => {
+    const client = require('./DiscordClient');
+
+    return member && member.displayColor !== 0
       ? member.displayColor
-      : member.client.constants.standard.color,
+      : client.constants.standard.color;
+  },
   /**
    * Creates a sample Loading Embed.
    * @constructor
@@ -1294,7 +1297,7 @@ const cooldownHandler = async (msg, m) => {
 };
 
 const deleteCommandHandler = async (msg, m) => {
-  if (!msg.command) return;
+  if (!msg.command || !msg.guild) return;
   const deleteRows = await getDeleteRes(msg);
 
   deleteRows.forEach((row) => {

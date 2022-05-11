@@ -318,7 +318,7 @@ module.exports = {
                 settingsConstant.removeIdent !== ''
                   ? `| ${isEmote ? '' : getIdentifier(msg, settingsConstant, row)}`
                   : ''
-              }`,
+              }`.slice(0, 100),
             )
             .setValue(String(row.id))
             .setEmoji(isEmote),
@@ -832,7 +832,7 @@ const mmrEditList = async (msgData, sendData) => {
             settingsConstant.removeIdent !== ''
               ? `| ${isEmote ? '' : getIdentifier(msg, settingsConstant, row)}`
               : ''
-          }`,
+          }`.slice(0, 100),
         )
         .setValue(String(row.id))
         .setEmoji(isEmote),
@@ -1945,7 +1945,9 @@ const categoryDisplay = async (msg, answer, needsBack) => {
     settings.forEach((s) => {
       if (s.category.includes(category)) {
         settingCategories.push(s.name);
-        options.push(new Builders.SelectMenuOptionBuilder().setLabel(s.name).setValue(s.name));
+        options.push(
+          new Builders.SelectMenuOptionBuilder().setLabel(s.name.slice(0, 100)).setValue(s.name),
+        );
       }
     });
 
