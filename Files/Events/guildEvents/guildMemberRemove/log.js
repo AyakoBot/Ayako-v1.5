@@ -71,23 +71,24 @@ module.exports = {
           });
         }
 
-        console.log(member.joinedTimestamp);
-        embed.addFields({
-          name: language.joinedAt,
-          value: `<t:${`${member.joinedTimestamp}`.slice(
-            0,
-            -3,
-          )}> <t:${`${member.joinedTimestamp}`.slice(0, -3)}:R>\n(\`${ch.stp(
-            language.time.timeAgo,
-            {
-              time: moment
-                .duration(Math.abs(Date.now() - member.joinedTimestamp))
-                .format(
-                  `Y [${language.time.years}], M [${language.time.months}], W [${language.time.weeks}], D [${language.time.days}], H [${language.time.hours}], m [${language.time.minutes}], s [${language.time.seconds}]`,
-                ),
-            },
-          )}\`)`,
-        });
+        if (member.joinedTimestamp) {
+          embed.addFields({
+            name: language.joinedAt,
+            value: `<t:${`${member.joinedTimestamp}`.slice(
+              0,
+              -3,
+            )}> <t:${`${member.joinedTimestamp}`.slice(0, -3)}:R>\n(\`${ch.stp(
+              language.time.timeAgo,
+              {
+                time: moment
+                  .duration(Math.abs(Date.now() - member.joinedTimestamp))
+                  .format(
+                    `Y [${language.time.years}], M [${language.time.months}], W [${language.time.weeks}], D [${language.time.days}], H [${language.time.hours}], m [${language.time.minutes}], s [${language.time.seconds}]`,
+                  ),
+              },
+            )}\`)`,
+          });
+        }
         ch.send(channels, { embeds: [embed] }, 5000);
       }
     }
