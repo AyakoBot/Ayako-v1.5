@@ -37,15 +37,25 @@ const getBaseEmbed = (msg) => {
 
   categories.forEach((category) => {
     const settings = msg.client.settings
-      .filter((s) => s.helpCategory === category)
+      .filter((s) => s.helpCategory === category && (s.finished || typeof s.finished !== 'boolean'))
       .map((s) => `\`${s.name}\``);
 
     const commands = msg.client.commands
-      .filter((s) => s.type === category)
+      .filter(
+        (c) =>
+          c.type === category &&
+          !c.unfinished &&
+          (!c.thisGuildOnly || c.thisGuildOnly.includes(msg.guild?.id)),
+      )
       .map((s) => `\`${s.name}\``);
 
     const slashCommands = msg.client.slashCommands
-      .filter((s) => s.type === category)
+      .filter(
+        (c) =>
+          c.type === category &&
+          !c.unfinished &&
+          (!c.thisGuildOnly || c.thisGuildOnly.includes(msg.guild?.id)),
+      )
       .map((s) => `\`${s.name}\``);
 
     embed.addFields({
