@@ -207,13 +207,14 @@ const logEmbed = async (lan, language, con, reason, args) => {
       }),
     )
     .setTimestamp()
-    .addFields({ name: language.reason, value: `${reason}` })
     .setFooter({
       text: args.executor.client.ch.stp(lan.footer, {
         user: args.executor,
         args,
       }),
     });
+
+  if (reason) embed.addFields({ name: language.reason, value: `${reason}` });
 
   if (args.duration) {
     embed.addFields({
@@ -453,7 +454,6 @@ const checkPunishable = async (
 const doDM = async ({ lan, language }, targetMember, reason, con, args) => {
   const dmChannel = await targetMember?.createDM().catch(() => {});
   const DMembed = new Builders.UnsafeEmbedBuilder()
-    .setDescription(`**${language.reason}:** \n${reason}`)
     .setColor(con.color)
     .setTimestamp()
     .setAuthor({
@@ -461,6 +461,9 @@ const doDM = async ({ lan, language }, targetMember, reason, con, args) => {
       iconURL: con.author.image,
       url: args.executor.client.ch.stp(con.author.link, { guild: args.guild, args }),
     });
+
+  if (reason) embed.setDescription(`**${language.reason}:** \n${reason}`);
+
   const m = await args.executor.client.ch.send(dmChannel, { embeds: [DMembed] });
 
   return m;
@@ -600,7 +603,7 @@ const takeAction = async (punishmentType, targetMember, executingMember, args, l
   switch (punishmentType) {
     case 'muteRemove': {
       punished = await targetMember
-        ?.timeout(null, `${args.executor.tag} | ${args.reason}`)
+        ?.timeout(null, `${args.executor.tag} ${args.reason ? `| ${args.reason}` : ''}`)
         .catch((err) => {
           error = err;
         });
@@ -608,7 +611,7 @@ const takeAction = async (punishmentType, targetMember, executingMember, args, l
     }
     case 'tempmuteAdd': {
       punished = await targetMember
-        ?.timeout(Number(args.duration), `${args.executor.tag} | ${args.reason}`)
+        ?.timeout(Number(args.duration), `${args.executor.tag} ${args.reason ? `| ${args.reason}` : ''}`)
         .catch((err) => {
           error = err;
         });
@@ -640,7 +643,7 @@ const takeAction = async (punishmentType, targetMember, executingMember, args, l
     case 'banAdd': {
       console.log('Do ban');
       punished = await targetMember
-        ?.ban({ deleteMessageDays: 7, reason: `${args.executor.tag} | ${args.reason}` })
+        ?.ban({ deleteMessageDays: 7, reason: `${args.executor.tag} ${args.reason ? `| ${args.reason}` : ''}` })
         .catch((err) => {
           error = err;
         });
@@ -648,14 +651,14 @@ const takeAction = async (punishmentType, targetMember, executingMember, args, l
     }
     case 'softbanAdd': {
       punished = await targetMember
-        ?.ban({ deleteMessageDays: 7, reason: `${args.executor.tag} | ${args.reason}` })
+        ?.ban({ deleteMessageDays: 7, reason: `${args.executor.tag} ${args.reason ? `| ${args.reason}` : ''}` })
         .catch((err) => {
           error = err;
         });
 
       if (punished) {
         punished = await guild?.bans
-          .remove(args.target.id, `${args.executor.tag} | ${args.reason}`)
+          .remove(args.target.id, `${args.executor.tag} ${args.reason ? `| ${args.reason}` : ''}`)
           .catch((err) => {
             error = err;
           });
@@ -665,7 +668,7 @@ const takeAction = async (punishmentType, targetMember, executingMember, args, l
     }
     case 'tempbanAdd': {
       punished = await targetMember
-        ?.ban({ deleteMessageDays: 7, reason: `${args.executor.tag} | ${args.reason}` })
+        ?.ban({ deleteMessageDays: 7, reason: `${args.executor.tag} ${args.reason ? `| ${args.reason}` : ''}` })
         .catch((err) => {
           error = err;
         });
@@ -701,7 +704,7 @@ const takeAction = async (punishmentType, targetMember, executingMember, args, l
             args.target.id,
             {},
             {
-              reason: `${args.executor.tag} | ${args.reason}`,
+              reason: `${args.executor.tag} ${args.reason ? `| ${args.reason}` : ''}`,
               type: 1,
             },
           )
@@ -722,7 +725,7 @@ const takeAction = async (punishmentType, targetMember, executingMember, args, l
               AddReactions: false,
             },
             {
-              reason: `${args.executor.tag} | ${args.reason}`,
+              reason: `${args.executor.tag} ${args.reason ? `| ${args.reason}` : ''}`,
               type: 1,
             },
           )
@@ -769,7 +772,7 @@ const takeAction = async (punishmentType, targetMember, executingMember, args, l
             AddReactions: null,
           },
           {
-            reason: `${args.executor.tag} | ${args.reason}`,
+            reason: `${args.executor.tag} ${args.reason ? `| ${args.reason}` : ''}`,
             type: 1,
           },
         )
@@ -783,7 +786,7 @@ const takeAction = async (punishmentType, targetMember, executingMember, args, l
         punished.permissionOverwrites.cache.get(args.target.id).allow.bitfield === 0n
       ) {
         punished = await args.channel.permissionOverwrites
-          .delete(args.target.id, `${args.executor.tag} | ${args.reason}`)
+          .delete(args.target.id, `${args.executor.tag} ${args.reason ? `| ${args.reason}` : ''}`)
           .catch((err) => {
             error = err;
           });
@@ -792,14 +795,14 @@ const takeAction = async (punishmentType, targetMember, executingMember, args, l
     }
     case 'banRemove': {
       punished = await guild?.bans
-        .remove(args.target.id, `${args.executor.tag} | ${args.reason}`)
+        .remove(args.target.id, `${args.executor.tag} ${args.reason ? `| ${args.reason}` : ''}`)
         .catch((err) => {
           error = err;
         });
       break;
     }
     case 'kickAdd': {
-      punished = await targetMember?.kick(`${args.executor.tag} | ${args.reason}`).catch((err) => {
+      punished = await targetMember?.kick(`${args.executor.tag} ${args.reason ? `| ${args.reason}` : ''}`).catch((err) => {
         error = err;
       });
       break;
