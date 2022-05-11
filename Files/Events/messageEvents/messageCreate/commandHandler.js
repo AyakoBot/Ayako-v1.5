@@ -55,7 +55,7 @@ module.exports = {
   execute: async (rawmsg) => {
     const [msg] = await module.exports.prefix(rawmsg);
     if (!msg) return;
-    if (!msg.command?.thisGuildOnly.includes(msg.guild?.id)) return;
+    if (msg.command?.thisGuildOnly && msg.command?.thisGuildOnly.includes(msg.guild?.id)) return;
 
     if (msg.command.perm === 0) {
       if (msg.author.id !== auth.ownerID) {
