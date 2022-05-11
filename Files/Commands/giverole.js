@@ -28,13 +28,11 @@ module.exports = {
     const { lan } = msg;
     if (!user) return msg.client.ch.error(msg, msg.language.errors.userNotFound);
 
-    const reason = msg.args.slice(1).join(' ') ? msg.args.slice(1).join(' ') : lan.reason;
     return msg.client.emit(
       `modBaseEvent`,
       {
         target: user,
         executor: msg.author,
-        reason,
         msg,
         role,
         guild: msg.guild,
