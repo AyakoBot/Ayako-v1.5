@@ -112,7 +112,7 @@ const queryCheck = async () => {
           row.removetime,
           await client.guilds.cache
             .get('298954459172700181')
-            .members.fetch(row.userid)
+            ?.members.fetch(row.userid)
             .catch(() => {}),
           client.guilds.cache.get('298954459172700181'),
         );

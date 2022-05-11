@@ -8,6 +8,7 @@ module.exports = {
   perm: null,
   dm: false,
   cooldown: 5000,
+  notACommand: false,
   execute: async (cmd, language) => {
     const lan = language.verification;
 

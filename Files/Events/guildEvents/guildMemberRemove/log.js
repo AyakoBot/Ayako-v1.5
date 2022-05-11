@@ -70,6 +70,8 @@ module.exports = {
             url: ch.stp(con.author.link, { user }),
           });
         }
+
+        console.log(member.joinedTimestamp);
         embed.addFields({
           name: language.joinedAt,
           value: `<t:${`${member.joinedTimestamp}`.slice(
@@ -79,7 +81,7 @@ module.exports = {
             language.time.timeAgo,
             {
               time: moment
-                .duration(Date.now() - member.joinedTimestamp)
+                .duration(Math.abs(Date.now() - member.joinedTimestamp))
                 .format(
                   `Y [${language.time.years}], M [${language.time.months}], W [${language.time.weeks}], D [${language.time.days}], H [${language.time.hours}], m [${language.time.minutes}], s [${language.time.seconds}]`,
                 ),
