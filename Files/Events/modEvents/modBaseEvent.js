@@ -92,8 +92,6 @@ module.exports = async (args, type) => {
     ({ action, error } = actionReply);
   }
 
-  console.log(action);
-
   if (action || args.doDBonly) {
     console.log('logEmbed');
     logEmbed(lan, language, con, reason, args);

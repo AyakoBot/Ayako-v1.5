@@ -31,53 +31,52 @@ module.exports = {
       }
     }
 
-    const embed = new Builders.UnsafeEmbedBuilder()
-      .addFields(
-        {
-          name: msg.lanSettings.active,
-          value: r.active
-            ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
-            : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`,
-          inline: false,
-        },
-        {
-          name: '\u200b',
-          value: '\u200b',
-          inline: false,
-        },
-        {
-          name: `${msg.lan.xpmultiplier}`,
-          value: `${r.xpmultiplier}`,
-          inline: true,
-        },
-        {
-          name: `${msg.lan.xppermsg}`,
-          value: `${Number(r.xppermsg) - 10} - ${r.xppermsg}`,
-          inline: true,
-        },
-        {
-          name: `${msg.lan.actualXP}`,
-          value: `${(Number(r.xppermsg) - 10) * Number(r.xpmultiplier)} - ${
-            Number(r.xppermsg) * Number(r.xpmultiplier)
-          }`,
-          inline: true,
-        },
-        {
-          name: `${msg.lan.rolemode}`,
-          value: `${r.rolemode ? msg.lan.replace : msg.lan.stack}`,
-          inline: true,
-        },
-        {
-          name: '\u200b',
-          value: '\u200b',
-          inline: false,
-        },
-        {
-          name: `${msg.lan.lvlupmode}`,
-          value: `${lvlupmode}`,
-          inline: true,
-        },
-      );
+    const embed = new Builders.UnsafeEmbedBuilder().addFields(
+      {
+        name: msg.lanSettings.active,
+        value: r.active
+          ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+          : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`,
+        inline: false,
+      },
+      {
+        name: '\u200b',
+        value: '\u200b',
+        inline: false,
+      },
+      {
+        name: `${msg.lan.xpmultiplier}`,
+        value: `${r.xpmultiplier}`,
+        inline: true,
+      },
+      {
+        name: `${msg.lan.xppermsg}`,
+        value: `${Number(r.xppermsg) - 10} - ${r.xppermsg}`,
+        inline: true,
+      },
+      {
+        name: `${msg.lan.actualXP}`,
+        value: `${(Number(r.xppermsg) - 10) * Number(r.xpmultiplier)} - ${
+          Number(r.xppermsg) * Number(r.xpmultiplier)
+        }`,
+        inline: true,
+      },
+      {
+        name: `${msg.lan.rolemode}`,
+        value: `${r.rolemode ? msg.lan.replace : msg.lan.stack}`,
+        inline: true,
+      },
+      {
+        name: '\u200b',
+        value: '\u200b',
+        inline: false,
+      },
+      {
+        name: `${msg.lan.lvlupmode}`,
+        value: `${lvlupmode}`,
+        inline: true,
+      },
+    );
 
     switch (r.lvlupmode) {
       case '1': {

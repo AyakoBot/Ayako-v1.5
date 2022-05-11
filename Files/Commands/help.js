@@ -118,7 +118,7 @@ const getEmbed = async (msg, category) => {
   slashCommands.forEach((slashCommand) => {
     const sC = msg.client.application.commands.cache.find((c) => c.name === slashCommand.name);
 
-    sC.options.forEach((c) => {
+    sC?.options.forEach((c) => {
       const lan = msg.language.slashCommands[slashCommand.name][c.name];
 
       embed.addFields({
