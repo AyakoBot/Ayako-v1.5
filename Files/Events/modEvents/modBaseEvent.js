@@ -462,7 +462,7 @@ const doDM = async ({ lan, language }, targetMember, reason, con, args) => {
       url: args.executor.client.ch.stp(con.author.link, { guild: args.guild, args }),
     });
 
-  if (reason) embed.setDescription(`**${language.reason}:** \n${reason}`);
+  if (reason) DMembed.setDescription(`**${language.reason}:** \n${reason}`);
 
   const m = await args.executor.client.ch.send(dmChannel, { embeds: [DMembed] });
 
