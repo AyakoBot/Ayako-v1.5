@@ -47,7 +47,7 @@ const policyReminder = async (member, user) => {
   const embed = new Builders.UnsafeEmbedBuilder()
     .setAuthor({
       name: `Hi! I don't think we've met before.`,
-      url: msg.client.constants.standard.invite,
+      url: member.client.constants.standard.invite,
     })
     .setTitle(`Here's a quick Guide to my Terms of Service and Privacy Policy`)
     .setDescription(
@@ -70,7 +70,7 @@ const policyReminder = async (member, user) => {
       },
       {
         name: 'Invite',
-        value: `You can Invite Ayako to your Server using this link: ${msg.client.constants.standard.invite}`,
+        value: `You can Invite Ayako to your Server using this link: ${member.client.constants.standard.invite}`,
         inline: false,
       },
       {
