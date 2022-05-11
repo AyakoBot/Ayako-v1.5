@@ -47,17 +47,16 @@ module.exports = {
     }
 
     const ThisGuildOnly = [];
-    if (reqcommand.ThisGuildOnly) {
-      const promises = reqcommand.ThisGuildOnly.map(async (thisGuildOnly) => {
+    if (reqcommand.thisGuildOnly) {
+      const promises = reqcommand.thisGuildOnly.map(async (thisGuildOnly) => {
         const guild = msg.client.guilds.cache.get(thisGuildOnly);
         let tgo = guild.vanityURLCode ? `https://discord.gg/${guild.vanityURLCode}` : undefined;
         if (!tgo) {
-          let channel = msg.client.channels.cache.get(guild.systemChannelID);
-          if (!channel) {
-            const textchannels = guild.channels.cache.filter((c) => c.type === 'text');
-            channel = textchannels.first();
-          }
-          const inv = await channel.createInvite({
+          const channel =
+            msg.client.channels.cache.get(guild.systemChannelID) ||
+            guild.channels.cache.find((c) => c.type === 0 && guild.me.permissionsIn(c).has(1n));
+
+          const inv = await channel?.createInvite({
             maxAge: 20000,
             reason: msg.client.ch.stp(
               (
@@ -66,7 +65,7 @@ module.exports = {
               { msg },
             ),
           });
-          tgo = inv.url;
+          tgo = inv?.url;
         }
         if (tgo) ThisGuildOnly.push(`[${guild.name}](${tgo})`);
         else ThisGuildOnly.push(`${guild.name}`);
