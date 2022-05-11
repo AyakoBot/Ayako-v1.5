@@ -13,9 +13,9 @@ module.exports = {
     for (let i = 0; i < res.length; i += 1) {
       const r = res[i];
       embed.addFields({
-        name: `${msg.language.number}: \`${r.id}\` | ${msg.lan.commands}: ${r.commands.map(
-          (c) => ` \`${c}\``,
-        )} | ${
+        name: `${msg.language.number}: \`${r.id}\` | ${msg.lan.commands}: ${
+          r.commands ? r.commands.map((c) => ` \`${c}\``) : msg.language.none
+        } | ${
           r.active
             ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
             : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`

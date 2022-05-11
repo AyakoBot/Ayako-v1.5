@@ -127,9 +127,9 @@ module.exports = {
 const checkDisabled = (msg, disabledCommands) => {
   const applyingRows = disabledCommands.filter(
     (row) =>
-      (row.commands.includes(msg.command.name) ||
+      (row.commands?.includes(msg.command.name) ||
         (msg.command.aliases &&
-          msg.command.aliases.some((alias) => row.commands.includes(alias)))) &&
+          msg.command.aliases.some((alias) => row.commands?.includes(alias)))) &&
       row.channels?.includes(msg.channel.id),
   );
 
@@ -412,7 +412,7 @@ const commandExe = async (msg) => {
     }
 
     // eslint-disable-next-line no-console
-    console.log(`Command executed: ${msg.command.name} | ${msg.channel.id}`);
+    console.log(`Command executed: ${msg.command.name} | ${msg.url}`);
     msg.command.execute(msg);
   } catch (e) {
     const channel = msg.client.channels.cache.get(msg.client.constants.errorchannel);

@@ -246,7 +246,7 @@ const roleAssign = async (msg, rolemode, newLevel) => {
       thisLevelsAndBelowRows.forEach((r) => {
         const remr = [];
         const addr = [];
-        r.roles.forEach((roleid) => {
+        r.roles?.forEach((roleid) => {
           if (Number(r.level) < Number(newLevel) && msg.member.roles.cache.has(roleid)) {
             if (msg.guild.roles.cache.get(roleid)) remr.push(roleid);
           }

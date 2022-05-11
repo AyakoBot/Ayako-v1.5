@@ -13,6 +13,7 @@ const ChannelRules = require('./Other Client Files/Classes/ChannelRules');
 const Constants = require('./Other Client Files/Constants.json');
 
 const DiscordEpoch = 1420070400000;
+const acceptedErrorCodes = ['50001', '50007', '50013'];
 
 module.exports = {
   /**
@@ -60,7 +61,7 @@ module.exports = {
     if (typeof channel.send !== 'function') throw new Error('Invalid Channel');
 
     return channel.send(payload).catch((e) => {
-      if (String(e).includes('50007')) return null;
+      if (acceptedErrorCodes.some((code) => String(e).includes(code))) return null;
 
       if (String(e).includes('AbortError: The user aborted a request')) {
         return module.exports.send(payload);
@@ -92,7 +93,7 @@ module.exports = {
     if (!payload) throw new Error('No Payload!');
 
     const m = await msg.reply(payload).catch((e) => {
-      if (String(e).includes('50007')) return null;
+      if (acceptedErrorCodes.some((code) => String(e).includes(code))) return null;
 
       if (String(e).includes('AbortError: The user aborted a request')) {
         return module.exports.reply(payload);
@@ -102,26 +103,6 @@ module.exports = {
         return module.exports.send(msg.channel, payload, timeout);
       }
 
-      if (String(e).includes('Missing Permissions')) {
-        return module.exports.send(
-          msg.author,
-          {
-            content: undefined,
-            embeds: [
-              new Builders.UnsafeEmbedBuilder()
-                .setAuthor({
-                  name: msg.language.error,
-                  iconURL: msg.client.objectEmotes.warning.link,
-                  url: msg.client.constants.standard.invite,
-                })
-                .setColor(msg.client.constants.error)
-                .setDescription(msg.language.errors.sendMessage),
-            ],
-            components: [],
-          },
-          timeout,
-        );
-      }
       console.log(
         e,
         payload.content,
