@@ -2,7 +2,7 @@ module.exports = {
   name: 'ping',
   perm: null,
   dm: true,
-  type: 'info',
+  type: 'other',
   execute: async (cmd) => {
     const { heartbeat } = (await cmd.client.ch.query('SELECT heartbeat FROM stats;')).rows[0];
 
