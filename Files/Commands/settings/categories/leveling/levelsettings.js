@@ -32,9 +32,6 @@ module.exports = {
     }
 
     const embed = new Builders.UnsafeEmbedBuilder()
-      .setDescription(
-        msg.client.ch.stp(msg.lan.description, { prefix: msg.client.constants.standard.prefix }),
-      )
       .addFields(
         {
           name: msg.lanSettings.active,
