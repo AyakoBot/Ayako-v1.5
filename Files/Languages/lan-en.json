@@ -3036,7 +3036,13 @@
         "channelid": "Reminder Channel",
         "repeatreminder": "Repeat Reminder",
         "desc": "As per DISBOARD's Guidelines, Servers are not allowed to reward Users for Actions on their Service.\nTherefore Functions like `Reward Roles` or `Bump Leaderboards` will not be added.",
+        "deletereply": "Delete DISBOARD's Bump Reply",
         "edit": {
+          "deletereply": {
+            "name": "Delete Bump Reply",
+            "answers": "`True` or `False`",
+            "recommended": "Recommended: `True`"
+          },
           "active": {
             "name": "Active",
             "answers": "`True` or `False`",
@@ -3824,6 +3830,7 @@
         "oneTimeRunner": "Apply all Separators to every Member of your Server",
         "deletedRole": "Role was deleted or not found",
         "calcError": "Could not be calculated",
+        "roleCount": "Too Many Roles to display",
         "edit": {
           "stoprole": {
             "name": "Stop-Role",
