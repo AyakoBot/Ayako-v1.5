@@ -39,8 +39,10 @@ const policyReminder = async (member) => {
     return false;
   };
 
-  if (await checkDisabledInGuild(member.guild)) return;
-  if (await checkSentToUser()) return;
+  const isDisabled = await checkDisabledInGuild(member.guild);
+  if (isDisabled) return;
+  const isSent = await checkSentToUser();
+  if (isSent) return;
 
   const embed = new Builders.UnsafeEmbedBuilder()
     .setAuthor({
