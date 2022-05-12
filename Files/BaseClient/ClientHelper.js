@@ -118,7 +118,7 @@ module.exports = {
         return module.exports.reply(msg, payload);
       }
 
-      if (String(e).includes('50035')) {
+      if (String(e).includes('50035') || String(e).includes('160002')) {
         return module.exports.send(msg.channel, payload, timeout);
       }
 
@@ -1231,11 +1231,11 @@ const cooldownHandler = async (msg, m) => {
 };
 
 const deleteCommandHandler = async (msg, m) => {
-  if (!msg.command || !msg.guild) return;
+  if (!msg.command || !msg.guild || !m) return;
   const deleteRows = await getDeleteRes(msg);
 
   deleteRows.forEach((row) => {
-    if (!row.commands.includes(msg.command.name)) return;
+    if (!row.commands?.includes(msg.command.name)) return;
     if (!row.deletetimeout || Number(row.deletetimeout) === 0) return;
 
     jobs.scheduleJob(new Date(Date.now() + row.deletetimeout * 1000), () => {
