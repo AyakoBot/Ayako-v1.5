@@ -13,7 +13,7 @@ module.exports = {
     if (r.words && r.words.length) {
       for (let i = 0; i < r.words.length; i += 1) {
         wordArr[i] = `${r.words[i]}⠀`;
-        wordText += wordArr[i] + new Array(22 - wordArr[i].length).join(' ');
+        wordText += wordArr[i] + new Array(Math.abs(22 - wordArr[i].length)).join(' ');
       }
     } else wordText = msg.language.none;
     const embed = new Builders.UnsafeEmbedBuilder()

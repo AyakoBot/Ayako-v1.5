@@ -98,12 +98,13 @@ const endReminder = async (msg) => {
 };
 
 const doDelete = async (msg, settings) => {
-  if (!settings.deletereply) return;
+  if (!settings.deletereply || !settings.msgid) return;
 
   msg.delete().catch(() => {});
   const channel = msg.client.channels.cache.get(settings.channelid) || msg.channel;
   if (!channel) return;
   const message = await channel.messages.fetch(settings.msgid).catch(() => {});
   if (!message) return;
+
   message.delete().catch(() => {});
 };
