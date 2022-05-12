@@ -52,7 +52,12 @@ const endReminder = async (msg) => {
   const users = settings.users?.map((u) => `<@${u}>`).join(', ') || '';
   const roles = settings.roles?.map((r) => `<@&${r}>`).join(', ') || '';
 
-  await msg.client.ch.send(channel, { embeds: [embed], content: `${users}\n${roles}` });
+  const m = await msg.client.ch.send(channel, { embeds: [embed], content: `${users}\n${roles}` });
+
+  await msg.client.ch.query(`UPDATE disboard SET msgid = $1 WHERE guildid = $2;`, [
+    m.id,
+    msg.guild.id,
+  ]);
 
   setReminder(msg, false, settings);
 };
@@ -67,11 +72,13 @@ const getSettings = async (msg) => {
   return null;
 };
 
-const setReminder = (msg, isBump, settings) => {
+const setReminder = async (msg, isBump, settings) => {
   if (!isBump && !Number(settings.repeatreminder)) {
     msg.client.ch.query(`UPDATE disboard SET nextbump = NULL WHERE guildid = $1;`, [msg.guild.id]);
     return;
   }
+
+  await doDelete(msg, settings);
 
   msg.client.ch.query(`UPDATE disboard SET nextbump = $1 WHERE guildid = $2;`, [
     Date.now() + (isBump ? 7200000 : settings.repeatreminder * 60 * 1000),
@@ -87,4 +94,16 @@ const setReminder = (msg, isBump, settings) => {
       },
     ),
   );
+};
+
+const doDelete = async (msg, settings) => {
+  if (!settings.deletereply || !settings.msgid) return;
+
+  msg.delete().catch(() => {});
+  const channel = msg.client.channels.cache.get(settings.channelid) || msg.channel;
+  if (!channel) return;
+  const message = await channel.messages.fetch(settings.msgid).catch(() => {});
+  if (!message) return;
+
+  message.delete().catch(() => {});
 };
