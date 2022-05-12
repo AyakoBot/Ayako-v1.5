@@ -24,7 +24,8 @@ module.exports = {
     isWaiting.add(`${newMember.user.id}-${newMember.guild.id}`);
     jobs.scheduleJob(new Date(Date.now() + 2000), async () => {
       isWaiting.delete(`${newMember.user.id}-${newMember.guild.id}`);
-      newMember = await newMember.fetch().catch(() => {});
+      const member = await newMember.fetch().catch(() => {});
+      if (!member) return;
 
       const ress = await newMember.client.ch.query(
         'SELECT stillrunning FROM roleseparatorsettings WHERE guildid = $1;',
@@ -37,11 +38,11 @@ module.exports = {
       );
       const language = await newMember.client.ch.languageSelector(newMember.guild);
       UpdateWorker.postMessage({
-        roles: newMember._roles,
-        guildid: newMember.guild.id,
-        userid: newMember.user.id,
-        guildroles: new Map(newMember.guild.roles.cache),
-        highest: newMember.guild.roles.highest,
+        roles: member._roles,
+        guildid: member.guild.id,
+        userid: member.user.id,
+        guildroles: new Map(member.guild.roles.cache),
+        highest: member.guild.roles.highest,
         res: res?.rows,
         language,
       });
