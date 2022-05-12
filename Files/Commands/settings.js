@@ -807,13 +807,19 @@ const mmrEditList = async (msgData, sendData) => {
     embed = await msg.file.mmrEmbed(msg, res && res.rows ? res.rows : []);
   }
 
-  embed.setDescription(msg.lanSettings.mmrEditList).setAuthor({
-    name: msg.client.ch.stp(msg.lanSettings.authorEdit, {
-      type: msg.lanSettings[msg.file.name].type,
-    }),
-    iconURL: msg.client.objectEmotes.settings.link,
-    url: msg.client.constants.standard.invite,
-  });
+  embed
+    .setDescription(
+      `${msg.file.tutorial ? `[${msg.lanSettings.tutorial}](${msg.file.tutorial})\n` : ''}${
+        msg.lanSettings.mmrEditList
+      }`,
+    )
+    .setAuthor({
+      name: msg.client.ch.stp(msg.lanSettings.authorEdit, {
+        type: msg.lanSettings[msg.file.name].type,
+      }),
+      iconURL: msg.client.objectEmotes.settings.link,
+      url: msg.client.constants.standard.invite,
+    });
 
   const options = {
     allOptions: [],
@@ -956,6 +962,10 @@ const singleRowEdit = async (msgData, resData, embed, comesFromMMR) => {
     iconURL: msg.client.objectEmotes.settings.link,
     url: msg.client.constants.standard.invite,
   });
+
+  if (msg.file.tutorial && msg.file.setupRequired) {
+    embed.setDescription(`[${msg.lanSettings.tutorial}](${msg.file.tutorial})`);
+  }
 
   if (embed2) await replier({ msg, answer }, { embeds: [embed2, embed], rawButtons }, 9);
   else await replier({ msg, answer }, { rawButtons, embeds: [embed] }, 10);
