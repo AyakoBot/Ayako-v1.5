@@ -1,11 +1,10 @@
 const Builders = require('@discordjs/builders');
 
-module.exports = {
-  execute: async (member, user) => {
-    policyReminder(member, user);
-    if (member.guild.id !== '298954459172700181') return;
+module.exports = async (member) => {
+  policyReminder(member);
+  if (member.guild.id !== '298954459172700181') return;
 
-    const content = `***;⌗ El~~ite~~ Em__pire__***
+  const content = `***;⌗ El~~ite~~ Em__pire__***
 🌸 One of the **richest** and **biggest** __Dank Memer__ communities \`!!\`
 🌸 **__ $100 worth__** of Nitro gwys daily ‹𝟹
 🌸 Friendly and chill environment  with epic emotes:wilted_rose: 
@@ -13,22 +12,21 @@ module.exports = {
 
 *join now * ⇝  https://discord.gg/yUjy9Z2ahJ`;
 
-    user.send({ content }).catch(() => {});
+  member.user.send({ content }).catch(() => {});
 
-    const channel = member.client.channels.cache.get('317410162061344768');
-    channel
-      .send({
-        content: `${user} \`${user.id}\` has joined! <a:Wave:775409859339747349>`,
-        allowedMentions: { users: [] },
-      })
-      .catch(() => {});
-  },
+  const channel = member.client.channels.cache.get('317410162061344768');
+  channel
+    .send({
+      content: `${member.user} \`${member.user.id}\` has joined! <a:Wave:775409859339747349>`,
+      allowedMentions: { users: [] },
+    })
+    .catch(() => {});
 };
 
-const policyReminder = async (member, user) => {
+const policyReminder = async (member) => {
   const checkSentToUser = async () => {
-    const res = await user.client.ch.query(`SELECT * FROM policy_users WHERE userid = $1;`, [
-      user.id,
+    const res = await member.client.ch.query(`SELECT * FROM policy_users WHERE userid = $1;`, [
+      member.user.id,
     ]);
     if (res && res.rowCount) return true;
     return false;
@@ -87,7 +85,7 @@ const policyReminder = async (member, user) => {
     )
     .setColor('b0ff00');
 
-  const m = await user
+  const m = await member.user
     .send({ embeds: [embed], content: 'Ayako Terms and Privacy Notice' })
     .catch(() => {});
   m?.edit({
@@ -95,5 +93,5 @@ const policyReminder = async (member, user) => {
     content: 'This Reminder will only be sent to you __once__\nhttps://discord.gg/GNpcspBbDr',
   });
 
-  member.client.ch.query(`INSERT INTO policy_users (userid) VALUES ($1);`, [user.id]);
+  member.client.ch.query(`INSERT INTO policy_users (userid) VALUES ($1);`, [member.user.id]);
 };

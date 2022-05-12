@@ -1,14 +1,12 @@
-module.exports = {
-  execute: async (member, user) => {
-    stickyroles(member, user);
-    stickyperms(member, user);
-  },
+module.exports = async (member) => {
+  stickyroles(member);
+  stickyperms(member);
 };
 
-const stickyroles = async (member, user) => {
+const stickyroles = async (member) => {
   const memberRes = await member.client.ch.query(
     `SELECT * FROM stickyrolemembers WHERE userid = $1 AND guildid = $2;`,
-    [user.id, member.guild.id],
+    [member.user.id, member.guild.id],
   );
 
   if (!memberRes || !memberRes.rowCount) return;
@@ -29,7 +27,7 @@ const stickyroles = async (member, user) => {
 
   await member.client.ch.query(
     `DELETE FROM stickyrolemembers WHERE userid = $1 AND guildid = $2;`,
-    [user.id, member.guild.id],
+    [member.user.id, member.guild.id],
   );
 
   const language = await member.guild.client.ch.languageSelector(member.guild);
@@ -53,15 +51,15 @@ const getRoles = (mode, roles, memberRoles, guild) => {
     .filter((id) => guild.roles.cache.get(id).rawPosition < guild.me.roles.highest.rawPosition);
 };
 
-const stickyperms = async (member, user) => {
+const stickyperms = async (member) => {
   const memberRes = await member.client.ch.query(
     `SELECT * FROM stickypermmembers WHERE userid = $1 AND guildid = $2;`,
-    [user.id, member.guild.id],
+    [member.user.id, member.guild.id],
   );
 
   await member.client.ch.query(
     `DELETE FROM stickypermmembers WHERE userid = $1 AND guildid = $2;`,
-    [user.id, member.guild.id],
+    [member.user.id, member.guild.id],
   );
 
   if (!memberRes || !memberRes.rowCount) return;
