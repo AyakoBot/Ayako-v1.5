@@ -58,16 +58,15 @@ module.exports = {
         if (invite.expiresTimestamp) {
           embed.addFields({
             name: lan.expires,
-            value: `\`${new Date(invite.expiresTimestamp).toUTCString()}\`\n(\`${ch.stp(
-              language.time.timeIn,
-              {
-                time: moment
-                  .duration(Date.now() - invite.expiresTimestamp)
-                  .format(
-                    `Y [${language.time.years}], M [${language.time.months}], W [${language.time.weeks}], D [${language.time.days}], H [${language.time.hours}], m [${language.time.minutes}], s [${language.time.seconds}]`,
-                  ),
-              },
-            )}\`)`,
+            value: `<t:${String(invite.expiresTimestamp).slice(0, -3)}> (<t:${String(
+              invite.expiresTimestamp,
+            ).slice(0, -3)}:R>) \n(\`${ch.stp(language.time.timeIn, {
+              time: moment
+                .duration(Math.abs(Date.now() - invite.expiresTimestamp))
+                .format(
+                  `Y [${language.time.years}], M [${language.time.months}], W [${language.time.weeks}], D [${language.time.days}], H [${language.time.hours}], m [${language.time.minutes}], s [${language.time.seconds}]`,
+                ),
+            })}\`)`,
             inline: false,
           });
         }

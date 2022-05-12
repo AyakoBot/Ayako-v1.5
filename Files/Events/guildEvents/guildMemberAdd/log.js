@@ -3,107 +3,109 @@ const Builders = require('@discordjs/builders');
 const moment = require('moment');
 require('moment-duration-format');
 
-module.exports = {
-  async execute(member, user) {
-    const { client } = user;
-    const { guild } = member;
-    const { ch } = client;
-    const Constants = client.constants;
-    const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);
-    if (res && res.rowCount > 0) {
-      const channels = res.rows[0].guildmemberevents
-        ?.map((id) =>
-          typeof client.channels.cache.get(id)?.send === 'function'
-            ? client.channels.cache.get(id)
-            : null,
-        )
-        .filter((c) => c !== null);
+module.exports = async (member) => {
+  const res = await member.client.ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [
+    member.guild.id,
+  ]);
+  if (res && res.rowCount > 0) {
+    const channels = res.rows[0].guildmemberevents
+      ?.map((id) =>
+        typeof member.client.channels.cache.get(id)?.send === 'function'
+          ? member.client.channels.cache.get(id)
+          : null,
+      )
+      .filter((c) => c !== null);
 
-      if (channels && channels.length) {
-        const language = await ch.languageSelector(guild);
-        const lan = language.guildMemberAddLog;
-        const con = Constants.guildMemberAddLog;
-        const embed = new Builders.UnsafeEmbedBuilder()
-          .setTimestamp()
-          .addFields({
-            name: language.createdAt,
-            value: `<t:${`${user.createdTimestamp}`.slice(
-              0,
-              -3,
-            )}> <t:${`${user.createdTimestamp}`.slice(0, -3)}:R>\n(\`${ch.stp(
-              language.time.timeAgo,
-              {
-                time: moment
-                  .duration(Date.now() - user.createdTimestamp)
-                  .format(
-                    `Y [${language.time.years}], M [${language.time.months}], W [${language.time.weeks}], D [${language.time.days}], H [${language.time.hours}], m [${language.time.minutes}], s [${language.time.seconds}]`,
-                  ),
-              },
-            )}\`)`,
-          })
-          .setColor(con.color);
-        const cachedInvites = client.invites.get(guild.id);
+    if (channels && channels.length) {
+      const language = await member.client.ch.languageSelector(member.guild);
+      const lan = language.guildMemberAddLog;
+      const con = member.client.constants.guildMemberAddLog;
+      const embed = new Builders.UnsafeEmbedBuilder()
+        .setTimestamp()
+        .addFields({
+          name: language.createdAt,
+          value: `<t:${`${member.user.createdTimestamp}`.slice(
+            0,
+            -3,
+          )}> <t:${`${member.user.createdTimestamp}`.slice(0, -3)}:R>\n(\`${member.client.ch.stp(
+            language.time.timeAgo,
+            {
+              time: moment
+                .duration(Date.now() - member.user.createdTimestamp)
+                .format(
+                  `Y [${language.time.years}], M [${language.time.months}], W [${language.time.weeks}], D [${language.time.days}], H [${language.time.hours}], m [${language.time.minutes}], s [${language.time.seconds}]`,
+                ),
+            },
+          )}\`)`,
+        })
+        .setColor(con.color);
+      const cachedInvites = member.client.invites.get(member.guild.id);
 
-        if (user.bot) {
-          let entry;
-          if (guild.me.permissions.has(128n)) {
-            const audits = await guild.fetchAuditLogs({ limit: 3, type: 28 });
-            if (audits && audits.entries) {
-              const audit = audits.entries.filter((a) => a.target.id === user.id);
-              entry = audit.sort((a, b) => b.id - a.id);
-              entry = entry.first();
-            }
-          }
-          embed.setAuthor({
-            name: lan.author.titleBot,
-            iconURL: con.author.image,
-            url: ch.stp(con.author.link, { user }),
-          });
-          embed.setThumbnail(user.displayAvatarURL({ size: 4096 }));
-          if (entry) {
-            embed.setDescription(ch.stp(lan.descriptionBot, { user: entry.executor, bot: user }));
-          } else embed.setDescription(ch.stp(lan.descriptionBotNoAudit, { bot: user }));
-        } else {
-          const newInvites = await client.ch.getAllInvites(guild);
-
-          let usedInvite;
-          if (cachedInvites && newInvites) {
-            usedInvite = newInvites.find((inv) => cachedInvites.get(inv?.code)?.uses < inv.uses);
-          }
-          client.invites.set(guild.id, newInvites);
-
-          embed.setAuthor({
-            name: lan.author.titleUser,
-            iconURL: con.author.image,
-            url: ch.stp(con.author.link, { user }),
-          });
-          embed.setThumbnail(member.user.displayAvatarURL({ size: 4096 }));
-          embed.setDescription(ch.stp(lan.descriptionUser, { user }));
-          if (usedInvite) {
-            if (usedInvite.uses) {
-              embed.addFields({
-                name: lan.inviteInfoTitle,
-                value: ch.stp(lan.inviteInfoUses, {
-                  invite: usedInvite,
-                  inviter: usedInvite.inviter?.tag
-                    ? usedInvite.inviter
-                    : { tag: language.unknown, id: usedInvite.inviter?.id || usedInvite.inviter },
-                  mention:
-                    guild.id === (usedInvite.inviter?.id || usedInvite.inviter)
-                      ? `${usedInvite.inviter}`
-                      : usedInvite.inviter?.username,
-                }),
-              });
-            } else {
-              embed.addFields({
-                name: lan.inviteInfoTitle,
-                value: ch.stp(lan.inviteInfo, { invite: usedInvite }),
-              });
-            }
+      if (member.user.bot) {
+        let entry;
+        if (member.guild.me.permissions.has(128n)) {
+          const audits = await member.guild.fetchAuditLogs({ limit: 3, type: 28 });
+          if (audits && audits.entries) {
+            const audit = audits.entries.filter((a) => a.target.id === member.user.id);
+            entry = audit.sort((a, b) => b.id - a.id);
+            entry = entry.first();
           }
         }
-        ch.send(channels, { embeds: [embed] }, 5000);
+        embed.setAuthor({
+          name: lan.author.titleBot,
+          iconURL: con.author.image,
+          url: member.client.ch.stp(con.author.link, { user: member.user }),
+        });
+        embed.setThumbnail(member.user.displayAvatarURL({ size: 4096 }));
+        if (entry) {
+          embed.setDescription(
+            member.client.ch.stp(lan.descriptionBot, { user: entry.executor, bot: member.user }),
+          );
+        } else {
+          embed.setDescription(
+            member.client.ch.stp(lan.descriptionBotNoAudit, { bot: member.user }),
+          );
+        }
+      } else {
+        const newInvites = await member.client.ch.getAllInvites(member.guild);
+
+        let usedInvite;
+        if (cachedInvites && newInvites) {
+          usedInvite = newInvites.find((inv) => cachedInvites.get(inv?.code)?.uses < inv.uses);
+        }
+        member.client.invites.set(member.guild.id, newInvites);
+
+        embed.setAuthor({
+          name: lan.author.titleUser,
+          iconURL: con.author.image,
+          url: member.client.ch.stp(con.author.link, { user: member.user }),
+        });
+        embed.setThumbnail(member.user.displayAvatarURL({ size: 4096 }));
+        embed.setDescription(member.client.ch.stp(lan.descriptionUser, { user: member.user }));
+        if (usedInvite) {
+          if (usedInvite.uses) {
+            embed.addFields({
+              name: lan.inviteInfoTitle,
+              value: member.client.ch.stp(lan.inviteInfoUses, {
+                invite: usedInvite,
+                inviter: usedInvite.inviter?.tag
+                  ? usedInvite.inviter
+                  : { tag: language.unknown, id: usedInvite.inviter?.id || usedInvite.inviter },
+                mention:
+                  member.guild.id === (usedInvite.inviter?.id || usedInvite.inviter)
+                    ? `${usedInvite.inviter}`
+                    : usedInvite.inviter?.username,
+              }),
+            });
+          } else {
+            embed.addFields({
+              name: lan.inviteInfoTitle,
+              value: member.client.ch.stp(lan.inviteInfo, { invite: usedInvite }),
+            });
+          }
+        }
       }
+      member.client.ch.send(channels, { embeds: [embed] }, 5000);
     }
-  },
+  }
 };
