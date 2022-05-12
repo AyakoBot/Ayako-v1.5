@@ -199,24 +199,7 @@ module.exports = {
    * @param {string|object} log - The Log that will be logged to the Console and Error Channel.
    */
   logger: async (type, log) => {
-    const client = require('./DiscordClient');
-
-    if (client && client.user) {
-      const channel = await client.channels
-        .fetch(Constants.standard.errorLogChannel)
-        .catch(() => {});
-      if (channel && channel.id) {
-        if (log) {
-          if (log.stack) {
-            channel.send(`${type}${module.exports.makeCodeBlock(log.stack)}`).catch(() => {});
-          } else channel.send(`${type}${module.exports.makeCodeBlock(log)}`).catch(() => {});
-          console.error(type, log);
-        } else {
-          channel.send(`${type}`).catch(() => {});
-          console.error(type);
-        }
-      }
-    }
+    console.error(type, log);
   },
   /**
    * Prepares incoming URLs for Download, giving it its Destination Path.

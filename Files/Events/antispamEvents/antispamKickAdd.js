@@ -8,7 +8,7 @@ module.exports = {
 
     msgs = msgs
       .filter((m) => m.author.id === msg.author.id)
-      .array()
+      .map((m) => m)
       .slice(0, 16);
 
     msg.channel.bulkDelete(msgs).catch(() => {});
