@@ -227,7 +227,7 @@ const roleAssign = async (msg, rolemode, newLevel) => {
       const thisLevelsRows = rows.filter((r) => Number(r.level) <= Number(newLevel));
       thisLevelsRows.forEach((r) => {
         const roleMap = r.roles
-          .map((roleid) => {
+          ?.map((roleid) => {
             if (!msg.member.roles.cache.has(roleid)) return roleid;
             return null;
           })

@@ -6,6 +6,6 @@ module.exports = {
     require('./verification').execute(member, member.user);
     require('./antiraid').execute(member, member.user);
     require('./sticky').execute(member, member.user);
-    require('./dmAd').execute(member, member.user);
+    // require('./dmAd').execute(member, member.user);
   },
 };

@@ -4,7 +4,7 @@ module.exports = () => {
   const client = require('../../BaseClient/DiscordClient');
 
   jobs.scheduleJob('0 0 0 */1 * *', async () => {
-    const invites = await client.ch.getErisInvites(client.guilds.cache.get('298954459172700181'));
+    const invites = await client.ch.getAllInvites(client.guilds.cache.get('298954459172700181'));
 
     const inviteTxt = client.ch.txtFileWriter(
       invites.map((i) => (i.uses > 9 ? `${i.code} ${i.uses}` : null)).filter((i) => !!i),

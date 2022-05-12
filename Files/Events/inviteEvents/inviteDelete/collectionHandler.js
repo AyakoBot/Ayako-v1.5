@@ -3,6 +3,6 @@ module.exports = {
     const { client } = invite;
     const { guild } = invite;
 
-    //client.invites.set(guild.id, await client.ch.getErisInvites(guild));
+    client.invites.set(guild.id, await client.ch.getAllInvites(guild));
   },
 };

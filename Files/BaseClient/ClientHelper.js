@@ -967,41 +967,17 @@ module.exports = {
    * @constructor
    * @param {object} guild - The Guild to get invites from
    */
-  getErisInvites: async (guild) => {
+  getAllInvites: async (guild) => {
     const client = require('./DiscordClient');
-    const invites = await client.eris.getGuildInvites(guild.id).catch(() => {});
+    const invites = await guild.invites.fetch().catch(() => {});
 
     if (!invites) return null;
-
-    const invitesMap = new Discord.Collection();
-    invites.forEach((inv) => {
-      const invite = {
-        channel: client.channels.cache.get(inv.channel.id),
-        channelId: inv.channel.id,
-        code: inv.code,
-        deletable: true,
-        expiresAt: inv.maxAge ? new Date(inv.maxAge) : null,
-        expiresTimestamp: inv.maxAge ? new Date(inv.maxAge).getTime() : null,
-        guild,
-        inviter: client.users.cache.get(inv.inviter?.id),
-        inviterId: inv.inviter?.id,
-        maxAge: inv.maxAge,
-        maxUses: inv.maxUses,
-        memberCount: inv.memberCount,
-        presenceCount: inv.presenceCount,
-        temporary: inv.temporary,
-        url: `https://discord.gg/${inv.code}`,
-        uses: inv.uses,
-      };
-
-      invitesMap.set(invite.code, invite);
-    });
 
     if (guild.vanityURLCode) {
       const vanity = await guild.fetchVanityData();
       const language = module.exports.languageSelector(guild);
 
-      invitesMap.set(vanity.code, {
+      invites.set(vanity.code, {
         code: vanity.code,
         deletable: false,
         guild,
@@ -1013,32 +989,7 @@ module.exports = {
       });
     }
 
-    return invitesMap;
-  },
-  /**
-   * Returns a Guilds Bans mapped by ID of Ban Target
-   * @constructor
-   * @param {object} guild - The Guild to get invites from
-   */
-  getErisBans: async (guild) => {
-    const client = require('./DiscordClient');
-    const bans = await client.eris.getGuildBans(guild.id).catch(() => {});
-
-    if (!bans) return null;
-
-    const bansMap = new Discord.Collection();
-    bans.forEach((b) => {
-      const ban = {
-        guild,
-        user: client.users.cache.get(b.user.id),
-        partial: false,
-        reason: b.reason,
-      };
-
-      bansMap.set(b.user.id, ban);
-    });
-
-    return bansMap;
+    return invites;
   },
   /**
    * Converts custom Embed Data into a Discord Embed
