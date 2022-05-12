@@ -24,6 +24,7 @@ module.exports = {
     isWaiting.add(`${newMember.user.id}-${newMember.guild.id}`);
     jobs.scheduleJob(new Date(Date.now() + 2000), async () => {
       isWaiting.delete(`${newMember.user.id}-${newMember.guild.id}`);
+      newMember = await newMember.fetch().catch(() => {});
 
       const ress = await newMember.client.ch.query(
         'SELECT stillrunning FROM roleseparatorsettings WHERE guildid = $1;',

@@ -139,60 +139,57 @@ module.exports = {
         affectedNumber = affected;
       }
 
-      embed.addFields(
-        {
-          name: msg.lanSettings.active,
-          value: r.active
-            ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
-            : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`,
-          inline: false,
-        },
-        {
-          name:
-            msg.guild.members.cache.get(msg.client.user.id).roles.highest.position <= sep?.position
-              ? `${msg.client.textEmotes.warning} ${msg.language.permissions.error.role}`
-              : '\u200b',
-          value: '\u200b',
-          inline: false,
-        },
-        {
-          name: msg.lan.isvarying,
-          value: r.isvarying
-            ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
-            : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`,
-          inline: false,
-        },
-        {
-          name: '\u200b',
-          value: '\u200b',
-          inline: false,
-        },
-        {
-          name: msg.lan.separator,
-          value: r.separator ? `${sepMention}` : msg.language.none,
-          inline: false,
-        },
-        {
-          name: msg.lan.stoprole,
-          value: r.stoprole ? `${stopMention}` : msg.language.none,
-          inline: false,
-        },
-        {
-          name: msg.language.number,
-          value: !Number.isNaN(+r.id) ? `\`${r.id}\`` : msg.language.none,
-          inline: false,
-        },
-        {
-          name: '\u200b',
-          value: '\u200b',
-          inline: false,
-        },
-        {
-          name: `${msg.language.affected} ${affectedNumber} ${msg.language.roles}`,
-          value: `${affectedRoleText}\u200b`,
-          inline: false,
-        },
-      );
+      embed
+        .setDescription(
+          `**${affectedNumber} ${msg.language.roles} ${msg.language.affected}**\n${
+            `${affectedRoleText}`.length > 4000 ? msg.lan.roleCount : affectedRoleText
+          } \u200b`,
+        )
+        .addFields(
+          {
+            name: msg.lanSettings.active,
+            value: r.active
+              ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+              : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`,
+            inline: false,
+          },
+          {
+            name:
+              msg.guild.members.cache.get(msg.client.user.id).roles.highest.position <=
+              sep?.position
+                ? `${msg.client.textEmotes.warning} ${msg.language.permissions.error.role}`
+                : '\u200b',
+            value: '\u200b',
+            inline: false,
+          },
+          {
+            name: msg.lan.isvarying,
+            value: r.isvarying
+              ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+              : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`,
+            inline: false,
+          },
+          {
+            name: '\u200b',
+            value: '\u200b',
+            inline: false,
+          },
+          {
+            name: msg.lan.separator,
+            value: r.separator ? `${sepMention}` : msg.language.none,
+            inline: false,
+          },
+          {
+            name: msg.lan.stoprole,
+            value: r.stoprole ? `${stopMention}` : msg.language.none,
+            inline: false,
+          },
+          {
+            name: msg.language.number,
+            value: !Number.isNaN(+r.id) ? `\`${r.id}\`` : msg.language.none,
+            inline: false,
+          },
+        );
     } else {
       embed.addFields(
         {

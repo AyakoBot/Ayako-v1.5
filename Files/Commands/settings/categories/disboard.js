@@ -35,7 +35,14 @@ module.exports = {
       {
         name: msg.lan.channelid,
         value: r.channelid ? `<#${r.channelid}>` : msg.language.none,
-        inline: false,
+        inline: true,
+      },
+      {
+        name: msg.lan.deletereply,
+        value: r.deletereply
+          ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+          : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`,
+        inline: true,
       },
       {
         name: msg.lan.repeatreminder,
@@ -74,6 +81,10 @@ module.exports = {
       .setCustomId(msg.lan.edit.repeatreminder.name)
       .setLabel(msg.lan.repeatreminder)
       .setStyle(Discord.ButtonStyle.Secondary);
-    return [[active], [roles, users, channel], [repeatreminder]];
+    const deletereply = new Builders.UnsafeButtonBuilder()
+      .setCustomId(msg.lan.edit.deletereply.name)
+      .setLabel(msg.lan.deletereply)
+      .setStyle(r.active ? Discord.ButtonStyle.Primary : Discord.ButtonStyle.Secondary);
+    return [[active], [roles, users], [channel, repeatreminder, deletereply]];
   },
 };
