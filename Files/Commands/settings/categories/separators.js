@@ -8,6 +8,7 @@ module.exports = {
   finished: true,
   category: ['automation'],
   helpCategory: 'roles',
+  tutorial: 'https://youtu.be/yLKgn-Ecduc',
   mmrEmbed(msg, res) {
     const embed = new Builders.UnsafeEmbedBuilder();
     for (let i = 0; i < res.length; i += 1) {
