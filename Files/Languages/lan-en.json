@@ -2138,6 +2138,7 @@
       "author": "Ayako {{type}} Settings",
       "authorEdit": "[Edit Mode] Ayako {{type}} Settings",
       "active": "Active",
+      "tutorial": "For a Setup Guide, click here",
       "categories": {
         "auto-moderation": "Auto-Moderation",
         "automation": "Automation",
