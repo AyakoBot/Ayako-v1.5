@@ -13,7 +13,7 @@ const ChannelRules = require('./Other Client Files/Classes/ChannelRules');
 const Constants = require('./Other Client Files/Constants.json');
 
 const DiscordEpoch = 1420070400000;
-const acceptedErrorCodes = ['50001', '50007', '50013'];
+const acceptedErrorCodes = ['50001', '50007', '10062'];
 
 module.exports = {
   /**
@@ -61,13 +61,17 @@ module.exports = {
     if (typeof channel.send !== 'function') throw new Error('Invalid Channel');
 
     return channel.send(payload).catch((e) => {
-      if (acceptedErrorCodes.some((code) => String(e).includes(code))) return null;
+      if ([...acceptedErrorCodes, '50013'].some((code) => String(e).includes(code))) return null;
 
       if (String(e).includes('AbortError: The user aborted a request')) {
         return module.exports.send(payload);
       }
 
-      console.log(e, payload.content, payload.embeds);
+      console.log(
+        e,
+        payload.content,
+        payload.embeds?.map((em) => em.data),
+      );
       return null;
     });
   },
@@ -95,8 +99,23 @@ module.exports = {
     const m = await msg.reply(payload).catch((e) => {
       if (acceptedErrorCodes.some((code) => String(e).includes(code))) return null;
 
+      if (String(e).includes('50013')) {
+        return module.exports.send(msg.author, {
+          embeds: [
+            Builders.UnsafeEmbedBuilder()
+              .setAuthor({
+                name: msg.language.error,
+                iconURL: msg.client.objectEmotes.warning.link,
+                url: msg.client.constants.standard.invite,
+              })
+              .setColor(msg.client.constants.error)
+              .setDescription(msg.language.errors.sendMessage),
+          ],
+        });
+      }
+
       if (String(e).includes('AbortError: The user aborted a request')) {
-        return module.exports.reply(payload);
+        return module.exports.reply(msg, payload);
       }
 
       if (String(e).includes('50035')) {
@@ -199,7 +218,8 @@ module.exports = {
    * @param {string|object} log - The Log that will be logged to the Console and Error Channel.
    */
   logger: async (type, log) => {
-    console.error(type, log);
+    if (log) console.error(type, log);
+    else console.log(type);
   },
   /**
    * Prepares incoming URLs for Download, giving it its Destination Path.
@@ -951,7 +971,6 @@ module.exports = {
    * @param {object} guild - The Guild to get invites from
    */
   getAllInvites: async (guild) => {
-    const client = require('./DiscordClient');
     const invites = await guild.invites.fetch().catch(() => {});
 
     if (!invites) return null;
