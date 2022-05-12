@@ -16,113 +16,116 @@ module.exports = {
         wordText += wordArr[i] + new Array(22 - wordArr[i].length).join(' ');
       }
     } else wordText = msg.language.none;
-    const embed = new Builders.UnsafeEmbedBuilder().addFields(
-      {
-        name: msg.lanSettings.active,
-        value: `${
-          r.active
-            ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
-            : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`
-        }`,
-        inline: false,
-      },
-      {
-        name: msg.lan.words,
-        value: `${
+    const embed = new Builders.UnsafeEmbedBuilder()
+      .setDescription(
+        `**${msg.lan.words}**\n${
           r.words && r.words.length ? msg.client.ch.makeCodeBlock(wordText) : msg.language.none
         }`,
-        inline: false,
-      },
-      {
-        name: '\u200b',
-        value: '\u200b',
-        inline: false,
-      },
-      {
-        name: msg.lan.bpchannelid,
-        value: `${
-          r.bpchannelid && r.bpchannelid.length
-            ? r.bpchannelid.map((id) => ` <#${id}>`)
-            : msg.language.none
-        }`,
-        inline: false,
-      },
-      {
-        name: msg.lan.bpuserid,
-        value: `${
-          r.bpuserid && r.bpuserid.length ? r.bpuserid.map((id) => ` <@${id}>`) : msg.language.none
-        }`,
-        inline: false,
-      },
-      {
-        name: msg.lan.bproleid,
-        value: `${
-          r.bproleid && r.bproleid.length ? r.bproleid.map((id) => ` <@&${id}>`) : msg.language.none
-        }`,
-        inline: false,
-      },
-      {
-        name: '\u200b',
-        value: '\u200b',
-        inline: false,
-      },
-      {
-        name: msg.language.punishments,
-        value: '\u200b',
-        inline: false,
-      },
-      {
-        name: msg.lan.warntof,
-        value: `${
-          r.warntof
-            ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
-            : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`
-        }\n`,
-        inline: true,
-      },
-      {
-        name: msg.lan.mutetof,
-        value: `${
-          r.mutetof
-            ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
-            : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`
-        }`,
-        inline: true,
-      },
-      {
-        name: msg.lan.kicktof,
-        value: `${
-          r.kicktof
-            ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
-            : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`
-        }`,
-        inline: true,
-      },
-      {
-        name: msg.lan.bantof,
-        value: `${
-          r.bantof
-            ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
-            : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`
-        }`,
-        inline: true,
-      },
-      {
-        name: '\u200b',
-        value:
-          `${msg.client.ch.stp(msg.lan.warnafter, {
-            amount: r.warnafter ? r.warnafter : '--',
-          })}\n` +
-          `${msg.client.ch.stp(msg.lan.muteafter, {
-            amount: r.muteafter ? r.muteafter : '--',
-          })}\n` +
-          `${msg.client.ch.stp(msg.lan.kickafter, {
-            amount: r.kickafter ? r.kickafter : '--',
-          })}\n` +
-          `${msg.client.ch.stp(msg.lan.banafter, { amount: r.banafter ? r.banafter : '--' })}`,
-        inline: false,
-      },
-    );
+      )
+      .addFields(
+        {
+          name: msg.lanSettings.active,
+          value: `${
+            r.active
+              ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+              : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`
+          }`,
+          inline: false,
+        },
+        {
+          name: '\u200b',
+          value: '\u200b',
+          inline: false,
+        },
+        {
+          name: msg.lan.bpchannelid,
+          value: `${
+            r.bpchannelid && r.bpchannelid.length
+              ? r.bpchannelid.map((id) => ` <#${id}>`)
+              : msg.language.none
+          }`,
+          inline: false,
+        },
+        {
+          name: msg.lan.bpuserid,
+          value: `${
+            r.bpuserid && r.bpuserid.length
+              ? r.bpuserid.map((id) => ` <@${id}>`)
+              : msg.language.none
+          }`,
+          inline: false,
+        },
+        {
+          name: msg.lan.bproleid,
+          value: `${
+            r.bproleid && r.bproleid.length
+              ? r.bproleid.map((id) => ` <@&${id}>`)
+              : msg.language.none
+          }`,
+          inline: false,
+        },
+        {
+          name: '\u200b',
+          value: '\u200b',
+          inline: false,
+        },
+        {
+          name: msg.language.punishments,
+          value: '\u200b',
+          inline: false,
+        },
+        {
+          name: msg.lan.warntof,
+          value: `${
+            r.warntof
+              ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+              : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`
+          }\n`,
+          inline: true,
+        },
+        {
+          name: msg.lan.mutetof,
+          value: `${
+            r.mutetof
+              ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+              : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`
+          }`,
+          inline: true,
+        },
+        {
+          name: msg.lan.kicktof,
+          value: `${
+            r.kicktof
+              ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+              : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`
+          }`,
+          inline: true,
+        },
+        {
+          name: msg.lan.bantof,
+          value: `${
+            r.bantof
+              ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
+              : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`
+          }`,
+          inline: true,
+        },
+        {
+          name: '\u200b',
+          value:
+            `${msg.client.ch.stp(msg.lan.warnafter, {
+              amount: r.warnafter ? r.warnafter : '--',
+            })}\n` +
+            `${msg.client.ch.stp(msg.lan.muteafter, {
+              amount: r.muteafter ? r.muteafter : '--',
+            })}\n` +
+            `${msg.client.ch.stp(msg.lan.kickafter, {
+              amount: r.kickafter ? r.kickafter : '--',
+            })}\n` +
+            `${msg.client.ch.stp(msg.lan.banafter, { amount: r.banafter ? r.banafter : '--' })}`,
+          inline: false,
+        },
+      );
     return embed;
   },
   buttons(msg, r) {

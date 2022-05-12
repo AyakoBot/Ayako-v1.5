@@ -30,6 +30,7 @@ process.on('uncaughtException', (error) => {
 });
 process.on('promiseRejectionHandledWarning', () => {});
 
+/*
 client.rest.on('request', (request) => {
   require('./Files/Events/REST Events/request')(request);
 });
@@ -41,6 +42,7 @@ client.rest.on('response', (request, response) => {
 client.eris.on('rawREST', (response) => {
   require('./Files/Events/REST Events/response')(null, response);
 });
+*/
 
 client.rest.on('rateLimited', (rateLimitInfo) => {
   require('./Files/Events/REST Events/rateLimited')(rateLimitInfo);

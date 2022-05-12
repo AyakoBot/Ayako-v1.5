@@ -64,7 +64,7 @@ module.exports = {
             embed.setDescription(ch.stp(lan.descriptionBot, { user: entry.executor, bot: user }));
           } else embed.setDescription(ch.stp(lan.descriptionBotNoAudit, { bot: user }));
         } else {
-          const newInvites = null; //await client.ch.getErisInvites(guild);
+          const newInvites = await client.ch.getAllInvites(guild);
 
           let usedInvite;
           if (cachedInvites && newInvites) {
