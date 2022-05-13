@@ -1086,10 +1086,11 @@ module.exports = {
           ? mod(embedToUse.thumbnail.url, { [option[0]]: option[1] })
           : null;
 
-      embed.data.image =
-        embedToUse.image && embedToUse.image.url
-          ? mod(embedToUse.image.url, { [option[0]]: option[1] })
-          : null;
+      if (embedToUse.image && embedToUse.image.url) {
+        embed.data.image = {
+          url: mod(embedToUse.image.url, { [option[0]]: option[1] }),
+        };
+      }
 
       embed.data.timestamp = embedToUse.timestamp
         ? Number(mod(`${embedToUse.timestamp}`, { [option[0]]: option[1] }))
