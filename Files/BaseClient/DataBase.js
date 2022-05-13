@@ -5,7 +5,7 @@ const ch = require('./ClientHelper');
 const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
-  database: 'Ayako-v1.5',
+  database: 'Clone_DB',
   password: auth.pSQLpw,
   port: 5432,
 });
