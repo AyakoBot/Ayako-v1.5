@@ -107,11 +107,11 @@ const doPunishment = async (punishment, executor, target, reason, msg, r) => {
         if (button.user.id === msg.author.id) {
           if (button.customId === 'yes') {
             buttonsCollector.stop();
-            button.update({ components: [] }).catch(() => {});
+            button.client.ch.edit(button, { components: [] }).catch(() => {});
             resolve(true);
           } else if (button.customId === 'no') {
             buttonsCollector.stop();
-            button.update({ components: [] }).catch(() => {});
+            button.client.ch.edit(button, { components: [] }).catch(() => {});
             resolve(false);
           }
         } else msg.client.ch.notYours(button);

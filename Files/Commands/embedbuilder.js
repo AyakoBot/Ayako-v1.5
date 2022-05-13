@@ -20,9 +20,9 @@ module.exports = {
     const { embed, answer } = returned;
     if (embed) {
       if (answer && !answer.replied && !answer.deferred) {
-        answer.update({ embeds: [embed] });
+        answer.client.ch.edit(answer, { embeds: [embed] });
       } else if (msg.m) {
-        msg.m.edit({ embeds: [embed] });
+        msg.client.ch.edit(msg.m, { embeds: [embed] });
       } else {
         msg.channel.send({ embeds: [embed] });
       }
@@ -111,7 +111,7 @@ const replier = async ({ msg, answer }, { embeds, components, content, files }, 
       files,
     });
   } else if (msg.m) {
-    await msg.m.edit({
+    await msg.client.ch.edit(msg.m, {
       embeds,
       components,
       content,
@@ -1412,9 +1412,11 @@ const handleEdit = async (msg, answer, Objects) => {
               if (m.author.id !== msg.client.user.id) {
                 err = msg.language.commands.embedbuilder.notMine;
               } else {
-                m = await m.edit({ embeds: [Objects.embed], content: null }).catch((e) => {
-                  err = e;
-                });
+                m = await m.client.ch
+                  .edit(m, { embeds: [Objects.embed], content: null })
+                  .catch((e) => {
+                    err = e;
+                  });
               }
             } else {
               err = `${msg.language.commands.embedbuilder.notMsgLink}\n${msg.language.commands.embedbuilder.noAccess}`;

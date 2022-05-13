@@ -47,7 +47,7 @@ module.exports = async (cmd) => {
     updateEmbed(cmd, updatedGiveaway);
   }
 
-  cmd.reply({
+  cmd.client.ch.reply(cmd, {
     content: lan.success,
     ephemeral: true,
     components: cmd.client.ch.buttonRower([
@@ -152,7 +152,7 @@ const updateEmbed = async (cmd, giveaway) => {
     .setStyle(Discord.ButtonStyle.Success)
     .setEmoji(cmd.client.objectEmotes.gift);
 
-  message.edit({
+  message.client.ch.edit(message, {
     embeds: [embed],
     components: cmd.client.ch.buttonRower([[participateButton]]),
   });

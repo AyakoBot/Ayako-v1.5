@@ -12,8 +12,8 @@ module.exports = {
     if (msg.editedTimestamp) ping = m.createdTimestamp - msg.editedTimestamp;
     else ping = m.createdTimestamp - msg.createdTimestamp;
     const { heartbeat } = (await msg.client.ch.query('SELECT heartbeat FROM stats;')).rows[0];
-    m?.edit(`🏓 \n**Response Time:** ${ping}ms\n**Last Heartbeat:** ${heartbeat}ms`).catch(
-      () => {},
-    );
+    msg.client.ch
+      .edit(m, `🏓 \n**Response Time:** ${ping}ms\n**Last Heartbeat:** ${heartbeat}ms`)
+      .catch(() => {});
   },
 };

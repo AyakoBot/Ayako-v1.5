@@ -160,7 +160,7 @@ const switchMsgButtons = async (msg, oldRow, newRow) => {
     oldMessage.author &&
     oldMessage.author.id === msg.client.user.id
   ) {
-    oldMessage.edit({ components: [] }).catch(() => {});
+    msg.client.ch.edit(oldMessage, { components: [] });
   }
 
   const newRows = await getButtonRows(msg, oldRow);
@@ -209,7 +209,7 @@ const switchMsgButtons = async (msg, oldRow, newRow) => {
     embeds: message.embeds,
   };
 
-  message.edit(newMsg).catch(() => {});
+  msg.client.ch.edit(message, newMsg);
 };
 
 const getReactionRows = async (msg, r) => {

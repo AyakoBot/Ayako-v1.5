@@ -49,13 +49,13 @@ module.exports = {
 
           embed.setDescription(msg.client.ch.stp(lan.cleared, { user }));
           embed.setColor(con.success);
-          msg.m.edit({ embeds: [embed], components: [] }).catch(() => {});
+          msg.client.ch.edit(msg.m, { embeds: [embed], components: [] });
           log(msg, rows, user, lan, con);
           collector.stop();
         } else if (button.customId === 'no') {
           embed.setDescription(lan.fail);
           embed.setColor(con.fail);
-          msg.m.edit({ embeds: [embed], components: [] }).catch(() => {});
+          msg.client.ch.edit(msg.m, { embeds: [embed], components: [] });
           collector.stop();
         }
       } else msg.client.ch.notYours(button);
