@@ -391,7 +391,7 @@ const ccscam = async ({ msg, lan, linkObject, check, language }, res) => {
 
   if (check) embed.addFields({ name: lan.checking, value: linkObject.href });
 
-  msg.m = await client.ch.reply(msg, { embeds: [embed] }).catch(() => {});
+  msg.m = await client.ch.reply(msg, { embeds: [embed] });
   client.ch.send(client.channels.cache.get(client.constants.standard.trashLogChannel), {
     content: msg.url,
   });

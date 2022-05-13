@@ -12,7 +12,7 @@ module.exports = {
       maxLength: 3994,
     });
 
-    cmd.reply({
+    cmd.client.ch.reply(cmd, {
       embeds: [
         new Builders.UnsafeEmbedBuilder()
           .setColor(cmd.client.constants.standard.ephemeralColor)

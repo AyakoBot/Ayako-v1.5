@@ -201,10 +201,12 @@ module.exports = {
         })
         .catch(() => {});
     } else if (m) {
-      m.edit({
-        embeds,
-        components: msg.client.ch.buttonRower(components),
-      }).catch(() => {});
+      msg.client.ch
+        .edit(m, {
+          embeds,
+          components: msg.client.ch.buttonRower(components),
+        })
+        .catch(() => {});
     }
 
     if (components) {
@@ -506,7 +508,7 @@ const rolesHandler = async (interaction, msg, member) => {
       });
     }
 
-    interaction.reply({ embeds: [embed], ephemeral: true });
+    msg.client.ch.reply(interaction, { embeds: [embed], ephemeral: true });
     return;
   }
 
@@ -517,7 +519,7 @@ const rolesHandler = async (interaction, msg, member) => {
       .join('\n')}`,
   );
 
-  interaction.reply({ embeds: [embed], ephemeral: true });
+  msg.client.ch.reply(interaction, { embeds: [embed], ephemeral: true });
 };
 
 const basicPermsHandler = (interaction, msg, member) => {
@@ -572,7 +574,7 @@ const basicPermsHandler = (interaction, msg, member) => {
     embed.addFields({ name: `${name}`, value: ` ${perms.join('\n')}\u200b`, inline: false });
   });
 
-  interaction.reply({ embeds: [embed], ephemeral: true });
+  msg.client.ch.reply(interaction, { embeds: [embed], ephemeral: true });
 };
 
 const permsHandler = (interaction, msg, member) => {
@@ -673,7 +675,7 @@ const permsHandler = (interaction, msg, member) => {
     embed.addFields({ name: `${name}`, value: ` ${perms.join('\n')}\u200b`, inline: false });
   });
 
-  interaction.reply({ embeds: [embed], ephemeral: true });
+  msg.client.ch.reply(interaction, { embeds: [embed], ephemeral: true });
 };
 
 const getBotInfo = async (msg, bot) => {
@@ -699,7 +701,7 @@ const getBotInfo = async (msg, bot) => {
 };
 
 const decideUser = async (msg, users, m) => {
-  await m.edit({
+  await msg.client.ch.edit(m, {
     content: '\u200b',
     embeds: [],
     components: msg.client.ch.buttonRower(getUserComponents(msg, 1, users)),

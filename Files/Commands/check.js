@@ -33,7 +33,10 @@ module.exports = {
     const page = 1;
     const baseButtons = getBaseButtons(msg, null, allPunishments, page);
 
-    await m.edit({ embeds: [embed], components: msg.client.ch.buttonRower(baseButtons) });
+    await m.client.ch.edit(m, {
+      embeds: [embed],
+      components: msg.client.ch.buttonRower(baseButtons),
+    });
 
     const buttonsCollector = m.createMessageComponentCollector({ time: 60000 });
 
@@ -335,17 +338,18 @@ const handleInteractions = (buttonsCollector, msg, allPunishments, selected, pag
       case 'left': {
         page -= 1;
         const baseButtons = getBaseButtons(msg, selected, allPunishments, page);
-        await interaction
-          .update({ components: msg.client.ch.buttonRower(baseButtons) })
-          .catch(() => {});
+
+        await interaction.client.ch.edit(interaction, {
+          components: msg.client.ch.buttonRower(baseButtons),
+        });
         break;
       }
       case 'right': {
         page += 1;
         const baseButtons = getBaseButtons(msg, selected, allPunishments, page);
-        await interaction
-          .update({ components: msg.client.ch.buttonRower(baseButtons) })
-          .catch(() => {});
+        await interaction.client.ch.edit(interaction, {
+          components: msg.client.ch.buttonRower(baseButtons),
+        });
         break;
       }
       default: {
@@ -356,13 +360,13 @@ const handleInteractions = (buttonsCollector, msg, allPunishments, selected, pag
           );
 
           const embeds = getPunishmentEmbeds(punishmentsToDisplay, msg, name);
-          interaction.update({ embeds: [embed, ...embeds] });
+          interaction.client.ch.edit(interaction, { embeds: [embed, ...embeds] });
         } else {
           selected = interaction.customId;
           const baseButtons = getBaseButtons(msg, selected, allPunishments, page);
-          await interaction
-            .update({ components: msg.client.ch.buttonRower(baseButtons) })
-            .catch(() => {});
+          await interaction.client.ch.edit(interaction, {
+            components: msg.client.ch.buttonRower(baseButtons),
+          });
         }
         break;
       }

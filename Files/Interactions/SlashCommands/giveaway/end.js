@@ -141,7 +141,12 @@ const editGiveaway = async (msg, giveaway, lan, winners, isReroll) => {
   });
   embed.data.author.name += ` | ${lan.ended}`;
 
-  await msg.edit({ embeds: [embed], components: [] }).catch(() => {});
+  await msg.client.ch
+    .edit(msg, {
+      embeds: [embed],
+      components: [],
+    })
+    .catch(() => {});
 };
 
 const getWinners = async (guild, giveaway) => {

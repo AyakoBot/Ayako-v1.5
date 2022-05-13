@@ -40,7 +40,7 @@ const listReminders = async (msg, m) => {
   });
 
   if (m) {
-    await m.edit({
+    await msg.client.ch.edit(m, {
       embeds: [embed],
       components: msg.client.ch.buttonRower(components),
     });
@@ -253,13 +253,13 @@ const interactionHandler = (msg, m, allReminders) => {
       case 'next': {
         page += 1;
         const components = getComponents(msg, [...allReminders], null, page);
-        interaction.update({ components: msg.client.ch.buttonRower(components) }).catch(() => {});
+        msg.client.ch.edit(interaction, { components: msg.client.ch.buttonRower(components) });
         break;
       }
       case 'prev': {
         page -= 1;
         const components = getComponents(msg, [...allReminders], null, page);
-        interaction.update({ components: msg.client.ch.buttonRower(components) }).catch(() => {});
+        msg.client.ch.edit(interaction, { components: msg.client.ch.buttonRower(components) });
         break;
       }
       default: {
@@ -267,7 +267,7 @@ const interactionHandler = (msg, m, allReminders) => {
 
         components[2].forEach((c) => c.setDisabled(false));
         components[3].forEach((c) => c.setDisabled(false));
-        interaction.update({ components: msg.client.ch.buttonRower(components) }).catch(() => {});
+        msg.client.ch.edit(interaction, { components: msg.client.ch.buttonRower(components) });
         break;
       }
     }

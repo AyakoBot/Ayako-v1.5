@@ -91,7 +91,10 @@ const doUserSelection = async (msg, user, m) => {
   };
 
   if (m) {
-    await m.edit({ embeds: [getEmbed(msg, selection)], components: getComponents(msg, selection) });
+    await msg.client.ch.edit(m, {
+      embeds: [getEmbed(msg, selection)],
+      components: getComponents(msg, selection),
+    });
   } else {
     m = await msg.client.ch.reply(msg, {
       embeds: [getEmbed(msg, selection)],
@@ -114,7 +117,11 @@ const interactionHandler = async (msg, m, selection) => {
     switch (interaction.customId) {
       case 'cancel': {
         buttonsCollector.stop();
-        interaction.update({ content: msg.language.aborted, embeds: [], components: [] });
+        interaction.client.ch.edit(interaction, {
+          content: msg.language.aborted,
+          embeds: [],
+          components: [],
+        });
         break;
       }
       case 'done': {
@@ -435,7 +442,7 @@ const handleDone = async (answer, msg, m, selection) => {
       },
     );
 
-  answer.update({ embeds: [embed], components: [] }).catch(() => {});
+  answer.client.ch.edit(answer, { embeds: [embed], components: [] });
 };
 
 const getLevel = (y) =>

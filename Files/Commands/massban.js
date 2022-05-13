@@ -123,7 +123,9 @@ module.exports = {
         }
       });
       const editIntervalS = jobs.scheduleJob('*/5 * * * * *', () => {
-        if (descS.length !== uniqueUsers.length) msg.m.edit({ embeds: [replyEmbed] });
+        if (descS.length !== uniqueUsers.length) {
+          msg.client.ch.edit(msg.m, { embeds: [replyEmbed] });
+        }
       });
 
       const intervalS = jobs.scheduleJob('*/1 * * * * *', () => {
@@ -145,7 +147,7 @@ module.exports = {
           });
           jobs.scheduleJob(new Date(Date.now() + 2000), () => {
             if (!descS.length) msg.m.delete();
-            else msg.m.edit({ embeds: [replyEmbed] });
+            else msg.client.ch.edit(msg.m, { embeds: [replyEmbed] });
           });
         }
       });
@@ -173,7 +175,7 @@ module.exports = {
       });
 
       const editintervalF = jobs.scheduleJob('*/5 * * * * *', () => {
-        if (descF.length !== uniqueFails.length) m.edit({ embeds: [replyEmbed] });
+        if (descF.length !== uniqueFails.length) msg.client.ch.edit(m, { embeds: [replyEmbed] });
       });
 
       const intervalF = jobs.scheduleJob('*/1 * * * * *', () => {
@@ -197,7 +199,7 @@ module.exports = {
           });
           jobs.scheduleJob(new Date(Date.now() + 2000), () => {
             if (!descF.length) m.delete();
-            else m.edit({ embeds: [replyEmbed] });
+            else msg.client.ch.edit(m, { embeds: [replyEmbed] });
           });
         }
       });

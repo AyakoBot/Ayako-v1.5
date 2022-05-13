@@ -35,7 +35,7 @@ module.exports = {
     const embed = new Builders.UnsafeEmbedBuilder(cmd.message.embeds[0].data).setTitle(
       `${giveaway.participants.length} ${lan.participants}`,
     );
-    await cmd.message.edit({ embeds: [embed] }).catch(() => {});
+    await cmd.client.ch.edit(cmd.message, { embeds: [embed] });
 
     await cmd.client.ch.query(
       `UPDATE giveaways SET participants = $1 WHERE msgid = $2 AND guildid = $3;`,

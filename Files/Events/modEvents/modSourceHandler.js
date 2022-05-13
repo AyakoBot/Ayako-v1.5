@@ -22,7 +22,7 @@ module.exports = async (msg, embed) => {
           embed.data.fields = [];
 
           jobs.scheduleJob(new Date(Date.now() + minimizeTimeout), () => {
-            msg.m.edit({ embeds: [embed] }).catch(() => {});
+            msg.client.ch.edit(msg.m, { embeds: [embed] });
           });
         }
 
