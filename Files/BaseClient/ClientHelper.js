@@ -99,6 +99,10 @@ module.exports = {
     const m = await msg.reply(payload).catch((e) => {
       if (acceptedErrorCodes.some((code) => String(e).includes(code))) return null;
 
+      if (String(e).includes('10062')) {
+        return module.exports.reply(msg.message, payload, timeout);
+      }
+
       if (String(e).includes('50013')) {
         return module.exports.send(msg.author, {
           embeds: [
@@ -134,6 +138,14 @@ module.exports = {
     deleteCommandHandler(msg, m);
 
     return m;
+  },
+  edit: async (msg, payload) => {
+    if (!msg) return null;
+
+    if (msg.message && msg.isRepliable() && !msg.replied) {
+      return msg.update(payload).catch(() => module.exports.edit(msg.message, payload));
+    }
+    return msg.edit(payload).catch(() => module.exports.edit(msg.message, payload));
   },
   /**
    * STP (String Template Replacer)
@@ -836,7 +848,7 @@ module.exports = {
       })
       .setColor(Constants.error)
       .setDescription(language.notYours);
-    interaction.reply({ embeds: [embed], ephemeral: true }).catch(() => {});
+    module.exports.reply(interaction, { embeds: [embed], ephemeral: true });
   },
   /**
    * Edits a Message to display a "time has run out" Error.
@@ -849,8 +861,8 @@ module.exports = {
       .setColor(Constants.error);
 
     if (m) {
-      m.edit({ embeds: [embed], components: [] }).catch(() => {});
-    } else msg.m.edit({ embeds: [embed], components: [] }).catch(() => {});
+      module.exports.edit(m, { embeds: [embed], components: [] });
+    } else module.exports.edit(msg.m, { embeds: [embed], components: [] });
     return embed;
   },
   /**
@@ -1133,10 +1145,10 @@ module.exports = {
       .setDescription(content);
 
     if (msg.isRepliable && msg.isRepliable()) {
-      return msg.reply({ embeds: [embed], ephemeral: true });
+      return module.exports.reply.reply(msg, { embeds: [embed], ephemeral: true });
     }
 
-    if (m) return m.edit({ embeds: [embed] }).catch(() => {});
+    if (m) return module.exports.edit(m, { embeds: [embed] });
     return module.exports.reply(msg, { embeds: [embed] }, timeout);
   },
   permError: (msg, bits, me) => {
@@ -1166,7 +1178,7 @@ module.exports = {
       });
 
     if (msg.isRepliable && msg.isRepliable()) {
-      return msg.reply({ embeds: [embed], ephemeral: true });
+      return module.exports.reply(msg, { embeds: [embed], ephemeral: true });
     }
 
     return module.exports.reply(msg, { embeds: [embed] });
@@ -1254,7 +1266,7 @@ const deleteCommandHandler = async (msg, m) => {
 };
 
 const getDeleteRes = async (msg) => {
-  const res = await msg.client.ch.query(
+  const res = await module.exports.query(
     `SELECT * FROM deletecommands WHERE guildid = $1 AND active = true;`,
     [msg.guild.id],
   );

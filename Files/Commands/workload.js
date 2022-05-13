@@ -49,7 +49,7 @@ module.exports = {
       );
     embed.description = null;
 
-    m.edit({ embeds: [embed] }).catch(() => {});
+    msg.client.ch.edit(m, { embeds: [embed] });
   },
 };
 

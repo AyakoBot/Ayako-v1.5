@@ -24,7 +24,7 @@ module.exports = {
 
     const { finished, m } = returned;
     if (!finished) {
-      m.update({ content: msg.language.aborted, embeds: [], components: [] }).catch(() => {});
+      m.client.ch.edit(m, { content: msg.language.aborted, embeds: [], components: [] });
       return;
     }
 
@@ -49,7 +49,7 @@ module.exports = {
         url: msg.client.constants.standard.invite,
       });
 
-    m.update({ embeds: [embed], components: [] }).catch(() => {});
+    m.client.ch.edit(m, { embeds: [embed], components: [] });
   },
 };
 

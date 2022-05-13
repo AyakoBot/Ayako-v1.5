@@ -87,8 +87,8 @@ module.exports = {
         })
         .catch(() => {});
     } else if (cmd.m) {
-      await cmd.m
-        .edit({
+      await cmd.client.ch
+        .edit(cmd.m, {
           embeds: [embed],
           components: cmd.client.ch.buttonRower([regenerate]),
           files: [file],
@@ -180,8 +180,8 @@ module.exports = {
           `${buttonsCollector.options.message.channelId.id}-${cmd.guild.id}`,
         );
         if (cmd.m) await cmd.m.removeAttachments().catch(() => {});
-        cmd.m
-          .edit({
+        cmd.client.ch
+          .edit(cmd.m, {
             embeds: [],
             components: [],
             content: `${cmd.client.ch.stp(lan.timeError, {

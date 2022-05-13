@@ -90,8 +90,8 @@ const policyReminder = async (member) => {
   const m = await member.user
     .send({ embeds: [embed], content: 'Ayako Terms and Privacy Notice' })
     .catch(() => {});
-  m?.edit({
-    embed,
+  member.client.ch.edit(m, {
+    embeds: [embed],
     content: 'This Reminder will only be sent to you __once__\nhttps://discord.gg/GNpcspBbDr',
   });
 
