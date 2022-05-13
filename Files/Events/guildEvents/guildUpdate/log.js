@@ -29,12 +29,12 @@ module.exports = async (oldGuild, newGuild) => {
       if (oldGuild.available === false && newGuild.available === true) {
         oldGuild.change.push('available');
         ch.query(
-          `UPDATE antispamsettings SET forceDisabled = false WHERE guildid = '${newGuild.id}';`,
+          `UPDATE antispamsettings SET forcedisabled = false WHERE guildid = '${newGuild.id}';`,
         );
         embed.setDescription(lan.antispam);
       } else if (oldGuild.available === true && newGuild.available === false) {
         return ch.query(
-          `UPDATE antispamsettings SET forceDisabled = true WHERE guildid = '${newGuild.id}';`,
+          `UPDATE antispamsettings SET forcedisabled = true WHERE guildid = '${newGuild.id}';`,
         );
       }
       if (oldGuild.name !== newGuild.name) {
