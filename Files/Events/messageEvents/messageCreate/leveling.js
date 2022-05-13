@@ -558,7 +558,9 @@ const infoEmbed = (msg, reactions, language) => {
   const embed = new Builders.UnsafeEmbedBuilder()
     .setColor(msg.client.ch.colorSelector(msg.guild.me))
     .setDescription(
-      msg.client.ch.stp(language.leveling.description, { reactions: reactions.join('') }),
+      msg.client.ch.stp(language.leveling.description, {
+        reactions: reactions.map((r) => msg.client.emojis.cache.get(r) || r).join(''),
+      }),
     );
 
   msg.client.ch.reply(msg, { embeds: [embed] }).then((m) => {
