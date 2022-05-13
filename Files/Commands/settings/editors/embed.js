@@ -97,9 +97,11 @@ module.exports = {
       .addOptions(
         ...(Objects.take.length
           ? Objects.take
-          : new Builders.UnsafeSelectMenuOptionBuilder()
-              .setLabel('placeholder')
-              .setValue('placeholder')),
+          : [
+              new Builders.UnsafeSelectMenuOptionBuilder()
+                .setLabel('placeholder')
+                .setValue('placeholder'),
+            ]),
       )
       .setDisabled(!Objects.take.length)
       .setMinValues(1)
