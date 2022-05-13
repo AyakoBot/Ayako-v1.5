@@ -963,8 +963,15 @@ const singleRowEdit = async (msgData, resData, embed, comesFromMMR) => {
     url: msg.client.constants.standard.invite,
   });
 
-  if (msg.file.tutorial && msg.file.setupRequired) {
-    embed.setDescription(`[${msg.lanSettings.tutorial}](${msg.file.tutorial})`);
+  if (
+    msg.file.tutorial &&
+    (msg.file.setupRequired || typeof msg.file.setupRequired !== 'boolean')
+  ) {
+    embed.setDescription(
+      `[${msg.file.tutorialNote ? msg.lan.tutorialNote : msg.lanSettings.tutorial}](${
+        msg.file.tutorial
+      })`,
+    );
   }
 
   if (embed2) await replier({ msg, answer }, { embeds: [embed2, embed], rawButtons }, 9);

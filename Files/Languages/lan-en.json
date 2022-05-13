@@ -2417,6 +2417,7 @@
         "pingroles": "Ping Roles",
         "pingusers": "Ping Users",
         "embed": "Welcome Embed",
+        "tutorialNote": "For a Guide how to restore your old Welcome Embed, Click Here",
         "options": {
           "member": "a @Mention of the Member who joined",
           "username": "the Username of the joined Member",
