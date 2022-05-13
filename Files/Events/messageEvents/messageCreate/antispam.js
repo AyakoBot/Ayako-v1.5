@@ -32,7 +32,7 @@ module.exports = {
     let guildSettings;
 
     const res = await msg.client.ch.query(
-      'SELECT * FROM antispamsettings WHERE guildid = $1 AND active = true;',
+      'SELECT * FROM antispamsettings WHERE guildid = $1 AND active = true AND forcedisabled = false;',
       [msg.guild.id],
     );
 
