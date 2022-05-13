@@ -414,7 +414,7 @@
       "reason": "Automatically Un-Muted"
     },
     "disboard": {
-      "desc": "You can now Bump this Server again!\n\n`/bump`",
+      "desc": "You can now Bump this Server again!\n\nPlease type `/bump`",
       "title": "Ayako DISBOARD Bump Reminder"
     },
     "reminder": {
@@ -4009,7 +4009,7 @@
   },
   "leveling": {
     "author": "Welcome {{member.user.tag}} to {{member.guild.name}}",
-    "description": "On this Server, Level-Ups are indicated by reactions to your Message\nThe current Reactions are: {{reactions}}"
+    "description": "On this Server, Level-Ups are indicated by Reactions on your Message\nThe current Reactions are: {{reactions}}"
   },
   "welcome": {
     "author": "Welcome {{member.user.tag}} to {{member.guild.name}} <:AMayakowave:924071188957913108>"
