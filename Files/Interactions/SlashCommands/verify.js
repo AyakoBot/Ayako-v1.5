@@ -179,7 +179,7 @@ module.exports = {
         cmd.client.verificationCodes.delete(
           `${buttonsCollector.options.message.channelId.id}-${cmd.guild.id}`,
         );
-        if (cmd.m) await cmd.m.removeAttachments();
+        if (cmd.m) await cmd.m.removeAttachments().catch(() => {});
         cmd.m
           .edit({
             embeds: [],
