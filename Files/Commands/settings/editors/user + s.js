@@ -18,7 +18,7 @@ module.exports = {
       const embed = new Builders.UnsafeEmbedBuilder()
         .setColor(msg.client.constants.error)
         .setDescription(`${lan}\n${text}`);
-      message.reply({ embeds: [embed], ephemeral: true });
+      msg.client.ch.reply(message, { embeds: [embed], ephemeral: true });
     };
 
     const args = message.content

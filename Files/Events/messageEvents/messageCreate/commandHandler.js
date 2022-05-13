@@ -318,11 +318,13 @@ const onCooldown = (msg) => {
     .then((m) => {
       if (!usedEmote) {
         jobs.scheduleJob(new Date(Date.now() + (timeLeft - 60000)), () => {
-          m.edit({
-            content: msg.client.ch.stp(msg.language.commands.commandHandler.pleaseWait, {
-              time: msg.client.textEmotes.timers[60],
-            }),
-          }).catch(() => {});
+          msg.client.ch
+            .edit(m, {
+              content: msg.client.ch.stp(msg.language.commands.commandHandler.pleaseWait, {
+                time: msg.client.textEmotes.timers[60],
+              }),
+            })
+            .catch(() => {});
         });
       }
 

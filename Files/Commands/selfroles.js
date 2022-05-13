@@ -225,8 +225,8 @@ module.exports = {
       const embed = getRoleUpdateEmbed();
       const currentRows = getComponents();
 
-      clickButton.reply({ embeds: [replyEmbed], ephemeral: true });
-      msg.m.edit({ embeds: [embed], components: currentRows });
+      msg.client.ch.reply(clickButton, { embeds: [replyEmbed], ephemeral: true });
+      msg.client.ch.edit(msg.m, { embeds: [embed], components: currentRows });
 
       return null;
     };
@@ -398,10 +398,11 @@ module.exports = {
     embed.setDescription(`${msg.language.page}: \`1/${Math.ceil(Data.cOptions.length / 25)}\``);
 
     if (answer) {
-      await answer.update({ embeds: [embed], components: rows });
+      await answer.client.ch.edit(answer, { embeds: [embed], components: rows });
       msg.m = answer.message;
-    } else if (msg.m) msg.m = await msg.m.edit({ embeds: [embed], components: rows });
-    else msg.m = await msg.client.ch.reply(msg, { embeds: [embed], components: rows });
+    } else if (msg.m) {
+      msg.m = await msg.client.ch.edit(msg.m, { embeds: [embed], components: rows });
+    } else msg.m = await msg.client.ch.reply(msg, { embeds: [embed], components: rows });
 
     const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
     buttonsCollector.on('collect', async (clickButton) => {
@@ -437,7 +438,7 @@ module.exports = {
             this.execute(msg, clickButton);
           }
         }
-        if (responseBody) clickButton.update(responseBody);
+        if (responseBody) clickButton.client.ch.edit(clickButton, responseBody);
         buttonsCollector.resetTimer();
       } else msg.client.ch.notYours(clickButton);
     });

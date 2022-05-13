@@ -373,10 +373,10 @@ module.exports = {
             .addFields({ name: 'Current Participants:', value: participants });
           if (m.embeds[0].fields[1]) {
             if (`${m.embeds[0].fields[2].value}` !== `${participants}`) {
-              m.edit(e);
+              m.client.ch.edit(m, { embeds: [e] });
             }
           } else {
-            m.edit(e);
+            m.client.ch.edit(m, { embeds: [e] });
           }
         });
       }

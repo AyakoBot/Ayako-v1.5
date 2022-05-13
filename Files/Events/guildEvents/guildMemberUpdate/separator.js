@@ -81,7 +81,7 @@ module.exports = {
           url: msg.client.constants.standard.invite,
         })
         .setDescription(msg.lan.edit.oneTimeRunner.timeout);
-      msg.m.edit({ embeds: [embed], components: [] }).catch(() => {});
+      msg.client.ch.edit(msg.m, { embeds: [embed], components: [] });
       msg.client.ch.query(
         'UPDATE roleseparatorsettings SET stillrunning = $2, duration = $3, startat = $4 WHERE guildid = $1;',
         [msg.guild.id, false, null, null],
@@ -97,7 +97,7 @@ module.exports = {
             url: msg.client.constants.standard.invite,
           })
           .setDescription(msg.lan.edit.oneTimeRunner.time);
-        msg.m.edit({ embeds: [embed], components: [] }).catch(() => {});
+        msg.client.ch.edit(msg.m, { embeds: [embed], components: [] });
       } else {
         embed
           .setAuthor({
@@ -106,7 +106,7 @@ module.exports = {
             url: msg.client.constants.standard.invite,
           })
           .setDescription(msg.lan.edit.oneTimeRunner.stillrunning);
-        msg.m.edit({ embeds: [embed], components: [] }).catch(() => {});
+        msg.client.ch.edit(msg.m, { embeds: [embed], components: [] });
       }
     } else {
       membersWithRoles.forEach((m, index) => {
@@ -148,7 +148,7 @@ module.exports = {
             finishTime: `<t:${finishTime}:F> (<t:${finishTime}:R>)`,
           }),
         );
-      msg.m.edit({ embeds: [embed], components: [] }).catch(() => {});
+      msg.client.ch.edit(msg.m, { embeds: [embed], components: [] });
     }
     msg.client.ch.query(
       'UPDATE roleseparatorsettings SET stillrunning = $1, duration = $3, startat = $4, channelid = $5, messageid = $6 WHERE guildid = $2;',
@@ -269,7 +269,7 @@ module.exports = {
                   url: msg.client.constants.standard.invite,
                 })
                 .setDescription(msg.lan.edit.oneTimeRunner.finished);
-              msg.m.edit({ embeds: [embed], components: [] }).catch(() => {});
+              msg.client.ch.edit(msg.m, { embeds: [embed], components: [] });
               msg.client.ch.query(
                 'UPDATE roleseparatorsettings SET stillrunning = $1, duration = $3, startat = $4 WHERE guildid = $2;',
                 [false, msg.guild.id, null, null],
@@ -294,7 +294,7 @@ module.exports = {
           url: msg.client.constants.standard.invite,
         })
         .setDescription(msg.lan.edit.oneTimeRunner.finished);
-      msg.m.edit({ embeds: [embed], components: [] }).catch(() => {});
+      msg.client.ch.edit(msg.m, { embeds: [embed], components: [] });
       msg.client.ch.query(
         'UPDATE roleseparatorsettings SET stillrunning = $1, duration = $3, startat = $4 WHERE guildid = $2;',
         [false, msg.guild.id, null, null],

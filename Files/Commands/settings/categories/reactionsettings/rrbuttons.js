@@ -197,7 +197,7 @@ const handleNewRes = async (msg, r) => {
     embeds: message.embeds,
   };
 
-  message.edit(newMsg).catch(() => {});
+  msg.client.ch.edit(message, newMsg);
 };
 
 const handleOldRes = async (oldRes, newRes, msg) => {
@@ -206,6 +206,6 @@ const handleOldRes = async (oldRes, newRes, msg) => {
   if (oR.messagelink !== nR.messagelink) {
     const [, , message] = await linkToIDs(msg, oR.messagelink);
     if (!message || !message.author || message.author.id !== msg.client.user.id) return;
-    message.edit({ components: [] }).catch(() => {});
+    msg.client.ch.edit(message, { components: [] });
   }
 };

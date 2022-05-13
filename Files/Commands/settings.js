@@ -237,7 +237,7 @@ module.exports = {
       });
       buttonsCollector.on('end', (collected, reason) => {
         if (reason === 'time') {
-          msg.m.edit({ embeds: [embed], components: [] }).catch(() => {});
+          msg.client.ch.edit(msg.m, { embeds: [embed], components: [] });
           msg.m.reactions.removeAll().catch(() => {});
         }
       });
@@ -542,7 +542,7 @@ const replier = async (msgData, sendData, originNumber) => {
       components: buttons,
     });
   } else if (msg.m) {
-    await msg.m.edit({
+    await msg.client.ch.edit(msg.m, {
       embeds,
       components: buttons,
     });

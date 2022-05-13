@@ -7,7 +7,7 @@ module.exports = {
   category: ['none'],
   helpCategory: 'util',
   displayEmbed(msg, r) {
-    const small = `${msg.client.textEmotes.small1}${msg.client.textEmotes.small2} ${msg.language.small}`;
+    const small = `${msg.client.textEmotes.small2}${msg.client.textEmotes.small1} ${msg.language.small}`;
     const big = `${msg.client.textEmotes.big} ${msg.language.big}`;
     if (r.prefix && r.prefix.startsWith('{"') && r.prefix.endsWith('"}')) {
       r.prefix = r.prefix.slice(2, r.prefix.length - 2);

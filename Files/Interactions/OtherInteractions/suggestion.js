@@ -111,7 +111,7 @@ const handleVote = async (cmd, isUp) => {
     }
   }
 
-  cmd.reply({ content: action, ephemeral: true }).catch(() => {});
+  cmd.client.ch.reply(cmd, { content: action, ephemeral: true });
 
   cmd.client.ch.query(
     `UPDATE suggestionvotes SET upvoted = $1, downvoted = $2 WHERE guildid = $3 AND msgid = $4;`,
@@ -134,7 +134,7 @@ const updateVoteCount = (cmd, votes) => {
   const embeds = [embed];
   if (cmd.message.embeds[1]) embeds.push(cmd.message.embeds[1]);
 
-  cmd.message.edit({ embeds }).catch(() => {});
+  cmd.client.ch.edit(cmd.message, { embeds });
 };
 
 const handleViewVotes = async (cmd) => {
@@ -174,7 +174,7 @@ const handleViewVotes = async (cmd) => {
       ),
   ];
 
-  cmd.client.ch.reply(cmd, { embeds, ephemeral: true }).catch(() => {});
+  cmd.client.ch.reply(cmd, { embeds, ephemeral: true });
 };
 
 const handleApproverVote = async (cmd, isApproved) => {
@@ -259,8 +259,8 @@ const handleApproverVote = async (cmd, isApproved) => {
     });
   }
 
-  await cmd.message
-    .edit({ components: [], embeds: [cmd.message.embeds[0], embed] })
+  await cmd.client.ch
+    .edit(cmd.message, { components: [], embeds: [cmd.message.embeds[0], embed] })
     .catch(() => {});
 
   await submit.update({
@@ -296,10 +296,10 @@ const handleDelete = async (cmd) => {
         buttonsCollector.stop();
 
         if (i.customId === 'yes') {
-          i.update({ content: cmd.language.suggestion.deleted, components: [] });
+          i.client.ch.edit(i, { content: cmd.language.suggestion.deleted, components: [] });
           resolve(true);
         } else {
-          i.update({ components: [], content: cmd.language.aborted });
+          i.client.ch.edit(i, { components: [], content: cmd.language.aborted });
           resolve(false);
         }
       });
@@ -361,7 +361,7 @@ const handleEdit = async (cmd) => {
   const embeds = [embed];
   if (cmd.message.embeds[1]) embeds.push(cmd.message.embeds[1]);
 
-  cmd.message.edit({ embeds }).catch(() => {});
+  cmd.client.ch.edit(cmd.message, { embeds });
 };
 
 const getEditModal = (cmd) =>

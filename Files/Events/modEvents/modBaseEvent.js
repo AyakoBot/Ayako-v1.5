@@ -20,7 +20,7 @@ module.exports = async (args, type) => {
     embed = loadingEmbed(mExistedPreviously, lan, con, args);
 
     if (msg && mExistedPreviously && msg.m.id) {
-      await msg.m.edit({ embeds: [embed] }).catch(() => {});
+      await msg.client.ch.edit(msg.m, { embeds: [embed] });
     } else if (msg) msg.m = await args.executor.client.ch.reply(msg, { embeds: [embed] });
 
     const targetMember = await guild?.members.fetch(target.id).catch(() => {});
@@ -127,7 +127,9 @@ const declareSuccess = async (embed, mExistedPreviously, lan, args) => {
     );
   }
 
-  if (args.msg.m) await args.msg.m.edit({ embeds: [embed] }).catch(() => {});
+  if (args.msg.m) {
+    await args.executor.client.ch.edit(args.msg.m, { embeds: [embed] });
+  }
 };
 
 const errorEmbed = async (embed, lan, mExistedPreviously, dm, err, args) => {
@@ -164,7 +166,9 @@ const errorEmbed = async (embed, lan, mExistedPreviously, dm, err, args) => {
     deleter(args);
   }
 
-  if (args.msg.m) await args.msg.m.edit({ embeds: [embed] }).catch(() => {});
+  if (args.msg.m) {
+    await args.executor.client.ch.edit(args.msg.m, { embeds: [embed] });
+  }
 };
 
 const logEmbed = async (lan, language, con, reason, args) => {
@@ -279,7 +283,7 @@ const roleCheck = async (embed, mExistedPreviously, lan, targetMember, executing
     deleter(args);
   }
 
-  await args.msg.m.edit({ embeds: [embed] }).catch(() => {});
+  await args.executor.client.ch.edit(args.msg.m, { embeds: [embed] });
   return false;
 };
 
@@ -314,8 +318,8 @@ const checkSelfPunish = async (
     deleter(args);
   }
 
-  if (mExistedPreviously) {
-    if (args.msg.m) await args.msg.m.edit({ embeds: [embed] }).catch(() => {});
+  if (mExistedPreviously && args.msg.m) {
+    await args.executor.client.ch.edit(args.msg.m, { embeds: [embed] });
   }
   return true;
 };
@@ -344,7 +348,7 @@ const checkMePunish = async (embed, mExistedPreviously, lan, targetMember, args)
     deleter(args);
   }
 
-  if (args.msg.m) await args.msg.m.edit({ embeds: [embed] });
+  if (args.msg.m) await args.executor.client.ch.edit(args.msg.m, { embeds: [embed] });
   return true;
 };
 
@@ -433,7 +437,7 @@ const checkPunishable = async (
     deleter(args);
   }
 
-  if (args.msg.m) await args.msg.m.edit({ embeds: [embed] });
+  if (args.msg.m) await args.executor.client.ch.edit(args.msg.m, { embeds: [embed] });
   return false;
 };
 
@@ -574,7 +578,7 @@ const checkActionTaken = async (
       deleter(args);
     }
 
-    if (args.msg.m) await args.msg.m.edit({ embeds: [embed] });
+    if (args.msg.m) await args.executor.client.ch.edit(args.msg.m, { embeds: [embed] });
     return true;
   }
 

@@ -70,7 +70,7 @@ module.exports = {
       [msg.guild.id, reply.id, msg.author.id, []],
     );
 
-    m.edit({
+    msg.client.ch.edit(m, {
       embeds: [
         new Builders.UnsafeEmbedBuilder()
           .setDescription(msg.lan.sentSuccess)
@@ -184,7 +184,9 @@ const areYouSure = async (msg, m, embed) => {
     ],
   ]);
 
-  await m.edit({ content: msg.lan.sure, embeds: [embed], components: buttons }).catch(() => {});
+  await msg.client.ch
+    .edit(m, { content: msg.lan.sure, embeds: [embed], components: buttons })
+    .catch(() => {});
   const buttonsCollector = m.createMessageComponentCollector({ time: 60000 });
 
   return new Promise((resolve) => {
