@@ -7,6 +7,8 @@ module.exports = {
   finished: true,
   category: ['automation'],
   helpCategory: 'util',
+  tutorial: 'https://youtu.be/NysN4BjXhA4',
+  tutorialNote: true,
   async displayEmbed(msg, r) {
     const customEmbed = await embedName(msg, r);
 
