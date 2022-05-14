@@ -21,7 +21,7 @@ module.exports = {
 
     if (row.bpchannelid?.includes(msg.channel.id)) return;
     if (row.bpuserid?.includes(msg.author.id)) return;
-    if (msg.member.roles.cache.some((r) => row.bproleid?.includes(r.id))) return;
+    if (msg.member?.roles.cache.some((r) => row.bproleid?.includes(r.id))) return;
     if (!row.words) return;
 
     const blwords = row.words;
