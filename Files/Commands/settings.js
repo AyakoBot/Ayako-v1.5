@@ -537,7 +537,7 @@ const replier = async (msgData, sendData, originNumber) => {
   }
 
   if (answer && !answer.replied && !manualReply) {
-    await answer.update({
+    await msg.client.ch.edit(answer, {
       embeds,
       components: buttons,
     });

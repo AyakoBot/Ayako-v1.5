@@ -27,7 +27,7 @@ module.exports = {
 
     const embed = new Builders.UnsafeEmbedBuilder(msg.embeds[0]);
 
-    cmd.update({
+    cmd.client.ch.edit(cmd, {
       embeds: [embed],
       components: cmd.client.ch.buttonRower([vote, disable]),
     });
