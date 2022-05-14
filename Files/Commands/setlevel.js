@@ -133,8 +133,8 @@ const interactionHandler = async (msg, m, selection) => {
         selection.newLvl -= Number(`1${'0'.repeat(selection.lvlZeros)}`);
         buttonsCollector.resetTimer();
         doMath(selection, 'lvl');
-        interaction
-          .update({
+        msg.client.ch
+          .edit(interaction, {
             embeds: [getEmbed(msg, selection)],
             components: getComponents(msg, selection),
           })
@@ -145,8 +145,8 @@ const interactionHandler = async (msg, m, selection) => {
         selection.newLvl += Number(`1${'0'.repeat(selection.lvlZeros)}`);
         buttonsCollector.resetTimer();
         doMath(selection, 'lvl');
-        interaction
-          .update({
+        msg.client.ch
+          .edit(interaction, {
             embeds: [getEmbed(msg, selection)],
             components: getComponents(msg, selection),
           })
@@ -157,8 +157,8 @@ const interactionHandler = async (msg, m, selection) => {
         selection.newXP -= Number(`1${'0'.repeat(selection.xpZeros)}`);
         buttonsCollector.resetTimer();
         doMath(selection, 'xp');
-        interaction
-          .update({
+        msg.client.ch
+          .edit(interaction, {
             embeds: [getEmbed(msg, selection)],
             components: getComponents(msg, selection),
           })
@@ -169,8 +169,8 @@ const interactionHandler = async (msg, m, selection) => {
         selection.newXP += Number(`1${'0'.repeat(selection.xpZeros)}`);
         buttonsCollector.resetTimer();
         doMath(selection, 'xp');
-        interaction
-          .update({
+        msg.client.ch
+          .edit(interaction, {
             embeds: [getEmbed(msg, selection)],
             components: getComponents(msg, selection),
           })
@@ -181,8 +181,8 @@ const interactionHandler = async (msg, m, selection) => {
         selection.newXP = selection.curXP;
         buttonsCollector.resetTimer();
         doMath(selection, 'xp');
-        interaction
-          .update({
+        msg.client.ch
+          .edit(interaction, {
             embeds: [getEmbed(msg, selection)],
             components: getComponents(msg, selection),
           })
@@ -193,8 +193,8 @@ const interactionHandler = async (msg, m, selection) => {
         selection.newLvl = selection.curLvl;
         buttonsCollector.resetTimer();
         doMath(selection, 'lvl');
-        interaction
-          .update({
+        msg.client.ch
+          .edit(interaction, {
             embeds: [getEmbed(msg, selection)],
             components: getComponents(msg, selection),
           })
@@ -204,8 +204,8 @@ const interactionHandler = async (msg, m, selection) => {
       case 'addZeroXP': {
         selection.xpZeros += 1;
         buttonsCollector.resetTimer();
-        interaction
-          .update({
+        msg.client.ch
+          .edit(interaction, {
             embeds: [getEmbed(msg, selection)],
             components: getComponents(msg, selection),
           })
@@ -215,8 +215,8 @@ const interactionHandler = async (msg, m, selection) => {
       case 'delZeroXP': {
         selection.xpZeros -= 1;
         buttonsCollector.resetTimer();
-        interaction
-          .update({
+        msg.client.ch
+          .edit(interaction, {
             embeds: [getEmbed(msg, selection)],
             components: getComponents(msg, selection),
           })
@@ -226,8 +226,8 @@ const interactionHandler = async (msg, m, selection) => {
       case 'addZeroLvl': {
         selection.lvlZeros += 1;
         buttonsCollector.resetTimer();
-        interaction
-          .update({
+        msg.client.ch
+          .edit(interaction, {
             embeds: [getEmbed(msg, selection)],
             components: getComponents(msg, selection),
           })
@@ -237,8 +237,8 @@ const interactionHandler = async (msg, m, selection) => {
       case 'delZeroLvl': {
         selection.lvlZeros -= 1;
         buttonsCollector.resetTimer();
-        interaction
-          .update({
+        msg.client.ch
+          .edit(interaction, {
             embeds: [getEmbed(msg, selection)],
             components: getComponents(msg, selection),
           })
