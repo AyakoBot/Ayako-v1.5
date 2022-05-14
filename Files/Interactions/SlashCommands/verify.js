@@ -44,7 +44,7 @@ module.exports = {
     }
   },
   startProcess: async (cmd, answer, logchannel, { lan, language }, alreadyStarted) => {
-    if (cmd.m) await cmd.m.removeAttachments();
+    if (cmd.m) await cmd.client.ch.edit(cmd.m, { attachments: [] });
     if (cmd.r.logchannel) logchannel = cmd.guild.channels.cache.get(cmd.r.logchannel);
     if (logchannel) {
       const log = new Builders.UnsafeEmbedBuilder()
@@ -179,7 +179,7 @@ module.exports = {
         cmd.client.verificationCodes.delete(
           `${buttonsCollector.options.message.channelId.id}-${cmd.guild.id}`,
         );
-        if (cmd.m) await cmd.m.removeAttachments().catch(() => {});
+        if (cmd.m) await cmd.client.ch.edit(cmd.m, { attachments: [] });
         cmd.client.ch
           .edit(cmd.m, {
             embeds: [],
