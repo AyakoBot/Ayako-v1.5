@@ -1,4 +1,3 @@
-const Discord = require('discord.js');
 const jobs = require('node-schedule');
 
 module.exports = {
@@ -52,9 +51,5 @@ module.exports = {
     require('./disboard')();
     require('./separators')();
     require('./inviteLogger')();
-
-    client.guilds.cache.forEach(async (guild) => {
-      client.invites.set(guild.id, await client.ch.getAllInvites(guild));
-    });
   },
 };
