@@ -104,7 +104,7 @@ const replier = async ({ msg, answer }, { embeds, components, content, files }, 
   }
 
   if (answer && !answer.replied) {
-    await answer.update({
+    await msg.client.ch.edit(answer, {
       embeds,
       components,
       content,
