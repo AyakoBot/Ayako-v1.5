@@ -99,7 +99,7 @@ const setReminder = async (msg, isBump, settings) => {
 const doDelete = async (msg, settings) => {
   if (!settings.deletereply || !settings.msgid) return;
 
-  msg.delete().catch(() => {});
+  if (msg.delete) msg.delete().catch(() => {});
   const channel = msg.client.channels.cache.get(settings.channelid) || msg.channel;
   if (!channel) return;
   const message = await channel.messages.fetch(settings.msgid).catch(() => {});

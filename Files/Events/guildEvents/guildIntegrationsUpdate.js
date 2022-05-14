@@ -21,9 +21,9 @@ module.exports = {
         let entryUpdate;
         let entryDelete;
         if (guild.me.permissions.has(128n)) {
-          const auditsCreate = await guild.fetchAuditLogs({ limit: 3, type: 80 });
-          const auditsUpdate = await guild.fetchAuditLogs({ limit: 3, type: 81 });
-          const auditsDelete = await guild.fetchAuditLogs({ limit: 3, type: 82 });
+          const auditsCreate = await guild.fetchAuditLogs({ limit: 3, type: 80 }).catch(() => {});
+          const auditsUpdate = await guild.fetchAuditLogs({ limit: 3, type: 81 }).catch(() => {});
+          const auditsDelete = await guild.fetchAuditLogs({ limit: 3, type: 82 }).catch(() => { });
 
           if (auditsCreate && auditsCreate.entries) {
             entryCreate = auditsCreate.entries.sort((a, b) => b.id - a.id);
@@ -77,7 +77,7 @@ module.exports = {
           if (entryUpdate) entry = entryUpdate;
         }
         const embed = new Builders.UnsafeEmbedBuilder().setTimestamp();
-        if (entry.actionType === 'DELETE') {
+        if (entry?.actionType === 'DELETE') {
           let finalEntry;
           if (guild.me.permissions.has(128n)) {
             let botBan = await guild.fetchAuditLogs({ limit: 3, type: 20 });
@@ -171,7 +171,7 @@ module.exports = {
             embed.addFields({ name: language.subscribers, value: entry.subscriber_count });
           }
         }
-        if (entry.actionType === 'CREATE') {
+        if (entry?.actionType === 'CREATE') {
           const con = Constants.guildIntegrationsCreate;
           const lan = language.guildIntegrationsCreate;
           embed.setDescription(
@@ -219,7 +219,7 @@ module.exports = {
           }
           ch.logger(`Integration Update Check console at ${new Date().toUTCString()}`);
         }
-        if (entry.actionType === 'UPDATE') {
+        if (entry?.actionType === 'UPDATE') {
           const con = Constants.guildIntegrationsUpdate;
           const lan = language.guildIntegrationsUpdate;
           embed.setDescription(
