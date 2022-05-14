@@ -258,7 +258,7 @@ const getBaseButtons = (msg, selected, allPunishments, page) => {
             .setLabel(
               `ID: ${Number(p.uniquetimestamp).toString(32)} | ${msg.lan.executor}: ${
                 p.executorname
-              }`,
+              }`.slice(0, 100),
             )
             .setValue(String(p.uniquetimestamp)),
         );
