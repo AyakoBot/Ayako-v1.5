@@ -106,7 +106,7 @@ module.exports = {
       if (String(e).includes('50013')) {
         return module.exports.send(msg.author, {
           embeds: [
-            Builders.UnsafeEmbedBuilder()
+            new Builders.UnsafeEmbedBuilder()
               .setAuthor({
                 name: msg.language.error,
                 iconURL: msg.client.objectEmotes.warning.link,
