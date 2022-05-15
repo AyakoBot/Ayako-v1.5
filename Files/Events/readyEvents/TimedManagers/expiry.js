@@ -96,9 +96,10 @@ const logExpire = async (rows, client, guildid) => {
     const user = client.users.cache.get(p.userid);
 
     const endedAt = client.ch.stp(lan.endedAt, {
-      time: `<t:${(Number(p.uniquetimestamp) + Number(p.duration)).slice(0, -3)}:F> (<t:${(
-        Number(p.uniquetimestamp) + Number(p.duration)
-      ).slice(0, -3)}:R>)`,
+      time: `<t:${String(Number(p.uniquetimestamp) + Number(p.duration)).slice(
+        0,
+        -3,
+      )}:F> (<t:${String(Number(p.uniquetimestamp) + Number(p.duration)).slice(0, -3)}:R>)`,
     });
 
     embed

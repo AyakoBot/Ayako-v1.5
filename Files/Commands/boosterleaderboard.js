@@ -43,7 +43,7 @@ const buttonsHandler = (msg, types, ownPos, content, oldEmbed, rows) => {
       return;
     }
     await msg.client.ch.disableComponents(msg.m, [oldEmbed]);
-    await interaction.deferUpdate();
+    await interaction.deferUpdate().catch(() => {});
     buttonsCollector.resetTimer();
 
     switch (interaction.customId) {

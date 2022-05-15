@@ -194,9 +194,8 @@ module.exports = {
     components = getComponents(msg, member, user, 1);
 
     if (answer) {
-      answer
-        .update({
-          embeds,
+      msg.client.ch
+        .edit(answer, {
           components: msg.client.ch.buttonRower(components),
         })
         .catch(() => {});
@@ -234,8 +233,8 @@ const interactionHandler = (msg, m, embeds, member) => {
       }
       case 'back': {
         page -= 1;
-        interaction
-          .update({
+        msg.client.ch
+          .edit(interaction, {
             embeds,
             components: msg.client.ch.buttonRower(getComponents(msg, member, member.user, page)),
           })
@@ -244,8 +243,8 @@ const interactionHandler = (msg, m, embeds, member) => {
       }
       case 'next': {
         page += 1;
-        interaction
-          .update({
+        msg.client.ch
+          .edit(interaction, {
             embeds,
             components: msg.client.ch.buttonRower(getComponents(msg, member, member.user, page)),
           })
@@ -722,7 +721,7 @@ const decideUser = async (msg, users, m) => {
         case 'back': {
           page -= 1;
 
-          await interaction.update({
+          await msg.client.ch.edit(interaction, {
             content: '\u200b',
             components: msg.client.ch.buttonRower(getUserComponents(msg, page, users)),
           });
@@ -731,7 +730,7 @@ const decideUser = async (msg, users, m) => {
         case 'next': {
           page += 1;
 
-          await interaction.update({
+          await msg.client.ch.edit(interaction, {
             content: '\u200b',
             components: msg.client.ch.buttonRower(getUserComponents(msg, page, users)),
           });
