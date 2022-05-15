@@ -11,7 +11,7 @@ module.exports = {
     const question = msg.args.slice(0).join(' ');
     const answer = msg.lan.answers[random];
     const embed = new Builders.UnsafeEmbedBuilder()
-      .setColor(msg.client.ch.colorSelector(msg.guild ? msg.guild.me : null))
+      .setColor(msg.client.ch.colorSelector(msg.guild ? msg.guild.members.me : null))
       .setAuthor({
         name: msg.lan.author,
         iconURL: msg.client.constants.standard.image,

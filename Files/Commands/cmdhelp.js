@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const Builders = require('@discordjs/builders');
+const fs = require('fs');
 
 module.exports = {
   name: 'cmdhelp',
@@ -8,23 +9,18 @@ module.exports = {
   aliases: ['cmdh', 'commandhelp', 'commandh'],
   type: 'info',
   async execute(msg) {
-    const commandName = msg.args[0] ? msg.args[0].toLowerCase() : 'help';
-    const reqcommand = msg.triedCMD
-      ? msg.triedCMD
-      : msg.client.commands.get(commandName) ||
-        msg.client.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName)) ||
-        msg.client.slashCommands.get(commandName);
-
-    const { language } = msg;
-    const { lan } = msg;
-    const commandLan =
-      language.commands[reqcommand.name] || language.slashCommands[reqcommand.name];
-    if (!commandLan) {
-      msg.client.ch.error(msg, lan.notFound);
-      throw new Error(`Command ${reqcommand.name} not found in language file.`);
+    const reqcommand = getCommand(msg);
+    if (!reqcommand) {
+      msg.client.ch.error(msg, msg.lan.commandNotFound);
+      return;
     }
 
-    if (!reqcommand || !reqcommand.name) return msg.client.ch.error(msg, lan.notValid);
+    const commandLan =
+      msg.language.commands[reqcommand.name] || msg.language.slashCommands[reqcommand.name];
+    if (!commandLan) {
+      msg.client.ch.error(msg, msg.lan.notFound);
+      throw new Error(`Command ${reqcommand.name} not found in language file.`);
+    }
 
     let category;
     if (reqcommand.category) {
@@ -32,18 +28,18 @@ module.exports = {
     } else if (commandLan?.category) {
       category = commandLan.category;
     } else {
-      category = language.none;
+      category = msg.language.none;
     }
 
     let reqperms;
     if (reqcommand.perm === 0) {
-      reqperms = language.AyakoOwner;
+      reqperms = msg.language.AyakoOwner;
     } else if (reqcommand.perm === 1) {
-      reqperms = language.ServerOwner;
+      reqperms = msg.language.ServerOwner;
     } else if (reqcommand.perm) {
       reqperms = new Discord.PermissionsBitField(reqcommand.perm).toArray();
     } else {
-      reqperms = language.none;
+      reqperms = msg.language.none;
     }
 
     const ThisGuildOnly = [];
@@ -54,7 +50,9 @@ module.exports = {
         if (!tgo) {
           const channel =
             msg.client.channels.cache.get(guild.systemChannelID) ||
-            guild.channels.cache.find((c) => c.type === 0 && guild.me.permissionsIn(c).has(1n));
+            guild.channels.cache.find(
+              (c) => c.type === 0 && guild.members.me.permissionsIn(c).has(1n),
+            );
 
           const inv = await channel?.createInvite({
             maxAge: 20000,
@@ -74,65 +72,105 @@ module.exports = {
     }
     const aliases = reqcommand.aliases
       ? reqcommand.aliases.map((t) => `\`${msg.client.constants.standard.prefix}${t}\``).join(', ')
-      : language.none;
+      : msg.language.none;
     const embed = new Builders.UnsafeEmbedBuilder()
       .setAuthor({
-        name: `${language.command}: ${reqcommand.name}`,
+        name: `${msg.language.command}: ${reqcommand.name}`,
         iconURL: msg.client.constants.standard.image,
         url: msg.client.constants.standard.invite,
       })
       .addFields(
         {
-          name: `|${language.name}`,
+          name: `|${msg.language.name}`,
           value: `\u200b${commandLan.name ? commandLan.name : reqcommand.name}`,
           inline: true,
         },
-        { name: `|${language.category}`, value: `\u200b${category}`, inline: true },
-        { name: `|${language.aliases}`, value: `\u200b${aliases}`, inline: false },
+        { name: `|${msg.language.category}`, value: `\u200b${category}`, inline: true },
+        { name: `|${msg.language.aliases}`, value: `\u200b${aliases}`, inline: false },
         {
-          name: `|${language.description}`,
+          name: `|${msg.language.description}`,
           value: `\u200b${commandLan.description}`,
           inline: false,
         },
         {
-          name: `|${language.requiredPermissions}`,
+          name: `|${msg.language.requiredPermissions}`,
           value: `\u200b${
             Array.isArray(reqperms)
-              ? reqperms.map((p) => `\`${language.permissions[p]}\``)
+              ? reqperms.map((p) => `\`${msg.language.permissions[p]}\``)
               : reqperms
           }`,
           inline: false,
         },
         {
-          name: `|${language.thisGuildOnly}`,
+          name: `|${msg.language.thisGuildOnly}`,
           value: `\u200b${
             `${ThisGuildOnly.map((r) => `${r}`).join(', ')}` !== ''
               ? ThisGuildOnly.map((r) => `${r}`).join(', ')
-              : language.freeToAccess
+              : msg.language.freeToAccess
           }`,
           inline: false,
         },
         {
-          name: `|${language.dms}`,
-          value: `\u200b${reqcommand.dm ? lan.dmsTrue : lan.dmsFalse}`,
+          name: `|${msg.language.dms}`,
+          value: `\u200b${reqcommand.dm ? msg.lan.dmsTrue : msg.lan.dmsFalse}`,
           inline: false,
         },
       )
-      .setColor(msg.client.ch.colorSelector(msg.guild ? msg.guild.me : null))
+      .setColor(msg.client.ch.colorSelector(msg.guild ? msg.guild.members.me : null))
       .setTimestamp();
     if (commandLan.usage && commandLan.usage.length) {
       embed.addFields({
-        name: `|${language.usage}`,
+        name: `|${msg.language.usage}`,
         value: `
           \u200b${msg.client.ch.makeCodeBlock(
             `${msg.client.constants.standard.prefix}${commandLan.usage.join(
               `\n${msg.client.constants.standard.prefix}`,
             )}`,
-          )}\n\`[ ] = ${language.required}\`\n\`( ) = ${language.optional}\`
+          )}\n\`[ ] = ${msg.language.required}\`\n\`( ) = ${msg.language.optional}\`
           `,
         inline: false,
       });
     }
-    return msg.client.ch.reply(msg, { embeds: [embed] });
+    msg.client.ch.reply(msg, { embeds: [embed] });
   },
+};
+
+const getCommand = (msg) => {
+  if (msg.triedCMD) {
+    return msg.triedCMD;
+  }
+
+  const cmdDir = `${require.main.path}/Files/Commands`;
+  const slashCmdDir = `${require.main.path}/Files/Interactions/SlashCommands`;
+
+  const cmdFiles = fs.readdirSync(cmdDir).filter((f) => f.endsWith('.js'));
+  const slashCmdFiles = fs.readdirSync(slashCmdDir).filter((f) => f.endsWith('.js'));
+
+  const commandName = msg.args[0]?.toLowerCase() || 'cmdh';
+  const searchedFileName = commandName || msg.args.shift().toLowerCase();
+
+  const cmdFile = cmdFiles
+    .map((c) => {
+      const possibleFile = require(`${cmdDir}/${c}`);
+      if (
+        possibleFile.name === searchedFileName ||
+        possibleFile.aliases?.includes(searchedFileName)
+      ) {
+        return possibleFile;
+      }
+      return null;
+    })
+    .filter((f) => !!f)[0];
+
+  const slashCmdFile = slashCmdFiles
+    .map((c) => {
+      const possibleFile = require(`${slashCmdDir}/${c}`);
+      if (possibleFile.name === searchedFileName) {
+        return possibleFile;
+      }
+      return null;
+    })
+    .filter((f) => !!f)[0];
+
+  return cmdFile || slashCmdFile;
 };

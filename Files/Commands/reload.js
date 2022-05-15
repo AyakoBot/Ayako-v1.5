@@ -1,4 +1,4 @@
-const fs = require('fs');
+const Builders = require('@discordjs/builders');
 
 module.exports = {
   name: 'reload',
@@ -7,60 +7,95 @@ module.exports = {
   takesFirstArg: true,
   aliases: ['r'],
   type: 'owner',
-  execute(msg) {
-    const { args } = msg;
-    if (!args.length) {
-      return msg.channel.send(`You didn't pass any command to reload, ${msg.author}!`);
+  execute: async (msg) => {
+    const paths = Object.keys(require.cache).filter((k) =>
+      k
+        .toLowerCase()
+        .replace(/\.json|\.js|\.log|\.txt/gim, '')
+        .endsWith(
+          msg.args
+            .slice(0)
+            .join('/')
+            .toLowerCase()
+            .replace(/\.json|\.js|\.log|\.txt/gim, ''),
+        ),
+    );
+
+    if (!paths.length) {
+      msg.client.ch.error(msg, { content: 'No Files found!' });
+      return;
     }
-    if (args[0].toLowerCase() === 'all') {
-      const commandFiles = fs
-        .readdirSync('./Files/Commands')
-        .filter((file) => file.endsWith('.js'));
-      let i = 0;
-      let o = 0;
-      commandFiles.forEach((file) => {
-        i += 1;
-        delete require.cache[require.resolve(`./${file}`)];
-        try {
-          const newCommand = require(`./${file}`);
-          msg.client.commands.set(newCommand.name, newCommand);
-        } catch (error) {
-          msg.channel.send(
-            `There was an error while reloading a command \`${file.replace(
-              '.js',
-              '',
-            )}\`:\n${msg.client.ch.makeCodeBlock(error.stack)}`,
-          );
-          i -= 1;
-          o += 1;
-        }
-      });
-      if (o > 0) {
-        msg.channel.send(`Reloaded ${i} command files\nFailed to reload ${o} command files`);
-      } else msg.channel.send(`Reloaded ${i} command files`);
-    } else {
-      const commandName = args.slice(0).join(' ').toLowerCase();
-      const command =
-        msg.client.commands.get(commandName) ||
-        msg.client.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName));
-      if (!command) {
-        return msg.channel.send(
-          `There is no command with name or alias \`${commandName}\`, ${msg.author}!`,
-        );
-      }
-      delete require.cache[require.resolve(`./${command.name}.js`)];
-      try {
-        const newCommand = require(`./${command.name}.js`);
-        msg.client.commands.set(newCommand.name, newCommand);
-        msg.channel.send(`Command \`${command.name}\` was reloaded!`);
-      } catch (error) {
-        msg.channel.send(
-          `There was an error while reloading a command \`${
-            command.name
-          }\`:\n${msg.client.ch.makeCodeBlock(error.stack)}`,
-        );
-      }
+
+    if (paths.length === 1) {
+      end(msg, paths[0]);
+      return;
     }
-    return null;
+
+    if (paths.length > 25) {
+      msg.client.ch.error(msg, 'Too many Files found! Please be more specific.');
+      return;
+    }
+
+    let content = '';
+    for (let i = 0; i < paths.length; i += 1) {
+      content += `${i + 1}. \`${paths[i].replace(require.main.path, '')}\`\n`;
+    }
+
+    const embed = new Builders.UnsafeEmbedBuilder()
+      .setColor(msg.client.constants.standard.color)
+      .setTitle('Reply with the Number of the File you want to reload')
+      .setDescription(content);
+
+    const options = paths.map((path, i) =>
+      new Builders.UnsafeSelectMenuOptionBuilder()
+        .setLabel(String(i + 1))
+        .setValue(path.slice(-100, path.length))
+        .setDescription(path.slice(-100, path.length)),
+    );
+
+    const select = new Builders.UnsafeSelectMenuBuilder()
+      .setPlaceholder('Select the Number')
+      .setCustomId('reload')
+      .setMaxValues(options.length)
+      .setMinValues(1)
+      .setOptions(...options);
+
+    const m = await msg.client.ch.reply(msg, {
+      embeds: [embed],
+      components: msg.client.ch.buttonRower([select]),
+    });
+
+    const interactionCollector = m.createMessageComponentCollector({ time: 360000 });
+    interactionCollector.on('collect', async (interaction) => {
+      if (interaction.user.id !== msg.author.id) {
+        msg.client.ch.notYours(interaction);
+        return;
+      }
+
+      if (interaction.customId === 'reload') {
+        interaction.values.forEach((v) => {
+          end(msg, v);
+        });
+
+        msg.client.ch.edit(interaction, { components: msg.client.ch.buttonRower([select]) });
+      }
+    });
+
+    interactionCollector.on('end', (c, reason) => {
+      if (reason === 'time') {
+        msg.client.ch.collectorEnd(msg, m);
+      }
+    });
   },
+};
+
+const end = (msg, path) => {
+  delete require.cache[require.resolve(path)];
+  require(path);
+
+  msg.client.ch.reply(
+    msg,
+    { content: `\`${path.replace(require.main.path, '')}\` reloaded!` },
+    2000,
+  );
 };

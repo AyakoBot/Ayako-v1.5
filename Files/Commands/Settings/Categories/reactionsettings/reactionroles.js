@@ -10,6 +10,7 @@ module.exports = {
   childOf: 'reactionsettings',
   displayParentOnly: true,
   helpCategory: 'roles',
+  main: true,
   mmrEmbed: (msg, rows) => {
     const embed = new Builders.UnsafeEmbedBuilder();
 

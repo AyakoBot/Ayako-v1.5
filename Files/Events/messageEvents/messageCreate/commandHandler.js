@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const Builders = require('@discordjs/builders');
 const jobs = require('node-schedule');
+const fs = require('fs');
 const moment = require('moment');
 require('moment-duration-format');
 
@@ -32,23 +33,10 @@ module.exports = {
 
     if (!prefix) return [];
 
-    const args = msg.content.replace(/\\n/g, ' ').slice(prefix.length).split(/ +/);
-    const commandName = args.shift().toLowerCase();
-
-    let command =
-      msg.client.commands.get(commandName) ||
-      msg.client.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName));
-    if (!command) return [];
-
-    if (command.takesFirstArg && !args[0]) {
-      msg.triedCMD = command;
-      command = msg.client.commands.get('cmdhelp');
-    }
-
+    msg.args = msg.content.replace(/\\n/g, ' ').slice(prefix.length).split(/ +/);
+    msg.command = getCommand(msg);
     msg.language = await msg.client.ch.languageSelector(msg.guild);
-    msg.lan = msg.language.commands[`${command.name}`];
-    msg.args = args;
-    msg.command = command;
+    msg.lan = msg.language.commands[`${msg.command.name}`];
     return [msg, prefix];
   },
 
@@ -115,7 +103,7 @@ module.exports = {
         return;
       }
 
-      if (!msg.guild.me.permissions.has(perms)) {
+      if (!msg.guild.members.me.permissions.has(perms)) {
         msg.client.ch.permError(msg, perms, true);
         return;
       }
@@ -458,8 +446,33 @@ const runDMCommand = (msg) => {
   if (msg.command.dm) {
     if (msg.command.takesFirstArg && !msg.args[0]) {
       msg.triedCMD = msg.command;
-      msg.command = msg.client.commands.get('cmdhelp');
+      msg.command = require(`${require.main.path}/Files/Commands/cmdhelp`);
     }
     commandExe(msg);
   } else msg.client.ch.error(msg, msg.language.commands.commandHandler.GuildOnly);
+};
+
+const getCommand = (msg) => {
+  const dir = `${require.main.path}/Files/Commands`;
+  const files = fs.readdirSync(dir).filter((f) => f.endsWith('.js'));
+  const searchedFileName = msg.args.shift().toLowerCase();
+
+  const file = files
+    .map((c) => {
+      const possibleFile = require(`${dir}/${c}`);
+      if (
+        possibleFile.name === searchedFileName ||
+        possibleFile.aliases?.includes(searchedFileName)
+      ) {
+        if (possibleFile.takesFirstArg && !msg.args[0]) {
+          msg.triedCMD = possibleFile;
+          return require(`${dir}/cmdhelp`);
+        }
+        return possibleFile;
+      }
+      return null;
+    })
+    .filter((f) => !!f)[0];
+
+  return file;
 };

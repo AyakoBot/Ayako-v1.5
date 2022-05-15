@@ -33,7 +33,7 @@ module.exports = {
       .setDescription(msg.lan.thanks.desc)
       .addFields({ name: msg.lan.thanks.field, value: '\u200B' })
       .setTimestamp()
-      .setColor(msg.client.ch.colorSelector(msg.guild ? msg.guild.me : null));
+      .setColor(msg.client.ch.colorSelector(msg.guild ? msg.guild.members.me : null));
     msg.client.ch.reply(msg, { embeds: [suggestReplyEmbed] });
   },
 };

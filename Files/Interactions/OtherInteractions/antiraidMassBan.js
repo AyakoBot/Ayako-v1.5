@@ -5,7 +5,7 @@ module.exports = {
   split: null,
   execute: async (cmd, language) => {
     cmd.deferReply();
-    const command = cmd.client.commands.get('massban');
+    const command = require(`${require.main.paht}/Files/Commands/massban`);
 
     cmd.language = language;
 
