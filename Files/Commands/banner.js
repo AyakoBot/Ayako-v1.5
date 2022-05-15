@@ -37,7 +37,7 @@ module.exports = {
       })
       .setImage(isGlobal ? user.bannerURL({ size: 4096 }) : member.bannerURL({ size: 4096 }))
       .setTimestamp()
-      .setColor(msg.client.ch.colorSelector(msg.guild ? msg.guild.me : null))
+      .setColor(msg.client.ch.colorSelector(msg.guild ? msg.guild.members.me : null))
       .setFooter({ text: msg.client.ch.stp(msg.language.requestedBy, { user: msg.author }) });
     msg.client.ch.reply(msg, { embeds: [embed] });
   },

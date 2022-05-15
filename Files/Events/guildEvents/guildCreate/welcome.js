@@ -10,7 +10,7 @@ module.exports = {
 
     let entry;
 
-    if (guild.me.permissions.has(128n)) {
+    if (guild.members.me.permissions.has(128n)) {
       const audits = await guild.fetchAuditLogs({ limit: 3, type: 28 }).catch(() => {});
       if (audits && audits.entries) {
         const audit = audits.entries.filter((a) => a.target.id === guild.client.user.id);
@@ -48,7 +48,7 @@ const getEmbed = (lan, guild) =>
       iconURL: guild.client.constants.standard.image,
       url: guild.client.constants.standard.invite,
     })
-    .setColor(guild.me.displayColor)
+    .setColor(guild.members.me.displayColor)
     .addFields({
       name: guild.client.ch.stp(lan.fields.one.name, {
         prefix: guild.client.constants.standard.prefix,

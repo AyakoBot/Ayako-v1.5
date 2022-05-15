@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const Builders = require('@discordjs/builders');
+const fs = require('fs');
 
 module.exports = {
   name: 'settings',
@@ -14,7 +15,7 @@ module.exports = {
     if (!msg.args[0]) {
       let categoryText = '';
       const categories = [];
-      msg.client.settings.forEach((setting) => {
+      getAllSettings().forEach((setting) => {
         setting.category.forEach((category) => {
           if (!categories.includes(category)) categories.push(category);
         });
@@ -22,30 +23,32 @@ module.exports = {
 
       categories.forEach((category) => {
         const settingCategories = [];
-        msg.client.settings.forEach((s) => {
-          if (s.category.includes(category)) {
-            if (s.folder && !!settingCategories.findIndex((a) => a.folder === s.folder)) {
-              if (msg.client.constants.commands.settings.baseSettings[s.folder] === s.name) {
+        getAllSettings()
+          .filter((s) => s.display !== false)
+          .forEach((s) => {
+            if (s.category.includes(category)) {
+              if (s.folder && !!settingCategories.findIndex((a) => a.folder === s.folder)) {
+                if (msg.client.constants.commands.settings.baseSettings[s.folder] === s.name) {
+                  options.push(
+                    new Builders.UnsafeSelectMenuOptionBuilder()
+                      .setLabel(s.folder)
+                      .setValue(s.folder),
+                  );
+                  settingCategories.push(s.folder);
+                }
+              } else if (!options.find((o) => o.data.label === s.name) && (!s.childOf || s.main)) {
                 options.push(
-                  new Builders.UnsafeSelectMenuOptionBuilder()
-                    .setLabel(s.folder)
-                    .setValue(s.folder),
+                  new Builders.UnsafeSelectMenuOptionBuilder().setLabel(s.name).setValue(s.name),
                 );
-                settingCategories.push(s.folder);
+                settingCategories.push(s.name);
               }
-            } else if (!options.find((o) => o.data.label === s.name)) {
-              options.push(
-                new Builders.UnsafeSelectMenuOptionBuilder().setLabel(s.name).setValue(s.name),
-              );
-              settingCategories.push(s.name);
             }
-          }
-        });
+          });
 
         for (let i = 0; i < settingCategories.length; i += 1) {
-          let settingsFile = msg.client.settings.get(settingCategories[i]);
+          let settingsFile = getSetting(settingCategories[i]);
           if (!settingsFile) {
-            settingsFile = msg.client.settings.get(
+            settingsFile = getSetting(
               msg.client.constants.commands.settings.baseSettings[settingCategories[i]],
             );
           }
@@ -98,7 +101,7 @@ module.exports = {
           settingCategories[i] += new Array(22 - settingCategories[i].length).join(' ');
         }
 
-        categoryText += `__${category}__:\n${msg.client.ch.makeCodeBlock(
+        categoryText += `__${msg.lan.categories[category]}__:\n${msg.client.ch.makeCodeBlock(
           `${settingCategories.map((s) => `${s}`)}`.replace(/,/g, ''),
         )}\n`;
       });
@@ -128,7 +131,7 @@ module.exports = {
       await replier({ msg, answer }, { embeds: [embed], rawButtons }, 1);
       categoryMenuHandler({ msg, answer }, false);
     } else {
-      let settingsFile = msg.client.settings.get(msg.args[0].toLowerCase());
+      let settingsFile = getSetting(msg.args[0].toLowerCase());
 
       if (!settingsFile && msg.client.constants.commands.settings.baseSettings[msg.args[0]]) {
         settingsFile = {
@@ -144,7 +147,7 @@ module.exports = {
         return categoryDisplay(msg, answer, true);
       }
       if (settingsFile.hasNoSettings) {
-        settingsFile = require('./settings/categories/overview');
+        settingsFile = require('./Settings/Categories/overview');
         settingsFile.name = 'overview';
       }
 
@@ -228,7 +231,7 @@ module.exports = {
               1,
             );
 
-            msg.file = msg.client.settings.get(interaction.customId);
+            msg.file = getSetting(interaction.customId);
             msg.lan = msg.language.commands.settings[msg.file.name];
 
             whereToGo(msg, interaction);
@@ -395,7 +398,7 @@ module.exports = {
                 2,
               );
 
-              msg.file = msg.client.settings.get(interaction.customId);
+              msg.file = getSetting(interaction.customId);
               msg.lan = msg.language.commands.settings[msg.file.name];
               return whereToGo(msg, interaction);
             }
@@ -503,7 +506,7 @@ const noEmbed = async (msg, answer, res) => {
         3,
       );
 
-      msg.file = msg.client.settings.get(interaction.customId);
+      msg.file = getSetting(interaction.customId);
       msg.lan = msg.language.commands.settings[msg.file.name];
       return whereToGo(msg, interaction);
     }
@@ -654,7 +657,7 @@ const mmrEditList = async (msgData, sendData) => {
       required: true,
     };
 
-    const editor = msg.client.settingsEditors.find((f) => f.key.includes(required.key));
+    const editor = getAllEditors().find((f) => f.key.includes(required.key));
     const returnedData = await editorInteractionHandler(
       { msg, answer },
       { insertedValues: {}, required, editor },
@@ -704,7 +707,7 @@ const mmrEditList = async (msgData, sendData) => {
       required: DataOfCurStep.required,
     };
 
-    const editor = msg.client.settingsEditors.find((f) => f.key.includes(required.key));
+    const editor = getAllEditors().find((f) => f.key.includes(required.key));
     if (editor.requiresInteraction) {
       const returnedData = await editorInteractionHandler(
         { msg, answer },
@@ -908,7 +911,7 @@ const mmrEditList = async (msgData, sendData) => {
             4,
           );
 
-          msg.file = msg.client.settings.get(interaction.customId);
+          msg.file = getSetting(interaction.customId);
           msg.lan = msg.language.commands.settings[msg.file.name];
           return whereToGo(msg, interaction);
         }
@@ -999,7 +1002,7 @@ const singleRowEdit = async (msgData, resData, embed, comesFromMMR) => {
         5,
       );
 
-      msg.file = msg.client.settings.get(interaction.customId);
+      msg.file = getSetting(interaction.customId);
       msg.lan = msg.language.commands.settings[msg.file.name];
       return whereToGo(msg, interaction);
     }
@@ -1214,7 +1217,7 @@ const changing = async (msgData, editData, resData) => {
     throw new Error(`${usedKey} is not a defined Key in the Settings Constants Object`);
   }
 
-  const editor = msg.client.settingsEditors.find((f) =>
+  const editor = getAllEditors().find((f) =>
     usedKey === 'active' ? f.key.includes('boolean') : f.key?.includes(settings[usedKey].key),
   );
   const language =
@@ -1236,7 +1239,7 @@ const changing = async (msgData, editData, resData) => {
   if (!editor) {
     throw new Error(
       `Cannot find Editor for key "${usedKey}" in \n${JSON.stringify(
-        msg.client.settingsEditors.map((e) => `${e.key}`),
+        getAllEditors().map((e) => `${e.key}`),
         null,
         1,
       )}`,
@@ -1447,7 +1450,7 @@ const buttonHandler = async (msgData, editData, languageData, comesFromMMR) => {
           6,
         );
 
-        msg.file = msg.client.settings.get(interaction.customId);
+        msg.file = getSetting(interaction.customId);
         msg.lan = msg.language.commands.settings[msg.file.name];
         return whereToGo(msg, interaction);
       }
@@ -1949,7 +1952,7 @@ const categoryDisplay = async (msg, answer, needsBack) => {
   let categoryText = '';
   const categories = [];
   const options = [];
-  const settings = msg.client.settings.filter((setting) => setting.folder === msg.args[0]);
+  const settings = getAllSettings().filter((setting) => setting.folder === msg.args[0]);
 
   settings.forEach((setting) => {
     setting.category.forEach((category) => {
@@ -2207,4 +2210,59 @@ const getResRows = async (msg) => {
 
   if (res && res.rowCount) return res;
   return null;
+};
+
+const getAllSettings = () => {
+  const dir = `${require.main.path}/Files/Commands/Settings/Categories`;
+  const files = [
+    ...fs
+      .readdirSync(dir)
+      .filter((f) => f.endsWith('.js'))
+      .map((c) => {
+        const file = require(`${dir}/${c}`);
+        file.name = c.replace('.js', '');
+
+        return file;
+      })
+      .filter((f) => f.finished !== false),
+    ...getNestedSettings(),
+  ];
+
+  return files;
+};
+
+const getNestedSettings = () => {
+  const mainDir = `${require.main.path}/Files/Commands/Settings/Categories`;
+  const folders = fs.readdirSync(mainDir).filter((f) => !f.endsWith('.js'));
+
+  const files = folders
+    .map((folder) => {
+      const insideFolder = fs.readdirSync(`${mainDir}/${folder}`);
+
+      return insideFolder.map((f) => {
+        const file = require(`${mainDir}/${folder}/${f}`);
+        file.name = f.replace('.js', '');
+
+        return file;
+      });
+    })
+    .flat(1);
+
+  return files;
+};
+
+const getSetting = (name) => {
+  const allSettings = getAllSettings();
+  return allSettings.find((s) => s.name === name);
+};
+
+const getAllEditors = () => {
+  const dir = `${require.main.path}/Files/Commands/Settings/Editors`;
+
+  const files = fs
+    .readdirSync(dir)
+    .filter((f) => f.endsWith('.js'))
+    .map((f) => require(`${dir}/${f}`));
+
+  return files;
 };

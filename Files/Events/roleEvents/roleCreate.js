@@ -20,7 +20,7 @@ module.exports = {
         const lan = language.roleCreate;
         const con = Constants.roleCreate;
         let entry;
-        if (guild.me.permissions.has(128n)) {
+        if (guild.members.me.permissions.has(128n)) {
           const audits = await guild.fetchAuditLogs({ limit: 3, type: 30 });
           if (audits && audits.entries) {
             const audit = audits.entries.filter((a) => a.target.id === role.id);

@@ -43,12 +43,12 @@ const getRoles = (mode, roles, memberRoles, guild) => {
     return memberRoles
       .filter((id) => !roles?.includes(id))
       .filter((id) => !!guild.roles.cache.get(id))
-      .filter((id) => guild.roles.cache.get(id).rawPosition < guild.me.roles.highest.rawPosition);
+      .filter((id) => guild.roles.cache.get(id).rawPosition < guild.members.me.roles.highest.rawPosition);
   }
   return memberRoles
     .filter((id) => roles?.includes(id))
     .filter((id) => !!guild.roles.cache.get(id))
-    .filter((id) => guild.roles.cache.get(id).rawPosition < guild.me.roles.highest.rawPosition);
+    .filter((id) => guild.roles.cache.get(id).rawPosition < guild.members.me.roles.highest.rawPosition);
 };
 
 const stickyperms = async (member) => {

@@ -46,7 +46,7 @@ module.exports = {
         });
       return msg.client.ch.reply(msg, { embeds: [embed] });
     }
-    if (msg.guild.me.roles.highest.position <= role.position) {
+    if (msg.guild.members.me.roles.highest.position <= role.position) {
       embed
         .setAuthor({
           name: language.error,

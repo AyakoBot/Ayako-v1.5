@@ -23,7 +23,7 @@ module.exports = {
         const lan = language.inviteDelete;
         const con = Constants.inviteDelete;
         let entry;
-        if (guild.me.permissions.has(128n)) {
+        if (guild.members.me.permissions.has(128n)) {
           const audits = await invite.guild.fetchAuditLogs({ limit: 10, type: 42 });
           if (audits && audits.entries) {
             entry = audits.entries.sort((a, b) => b.id - a.id);

@@ -556,7 +556,7 @@ const getChannelMultiplier = async (msg) => {
 
 const infoEmbed = (msg, reactions, language) => {
   const embed = new Builders.UnsafeEmbedBuilder()
-    .setColor(msg.client.ch.colorSelector(msg.guild.me))
+    .setColor(msg.client.ch.colorSelector(msg.guild.members.me))
     .setDescription(
       msg.client.ch.stp(language.leveling.description, {
         reactions: reactions.map((r) => msg.client.emojis.cache.get(r) || r).join(''),

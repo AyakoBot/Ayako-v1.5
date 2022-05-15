@@ -106,7 +106,7 @@ module.exports = {
       if (String(e).includes('50013')) {
         return module.exports.send(msg.author, {
           embeds: [
-            Builders.UnsafeEmbedBuilder()
+            new Builders.UnsafeEmbedBuilder()
               .setAuthor({
                 name: msg.language.error,
                 iconURL: msg.client.objectEmotes.warning.link,
@@ -1050,7 +1050,13 @@ module.exports = {
    * @param {number} page - An Page to instantly navigate to upon calling this
    */
   embedBuilder: (msg, answer, options, embed, page) =>
-    msg.client.commands.get('embedbuilder').builder(msg, answer, embed, page, options),
+    require(`${require.main.path}/Files/Commands/embedbuilder`).builder(
+      msg,
+      answer,
+      embed,
+      page,
+      options,
+    ),
   /**
    * Converts a DB embed and its Dynamic Options to a Discord Embed
    * @constructor
@@ -1154,7 +1160,7 @@ module.exports = {
   permError: (msg, bits, me) => {
     const [neededPerms] = module.exports.bitUniques(
       { bitfield: bits },
-      me ? msg.guild.me.permissions : msg.member.permissions,
+      me ? msg.guild.members.me.permissions : msg.member.permissions,
     );
 
     const embed = new Builders.UnsafeEmbedBuilder()
