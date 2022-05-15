@@ -1145,7 +1145,7 @@ module.exports = {
       .setDescription(content);
 
     if (msg.isRepliable && msg.isRepliable()) {
-      return module.exports.reply.reply(msg, { embeds: [embed], ephemeral: true });
+      return module.exports.reply(msg, { embeds: [embed], ephemeral: true });
     }
 
     if (m) return module.exports.edit(m, { embeds: [embed] });
