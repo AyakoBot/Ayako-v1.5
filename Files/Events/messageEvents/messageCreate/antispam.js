@@ -27,6 +27,7 @@ let data = {
 
 module.exports = {
   async execute(msg) {
+    if (!msg.channel) return;
     if (msg.channel.type === 1 || msg.author.id === msg.client.user.id || msg.author.bot) return;
     let warnnr;
     let guildSettings;

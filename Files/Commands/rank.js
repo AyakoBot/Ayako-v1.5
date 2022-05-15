@@ -74,7 +74,9 @@ module.exports = {
         msg.client.ch.makeBold(msg.client.ch.stp(msg.lan.currentLevel, { level: `${level}` })),
       )
       .setColor(
-        isGuild ? msg.client.ch.colorSelector(msg.guild.me) : msg.client.constants.standard.color,
+        isGuild
+          ? msg.client.ch.colorSelector(msg.guild.members.me)
+          : msg.client.constants.standard.color,
       )
       .addFields(
         { name: msg.lan.currentXP, value: `${xp}`, inline: true },

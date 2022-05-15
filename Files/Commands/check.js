@@ -77,7 +77,7 @@ const baseMessage = async (msg, allPunishments, user) => {
       iconURL: msg.client.objectEmotes.warning.link,
       url: msg.client.constants.standard.invite,
     })
-    .setColor(msg.client.ch.colorSelector(msg.guild.me));
+    .setColor(msg.client.ch.colorSelector(msg.guild.members.me));
 
   return { m: await msg.client.ch.reply(msg, { embeds: [embed] }), embed };
 };

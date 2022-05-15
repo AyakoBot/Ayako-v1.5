@@ -8,8 +8,8 @@ module.exports = {
   finished: true,
   category: ['automation'],
   childOf: 'reactionsettings',
-  noArrows: true,
   canBe1Row: true,
+  display: false,
   mmrEmbed: (msg, rows) => {
     const embed = new Builders.UnsafeEmbedBuilder();
 

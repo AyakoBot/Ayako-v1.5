@@ -50,7 +50,7 @@ module.exports = {
         url: msg.client.constants.standard.invite,
       })
       .setDescription(lan.chooseTheEdit)
-      .setColor(msg.client.ch.colorSelector(msg.guild.me));
+      .setColor(msg.client.ch.colorSelector(msg.guild.members.me));
 
     if (Objects.options) {
       embed.addFields({

@@ -9,6 +9,7 @@ module.exports = {
     require('./leveling').execute(msg);
     require('./blacklist').execute(msg);
     require('./willis').execute(msg);
+    require('./ashes')(msg);
     require('./DMlog').execute(msg);
     require('./other').execute(msg);
     require('./shoob').execute(msg);

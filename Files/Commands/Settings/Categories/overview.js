@@ -14,7 +14,7 @@ module.exports = {
     }
 
     let { vanity } = r;
-    if (!msg.guild.me.permissions.has(8n)) {
+    if (!msg.guild.members.me.permissions.has(8n)) {
       vanity = msg.lan.missingPermissions;
     }
     if (!vanity) vanity = msg.language.none;

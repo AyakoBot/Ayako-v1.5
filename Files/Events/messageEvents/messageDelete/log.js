@@ -21,7 +21,7 @@ module.exports = {
         const lan = language.messageDelete;
         const con = Constants.messageDelete;
         let entry;
-        if (guild.me.permissions.has(128n)) {
+        if (guild.members.me.permissions.has(128n)) {
           const audits = await guild.fetchAuditLogs({ limit: 5, type: 72 });
           if (audits && audits.entries) {
             const audit = audits.entries.filter(

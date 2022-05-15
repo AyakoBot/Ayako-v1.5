@@ -30,7 +30,7 @@ module.exports = {
       let code = `${msg.args.slice(0).join(' ')}`;
       if (code.startsWith('```')) code = code.replace(/```js/g, '').replace(/```/g, '');
       // eslint-disable-next-line no-eval
-      let evaled = await eval(`(async () => {${code}})()`);
+      let evaled = code.includes('await') ? await eval(`(async () => {${code}})()`) : eval(code);
       if (typeof evaled !== 'string') evaled = util.inspect(evaled);
 
       if (evaled.length > 2000) {

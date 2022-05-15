@@ -127,7 +127,7 @@ const updateEmbed = async (cmd, giveaway) => {
       iconURL: cmd.client.objectEmotes.gift.link,
       url: cmd.client.constants.standard.invite,
     })
-    .setColor(cmd.client.ch.colorSelector(cmd.guild.me))
+    .setColor(cmd.client.ch.colorSelector(cmd.guild.members.me))
     .setDescription(giveaway.description)
     .setTitle(`${giveaway.participants.length} ${lan.participants}`)
     .addFields({
