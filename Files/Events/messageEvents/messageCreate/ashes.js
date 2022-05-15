@@ -1,13 +1,13 @@
 module.exports = async (msg) => {
   if (msg.channel.id === '757879586439823440' && msg.author.id === '646937666251915264') {
     if (msg.content.includes('since this server is currently active')) {
-      msg.client.reply(msg, {
+      msg.client.ch.reply(msg, {
         content: '<@&893986129773207582> Karuta has dropped Cards! Move or lose.',
       });
     }
 
     if (msg.content.includes('A card from your wishlist is dropping')) {
-      msg.client.reply(msg, {
+        msg.client.ch.reply(msg, {
         content: '<@&893986129773207582> a wished Card was dropped! Move or lose.',
       });
     }

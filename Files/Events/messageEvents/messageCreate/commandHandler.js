@@ -35,6 +35,7 @@ module.exports = {
 
     msg.args = msg.content.replace(/\\n/g, ' ').slice(prefix.length).split(/ +/);
     msg.command = getCommand(msg);
+    if (!msg.command) return [];
     msg.language = await msg.client.ch.languageSelector(msg.guild);
     msg.lan = msg.language.commands[`${msg.command.name}`];
     return [msg, prefix];

@@ -46,7 +46,7 @@ const getCommand = (msg, args) => {
         possibleFile.name === searchedFileName ||
         possibleFile.aliases?.includes(searchedFileName)
       ) {
-        if (possibleFile.takesFirstArg && !msg.args[0]) {
+        if (possibleFile.takesFirstArg && !args[0]) {
           msg.triedCMD = possibleFile;
           return require(`${dir}/cmdhelp`);
         }

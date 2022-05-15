@@ -9,7 +9,7 @@
     "chai": "^4.3.6",
     "clone": "^2.1.2",
     "confusables": "^1.1.0",
-    "discord.js": "^14.0.0-dev.1652443445-d522320",
+    "discord.js": "^14.0.0-dev.1652573522-7ce641d",
     "eris": "^0.16.1",
     "eslint-config-airbnb-base": "^15.0.0",
     "express": "^4.17.3",

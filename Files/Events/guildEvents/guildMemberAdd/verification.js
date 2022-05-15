@@ -16,9 +16,10 @@ module.exports = async (member) => {
       msg.user = member.user;
       msg.member = member;
       msg.guild = member.guild;
-      member.user.client.slashCommands
-        .get('verify_message_button')
-        .startProcess(msg, null, null, { lan: language.verification, language });
+      require('../../../Interactions/SlashCommands/verify').startProcess(msg, null, null, {
+        lan: language.verification,
+        language,
+      });
     }
   }
 };
