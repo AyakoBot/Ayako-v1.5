@@ -4,15 +4,21 @@ const Builders = require('@discordjs/builders');
 const jobs = require('node-schedule');
 const Discord = require('discord.js');
 
-const files = [];
+const interactionFiles = [];
+let aliases = [];
 
-const aliases = [];
-fs.readdirSync(path.join(__dirname, '/interactions')).forEach((fileName) => {
-  const file = require(`./interactions/${fileName}`);
-  files.push({ name: file.name, aliases: file.aliases });
-  if (file.aliases) aliases.push(...file.aliases);
-  aliases.push(file.name);
-});
+const getAliases = () => {
+  aliases = [];
+
+  fs.readdirSync(path.join(__dirname, '/Interactions')).forEach((fileName) => {
+    const file = require(`./Interactions/${fileName}`);
+    interactionFiles.push({ name: file.name, aliases: file.aliases });
+    if (file.aliases) aliases.push(...file.aliases);
+    aliases.push(file.name);
+  });
+};
+
+getAliases();
 
 module.exports = {
   name: 'interactions',
@@ -23,14 +29,7 @@ module.exports = {
   type: 'fun',
   queueAble: true,
   async execute(msg) {
-    const [, prefix] = await require('../Events/messageEvents/messageCreate/commandHandler').prefix(
-      msg,
-    );
-    const args = msg.content.replace(/\\n/g, ' ').slice(prefix.length).split(/ +/);
-    const usedCommandName = args.shift().toLowerCase();
-    const interaction =
-      msg.client.interactions.get(usedCommandName) ||
-      msg.client.interactions.find((i) => i.aliases?.includes(usedCommandName));
+    const interaction = await getInteraction(msg);
     const loneError = !msg.mentions.users.size && !msg.lan.lone[interaction.name];
 
     if (loneError) {
@@ -47,7 +46,7 @@ module.exports = {
 
     const embed = new Builders.UnsafeEmbedBuilder()
       .setDescription(text)
-      .setColor(msg.client.ch.colorSelector(msg.guild.me));
+      .setColor(msg.client.ch.colorSelector(msg.guild.members.me));
 
     if (small) embed.setThumbnail(gif);
     else embed.setImage(gif);
@@ -178,4 +177,31 @@ const getGif = (msg, interaction) => {
 
   const random = Math.floor(Math.random() * interaction.gifs.length);
   return interaction.gifs[random];
+};
+
+const getInteraction = async (msg) => {
+  getAliases();
+
+  const [, prefix] = await require('../Events/messageEvents/messageCreate/commandHandler').prefix(
+    msg,
+  );
+  const args = msg.content.replace(/\\n/g, ' ').slice(prefix.length).split(/ +/);
+  const dir = `${require.main.path}/Files/Commands/Interactions`;
+  const files = fs.readdirSync(dir).filter((f) => f.endsWith('.js'));
+  const searchedFileName = args.shift().toLowerCase();
+
+  const file = files
+    .map((c) => {
+      const possibleFile = require(`${dir}/${c}`);
+      if (
+        possibleFile.name === searchedFileName ||
+        possibleFile.aliases?.includes(searchedFileName)
+      ) {
+        return possibleFile;
+      }
+      return null;
+    })
+    .filter((f) => !!f)[0];
+
+  return file;
 };

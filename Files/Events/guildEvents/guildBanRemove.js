@@ -20,7 +20,7 @@ module.exports = {
         const con = Constants.guildBanRemove;
 
         let entry;
-        if (ban.guild.me.permissions.has(128n)) {
+        if (ban.guild.members.me.permissions.has(128n)) {
           const audits = await ban.guild.fetchAuditLogs({ limit: 3, type: 23 });
           if (audits && audits.entries) {
             const audit = audits.entries.filter((a) => a.target.id === ban.user.id);

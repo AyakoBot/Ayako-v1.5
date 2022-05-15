@@ -74,7 +74,7 @@ module.exports = {
       embeds: [
         new Builders.UnsafeEmbedBuilder()
           .setDescription(msg.lan.sentSuccess)
-          .setColor(await msg.client.ch.colorSelector(msg.guild.me)),
+          .setColor(await msg.client.ch.colorSelector(msg.guild.members.me)),
       ],
       content: null,
       components: [],

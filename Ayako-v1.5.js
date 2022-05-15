@@ -2,23 +2,24 @@ const readline = require('readline');
 const auth = require('./Files/BaseClient/auth.json');
 const client = require('./Files/BaseClient/DiscordClient');
 require('./Files/BaseClient/DataBase');
-
 client.ch = require('./Files/BaseClient/ClientHelper');
 
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-// eslint-disable-next-line no-eval, no-console
-rl.on('line', async (msg) => console.log(await eval(`(async () => {${msg}})()`)));
+rl.on('line', async (msg) =>
+  // eslint-disable-next-line no-eval, no-console
+  console.log(msg.includes('await') ? await eval(`(async () => {${msg}})()`) : eval(msg)),
+);
 
 process.setMaxListeners(2);
 
-[...client.events.entries()].forEach((rawevent) => {
-  const event = client.events.get(rawevent[0]);
+client.eventPaths.forEach((path) => {
+  const event = require(path);
+  const eventName = path.replace('.js', '').split(/\/+/).pop();
+
   if (event.once) {
-    client.once(rawevent[0], (...args) =>
-      event.execute ? event.execute(...args) : event(...args),
-    );
+    client.once(eventName, (...args) => (event.execute ? event.execute(...args) : event(...args)));
   } else {
-    client.on(rawevent[0], (...args) => (event.execute ? event.execute(...args) : event(...args)));
+    client.on(eventName, (...args) => (event.execute ? event.execute(...args) : event(...args)));
   }
 });
 

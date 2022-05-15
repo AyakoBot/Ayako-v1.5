@@ -1,6 +1,7 @@
 const Builders = require('@discordjs/builders');
 const Discord = require('discord.js');
 const jobs = require('node-schedule');
+const fs = require('fs');
 const auth = require('../BaseClient/auth.json');
 
 const cooldowns = new Map();
@@ -55,10 +56,7 @@ const otherInteractionHandler = async (interaction) => {
 };
 
 const getInteraction = (interaction) => {
-  const nonSlashCommand = interaction.client.nonSlashCommands.find(
-    (cmd) =>
-      cmd.name === (cmd.split ? interaction.customId?.split(cmd.split)[0] : interaction.customId),
-  );
+  const nonSlashCommand = getNonSlashCommand(interaction);
 
   if (!nonSlashCommand) return { args: [], nonSlashCommand: null };
 
@@ -70,9 +68,9 @@ const getInteraction = (interaction) => {
 };
 
 const slashCommandHandler = async (interaction) => {
-  interaction.cmd =
-    interaction.client.slashCommands.get(interaction.customId) ||
-    interaction.client.slashCommands.find((c) => c.name === interaction.commandName);
+  interaction.cmd = getAllSlashCommands().find(
+    (cmd) => cmd.name === interaction.customId || cmd.name === interaction.commandName,
+  );
 
   if (!interaction.cmd) return;
   interaction.language = await interaction.client.ch.languageSelector(interaction.guild);
@@ -150,7 +148,7 @@ const slashCommandHandler = async (interaction) => {
       return;
     }
 
-    if (!interaction.guild.me.permissions.has(perms)) {
+    if (!interaction.guild.members.me.permissions.has(perms)) {
       interaction.client.ch.permError(interaction, perms, true);
       return;
     }
@@ -438,4 +436,31 @@ const runDMCommand = (interaction) => {
       interaction.language.commands.commandHandler.GuildOnly,
     );
   }
+};
+
+const getNonSlashCommand = (cmd) => {
+  const dir = `${require.main.path}/Files/Interactions/OtherInteractions`;
+  const files = fs.readdirSync(dir).filter((f) => f.endsWith('.js'));
+
+  const file = files.find((c) => {
+    const possibleFile = require(`${dir}/${c}`);
+    if (
+      possibleFile.name === (possibleFile.split ? cmd.customId?.split(cmd.split)[0] : cmd.customId)
+    ) {
+      return true;
+    }
+    return false;
+  });
+
+  return file;
+};
+
+const getAllSlashCommands = () => {
+  const dir = `${require.main.path}/Files/Interactions/SlashCommands`;
+  const files = fs
+    .readdirSync(dir)
+    .filter((f) => f.endsWith('.js'))
+    .map((c) => require(`${dir}/${c}`));
+
+  return files;
 };

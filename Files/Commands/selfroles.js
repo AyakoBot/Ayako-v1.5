@@ -145,7 +145,7 @@ module.exports = {
           name: msg.lan.rolesUpdated,
           url: msg.client.constants.standard.invite,
         })
-        .setColor(msg.client.ch.colorSelector(msg.guild.me));
+        .setColor(msg.client.ch.colorSelector(msg.guild.members.me));
 
       if (add.length) {
         embed.addFields({
@@ -170,7 +170,7 @@ module.exports = {
 
     const getRoleUpdateEmbed = () =>
       new Builders.UnsafeEmbedBuilder()
-        .setColor(msg.client.ch.colorSelector(msg.guild.me))
+        .setColor(msg.client.ch.colorSelector(msg.guild.members.me))
         .setAuthor({
           name: Data.currentRow.name,
           url: msg.client.constants.standard.invite,
@@ -185,7 +185,7 @@ module.exports = {
 
     const getCategoryUpdateEmbed = () =>
       new Builders.UnsafeEmbedBuilder()
-        .setColor(msg.client.ch.colorSelector(msg.guild.me))
+        .setColor(msg.client.ch.colorSelector(msg.guild.members.me))
         .setAuthor({
           name: Data.currentRow.name,
           url: msg.client.constants.standard.invite,
@@ -234,7 +234,7 @@ module.exports = {
     const getCategoryButtonEmbed = () => {
       if (Data.currentRow) {
         return new Builders.UnsafeEmbedBuilder()
-          .setColor(msg.client.ch.colorSelector(msg.guild.me))
+          .setColor(msg.client.ch.colorSelector(msg.guild.members.me))
           .setAuthor({
             name: Data.currentRow.name,
             url: msg.client.constants.standard.invite,
@@ -248,7 +248,7 @@ module.exports = {
           );
       }
       const embed = new Builders.UnsafeEmbedBuilder()
-        .setColor(msg.client.ch.colorSelector(msg.guild.me))
+        .setColor(msg.client.ch.colorSelector(msg.guild.members.me))
         .setAuthor({
           name: Data.currentRow.name,
           url: msg.client.constants.standard.invite,
@@ -262,7 +262,7 @@ module.exports = {
 
     const getRoleButtonEmbed = () =>
       new Builders.UnsafeEmbedBuilder()
-        .setColor(msg.client.ch.colorSelector(msg.guild.me))
+        .setColor(msg.client.ch.colorSelector(msg.guild.members.me))
         .setAuthor({
           name: Data.currentRow.name,
           url: msg.client.constants.standard.invite,
@@ -319,7 +319,7 @@ module.exports = {
     };
 
     const embed = new Builders.UnsafeEmbedBuilder();
-    embed.setColor(msg.client.ch.colorSelector(msg.guild.me)).setAuthor({
+    embed.setColor(msg.client.ch.colorSelector(msg.guild.members.me)).setAuthor({
       name: msg.lan.author,
       url: msg.client.constants.standard.invite,
     });

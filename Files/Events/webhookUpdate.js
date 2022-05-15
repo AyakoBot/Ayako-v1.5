@@ -21,7 +21,7 @@ module.exports = {
         const webhooks = await data.fetchWebhooks().catch(() => {});
         const audits = [];
         let auditsDelete;
-        if (guild.me.permissions.has(128n)) {
+        if (guild.members.me.permissions.has(128n)) {
           const auditsCreate = await guild.fetchAuditLogs({ limit: 3, type: 50 });
           const auditsUpdate = await guild.fetchAuditLogs({ limit: 3, type: 51 });
           auditsDelete = await guild.fetchAuditLogs({ limit: 3, type: 52 });

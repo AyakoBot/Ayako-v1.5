@@ -21,7 +21,7 @@ module.exports = {
         const con = Constants.channelDelete;
 
         let entry;
-        if (guild.me.permissions.has(128n)) {
+        if (guild.members.me.permissions.has(128n)) {
           let audit = await guild.fetchAuditLogs({ limit: 5, type: 12 }).catch(() => {});
           if (audit && audit.entries) {
             audit = audit.entries.filter((e) => e.target.id === channel.id);

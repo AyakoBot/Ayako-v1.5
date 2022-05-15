@@ -24,7 +24,7 @@ module.exports = {
         const lan = language.guildMemberRemove;
         const con = Constants.guildMemberRemove;
         let entry;
-        if (guild.me.permissions.has(128n)) {
+        if (guild.members.me.permissions.has(128n)) {
           let audit = await guild.fetchAuditLogs({ limit: 5, type: 20 }).catch(() => {});
           if (audit && audit.entries) {
             audit = audit.entries.filter((e) => e.target.id === user.id);

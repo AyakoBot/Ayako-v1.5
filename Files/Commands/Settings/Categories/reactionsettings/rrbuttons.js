@@ -8,8 +8,8 @@ module.exports = {
   finished: true,
   category: ['automation'],
   childOf: 'reactionsettings',
-  noArrows: true,
   canBe1Row: true,
+  display: false,
   mmrEmbed: async (msg, rows) => {
     let message;
     if (rows.length) [, , message] = await linkToIDs(msg, rows[0].messagelink);

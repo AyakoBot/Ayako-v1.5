@@ -14,6 +14,7 @@ module.exports = {
   childOf: 'leveling',
   category: ['automation'],
   helpCategory: 'leveling',
+  main: true,
   async displayEmbed(msg, r) {
     let lvlupmode;
     switch (r.lvlupmode) {

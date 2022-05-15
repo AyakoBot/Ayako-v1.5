@@ -21,7 +21,7 @@ module.exports = {
         const con = Constants.emojiUpdate;
 
         let entry;
-        if (guild.me.permissions.has(128n)) {
+        if (guild.members.me.permissions.has(128n)) {
           const audits = await guild.fetchAuditLogs({ limit: 2, type: 61 }).catch(() => {});
           if (audits && audits.entries) {
             const audit = audits.entries.filter((a) => a.target.id === newEmoji.id);
