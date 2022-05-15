@@ -47,7 +47,7 @@ const endReminder = async (msg) => {
       url: msg.client.constants.standard.invite,
     })
     .setDescription(lan.desc)
-    .setColor(msg.client.ch.colorSelector(msg.guild.me));
+    .setColor(msg.client.ch.colorSelector(msg.guild.members.me));
 
   const users = settings.users?.map((u) => `<@${u}>`).join(', ') || '';
   const roles = settings.roles?.map((r) => `<@&${r}>`).join(', ') || '';

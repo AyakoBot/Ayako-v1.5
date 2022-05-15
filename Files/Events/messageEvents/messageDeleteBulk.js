@@ -35,7 +35,7 @@ module.exports = {
 
         const attachment = ch.txtFileWriter(arr);
         let entry;
-        if (guild.me.permissions.has(128n)) {
+        if (guild.members.me.permissions.has(128n)) {
           let audits = await guild.fetchAuditLogs({ limit: 5, type: 73 }).catch(() => {});
           if (audits && audits.entries.size > 0) {
             audits = audits.entries.filter((a) => a.target.id === msgs.first().channel.id);

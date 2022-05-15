@@ -1,180 +1,51 @@
 /* eslint-disable global-require,import/no-dynamic-require */
 const Discord = require('discord.js');
 const fs = require('fs');
-const { dirname } = require('path');
 const Constants = require('./Other Client Files/Constants.json');
 const Eris = require('./ErisClient');
 
-const appDir = dirname(require.main.filename);
-
-const getSettings = () => {
-  const settings = new Discord.Collection();
-  const settingsFiles = fs
-    .readdirSync(`${appDir}/Files/Commands/settings/categories`)
-    .filter((file) => file.endsWith('.js'));
-
-  const settingsFolders = fs
-    .readdirSync(`${appDir}/Files/Commands/settings/categories`)
-    .filter((file) => !file.endsWith('.js'));
-
-  settingsFolders.forEach((folder) => {
-    const files = fs
-      .readdirSync(`${appDir}/Files/Commands/settings/categories/${folder}`)
-      .filter((file) => file.endsWith('.js'));
-
-    files.forEach((file) => {
-      settingsFiles.push([file, folder]);
-    });
-  });
-
-  settingsFiles.forEach((file) => {
-    let settingsFile;
-    let path;
-
-    if (Array.isArray(file)) {
-      path = `${appDir}/Files/Commands/settings/categories/${file[1]}/${file[0]}`;
-      settingsFile = require(path);
-      [file, settingsFile.folder] = file;
-    } else {
-      path = `${appDir}/Files/Commands/settings/categories/${file}`;
-      settingsFile = require(path);
-    }
-
-    if (!settingsFile.finished) return;
-    settingsFile.name = file.replace('.js', '');
-    settingsFile.path = path;
-
-    settings.set(settingsFile.name, settingsFile);
-  });
-
-  return settings;
-};
-
-const getInteractions = () => {
-  const interactions = new Discord.Collection();
-  const interactionFiles = fs
-    .readdirSync(`${appDir}/Files/Commands/interactions`)
-    .filter((file) => file.endsWith('.js'));
-
-  interactionFiles.forEach((file) => {
-    const interaction = require(`${appDir}/Files/Commands/interactions/${file}`);
-    interaction.path = `${appDir}/Files/Commands/interactions/${file}`;
-
-    interactions.set(interaction.name, interaction);
-  });
-
-  return interactions;
-};
-
-const getSettingsEditors = () => {
-  const settingsEditors = new Discord.Collection();
-
-  fs.readdirSync(`${appDir}/Files/Commands/settings/editors`)
-    .filter((file) => file.endsWith('.js'))
-    .forEach((file) => {
-      const editorfile = require(`../Commands/settings/editors/${file}`);
-      editorfile.path = `../Commands/settings/editors/${file}`;
-
-      settingsEditors.set(file.slice(0, -3), editorfile);
-    });
-
-  return settingsEditors;
-};
-
-const getCommands = () => {
-  const commands = new Discord.Collection();
-
-  fs.readdirSync(`${appDir}/Files/Commands`)
-    .filter((file) => file.endsWith('.js'))
-    .forEach((file) => {
-      const command = require(`../Commands/${file}`);
-
-      commands.set(command.name, command);
-    });
-
-  return commands;
-};
-
-const getSlashCommands = () => {
-  const slashCommands = new Discord.Collection();
-
-  fs.readdirSync(`${appDir}/Files/Interactions/SlashCommands`)
-    .filter((file) => file.endsWith('.js'))
-    .forEach((file) => {
-      const interaction = require(`../Interactions/SlashCommands/${file}`);
-
-      slashCommands.set(interaction.name, interaction);
-    });
-
-  return slashCommands;
-};
-
-const getNonSlashCommands = () => {
-  const nonSlashCommands = new Discord.Collection();
-
-  fs.readdirSync(`${appDir}/Files/Interactions/OtherInteractions`)
-    .filter((file) => file.endsWith('.js'))
-    .forEach((file) => {
-      const interaction = require(`../Interactions/OtherInteractions/${file}`);
-
-      nonSlashCommands.set(interaction.name, interaction);
-    });
-
-  return nonSlashCommands;
-};
-
-const getLanguages = () => {
-  const languages = new Discord.Collection();
-  const languageFiles = fs
-    .readdirSync(`${appDir}/Files/Languages`)
-    .filter((file) => file.endsWith('.json'));
-
-  languageFiles.forEach((file) => {
-    const language = require(`../Languages/${file}`);
-    const name = file.replace(/.json/g, '');
-
-    languages.set(name, language);
-  });
-
-  return languages;
-};
-
 const getEvents = () => {
-  const events = new Discord.Collection();
-  const eventsDir = fs.readdirSync(`${appDir}/Files/Events`);
-  const reg = /.js/g;
+  const paths = [];
+
+  const eventsDir = fs.readdirSync(`${require.main.path}/Files/Events`);
 
   eventsDir.forEach((folder) => {
     if (folder.endsWith('.js')) {
-      const event = require(`../Events/${folder}`);
-      event.path = `../Events/${folder}`;
+      const path = `${require.main.path}/Files/Events/${folder}`;
+      paths.push(path);
 
-      events.set(folder.replace(reg, ''), event);
-    } else {
-      const key = folder.replace(/Events/g, '');
-      const eventFiles = fs.readdirSync(`${appDir}/Files/Events/${folder}`);
-
-      eventFiles.forEach((file) => {
-        if (file.endsWith('.js') && file.startsWith(key)) {
-          const event = require(`../Events/${folder}/${file}`);
-          event.path = `../Events/${folder}/${file}`;
-
-          events.set(file.replace(reg, ''), event);
-        } else if (file.startsWith(key) && !file.endsWith('.js')) {
-          fs.readdirSync(`${appDir}/Files/Events/${folder}/${file}`).forEach((eventFolderFile) => {
-            if (`${eventFolderFile}`.endsWith('.js') && `${eventFolderFile}`.startsWith(key)) {
-              const event = require(`../Events/${folder}/${file}/${eventFolderFile}`);
-              event.path = `../Events/${folder}/${file}/${eventFolderFile}`;
-
-              events.set(eventFolderFile.replace(reg, ''), event);
-            }
-          });
-        }
-      });
+      return;
     }
+
+    const key = folder.replace(/events/gi, '');
+    const eventFiles = fs.readdirSync(`${require.main.path}/Files/Events/${folder}`);
+
+    eventFiles.forEach((file) => {
+      if (file.endsWith('.js') && file.startsWith(key)) {
+        const path = `${require.main.path}/Files/Events/${folder}/${file}`;
+        paths.push(path);
+
+        return;
+      }
+
+      if (file.startsWith(key) && !file.endsWith('.js')) {
+        fs.readdirSync(`${require.main.path}/Files/Events/${folder}/${file}`).forEach(
+          (eventFolderFile) => {
+            if (
+              String(eventFolderFile).endsWith('.js') &&
+              String(eventFolderFile).startsWith(key)
+            ) {
+              const path = `${require.main.path}/Files/Events/${folder}/${file}/${eventFolderFile}`;
+
+              paths.push(path);
+            }
+          },
+        );
+      }
+    });
   });
 
-  return events;
+  return paths;
 };
 
 class Client extends Discord.Client {
@@ -206,14 +77,7 @@ class Client extends Discord.Client {
       },
     });
 
-    this.commands = getCommands();
-    this.events = getEvents();
-    this.languages = getLanguages();
-    this.settingsEditors = getSettingsEditors();
-    this.settings = getSettings();
-    this.slashCommands = getSlashCommands();
-    this.nonSlashCommands = getNonSlashCommands();
-    this.interactions = getInteractions();
+    this.eventPaths = getEvents();
 
     this.mutes = new Discord.Collection();
     this.bans = new Discord.Collection();
@@ -237,7 +101,7 @@ class Client extends Discord.Client {
     this.channelTimeout = new Map();
     this.channelCharLimit = new Map();
 
-    this.setMaxListeners(this.events.size);
+    this.setMaxListeners(this.eventPaths.length);
   }
 }
 

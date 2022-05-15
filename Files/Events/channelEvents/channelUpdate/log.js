@@ -313,7 +313,7 @@ module.exports = {
           if (!typeID) typeID = 11;
 
           let entry;
-          if (guild.me.permissions.has(128n)) {
+          if (guild.members.me.permissions.has(128n)) {
             const audits = await guild.fetchAuditLogs({ limit: 3, type: typeID });
             if (audits && audits.entries) {
               const audit = audits.entries.filter((a) => a.target.id === newChannel.id);

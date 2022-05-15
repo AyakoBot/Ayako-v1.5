@@ -8,6 +8,7 @@ module.exports = {
   category: ['automation'],
   childOf: 'nitro',
   helpCategory: 'nitro',
+  main: true,
   displayEmbed(msg, r) {
     const embed = new Builders.UnsafeEmbedBuilder().addFields(
       {

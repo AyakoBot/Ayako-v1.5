@@ -11,12 +11,15 @@ module.exports = async (args, type) => {
   const lan = language.mod[type];
   const con = args.executor.client.constants.mod[type];
 
+  console.log(1);
+
   let action;
   let embed;
   let error;
   let dm;
 
   if (!args.doDBonly) {
+    console.log(2);
     embed = loadingEmbed(mExistedPreviously, lan, con, args);
 
     if (msg && mExistedPreviously && msg.m.id) {
@@ -34,6 +37,7 @@ module.exports = async (args, type) => {
       executingMember,
       args,
     );
+    console.log(3);
     if (!roleCheckAllowed) return;
 
     const selfPunish = await checkSelfPunish(
@@ -44,6 +48,7 @@ module.exports = async (args, type) => {
       executingMember,
       args,
     );
+    console.log(4);
     if (selfPunish) return;
 
     const mePunish = await checkMePunish(embed, mExistedPreviously, lan, targetMember, args);
@@ -57,6 +62,7 @@ module.exports = async (args, type) => {
       type,
       args,
     );
+    console.log(5);
     if (!punishable) return;
 
     const actionTaken = await checkActionTaken(
@@ -67,6 +73,7 @@ module.exports = async (args, type) => {
       type,
       args,
     );
+    console.log(6);
     if (actionTaken) return;
 
     dm = await doDM({ lan, language }, targetMember, reason, con, args);
@@ -82,6 +89,7 @@ module.exports = async (args, type) => {
 
     ({ action, error } = actionReply);
   }
+  console.log(7);
 
   if (action || args.doDBonly) {
     logEmbed(lan, language, con, reason, args);
@@ -92,6 +100,7 @@ module.exports = async (args, type) => {
     await errorEmbed(embed, lan, mExistedPreviously, dm, error, args);
     return;
   }
+  console.log(8);
 
   doDataBaseAction(type, client, args, guild);
 

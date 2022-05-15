@@ -21,7 +21,7 @@ module.exports = {
 
         let entryPin;
         let entryUnPin;
-        if (guild.me.permissions.has(128n)) {
+        if (guild.members.me.permissions.has(128n)) {
           let auditsPin = await guild.fetchAuditLogs({ limit: 5, type: 74 }).catch(() => {});
           let auditsUnPin = await guild.fetchAuditLogs({ limit: 5, type: 75 }).catch(() => {});
 

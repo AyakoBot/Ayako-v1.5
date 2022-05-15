@@ -62,7 +62,7 @@ const checkWarn = async (msg) => {
       return false;
     }
 
-    msg.client.commands.get('clearwarns').execute(msg);
+    require(`${require.main.path}/Files/Commands/clearwarns`).execute(msg);
     return false;
   }
 
