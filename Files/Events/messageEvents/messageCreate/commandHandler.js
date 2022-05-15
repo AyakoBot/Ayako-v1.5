@@ -371,13 +371,13 @@ const editVerifier = async (msg) => {
       if (interaction.customId === 'abort') {
         m.delete().catch(() => {});
         msg.delete().catch(() => {});
-        interaction.deferUpdate();
+        interaction.deferUpdate().catch(() => {});
         resolve(false);
         return;
       }
 
       if (interaction.customId === 'proceed') {
-        interaction.deferUpdate();
+        interaction.deferUpdate().catch(() => {});
         resolve(true);
       }
     });

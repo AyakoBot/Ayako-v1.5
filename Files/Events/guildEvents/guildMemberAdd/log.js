@@ -39,7 +39,6 @@ module.exports = async (member) => {
           )}\`)`,
         })
         .setColor(con.color);
-      const cachedInvites = member.client.invites.get(member.guild.id);
 
       if (member.user.bot) {
         let entry;
@@ -67,14 +66,6 @@ module.exports = async (member) => {
           );
         }
       } else {
-        const newInvites = await member.client.ch.getAllInvites(member.guild);
-
-        let usedInvite;
-        if (cachedInvites && newInvites) {
-          usedInvite = newInvites.find((inv) => cachedInvites.get(inv?.code)?.uses < inv.uses);
-        }
-        member.client.invites.set(member.guild.id, newInvites);
-
         embed.setAuthor({
           name: lan.author.titleUser,
           iconURL: con.author.image,
@@ -82,28 +73,6 @@ module.exports = async (member) => {
         });
         embed.setThumbnail(member.user.displayAvatarURL({ size: 4096 }));
         embed.setDescription(member.client.ch.stp(lan.descriptionUser, { user: member.user }));
-        if (usedInvite) {
-          if (usedInvite.uses) {
-            embed.addFields({
-              name: lan.inviteInfoTitle,
-              value: member.client.ch.stp(lan.inviteInfoUses, {
-                invite: usedInvite,
-                inviter: usedInvite.inviter?.tag
-                  ? usedInvite.inviter
-                  : { tag: language.unknown, id: usedInvite.inviter?.id || usedInvite.inviter },
-                mention:
-                  member.guild.id === (usedInvite.inviter?.id || usedInvite.inviter)
-                    ? `${usedInvite.inviter}`
-                    : usedInvite.inviter?.username,
-              }),
-            });
-          } else {
-            embed.addFields({
-              name: lan.inviteInfoTitle,
-              value: member.client.ch.stp(lan.inviteInfo, { invite: usedInvite }),
-            });
-          }
-        }
       }
       member.client.ch.send(channels, { embeds: [embed] }, 5000);
     }

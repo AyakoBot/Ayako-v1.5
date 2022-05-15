@@ -181,7 +181,7 @@ const interactionHandler = (msg, m, allReminders) => {
           [selected.uniquetimestamp, selected.userid],
         );
 
-        await interaction.deferUpdate();
+        await interaction.deferUpdate().catch(() => {});
 
         module.exports.execute(msg, m);
 
@@ -210,7 +210,7 @@ const interactionHandler = (msg, m, allReminders) => {
 
         if (!submit) return;
 
-        await submit.deferUpdate();
+        await submit.deferUpdate().catch(() => {});
 
         let newTime = submit.fields.getField('editTime').value;
         const newReason = submit.fields.getField('editLabel').value;

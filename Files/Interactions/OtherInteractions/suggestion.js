@@ -263,7 +263,7 @@ const handleApproverVote = async (cmd, isApproved) => {
     .edit(cmd.message, { components: [], embeds: [cmd.message.embeds[0], embed] })
     .catch(() => {});
 
-  await submit.update({
+  await cmd.client.ch.edit(submit, {
     components: [],
   });
 };
@@ -352,7 +352,7 @@ const handleEdit = async (cmd) => {
 
   if (!submit) return;
 
-  await submit.deferUpdate();
+  await submit.deferUpdate().catch(() => {});
 
   const embed = new Builders.UnsafeEmbedBuilder(cmd.message.embeds[0].data).setDescription(
     submit.fields.getField('longEdit').value,
