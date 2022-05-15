@@ -316,7 +316,7 @@ module.exports = async (oldGuild, newGuild) => {
 
 const getAudits = async (guild) => {
   let entry;
-  if (guild.me.permissions.has(128n)) {
+  if (guild.members.me.permissions.has(128n)) {
     const audits = await guild.fetchAuditLogs({ limit: 5, type: 1 }).catch(() => {});
     if (audits && audits.entries) {
       entry = audits.entries.sort((a, b) => b.id - a.id);

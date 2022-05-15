@@ -12,7 +12,7 @@ module.exports = async (cmd) => {
   const role = options.find((o) => o.name === 'role')?.role;
   const actualPrize = options.find((o) => o.name === 'actual-prize')?.value;
   const host = options.find((o) => o.name === 'host')?.user || cmd.user;
-  const perms = cmd.guild.me.permissionsIn(channel.id);
+  const perms = cmd.guild.members.me.permissionsIn(channel.id);
   const lan = cmd.lan.create;
 
   if (!perms.has(3072n)) {
@@ -88,7 +88,7 @@ const createGiveaway = (cmd, lan, { description, role, endtime, winnerCount, hos
       iconURL: cmd.client.objectEmotes.gift.link,
       url: cmd.client.constants.standard.invite,
     })
-    .setColor(cmd.client.ch.colorSelector(cmd.guild.me))
+    .setColor(cmd.client.ch.colorSelector(cmd.guild.members.me))
     .setDescription(description)
     .setTitle(`0 ${lan.participants}`)
     .addFields({

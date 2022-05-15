@@ -88,7 +88,9 @@ const buttonsHandler = (msg, types, isGuild, ownPos, content, oldEmbed) => {
 const getEmbed = (content, isGuild, msg, ownPos) => {
   const embed = new Builders.UnsafeEmbedBuilder()
     .setColor(
-      isGuild ? msg.client.ch.colorSelector(msg.guild.me) : msg.client.constants.standard.color,
+      isGuild
+        ? msg.client.ch.colorSelector(msg.guild.members.me)
+        : msg.client.constants.standard.color,
     )
     .setDescription(content || msg.lan.noLevels)
     .setAuthor({

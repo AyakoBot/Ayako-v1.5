@@ -23,7 +23,7 @@ module.exports = {
         if (guild.me.permissions.has(128n)) {
           const auditsCreate = await guild.fetchAuditLogs({ limit: 3, type: 80 }).catch(() => {});
           const auditsUpdate = await guild.fetchAuditLogs({ limit: 3, type: 81 }).catch(() => {});
-          const auditsDelete = await guild.fetchAuditLogs({ limit: 3, type: 82 }).catch(() => { });
+          const auditsDelete = await guild.fetchAuditLogs({ limit: 3, type: 82 }).catch(() => {});
 
           if (auditsCreate && auditsCreate.entries) {
             entryCreate = auditsCreate.entries.sort((a, b) => b.id - a.id);
@@ -79,7 +79,7 @@ module.exports = {
         const embed = new Builders.UnsafeEmbedBuilder().setTimestamp();
         if (entry?.actionType === 'DELETE') {
           let finalEntry;
-          if (guild.me.permissions.has(128n)) {
+          if (guild.members.me.permissions.has(128n)) {
             let botBan = await guild.fetchAuditLogs({ limit: 3, type: 20 });
             botBan = botBan.entries.filter(
               (e) => e.target.bot === true && e.executor === entry.executor,

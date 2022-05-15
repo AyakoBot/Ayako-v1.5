@@ -24,7 +24,7 @@ module.exports = {
         const lan = language.inviteCreate;
         const con = Constants.inviteCreate;
         let entry;
-        if (guild.me.permissions.has(128n)) {
+        if (guild.members.me.permissions.has(128n)) {
           const audits = await invite.guild.fetchAuditLogs({ limit: 10, type: 40 });
           if (audits && audits.entries) {
             const audit = audits.entries.filter((a) => a.target && a.target.code === invite.code);

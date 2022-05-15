@@ -42,7 +42,7 @@ module.exports = async (member) => {
 
       if (member.user.bot) {
         let entry;
-        if (member.guild.me.permissions.has(128n)) {
+        if (member.guild.members.me.permissions.has(128n)) {
           const audits = await member.guild.fetchAuditLogs({ limit: 3, type: 28 });
           if (audits && audits.entries) {
             const audit = audits.entries.filter((a) => a.target.id === member.user.id);

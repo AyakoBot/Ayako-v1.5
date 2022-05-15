@@ -64,7 +64,7 @@ const doNickname = (msg) => {
 
   if (msg.member.displayName.length > 26) return;
   if (msg.member.displayName.endsWith('[AFK]')) return;
-  if (!msg.guild.me.permissions.has(134217728n) || !msg.member.manageable) return;
+  if (!msg.guild.members.me.permissions.has(134217728n) || !msg.member.manageable) return;
 
   msg.member.setNickname(newNickname, msg.language.commands.afkHandler.setAfk).catch(() => {});
 };

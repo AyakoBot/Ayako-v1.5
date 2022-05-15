@@ -1,4 +1,5 @@
 const Builders = require('@discordjs/builders');
+const fs = require('fs');
 
 module.exports = {
   name: 'help',
@@ -29,18 +30,24 @@ const getBaseEmbed = (msg) => {
 
   const categories = [
     ...new Set([
-      ...msg.client.settings.filter((s) => s.helpCategory).map((s) => s.helpCategory),
-      ...msg.client.commands.filter((s) => s.type).map((s) => s.type),
-      ...msg.client.slashCommands.filter((s) => s.type).map((s) => s.type),
+      ...getAllSettings()
+        .filter((s) => s.helpCategory)
+        .map((s) => s.helpCategory),
+      ...getAllCommands()
+        .filter((s) => s.type)
+        .map((s) => s.type),
+      ...getAllSlashCommands()
+        .filter((s) => s.type)
+        .map((s) => s.type),
     ]),
   ];
 
   categories.forEach((category) => {
-    const settings = msg.client.settings
+    const settings = getAllSettings()
       .filter((s) => s.helpCategory === category && (s.finished || typeof s.finished !== 'boolean'))
       .map((s) => `\`${s.name}\``);
 
-    const commands = msg.client.commands
+    const commands = getAllCommands()
       .filter(
         (c) =>
           c.type === category &&
@@ -49,7 +56,7 @@ const getBaseEmbed = (msg) => {
       )
       .map((s) => `\`${s.name}\``);
 
-    const slashCommands = msg.client.slashCommands
+    const slashCommands = getAllSlashCommands()
       .filter(
         (c) =>
           c.type === category &&
@@ -73,18 +80,18 @@ const getBaseEmbed = (msg) => {
 };
 
 const getEmbed = async (msg, category) => {
-  const commands = msg.client.commands.filter(
+  const commands = getAllCommands().filter(
     (c) =>
       c.type === category &&
       !c.unfinished &&
       (!c.thisGuildOnly || c.thisGuildOnly.includes(msg.guild?.id)),
   );
 
-  const settings = msg.client.settings.filter(
+  const settings = getAllSettings().filter(
     (s) => s.helpCategory === category && (s.finished || typeof s.finished !== 'boolean'),
   );
 
-  const slashCommands = msg.client.slashCommands.filter(
+  const slashCommands = getAllSlashCommands().filter(
     (c) =>
       c.type === category &&
       !c.unfinished &&
@@ -156,4 +163,64 @@ const getEmbed = async (msg, category) => {
   })}`;
 
   return embed;
+};
+
+const getAllCommands = () => {
+  const dir = `${require.main.path}/Files/Commands`;
+  const files = fs
+    .readdirSync(dir)
+    .filter((f) => f.endsWith('.js'))
+    .map((c) => require(`${dir}/${c}`))
+    .filter((c) => c.unfinished !== true);
+
+  return files;
+};
+
+const getAllSlashCommands = () => {
+  const dir = `${require.main.path}/Files/Interactions/SlashCommands`;
+  const files = fs
+    .readdirSync(dir)
+    .filter((f) => f.endsWith('.js'))
+    .map((c) => require(`${dir}/${c}`));
+
+  return files;
+};
+
+const getAllSettings = () => {
+  const dir = `${require.main.path}/Files/Commands/Settings/Categories`;
+  const files = [
+    ...fs
+      .readdirSync(dir)
+      .filter((f) => f.endsWith('.js'))
+      .map((c) => {
+        const file = require(`${dir}/${c}`);
+        file.name = c.replace('.js', '');
+
+        return file;
+      })
+      .filter((f) => f.finished !== false),
+    ...getNestedSettings(),
+  ];
+
+  return files;
+};
+
+const getNestedSettings = () => {
+  const mainDir = `${require.main.path}/Files/Commands/Settings/Categories`;
+  const folders = fs.readdirSync(mainDir).filter((f) => !f.endsWith('.js'));
+
+  const files = folders
+    .map((folder) => {
+      const insideFolder = fs.readdirSync(`${mainDir}/${folder}`);
+
+      return insideFolder.map((f) => {
+        const file = require(`${mainDir}/${folder}/${f}`);
+        file.name = f.replace('.js', '');
+
+        return file;
+      });
+    })
+    .flat(1);
+
+  return files;
 };

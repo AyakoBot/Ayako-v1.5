@@ -1696,7 +1696,7 @@
       "description": "Show how a specified Command works",
       "usage": ["cmdhelp [command name]"],
       "category": "Info",
-      "notValid": "That was not a valid Command",
+      "commandNotFound": "Command not Found",
       "inviteReason": "Command specific Help Command used on {{msg.guild.name}} in {{msg.channel.name}}",
       "dmsTrue": "Usable in DMs",
       "dmsFalse": "Usable in Servers only",
@@ -1889,40 +1889,10 @@
       "category": "Moderation",
       "reason": "No Reason given"
     },
-    "reloadevent": {
-      "category": "Owner",
-      "description": "Reloads an Event File",
-      "usage": [
-        "reloadevent [event Name]",
-        "reloadevent constants",
-        "reloadevent ch",
-        "reloadevent lan [language]"
-      ]
-    },
-    "reloadinteraction": {
-      "category": "Owner",
-      "description": "Reloads an Interaction File",
-      "usage": ["reloadinteraction [interaction Name]"]
-    },
-    "reloadslashcommand": {
-      "category": "Owner",
-      "description": "Reloads a Slash Command",
-      "usage": ["reloadslashcommand [Slash Command Name]"]
-    },
     "restart": {
       "category": "Owner",
       "description": "Restarts the Client",
       "usage": ["restart"]
-    },
-    "reloadsettings": {
-      "category": "Owner",
-      "description": "Reloads a Settings File",
-      "usage": ["reloadsettings [settings Name]"]
-    },
-    "reloadeditor": {
-      "category": "Owner",
-      "description": "Reloads an Editor File",
-      "usage": ["reloadeditor [editor Name]"]
     },
     "reminder": {
       "category": "Info",
@@ -2141,11 +2111,11 @@
       "tutorial": "For a Setup Guide, click here",
       "categories": {
         "auto-moderation": "Auto-Moderation",
+        "moderation": "Moderation",
         "automation": "Automation",
         "none": "None",
         "compaction": "Compaction",
-        "fun": "Fun",
-        "mod": "Moderation"
+        "fun": "Fun"
       },
       "noEmbed": {
         "author": "Ayako Settings",

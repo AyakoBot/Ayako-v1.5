@@ -54,7 +54,7 @@ const doMentionAFKcheck = (msg, checkedMsg, language) => {
 
 const getIsAFKEmbed = (msg, language, mention, afkRow) => {
   const embed = new Builders.UnsafeEmbedBuilder()
-    .setColor(msg.client.ch.colorSelector(msg.guild.me))
+    .setColor(msg.client.ch.colorSelector(msg.guild.members.me))
     .setFooter({
       text: msg.client.ch.stp(language.commands.afk.footer, {
         user: mention,
@@ -90,7 +90,7 @@ const getTime = (afkRow, language) =>
 const deleteNickname = (msg, language) => {
   if (!msg.member.nickname || !msg.member.nickname.endsWith(' [AFK]')) return;
   const newNickname = msg.member.displayName.slice(0, msg.member.displayName.length - 6);
-  if (!msg.guild.me.permissions.has(134217728n) || !msg.member.manageable) return;
+  if (!msg.guild.members.me.permissions.has(134217728n) || !msg.member.manageable) return;
   msg.member.setNickname(newNickname, language.commands.afkHandler.delAfk).catch(() => {});
 };
 
@@ -110,11 +110,13 @@ const deleteM = (m) => {
 };
 
 const getAFKdeletedEmbed = (msg, language, afkRow) =>
-  new Builders.UnsafeEmbedBuilder().setColor(msg.client.ch.colorSelector(msg.guild.me)).setFooter({
-    text: msg.client.ch.stp(language.commands.afkHandler.footer, {
-      time: getTime(afkRow, language),
-    }),
-  });
+  new Builders.UnsafeEmbedBuilder()
+    .setColor(msg.client.ch.colorSelector(msg.guild.members.me))
+    .setFooter({
+      text: msg.client.ch.stp(language.commands.afkHandler.footer, {
+        time: getTime(afkRow, language),
+      }),
+    });
 
 const handleReactions = async (m, msg) => {
   if (!m) return;
