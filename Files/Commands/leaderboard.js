@@ -48,7 +48,7 @@ const buttonsHandler = (msg, types, isGuild, ownPos, content, oldEmbed) => {
       return;
     }
     await msg.client.ch.disableComponents(msg.m, [oldEmbed]);
-    await interaction.deferUpdate();
+    await interaction.deferUpdate().catch(() => {});
     buttonsCollector.resetTimer();
 
     switch (interaction.customId) {
