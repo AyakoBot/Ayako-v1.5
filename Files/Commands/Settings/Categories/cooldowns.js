@@ -96,7 +96,7 @@ module.exports = {
   },
   buttons(msg, r) {
     const active = new Builders.UnsafeButtonBuilder()
-      .setCustomId(msg.lan.edit.active.name)
+      .setCustomId(msg.lanSettings.active)
       .setLabel(msg.lanSettings.active)
       .setStyle(r.active ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger);
     const command = new Builders.UnsafeButtonBuilder()

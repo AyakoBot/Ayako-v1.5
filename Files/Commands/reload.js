@@ -15,14 +15,14 @@ module.exports = {
         .endsWith(
           msg.args
             .slice(0)
-            .join('/')
+            .join(' ')
             .toLowerCase()
             .replace(/\.json|\.js|\.log|\.txt/gim, ''),
         ),
     );
 
     if (!paths.length) {
-      msg.client.ch.error(msg, { content: 'No Files found!' });
+      msg.client.ch.error(msg, 'No Files found!');
       return;
     }
 

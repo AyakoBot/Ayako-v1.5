@@ -33,7 +33,7 @@ const getBaseEmbed = (msg) => {
       ...getAllSettings()
         .filter((s) => s.helpCategory)
         .map((s) => s.helpCategory),
-      ...getAllCommands()
+      ...getAllCommands(msg)
         .filter((s) => s.type)
         .map((s) => s.type),
       ...getAllSlashCommands()
@@ -47,13 +47,8 @@ const getBaseEmbed = (msg) => {
       .filter((s) => s.helpCategory === category && (s.finished || typeof s.finished !== 'boolean'))
       .map((s) => `\`${s.name}\``);
 
-    const commands = getAllCommands()
-      .filter(
-        (c) =>
-          c.type === category &&
-          !c.unfinished &&
-          (!c.thisGuildOnly || c.thisGuildOnly.includes(msg.guild?.id)),
-      )
+    const commands = getAllCommands(msg)
+      .filter((c) => c.type === category)
       .map((s) => `\`${s.name}\``);
 
     const slashCommands = getAllSlashCommands()
@@ -80,12 +75,7 @@ const getBaseEmbed = (msg) => {
 };
 
 const getEmbed = async (msg, category) => {
-  const commands = getAllCommands().filter(
-    (c) =>
-      c.type === category &&
-      !c.unfinished &&
-      (!c.thisGuildOnly || c.thisGuildOnly.includes(msg.guild?.id)),
-  );
+  const commands = getAllCommands(msg).filter((c) => c.type === category);
 
   const settings = getAllSettings().filter(
     (s) => s.helpCategory === category && (s.finished || typeof s.finished !== 'boolean'),
@@ -165,13 +155,15 @@ const getEmbed = async (msg, category) => {
   return embed;
 };
 
-const getAllCommands = () => {
+const getAllCommands = (msg) => {
   const dir = `${require.main.path}/Files/Commands`;
   const files = fs
     .readdirSync(dir)
     .filter((f) => f.endsWith('.js'))
     .map((c) => require(`${dir}/${c}`))
-    .filter((c) => c.unfinished !== true);
+    .filter(
+      (c) => c.unfinished !== true && (!c.thisGuildOnly || c.thisGuildOnly.includes(msg.guild?.id)),
+    );
 
   return files;
 };

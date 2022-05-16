@@ -7,7 +7,7 @@ module.exports = async (msg) => {
     }
 
     if (msg.content.includes('A card from your wishlist is dropping')) {
-        msg.client.ch.reply(msg, {
+      msg.client.ch.reply(msg, {
         content: '<@&893986129773207582> a wished Card was dropped! Move or lose.',
       });
     }
