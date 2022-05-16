@@ -22,7 +22,7 @@ module.exports = {
     }
 
     const types = ['tag', 'id', 'mention'];
-    const contentData = getContent(msg, 'tag', 0, rows);
+    const contentData = await getContent(msg, 'tag', 0, rows);
     const { content, ownPos } = contentData;
     const embed = getEmbed(content, msg, ownPos, rows);
     const components = getButtons(msg, 1, rows);
@@ -64,7 +64,7 @@ const buttonsHandler = (msg, types, ownPos, content, oldEmbed, rows) => {
       }
     }
 
-    const contentData = getContent(msg, type, page, rows);
+    const contentData = await getContent(msg, type, page, rows);
     ({ content, ownPos } = contentData);
 
     const embed = getEmbed(content, msg, ownPos, rows);
@@ -80,6 +80,11 @@ const buttonsHandler = (msg, types, ownPos, content, oldEmbed, rows) => {
 };
 
 const getEmbed = (content, msg, ownPos, rows) => {
+  const boosters = msg.guild.members.cache
+    .filter((m) => m.premiumSinceTimestamp)
+    .map((m) => m.user.id);
+  const users = getUsersWithDays(rows);
+
   const embed = new Builders.UnsafeEmbedBuilder()
     .setColor(msg.client.ch.colorSelector(msg.guild.members.me))
     .setDescription(content || msg.lan.noUsers)
@@ -92,21 +97,21 @@ const getEmbed = (content, msg, ownPos, rows) => {
   embed.addFields(
     {
       name: msg.lan.allBoosters,
-      value: `${rows && rows.length ? String(rows.length) : msg.language.none}`,
+      value: `${users && users.length ? String(users.length) : msg.language.none}`,
       inline: true,
     },
     {
       name: msg.lan.inactiveBoosters,
       value: `${
-        rows && rows.length ? String(rows.filter((r) => !r.isBoosting).length) : msg.language.none
+        users && users.length && boosters && boosters.length
+          ? Math.abs(users.filter((r) => !r.isBoosting).length - boosters.length)
+          : msg.language.none
       }`,
       inline: true,
     },
     {
       name: msg.lan.currentBoosters,
-      value: `${
-        rows && rows.length ? String(rows.filter((r) => r.isBoosting).length) : msg.language.none
-      }`,
+      value: `${boosters && boosters.length ? boosters.length : msg.language.none}`,
       inline: true,
     },
   );
@@ -143,34 +148,39 @@ const getRow = async (msg) => {
   return null;
 };
 
-const getContent = (msg, type, page, rows) => {
+const getContent = async (msg, type, page, rows) => {
   if (!page) page = 1;
 
   const ownPos = {};
-  const index = rows?.findIndex((row) => row.userid === msg.author.id);
 
   if (rows) {
-    const originalRows = [...rows];
-    rows = rows.splice(30 * (page - 1), 30);
-
-    let longestLevel = Math.max(...rows.map((row) => String(row.level).length));
+    let longestLevel = Math.max(...usersWithDays.map((row) => String(row.level).length));
     longestLevel = longestLevel > 6 ? longestLevel : 6;
+
+    let usersWithDays = getUsersWithDays(rows);
+    const allUsersWithDays = [...usersWithDays];
+    usersWithDays = usersWithDays.splice(30 * (page - 1), 30);
+
+    const index = usersWithDays?.findIndex((row) => row.userid === msg.author.id);
 
     if (index !== -1) {
       ownPos.name = msg.lan.yourPosition;
       ownPos.value = `\`${spaces(`${index + 1}`, 6)} | ${spaces(
-        `${originalRows[index].days}`,
+        `${allUsersWithDays[index].days}`,
         longestLevel,
       )} | \`${msg.author}`;
       ownPos.inline = false;
     }
+    const originalRows = [...rows];
+
+    usersWithDays = await getRows(msg, originalRows[index], usersWithDays);
 
     let content = `\`${spaces(msg.language.rank, 7)}| ${spaces(
       msg.language.time.days,
       longestLevel,
     )} | ${msg.language.user}\`\n`;
 
-    rows?.forEach((row, i) => {
+    usersWithDays?.forEach((row, i) => {
       let user;
 
       switch (type) {
@@ -205,45 +215,7 @@ const getGuildRow = async (msg) => {
   const res = await msg.client.ch.query('SELECT * FROM nitrousers WHERE guildid = $1;', [
     msg.guild.id,
   ]);
-  if (res && res.rowCount) {
-    await Promise.all(
-      res.rows.map((r) => {
-        if (!msg.client.users.cache.get(r.userid)) {
-          return msg.client.users.fetch(r.userid).catch(() => {});
-        }
-        return null;
-      }),
-    );
-
-    await Promise.all(
-      res.rows.map((r) => {
-        if (!msg.guild.members.cache.get(r.userid)) {
-          return msg.guild.members.fetch(r.userid).catch(() => {});
-        }
-        return null;
-      }),
-    );
-
-    let usersWithDays = res.rows.slice();
-    usersWithDays = usersWithDays.filter(
-      (value, index, self) =>
-        index === self.findIndex((t) => t.userid === value.userid && t.guildid === value.guildid),
-    );
-
-    usersWithDays.forEach((user) => {
-      const entries = res.rows.filter(
-        (u) => u.userid === user.userid && u.guildid === user.guildid,
-      );
-      const days = entries.map((e) => getDays(e.booststart, e.boostend ? e.boostend : Date.now()));
-
-      const totalDays = days.reduce((a, b) => a + b, 0);
-      user.days = totalDays;
-
-      const member = msg.guild.members.cache.get(user.userid);
-      if (member?.premiumSinceTimestamp) user.isBoosting = true;
-    });
-    return usersWithDays.sort((b, a) => a.days - b.days);
-  }
+  if (res && res.rowCount) return res.rows;
   return null;
 };
 
@@ -256,4 +228,45 @@ const getDays = (start, end) => {
   const timeDiff = Math.abs(start - end);
   const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
   return diffDays;
+};
+
+const getRows = async (msg, ownPos, usersWithDays) => {
+  await Promise.all(
+    usersWithDays.map((r) => {
+      if (!msg.client.users.cache.get(r.userid)) {
+        return msg.client.users.fetch(r.userid).catch(() => {});
+      }
+      return null;
+    }),
+  );
+
+  if (ownPos && !msg.client.users.cache.get(ownPos.userid)) {
+    msg.client.users.fetch(ownPos.userid).catch(() => {});
+  }
+
+  await msg.guild.members.fetch().catch(() => {});
+
+  usersWithDays.forEach((user) => {
+    const member = msg.guild.members.cache.get(user.userid);
+    if (member?.premiumSinceTimestamp) user.isBoosting = true;
+  });
+
+  return usersWithDays;
+};
+
+const getUsersWithDays = (rows) => {
+  let usersWithDays = rows.slice();
+  usersWithDays = usersWithDays.filter(
+    (value, i, self) =>
+      i === self.findIndex((t) => t.userid === value.userid && t.guildid === value.guildid),
+  );
+
+  usersWithDays.forEach((user) => {
+    const entries = rows.filter((u) => u.userid === user.userid && u.guildid === user.guildid);
+    const days = entries.map((e) => getDays(e.booststart, e.boostend ? e.boostend : Date.now()));
+    const totalDays = days.reduce((a, b) => a + b, 0);
+    user.days = totalDays;
+  });
+
+  return usersWithDays.sort((b, a) => a.days - b.days);
 };

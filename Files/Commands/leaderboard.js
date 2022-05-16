@@ -138,15 +138,16 @@ const getContent = async (msg, type, isGuild, page) => {
   if (isGuild) rows = await getGuildRow(msg);
   else rows = await getGlobalRow(msg);
 
-  const returnedRow = msg.client.ch.objectClone(rows);
+  const returnedRow = [...rows];
   const ownPos = {};
   const index = rows?.findIndex((row) => row.userid === msg.author.id);
 
   if (rows) {
     const originalRows = [...rows];
-    rows = rows.splice(30 * (page - 1), 30);
+    const newRows = rows.splice(30 * (page - 1), 30);
+    newRows.sort((a, b) => Number(b.xp) - Number(a.xp));
 
-    let longestLevel = Math.max(...rows.map((row) => String(row.level).length));
+    let longestLevel = Math.max(...newRows.map((row) => String(row.level).length));
     longestLevel = longestLevel > 6 ? longestLevel : 6;
 
     if (index !== -1) {
@@ -158,7 +159,7 @@ const getContent = async (msg, type, isGuild, page) => {
     }
 
     const users = await Promise.all(
-      rows.map((r) => {
+      newRows.map((r) => {
         if (msg.client.users.cache.get(r.userid)) return msg.client.users.cache.get(r.userid);
         return msg.client.users.fetch(r.userid).catch(() => {});
       }),
@@ -169,7 +170,7 @@ const getContent = async (msg, type, isGuild, page) => {
       longestLevel,
     )} | ${msg.language.user}\`\n`;
 
-    rows?.forEach((row, i) => {
+    newRows?.forEach((row, i) => {
       let user;
 
       switch (type) {
@@ -195,6 +196,7 @@ const getContent = async (msg, type, isGuild, page) => {
         longestLevel,
       )} | ${user}\n`;
     });
+
     return { content, rows: returnedRow, ownPos };
   }
   return { rows: returnedRow, ownPos };
@@ -202,7 +204,7 @@ const getContent = async (msg, type, isGuild, page) => {
 
 const getGlobalRow = async (msg) => {
   const res = await msg.client.ch.query(
-    "SELECT * FROM level WHERE type = 'global' ORDER BY xp DESC;",
+    "SELECT * FROM level WHERE type = 'global' ORDER BY xp DESC LIMIT 500;",
   );
   if (res && res.rowCount) return res.rows;
   return null;
@@ -210,7 +212,7 @@ const getGlobalRow = async (msg) => {
 
 const getGuildRow = async (msg) => {
   const res = await msg.client.ch.query(
-    "SELECT * FROM level WHERE type = 'guild' AND guildid = $1 ORDER BY xp DESC;",
+    "SELECT * FROM level WHERE type = 'guild' AND guildid = $1 ORDER BY xp DESC LIMIT 500;",
     [msg.guild.id],
   );
   if (res && res.rowCount) return res.rows;
