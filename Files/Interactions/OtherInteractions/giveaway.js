@@ -2,7 +2,7 @@ const Builders = require('@discordjs/builders');
 
 module.exports = {
   name: 'giveaway',
-  split: /_+/,
+  split: true,
   needsLanguage: true,
   execute: async (cmd, language) => {
     const lan = language.slashCommands.giveaway.participate;

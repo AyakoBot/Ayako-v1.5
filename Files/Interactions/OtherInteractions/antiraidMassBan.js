@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 
 module.exports = {
   name: 'antiraid_massban',
-  split: null,
+  split: false,
   execute: async (cmd, language) => {
     cmd.deferReply();
     const command = require(`${require.main.paht}/Files/Commands/massban`);

@@ -1,6 +1,6 @@
 module.exports = {
   name: 'rrbuttons',
-  split: /_+/,
+  split: true,
   needsLanguage: false,
   execute: async (cmd) => {
     const reactionRow = await getReactionRow(cmd);
