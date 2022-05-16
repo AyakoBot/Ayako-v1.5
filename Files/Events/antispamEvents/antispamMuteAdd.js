@@ -20,7 +20,7 @@ module.exports = {
       {
         executor: msg.client.user,
         target: msg.author,
-        reason: language.autotypes.antivirus,
+        reason: language.autotypes.antispam,
         msg,
         guild: msg.guild,
         duration: 3600000,
