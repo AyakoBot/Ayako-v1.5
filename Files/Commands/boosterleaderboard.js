@@ -150,19 +150,19 @@ const getContent = (msg, type, page, rows) => {
   const index = rows?.findIndex((row) => row.userid === msg.author.id);
 
   if (rows) {
+    const originalRows = [...rows];
+    rows = rows.splice(30 * (page - 1), 30);
+
     let longestLevel = Math.max(...rows.map((row) => String(row.level).length));
     longestLevel = longestLevel > 6 ? longestLevel : 6;
 
     if (index !== -1) {
       ownPos.name = msg.lan.yourPosition;
       ownPos.value = `\`${spaces(`${index + 1}`, 6)} | ${spaces(
-        `${rows[index].days}`,
+        `${originalRows[index].days}`,
         longestLevel,
       )} | \`${msg.author}`;
       ownPos.inline = false;
-
-      rows.splice(30 * page, rows.length - 1);
-      rows.splice(0, 30 * (page - 1));
     }
 
     let content = `\`${spaces(msg.language.rank, 7)}| ${spaces(
@@ -240,7 +240,7 @@ const getGuildRow = async (msg) => {
       user.days = totalDays;
 
       const member = msg.guild.members.cache.get(user.userid);
-      if (member.premiumSinceTimestamp) user.isBoosting = true;
+      if (member?.premiumSinceTimestamp) user.isBoosting = true;
     });
     return usersWithDays.sort((b, a) => a.days - b.days);
   }

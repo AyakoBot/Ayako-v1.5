@@ -34,3 +34,9 @@ const e = (msg) => {
     msg.channel.send({ content: '<@534783899331461123>' });
   }
 };
+
+/*
+const memwatch = require('@airbnb/node-memwatch');
+const hd = new memwatch.HeapDiff();
+console.log(hd.end());
+*/

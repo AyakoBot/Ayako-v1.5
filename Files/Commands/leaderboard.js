@@ -143,18 +143,18 @@ const getContent = async (msg, type, isGuild, page) => {
   const index = rows?.findIndex((row) => row.userid === msg.author.id);
 
   if (rows) {
+    const originalRows = [...rows];
+    rows = rows.splice(30 * (page - 1), 30);
+
     let longestLevel = Math.max(...rows.map((row) => String(row.level).length));
     longestLevel = longestLevel > 6 ? longestLevel : 6;
 
     if (index !== -1) {
       ownPos.name = msg.lan.yourPosition;
       ownPos.value = `\`${spaces(`${index + 1}`, 6)} | ${spaces(
-        `${rows[index].level}`,
+        `${originalRows[index].level}`,
         longestLevel,
       )} | \`${msg.author}`;
-
-      rows.splice(30 * page, rows.length - 1);
-      rows.splice(0, 30 * (page - 1));
     }
 
     const users = await Promise.all(

@@ -380,7 +380,7 @@ const checkPunishable = async (
     case 'banAdd':
     case 'softbanAdd':
     case 'tempbanAdd': {
-      if (targetMember?.bannable || (!targetMember && args.guild?.me.permissions.has(4n))) {
+      if (targetMember?.bannable || (!targetMember && args.ld?.members.me.permissions.has(4n))) {
         return true;
       }
       break;
@@ -392,18 +392,18 @@ const checkPunishable = async (
       break;
     }
     case 'banRemove': {
-      if (args.guild?.me.permissions.has(4n)) return true;
+      if (args.ld?.members.me.permissions.has(4n)) return true;
       break;
     }
     case 'kickAdd': {
-      if (targetMember?.kickable || (!targetMember && args.guild?.me.permissions.has(2n))) {
+      if (targetMember?.kickable || (!targetMember && args.ld?.members.me.permissions.has(2n))) {
         return true;
       }
       break;
     }
     case 'roleAdd': {
       if (
-        args.role.rawPosition < args.guild?.me.roles.highest.rawPosition &&
+        args.role.rawPosition < args.guild?.members.me.roles.highest.rawPosition &&
         targetMember?.manageable
       ) {
         return true;
@@ -412,7 +412,7 @@ const checkPunishable = async (
     }
     case 'roleRemove': {
       if (
-        args.role.rawPosition < args.guild?.me.roles.highest.rawPosition &&
+        args.role.rawPosition < args.ld?.members.me.roles.highest.rawPosition &&
         targetMember?.manageable
       ) {
         return true;

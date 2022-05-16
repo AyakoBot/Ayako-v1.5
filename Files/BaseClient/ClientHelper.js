@@ -315,32 +315,46 @@ module.exports = {
     const BitField = new Discord.BitField(Number(bits));
     const Flags = [];
 
-    if (BitField.has(1)) {
-      Flags.push(`${emotes ? client.textEmotes.userFlags.Boost1 : ''} ${lan.userFlags.Boost1}`);
-    }
-    if (BitField.has(2)) {
-      Flags.push(`${emotes ? client.textEmotes.userFlags.Boost2 : ''} ${lan.userFlags.Boost2}`);
-    }
-    if (BitField.has(4)) {
-      Flags.push(`${emotes ? client.textEmotes.userFlags.Boost3 : ''} ${lan.userFlags.Boost3}`);
-    }
-    if (BitField.has(8)) {
-      Flags.push(`${emotes ? client.textEmotes.userFlags.Boost6 : ''} ${lan.userFlags.Boost6}`);
-    }
-    if (BitField.has(16)) {
-      Flags.push(`${emotes ? client.textEmotes.userFlags.Boost9 : ''} ${lan.userFlags.Boost9}`);
-    }
-    if (BitField.has(32)) {
-      Flags.push(`${emotes ? client.textEmotes.userFlags.Boost12 : ''} ${lan.userFlags.Boost12}`);
-    }
-    if (BitField.has(64)) {
-      Flags.push(`${emotes ? client.textEmotes.userFlags.Boost15 : ''} ${lan.userFlags.Boost15}`);
-    }
-    if (BitField.has(128)) {
-      Flags.push(`${emotes ? client.textEmotes.userFlags.Boost18 : ''} ${lan.userFlags.Boost18}`);
-    }
-    if (BitField.has(256)) {
-      Flags.push(`${emotes ? client.textEmotes.userFlags.Boost24 : ''} ${lan.userFlags.Boost24}`);
+    switch (true) {
+      case BitField.has(1): {
+        Flags.push(`${emotes ? client.textEmotes.userFlags.Boost1 : ''} ${lan.userFlags.Boost1}`);
+        break;
+      }
+      case BitField.has(2): {
+        Flags.push(`${emotes ? client.textEmotes.userFlags.Boost2 : ''} ${lan.userFlags.Boost2}`);
+        break;
+      }
+      case BitField.has(4): {
+        Flags.push(`${emotes ? client.textEmotes.userFlags.Boost3 : ''} ${lan.userFlags.Boost3}`);
+        break;
+      }
+      case BitField.has(8): {
+        Flags.push(`${emotes ? client.textEmotes.userFlags.Boost6 : ''} ${lan.userFlags.Boost6}`);
+        break;
+      }
+      case BitField.has(16): {
+        Flags.push(`${emotes ? client.textEmotes.userFlags.Boost9 : ''} ${lan.userFlags.Boost9}`);
+        break;
+      }
+      case BitField.has(32): {
+        Flags.push(`${emotes ? client.textEmotes.userFlags.Boost12 : ''} ${lan.userFlags.Boost12}`);
+        break;
+      }
+      case BitField.has(64): {
+        Flags.push(`${emotes ? client.textEmotes.userFlags.Boost15 : ''} ${lan.userFlags.Boost15}`);
+        break;
+      }
+      case BitField.has(128): {
+        Flags.push(`${emotes ? client.textEmotes.userFlags.Boost18 : ''} ${lan.userFlags.Boost18}`);
+        break;
+      }
+      case BitField.has(256): {
+        Flags.push(`${emotes ? client.textEmotes.userFlags.Boost24 : ''} ${lan.userFlags.Boost24}`);
+        break;
+      }
+      default: {
+        break;
+      }
     }
 
     return Flags;
@@ -462,59 +476,82 @@ module.exports = {
     const BitField = new ChannelRules(bits);
     const Rules = [];
 
-    if (BitField.has(1)) {
-      Rules.push(lan.channelRules.HasLeastAttachments);
-    }
-    if (BitField.has(2)) {
-      Rules.push(lan.channelRules.HasMostAttachments);
-    }
-    if (BitField.has(4)) {
-      Rules.push(lan.channelRules.HasLeastCharacters);
-    }
-    if (BitField.has(8)) {
-      Rules.push(lan.channelRules.HasMostCharacters);
-    }
-    if (BitField.has(16)) {
-      Rules.push(lan.channelRules.HasLeastWords);
-    }
-    if (BitField.has(32)) {
-      Rules.push(lan.channelRules.HasMostWords);
-    }
-    if (BitField.has(64)) {
-      Rules.push(lan.channelRules.MentionsLeastUsers);
-    }
-    if (BitField.has(128)) {
-      Rules.push(lan.channelRules.MentionsMostUsers);
-    }
-    if (BitField.has(256)) {
-      Rules.push(lan.channelRules.MentionsLeastChannels);
-    }
-    if (BitField.has(512)) {
-      Rules.push(lan.channelRules.MentionsMostChannels);
-    }
-    if (BitField.has(1024)) {
-      Rules.push(lan.channelRules.MentionsLeastRoles);
-    }
-    if (BitField.has(2048)) {
-      Rules.push(lan.channelRules.MentionsMostRoles);
-    }
-    if (BitField.has(4096)) {
-      Rules.push(lan.channelRules.HasLeastLinks);
-    }
-    if (BitField.has(8192)) {
-      Rules.push(lan.channelRules.HasMostLinks);
-    }
-    if (BitField.has(16384)) {
-      Rules.push(lan.channelRules.HasLeastEmotes);
-    }
-    if (BitField.has(32768)) {
-      Rules.push(lan.channelRules.HasMostEmotes);
-    }
-    if (BitField.has(65536)) {
-      Rules.push(lan.channelRules.HasLeastMentions);
-    }
-    if (BitField.has(131072)) {
-      Rules.push(lan.channelRules.HasMostMentions);
+    switch (true) {
+      case BitField.has(1): {
+        Rules.push(lan.channelRules.HasLeastAttachments);
+        break;
+      }
+      case BitField.has(2): {
+        Rules.push(lan.channelRules.HasMostAttachments);
+        break;
+      }
+      case BitField.has(4): {
+        Rules.push(lan.channelRules.HasLeastCharacters);
+        break;
+      }
+      case BitField.has(8): {
+        Rules.push(lan.channelRules.HasMostCharacters);
+        break;
+      }
+      case BitField.has(16): {
+        Rules.push(lan.channelRules.HasLeastWords);
+        break;
+      }
+      case BitField.has(32): {
+        Rules.push(lan.channelRules.HasMostWords);
+        break;
+      }
+      case BitField.has(64): {
+        Rules.push(lan.channelRules.MentionsLeastUsers);
+        break;
+      }
+      case BitField.has(128): {
+        Rules.push(lan.channelRules.MentionsMostUsers);
+        break;
+      }
+      case BitField.has(256): {
+        Rules.push(lan.channelRules.MentionsLeastChannels);
+        break;
+      }
+      case BitField.has(512): {
+        Rules.push(lan.channelRules.MentionsMostChannels);
+        break;
+      }
+      case BitField.has(1024): {
+        Rules.push(lan.channelRules.MentionsLeastRoles);
+        break;
+      }
+      case BitField.has(2048): {
+        Rules.push(lan.channelRules.MentionsMostRoles);
+        break;
+      }
+      case BitField.has(4096): {
+        Rules.push(lan.channelRules.HasMostCharacters);
+        break;
+      }
+      case BitField.has(8192): {
+        Rules.push(lan.channelRules.HasMostLinks);
+        break;
+      }
+      case BitField.has(16384): {
+        Rules.push(lan.channelRules.HasLeastEmotes);
+        break;
+      }
+      case BitField.has(32768): {
+        Rules.push(lan.channelRules.HasMostEmotes);
+        break;
+      }
+      case BitField.has(65536): {
+        Rules.push(lan.channelRules.HasLeastMentions);
+        break;
+      }
+      case BitField.has(131072): {
+        Rules.push(lan.channelRules.HasMostMentions);
+        break;
+      }
+      default: {
+        break;
+      }
     }
 
     return Rules;
@@ -529,140 +566,186 @@ module.exports = {
     const BitField = new Discord.PermissionsBitField(BigInt(bits));
     const Perms = [];
 
-    if (BitField.has(1n, false)) {
-      Perms.push(lan.permissions.CreateInstantInvite);
-    }
-    if (BitField.has(2n, false)) {
-      Perms.push(lan.permissions.KickMembers);
-    }
-    if (BitField.has(4n, false)) {
-      Perms.push(lan.permissions.BanMembers);
-    }
-    if (BitField.has(8n, false)) {
-      Perms.push(lan.permissions.Administrator);
-    }
-    if (BitField.has(16n, false)) {
-      if (isntRole) {
-        Perms.push(lan.permissions.ManageChannel);
-      } else {
-        Perms.push(lan.permissions.ManageChannels);
+    switch (true) {
+      case BitField.has(1n, false): {
+        Perms.push(lan.permissions.CreateInstantInvite);
+        break;
       }
-    }
-    if (BitField.has(32n, false)) {
-      Perms.push(lan.permissions.ManageGuild);
-    }
-    if (BitField.has(64n, false)) {
-      Perms.push(lan.permissions.AddReactions);
-    }
-    if (BitField.has(128n, false)) {
-      Perms.push(lan.permissions.ViewAuditLog);
-    }
-    if (BitField.has(256n, false)) {
-      Perms.push(lan.permissions.PrioritySpeaker);
-    }
-    if (BitField.has(512n, false)) {
-      Perms.push(lan.permissions.Stream);
-    }
-    if (BitField.has(1024n, false)) {
-      if (isntRole) {
-        Perms.push(lan.permissions.ViewChannel);
-      } else {
-        Perms.push(lan.permissions.ViewChannels);
+      case BitField.has(2n, false): {
+        Perms.push(lan.permissions.KickMembers);
+        break;
       }
-    }
-    if (BitField.has(2048n, false)) {
-      Perms.push(lan.permissions.SendMessages);
-    }
-    if (BitField.has(4096n, false)) {
-      Perms.push(lan.permissions.SendTTSMessages);
-    }
-    if (BitField.has(8192n, false)) {
-      Perms.push(lan.permissions.ManageMessages);
-    }
-    if (BitField.has(16384n, false)) {
-      Perms.push(lan.permissions.EmbedLinks);
-    }
-    if (BitField.has(32768n, false)) {
-      Perms.push(lan.permissions.AttachFiles);
-    }
-    if (BitField.has(65536n, false)) {
-      Perms.push(lan.permissions.ReadMessageHistory);
-    }
-    if (BitField.has(131072n, false)) {
-      Perms.push(lan.permissions.MentionEveryone);
-    }
-    if (BitField.has(262144n, false)) {
-      Perms.push(lan.permissions.UseExternalEmojis);
-    }
-    if (BitField.has(524288n, false)) {
-      Perms.push(lan.permissions.ViewGuildInsights);
-    }
-    if (BitField.has(1048576n, false)) {
-      Perms.push(lan.permissions.Connect);
-    }
-    if (BitField.has(2097152n, false)) {
-      Perms.push(lan.permissions.Speak);
-    }
-    if (BitField.has(4194304n, false)) {
-      Perms.push(lan.permissions.MuteMembers);
-    }
-    if (BitField.has(8388608n, false)) {
-      Perms.push(lan.permissions.DeafenMembers);
-    }
-    if (BitField.has(16777216n, false)) {
-      Perms.push(lan.permissions.MoveMembers);
-    }
-    if (BitField.has(33554432n, false)) {
-      Perms.push(lan.permissions.UseVAD);
-    }
-    if (BitField.has(67108864n, false)) {
-      Perms.push(lan.permissions.ChangeNickname);
-    }
-    if (BitField.has(134217728n, false)) {
-      Perms.push(lan.permissions.ManageNicknames);
-    }
-    if (BitField.has(268435456n, false)) {
-      if (isntRole) {
-        Perms.push(lan.permissions.ManagePermissions);
-      } else {
-        Perms.push(lan.permissions.ManageRoles);
+      case BitField.has(4n, false): {
+        Perms.push(lan.permissions.BanMembers);
+        break;
       }
-    }
-    if (BitField.has(536870912n, false)) {
-      Perms.push(lan.permissions.ManageWebhooks);
-    }
-    if (BitField.has(1073741824n, false)) {
-      Perms.push(lan.permissions.ManageEmojisAndStickers);
-    }
-    if (BitField.has(2147483648n, false)) {
-      Perms.push(lan.permissions.UseApplicationCommands);
-    }
-    if (BitField.has(4294967296n, false)) {
-      Perms.push(lan.permissions.RequestToSpeak);
-    }
-    if (BitField.has(8589934592n, false)) {
-      Perms.push(lan.permissions.ManageEvents);
-    }
-    if (BitField.has(17179869184n, false)) {
-      Perms.push(lan.permissions.ManageThreads);
-    }
-    if (BitField.has(34359738368n, false)) {
-      Perms.push(lan.permissions.CreatePublicThreads);
-    }
-    if (BitField.has(68719476736n, false)) {
-      Perms.push(lan.permissions.CreatePrivateThreads);
-    }
-    if (BitField.has(137438953472n, false)) {
-      Perms.push(lan.permissions.UseExternalStickers);
-    }
-    if (BitField.has(274877906944n, false)) {
-      Perms.push(lan.permissions.SendMessagesInThreads);
-    }
-    if (BitField.has(549755813888n, false)) {
-      Perms.push(lan.permissions.StartEmbeddedActivities);
-    }
-    if (BitField.has(1099511627776n, false)) {
-      Perms.push(lan.permissions.ModerateMembers);
+      case BitField.has(8n, false): {
+        Perms.push(lan.permissions.Administrator);
+        break;
+      }
+      case BitField.has(16n, false): {
+        if (isntRole) {
+          Perms.push(lan.permissions.ManageChannel);
+        } else {
+          Perms.push(lan.permissions.ManageChannels);
+        }
+        break;
+      }
+      case BitField.has(32n, false): {
+        Perms.push(lan.permissions.AddReactions);
+        break;
+      }
+      case BitField.has(64n, false): {
+        Perms.push(lan.permissions.AddReactions);
+        break;
+      }
+      case BitField.has(128n, false): {
+        Perms.push(lan.permissions.ViewAuditLog);
+        break;
+      }
+      case BitField.has(256n, false): {
+        Perms.push(lan.permissions.PrioritySpeaker);
+        break;
+      }
+      case BitField.has(512n, false): {
+        Perms.push(lan.permissions.Stream);
+        break;
+      }
+      case BitField.has(1024n, false): {
+        if (isntRole) {
+          Perms.push(lan.permissions.ViewChannel);
+        } else {
+          Perms.push(lan.permissions.ViewChannels);
+        }
+        break;
+      }
+      case BitField.has(2048n, false): {
+        Perms.push(lan.permissions.SendMessages);
+        break;
+      }
+      case BitField.has(4096n, false): {
+        Perms.push(lan.permissions.SendTTSMessages);
+        break;
+      }
+      case BitField.has(8192n, false): {
+        Perms.push(lan.permissions.ManageMessages);
+        break;
+      }
+      case BitField.has(16384n, false): {
+        Perms.push(lan.permissions.EmbedLinks);
+        break;
+      }
+      case BitField.has(32768n, false): {
+        Perms.push(lan.permissions.AttachFiles);
+        break;
+      }
+      case BitField.has(65536n, false): {
+        Perms.push(lan.permissions.ReadMessageHistory);
+        break;
+      }
+      case BitField.has(131072n, false): {
+        Perms.push(lan.permissions.MentionEveryone);
+        break;
+      }
+      case BitField.has(262144n, false): {
+        Perms.push(lan.permissions.UseExternalEmojis);
+        break;
+      }
+      case BitField.has(524288n, false): {
+        Perms.push(lan.permissions.ViewGuildInsights);
+        break;
+      }
+      case BitField.has(1048576n, false): {
+        Perms.push(lan.permissions.Connect);
+        break;
+      }
+      case BitField.has(2097152n, false): {
+        Perms.push(lan.permissions.Speak);
+        break;
+      }
+      case BitField.has(4194304n, false): {
+        Perms.push(lan.permissions.MuteMembers);
+        break;
+      }
+      case BitField.has(8388608n, false): {
+        Perms.push(lan.permissions.DeafenMembers);
+        break;
+      }
+      case BitField.has(16777216n, false): {
+        Perms.push(lan.permissions.MoveMembers);
+        break;
+      }
+      case BitField.has(33554432n, false): {
+        Perms.push(lan.permissions.UseVAD);
+        break;
+      }
+      case BitField.has(67108864n, false): {
+        Perms.push(lan.permissions.ChangeNickname);
+        break;
+      }
+      case BitField.has(134217728n, false): {
+        Perms.push(lan.permissions.ManageNicknames);
+        break;
+      }
+      case BitField.has(268435456n, false): {
+        if (isntRole) {
+          Perms.push(lan.permissions.ManagePermissions);
+        } else {
+          Perms.push(lan.permissions.ManageRoles);
+        }
+        break;
+      }
+      case BitField.has(536870912n, false): {
+        Perms.push(lan.permissions.ManageWebhooks);
+        break;
+      }
+      case BitField.has(1073741824n, false): {
+        Perms.push(lan.permissions.ManageEmojisAndStickers);
+        break;
+      }
+      case BitField.has(2147483648n, false): {
+        Perms.push(lan.permissions.UseApplicationCommands);
+        break;
+      }
+      case BitField.has(4294967296n, false): {
+        Perms.push(lan.permissions.RequestToSpeak);
+        break;
+      }
+      case BitField.has(8589934592n, false): {
+        Perms.push(lan.permissions.ManageEvents);
+        break;
+      }
+      case BitField.has(17179869184n, false): {
+        Perms.push(lan.permissions.ManageThreads);
+        break;
+      }
+      case BitField.has(34359738368n, false): {
+        Perms.push(lan.permissions.CreatePublicThreads);
+        break;
+      }
+      case BitField.has(68719476736n, false): {
+        Perms.push(lan.permissions.CreatePrivateThreads);
+        break;
+      }
+      case BitField.has(137438953472n, false): {
+        Perms.push(lan.permissions.UseExternalStickers);
+        break;
+      }
+      case BitField.has(274877906944n, false): {
+        Perms.push(lan.permissions.SendMessagesInThreads);
+        break;
+      }
+      case BitField.has(549755813888n, false): {
+        Perms.push(lan.permissions.StartEmbeddedActivities);
+        break;
+      }
+      case BitField.has(1099511627776n, false): {
+        Perms.push(lan.permissions.ModerateMembers);
+        break;
+      }
+      default: {
+        break;
+      }
     }
 
     return Perms;

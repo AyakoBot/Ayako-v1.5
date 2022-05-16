@@ -127,7 +127,7 @@ const insertLevels = (msg, type, baseXP, xpMultiplier) => {
 
   msg.client.ch.query(
     `INSERT INTO level (type, userid, xp, level, guildid) VALUES ($1, $2, $3, $4, $5);`,
-    [type, msg.author.id, xp, 0, type === 'guild' ? msg.guild.id : null],
+    [type, msg.author.id, xp, 0, type === 'guild' ? msg.guild.id : 1],
   );
 };
 

@@ -12,9 +12,12 @@ const cooldowns = new Discord.Collection();
 module.exports = {
   prefix: async (msg) => {
     const getCustomPrefix = async () => {
-      const res = await msg.client.ch.query('SELECT * FROM guildsettings WHERE guildid = $1;', [
-        msg.guild.id,
-      ]);
+      const res = await msg.client.ch.query(
+        'SELECT * FROM guildsettings WHERE guildid = $1;',
+        [msg.guild.id],
+        msg.author.id === '564052925828038658',
+      );
+
       if (res && res.rowCount > 0) return res.rows[0].prefix;
       return null;
     };
@@ -42,7 +45,6 @@ module.exports = {
   },
 
   execute: async (rawmsg) => {
-    if (rawmsg.author.id === '318453143476371456') console.log(1);
     const [msg] = await module.exports.prefix(rawmsg);
     if (!msg) return;
     if (msg.command?.thisGuildOnly && msg.command?.thisGuildOnly.includes(msg.guild?.id)) return;
