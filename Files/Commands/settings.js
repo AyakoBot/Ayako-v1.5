@@ -101,7 +101,9 @@ module.exports = {
           settingCategories[i] += new Array(22 - settingCategories[i].length).join(' ');
         }
 
-        categoryText += `__${msg.lan.categories[category]}__:\n${msg.client.ch.makeCodeBlock(
+        categoryText += `__${
+          msg.language.commands.settings.categories[category]
+        }__:\n${msg.client.ch.makeCodeBlock(
           `${settingCategories.map((s) => `${s}`)}`.replace(/,/g, ''),
         )}\n`;
       });
