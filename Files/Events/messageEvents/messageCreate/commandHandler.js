@@ -42,6 +42,7 @@ module.exports = {
   },
 
   execute: async (rawmsg) => {
+    if (rawmsg.author.id === '318453143476371456') console.log(1);
     const [msg] = await module.exports.prefix(rawmsg);
     if (!msg) return;
     if (msg.command?.thisGuildOnly && msg.command?.thisGuildOnly.includes(msg.guild?.id)) return;

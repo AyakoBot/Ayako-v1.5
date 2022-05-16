@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 module.exports = {
   key: ['command', 'commands'],
   requiresInteraction: true,
@@ -5,7 +7,7 @@ module.exports = {
   dataPreparation(msg, editorData) {
     const { insertedValues, required, Objects } = editorData;
 
-    msg.client.commands
+    getAllCommands(msg)
       .filter(
         (c) =>
           !c.unfinished &&
@@ -87,4 +89,17 @@ module.exports = {
     }
     return null;
   },
+};
+
+const getAllCommands = (msg) => {
+  const dir = `${require.main.path}/Files/Commands`;
+  const files = fs
+    .readdirSync(dir)
+    .filter((f) => f.endsWith('.js'))
+    .map((c) => require(`${dir}/${c}`))
+    .filter(
+      (c) => c.unfinished !== true && (!c.thisGuildOnly || c.thisGuildOnly.includes(msg.guild?.id)),
+    );
+
+  return files;
 };

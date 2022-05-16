@@ -10,7 +10,14 @@ module.exports = async (member) => {
 🌸 Friendly and chill environment  with epic emotes:wilted_rose: 
 🌸 Many fun events & gwys for **Karuta, Dank Memer, Nitro and OwO**
 
-*join now * ⇝  https://discord.gg/yUjy9Z2ahJ`;
+*join now * ⇝  https://discord.gg/yUjy9Z2ahJ
+
+✧･ﾟ: ✧･ﾟ:  :･ﾟ✧:･ﾟ✧
+
+• 𝐘𝐮𝐫𝐢’𝐬 𝐀𝐫𝐜𝐚𝐝𝐞 is a place for all anime lovers to come together. We offer a safe place for those who enjoy anime to talk about it with others and learn more about anime.
+
+𝐃𝐢𝐬𝐜𝗼𝐫𝐝: https://discord.gg/sST6whJbdN
+`;
 
   member.user.send({ content }).catch(() => {});
 

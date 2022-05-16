@@ -1702,6 +1702,11 @@
       "dmsFalse": "Usable in Servers only",
       "notFound": "Command Help not found. Developer has been notified. Please try again later."
     },
+    "promotion": {
+      "description": "Vote about a User for Promotion",
+      "usage": ["promotion net/gold [user to promote]"],
+      "category": "Utility"
+    },
     "help": {
       "description": "Information about all Features Ayako has",
       "usage": ["help", "help (sub category)"],
