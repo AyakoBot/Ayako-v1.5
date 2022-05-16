@@ -65,5 +65,7 @@ const getNonSlashCommand = (cmd) => {
     return false;
   });
 
+  if (!file) return null;
+
   return require(`${dir}/${file}`);
 };

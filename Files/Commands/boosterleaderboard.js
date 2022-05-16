@@ -154,11 +154,11 @@ const getContent = async (msg, type, page, rows) => {
   const ownPos = {};
 
   if (rows) {
+    let usersWithDays = getUsersWithDays(rows);
+    const allUsersWithDays = [...usersWithDays];
     let longestLevel = Math.max(...usersWithDays.map((row) => String(row.level).length));
     longestLevel = longestLevel > 6 ? longestLevel : 6;
 
-    let usersWithDays = getUsersWithDays(rows);
-    const allUsersWithDays = [...usersWithDays];
     usersWithDays = usersWithDays.splice(30 * (page - 1), 30);
 
     const index = usersWithDays?.findIndex((row) => row.userid === msg.author.id);
