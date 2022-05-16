@@ -3,7 +3,7 @@ const Builders = require('@discordjs/builders');
 
 module.exports = {
   name: 'vote_reminder_disable',
-  split: null,
+  split: false,
   execute: async (cmd) => {
     cmd.client.ch.query(
       `INSERT INTO users (userid, votereminders) VALUES ($1, $2)

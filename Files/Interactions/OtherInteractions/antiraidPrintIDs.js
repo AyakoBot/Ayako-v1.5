@@ -3,7 +3,7 @@ const Builders = require('@discordjs/builders');
 
 module.exports = {
   name: 'antiraid_print_ids',
-  split: null,
+  split: false,
   execute: async (cmd) => {
     const rawContent = await cmd.client.ch.convertTxtFileLinkToString(
       (await cmd.message.fetch()).attachments.first().url,

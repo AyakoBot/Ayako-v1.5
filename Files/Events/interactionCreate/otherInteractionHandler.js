@@ -1,4 +1,3 @@
-const Builders = require('@discordjs/builders');
 const fs = require('fs');
 const jobs = require('node-schedule');
 
@@ -39,7 +38,7 @@ module.exports = async (interaction) => {
   try {
     nonSlashCommand.execute(interaction, interaction.language);
   } catch (e) {
-    error(interaction, e);
+    interaction.client.logger(`slashCommandError ${nonSlashCommand.name}:`, e);
   }
 };
 
@@ -48,42 +47,9 @@ const getInteraction = (interaction) => {
 
   if (!nonSlashCommand) return { args: [], nonSlashCommand: null };
 
-  const args = nonSlashCommand.split
-    ? interaction.customId.split(nonSlashCommand.split)
-    : [interaction.customId];
+  const args = nonSlashCommand.split ? interaction.customId.split(/_+/) : [interaction.customId];
 
   return { args, nonSlashCommand };
-};
-
-const error = (interaction, e) => {
-  // eslint-disable-next-line no-console
-  console.log(e);
-
-  const channel = interaction.client.channels.cache.get(interaction.client.constants.errorchannel);
-
-  const embed = new Builders.UnsafeEmbedBuilder()
-    .setAuthor({
-      name: 'Interaction Error',
-      iconURL: interaction.client.objectEmotes.cross.link,
-      url: interaction.url,
-    })
-    .setTimestamp()
-    .setDescription(`${interaction.client.ch.makeCodeBlock(e.stack)}`)
-    .addFields({
-      name: 'Message',
-      value: `${interaction.client.ch.makeCodeBlock(interaction)}`,
-    })
-    .addFields({
-      name: 'Guild',
-      value: `${interaction.guild?.name} | ${interaction.guild?.id}`,
-    })
-    .addFields({
-      name: 'Channel',
-      value: `${interaction.channel?.name} | ${interaction.channel?.id}`,
-    })
-    .addFields({ name: 'Message Link', value: interaction.url })
-    .setColor(16711680);
-  if (channel) interaction.client.ch.send(channel, { embeds: [embed] });
 };
 
 const getNonSlashCommand = (cmd) => {
@@ -92,13 +58,12 @@ const getNonSlashCommand = (cmd) => {
 
   const file = files.find((c) => {
     const possibleFile = require(`${dir}/${c}`);
-    if (
-      possibleFile.name === (possibleFile.split ? cmd.customId?.split(cmd.split)[0] : cmd.customId)
-    ) {
+
+    if (possibleFile.name === (possibleFile.split ? cmd.customId?.split(/_+/)[0] : cmd.customId)) {
       return true;
     }
     return false;
   });
 
-  return file;
+  return require(`${dir}/${file}`);
 };
