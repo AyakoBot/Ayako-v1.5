@@ -13,14 +13,11 @@ rl.on('line', async (msg) =>
 process.setMaxListeners(2);
 
 client.eventPaths.forEach((path) => {
-  const event = require(path);
   const eventName = path.replace('.js', '').split(/\/+/).pop();
+  const eventHandler = require('./Files/Events/baseEventHandler');
 
-  if (event.once) {
-    client.once(eventName, (...args) => (event.execute ? event.execute(...args) : event(...args)));
-  } else {
-    client.on(eventName, (...args) => (event.execute ? event.execute(...args) : event(...args)));
-  }
+  if (eventName === 'ready') client.once(eventName, (...args) => eventHandler(eventName, args));
+  else client.on(eventName, (...args) => eventHandler(eventName, args));
 });
 
 process.on('unhandledRejection', (error) => {
