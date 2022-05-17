@@ -11,15 +11,12 @@ module.exports = async (args, type) => {
   const lan = language.mod[type];
   const con = args.executor.client.constants.mod[type];
 
-  console.log(1);
-
   let action;
   let embed;
   let error;
   let dm;
 
   if (!args.doDBonly) {
-    console.log(2);
     embed = loadingEmbed(mExistedPreviously, lan, con, args);
 
     if (msg && mExistedPreviously && msg.m.id) {
@@ -37,7 +34,6 @@ module.exports = async (args, type) => {
       executingMember,
       args,
     );
-    console.log(3);
     if (!roleCheckAllowed) return;
 
     const selfPunish = await checkSelfPunish(
@@ -48,7 +44,6 @@ module.exports = async (args, type) => {
       executingMember,
       args,
     );
-    console.log(4);
     if (selfPunish) return;
 
     const mePunish = await checkMePunish(embed, mExistedPreviously, lan, targetMember, args);
@@ -62,7 +57,6 @@ module.exports = async (args, type) => {
       type,
       args,
     );
-    console.log(5);
     if (!punishable) return;
 
     const actionTaken = await checkActionTaken(
@@ -73,7 +67,6 @@ module.exports = async (args, type) => {
       type,
       args,
     );
-    console.log(6);
     if (actionTaken) return;
 
     dm = await doDM({ lan, language }, targetMember, reason, con, args);
@@ -89,7 +82,6 @@ module.exports = async (args, type) => {
 
     ({ action, error } = actionReply);
   }
-  console.log(7);
 
   if (action || args.doDBonly) {
     logEmbed(lan, language, con, reason, args);
@@ -380,7 +372,7 @@ const checkPunishable = async (
     case 'banAdd':
     case 'softbanAdd':
     case 'tempbanAdd': {
-      if (targetMember?.bannable || (!targetMember && args.ld?.members.me.permissions.has(4n))) {
+      if (targetMember?.bannable || (!targetMember && args.guild?.members.me.permissions.has(4n))) {
         return true;
       }
       break;
@@ -392,11 +384,11 @@ const checkPunishable = async (
       break;
     }
     case 'banRemove': {
-      if (args.ld?.members.me.permissions.has(4n)) return true;
+      if (args.guild?.members.me.permissions.has(4n)) return true;
       break;
     }
     case 'kickAdd': {
-      if (targetMember?.kickable || (!targetMember && args.ld?.members.me.permissions.has(2n))) {
+      if (targetMember?.kickable || (!targetMember && args.guild?.members.me.permissions.has(2n))) {
         return true;
       }
       break;
@@ -412,7 +404,7 @@ const checkPunishable = async (
     }
     case 'roleRemove': {
       if (
-        args.role.rawPosition < args.ld?.members.me.roles.highest.rawPosition &&
+        args.role.rawPosition < args.guild?.members.me.roles.highest.rawPosition &&
         targetMember?.manageable
       ) {
         return true;
