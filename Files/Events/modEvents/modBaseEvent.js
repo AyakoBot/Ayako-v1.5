@@ -92,7 +92,6 @@ module.exports = async (args, type) => {
     await errorEmbed(embed, lan, mExistedPreviously, dm, error, args);
     return;
   }
-  console.log(8);
 
   doDataBaseAction(type, client, args, guild);
 
@@ -531,13 +530,6 @@ const checkActionTaken = async (
   if (punished) {
     if (!args.msg && !args.msg.id) return true;
 
-    const deleter = () => {
-      jobs.scheduleJob(new Date(Date.now() + 10000), () => {
-        if (args.msg.m) args.msg.m.delete().catch(() => {});
-        if (args.msg) args.msg.delete().catch(() => {});
-      });
-    };
-
     if (mExistedPreviously && args.msg?.source) {
       embed.data.fields?.pop();
       embed.addFields({
@@ -634,8 +626,8 @@ const takeAction = async (punishmentType, targetMember, executingMember, args, l
       break;
     }
     case 'banAdd': {
-      punished = await targetMember
-        ?.ban({
+      punished = await args.guild?.bans
+        .create(args.target.id, {
           deleteMessageDays: 7,
           reason: `${args.executor.tag} ${args.reason ? `| ${args.reason}` : ''}`,
         })
@@ -645,8 +637,8 @@ const takeAction = async (punishmentType, targetMember, executingMember, args, l
       break;
     }
     case 'softbanAdd': {
-      punished = await targetMember
-        ?.ban({
+      punished = await args.guild?.bans
+        .create(args.target.id, {
           deleteMessageDays: 7,
           reason: `${args.executor.tag} ${args.reason ? `| ${args.reason}` : ''}`,
         })
@@ -665,8 +657,8 @@ const takeAction = async (punishmentType, targetMember, executingMember, args, l
       break;
     }
     case 'tempbanAdd': {
-      punished = await targetMember
-        ?.ban({
+      punished = await args.guild?.bans
+        .create(args.target.id, {
           deleteMessageDays: 7,
           reason: `${args.executor.tag} ${args.reason ? `| ${args.reason}` : ''}`,
         })
