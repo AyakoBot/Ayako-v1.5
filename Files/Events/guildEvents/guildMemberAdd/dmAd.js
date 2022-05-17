@@ -92,11 +92,12 @@ const policyReminder = async (member) => {
         inline: false,
       },
     )
-    .setColor('b0ff00');
+    .setColor(member.client.constants.standard.color);
 
-  const m = await member.user
-    .send({ embeds: [embed], content: 'Ayako Terms and Privacy Notice' })
-    .catch(() => {});
+  const m = await member.client.ch.send(member.user, {
+    embeds: [embed],
+    content: 'Ayako Terms and Privacy Notice',
+  });
   member.client.ch.edit(m, {
     embeds: [embed],
     content: 'This Reminder will only be sent to you __once__\nhttps://discord.gg/GNpcspBbDr',

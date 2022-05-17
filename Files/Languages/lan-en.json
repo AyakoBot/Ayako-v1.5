@@ -1932,7 +1932,7 @@
       "description": "Disables the Privacy Policy and Terms reminder",
       "usage": ["disableprivacyandtermsreminder"],
       "reenabled": "The Policy and Terms Reminder is now Re-Enabled",
-      "disabled": "'The Policy and Terms reminder is now disabled.\nPlease remember to link\nhttps://ayakobot.com/terms and https://ayakobot.com/privacy in one of your Info Channels.\nYou can re-enable the Reminder by using the same Command again.'"
+      "disabled": "The Policy and Terms reminder is now disabled.\nPlease remember to link\nhttps://ayakobot.com/terms and https://ayakobot.com/privacy in one of your Info Channels.\nYou can re-enable the Reminder by using the same Command again."
     },
     "workload": {
       "category": "Info",
