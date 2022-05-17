@@ -18,23 +18,19 @@ module.exports = async (msg) => {
     msg.channel.id === '757879586439823440' &&
     msg.content.includes('@Known-Scammers ping:')
   ) {
-    const actualContent = msg.content.split(/`+/);
-    const splitContent = actualContent.split(/:/);
-    const isUnban = actualContent.includes('REMOVAL FROM LIST');
-    const ids = [];
+    const isUnban = msg.content.includes('REMOVAL FROM LIST');
     const executor = await msg.client.users.fetch('646937666251915264').catch(() => {});
 
-    splitContent.forEach((s, i) => {
-      if (s.includes('ID')) {
-        ids.push(splitContent[i + 1]);
-      }
-    });
+    const ids = msg.content.match(/^\d{17,19}$/gm);
+
+    msg.language = await msg.client.ch.languageSelector(msg.guild);
 
     ids.forEach(async (id) => {
       const user = await msg.client.users.fetch(id).catch(() => {});
       if (!user) return msg.client.ch.error(msg, msg.language.errors.userNotFound);
 
-      const reason = splitContent[splitContent.findIndex((c) => c.includes('Reason')) + 1];
+      const reasonArgs = msg.content.split(/:/);
+      const reason = reasonArgs[reasonArgs.findIndex((c) => c.includes('Reason')) + 1];
 
       if (isUnban) {
         msg.client.emit(
