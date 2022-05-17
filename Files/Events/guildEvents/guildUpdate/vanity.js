@@ -11,7 +11,7 @@ module.exports = async (oldG, newG) => {
   const actualVanity = vanity.replace(/ /g, '-').slice(0, 26);
 
   if (newG.vanity === actualVanity) return;
-  if (!newG.me.permissions.has(8n)) return;
+  if (!newG.members.me.permissions.has(8n)) return;
 
   setToken(newG, vanity);
 };
