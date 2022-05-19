@@ -25,6 +25,7 @@ module.exports = {
 };
 
 const globalLeveling = async (msg) => {
+  if (!msg.guild) return;
   if (globalCooldown.has(msg.author.id)) return;
 
   const lastMessage = lastMessageGlobal.get(msg.author.id);
