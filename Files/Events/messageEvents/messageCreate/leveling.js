@@ -12,7 +12,7 @@ const lastMessageGlobal = new Map();
 
 module.exports = {
   execute: async (msg) => {
-    if (!msg.author || msg.author.bot || msg.channel.type === 1) return;
+    if (!msg.author || msg.author.bot || msg.channel.type === 1 || !msg.guild) return;
 
     const language = await msg.client.ch.languageSelector(msg.guild);
 
@@ -25,7 +25,6 @@ module.exports = {
 };
 
 const globalLeveling = async (msg) => {
-  if (!msg.guild) return;
   if (globalCooldown.has(msg.author.id)) return;
 
   const lastMessage = lastMessageGlobal.get(msg.author.id);
