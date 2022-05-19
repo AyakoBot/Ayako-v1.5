@@ -7,6 +7,8 @@ module.exports = {
     }
 
     if (newMember.premiumSinceTimestamp && !oldMember.premiumSinceTimestamp) {
+      const startedBoostRows = await getStartedBoost(newMember);
+      if (startedBoostRows) return;
       startedBoost(newMember);
       logStart(oldMember);
     }
@@ -18,9 +20,18 @@ module.exports = {
   },
 };
 
+const getStartedBoost = async (member) => {
+  const res = await member.client.ch.query(
+    `SELECT * FROM nitrousers WHERE userid = $1 AND booststart = $2;`,
+    [member.user.id, member.premiumSinceTimestamp],
+  );
+  if (res && res.rowCount) return res.rows[0];
+  return null;
+};
+
 const startedBoost = (member) => {
   member.client.ch.query(
-    `INSERT INTO nitrousers (guildid, userid, booststart) VALUES ($1, $2, $3) ON CONFLICT (booststart) DO NOTHING;`,
+    `INSERT INTO nitrousers (guildid, userid, booststart) VALUES ($1, $2, $3);`,
     [member.guild.id, member.user.id, member.premiumSinceTimestamp],
   );
 };
