@@ -23,7 +23,7 @@ module.exports = async () => {
         'Content-Type': 'application/json',
         Authorization: auth.DBToken,
       },
-    });
+    }).catch(() => {});
 
     fetch(APIDiscordBotList, {
       method: 'post',
@@ -35,7 +35,7 @@ module.exports = async () => {
         'Content-Type': 'application/json',
         Authorization: auth.DBListToken,
       },
-    });
+    }).catch(() => {});
   });
 
   AutoPoster(auth.topGGtoken, client);
