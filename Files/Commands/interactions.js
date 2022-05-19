@@ -30,6 +30,7 @@ module.exports = {
   queueAble: true,
   async execute(msg) {
     const interaction = await getInteraction(msg);
+    if (!interaction) return;
     const loneError = !msg.mentions.users.size && !msg.lan.lone[interaction.name];
 
     if (loneError) {
