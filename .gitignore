@@ -1,8 +1,11 @@
 node_modules
-Files/BaseClient/auth.json
-Files/Commands/working
-Files/Downloads
+old-raw/Files/BaseClient/auth.json
+TS/Files/BaseClient/auth.json
+old-raw/Files/Downloads
+TS/Files/Downloads
 .vscode
-Files/blocklist.json
+old-raw/Files/blocklist.json
+TS/Files/blocklist.json
 .idea
-Files/Commands/execute.js
+old-raw/Files/Commands/execute.js
+TS/Files/Commands/execute.ts
