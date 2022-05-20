@@ -21,7 +21,7 @@ module.exports = async (msg) => {
     const isUnban = msg.content.includes('REMOVAL FROM LIST');
     const executor = await msg.client.users.fetch('646937666251915264').catch(() => {});
 
-    const ids = msg.content.match(/^\d{17,19}$/gm);
+    const ids = msg.content.match(/\d{17,19}/gm);
 
     msg.language = await msg.client.ch.languageSelector(msg.guild);
 
@@ -29,7 +29,7 @@ module.exports = async (msg) => {
       const user = await msg.client.users.fetch(id).catch(() => {});
       if (!user) return msg.client.ch.error(msg, msg.language.errors.userNotFound);
 
-      const reasonArgs = msg.content.split(/:/);
+      const reasonArgs = msg.content.replace(/```/g, '').split(/:/);
       const reason = reasonArgs[reasonArgs.findIndex((c) => c.includes('Reason')) + 1];
 
       if (isUnban) {
