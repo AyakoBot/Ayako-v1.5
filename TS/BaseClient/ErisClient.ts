@@ -1,7 +1,7 @@
 import Eris from 'eris';
 import * as fs from 'fs';
 import type * as Jobs from 'node-schedule';
-import * as auth from './auth.json';
+import auth from './auth.json';
 import type CT from '../typings/CustomTypings';
 
 const getEvents = () => {
