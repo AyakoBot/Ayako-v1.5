@@ -1,5 +1,8 @@
 node_modules
-old-raw/Files/BaseClient/auth.json
-TS/BaseClient/auth.json
+Files/BaseClient/auth.json
+Files/Commands/working
+Files/Downloads
 .vscode
+Files/blocklist.json
 .idea
+Files/Commands/execute.js
