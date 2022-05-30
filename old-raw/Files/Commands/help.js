@@ -21,7 +21,7 @@ const getBaseEmbed = (msg) => {
       name: msg.lan.authorNoType,
       url: msg.client.constants.standard.invite,
     })
-    .setColor(msg.client.ch.colorSelector(msg.guild?.me))
+    .setColor(msg.client.ch.colorSelector(msg.guild?.members.me))
     .setFooter({
       iconURL:
         'https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Patreon_logo.svg/541px-Patreon_logo.svg.png',
@@ -93,7 +93,7 @@ const getEmbed = async (msg, category) => {
       name: msg.client.ch.stp(msg.lan.author, { type: msg.lan.categoryNames[category] }),
       url: msg.client.constants.standard.invite,
     })
-    .setColor(msg.client.ch.colorSelector(msg.guild?.me))
+    .setColor(msg.client.ch.colorSelector(msg.guild?.members.me))
     .setFooter({
       iconURL:
         'https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Patreon_logo.svg/541px-Patreon_logo.svg.png',

@@ -1003,7 +1003,7 @@ module.exports = {
         iconURL: guild.client.objectEmotes.loading.link,
         url: guild.client.constants.standard.invite,
       })
-      .setColor(module.exports.colorSelector(guild?.me))
+      .setColor(module.exports.colorSelector(guild?.members.me))
       .setDescription(
         `${guild.client.textEmotes.loading} ${
           lan.loading ? lan.loading : (await module.exports.languageSelector(guild)).loading
