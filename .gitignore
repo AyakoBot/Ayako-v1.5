@@ -1,5 +1,4 @@
 node_modules
-old-raw/Files/BaseClient/auth.json
 .vscode
 .idea
 TS/BaseClient/auth.json
