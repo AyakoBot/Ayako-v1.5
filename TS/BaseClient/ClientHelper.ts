@@ -33,7 +33,7 @@ const combineMessages = async (
 
   if (client.channelQueue.has(channel.id)) {
     const updatedQueue = client.channelQueue.get(channel.id);
-    const charsToPush = getEmbedCharLens(payload.embeds);
+    const charsToPush = getEmbedCharLens(payload.embeds as Eris.EmbedOptions[]);
 
     if (updatedQueue.length < 10 && client.channelCharLimit.get(channel.id) + charsToPush <= 5000) {
       updatedQueue.push(payload);
@@ -55,13 +55,18 @@ const combineMessages = async (
 
       client.channelTimeout.get(channel.id)?.cancel();
 
-      client.channelCharLimit.set(channel.id, getEmbedCharLens(payload.embeds));
+      client.channelCharLimit.set(
+        channel.id,
+        getEmbedCharLens(payload.embeds as Eris.EmbedOptions[]),
+      );
       queueSend(channel, timeout, client);
     }
   } else {
     client.channelQueue.set(channel.id, [payload]);
-    client.channelCharLimit.set(channel.id, getEmbedCharLens(payload.embeds));
-
+    client.channelCharLimit.set(
+      channel.id,
+      getEmbedCharLens(payload.embeds as Eris.EmbedOptions[]),
+    );
     client.channelTimeout.get(channel.id)?.cancel();
 
     queueSend(channel, timeout, client);

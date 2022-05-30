@@ -3,3 +3,4 @@ old-raw/Files/BaseClient/auth.json
 .vscode
 .idea
 TS/BaseClient/auth.json
+*-lock.json 
