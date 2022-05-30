@@ -9,3 +9,4 @@ TS/Files/blocklist.json
 .idea
 old-raw/Files/Commands/execute.js
 TS/Files/Commands/execute.ts
+*-lock.json

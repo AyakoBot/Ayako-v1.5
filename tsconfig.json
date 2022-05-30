@@ -7,6 +7,7 @@
     "lib": [
       "es5",
       "es6",
+      "es2019",
       "dom",
       "dom.iterable"
     ] /* Specify library files to be included in the compilation. */,

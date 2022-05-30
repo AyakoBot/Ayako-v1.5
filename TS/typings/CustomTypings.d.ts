@@ -6,10 +6,11 @@ export interface command {
   cooldown?: number;
 }
 
-export interface MessagePayload extends Eris.AdvancedMessageContent {
-  files?: Eris.FileContent[];
+type AdvancedMessageContent_Modified = Omit<Eris.AdvancedMessageContent, "embeds">
+export interface MessagePayload extends AdvancedMessageContent_Modified {
+  embeds?: (Eris.EmbedOptions | undefined)[];
+  files?: (Eris.FileContent | undefined)[];
 }
-
 export class Client extends Eris.Client {
   eventPaths: string[];
   mutes: Map<string, Jobs.Job>;
