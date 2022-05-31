@@ -1,29 +1,28 @@
-import { Snowflake } from 'discord.js';
 import type { QueryResultBase } from 'pg';
 
 // Tables
 export interface afk extends QueryResultBase {
-  userid: Snowflake;
-  guildid: Snowflake;
+  userid: string;
+  guildid: string;
   text: string;
   since: string;
 }
 
 export interface antiraidsettings extends QueryResultBase {
-  guildid: Snowflake;
+  guildid: string;
   active: boolean;
   punishment: boolean;
   posttof?: boolean;
-  postchannel?: Snowflake;
-  pingroles?: Snowflake[];
-  pingusers?: Snowflake[];
+  postchannel?: string;
+  pingroles?: string[];
+  pingusers?: string[];
   time: string;
   jointhreshold: string;
   punishmenttof?: boolean;
 }
 
 export interface antispamsettings extends QueryResultBase {
-  guildid: Snowflake;
+  guildid: string;
   active: boolean;
   giveofficialwarnstof: boolean;
   muteafterwarnsamount: string;
@@ -33,14 +32,14 @@ export interface antispamsettings extends QueryResultBase {
   kickenabledtof: boolean;
   baneneabledtof: boolean;
   readofwarnstof: boolean;
-  bpuserid?: Snowflake[];
-  bproleid?: Snowflake[];
-  bpchannelid?: Snowflake[];
+  bpuserid?: string[];
+  bproleid?: string[];
+  bpchannelid?: string[];
   forcedisabled?: boolean;
 }
 
 export interface antivirus extends QueryResultBase {
-  guildid: Snowflake;
+  guildid: string;
   active: boolean;
   bantof: boolean;
   warntof: boolean;
@@ -53,36 +52,36 @@ export interface antivirus extends QueryResultBase {
   minimize?: string;
   delete?: string;
   linklogging: boolean;
-  linklogchannels?: Snowflake[];
+  linklogchannels?: string[];
 }
 
 export interface antiviruslog extends QueryResultBase {
-  guildid: Snowflake;
-  userid: Snowflake;
+  guildid: string;
+  userid: string;
   type: string;
   date: string;
 }
 
 export interface autopunish extends QueryResultBase {
-  guildid: Snowflake;
+  guildid: string;
   uniquetimestamp: string;
   duration?: string;
   warnamount: string;
   punishment?: string;
   active: boolean;
-  addroles?: Snowflake[];
-  removeroles?: Snowflake[];
+  addroles?: string[];
+  removeroles?: string[];
   sendtof: boolean;
-  sendchannels?: Snowflake[];
+  sendchannels?: string[];
   confirmationreq: boolean;
 }
 
 export interface autorole extends QueryResultBase {
-  guildid: Snowflake;
+  guildid: string;
   active: boolean;
-  botroleid?: Snowflake[];
-  userroleid?: Snowflake[];
-  allroleid?: Snowflake[];
+  botroleid?: string[];
+  userroleid?: string[];
+  allroleid?: string[];
 }
 
 export interface blacklists extends QueryResultBase {
@@ -94,11 +93,11 @@ export interface blacklists extends QueryResultBase {
   muteafter?: string;
   kickafter?: string;
   banafter?: string;
-  bpchannelid?: Snowflake[];
-  bproleid?: Snowflake[];
-  bpuserid?: Snowflake[];
+  bpchannelid?: string[];
+  bproleid?: string[];
+  bpuserid?: string[];
   words?: string[];
-  guildid: Snowflake;
+  guildid: string;
   mutetof: boolean;
 }
 
@@ -106,12 +105,12 @@ export interface cooldowns extends QueryResultBase {
   command: string;
   cooldown: string;
   active: boolean;
-  bpchannelid?: Snowflake[];
-  bproleid?: Snowflake[];
-  bpuserid?: Snowflake[];
-  activechannelid?: Snowflake[];
+  bpchannelid?: string[];
+  bproleid?: string[];
+  bpuserid?: string[];
+  activechannelid?: string[];
   uniquetimestamp: string;
-  guildid: Snowflake;
+  guildid: string;
 }
 
 export interface customembeds extends QueryResultBase {
@@ -131,13 +130,13 @@ export interface customembeds extends QueryResultBase {
   footertext?: string;
   footericonurl?: string;
   uniquetimestamp: string;
-  guildid: Snowflake;
+  guildid: string;
   name?: string;
 }
 
 export interface deletecommands extends QueryResultBase {
   uniquetimestamp: string;
-  guildid: Snowflake;
+  guildid: string;
   deletecommand: boolean;
   deletereply: boolean;
   deletetimeout?: string;
@@ -146,108 +145,108 @@ export interface deletecommands extends QueryResultBase {
 }
 
 export interface disabledcommands extends QueryResultBase {
-  guildid: Snowflake;
+  guildid: string;
   active: boolean;
   commands?: string[];
-  channels?: Snowflake[];
-  bproleid?: Snowflake[];
-  blroleid?: Snowflake[];
-  bpuserid?: Snowflake[];
-  bluserid?: Snowflake[];
-  bpchannelid?: Snowflake[];
-  blchannelid?: Snowflake[];
+  channels?: string[];
+  bproleid?: string[];
+  blroleid?: string[];
+  bpuserid?: string[];
+  bluserid?: string[];
+  bpchannelid?: string[];
+  blchannelid?: string[];
   uniquetimestamp: string;
 }
 
 export interface disboard extends QueryResultBase {
-  guildid: Snowflake;
+  guildid: string;
   active: boolean;
   nextbump?: string;
-  channelid?: Snowflake;
+  channelid?: string;
   repeatreminder?: string;
-  roles?: Snowflake[];
-  users?: Snowflake[];
-  rempchannelid?: Snowflake;
+  roles?: string[];
+  users?: string[];
+  rempchannelid?: string;
   deletereply: boolean;
-  msgid?: Snowflake;
+  msgid?: string;
 }
 
 export interface giveaways extends QueryResultBase {
-  guildid: Snowflake;
-  msgid: Snowflake;
+  guildid: string;
+  msgid: string;
   description: string;
   winnercount: string;
   endtime: string;
-  reqrole?: Snowflake;
+  reqrole?: string;
   actualprize?: string;
-  host: Snowflake;
+  host: string;
   ended: boolean;
-  channelid: Snowflake;
-  participants?: Snowflake[];
+  channelid: string;
+  participants?: string[];
 }
 
 export interface guildsettings extends QueryResultBase {
-  guildid: Snowflake;
+  guildid: string;
   prefix?: string;
   interactionsmode: boolean;
   lan: string;
-  errorchannel?: Snowflake;
+  errorchannel?: string;
   vanity?: string;
 }
 
 export interface level extends QueryResultBase {
-  userid: Snowflake;
-  guildid: Snowflake;
+  userid: string;
+  guildid: string;
   type: string;
   xp: string;
   level?: string;
 }
 
 export interface leveling extends QueryResultBase {
-  guildid: Snowflake;
+  guildid: string;
   active: boolean;
   xpmultiplier: string;
-  blchannels?: Snowflake[];
-  blroles?: Snowflake[];
-  blusers?: Snowflake[];
-  wlchannels?: Snowflake[];
-  wlroles?: Snowflake[];
-  wlusers?: Snowflake[];
+  blchannels?: string[];
+  blroles?: string[];
+  blusers?: string[];
+  wlchannels?: string[];
+  wlroles?: string[];
+  wlusers?: string[];
   xppermsg: string;
   rolemode: boolean;
   lvlupmode?: string;
   lvlupdeltimeout?: string;
-  lvlupchannels?: Snowflake[];
-  lvlupemotes?: (Snowflake | string)[];
+  lvlupchannels?: string[];
+  lvlupemotes?: (string | string)[];
   embed?: string;
   ignoreprefixes: boolean;
   prefixes?: string[];
 }
 
 export interface levelingmultiplierchannels extends QueryResultBase {
-  guildid: Snowflake;
-  channels?: Snowflake[];
+  guildid: string;
+  channels?: string[];
   multiplier: string;
   uniquetimestamp: string;
 }
 
 export interface levelingmultiroles extends QueryResultBase {
-  guildid: Snowflake;
-  roles?: Snowflake[];
+  guildid: string;
+  roles?: string[];
   multiplier: string;
   uniquetimestamp: string;
 }
 
 export interface levelingroles {
-  guildid: Snowflake;
+  guildid: string;
   level?: string;
-  roles?: Snowflake[];
+  roles?: string[];
   uniquetimestamp: string;
 }
 
 export interface levelingruleschannels extends QueryResultBase {
-  guildid: Snowflake;
-  channels?: Snowflake[];
+  guildid: string;
+  channels?: string[];
   rules?: string;
   uniquetimestamp: string;
   hasleastattachments?: string;
@@ -271,33 +270,33 @@ export interface levelingruleschannels extends QueryResultBase {
 }
 
 export interface logchannels extends QueryResultBase {
-  guildid: Snowflake;
-  emojievents?: Snowflake[];
-  guildevents?: Snowflake[];
-  inviteevents?: Snowflake[];
-  messageevents?: Snowflake[];
-  modlogs?: Snowflake[];
-  roleevents?: Snowflake[];
-  userevents?: Snowflake[];
-  voiceevents?: Snowflake[];
-  webhookevents?: Snowflake[];
-  settingslog?: Snowflake[];
-  channelevents?: Snowflake[];
-  stageinstanceevents?: Snowflake[];
-  stickerevents?: Snowflake[];
-  threadevents?: Snowflake[];
-  guildmemberevents?: Snowflake[];
+  guildid: string;
+  emojievents?: string[];
+  guildevents?: string[];
+  inviteevents?: string[];
+  messageevents?: string[];
+  modlogs?: string[];
+  roleevents?: string[];
+  userevents?: string[];
+  voiceevents?: string[];
+  webhookevents?: string[];
+  settingslog?: string[];
+  channelevents?: string[];
+  stageinstanceevents?: string[];
+  stickerevents?: string[];
+  threadevents?: string[];
+  guildmemberevents?: string[];
 }
 
 export interface modroles extends QueryResultBase {
-  guildid: Snowflake;
-  roleid: Snowflake;
+  guildid: string;
+  roleid: string;
   perms?: bigint;
   whitelistedcommands?: string[];
-  whitelistedusers?: Snowflake[];
-  whitelistedroles?: Snowflake[];
-  blacklistedroles?: Snowflake[];
-  blacklistedusers?: Snowflake[];
+  whitelistedusers?: string[];
+  whitelistedroles?: string[];
+  blacklistedroles?: string[];
+  blacklistedusers?: string[];
   active: boolean;
   blacklistedcommands?: string[];
   uniquetimestamp: string;
@@ -305,7 +304,7 @@ export interface modroles extends QueryResultBase {
 }
 
 export interface modsettings extends QueryResultBase {
-  guildid: Snowflake;
+  guildid: string;
   bans: boolean;
   channelbans: boolean;
   kicks: boolean;
@@ -319,160 +318,160 @@ export interface modsettings extends QueryResultBase {
 }
 
 export interface nitroroles extends QueryResultBase {
-  guildid: Snowflake;
+  guildid: string;
   uniquetimestamp: string;
-  roles?: Snowflake[];
+  roles?: string[];
   days?: string;
 }
 
 export interface nitrosettings extends QueryResultBase {
-  guildid: Snowflake;
+  guildid: string;
   active: boolean;
-  logchannels?: Snowflake[];
+  logchannels?: string[];
   rolemode: boolean;
 }
 
 export interface nitrousers extends QueryResultBase {
-  guildid: Snowflake;
-  userid: Snowflake;
+  guildid: string;
+  userid: string;
   booststart: string;
   boostend?: string;
 }
 
 export interface policy_guilds extends QueryResultBase {
-  guildid: Snowflake;
+  guildid: string;
 }
 
 export interface policy_users extends QueryResultBase {
-  userid: Snowflake;
+  userid: string;
 }
 
 export interface punish_bans extends QueryResultBase {
-  guildid: Snowflake;
-  userid: Snowflake;
+  guildid: string;
+  userid: string;
   reason?: string;
   uniquetimestamp: string;
-  channelid: Snowflake;
+  channelid: string;
   channelname: string;
-  executorid: Snowflake;
+  executorid: string;
   executorname: string;
-  msgid: Snowflake;
+  msgid: string;
   duration?: string;
 }
 
 export interface punish_channelbans extends QueryResultBase {
-  guildid: Snowflake;
-  userid: Snowflake;
+  guildid: string;
+  userid: string;
   reason?: string;
   uniquetimestamp: string;
-  channelid: Snowflake;
+  channelid: string;
   channelname: string;
-  executorid: Snowflake;
+  executorid: string;
   executorname: string;
-  msgid: Snowflake;
+  msgid: string;
   duration?: string;
 }
 
 export interface punish_kicks extends QueryResultBase {
-  guildid: Snowflake;
-  userid: Snowflake;
+  guildid: string;
+  userid: string;
   reason?: string;
   uniquetimestamp: string;
-  channelid: Snowflake;
+  channelid: string;
   channelname: string;
-  executorid: Snowflake;
+  executorid: string;
   executorname: string;
-  msgid: Snowflake;
+  msgid: string;
 }
 
 export interface punish_mutes extends QueryResultBase {
-  guildid: Snowflake;
-  userid: Snowflake;
+  guildid: string;
+  userid: string;
   reason?: string;
   uniquetimestamp: string;
-  channelid: Snowflake;
+  channelid: string;
   channelname: string;
-  executorid: Snowflake;
+  executorid: string;
   executorname: string;
-  msgid: Snowflake;
+  msgid: string;
   duration?: string;
 }
 
 export interface punish_tempbans extends QueryResultBase {
-  guildid: Snowflake;
-  userid: Snowflake;
+  guildid: string;
+  userid: string;
   reason?: string;
   uniquetimestamp: string;
-  channelid: Snowflake;
+  channelid: string;
   channelname: string;
-  executorid: Snowflake;
+  executorid: string;
   executorname: string;
-  msgid: Snowflake;
+  msgid: string;
   duration: string;
 }
 
 export interface punish_tempchannelbans extends QueryResultBase {
-  guildid: Snowflake;
-  userid: Snowflake;
+  guildid: string;
+  userid: string;
   reason?: string;
   uniquetimestamp: string;
-  channelid: Snowflake;
+  channelid: string;
   channelname: string;
-  executorid: Snowflake;
+  executorid: string;
   executorname: string;
-  msgid: Snowflake;
+  msgid: string;
   duration: string;
 }
 
 export interface punish_tempmutes extends QueryResultBase {
-  guildid: Snowflake;
-  userid: Snowflake;
+  guildid: string;
+  userid: string;
   reason?: string;
   uniquetimestamp: string;
-  channelid: Snowflake;
+  channelid: string;
   channelname: string;
-  executorid: Snowflake;
+  executorid: string;
   executorname: string;
-  msgid: Snowflake;
+  msgid: string;
   duration: string;
 }
 
 export interface punish_warns extends QueryResultBase {
-  guildid: Snowflake;
-  userid: Snowflake;
+  guildid: string;
+  userid: string;
   reason?: string;
   uniquetimestamp: string;
-  channelid: Snowflake;
+  channelid: string;
   channelname: string;
-  executorid: Snowflake;
+  executorid: string;
   executorname: string;
-  msgid: Snowflake;
+  msgid: string;
 }
 
 export interface reminders extends QueryResultBase {
-  userid: Snowflake;
-  channelid: Snowflake;
+  userid: string;
+  channelid: string;
   reason: string;
   uniquetimestamp: string;
   endtime: string;
-  msgid: Snowflake;
+  msgid: string;
 }
 
 export interface roleseparator extends QueryResultBase {
-  guildid: Snowflake;
-  separator: Snowflake;
+  guildid: string;
+  separator: string;
   active: boolean;
-  stoprole?: Snowflake;
+  stoprole?: string;
   isvarying: boolean;
-  roles?: Snowflake[];
+  roles?: string[];
   uniquetimestamp: string;
 }
 
 export interface roleseparatorsettings extends QueryResultBase {
-  guildid: Snowflake;
+  guildid: string;
   stillrunning: boolean;
-  channelid?: Snowflake;
-  messageid?: Snowflake;
+  channelid?: string;
+  messageid?: string;
   duration?: string;
   startat?: string;
   index?: string;
@@ -481,42 +480,42 @@ export interface roleseparatorsettings extends QueryResultBase {
 
 export interface rrbuttons extends QueryResultBase {
   uniquetimestamp: string;
-  roles?: Snowflake[];
-  emoteid?: Snowflake;
+  roles?: string[];
+  emoteid?: string;
   buttontext?: string;
   active: boolean;
   messagelink: string;
-  guildid: Snowflake;
+  guildid: string;
 }
 
 export interface rrreactions extends QueryResultBase {
   uniquetimestamp: string;
-  emoteid: Snowflake;
-  roles?: Snowflake[];
+  emoteid: string;
+  roles?: string[];
   active: boolean;
   messagelink: string;
-  guildid: Snowflake;
+  guildid: string;
 }
 
 export interface rrsettings extends QueryResultBase {
-  guildid: Snowflake;
+  guildid: string;
   messagelink: string;
   uniquetimestamp: string;
   name: string;
   onlyone?: boolean;
   active: boolean;
-  anyroles?: Snowflake[];
+  anyroles?: string[];
 }
 
 export interface selfroles extends QueryResultBase {
-  guildid: Snowflake;
-  roles?: Snowflake[];
+  guildid: string;
+  roles?: string[];
   onlyone?: boolean;
   uniquetimestamp: string;
-  blacklistedroles?: Snowflake[];
-  blacklistedusers?: Snowflake[];
-  whitelistedroles?: Snowflake[];
-  whitelistedusers?: Snowflake[];
+  blacklistedroles?: string[];
+  blacklistedusers?: string[];
+  whitelistedroles?: string[];
+  whitelistedusers?: string[];
   active: boolean;
 }
 
@@ -526,7 +525,7 @@ export interface stats extends QueryResultBase {
   channelcount: string;
   rolecount: string;
   allusers: string;
-  willis?: Snowflake[];
+  willis?: string[];
   count?: string;
   antispam: boolean;
   verbosity: boolean;
@@ -534,71 +533,71 @@ export interface stats extends QueryResultBase {
 }
 
 export interface statschannel extends QueryResultBase {
-  guildid: Snowflake;
-  channelid: Snowflake;
+  guildid: string;
+  channelid: string;
   type?: string;
 }
 
 export interface sticky extends QueryResultBase {
-  guildid: Snowflake;
-  roles?: Snowflake[];
+  guildid: string;
+  roles?: string[];
   stickyrolesmode: boolean;
   stickyrolesactive: boolean;
   stickypermsactive: boolean;
 }
 
 export interface stickypermmembers extends QueryResultBase {
-  userid: Snowflake;
-  guildid: Snowflake;
-  channelid: Snowflake;
+  userid: string;
+  guildid: string;
+  channelid: string;
   denybits?: bigint;
   allowbits?: bigint;
 }
 
 export interface stickyrolemembers extends QueryResultBase {
-  userid: Snowflake;
-  guildid: Snowflake;
-  roles: Snowflake[];
+  userid: string;
+  guildid: string;
+  roles: string[];
 }
 
 export interface suggestionsettings extends QueryResultBase {
-  guildid: Snowflake;
+  guildid: string;
   active: boolean;
-  channelid?: Snowflake;
-  novoteroles?: Snowflake[];
-  novoteusers?: Snowflake[];
-  approverroleid?: Snowflake[];
+  channelid?: string;
+  novoteroles?: string[];
+  novoteusers?: string[];
+  approverroleid?: string[];
   anon: boolean;
-  nosendroles?: Snowflake[];
-  nosendusers?: Snowflake[];
+  nosendroles?: string[];
+  nosendusers?: string[];
 }
 
 export interface suggestionvotes extends QueryResultBase {
-  guildid: Snowflake;
-  msgid: Snowflake;
-  authorid: Snowflake;
-  downvoted?: Snowflake[];
-  upvoted?: Snowflake[];
+  guildid: string;
+  msgid: string;
+  authorid: string;
+  downvoted?: string[];
+  upvoted?: string[];
   ended?: boolean;
 }
 
 export interface toxicitycheck extends QueryResultBase {
-  guildid: Snowflake;
-  userid: Snowflake;
+  guildid: string;
+  userid: string;
   amount: string;
 }
 
 export interface users extends QueryResultBase {
-  userid: Snowflake;
+  userid: string;
   votereminders?: boolean;
 }
 
 export interface verification extends QueryResultBase {
-  guildid: Snowflake;
-  logchannel?: Snowflake;
-  finishedrole?: Snowflake;
-  pendingrole?: Snowflake;
-  startchannel?: Snowflake;
+  guildid: string;
+  logchannel?: string;
+  finishedrole?: string;
+  pendingrole?: string;
+  startchannel?: string;
   selfstart: boolean;
   kickafter?: string;
   kicktof: boolean;
@@ -606,21 +605,21 @@ export interface verification extends QueryResultBase {
 }
 
 export interface votereminder extends QueryResultBase {
-  userid: Snowflake;
+  userid: string;
   removetime: string;
 }
 
 export interface voterewards extends QueryResultBase {
-  userid: Snowflake;
-  roleid: Snowflake;
+  userid: string;
+  roleid: string;
   removetime: string;
 }
 
 export interface welcome extends QueryResultBase {
-  guildid: Snowflake;
-  channelid?: Snowflake;
+  guildid: string;
+  channelid?: string;
   active: boolean;
   embed: string;
-  pingroles?: Snowflake[];
-  pingusers?: Snowflake[];
+  pingroles?: string[];
+  pingusers?: string[];
 }

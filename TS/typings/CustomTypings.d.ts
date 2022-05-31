@@ -1,15 +1,16 @@
 import type Eris from 'eris';
 import type Jobs from 'node-schedule';
-
-export interface command {
+import type DBT from './DataBaseTypings';
+export interface Command {
   name: string;
-  cooldown?: number;
+  cooldownRow?: DBT.cooldowns;
+  deleteCommandRow?: DBT.deletecommands;
 }
 
 type AdvancedMessageContent_Modified = Omit<Eris.AdvancedMessageContent, 'embeds'>;
 export interface MessagePayload extends AdvancedMessageContent_Modified {
-  embeds?: (Eris.EmbedOptions | undefined)[];
-  files?: (Eris.FileContent | undefined)[];
+  embeds?: Eris.EmbedOptions[] | undefined;
+  files?: Eris.FileContent[] | undefined;
 }
 
 export class Client extends Eris.Client {
@@ -32,3 +33,5 @@ export class Client extends Eris.Client {
   channelCharLimit: Map<string, Jobs.Job>;
   ch: typeof import('../BaseClient/ClientHelper');
 }
+
+export type Language = typeof import('../Languages/lan-en.json');
