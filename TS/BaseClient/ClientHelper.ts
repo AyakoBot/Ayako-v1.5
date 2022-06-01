@@ -1,4 +1,4 @@
-export default {
+const ch = {
   send: require(`./ClientHelper/send`),
   reply: require(`./ClientHelper/reply`),
   query: require(`./ClientHelper/query`),
@@ -12,3 +12,5 @@ export default {
   getUnix: require(`./ClientHelper/getUnix`),
   getDifference: require(`./ClientHelper/getDifference`),
 };
+
+export default ch;

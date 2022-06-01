@@ -1,3 +1,4 @@
+/*
 import type Eris from 'eris';
 import Builders from '@discordjs/builders';
 import Discord from 'discord.js';
@@ -46,3 +47,5 @@ export default async (
     });
   });
 };
+
+*/

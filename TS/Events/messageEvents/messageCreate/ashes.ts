@@ -1,4 +1,4 @@
-import type Eris from 'eris';
+/*import type Eris from 'eris';
 import client from '../../../BaseClient/ErisClient';
 
 export default async (msg: Eris.Message) => {
@@ -64,3 +64,5 @@ export default async (msg: Eris.Message) => {
     });
   }
 };
+
+*/

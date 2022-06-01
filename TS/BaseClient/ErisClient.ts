@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import type * as Jobs from 'node-schedule';
 import auth from './auth.json';
 import type CT from '../typings/CustomTypings';
+import { default as ch } from './ClientHelper';
 
 const getEvents = () => {
   const paths: string[] = [];
@@ -66,7 +67,7 @@ class Client extends Eris.Client {
   channelQueue: Map<string, Jobs.Job>;
   channelTimeout: Map<string, Jobs.Job>;
   channelCharLimit: Map<string, CT.MessagePayload[]>;
-  ch: typeof import('./ClientHelper');
+  ch: typeof ch;
 
   constructor(token: string) {
     super(token, {
@@ -106,7 +107,7 @@ class Client extends Eris.Client {
     this.channelTimeout = new Map();
     this.channelCharLimit = new Map();
 
-    this.ch = require('./ClientHelper');
+    this.ch = ch;
 
     this.setMaxListeners(this.eventPaths.length);
   }

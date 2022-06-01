@@ -12,6 +12,8 @@ process.setMaxListeners(2);
 
 client.eventPaths.forEach((path) => {
   const eventName = path.replace('.js', '').split(/\/+/).pop();
+  if (!eventName) return;
+
   const eventHandler = require('./Files/Events/baseEventHandler.ts');
 
   if (eventName === 'ready') client.once(eventName, (...args) => eventHandler(eventName, args));

@@ -23,7 +23,7 @@ export default async (msg: Eris.Message) => {
 
   if (!msg.editedTimestamp) {
     if (client.uptime > 10000) {
-      const r: DBT.stats = await client.ch.query('SELECT * FROM stats;').then((r) => (r ? r[0] : null));
+      const r: DBT.stats = await client.ch.query('SELECT * FROM stats;').then((r: any) => (r ? r[0] : null));
       if (r?.antispam === true) require('./antispam')(msg);
     }
   }

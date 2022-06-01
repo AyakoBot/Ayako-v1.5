@@ -35,3 +35,13 @@ export class Client extends Eris.Client {
 }
 
 export type Language = typeof import('../Languages/lan-en.json');
+
+export interface MessageCollectorOptions {
+  timeout: number;
+  count: number;
+  filter: (_msg: Eris.Message) => true;
+}
+
+export interface OldMessage extends Eris.OldMessage {
+  id: string;
+}
