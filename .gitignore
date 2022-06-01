@@ -3,4 +3,4 @@ node_modules
 .idea
 TS/BaseClient/auth.json
 *-lock.json 
-/output
+/dist

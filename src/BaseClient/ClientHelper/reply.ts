@@ -1,6 +1,7 @@
 import type Eris from 'eris';
 import type CT from '../../typings/CustomTypings';
 import jobs from 'node-schedule';
+import client from '../ErisClient.js';
 
 export default async (
   msg: Eris.Message<Eris.PrivateChannel> | Eris.Message<Eris.TextChannel> | void,
@@ -42,7 +43,6 @@ const cooldownHandler = async (
   if (r.bproleid?.some((id: string) => msg.member?.roles.includes(id))) return;
   if (r.activechannelid?.length && !r.activechannelid?.includes(msg.channel.id)) return;
 
-  const client = require('./ErisClient');
   let emote: string;
 
   if (Number(r.cooldown) <= 60000) {

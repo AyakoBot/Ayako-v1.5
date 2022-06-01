@@ -1,14 +1,16 @@
 import type { QueryResultBase } from 'pg';
 
+export interface QueryResultBase {}
+
 // Tables
-export interface afk extends QueryResultBase {
+export type afk = {
   userid: string;
   guildid: string;
   text: string;
   since: string;
 }
 
-export interface antiraidsettings extends QueryResultBase {
+export type antiraidsettings = {
   guildid: string;
   active: boolean;
   punishment: boolean;
@@ -21,7 +23,7 @@ export interface antiraidsettings extends QueryResultBase {
   punishmenttof?: boolean;
 }
 
-export interface antispamsettings extends QueryResultBase {
+export type antispamsettings = {
   guildid: string;
   active: boolean;
   giveofficialwarnstof: boolean;
@@ -38,7 +40,7 @@ export interface antispamsettings extends QueryResultBase {
   forcedisabled?: boolean;
 }
 
-export interface antivirus extends QueryResultBase {
+export type antivirus = {
   guildid: string;
   active: boolean;
   bantof: boolean;
@@ -55,14 +57,14 @@ export interface antivirus extends QueryResultBase {
   linklogchannels?: string[];
 }
 
-export interface antiviruslog extends QueryResultBase {
+export type antiviruslog = {
   guildid: string;
   userid: string;
   type: string;
   date: string;
 }
 
-export interface autopunish extends QueryResultBase {
+export type autopunish = {
   guildid: string;
   uniquetimestamp: string;
   duration?: string;
@@ -76,7 +78,7 @@ export interface autopunish extends QueryResultBase {
   confirmationreq: boolean;
 }
 
-export interface autorole extends QueryResultBase {
+export type autorole = {
   guildid: string;
   active: boolean;
   botroleid?: string[];
@@ -84,7 +86,7 @@ export interface autorole extends QueryResultBase {
   allroleid?: string[];
 }
 
-export interface blacklists extends QueryResultBase {
+export type blacklists = {
   active: boolean;
   warntof: boolean;
   kicktof: boolean;
@@ -101,7 +103,7 @@ export interface blacklists extends QueryResultBase {
   mutetof: boolean;
 }
 
-export interface cooldowns extends QueryResultBase {
+export type cooldowns = {
   command: string;
   cooldown: string;
   active: boolean;
@@ -113,7 +115,7 @@ export interface cooldowns extends QueryResultBase {
   guildid: string;
 }
 
-export interface customembeds extends QueryResultBase {
+export type customembeds = {
   color?: string;
   title?: string;
   url?: string;
@@ -134,7 +136,7 @@ export interface customembeds extends QueryResultBase {
   name?: string;
 }
 
-export interface deletecommands extends QueryResultBase {
+export type deletecommands = {
   uniquetimestamp: string;
   guildid: string;
   deletecommand: boolean;
@@ -144,7 +146,7 @@ export interface deletecommands extends QueryResultBase {
   commands: string[];
 }
 
-export interface disabledcommands extends QueryResultBase {
+export type disabledcommands = {
   guildid: string;
   active: boolean;
   commands?: string[];
@@ -158,7 +160,7 @@ export interface disabledcommands extends QueryResultBase {
   uniquetimestamp: string;
 }
 
-export interface disboard extends QueryResultBase {
+export type disboard = {
   guildid: string;
   active: boolean;
   nextbump?: string;
@@ -171,7 +173,7 @@ export interface disboard extends QueryResultBase {
   msgid?: string;
 }
 
-export interface giveaways extends QueryResultBase {
+export type giveaways = {
   guildid: string;
   msgid: string;
   description: string;
@@ -185,7 +187,7 @@ export interface giveaways extends QueryResultBase {
   participants?: string[];
 }
 
-export interface guildsettings extends QueryResultBase {
+export type guildsettings = {
   guildid: string;
   prefix?: string;
   interactionsmode: boolean;
@@ -194,7 +196,7 @@ export interface guildsettings extends QueryResultBase {
   vanity?: string;
 }
 
-export interface level extends QueryResultBase {
+export type level = {
   userid: string;
   guildid: string;
   type: string;
@@ -202,7 +204,7 @@ export interface level extends QueryResultBase {
   level?: string;
 }
 
-export interface leveling extends QueryResultBase {
+export type leveling = {
   guildid: string;
   active: boolean;
   xpmultiplier: string;
@@ -223,28 +225,28 @@ export interface leveling extends QueryResultBase {
   prefixes?: string[];
 }
 
-export interface levelingmultiplierchannels extends QueryResultBase {
+export type levelingmultiplierchannels = {
   guildid: string;
   channels?: string[];
   multiplier: string;
   uniquetimestamp: string;
 }
 
-export interface levelingmultiroles extends QueryResultBase {
+export type levelingmultiroles = {
   guildid: string;
   roles?: string[];
   multiplier: string;
   uniquetimestamp: string;
 }
 
-export interface levelingroles {
+export type levelingroles = {
   guildid: string;
   level?: string;
   roles?: string[];
   uniquetimestamp: string;
 }
 
-export interface levelingruleschannels extends QueryResultBase {
+export type levelingruleschannels = {
   guildid: string;
   channels?: string[];
   rules?: string;
@@ -269,7 +271,7 @@ export interface levelingruleschannels extends QueryResultBase {
   hasmostmentions?: string;
 }
 
-export interface logchannels extends QueryResultBase {
+export type logchannels = {
   guildid: string;
   emojievents?: string[];
   guildevents?: string[];
@@ -288,7 +290,7 @@ export interface logchannels extends QueryResultBase {
   guildmemberevents?: string[];
 }
 
-export interface modroles extends QueryResultBase {
+export type modroles = {
   guildid: string;
   roleid: string;
   perms?: bigint;
@@ -303,7 +305,7 @@ export interface modroles extends QueryResultBase {
   mutedurationdefault?: string;
 }
 
-export interface modsettings extends QueryResultBase {
+export type modsettings = {
   guildid: string;
   bans: boolean;
   channelbans: boolean;
@@ -317,49 +319,36 @@ export interface modsettings extends QueryResultBase {
   warnstime?: string;
 }
 
-export interface nitroroles extends QueryResultBase {
+export type nitroroles = {
   guildid: string;
   uniquetimestamp: string;
   roles?: string[];
   days?: string;
 }
 
-export interface nitrosettings extends QueryResultBase {
+export type nitrosettings = {
   guildid: string;
   active: boolean;
   logchannels?: string[];
   rolemode: boolean;
 }
 
-export interface nitrousers extends QueryResultBase {
+export type nitrousers = {
   guildid: string;
   userid: string;
   booststart: string;
   boostend?: string;
 }
 
-export interface policy_guilds extends QueryResultBase {
+export type policy_guilds = {
   guildid: string;
 }
 
-export interface policy_users extends QueryResultBase {
+export type policy_users = {
   userid: string;
 }
 
-export interface punish_bans extends QueryResultBase {
-  guildid: string;
-  userid: string;
-  reason?: string;
-  uniquetimestamp: string;
-  channelid: string;
-  channelname: string;
-  executorid: string;
-  executorname: string;
-  msgid: string;
-  duration?: string;
-}
-
-export interface punish_channelbans extends QueryResultBase {
+export type punish_bans = {
   guildid: string;
   userid: string;
   reason?: string;
@@ -372,19 +361,7 @@ export interface punish_channelbans extends QueryResultBase {
   duration?: string;
 }
 
-export interface punish_kicks extends QueryResultBase {
-  guildid: string;
-  userid: string;
-  reason?: string;
-  uniquetimestamp: string;
-  channelid: string;
-  channelname: string;
-  executorid: string;
-  executorname: string;
-  msgid: string;
-}
-
-export interface punish_mutes extends QueryResultBase {
+export type punish_channelbans = {
   guildid: string;
   userid: string;
   reason?: string;
@@ -397,7 +374,32 @@ export interface punish_mutes extends QueryResultBase {
   duration?: string;
 }
 
-export interface punish_tempbans extends QueryResultBase {
+export type punish_kicks = {
+  guildid: string;
+  userid: string;
+  reason?: string;
+  uniquetimestamp: string;
+  channelid: string;
+  channelname: string;
+  executorid: string;
+  executorname: string;
+  msgid: string;
+}
+
+export type punish_mutes = {
+  guildid: string;
+  userid: string;
+  reason?: string;
+  uniquetimestamp: string;
+  channelid: string;
+  channelname: string;
+  executorid: string;
+  executorname: string;
+  msgid: string;
+  duration?: string;
+}
+
+export type punish_tempbans = {
   guildid: string;
   userid: string;
   reason?: string;
@@ -410,7 +412,7 @@ export interface punish_tempbans extends QueryResultBase {
   duration: string;
 }
 
-export interface punish_tempchannelbans extends QueryResultBase {
+export type punish_tempchannelbans = {
   guildid: string;
   userid: string;
   reason?: string;
@@ -423,7 +425,7 @@ export interface punish_tempchannelbans extends QueryResultBase {
   duration: string;
 }
 
-export interface punish_tempmutes extends QueryResultBase {
+export type punish_tempmutes = {
   guildid: string;
   userid: string;
   reason?: string;
@@ -436,7 +438,7 @@ export interface punish_tempmutes extends QueryResultBase {
   duration: string;
 }
 
-export interface punish_warns extends QueryResultBase {
+export type punish_warns = {
   guildid: string;
   userid: string;
   reason?: string;
@@ -448,7 +450,7 @@ export interface punish_warns extends QueryResultBase {
   msgid: string;
 }
 
-export interface reminders extends QueryResultBase {
+export type reminders = {
   userid: string;
   channelid: string;
   reason: string;
@@ -457,7 +459,7 @@ export interface reminders extends QueryResultBase {
   msgid: string;
 }
 
-export interface roleseparator extends QueryResultBase {
+export type roleseparator = {
   guildid: string;
   separator: string;
   active: boolean;
@@ -467,7 +469,7 @@ export interface roleseparator extends QueryResultBase {
   uniquetimestamp: string;
 }
 
-export interface roleseparatorsettings extends QueryResultBase {
+export type roleseparatorsettings = {
   guildid: string;
   stillrunning: boolean;
   channelid?: string;
@@ -478,7 +480,7 @@ export interface roleseparatorsettings extends QueryResultBase {
   length?: string;
 }
 
-export interface rrbuttons extends QueryResultBase {
+export type rrbuttons = {
   uniquetimestamp: string;
   roles?: string[];
   emoteid?: string;
@@ -488,7 +490,7 @@ export interface rrbuttons extends QueryResultBase {
   guildid: string;
 }
 
-export interface rrreactions extends QueryResultBase {
+export type rrreactions = {
   uniquetimestamp: string;
   emoteid: string;
   roles?: string[];
@@ -497,7 +499,7 @@ export interface rrreactions extends QueryResultBase {
   guildid: string;
 }
 
-export interface rrsettings extends QueryResultBase {
+export type rrsettings = {
   guildid: string;
   messagelink: string;
   uniquetimestamp: string;
@@ -507,7 +509,7 @@ export interface rrsettings extends QueryResultBase {
   anyroles?: string[];
 }
 
-export interface selfroles extends QueryResultBase {
+export type selfroles = {
   guildid: string;
   roles?: string[];
   onlyone?: boolean;
@@ -519,7 +521,7 @@ export interface selfroles extends QueryResultBase {
   active: boolean;
 }
 
-export interface stats extends QueryResultBase {
+export type stats = {
   usercount: string;
   guildcount: string;
   channelcount: string;
@@ -532,13 +534,13 @@ export interface stats extends QueryResultBase {
   heartbeat: string;
 }
 
-export interface statschannel extends QueryResultBase {
+export type statschannel = {
   guildid: string;
   channelid: string;
   type?: string;
 }
 
-export interface sticky extends QueryResultBase {
+export type sticky = {
   guildid: string;
   roles?: string[];
   stickyrolesmode: boolean;
@@ -546,7 +548,7 @@ export interface sticky extends QueryResultBase {
   stickypermsactive: boolean;
 }
 
-export interface stickypermmembers extends QueryResultBase {
+export type stickypermmembers = {
   userid: string;
   guildid: string;
   channelid: string;
@@ -554,13 +556,13 @@ export interface stickypermmembers extends QueryResultBase {
   allowbits?: bigint;
 }
 
-export interface stickyrolemembers extends QueryResultBase {
+export type stickyrolemembers = {
   userid: string;
   guildid: string;
   roles: string[];
 }
 
-export interface suggestionsettings extends QueryResultBase {
+export type suggestionsettings = {
   guildid: string;
   active: boolean;
   channelid?: string;
@@ -572,7 +574,7 @@ export interface suggestionsettings extends QueryResultBase {
   nosendusers?: string[];
 }
 
-export interface suggestionvotes extends QueryResultBase {
+export type suggestionvotes = {
   guildid: string;
   msgid: string;
   authorid: string;
@@ -581,18 +583,18 @@ export interface suggestionvotes extends QueryResultBase {
   ended?: boolean;
 }
 
-export interface toxicitycheck extends QueryResultBase {
+export type toxicitycheck = {
   guildid: string;
   userid: string;
   amount: string;
 }
 
-export interface users extends QueryResultBase {
+export type users = {
   userid: string;
   votereminders?: boolean;
 }
 
-export interface verification extends QueryResultBase {
+export type verification = {
   guildid: string;
   logchannel?: string;
   finishedrole?: string;
@@ -604,18 +606,18 @@ export interface verification extends QueryResultBase {
   active: boolean;
 }
 
-export interface votereminder extends QueryResultBase {
+export type votereminder = {
   userid: string;
   removetime: string;
 }
 
-export interface voterewards extends QueryResultBase {
+export type voterewards = {
   userid: string;
   roleid: string;
   removetime: string;
 }
 
-export interface welcome extends QueryResultBase {
+export type welcome = {
   guildid: string;
   channelid?: string;
   active: boolean;

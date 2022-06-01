@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "dependencies": {
     "@airbnb/node-memwatch": "^2.0.0",
     "@discordjs/builders": "^0.13.0-dev.1648123730.b520c3d",

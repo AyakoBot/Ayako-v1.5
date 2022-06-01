@@ -7,10 +7,9 @@ export interface Command {
   deleteCommandRow?: DBT.deletecommands;
 }
 
-type AdvancedMessageContent_Modified = Omit<Eris.AdvancedMessageContent, 'embeds'>;
-export interface MessagePayload extends AdvancedMessageContent_Modified {
-  embeds?: Eris.EmbedOptions[] | undefined;
-  files?: Eris.FileContent[] | undefined;
+export interface MessagePayload extends Eris.AdvancedMessageContent {
+  embeds?: Eris.EmbedOptions[];
+  files?: Eris.FileContent[];
 }
 
 export class Client extends Eris.Client {

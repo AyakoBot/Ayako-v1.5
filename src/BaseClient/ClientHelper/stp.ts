@@ -1,9 +1,8 @@
-import auth from '../auth.json';
-import ch from '../ClientHelper';
+import auth from '../auth.json'  assert { type: 'json' };
 
 export default (expression: string | string[], Object: { [key: string]: string }) => {
   const replacer = (e: string) => {
-    const text = e.replace(ch.regexes.templateMatcher, (substring: string, value: string) => {
+    const text = e.replace(/{{\s?([^{}\s]*)\s?}}/g, (substring: string, value: string) => {
       const newValue = value.split('.');
       let decided: any;
       const Result = Object[newValue[0]];

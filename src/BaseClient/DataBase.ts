@@ -1,5 +1,6 @@
-import { Pool } from 'pg';
-import auth from './auth.json';
+import pgPKG from 'pg';
+const { Pool } = pgPKG;
+import auth from './auth.json' assert { type: 'json' };
 
 const pool = new Pool({
   user: 'postgres',

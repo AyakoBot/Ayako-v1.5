@@ -3,7 +3,11 @@ import * as fs from 'fs';
 import type * as Jobs from 'node-schedule';
 import auth from './auth.json';
 import type CT from '../typings/CustomTypings';
-import { default as ch } from './ClientHelper';
+import {default as ch} from './ClientHelper';
+import NekoClient from './NekoClient';
+import Constants from './Other/Constants.json';
+import ObjectEmotes from './Other/ObjectEmotes.json';
+import StringEmotes from './Other/StringEmotes.json';
 
 const getEvents = () => {
   const paths: string[] = [];
@@ -59,14 +63,14 @@ class Client extends Eris.Client {
   giveaways: Map<string, Jobs.Job>;
   invites: Map<string, Eris.Invite>;
   verificationCodes: Map<string, string>;
-  neko: typeof import('./NekoClient');
-  constants: typeof import('./Other/Constants.json');
-  objectEmotes: typeof import('./Other/ObjectEmotes.json');
-  stringEmotes: typeof import('./Other/StringEmotes.json');
+  neko: typeof NekoClient;
+  constants: typeof Constants;
+  objectEmotes: typeof ObjectEmotes;
+  stringEmotes: typeof StringEmotes
   mainID: string;
-  channelQueue: Map<string, Jobs.Job>;
+  channelQueue: Map<string, CT.MessagePayload[]>;
   channelTimeout: Map<string, Jobs.Job>;
-  channelCharLimit: Map<string, CT.MessagePayload[]>;
+  channelCharLimit: Map<string, number>;
   ch: typeof ch;
 
   constructor(token: string) {
@@ -96,10 +100,10 @@ class Client extends Eris.Client {
     this.invites = new Map();
     this.verificationCodes = new Map();
 
-    this.neko = require('./NekoClient');
-    this.constants = require('./Other/Constants.json');
-    this.objectEmotes = require('./Other/ObjectEmotes.json');
-    this.stringEmotes = require('./Other/StringEmotes.json');
+    this.neko = NekoClient;
+    this.constants = Constants;
+    this.objectEmotes = ObjectEmotes;
+    this.stringEmotes = StringEmotes;
 
     this.mainID = '650691698409734151';
 
