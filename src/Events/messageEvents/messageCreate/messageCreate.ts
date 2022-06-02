@@ -3,14 +3,12 @@ import client from '../../../BaseClient/ErisClient';
 // import type DBT from '../../../typings/DataBaseTypings';
 
 export default async (msg: Eris.Message) => {
-  // (await import('./ashes'))(msg);
+  const language = await client.ch.languageSelector(msg.guildID);
+  (await import('./ashes')).default(msg, language);
+
   if (msg.author.discriminator === '0000') return;
 
   e(msg);
-
-  if (msg.author.id === '318453143476371456') {
-    msg.channel.createMessage('hi');
-  }
   // (await import('./commandHandler')).default(msg);
   // (await import('./afk')).default(msg);
   // (await import('./disboard')).default(msg);

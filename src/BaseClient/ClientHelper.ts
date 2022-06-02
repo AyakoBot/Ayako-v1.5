@@ -11,6 +11,14 @@ const ch = {
   permCalc: (await import(`./ClientHelper/permCalc`)).default,
   getUnix: (await import(`./ClientHelper/getUnix`)).default,
   getDifference: (await import(`./ClientHelper/getDifference`)).default,
+  languageSelector: (await import(`./ClientHelper/languageSelector`)).default,
+  getUser: (await import(`./ClientHelper/getUser`)).default,
+  bitUniques: (await import(`./ClientHelper/bitUniques`)).default,
+  containsNonLatinCodepoints: (await import(`./ClientHelper/containsNonLatinCodepoints`)).default,
+  // modRoleWaiter: (await import(`./ClientHelper/modRoleWaiter`)).default,
+  txtFileWriter: (await import(`./ClientHelper/txtFileWriter`)).default,
+  util: await import(`./ClientHelper/util`),
+  error: (await import(`./ClientHelper/error`)).default,
 };
 
 export default ch;

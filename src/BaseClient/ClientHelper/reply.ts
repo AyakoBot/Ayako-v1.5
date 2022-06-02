@@ -4,7 +4,14 @@ import type CT from '../../typings/CustomTypings';
 import client from '../ErisClient.js';
 
 export default async (
-  msg: Eris.Message<Eris.PrivateChannel> | Eris.Message<Eris.TextChannel> | void,
+  msg:
+    | Eris.CommandInteraction
+    | Eris.ComponentInteraction
+    | Eris.AutocompleteInteraction
+    | Eris.Message<Eris.PrivateChannel>
+    | Eris.Message<Eris.TextChannel>
+    | Eris.Message<Eris.TextableChannel>
+    | void,
   payload: CT.MessagePayload,
   language: CT.Language,
   command?: CT.Command,
@@ -29,8 +36,18 @@ export default async (
 };
 
 const cooldownHandler = async (
-  msg: Eris.Message<Eris.PrivateChannel> | Eris.Message<Eris.TextChannel>,
-  sentMessage: Eris.Message<Eris.PrivateChannel> | Eris.Message<Eris.TextChannel> | void,
+  msg:
+    | Eris.CommandInteraction
+    | Eris.ComponentInteraction
+    | Eris.AutocompleteInteraction
+    | Eris.Message<Eris.PrivateChannel>
+    | Eris.Message<Eris.TextChannel>
+    | Eris.Message<Eris.TextableChannel>,
+  sentMessage:
+    | Eris.Message<Eris.PrivateChannel>
+    | Eris.Message<Eris.TextChannel>
+    | Eris.Message<Eris.TextableChannel>
+    | void,
   command?: CT.Command,
 ) => {
   if (!sentMessage) return;
@@ -38,8 +55,10 @@ const cooldownHandler = async (
   if (!command.cooldownRow) return;
   if (!command.cooldownRow.cooldown) return;
 
+  const author = msg.author || msg.member?.user || msg.user;
+
   const r = command.cooldownRow;
-  if (r.bpuserid?.includes(msg.author.id)) return;
+  if (r.bpuserid?.includes(author.id)) return;
   if (r.bpchannelid?.includes(msg.channel.id)) return;
   if (r.bproleid?.some((id: string) => msg.member?.roles.includes(id))) return;
   if (r.activechannelid?.length && !r.activechannelid?.includes(msg.channel.id)) return;
@@ -76,8 +95,19 @@ const cooldownHandler = async (
 };
 
 const deleteCommandHandler = (
-  msg: Eris.Message<Eris.PrivateChannel> | Eris.Message<Eris.TextChannel>,
-  sentMessage: Eris.Message<Eris.PrivateChannel> | Eris.Message<Eris.TextChannel> | void,
+  msg:
+    | Eris.CommandInteraction
+    | Eris.ComponentInteraction
+    | Eris.AutocompleteInteraction
+    | Eris.Message<Eris.PrivateChannel>
+    | Eris.Message<Eris.TextChannel>
+    | Eris.Message<Eris.TextableChannel>
+    | void,
+  sentMessage:
+    | Eris.Message<Eris.PrivateChannel>
+    | Eris.Message<Eris.TextChannel>
+    | void
+    | Eris.Message<Eris.TextableChannel>,
   language: CT.Language,
   command?: CT.Command,
 ) => {
