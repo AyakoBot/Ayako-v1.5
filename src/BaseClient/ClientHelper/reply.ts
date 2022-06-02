@@ -1,4 +1,4 @@
-import type Eris from 'eris';
+import Eris from 'eris';
 import jobs from 'node-schedule';
 import type CT from '../../typings/CustomTypings';
 import client from '../ErisClient.js';
@@ -50,15 +50,21 @@ const cooldownHandler = async (
     | void,
   command?: CT.Command,
 ) => {
+  if (!msg) return;
   if (!sentMessage) return;
   if (!command) return;
   if (!command.cooldownRow) return;
   if (!command.cooldownRow.cooldown) return;
-
-  const author = msg.author || msg.member?.user || msg.user;
-
+  let author =
+    msg instanceof Eris.Message
+      ? msg.author
+      : msg instanceof Eris.CommandInteraction ||
+        msg instanceof Eris.ComponentInteraction ||
+        msg instanceof Eris.AutocompleteInteraction
+      ? msg.user
+      : undefined;
   const r = command.cooldownRow;
-  if (r.bpuserid?.includes(author.id)) return;
+  if (author ? r.bpuserid?.includes(author.id) : true) return;
   if (r.bpchannelid?.includes(msg.channel.id)) return;
   if (r.bproleid?.some((id: string) => msg.member?.roles.includes(id))) return;
   if (r.activechannelid?.length && !r.activechannelid?.includes(msg.channel.id)) return;
@@ -111,6 +117,7 @@ const deleteCommandHandler = (
   language: CT.Language,
   command?: CT.Command,
 ) => {
+  if (!msg) return;
   if (!sentMessage) return;
   if (!command) return;
 
@@ -121,10 +128,28 @@ const deleteCommandHandler = (
 
   if (r.deletecommand && r.deletetimeout) {
     jobs.scheduleJob(new Date(Date.now() + Number(r.deletetimeout)), () => {
-      msg.delete(language.commands.deleteHandler.reasonCommand).catch(() => null);
+      if (
+        msg instanceof Eris.CommandInteraction ||
+        msg instanceof Eris.ComponentInteraction ||
+        msg instanceof Eris.AutocompleteInteraction
+      ) {
+        //!do something
+        return;
+      } else {
+        msg.delete(language.commands.deleteHandler.reasonCommand).catch(() => null);
+      }
     });
   } else if (r.deletecommand) {
-    msg.delete(language.commands.deleteHandler.reasonCommand).catch(() => null);
+    if (
+      msg instanceof Eris.CommandInteraction ||
+      msg instanceof Eris.ComponentInteraction ||
+      msg instanceof Eris.AutocompleteInteraction
+    ) {
+      //!do something
+      return;
+    } else {
+      msg.delete(language.commands.deleteHandler.reasonCommand).catch(() => null);
+    }
   }
 
   if (r.deletereply && r.deletetimeout) {
