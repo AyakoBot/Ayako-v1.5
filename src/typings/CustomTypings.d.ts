@@ -1,6 +1,7 @@
 import type Eris from 'eris';
 import type Jobs from 'node-schedule';
 import type DBT from './DataBaseTypings';
+
 export interface Command {
   name: string;
   cooldownRow?: DBT.cooldowns;

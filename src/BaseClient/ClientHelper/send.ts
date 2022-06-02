@@ -1,6 +1,7 @@
 import type Eris from 'eris';
-import type CT from '../../typings/CustomTypings';
 import jobs from 'node-schedule';
+import type CT from '../../typings/CustomTypings';
+// eslint-disable-next-line import/no-self-import
 import send from './send';
 import client from '../ErisClient.js';
 
@@ -11,21 +12,22 @@ export default async (
   command?: CT.Command,
   timeout?: number,
 ) => {
-  if (!channel) return;
+  if (!channel) return null;
 
   if (Array.isArray(channel)) {
     channel.forEach((c) => {
       send(c, payload, language, command, timeout);
     });
-    return;
+    return null;
   }
 
   if (timeout) {
     combineMessages({ channel }, payload, timeout, language);
-    return;
+    return null;
   }
 
   const sentMessage = await channel.createMessage(payload, payload.files).catch((err) => {
+    // eslint-disable-next-line no-console
     console.log('send err', err);
   });
 
@@ -38,7 +40,6 @@ const combineMessages = async (
   timeout: number,
   language: CT.Language,
 ) => {
-
   if (!payload.embeds || !payload.embeds.length || !payload.files || !payload.files.length) {
     send(channel, payload, language);
     return;
@@ -55,7 +56,7 @@ const combineMessages = async (
 
   const updatedQueue = client.channelQueue.get(channel.id);
   const charsToPush = getEmbedCharLens(payload.embeds);
-  const charLimit = client.channelCharLimit.get(channel.id)
+  const charLimit = client.channelCharLimit.get(channel.id);
 
   if (updatedQueue && updatedQueue.length < 10 && charLimit && charLimit + charsToPush <= 5000) {
     updatedQueue.push(payload);
@@ -68,18 +69,21 @@ const combineMessages = async (
     return;
   }
 
-  if (updatedQueue && (( updatedQueue.length === 10) || (charLimit && charLimit + charsToPush >= 5000))) {
-    const embeds = updatedQueue.map((p: CT.MessagePayload) => p.embeds).flat(1).filter((e): e is Eris.EmbedOptions => !!e) || [];
-    send(
-      channel,
-      { embeds: embeds },
-      language,
-    );
+  if (
+    updatedQueue &&
+    (updatedQueue.length === 10 || (charLimit && charLimit + charsToPush >= 5000))
+  ) {
+    const embeds =
+      updatedQueue
+        .map((p: CT.MessagePayload) => p.embeds)
+        .flat(1)
+        .filter((e): e is Eris.EmbedOptions => !!e) || [];
+    send(channel, { embeds }, language);
 
     client.channelQueue.set(channel.id, [payload]);
     client.channelTimeout.get(channel.id)?.cancel();
     client.channelCharLimit.set(channel.id, getEmbedCharLens(payload.embeds));
-    
+
     queueSend(channel, timeout, language);
   }
 };
@@ -96,7 +100,7 @@ const getEmbedCharLens = (embeds: Eris.EmbedOptions[]) => {
     for (let i = 0; i < (embed.fields ? embed.fields.length : 0); i += 1) {
       const field = embed.fields ? embed.fields[i] : null;
 
-      if (!field) continue;
+      if (!field) return;
 
       if (typeof field.name === 'string') total += field.name.length;
       if (typeof field.value === 'string') total += field.value.length;

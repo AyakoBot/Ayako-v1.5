@@ -1,5 +1,6 @@
 import Discord from 'discord.js';
 
+// eslint-disable-next-line no-shadow
 export declare enum ActivityFlags {
   'HasLeastAttachments' = 1,
   'HasMostAttachments' = 2,
@@ -49,6 +50,7 @@ export default class ChannelRules extends Discord.BitField<keyof typeof Activity
   constructor(bits: number) {
     super(bits);
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.All = Object.values(ChannelRules.Flags).reduce((all: any, p: any) => all | p, 0);
     this.defaultBit = BigInt(0);
   }

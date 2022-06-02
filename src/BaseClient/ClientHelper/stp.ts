@@ -1,4 +1,5 @@
-import auth from '../auth.json'  assert { type: 'json' };
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import auth from '../auth.json' assert { type: 'json' };
 
 export default (expression: string | string[], Object: { [key: string]: string }) => {
   const replacer = (e: string) => {

@@ -1,19 +1,31 @@
 {
   "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts"]
+    },
     "import/resolver": {
-      "node": {
-        "extensions": [".js", ".jsx", ".ts", ".tsx"],
-        "paths": ["./"]
-      }
+      "typescript": {}
     }
   },
+  "plugins": ["@typescript-eslint", "prettier"],
   "env": {
     "browser": true,
     "es2021": true
   },
-  "extends": ["airbnb-base", "plugin:prettier/recommended", "airbnb"],
+  "extends": [
+    "airbnb-base",
+    "plugin:prettier/recommended",
+    "airbnb",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaVersion": 2021
+    "requireConfigFile": false,
+    "ecmaVersion": "latest",
+    "ecmaFeatures": {
+      "experimentalObjectRestSpread": true
+    }
   },
   "rules": {
     "linebreak-style": "off",
@@ -40,6 +52,7 @@
     "padded-blocks": "off",
     "quotes": "off",
     "object-curly-newline": "off",
+    "lines-between-class-members": "off",
     "prettier/prettier": [
       "warn",
       {

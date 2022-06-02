@@ -1,11 +1,13 @@
+/* eslint-disable no-console */
 import pgPKG from 'pg';
-const { Pool } = pgPKG;
 import auth from './auth.json' assert { type: 'json' };
+
+const { Pool } = pgPKG;
 
 const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
-  database: 'Ayako-v1.5',
+  database: 'Clone_DB',
   password: auth.pSQLpw,
   port: 5432,
 });

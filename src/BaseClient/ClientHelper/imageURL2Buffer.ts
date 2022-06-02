@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-export default async (urls: string[]) => {
-  return (await Promise.all(urls.map((url) => axios.get(url).catch((e) => e))))
+export default async (urls: string[]) =>
+  (await Promise.all(urls.map((url) => axios.get(url).catch((e) => e))))
     .map((res, i) => {
       const URLObject = new URL(urls[i]);
       const name = URLObject.pathname.split(/\/+/).pop();
@@ -17,4 +17,3 @@ export default async (urls: string[]) => {
       return null;
     })
     .filter((r) => !!r);
-};

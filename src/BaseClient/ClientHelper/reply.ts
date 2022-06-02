@@ -1,6 +1,6 @@
 import type Eris from 'eris';
-import type CT from '../../typings/CustomTypings';
 import jobs from 'node-schedule';
+import type CT from '../../typings/CustomTypings';
 import client from '../ErisClient.js';
 
 export default async (
@@ -9,7 +9,7 @@ export default async (
   language: CT.Language,
   command?: CT.Command,
 ) => {
-  if (!msg) return;
+  if (!msg) return null;
 
   payload.messageReference = {
     failIfNotExists: false,
@@ -18,6 +18,7 @@ export default async (
   };
 
   const sentMessage = await msg.channel.createMessage(payload, payload.files).catch((err) => {
+    // eslint-disable-next-line no-console
     console.log('reply err', err);
   });
 

@@ -1,13 +1,13 @@
 import Eris from 'eris';
 import * as fs from 'fs';
 import type * as Jobs from 'node-schedule';
-import auth from './auth.json';
+import auth from './auth.json' assert { type: 'json' };
 import type CT from '../typings/CustomTypings';
-import {default as ch} from './ClientHelper';
+import ch from './ClientHelper';
 import NekoClient from './NekoClient';
-import Constants from './Other/Constants.json';
-import ObjectEmotes from './Other/ObjectEmotes.json';
-import StringEmotes from './Other/StringEmotes.json';
+import Constants from './Other/Constants.json' assert { type: 'json' };
+import ObjectEmotes from './Other/ObjectEmotes.json' assert { type: 'json' };
+import StringEmotes from './Other/StringEmotes.json' assert { type: 'json' };
 
 const getEvents = () => {
   const paths: string[] = [];
@@ -66,7 +66,7 @@ class Client extends Eris.Client {
   neko: typeof NekoClient;
   constants: typeof Constants;
   objectEmotes: typeof ObjectEmotes;
-  stringEmotes: typeof StringEmotes
+  stringEmotes: typeof StringEmotes;
   mainID: string;
   channelQueue: Map<string, CT.MessagePayload[]>;
   channelTimeout: Map<string, Jobs.Job>;

@@ -5,6 +5,7 @@ import type * as Typings from '../../typings/CustomTypings';
 const MessageCollectorDefaults: Typings.MessageCollectorOptions = {
   timeout: 1000,
   count: 10,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   filter: (_msg: Eris.Message) => true,
 };
 
