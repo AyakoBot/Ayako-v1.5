@@ -1,4 +1,4 @@
-import Eris from 'eris';
+import * as Eris from 'eris';
 import * as fs from 'fs';
 import type * as Jobs from 'node-schedule';
 import auth from './auth.json' assert { type: 'json' };
@@ -9,38 +9,44 @@ import Constants from './Other/Constants.json' assert { type: 'json' };
 import ObjectEmotes from './Other/ObjectEmotes.json' assert { type: 'json' };
 import StringEmotes from './Other/StringEmotes.json' assert { type: 'json' };
 
+const isDisallowed = (file: string) =>
+  ['.d.ts', '.d.ts.map', '.js.map'].some((end) => file.endsWith(end));
+
 const getEvents = () => {
   const paths: string[] = [];
 
-  const eventsDir = fs.readdirSync(`${process.cwd()}/Files/Events`);
+  const eventsDir = fs.readdirSync(`${process.cwd()}/dist/Events`);
 
   eventsDir.forEach((folder) => {
-    if (folder.endsWith('.js')) {
-      const path = `${process.cwd()}/Files/Events/${folder}`;
+    if (isDisallowed(folder)) return;
+
+    if (folder.includes('.')) {
+      const path = `${process.cwd()}/dist/Events/${folder}`;
       paths.push(path);
 
       return;
     }
 
     const key = folder.replace(/events/gi, '');
-    const eventFiles = fs.readdirSync(`${process.cwd()}/Files/Events/${folder}`);
+    const eventFiles = fs.readdirSync(`${process.cwd()}/dist/Events/${folder}`);
 
     eventFiles.forEach((file) => {
-      if (file.endsWith('.js') && file.startsWith(key)) {
-        const path = `${process.cwd()}/Files/Events/${folder}/${file}`;
+      if (isDisallowed(file)) return;
+
+      if (file.includes('.') && file.startsWith(key)) {
+        const path = `${process.cwd()}/dist/Events/${folder}/${file}`;
         paths.push(path);
 
         return;
       }
 
-      if (file.startsWith(key) && !file.endsWith('.js')) {
-        fs.readdirSync(`${process.cwd()}/Files/Events/${folder}/${file}`).forEach(
+      if (file.startsWith(key) && !file.includes('.')) {
+        fs.readdirSync(`${process.cwd()}/dist/Events/${folder}/${file}`).forEach(
           (eventFolderFile) => {
-            if (
-              String(eventFolderFile).endsWith('.js') &&
-              String(eventFolderFile).startsWith(key)
-            ) {
-              const path = `${process.cwd()}/Files/Events/${folder}/${file}/${eventFolderFile}`;
+            if (isDisallowed(eventFolderFile)) return;
+
+            if (String(eventFolderFile).includes('.') && String(eventFolderFile).startsWith(key)) {
+              const path = `${process.cwd()}/dist/Events/${folder}/${file}/${eventFolderFile}`;
 
               paths.push(path);
             }
