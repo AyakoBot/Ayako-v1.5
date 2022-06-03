@@ -1954,7 +1954,9 @@ const categoryDisplay = async (msg, answer, needsBack) => {
   let categoryText = '';
   const categories = [];
   const options = [];
-  const settings = getAllSettings().filter((setting) => setting.folder === msg.args[0]);
+  const settings = getAllSettings().filter(
+    (setting) => setting.folder === msg.args[0] || setting.childOf === msg.args[0],
+  );
 
   settings.forEach((setting) => {
     setting.category.forEach((category) => {
@@ -1974,7 +1976,7 @@ const categoryDisplay = async (msg, answer, needsBack) => {
     });
 
     for (let i = 0; i < settingCategories.length; i += 1) {
-      const settingsFile = settings.get(settingCategories[i]);
+      const settingsFile = settings.find((s) => s.name === settingCategories[i]);
 
       let textType;
       let objectType;
@@ -2026,7 +2028,7 @@ const categoryDisplay = async (msg, answer, needsBack) => {
   const embed = new Builders.UnsafeEmbedBuilder()
     .setAuthor({
       name: msg.client.ch.stp(msg.language.commands.settings.author, {
-        type: msg.language.commands.settings[settings.first().name].type,
+        type: msg.language.commands.settings[settings[0].name].type,
       }),
       iconURL: msg.client.objectEmotes.settings.link,
       url: msg.client.constants.standard.invite,

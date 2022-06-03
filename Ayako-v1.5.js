@@ -24,6 +24,12 @@ process.on('unhandledRejection', (error) => {
   client.emit('unhandledRejection', error);
 });
 process.on('uncaughtException', (error) => {
+  if (
+    String(error).includes("Cannot read properties of undefined (reading 'values')") ||
+    String(error).includes("Cannot read properties of undefined (reading 'clear')")
+  ) {
+    process.exit();
+  }
   client.ch.logger('Unhandled Exception', error);
 });
 process.on('promiseRejectionHandledWarning', () => {});

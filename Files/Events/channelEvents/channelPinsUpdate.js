@@ -58,7 +58,7 @@ module.exports = {
       if (pinned.content) {
         embed.addFields({ name: language.content, value: pinned.content });
       }
-      for (let i = 0; pinned.embeds.length > i; i += 1) {
+      for (let i = 0; pinned.embeds?.length > i; i += 1) {
         if (pinned.embeds[i].title) {
           embed.addFields({ name: language.embedTitle, value: pinned.embeds[i].title });
         } else if (pinned.embeds[i].description) {
@@ -70,7 +70,7 @@ module.exports = {
 
       let buffers = [];
       let files = [];
-      if (pinned.attachments.size > 0) {
+      if (pinned.attachments?.size > 0) {
         const urls = pinned.attachments.map((attachment) => attachment.url);
         buffers = await ch.convertImageURLtoBuffer(urls);
       }

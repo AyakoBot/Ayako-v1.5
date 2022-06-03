@@ -17,6 +17,8 @@ module.exports = async (member) => {
 • 𝐘𝐮𝐫𝐢’𝐬 𝐀𝐫𝐜𝐚𝐝𝐞 is a place for all anime lovers to come together. We offer a safe place for those who enjoy anime to talk about it with others and learn more about anime.
 
 𝐃𝐢𝐬𝐜𝗼𝐫𝐝: https://discord.gg/sST6whJbdN
+
+https://discord.gg/WGRbUwqkwG
 `;
 
   member.user.send({ content }).catch(() => {});

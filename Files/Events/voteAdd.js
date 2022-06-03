@@ -71,7 +71,9 @@ const roleReward = async (voteData) => {
 
   if (voteData.isWeekend) {
     gettingThisRole = roles[roles.findIndex((r) => r.id === gettingThisRole.id) + 1];
-    if (!roles.findIndex((r) => r.id === gettingThisRole.id)) [, , gettingThisRole] = roles;
+    if (!gettingThisRole || !roles.findIndex((r) => r.id === gettingThisRole.id)) {
+      [, , gettingThisRole] = roles;
+    }
   }
 
   await member.roles.add(gettingThisRole);

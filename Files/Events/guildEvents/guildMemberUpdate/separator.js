@@ -164,7 +164,7 @@ module.exports = {
     this.assinger(msg, membersWithRoles, embed);
   },
   async getNewMembers(guild, res) {
-    await guild.members.fetch();
+    await guild.members.fetch().catch(() => {});
     const obj = {
       members: [],
       separators: [],

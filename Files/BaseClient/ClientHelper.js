@@ -1309,7 +1309,8 @@ const cooldownHandler = async (msg, m) => {
     !res.bpuserid?.includes(msg.author.id) &&
     !res.bpchannelid?.includes(msg.channel.id) &&
     !res.bproleid?.some((id) => msg.member.roles.cache.has(id)) &&
-    (!res.activechannelid?.length || !res.activechannelid.includes(msg.channel.id))
+    ((res.activechannelid?.length && res.activechannelid.includes(msg.channel.id)) ||
+      !res.activechannelid?.length)
   ) {
     let emote;
     if (msg.cooldown <= 60000) emote = msg.client.objectEmotes.timers[msg.cooldown / 1000];

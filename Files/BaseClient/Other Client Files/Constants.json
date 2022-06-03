@@ -1552,8 +1552,8 @@
           "vals": [["{{msg.guild.id}}", true]]
         },
         "disboard": {
-          "cols": ["guildid, active, repeatreminder"],
-          "vals": [["{{msg.guild.id}}", true, 30]]
+          "cols": ["guildid, active, repeatreminder, deletereply"],
+          "vals": [["{{msg.guild.id}}", true, 30, false]]
         },
         "antivirus": {
           "cols": [

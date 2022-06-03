@@ -37,7 +37,7 @@ module.exports = {
         Objects.options.push(inserted);
       });
 
-    msg.client.slashCommands
+    getAllSlashCommands()
       .filter(
         (c) =>
           !c.unfinished &&
@@ -100,6 +100,16 @@ const getAllCommands = (msg) => {
     .filter(
       (c) => c.unfinished !== true && (!c.thisGuildOnly || c.thisGuildOnly.includes(msg.guild?.id)),
     );
+
+  return files;
+};
+
+const getAllSlashCommands = () => {
+  const dir = `${require.main.path}/Files/Interactions/SlashCommands`;
+  const files = fs
+    .readdirSync(dir)
+    .filter((f) => f.endsWith('.js'))
+    .map((c) => require(`${dir}/${c}`));
 
   return files;
 };

@@ -37,6 +37,8 @@ module.exports = {
           : [];
 
         args.forEach((arg) => {
+          if (!arg.length) return;
+
           if (
             insertedValues[required.assinger] &&
             insertedValues[required.assinger].includes(arg)

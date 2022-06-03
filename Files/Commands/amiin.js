@@ -4,9 +4,8 @@ module.exports = {
   name: 'amiin',
   perm: null,
   dm: false,
-  takesFirstArg: true,
+  takesFirstArg: false,
   category: null,
-  description: 'Check if you are in the latest WiLLiS Giveaway',
   usage: ['amiin'],
   thisGuildOnly: ['108176345204264960'],
   type: 'info',
@@ -18,22 +17,20 @@ module.exports = {
     if (res.rows[0].willis == null) {
       embed
         .setDescription(
-          `${msg.client.textEmotes.tick} You are NOT participating!\nGo to <#805839305377447936> and follow the instructions to enter`,
+          `${msg.client.textEmotes.tick} You are NOT participating!\nGo to <#979811225212956722> and follow the instructions to enter`,
         )
         .setColor(16776960);
-      msg.channel.send(embed);
     } else if (res.rows[0].willis.includes(id)) {
       embed
         .setDescription(`${msg.client.textEmotes.tick} You are participating! Good Luck!`)
         .setColor(65280);
-      msg.channel.send(embed);
     } else {
       embed
         .setDescription(
-          `${msg.client.textEmotes.tick} You are NOT participating!\nGo to <#805839305377447936> and follow the instructions to enter`,
+          `${msg.client.textEmotes.tick} You are NOT participating!\nGo to <#979811225212956722> and follow the instructions to enter`,
         )
         .setColor(16711680);
-      msg.channel.send(embed);
     }
+    msg.channel.send({ embeds: [embed] });
   },
 };
