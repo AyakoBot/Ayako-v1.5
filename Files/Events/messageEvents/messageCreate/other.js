@@ -1,5 +1,3 @@
-const Builders = require('@discordjs/builders');
-
 const jobs = require('node-schedule');
 
 module.exports = {
@@ -146,26 +144,6 @@ module.exports = {
           }
           msg.delete().catch(() => {});
         }
-        if (msg.author.id === '305448665496027137') {
-          if (msg.content.toLocaleLowerCase().startsWith('.kill')) {
-            const args = msg.content.split(/ +/);
-            const killedUser = msg.mentions.users.first();
-            let link;
-            for (let i = 0; args.length; i += 1) {
-              if (args[i].includes('https://').endsWith('.gif')) {
-                link = args[i];
-              }
-            }
-            const embed = new Builders.UnsafeEmbedBuilder()
-              .setColor(msg.client.constants.standard.color)
-              .setDescription(
-                `${msg.author} killed ${killedUser} while being too retarded to use the proper commands`,
-              )
-              .setThumbnail(link);
-            msg.client.ch.send(msg.channel, { embeds: [embed] });
-            msg.delete();
-          }
-        }
       }
       if (
         msg.content.includes(' is now level ') &&
@@ -194,46 +172,6 @@ module.exports = {
             msg.delete().catch(() => {});
           });
         }
-      }
-      if (
-        msg.content.toLowerCase().includes('nazi') ||
-        msg.content.toLowerCase().includes('jew') ||
-        Date.now() - msg.author.createdAt < 1000 * 60 * 20
-      ) {
-        msg.react('❔').catch(() => {});
-        msg.channel
-          .awaitMessages(
-            (m) => m.author.id === '318453143476371456' || m.author.id === msg.author.id,
-            { max: 1, time: 60000 },
-          )
-          .then((collected) => {
-            const content = collected.first().content.toLowerCase();
-            if (collected.first().author.id === '318453143476371456') {
-              if (content === 'y') {
-                msg.guild.members
-                  .ban(msg.author, {
-                    deleteMessageDays: 1,
-                    reason: 'Executor: Lars_und_so#0666 | no reason specified',
-                  })
-                  .catch(() => {});
-                const embed = new Builders.UnsafeEmbedBuilder()
-                  .setColor(16711680)
-                  .setDescription(`${msg.author} was banned from the server`)
-                  .setTimestamp();
-                msg.client.ch.send(msg.channel, { embeds: [embed] });
-              } else return msg.reactions.removeAll().catch(() => {});
-            } else return msg.reactions.removeAll().catch(() => {});
-            return null;
-          })
-          .catch(() => {
-            msg.reactions.removeAll().catch(() => {});
-          });
-      }
-      if (msg.content.startsWith('.shop') && msg.guild.id === '298954459172700181') {
-        msg.client.ch.reply(
-          msg,
-          '<:nFingerGun:700775747006234754> hey you! We have an updated version of the Role Shop. Just type `h!shop`',
-        );
       }
     }
   },
