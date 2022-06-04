@@ -1927,6 +1927,20 @@
       "description": "Calculates Ayako's Ping",
       "usage": ["ping"]
     },
+    "balance": {
+      "category": "Currency",
+      "description": "Shows a Users Balance",
+      "usage": ["balance (User ID or @Mention)"],
+      "has": "{{user}} currently has {{amount}} <a:AMLantern:982432370814759003>"
+    },
+    "give": {
+      "category": "Currency",
+      "description": "Transfers Currency from you to another User",
+      "usage": ["give [user ID or @Mention] [amount]"],
+      "impossibleNumber": "This Number is impossible to give",
+      "notEnough": "You don't have enough <a:AMLantern:982432370814759003> to send",
+      "sent": "You've sent {{user}} {{amount}} <a:AMLantern:982432370814759003>"
+    },
     "disableprivacyandtermsreminder": {
       "category": "Other",
       "description": "Disables the Privacy Policy and Terms reminder",

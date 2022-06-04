@@ -1,5 +1,13 @@
 const Builders = require('@discordjs/builders');
 
+const AMRoles = [
+  ['330766391999463424', 15000],
+  ['358778201868075008', 10000],
+  ['332858829706362882', 5000],
+  ['389601915958198283', 500],
+  ['349652217885622273', 200],
+];
+
 module.exports = {
   name: 'shop',
   perm: null,
@@ -12,6 +20,8 @@ module.exports = {
   type: 'info',
   async execute(msg) {
     if (msg.guild.id === '298954459172700181') {
+      const coins = await getCoins(msg, msg.author);
+
       const embed = new Builders.UnsafeEmbedBuilder()
         .setAuthor({
           name: 'Server Role Shop',
@@ -19,43 +29,63 @@ module.exports = {
         })
         .addFields(
           {
-            name: '**#1 - 15000<a:NadekoFlower:746420831390793899>**',
+            name: '**#1 - 15000<a:AMLantern:982432370814759003>**',
             value: '<@&330766391999463424>',
             inline: true,
           },
           {
-            name: '**#2 - 10000<a:NadekoFlower:746420831390793899>**',
+            name: '**#2 - 10000<a:AMLantern:982432370814759003>**',
             value: '<@&358778201868075008>',
             inline: true,
           },
           {
-            name: '**#3 - 5000<a:NadekoFlower:746420831390793899>**',
+            name: '**#3 - 5000<a:AMLantern:982432370814759003>**',
             value: '<@&332858829706362882>',
             inline: true,
           },
           {
-            name: '**#4 - 500<a:NadekoFlower:746420831390793899>**',
+            name: '**#4 - 500<a:AMLantern:982432370814759003>**',
             value: '<@&389601915958198283>',
             inline: true,
           },
           {
-            name: '**#5 - 200<a:NadekoFlower:746420831390793899>**',
+            name: '**#5 - 200<a:AMLantern:982432370814759003>**',
             value: '<@&349652217885622273>',
             inline: true,
           },
           { name: '\u200b', value: '\u200b', inline: false },
           {
-            name: 'https://top.gg/bot/nadeko/vote',
-            value: 'Earn Flowers by voting for Nadeko',
+            name: 'https://top.gg/bot/650691698409734151/vote\nhttps://top.gg/servers/298954459172700181/vote',
+            value: 'Earn <a:AMLantern:982432370814759003> by voting for Animekos and/or Ayako',
             inline: false,
           },
         )
-        .setDescription(
-          'Send payment to a <@&360469415612907522> Member\n\n**For automatic role assignment type in this pattern: \n\n`.give [amount] [<@&360469415612907522> member] [role name]`**\n Example: | .give 500 <@267835618032222209> Kawaii Potato |\n',
-        )
-        .setColor(msg.client.ch.colorSelector(msg.guild.members.me))
-        .setFooter({ text: 'If it doesnt work for some reason, wait for the Staff to reply' });
-      msg.client.ch.reply(msg, { embeds: [embed] });
+        .setDescription(`Buy Roles through the Select Menu below\nYou currently have ${coins} <a:AMLantern:982432370814759003>`)
+        .setColor(msg.client.ch.colorSelector(msg.guild.members.me));
+
+      const menu = new Builders.UnsafeSelectMenuBuilder()
+        .setCustomId('roles')
+        .setMaxValues(1)
+        .setMinValues(1)
+        .setPlaceholder('Select a Role')
+        .setOptions(
+          ...AMRoles.map(([roleID, cost]) => {
+            const role = msg.guild.roles.cache.get(roleID);
+
+            return {
+              label: role.name,
+              value: role.id,
+              description: `This Role costs ${cost} Lanterns`,
+              disabled: msg.member.roles.cache.has(role.id),
+            };
+          }),
+        );
+
+      const m = await msg.client.ch.reply(msg, {
+        embeds: [embed],
+        components: msg.client.ch.buttonRower([menu]),
+      });
+      interactionHandler(msg, m, menu);
     } else if (msg.guild.id === '266632338883084290') {
       const embed = new Builders.UnsafeEmbedBuilder()
         .setAuthor({
@@ -102,4 +132,39 @@ module.exports = {
       msg.client.ch.reply(msg, { embeds: [embed] });
     }
   },
+};
+
+const getCoins = async (msg, user) => {
+  const res = await msg.client.ch.query(
+    `SELECT * FROM balance WHERE userid = $1 AND guildid = $2;`,
+    [user.id, msg.guild.id],
+  );
+
+  if (res && res.rowCount) return Number(res.rows[0].balance);
+  return 0;
+};
+
+const interactionHandler = async (msg, m) => {
+  const collector = m.createMessageComponentCollector({ time: 60000 });
+  collector.on('collect', async (interaction) => {
+    const coins = await getCoins(msg, interaction.user);
+    const r = AMRoles.find(([or]) => or === interaction.values[0]);
+
+    if (r[1] > coins) {
+      msg.client.ch.reply(interaction, {
+        content: 'You do not have enough <a:AMLantern:982432370814759003>',
+        ephemeral: true,
+      });
+      return;
+    }
+
+    const role = msg.guild.roles.cache.get(r[0]);
+    msg.guild.members.cache.get(interaction.user.id)?.roles.add(role);
+  });
+
+  collector.on('end', (collected, reason) => {
+    if (reason === 'time') {
+      msg.client.ch.collectorEnd(msg, m);
+    }
+  });
 };

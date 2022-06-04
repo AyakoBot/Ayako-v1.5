@@ -1,6 +1,5 @@
 module.exports = {
   name: 'randomize',
-  perm: 8n,
   dm: false,
   takesFirstArg: false,
   category: null,
@@ -8,7 +7,7 @@ module.exports = {
   thisGuildOnly: ['108176345204264960'],
   type: 'info',
   async execute(msg) {
-    if (msg.channel.id === '805839305377447936') return;
+    if (msg.author.id !== '108176076261314560') return;
     const res = await msg.client.ch.query('SELECT * FROM stats;');
     const r = res.rows[0].willis;
     const user = r[Math.floor(Math.random() * r.length)];

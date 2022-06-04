@@ -11,9 +11,10 @@ module.exports = async (voteData) => {
     return;
   }
 
-  const res = await client.ch.query(`SELECT * FROM votereminder WHERE userid = $1;`, [
-    voteData.user,
-  ]);
+  const res = await client.ch.query(
+    `SELECT * FROM votereminder WHERE userid = $1 AND voted = $2;`,
+    [voteData.user, voteData.guild],
+  );
 
   if (res && res.rowCount) return;
 
@@ -21,7 +22,8 @@ module.exports = async (voteData) => {
 
   jobs.scheduleJob(new Date(Date.now() + 1000), () => {
     roleReward(voteData);
-    reminder(voter);
+    coinReward(voter);
+    reminder(voter, voteData);
   });
 };
 
@@ -35,57 +37,37 @@ const roleReward = async (voteData) => {
     return;
   }
 
-  const res = await client.ch.query(`SELECT * FROM voterewards WHERE userid = $1;`, [
+  const res = await client.ch.query(`SELECT * FROM voterewards WHERE userid = $1 AND voted = $2;`, [
     voteData.user,
+    voteData.guild,
   ]);
   if (res && res.rowCount) {
-    client.ch.query(`UPDATE voterewards SET removetime = $1 WHERE userid = $2;`, [
+    client.ch.query(`UPDATE voterewards SET removetime = $1 WHERE userid = $2 AND voted = $3;`, [
       Date.now() + 43200000,
       voteData.user,
+      voteData.guild,
     ]);
 
-    timeouts.get(voteData.user).cancel();
+    timeouts.get(voteData.user)?.cancel();
     timeouts.set(
       voteData.user,
       jobs.scheduleJob(new Date(Date.now() + 43200000), () => {
-        removeRoles(voteData.user, Date.now() + 43200000, member, guild);
+        removeRoles(voteData.user, Date.now() + 43200000, member, guild, voteData.guild);
       }),
     );
     announcement(voter, guild.roles.cache.get(res.rows[0].roleid));
     return;
   }
 
-  const roles = [
-    guild.roles.cache.get('327424359016824842'),
-    guild.roles.cache.get('910079633477730364'),
-    guild.roles.cache.get('910079643267252235'),
-  ];
-
-  let [gettingThisRole] = roles;
-  if (member.roles.cache.has(roles[0].id)) [, gettingThisRole] = roles;
-  if (member.roles.cache.has(roles[1].id)) [, , gettingThisRole] = roles;
-  if (member.roles.cache.has(roles[2].id)) {
-    announcement(voter);
-    return;
-  }
-
-  if (voteData.isWeekend) {
-    gettingThisRole = roles[roles.findIndex((r) => r.id === gettingThisRole.id) + 1];
-    if (!gettingThisRole || !roles.findIndex((r) => r.id === gettingThisRole.id)) {
-      [, , gettingThisRole] = roles;
-    }
-  }
-
-  await member.roles.add(gettingThisRole);
-  announcement(voter, gettingThisRole);
+  await member.roles.add('982440576895045635');
+  announcement(voter, guild.roles.cache.get('982440576895045635'));
 
   const delTime = Date.now() + 43200000;
 
-  client.ch.query(`INSERT INTO voterewards (userid, roleid, removetime) VALUES ($1, $2, $3);`, [
-    voteData.user,
-    gettingThisRole.id,
-    delTime,
-  ]);
+  client.ch.query(
+    `INSERT INTO voterewards (userid, roleid, removetime, voted) VALUES ($1, $2, $3, $4);`,
+    [voteData.user, '982440576895045635', delTime, voteData.guild],
+  );
 
   timeouts.set(
     voteData.user,
@@ -95,22 +77,18 @@ const roleReward = async (voteData) => {
   );
 };
 
-const removeRoles = (userid, delTime, member, guild) => {
+const removeRoles = (userid, delTime, member, guild, votedid) => {
   if (!member) return;
-  const roles = [
-    guild.roles.cache.get('327424359016824842'),
-    guild.roles.cache.get('910079633477730364'),
-    guild.roles.cache.get('910079643267252235'),
-  ];
 
-  client.ch.query(`DELETE FROM voterewards WHERE userid = $1 AND removetime = $2;`, [
+  client.ch.query(`DELETE FROM voterewards WHERE userid = $1 AND removetime = $2 AND voted = $3;`, [
     userid,
     delTime,
+    votedid,
   ]);
 
-  if (member.roles.cache.has(roles[2].id)) member.roles.remove(roles[2].id).catch(() => {});
-  else if (member.roles.cache.has(roles[1].id)) member.roles.remove(roles[1].id).catch(() => {});
-  else if (member.roles.cache.has(roles[0].id)) member.roles.remove(roles[0].id).catch(() => {});
+  if (member.roles.cache.has('982440576895045635')) {
+    member.roles.remove('982440576895045635').catch(() => {});
+  }
 };
 
 const announcement = async (voter, usedRole) => {
@@ -121,18 +99,20 @@ const announcement = async (voter, usedRole) => {
   );
 
   /*
-    // eslint-disable-next-line no-unused-vars
-    const debugWebhook = await client.fetchWebhook(
-      '941900464876818452',
-      'xEb6FpCGOZJTD-GSZZ35okCzkfWQXeiP4ibNpqCMQwC3SDqvepM8jv8SX9lRoX80D9R5',
-    );
-    */
+      // eslint-disable-next-line no-unused-vars
+      const debugWebhook = await client.fetchWebhook(
+        '941900464876818452',
+        'xEb6FpCGOZJTD-GSZZ35okCzkfWQXeiP4ibNpqCMQwC3SDqvepM8jv8SX9lRoX80D9R5',
+      );
+      */
 
   webhook.send({
     content: `Thanks **${
       voter.tag
-    }** for [voting for Ayako](<https://top.gg/bot/650691698409734151/vote> "Click me to Vote too!")!${
-      usedRole ? `\nYou have been given ${usedRole} as gift for the next 12 Hours~` : ''
+    }** for [voting for Animekos](<https://top.gg/servers/298954459172700181/vote> "Click me to Vote too!")!${
+      usedRole
+        ? `\nYou have been given ${usedRole} as gift for the next 12 Hours and 120 <a:AMLantern:982432370814759003>~`
+        : 'You have been given 120 <a:AMLantern:982432370814759003>~'
     }`,
     allowedMentions: {
       users: [],
@@ -140,14 +120,14 @@ const announcement = async (voter, usedRole) => {
     },
     components: client.ch.buttonRower([
       new Builders.UnsafeButtonBuilder()
-        .setURL('https://top.gg/bot/650691698409734151/vote')
+        .setURL('https://top.gg/servers/298954459172700181/vote')
         .setStyle(Discord.ButtonStyle.Link)
         .setLabel('Vote Here'),
     ]),
   });
 };
 
-const reminder = async (voter) => {
+const reminder = async (voter, voteData) => {
   const allowsReminder = await getReminder(voter);
   if (!allowsReminder) return;
 
@@ -159,31 +139,32 @@ const reminder = async (voter) => {
       url: client.constants.standard.invite,
     })
     .setDescription(
-      `Thank you for Voting for Ayako!\nI will send you a reminder once you can vote again`,
+      `Thank you for Voting for Animekos!\nI will send you a reminder once you can vote again`,
     );
 
   const dm = await voter.createDM();
   client.ch.send(dm, { embeds: [embed] }).catch(() => {});
 
   const endTime = Date.now() + 43200000;
-  client.ch.query(`INSERT INTO votereminder (userid, removetime) VALUES ($1, $2);`, [
+  client.ch.query(`INSERT INTO votereminder (userid, removetime, voted) VALUES ($1, $2, $3);`, [
     voter.id,
     endTime,
+    voteData.guild,
   ]);
 
   jobs.scheduleJob(new Date(Date.now() + 43200000), async () => {
-    endReminder(voter, endTime);
+    endReminder(voter, endTime, voteData);
   });
 };
 
-const endReminder = async (voter, endTime) => {
+const endReminder = async (voter, endTime, voteData) => {
   const allowsReminder = await getReminder(voter);
   if (!allowsReminder) return;
 
-  client.ch.query(`DELETE FROM votereminder WHERE userid = $1 AND removetime = $2;`, [
-    voter.id,
-    endTime,
-  ]);
+  client.ch.query(
+    `DELETE FROM votereminder WHERE userid = $1 AND removetime = $2 AND voted = $3;`,
+    [voter.id, endTime, voteData.guild],
+  );
 
   const disable = new Builders.UnsafeButtonBuilder()
     .setLabel('Disable Vote Reminder')
@@ -191,9 +172,9 @@ const endReminder = async (voter, endTime) => {
     .setCustomId('vote_reminder_disable');
 
   const vote = new Builders.UnsafeButtonBuilder()
-    .setLabel('Vote for Ayako')
+    .setLabel('Vote for Animekos')
     .setStyle(Discord.ButtonStyle.Link)
-    .setURL('https://top.gg/bot/650691698409734151/vote');
+    .setURL('https://top.gg/servers/298954459172700181/vote');
 
   const embed = new Builders.UnsafeEmbedBuilder()
     .setColor(client.constants.standard.color)
@@ -203,7 +184,7 @@ const endReminder = async (voter, endTime) => {
       url: client.constants.standard.invite,
     })
     .setDescription(
-      'You can now Vote for Ayako again!\n[Click here to Vote](https://top.gg/bot/650691698409734151/vote "Click me to Vote!")',
+      'You can now Vote for Animekos again!\n[Click here to Vote](https://top.gg/servers/298954459172700181/vote "Click me to Vote!")',
     );
 
   const dm = await voter.createDM();
@@ -234,6 +215,7 @@ const queryCheck = async () => {
             ?.members.fetch(row.userid)
             .catch(() => {}),
           client.guilds.cache.get('298954459172700181'),
+          row.voted,
         );
       } else {
         timeouts.set(
@@ -244,6 +226,7 @@ const queryCheck = async () => {
               row.removetime,
               await client.guilds.cache.get('298954459172700181').members.fetch(row.userid),
               client.guilds.cache.get('298954459172700181'),
+              row.voted,
             );
           }),
         );
@@ -258,9 +241,16 @@ const queryCheck = async () => {
         client.ch.query(`DELETE FROM votereminder WHERE userid = $1;`, [row.userid]);
       } else {
         jobs.scheduleJob(new Date(Date.now() + Number(row.removetime) - Date.now()), async () => {
-          endReminder(await client.users.fetch(row.userid), row.removetime);
+          endReminder(await client.users.fetch(row.userid), row.removetime, { bot: row.voted });
         });
       }
     });
   }
+};
+
+const coinReward = (user) => {
+  client.ch.query(
+    `INSERT INTO balance (userid, guildid, balance) VALUES ($1, $2, 120) ON CONFLICT (userid, guildid) DO UPDATE SET balance = balance.balance + 120;`,
+    [user.id, '298954459172700181'],
+  );
 };

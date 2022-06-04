@@ -11,8 +11,13 @@ module.exports = async () => {
     },
   });
 
-  socket.on('TOP_GG_VOTE', async (voteData) => {
-    console.log(`User ${voteData.user} has voted`);
-    client.emit('voteAdd', voteData);
+  socket.on('TOP_GG_BOT', async (voteData) => {
+    console.log(`User ${voteData.user} has voted for Ayako`);
+    client.emit('voteAddBot', voteData);
+  });
+
+  socket.on('TOP_GG_SERVER', async (voteData) => {
+    console.log(`User ${voteData.user} has voted for Animekos`);
+    client.emit('voteAddServer', voteData);
   });
 };
