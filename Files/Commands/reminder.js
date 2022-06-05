@@ -287,7 +287,7 @@ const createReminder = async (msg) => {
   const startArg = msg.args[0] === msg.lan.set ? 1 : 0;
 
   const { reasonArg, endTime } = getEndTime(msg, startArg, now);
-  if (!reasonArg || !endTime) return;
+  if ((!reasonArg && typeof reasonArg !== 'number') || !endTime) return;
 
   const reason = msg.args.slice(reasonArg).join(' ');
   if (!reason) {
@@ -339,7 +339,7 @@ const getEndTime = (msg, startArg, now) => {
   });
 
   const unusableArgs = timeArgs.filter((a) => !a);
-  reasonArg += unusableArgs.length;
+  reasonArg += unusableArgs.length + 1;
 
   const endTime = timeArgs.filter((a) => !!a).reduce((a, b) => a + b, now);
 
