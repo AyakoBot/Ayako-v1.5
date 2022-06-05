@@ -154,7 +154,7 @@ const getWinners = async (guild, giveaway) => {
     ?.map((p) => guild.members.fetch(p).catch(() => {}))
     .filter((r) => !!r);
 
-  await Promise.all(requests);
+  if (requests && requests.length) await Promise.all(requests);
 
   const validEntries =
     giveaway.participants && giveaway.participants.length
