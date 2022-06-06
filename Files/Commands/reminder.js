@@ -339,7 +339,7 @@ const getEndTime = (msg, startArg, now) => {
   });
 
   const unusableArgs = timeArgs.filter((a) => !a);
-  reasonArg += unusableArgs.length + 1;
+  reasonArg += unusableArgs.length;
 
   const endTime = timeArgs.filter((a) => !!a).reduce((a, b) => a + b, now);
 

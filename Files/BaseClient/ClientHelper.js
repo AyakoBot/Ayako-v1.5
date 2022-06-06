@@ -173,8 +173,8 @@ module.exports = {
         if (Result) {
           if (newValue.length > 1) {
             newValue.forEach((element, i) => {
-              if (i === 1) decided = Result[element];
-              if (i > 1) decided = decided[element];
+              if (i === 1) decided = Result && Result[element] ? Result[element] : 'null';
+              if (i > 1) decided = decided && decided[element] ? decided[element] : 'null';
             });
             return decided;
           }
