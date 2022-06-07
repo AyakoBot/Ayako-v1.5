@@ -326,22 +326,27 @@ const getEndTime = (msg, startArg, now) => {
 
   const args = msg.args
     .slice(startArg)
-    .map((a) => (ms(a.replace(/,/g, '.')) ? ms(a.replace(/,/g, '.')) : a));
+    .map((a) => (ms(a.replace(/./g, ',')) ? ms(a.replace(/./g, ',')) : a));
 
   let skip;
-  const timeArgs = args.map((a, i) => {
-    if (i === skip) return null;
-    if (ms(`${a} ${args[i + 1]}`)) {
-      skip = i + 1;
-      return ms(`${a} ${args[i + 1]}`);
-    }
-    return ms(`${a}`);
-  });
+  const timeArgs = args
+    .map((a, i) => {
+      if (i === skip) return null;
+      if (ms(`${a} ${args[i + 1]}`)) {
+        skip = i + 1;
+        return ms(`${a} ${args[i + 1]}`);
+      }
+      if (!ms(`${a}`)) {
+        skip = i;
+        return null;
+      }
+      return ms(`${a}`);
+    })
+    .filter((a) => !!a);
 
-  const unusableArgs = timeArgs.filter((a) => !a);
-  reasonArg += unusableArgs.length;
+  reasonArg += timeArgs.length;
 
-  const endTime = timeArgs.filter((a) => !!a).reduce((a, b) => a + b, now);
+  const endTime = timeArgs.reduce((a, b) => a + b, now);
 
   return { reasonArg, endTime };
 };
