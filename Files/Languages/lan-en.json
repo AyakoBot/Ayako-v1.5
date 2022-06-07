@@ -1920,7 +1920,8 @@
       "timeLabel": "Insert new Time Below",
       "editLabel": "Insert new Text Below",
       "editPlaceholder": "Remind me to Vote for Ayako!",
-      "timePlaceholder": "11 hours 30 minutes"
+      "timePlaceholder": "11 hours 30 minutes",
+      "negativeTime": "You can't set a negative Duration"
     },
     "ping": {
       "category": "Info",
