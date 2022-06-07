@@ -2,7 +2,6 @@ const Builders = require('@discordjs/builders');
 const client = require('../../BaseClient/DiscordClient');
 
 module.exports = async () => {
-  console.log('start');
   const rawUsers = await getUsers();
   if (!rawUsers) return;
 
@@ -53,7 +52,6 @@ module.exports = async () => {
 
     log(rolesToAdd, rolesToRemove, guild, settings, user, rawUser.days);
   });
-  console.log('end');
 };
 
 const getUsers = async () => {
