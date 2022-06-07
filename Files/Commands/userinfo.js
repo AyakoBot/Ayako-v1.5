@@ -196,6 +196,7 @@ module.exports = {
     if (answer) {
       msg.client.ch
         .edit(answer, {
+          embeds,
           components: msg.client.ch.buttonRower(components),
         })
         .catch(() => {});
