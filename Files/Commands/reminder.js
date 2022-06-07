@@ -326,18 +326,21 @@ const getEndTime = (msg, startArg, now) => {
 
   const args = msg.args
     .slice(startArg)
-    .map((a) => (ms(a.replace(/./g, ',')) ? ms(a.replace(/./g, ',')) : a));
+    .map((a) => (ms(a.replace(/\./g, ',')) ? ms(a.replace(/\./g, ',')) : a));
 
   let skip;
+  let end;
   const timeArgs = args
     .map((a, i) => {
+      if (end) return null;
       if (i === skip) return null;
       if (ms(`${a} ${args[i + 1]}`)) {
         skip = i + 1;
         return ms(`${a} ${args[i + 1]}`);
       }
+
       if (!ms(`${a}`)) {
-        skip = i;
+        end = true;
         return null;
       }
       return ms(`${a}`);
