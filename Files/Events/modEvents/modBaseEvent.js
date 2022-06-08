@@ -208,7 +208,7 @@ const logEmbed = async (lan, language, con, reason, args) => {
 
   if (reason) embed.addFields({ name: language.reason, value: `${reason}` });
 
-  if (args.duration) {
+  if (Number(args.duration)) {
     embed.addFields({
       name: language.duration,
       value: moment
@@ -482,7 +482,7 @@ const checkActionTaken = async (
     case 'banAdd':
     case 'softbanAdd':
     case 'tempbanAdd': {
-      punished = await args.guild?.bans.fetch(args.target.id).catch(() => {});
+      punished = await args.guild?.bans.fetch(args.target.id).catch(() => null);
       break;
     }
     case 'channelbanAdd':
@@ -505,7 +505,7 @@ const checkActionTaken = async (
       break;
     }
     case 'banRemove': {
-      punished = !(await args.guild?.bans.fetch(args.target.id).catch(() => {}));
+      punished = !(await args.guild?.bans.fetch(args.target.id).catch(() => null));
       break;
     }
     case 'kickAdd': {
@@ -671,7 +671,7 @@ const takeAction = async (punishmentType, targetMember, executingMember, args, l
         `${guild?.id}-${args.target.id}`,
         jobs.scheduleJob(
           `${guild?.id}-${args.target.id}`,
-          new Date(Date.now() + args.duration),
+          new Date(Date.now() + Number(args.duration)),
           () => {
             args.executor.client.emit(
               'modBaseEvent',
@@ -733,7 +733,7 @@ const takeAction = async (punishmentType, targetMember, executingMember, args, l
           `${args.channel?.id}-${args.target.id}`,
           jobs.scheduleJob(
             `${args.channel?.id}-${args.target.id}`,
-            new Date(Date.now() + args.duration),
+            new Date(Date.now() + Number(args.duration)),
             () => {
               args.executor.client.emit(
                 'modBaseEvent',
@@ -776,8 +776,8 @@ const takeAction = async (punishmentType, targetMember, executingMember, args, l
 
       if (
         punished &&
-        punished.permissionOverwrites.cache.get(args.target.id).deny.bitfield === 0n &&
-        punished.permissionOverwrites.cache.get(args.target.id).allow.bitfield === 0n
+        punished.permissionOverwrites.cache.get(args.target.id)?.deny.bitfield === 0n &&
+        punished.permissionOverwrites.cache.get(args.target.id)?.allow.bitfield === 0n
       ) {
         punished = await args.channel.permissionOverwrites
           .delete(args.target.id, `${args.executor.tag} ${args.reason ? `| ${args.reason}` : ''}`)
