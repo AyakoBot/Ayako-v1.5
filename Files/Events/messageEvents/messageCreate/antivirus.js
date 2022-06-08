@@ -582,7 +582,7 @@ const timedOut = ({ msg, lan, check, linkObject, language }, res) => {
 */
 
 const linkLog = (msg, lan, color, url, text, row) => {
-  if (!row || !row.linklogging || !row.linklogchannels.length) return;
+  if (!row || !row.linklogging || !row.linklogchannels?.length) return;
 
   const embed = new Builders.UnsafeEmbedBuilder()
     .setAuthor({
