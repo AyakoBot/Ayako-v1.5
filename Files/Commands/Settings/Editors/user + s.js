@@ -5,7 +5,7 @@ module.exports = {
   requiresInteraction: true,
   requiresMenu: false,
   interactionType: 'message',
-  messageHandler(msgData, insertedValues, required) {
+  async messageHandler(msgData, insertedValues, required) {
     const { msg, message } = msgData;
 
     const fail = (arg) => {
@@ -33,6 +33,8 @@ module.exports = {
           : [];
 
         const notUserArgs = [];
+
+        await Promise.all(args.map((id) => msg.client.users.fetch(id).catch(() => null)));
 
         args.forEach((id) => {
           const user = msg.client.users.cache.get(id);
