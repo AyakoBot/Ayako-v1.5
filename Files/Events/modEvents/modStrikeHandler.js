@@ -58,7 +58,7 @@ module.exports = {
 const doRoles = async (r, msg, user) => {
   if (!r) return;
 
-  const member = await msg.guild.members.fetch(user.id);
+  const member = await msg.guild.members.fetch(user.id).catch(() => {});
   if (member) {
     if (r.addroles && r.addroles.length) {
       const roles = checkRoles(r.addroles, msg.guild);
@@ -78,48 +78,7 @@ const doPunishment = async (punishment, executor, target, reason, msg, r) => {
   if (punishment === 'warnAdd') {
     msg.client.emit('modBaseEvent', { executor, target, reason, msg, guild: msg.guild }, 'warnAdd');
   } else {
-    const embed = new Builders.UnsafeEmbedBuilder()
-      .setAuthor({
-        name: lan.confirmEmbed.author,
-      })
-      .setDescription(
-        msg.client.ch.stp(lan.confirmEmbed.description, {
-          user: target,
-          punishment: msg.language.autopunish[Number(r.punishment)],
-        }),
-      )
-      .setColor(con.confirmEmbed.color);
-    const yes = new Builders.UnsafeButtonBuilder()
-      .setLabel(msg.language.Yes)
-      .setStyle(Discord.ButtonStyle.Primary)
-      .setCustomId('yes');
-    const no = new Builders.UnsafeButtonBuilder()
-      .setLabel(msg.language.No)
-      .setStyle(Discord.ButtonStyle.Danger)
-      .setCustomId('no');
-    msg.m = await msg.client.ch.reply(msg, {
-      embeds: [embed],
-      components: msg.client.ch.buttonRower([[yes, no]]),
-    });
-    const agreed = await new Promise((resolve) => {
-      const buttonsCollector = msg.m.createMessageComponentCollector({ time: 60000 });
-      buttonsCollector.on('collect', (button) => {
-        if (button.user.id === msg.author.id) {
-          if (button.customId === 'yes') {
-            buttonsCollector.stop();
-            button.client.ch.edit(button, { components: [] }).catch(() => {});
-            resolve(true);
-          } else if (button.customId === 'no') {
-            buttonsCollector.stop();
-            button.client.ch.edit(button, { components: [] }).catch(() => {});
-            resolve(false);
-          }
-        } else msg.client.ch.notYours(button);
-      });
-      buttonsCollector.on('end', (collected, endReason) => {
-        if (endReason === 'time') resolve(false);
-      });
-    });
+    const agreed = await getConfirmation(msg, lan, target, con, r);
     if (agreed) {
       msg.client.emit(
         'modBaseEvent',
@@ -130,6 +89,7 @@ const doPunishment = async (punishment, executor, target, reason, msg, r) => {
           msg,
           duration: r.duration ? r.duration : 60,
           guild: msg.guild,
+          channel: msg.channel,
         },
         punishment,
       );
@@ -196,4 +156,55 @@ const getWarns = async (msg, target) => {
   if (channelbanRes && channelbanRes.rowCount) totalWarns += channelbanRes.rowCount;
 
   return totalWarns;
+};
+
+const getConfirmation = async (msg, lan, target, con, r) => {
+  if (!r.confirmationreq) return true;
+
+  const embed = new Builders.UnsafeEmbedBuilder()
+    .setAuthor({
+      name: lan.confirmEmbed.author,
+    })
+    .setDescription(
+      msg.client.ch.stp(lan.confirmEmbed.description, {
+        user: target,
+        punishment: msg.language.autopunish[Number(r.punishment)],
+      }),
+    )
+    .setColor(con.confirmEmbed.color);
+  const yes = new Builders.UnsafeButtonBuilder()
+    .setLabel(msg.language.Yes)
+    .setStyle(Discord.ButtonStyle.Primary)
+    .setCustomId('yes');
+  const no = new Builders.UnsafeButtonBuilder()
+    .setLabel(msg.language.No)
+    .setStyle(Discord.ButtonStyle.Danger)
+    .setCustomId('no');
+  msg.m = await msg.client.ch.reply(msg, {
+    embeds: [embed],
+    components: msg.client.ch.buttonRower([[yes, no]]),
+  });
+  const agreed = await new Promise((resolve) => {
+    const buttonsCollector = msg.m.createMessageComponentCollector({
+      time: r.punishmentawaittime || 60000,
+    });
+    buttonsCollector.on('collect', (button) => {
+      if (button.user.id === msg.author.id) {
+        if (button.customId === 'yes') {
+          buttonsCollector.stop();
+          button.client.ch.edit(button, { components: [] });
+          resolve(true);
+        } else if (button.customId === 'no') {
+          buttonsCollector.stop();
+          button.client.ch.edit(button, { components: [] });
+          resolve(false);
+        }
+      } else msg.client.ch.notYours(button);
+    });
+    buttonsCollector.on('end', (collected, endReason) => {
+      if (endReason === 'time') resolve(true);
+    });
+  });
+
+  return agreed;
 };
