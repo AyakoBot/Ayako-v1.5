@@ -1644,7 +1644,7 @@
           "vals": [["{{msg.guild.id}}", false, false, false, false, false]]
         },
         "autopunish": {
-          "cols": ["guildid, active, uniquetimestamp, warnamount, confirmationreq, sendtof"],
+          "cols": ["guildid, active, uniquetimestamp, warnamount, confirmationreq, sendtof, duration"],
           "vals": [
             [
               "{{msg.guild.id}}",
@@ -1652,7 +1652,8 @@
               "{{values.uniquetimestamp}}",
               "{{values.warnamount}}",
               false,
-              false
+              false,
+              60000
             ]
           ],
           "add": ["warnamount"],
