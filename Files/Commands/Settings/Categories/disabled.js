@@ -12,6 +12,10 @@ module.exports = {
     const embed = new Builders.UnsafeEmbedBuilder();
     for (let i = 0; i < res.length; i += 1) {
       const r = res[i];
+
+      let channels =
+        r.channels && r.channels.length ? r.channels.map((c) => ` <#${c}>`) : msg.language.none;
+      if (`${channels}`.length > 900) channels = `${r.channels.length} ${msg.lan.channels}`;
       embed.addFields({
         name: `${msg.language.number}: \`${r.id}\` | ${msg.lan.commands}: ${
           r.commands ? r.commands.map((c) => ` \`${c}\``) : msg.language.none
@@ -20,9 +24,7 @@ module.exports = {
             ? `${msg.client.textEmotes.enabled} ${msg.language.enabled}`
             : `${msg.client.textEmotes.disabled} ${msg.language.disabled}`
         }`,
-        value: `${msg.lan.channels}: ${
-          r.channels && r.channels.length ? r.channels.map((c) => ` <#${c}>`) : msg.language.none
-        }`,
+        value: `${msg.lan.channels}: ${channels}`,
         inline: true,
       });
     }
