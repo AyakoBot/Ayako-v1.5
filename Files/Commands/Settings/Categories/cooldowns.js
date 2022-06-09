@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
-const moment = require('moment');
 const Builders = require('@discordjs/builders');
+const moment = require('moment');
 require('moment-duration-format');
 
 module.exports = {
@@ -50,7 +50,9 @@ module.exports = {
       {
         name: msg.lan.cooldown,
         value: r.cooldown
-          ? `\`${moment.duration(r.cooldown * 1000).format(`s [${msg.language.time.seconds}]`)}\``
+          ? `\`${moment
+              .duration(Number(r.cooldown) * 1000)
+              .format(`s [${msg.language.time.seconds}]`)}\``
           : msg.language.none,
         inline: true,
       },

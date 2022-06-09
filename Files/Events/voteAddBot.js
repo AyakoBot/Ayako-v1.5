@@ -11,9 +11,11 @@ module.exports = async (voteData) => {
     return;
   }
 
+  deleteStuff();
+
   const res = await client.ch.query(
-    `SELECT * FROM votereminder WHERE userid = $1 AND voted = $2;`,
-    [voteData.user, voteData.bot],
+    `SELECT * FROM votereminder WHERE userid = $1 AND voted = $2 AND removetime > $3;`,
+    [voteData.user, voteData.bot, Date.now()],
   );
 
   if (res && res.rowCount) return;
@@ -68,7 +70,7 @@ const roleReward = async (voteData) => {
   let index;
   roles.forEach((r, i) => {
     if (typeof index === 'number') return;
-    if (!member.roles.has(r.id) || i === roles.length - 1) index = i;
+    if (!member.roles.cache.has(r.id) || i === roles.length - 1) index = i;
   });
 
   if (voteData.isWeekend && index !== roles.length - 1) index += 1;
@@ -277,4 +279,34 @@ const coinReward = (user) => {
     `INSERT INTO balance (userid, guildid, balance) VALUES ($1, $2, 120) ON CONFLICT (userid, guildid) DO UPDATE SET balance = balance.balance + 120;`,
     [user.id, '298954459172700181'],
   );
+};
+
+const deleteStuff = async () => {
+  const rewardsRes = await client.ch.query(`SELECT * FROM voterewards WHERE removetime < $1;`, [
+    Date.now(),
+  ]);
+
+  if (rewardsRes && rewardsRes.rowCount) {
+    rewardsRes.rows.forEach(async (row) => {
+      removeRoles(
+        row.userid,
+        Number(row.removetime),
+        await client.guilds.cache
+          .get('298954459172700181')
+          ?.members.fetch(row.userid)
+          .catch(() => {}),
+        client.guilds.cache.get('298954459172700181'),
+        row.voted,
+      );
+    });
+  }
+
+  const reminderRes = await client.ch.query(`SELECT * FROM votereminder WHERE removetime < $1;`, [
+    Date.now(),
+  ]);
+  if (reminderRes && reminderRes.rowCount) {
+    reminderRes.rows.forEach(async (row) => {
+      endReminder(await client.users.fetch(row.userid), row.removetime, { bot: row.voted });
+    });
+  }
 };
