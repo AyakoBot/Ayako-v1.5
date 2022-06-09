@@ -763,6 +763,7 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
       if (!editing) return;
 
       const limits = msg.client.constants.customembeds.limits.fields;
+      const isReset = message.content.toLowerCase() === 'x';
 
       message.delete().catch(() => {});
       buttonsCollector.resetTimer();
@@ -770,6 +771,11 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
 
       switch (editing) {
         case 'color': {
+          if (isReset) {
+            Objects.embed.setColor(undefined);
+            break;
+          }
+
           const int = parseInt(message.content, 16);
           let e;
           try {
@@ -789,6 +795,11 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           break;
         }
         case 'title': {
+          if (isReset) {
+            Objects.embed.setTitle(undefined);
+            break;
+          }
+
           const passesLength = limits.title >= message.content.length;
 
           let e;
@@ -812,6 +823,11 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           break;
         }
         case 'url': {
+          if (isReset) {
+            Objects.embed.setURL(undefined);
+            break;
+          }
+
           let isUrl = false;
           try {
             // eslint-disable-next-line no-new
@@ -842,6 +858,15 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           break;
         }
         case 'author-name': {
+          if (isReset) {
+            Objects.embed.setAuthor({
+              name: undefined,
+              url: Objects.embed.data.author?.url,
+              iconURL: Objects.embed.data.author?.iconURL,
+            });
+            break;
+          }
+
           const passesLength = limits['author-name'] >= message.content.length;
 
           let e;
@@ -869,6 +894,15 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           break;
         }
         case 'author-iconURL': {
+          if (isReset) {
+            Objects.embed.setAuthor({
+              name: Objects.embed.data.author?.name,
+              url: Objects.embed.data.author?.url,
+              iconURL: undefined,
+            });
+            break;
+          }
+
           let isUrl = false;
           try {
             // eslint-disable-next-line no-new
@@ -909,6 +943,15 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           break;
         }
         case 'author-url': {
+          if (isReset) {
+            Objects.embed.setAuthor({
+              name: Objects.embed.data.author?.name,
+              url: undefined,
+              iconURL: Objects.embed.data.author?.iconURL,
+            });
+            break;
+          }
+
           let isUrl = false;
           try {
             // eslint-disable-next-line no-new
@@ -946,6 +989,11 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           break;
         }
         case 'description': {
+          if (isReset) {
+            Objects.embed.setDescription(undefined);
+            break;
+          }
+
           let e;
           try {
             new Builders.UnsafeEmbedBuilder().setDescription(message.content);
@@ -962,6 +1010,11 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           break;
         }
         case 'image': {
+          if (isReset) {
+            Objects.embed.setImage(undefined);
+            break;
+          }
+
           let isUrl = false;
           try {
             // eslint-disable-next-line no-new
@@ -992,6 +1045,11 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           break;
         }
         case 'thumbnail': {
+          if (isReset) {
+            Objects.embed.setThumbnail(undefined);
+            break;
+          }
+
           let isUrl = false;
           try {
             // eslint-disable-next-line no-new
@@ -1022,6 +1080,11 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           break;
         }
         case 'timestamp': {
+          if (isReset) {
+            Objects.embed.setTimestamp(undefined);
+            break;
+          }
+
           if (message.content !== msg.language.now) {
             let isTimestamp = false;
             try {
@@ -1054,6 +1117,14 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           break;
         }
         case 'footer-text': {
+          if (isReset) {
+            Objects.embed.setFooter({
+              text: undefined,
+              iconUrl: Objects.embed.data.footer?.iconUrl,
+            });
+            break;
+          }
+
           let e;
           try {
             new Builders.UnsafeEmbedBuilder().setFooter({ text: message.content });
@@ -1073,6 +1144,17 @@ const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, comp
           break;
         }
         case 'footer-iconURL': {
+          if (isReset) {
+            Objects.embed.setFooter({
+              text:
+                Objects.embed.data.footer && Objects.embed.data.footer.text
+                  ? Objects.embed.data.footer.text
+                  : '\u200b',
+              iconUrl: undefined,
+            });
+            break;
+          }
+
           let isUrl = false;
           try {
             // eslint-disable-next-line no-new

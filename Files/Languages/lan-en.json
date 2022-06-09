@@ -1458,7 +1458,7 @@
       "errorVal": "Input was Invalid",
       "unsaved": "Your unsaved Embed:",
       "unsavedFieldValue": "To continue the Embed, copy the Code above and Enter it via the\n`Inherit Raw Embed Code` Button on the Embed Builder Page 3",
-      "chooseTheEdit": "Choose what to Edit below",
+      "chooseTheEdit": "Choose what to Edit below\nTo reset an entered Value, click on the according Button and reply with `x`",
       "fieldValue": "Value",
       "fieldName": "Name",
       "fieldInline": "Inline",
