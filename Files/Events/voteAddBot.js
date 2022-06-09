@@ -65,21 +65,17 @@ const roleReward = async (voteData) => {
     guild.roles.cache.get('910079643267252235'),
   ];
 
-  let [gettingThisRole] = roles;
-  if (member.roles.cache.has(roles[0].id)) [, gettingThisRole] = roles;
-  if (member.roles.cache.has(roles[1].id)) [, , gettingThisRole] = roles;
-  if (member.roles.cache.has(roles[2].id)) {
-    announcement(voter);
-    return;
-  }
+  let index;
+  roles.forEach((r, i) => {
+    if (typeof index === 'number') return;
+    if (!member.roles.has(r.id) || i === roles.length - 1) index = i;
+  });
 
-  if (voteData.isWeekend) {
-    gettingThisRole = roles[roles.findIndex((r) => r.id === gettingThisRole.id) + 1];
-    if (!gettingThisRole || !roles.findIndex((r) => r.id === gettingThisRole.id)) {
-      [, , gettingThisRole] = roles;
-    }
-  }
+  if (voteData.isWeekend && index !== roles.length - 1) index += 1;
 
+  const gettingThisRole = roles[index];
+
+  console.log(gettingThisRole);
   await member.roles.add(gettingThisRole);
   announcement(voter, gettingThisRole);
 
@@ -235,7 +231,7 @@ const queryCheck = async () => {
       if (row.removetime < Date.now()) {
         removeRoles(
           row.userid,
-          row.removetime,
+          Number(row.removetime),
           await client.guilds.cache
             .get('298954459172700181')
             ?.members.fetch(row.userid)
@@ -249,7 +245,7 @@ const queryCheck = async () => {
           jobs.scheduleJob(new Date(Date.now() + Number(row.removetime) - Date.now()), async () => {
             removeRoles(
               row.userid,
-              row.removetime,
+              Number(row.removetime),
               await client.guilds.cache.get('298954459172700181').members.fetch(row.userid),
               client.guilds.cache.get('298954459172700181'),
               row.voted,
@@ -263,11 +259,13 @@ const queryCheck = async () => {
   const reminderRes = await client.ch.query(`SELECT * FROM votereminder;`);
   if (reminderRes && reminderRes.rowCount) {
     reminderRes.rows.forEach((row) => {
-      if (row.removetime < Date.now()) {
+      if (Number(row.removetime) < Date.now()) {
         client.ch.query(`DELETE FROM votereminder WHERE userid = $1;`, [row.userid]);
       } else {
         jobs.scheduleJob(new Date(Date.now() + Number(row.removetime) - Date.now()), async () => {
-          endReminder(await client.users.fetch(row.userid), row.removetime, { bot: row.voted });
+          endReminder(await client.users.fetch(row.userid), Number(row.removetime), {
+            bot: row.voted,
+          });
         });
       }
     });
