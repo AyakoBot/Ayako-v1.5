@@ -1846,7 +1846,7 @@
         "clear videos [Amount of Messages]",
         "clear files [Amount of Messages]",
         "clear audio [Amount of Messages]",
-        "clear @Mentions [Amount of Messages]",
+        "clear mentions [Amount of Messages]",
         "clear stickers [Amount of Messages]",
         "clear embeds [Amount of Messages]",
         "clear text [Amount of Messages]",

@@ -233,7 +233,7 @@ const roleAssign = async (msg, rolemode, newLevel) => {
           })
           .filter((req) => !!req);
 
-        if (roleMap.length) {
+        if (roleMap?.length) {
           add = [...new Set([...add, ...roleMap])];
         }
       });
