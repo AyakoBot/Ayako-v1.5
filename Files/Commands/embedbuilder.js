@@ -504,6 +504,7 @@ const getOtherButtons = (baseLan) => [
 const handleBuilderButtons = async ({ msg, answer }, Objects, lan, { embed, components }) => {
   const reply = async (editing, interaction) => {
     const lang = msg.language.commands.embedbuilder.edit[editing];
+    if (!lang) return;
 
     const recommendedEmbed = new Builders.UnsafeEmbedBuilder()
       .setAuthor({
