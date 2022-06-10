@@ -77,7 +77,6 @@ const roleReward = async (voteData) => {
 
   const gettingThisRole = roles[index];
 
-  console.log(gettingThisRole);
   await member.roles.add(gettingThisRole);
   announcement(voter, gettingThisRole);
 
