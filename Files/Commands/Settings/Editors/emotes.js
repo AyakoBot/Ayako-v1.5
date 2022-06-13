@@ -31,10 +31,7 @@ module.exports = {
   messageHandler: (msgData, insertedValues, required) => {
     const { msg, message } = msgData;
 
-    const args = message.content
-      .split(/:+/)
-      .map((arg) => arg.replace(/\D+/g, ''))
-      .filter((arg) => !!arg.length);
+    const args = message.content.match(/\d{17,19}/g) || [];
 
     const unicodeEmojis = message.content
       .match(msg.client.ch.regexes.emojiTester)
@@ -67,6 +64,7 @@ module.exports = {
         break;
       }
       default: {
+        if (!args) break;
         [insertedValues[required.assinger]] = args;
         break;
       }
@@ -90,14 +88,8 @@ module.exports = {
             ? insertedValues[required.assinger]
                 .map((value) => {
                   let emote;
-                  if (
-                    msg.client.emojis.cache.get(
-                      value.replace(/[<:|<a:](.*):/g, '').replace(/>/g, ''),
-                    )
-                  ) {
-                    emote = msg.client.emojis.cache.get(
-                      value.replace(/[<:|<a:](.*):/g, '').replace(/>/g, ''),
-                    );
+                  if (msg.client.emojis.cache.get(value.match(/\d{17,19}/g)?.[0])) {
+                    emote = msg.client.emojis.cache.get(value.match(/\d{17,19}/g)?.[0]);
                   } else if (value.match(msg.client.ch.regexes.emojiTester)?.length) {
                     emote = value;
                   }
@@ -115,11 +107,11 @@ module.exports = {
             let emote;
             if (
               msg.client.emojis.cache.get(
-                insertedValues[required.assinger].replace(/[<:|<a:](.*):/g, '').replace(/>/g, ''),
+                insertedValues[required.assinger].match(/\d{17,19}/g)?.[0],
               )
             ) {
               emote = msg.client.emojis.cache.get(
-                insertedValues[required.assinger].replace(/[<:|<a:](.*):/g, '').replace(/>/g, ''),
+                insertedValues[required.assinger].match(/\d{17,19}/g)?.[0],
               );
             } else if (
               insertedValues[required.assinger].match(msg.client.ch.regexes.emojiTester)?.length
@@ -146,9 +138,8 @@ module.exports = {
 
     const noAccessEmotes = args
       .map((arg) => {
-        const emote = msg.client.emojis.cache.get(
-          arg.replace(/[<:|<a:](.*):/g, '').replace(/>/g, ''),
-        );
+        if (!arg.match(/\d{17,19}/g)?.[0]) return null;
+        const emote = msg.client.emojis.cache.get(arg.match(/\d{17,19}/g)?.[0]);
         if (!emote) {
           const nameArray = message.content.split(arg)[0].split(/:+/);
           return `\`${nameArray[nameArray.length - 2]}\``;

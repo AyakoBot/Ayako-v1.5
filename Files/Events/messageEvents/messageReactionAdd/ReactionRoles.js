@@ -1,3 +1,5 @@
+const queue = [];
+
 module.exports = {
   execute: async (reaction, user) => {
     if (user.id === reaction.client.user.id) return;
@@ -65,7 +67,7 @@ const getHasAnyOfRelated = (relatedReactions, member) => {
   return hasAnyOfRelated;
 };
 
-const giveRoles = async (reactionRow, baseRow, hasAnyOfRelated, member) => {
+const giveRoles = (reactionRow, baseRow, hasAnyOfRelated, member) => {
   const rolesToAdd = [];
 
   reactionRow.roles.forEach((rID) => {
@@ -79,7 +81,7 @@ const giveRoles = async (reactionRow, baseRow, hasAnyOfRelated, member) => {
   }
 
   if (rolesToAdd.length) {
-    await member.roles.add(rolesToAdd).catch(() => {});
+    queue.push({ member, roles: rolesToAdd });
   }
 };
 
@@ -102,3 +104,23 @@ const getReactionRows = async (reaction) => {
   if (!res || !res.rowCount) return [];
   return res.rows;
 };
+
+setInterval(() => {
+  if (!queue.length) return;
+
+  const { member, roles } = queue.shift();
+
+  queue
+    .filter(({ member: m }) => m.user.id === member.user.id && m.guild.id === member.guild.id)
+    .forEach(({ roles: r }) => {
+      roles.push(...r);
+    });
+
+  const indexes = [];
+  queue.forEach(({ member: m }, i) =>
+    m.user.id === member.user.id && m.guild.id === member.guild.id ? indexes.push(i) : null,
+  );
+  indexes.forEach((index) => queue.splice(index, 1));
+
+  member.roles.add(roles).catch(() => {});
+}, 500);

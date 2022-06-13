@@ -25,7 +25,6 @@ module.exports = {
     if (!role) return msg.client.ch.error(msg, msg.language.errors.roleNotFound);
 
     const user = await msg.client.users.fetch(msg.args[0].replace(/\D+/g, '')).catch(() => {});
-    const { lan } = msg;
     if (!user) return msg.client.ch.error(msg, msg.language.errors.userNotFound);
 
     return msg.client.emit(

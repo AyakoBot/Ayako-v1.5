@@ -60,7 +60,9 @@ module.exports = {
             inline: false,
           },
         )
-        .setDescription(`Buy Roles through the Select Menu below\nYou currently have ${coins} <a:AMLantern:982432370814759003>`)
+        .setDescription(
+          `Buy Roles through the Select Menu below\nYou currently have ${coins} <a:AMLantern:982432370814759003>`,
+        )
         .setColor(msg.client.ch.colorSelector(msg.guild.members.me));
 
       const menu = new Builders.UnsafeSelectMenuBuilder()

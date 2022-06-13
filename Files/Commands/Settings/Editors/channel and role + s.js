@@ -1,3 +1,6 @@
+const stringSimilarity = require('string-similarity');
+const Builders = require('@discordjs/builders');
+
 module.exports = {
   key: ['channel', 'channels', 'role', 'roles'],
   requiresInteraction: true,
@@ -55,17 +58,128 @@ module.exports = {
 
     return { cache, Objects, cacheName };
   },
-  getSelected(msg, insertedValues, required, { cacheName }) {
+  interactionType: 'message',
+  async messageHandler(msgData, insertedValues, required) {
+    const { msg, message } = msgData;
+
+    const fail = (arg) => {
+      let text;
+      if (Array.isArray(arg)) {
+        text = arg.map((c) => c).join(', ');
+      } else text = arg;
+
+      const lan = msg.lanSettings.fails[required.key];
+      const embed = new Builders.UnsafeEmbedBuilder()
+        .setColor(msg.client.constants.error)
+        .setDescription(`${lan}\n${text}`);
+      msg.client.ch.reply(message, { embeds: [embed], ephemeral: true });
+    };
+
+    switch (required.key) {
+      case 'roles':
+      case 'role': {
+        const push = (id) => {
+          if (insertedValues[required.assinger]) {
+            if (insertedValues[required.assinger].includes(id)) {
+              insertedValues[required.assinger].splice(
+                insertedValues[required.assinger].indexOf(id),
+                1,
+              );
+            } else {
+              insertedValues[required.assinger].push(id);
+            }
+          } else {
+            insertedValues[required.assinger] = [id];
+          }
+        };
+
+        let role = msg.guild.roles.cache.get(message.content);
+        if (role) {
+          push(role.id);
+        } else {
+          role = msg.guild.roles.cache.get(message.content.replace(/\D+/g, ''));
+          if (role) {
+            push(role.id);
+          } else {
+            role = msg.guild.roles.cache.find(
+              (r) =>
+                r.name.toLowerCase() ===
+                stringSimilarity.findBestMatch(
+                  message.content.toLowerCase(),
+                  msg.guild.roles.cache.map((roles) => roles.name.toLowerCase()),
+                ).bestMatch.target,
+            );
+            if (role) {
+              push(role.id);
+            } else fail(message.content);
+          }
+        }
+        break;
+      }
+      case 'channels':
+      case 'channel': {
+        const push = (id) => {
+          if (insertedValues[required.assinger]) {
+            if (insertedValues[required.assinger].includes(id)) {
+              insertedValues[required.assinger].splice(
+                insertedValues[required.assinger].indexOf(id),
+                1,
+              );
+            } else {
+              insertedValues[required.assinger].push(id);
+            }
+          } else {
+            insertedValues[required.assinger] = [id];
+          }
+        };
+
+        let channel = msg.guild.channels.cache.get(message.content);
+        if (channel) {
+          push(channel.id);
+        } else {
+          channel = msg.guild.channels.cache.get(message.content.replace(/\D+/g, ''));
+          if (channel) {
+            push(channel.id);
+          } else {
+            channel = msg.guild.channels.cache.find(
+              (r) =>
+                r.name.toLowerCase() ===
+                stringSimilarity.findBestMatch(
+                  message.content.toLowerCase(),
+                  msg.guild.channels.cache.map((channels) => channels.name.toLowerCase()),
+                ).bestMatch.target,
+            );
+            if (channel) {
+              push(channel.id);
+            } else fail(message.content);
+          }
+        }
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+
+    const selected = this.getSelected(msg, insertedValues, required, required.key);
+
+    const returnEmbed = new Builders.UnsafeEmbedBuilder().setDescription(
+      `**${msg.language.selected}:**\n${selected?.length ? selected : msg.language.none}`,
+    );
+
+    return { returnEmbed };
+  },
+  getSelected(msg, insertedValues, required) {
     if (insertedValues[required.assinger]) {
       if (insertedValues[required.assinger]) {
         switch (required.key.endsWith('s')) {
           case true: {
-            if (cacheName === 'roles') {
+            if (required.key === 'roles') {
               return Array.isArray(insertedValues[required.assinger])
                 ? insertedValues[required.assinger].map((value) => `<@&${value}>`).join(', ')
                 : msg.language.none;
             }
-            if (cacheName === 'channels') {
+            if (required.key === 'channels') {
               return Array.isArray(insertedValues[required.assinger])
                 ? insertedValues[required.assinger].map((value) => `<#${value}>`).join(', ')
                 : msg.language.none;
@@ -73,12 +187,12 @@ module.exports = {
             return msg.language.none;
           }
           default: {
-            if (cacheName === 'roles') {
+            if (required.key === 'role') {
               return Number.isNaN(+insertedValues[required.assinger])
                 ? msg.language.none
                 : `<@&${insertedValues[required.assinger]}>`;
             }
-            if (cacheName === 'channels') {
+            if (required.key === 'channel') {
               return Number.isNaN(+insertedValues[required.assinger])
                 ? msg.language.none
                 : `<#${insertedValues[required.assinger]}>`;

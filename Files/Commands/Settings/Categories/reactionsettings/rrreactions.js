@@ -117,24 +117,30 @@ module.exports = {
     const oldRow = oldRes.rows[0];
 
     if (message) {
-      if (newRow.active === false && oldRow.active === true) {
-        message.reactions.cache
-          .get(oldRow.emoteid)
-          ?.remove()
-          .catch(() => {});
-      }
+      const rows = await getRes(newRow.messagelink, msg);
+      if (!rows) return;
+
+      rows.forEach((row) => {
+        if (row.active === false) {
+          message.reactions.cache
+            .get(oldRow.emoteid)
+            ?.remove()
+            .catch(() => {});
+        }
+
+        if (row.active === true) {
+          message.reactions.cache
+            .get(oldRow.emoteid)
+            ?.remove()
+            .catch(() => {});
+        }
+      });
 
       if (oldRow.emoteid !== newRow.emoteid) {
         message.reactions.cache
           .get(oldRow.emoteid)
-          ?.remove()
+          .remove()
           .catch(() => {});
-
-        message.react(newRow.emoteid).catch(() => {});
-      }
-
-      if (newRow.active === true && oldRow.active === false) {
-        message.react(newRow.emoteid).catch(() => {});
       }
     }
   },
@@ -148,4 +154,13 @@ const linkToIDs = async (msg, link) => {
   const message = channel ? await channel.messages.fetch(messageid).catch(() => {}) : null;
 
   return [guild, channel, message];
+};
+
+const getRes = async (link, msg) => {
+  const res = await msg.client.ch.query(
+    `SELECT * FROM rrreactions WHERE messagelink = $1 AND guildid = $2;`,
+    [link, msg.guild.id],
+  );
+
+  return res && res.rowCount ? res.rows : null;
 };

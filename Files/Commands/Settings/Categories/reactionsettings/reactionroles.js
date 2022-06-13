@@ -140,14 +140,14 @@ const switchMsgReactions = async (msg, oldRow, newRow) => {
 
   const [, , oldMessage] = await linkToIDs(msg, oldRow.messagelink);
 
-  if (oldMessage && oldMessage.reactions) {
+  if (oldMessage && oldMessage.reactions && oldRow.messagelink !== newRow.messagelink) {
     oldMessage.reactions.removeAll().catch(() => {});
   }
 
   oldReactionRows.forEach(async (row) => {
     const [, , newMessage] = await linkToIDs(msg, newRow.messagelink);
 
-    if (newMessage) {
+    if (newMessage && !newMessage.reactions.cache.has(row.emoteid)) {
       newMessage.react(row.emoteid).catch(() => {});
     }
   });

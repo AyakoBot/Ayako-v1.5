@@ -88,6 +88,7 @@ const endReminder = async (msg) => {
   const roles = settings.roles?.map((r) => `<@&${r}>`).join(', ') || '';
 
   const m = await msg.client.ch.send(channel, { embeds: [embed], content: `${users}\n${roles}` });
+  if (!m) return;
 
   await msg.client.ch.query(`UPDATE disboard SET msgid = $1 WHERE guildid = $2;`, [
     m.id,
