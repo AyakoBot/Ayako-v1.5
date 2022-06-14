@@ -257,7 +257,7 @@ const roleCheck = async (embed, mExistedPreviously, lan, targetMember, executing
   if (
     !executingMember ||
     !targetMember ||
-    executingMember.roles.highest.position > targetMember?.roles.highest.position ||
+    executingMember.roles?.highest.position > targetMember?.roles?.highest.position ||
     args.executor.id === args.guild?.ownerId
   ) {
     return true;
@@ -395,7 +395,7 @@ const checkPunishable = async (
     }
     case 'roleAdd': {
       if (
-        args.role.rawPosition < args.guild?.members.me.roles.highest.rawPosition &&
+        args.role.rawPosition < args.guild?.members.me.roles?.highest.rawPosition &&
         targetMember?.manageable
       ) {
         return true;
@@ -404,7 +404,7 @@ const checkPunishable = async (
     }
     case 'roleRemove': {
       if (
-        args.role.rawPosition < args.guild?.members.me.roles.highest.rawPosition &&
+        args.role.rawPosition < args.guild?.members.me.roles?.highest.rawPosition &&
         targetMember?.manageable
       ) {
         return true;

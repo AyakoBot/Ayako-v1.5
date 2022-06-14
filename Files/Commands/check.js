@@ -188,6 +188,7 @@ const getCurrentStatusField = (
   if (isBanned) {
     fieldValue += `${msg.client.textEmotes.banTick} ${msg.client.ch.stp(msg.lan.banned, {
       target: user,
+      reason: isBanned.reason,
     })}\n`;
   } else if (banError) {
     fieldValue += `${msg.client.textEmotes.banError} ${msg.client.ch.stp(msg.lan.banError, {

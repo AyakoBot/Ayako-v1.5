@@ -17,31 +17,9 @@ module.exports = {
     const Animekos = msg.client.guilds.cache.get('298954459172700181');
     const banReason = msg.args[1] ? msg.args.slice(1).join(' ') : 'No Reason given';
 
-    msg.guild = Gameverse;
-    msg.client.emit(
-      'modBaseEvent',
-      {
-        target: user,
-        executor: msg.author,
-        reason: banReason,
-        msg,
-        guild: msg.guild,
-      },
-      'banAdd',
-    );
-
-    msg.guild = Animekos;
-    msg.client.emit(
-      'modBaseEvent',
-      {
-        target: user,
-        executor: msg.author,
-        reason: banReason,
-        msg,
-        guild: msg.guild,
-      },
-      'banAdd',
-    );
+    Gameverse.bans.create(user, { reason: banReason }).catch(() => {});
+    Animekos.bans.create(user, { reason: banReason }).catch(() => {});
+    msg.react('✅');
     return null;
   },
 };

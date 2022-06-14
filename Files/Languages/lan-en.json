@@ -2069,7 +2069,7 @@
       "usage": ["check [User ID or @Mention]"],
       "author": "Punishments of {{target.tag}}",
       "banLoad": "Fetching Bans",
-      "banned": "{{target.username}} **is Banned**",
+      "banned": "{{target.username}} **is Banned**\n```{{reason}}```",
       "banError": "I'm lacking Permissions to view Bans",
       "notbanned": "{{target.username}} **is not Banned**",
       "muteLoad": "Fetching Mutes",
