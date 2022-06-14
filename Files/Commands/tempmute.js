@@ -2,7 +2,7 @@ const ms = require('ms');
 
 module.exports = {
   name: 'tempmute',
-  perm: 268435456n,
+  perm: 1099511627776n,
   dm: false,
   takesFirstArg: true,
   aliases: ['mute'],
