@@ -1199,7 +1199,7 @@ module.exports = {
 
       if (embedToUse.footer) {
         embed.data.footer = {
-          name: embedToUse.footer.text
+          text: embedToUse.footer.text
             ? mod(embedToUse.footer.text, { [option[0]]: option[1] })
             : null,
           iconURL: embedToUse.footer.iconURL

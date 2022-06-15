@@ -2,6 +2,7 @@ const Builders = require('@discordjs/builders');
 
 module.exports = async (member) => {
   policyReminder(member);
+  if (member.guild.id === '366219406776336385') gv(member);
   if (member.guild.id !== '298954459172700181') return;
 
   const content = `***;⌗ El~~ite~~ Em__pire__***
@@ -24,6 +25,16 @@ https://discord.gg/WGRbUwqkwG
   member.user.send({ content }).catch(() => {});
 
   const channel = member.client.channels.cache.get('317410162061344768');
+  channel
+    .send({
+      content: `${member.user} \`${member.user.id}\` has joined! <a:Wave:775409859339747349>`,
+      allowedMentions: { users: [] },
+    })
+    .catch(() => {});
+};
+
+const gv = (member) => {
+  const channel = member.client.channels.cache.get('371033911394041857');
   channel
     .send({
       content: `${member.user} \`${member.user.id}\` has joined! <a:Wave:775409859339747349>`,
