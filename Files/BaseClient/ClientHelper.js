@@ -89,6 +89,13 @@ module.exports = {
    * @param {object|string} rawPayload - The Payload or String sent
    */
   reply: async (msg, rawPayload, timeout) => {
+    if (
+      rawPayload?.embeds?.[0].author?.name ===
+      'Welcome {{member.user.tag}} to {{member.guild.name}}'
+    ) {
+      throw new Error('Found one');
+    }
+
     const payload = typeof rawPayload === 'string' ? { content: rawPayload } : rawPayload;
 
     if (typeof msg.reply !== 'function') {
