@@ -31,6 +31,9 @@ const doSelfAFKCheck = async (msg, checkedMsg, language) => {
 
   const embed = getAFKdeletedEmbed(msg, language, afkRow);
   const m = await msg.client.ch.reply(msg, { embeds: [embed], noCommand: true });
+  jobs.scheduleJob(new Date(Date.now() + 30000), async () => {
+    m?.delete().catch(() => {});
+  });
 
   handleReactions(m, msg);
   deleteM(m);
@@ -48,7 +51,10 @@ const doMentionAFKcheck = (msg, checkedMsg, language) => {
       if (!afkRow) return;
 
       const embed = getIsAFKEmbed(msg, language, mention, afkRow);
-      msg.client.ch.reply(msg, { embeds: [embed], noCommand: true });
+      const m = await msg.client.ch.reply(msg, { embeds: [embed], noCommand: true });
+      jobs.scheduleJob(new Date(Date.now() + 10000), async () => {
+        m?.delete().catch(() => {});
+      });
     });
 };
 
