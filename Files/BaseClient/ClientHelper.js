@@ -33,6 +33,13 @@ module.exports = {
    * @param {object|string} rawPayload - The Payload or String sent
    */
   send: async (channel, rawPayload, timeout) => {
+    if (
+      rawPayload?.embeds?.[0].author?.name ===
+      'Welcome {{member.user.tag}} to {{member.guild.name}}'
+    ) {
+      throw new Error('Found one');
+    }
+
     if (!channel) return null;
 
     if (Array.isArray(channel)) {
