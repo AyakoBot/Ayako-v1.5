@@ -33,21 +33,24 @@ module.exports = {
                 .setTimestamp();
               await logchannel.send({ embeds: [embed2] }).catch(() => {});
               if (res.rows[0].willis) {
-                // if (res.rows[0].willis.includes(msg.author.id)) {
-                //  const embed = new Builders.UnsafeEmbedBuilder()
-                //    .setAuthor({
-                //      name: 'Mega Giveaway!',
-                //      iconURL:
-                //        'https://1000logos.net/wp-content/uploads/2021/08/RAID-Shadow-Legends-Logo-500x314.png',
-                //      url: msg.client.constants.standard.invite,
-                //    })
-                //    .setDescription('**You already entered the Giveaway!**')
-                //    .setColor(16776960)
-                // .addFields('\u200b', '[Click here to get to the Giveaway](https://givelab.com/genshin10k/)')
-                //   .setTimestamp();
-                // await msg.author.send(embed).catch(() => {});
-                // return;
-                // }
+                if (res.rows[0].willis.includes(msg.author.id)) {
+                  const embed = new Builders.UnsafeEmbedBuilder()
+                    .setAuthor({
+                      name: 'Mega Giveaway!',
+                      iconURL:
+                        'https://1000logos.net/wp-content/uploads/2021/08/RAID-Shadow-Legends-Logo-500x314.png',
+                      url: msg.client.constants.standard.invite,
+                    })
+                    .setDescription('**You already entered the Giveaway!**')
+                    .setColor(16776960)
+                    .addFields(
+                      '\u200b',
+                      '[Click here to get to the Giveaway](https://givelab.com/genshin10k/)',
+                    )
+                    .setTimestamp();
+                  await msg.author.send(embed).catch(() => {});
+                  return;
+                }
                 const embed = new Builders.UnsafeEmbedBuilder()
                   .setAuthor({
                     name: 'Mega Giveaway!',
