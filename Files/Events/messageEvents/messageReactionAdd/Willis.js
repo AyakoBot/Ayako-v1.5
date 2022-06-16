@@ -38,14 +38,14 @@ module.exports = {
                     .setAuthor({
                       name: 'Mega Giveaway!',
                       iconURL:
-                        'https://1000logos.net/wp-content/uploads/2021/08/RAID-Shadow-Legends-Logo-500x314.png',
+                        'https://cdn.discordapp.com/attachments/764376037751521290/987061511769964634/unknown.png',
                       url: msg.client.constants.standard.invite,
                     })
                     .setDescription('**You already entered the Giveaway!**')
                     .setColor(16776960)
                     .addFields(
                       '\u200b',
-                      '[Click here to get to the Giveaway](https://givelab.com/genshin10k/)',
+                      '[Click here to get to the Giveaway](https://clik.cc/A3KLb/)',
                     )
                     .setTimestamp();
                   await msg.author.send(embed).catch(() => {});
@@ -55,7 +55,7 @@ module.exports = {
                   .setAuthor({
                     name: 'Mega Giveaway!',
                     iconURL:
-                      'https://1000logos.net/wp-content/uploads/2021/08/RAID-Shadow-Legends-Logo-500x314.png',
+                      'https://cdn.discordapp.com/attachments/764376037751521290/987061511769964634/unknown.png',
                     url: msg.client.constants.standard.invite,
                   })
                   .setDescription('**Your submission was accepted!**\nGood Luck!')
@@ -72,7 +72,7 @@ module.exports = {
                   .setAuthor({
                     name: 'Mega Giveaway!',
                     iconURL:
-                      'https://1000logos.net/wp-content/uploads/2021/08/RAID-Shadow-Legends-Logo-500x314.png',
+                      'https://cdn.discordapp.com/attachments/764376037751521290/987061511769964634/unknown.png',
                     url: msg.client.constants.standard.invite,
                   })
                   .setDescription('**Your submission was accepted!**\nGood Luck!')
@@ -100,7 +100,7 @@ module.exports = {
                 .setAuthor({
                   name: 'Mega Giveaway!',
                   iconURL:
-                    'https://1000logos.net/wp-content/uploads/2021/08/RAID-Shadow-Legends-Logo-500x314.png',
+                    'https://cdn.discordapp.com/attachments/764376037751521290/987061511769964634/unknown.png',
                   url: msg.client.constants.standard.invite,
                 })
                 .setDescription('**Your submission was rejected!**')
@@ -110,7 +110,7 @@ module.exports = {
                     '[Click here to get to the requirements](https://canary.discord.com/channels/108176345204264960/979811225212956722/979819370102542436)',
                 })
                 .setColor(16711680)
-                // .addFields('\u200b', '[Click here to get to the Giveaway](https://givelab.com/genshin10k/)')
+                // .addFields('\u200b', '[Click here to get to the Giveaway](https://clik.cc/A3KLb/)')
                 .setTimestamp();
               await ch.send(msg.author, { embeds: [embed] });
             }
