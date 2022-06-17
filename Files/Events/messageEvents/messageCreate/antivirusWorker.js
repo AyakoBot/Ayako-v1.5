@@ -155,6 +155,7 @@ const run = async ({
   logs.push(10);
 
   const attributes = urlsAttributes;
+  console.log(attributes);
   if (attributes && `${+attributes.creation_date}000` > Date.now() - 604800000) {
     if (!check) {
       includedBadLink = true;
