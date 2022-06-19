@@ -1384,7 +1384,7 @@ const handleSave = async (msg, answer, Objects) => {
           emb.data.fields?.map((f) => f.value),
           emb.data.fields?.map((f) => f.inline),
           emb.data.image?.url,
-          emb.data.timestamp,
+          emb.data.timestamp ? new Date(emb.data.timestamp).getTime() : null,
           emb.data.footer?.text,
           emb.data.footer?.iconURL,
           now,

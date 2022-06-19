@@ -1223,11 +1223,13 @@ module.exports = {
       }
 
       if (embedToUse.fields && embedToUse.fields.length) {
-        embedToUse.fields.forEach(([name, value, inline]) => {
+        embedToUse.fields.forEach((field) => {
+          if (!embed.fields) embed.data.fields = [];
+
           embed.data.fields.push({
-            name: name ? mod(name, { [option[0]]: option[1] }) : null,
-            value: value ? mod(value, { [option[0]]: option[1] }) : null,
-            inline,
+            name: field.name ? mod(field.name, { [option[0]]: option[1] }) : null,
+            value: field.value ? mod(field.value, { [option[0]]: option[1] }) : null,
+            inline: field.inline,
           });
         });
       }
