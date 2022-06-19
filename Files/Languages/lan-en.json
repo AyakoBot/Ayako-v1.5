@@ -1219,6 +1219,7 @@
       },
       "self": {
         "hug": "{{msg.author}} hugs themselves, that looks quite sad...",
+        "handhold": "{{msg.author}} holds their own hand, try holding someone else's next time",
         "pat": "{{msg.author}} pats themselves, what an odd thing to do",
         "kiss": "{{msg.author}} kisses themselves, how do you even do that??",
         "bloodsuck": "{{msg.author}} sucks their own blood, I don't think that's healthy",
@@ -3568,6 +3569,7 @@
         }
       },
       "suggestions": {
+        "description": "Members will have to use the `suggest` Command to send a Suggestion",
         "type": "Suggestions",
         "channelid": "Suggestion Channel",
         "novoteusers": "No Vote Users",
