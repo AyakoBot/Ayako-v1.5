@@ -1196,10 +1196,11 @@ module.exports = {
         ? mod(embedToUse.description, { [option[0]]: option[1] })
         : null;
 
-      embed.data.thumbnail =
-        embedToUse.thumbnail && embedToUse.thumbnail.url
-          ? mod(embedToUse.thumbnail.url, { [option[0]]: option[1] })
-          : null;
+      if (embedToUse.thumbnail && embedToUse.thumbnail.url) {
+        embed.data.thumbnail = {
+          url: mod(embedToUse.thumbnail.url, { [option[0]]: option[1] }),
+        };
+      }
 
       if (embedToUse.image && embedToUse.image.url) {
         embed.data.image = {
