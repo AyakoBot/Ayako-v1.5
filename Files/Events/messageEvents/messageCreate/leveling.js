@@ -55,7 +55,7 @@ const guildLeveling = async (msg, language) => {
 
   const rows = isEnabled?.rows[0];
   if (rows) {
-    if (rows.ignoreprefixes && rows.prefixes.length) {
+    if (rows.ignoreprefixes && rows.prefixes?.length) {
       const startsWith = rows.prefixes.some((w) =>
         msg.content.toLowerCase().startsWith(w.toLowerCase()),
       );
