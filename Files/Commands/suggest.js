@@ -96,7 +96,7 @@ const getAllowed = (settings, msg) => {
   if (
     settings.nosendroles &&
     settings.nosendroles.length &&
-    settings.noserndroles.some((r) => msg.member.roles.cache.has(r.id))
+    settings.nosendroles?.some((r) => msg.member.roles.cache.has(r.id))
   ) {
     msg.client.ch.error(msg, msg.lan.roleSendBlacklisted);
     return false;
