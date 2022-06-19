@@ -79,17 +79,23 @@ module.exports = {
       case 'roles':
       case 'role': {
         const push = (id) => {
-          if (insertedValues[required.assinger]) {
-            if (insertedValues[required.assinger].includes(id)) {
-              insertedValues[required.assinger].splice(
-                insertedValues[required.assinger].indexOf(id),
-                1,
-              );
+          if (required.key === 'roles') {
+            if (insertedValues[required.assinger]) {
+              if (insertedValues[required.assinger].includes(id)) {
+                insertedValues[required.assinger].splice(
+                  insertedValues[required.assinger].indexOf(id),
+                  1,
+                );
+              } else {
+                insertedValues[required.assinger].push(id);
+              }
             } else {
-              insertedValues[required.assinger].push(id);
+              insertedValues[required.assinger] = [id];
             }
+          } else if (insertedValues[required.assinger] === id) {
+            insertedValues[required.assinger] = null;
           } else {
-            insertedValues[required.assinger] = [id];
+            insertedValues[required.assinger] = id;
           }
         };
 
@@ -119,17 +125,23 @@ module.exports = {
       case 'channels':
       case 'channel': {
         const push = (id) => {
-          if (insertedValues[required.assinger]) {
-            if (insertedValues[required.assinger].includes(id)) {
-              insertedValues[required.assinger].splice(
-                insertedValues[required.assinger].indexOf(id),
-                1,
-              );
+          if (required.key === 'channels') {
+            if (insertedValues[required.assinger]) {
+              if (insertedValues[required.assinger].includes(id)) {
+                insertedValues[required.assinger].splice(
+                  insertedValues[required.assinger].indexOf(id),
+                  1,
+                );
+              } else {
+                insertedValues[required.assinger].push(id);
+              }
             } else {
-              insertedValues[required.assinger].push(id);
+              insertedValues[required.assinger] = [id];
             }
+          } else if (insertedValues[required.assinger] === id) {
+            insertedValues[required.assinger] = null;
           } else {
-            insertedValues[required.assinger] = [id];
+            insertedValues[required.assinger] = id;
           }
         };
 
