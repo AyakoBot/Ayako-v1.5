@@ -310,7 +310,7 @@ const doReact = async (msg, row, levelData, language) => {
 const doEmbed = async (msg, settinsgrow, language, levelData, row) => {
   const getDefaultEmbed = () => ({
     author: {
-      name: language.leveling.author,
+      name: msg.client.ch.stp(language.leveling.author, { msg, level: levelData.newLevel }),
     },
     color: msg.client.ch.colorSelector(msg.member),
   });

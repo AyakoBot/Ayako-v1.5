@@ -4001,7 +4001,7 @@
     }
   },
   "leveling": {
-    "author": "Welcome {{member.user.tag}} to {{member.guild.name}}",
+    "author": "Congraz {{msg.author}}! You are now Level {{level}}",
     "description": "On this Server, Level-Ups are indicated by Reactions on your Message\nThe current Reactions are: {{reactions}}"
   },
   "welcome": {
