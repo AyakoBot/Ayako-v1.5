@@ -1903,8 +1903,9 @@
     "reminder": {
       "category": "Info",
       "description": "Set, view and delete Reminders Ayako will remind you of",
-      "usage": ["reminder [duration] [text]", "reminder delete [reminder ID]", "reminder list"],
+      "usage": ["reminder [duration] [text]", "reminders"],
       "set": "set",
+      "me": "me",
       "delete": "delete",
       "list": "list",
       "created": "Successfully created Reminder with ID `{{ID}}`\nReminder End: {{time}}",
@@ -1922,7 +1923,7 @@
       "editLabel": "Insert new Text Below",
       "editPlaceholder": "Remind me to Vote for Ayako!",
       "timePlaceholder": "11 hours 30 minutes",
-      "negativeTime": "You can't set a negative Duration"
+      "negativeTime": "You can't set a negative Duration\nor your Command Syntax is not valid\nUse `h!cmdh reminder`"
     },
     "ping": {
       "category": "Info",

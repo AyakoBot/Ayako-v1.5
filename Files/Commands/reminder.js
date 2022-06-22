@@ -284,12 +284,12 @@ const getAllReminders = async (msg) => {
 
 const createReminder = async (msg) => {
   const now = Date.now();
-  const startArg = msg.args[0] === msg.lan.set ? 1 : 0;
+  const startArg = msg.args[0] === msg.lan.set || msg.args[0] === msg.lan.me ? 1 : 0;
 
   const { reasonArg, endTime } = getEndTime(msg, startArg, now);
   if ((!reasonArg && typeof reasonArg !== 'number') || !endTime) return;
 
-  if (endTime < now) {
+  if (endTime <= now) {
     msg.client.ch.error(msg, msg.lan.negativeTime);
     return;
   }
