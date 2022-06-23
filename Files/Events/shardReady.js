@@ -1,11 +1,13 @@
 module.exports = {
   async execute(id, unavailableGuilds) {
     const client = require('../BaseClient/DiscordClient');
-    if (unavailableGuilds)
+    if (unavailableGuilds) {
       client.ch.logger(
         `Discord Client Shard with ID ${id} is Ready. Unavailable Guilds:`,
         unavailableGuilds,
       );
-    else client.ch.logger(`Discord Client Shard with ID ${id} is Ready.`);
+    } else client.ch.logger(`Discord Client Shard with ID ${id} is Ready.`);
+
+    if (unavailableGuilds?.size > 10) process.exit();
   },
 };
