@@ -7,6 +7,7 @@ module.exports = {
   takesFirstArg: true,
   aliases: null,
   type: 'currency',
+  thisGuildOnly: ['298954459172700181'],
   execute: async (msg) => {
     const user = await msg.client.users.fetch(msg.args[0].replace(/\D+/g, '')).catch(() => {});
     if (!user) {
@@ -39,7 +40,7 @@ module.exports = {
     msg.client.ch.reply(msg, {
       embeds: [
         new Builders.UnsafeEmbedBuilder()
-          .setDescription(msg.client.ch.stp(msg.lan.sent, { user, amount: given }))
+          .setDescription(msg.client.ch.stp(msg.lan.sent, { user, amount: String(given) }))
           .setColor(msg.client.ch.colorSelector(msg.guild.members.me)),
       ],
     });

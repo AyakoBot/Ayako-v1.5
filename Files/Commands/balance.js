@@ -7,6 +7,7 @@ module.exports = {
   takesFirstArg: false,
   aliases: ['bal', '$'],
   type: 'currency',
+  thisGuildOnly: ['298954459172700181'],
   execute: async (msg) => {
     let user = msg.args[0]
       ? await msg.client.users.fetch(msg.args[0].replace(/\D+/g, '')).catch(() => {})

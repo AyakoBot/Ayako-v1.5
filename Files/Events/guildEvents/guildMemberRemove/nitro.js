@@ -7,8 +7,8 @@ module.exports = (member) => {
 
   oldMember.client = member.client;
   newMember.client = member.client;
-  oldMember.guild = member.guild
-  newMember.guild = member.guild
+  oldMember.guild = member.guild;
+  newMember.guild = member.guild;
 
   member.client.emit('guildMemberUpdate', oldMember, newMember);
 };
