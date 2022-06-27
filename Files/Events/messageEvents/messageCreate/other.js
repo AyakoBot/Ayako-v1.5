@@ -7,7 +7,7 @@ module.exports = {
     if (msg.guild.id === '366219406776336385' && msg.channel.id !== '801804774759727134') {
       if (msg.content.toLocaleLowerCase().includes('discord.gg/')) {
         if (msg.author.id !== '267835618032222209' && msg.author.id !== '400086473337995265') {
-          if (member && !member.permissions.has('MANAGE_GUILD')) {
+          if (member && !member.permissions.has('manageGuild')) {
             msg.delete().catch(() => {});
             msg.client.ch
               .send(msg.channel, `${msg.author} **Do not send Discord Links in this Channel**`)
