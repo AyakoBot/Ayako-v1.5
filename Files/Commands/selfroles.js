@@ -45,7 +45,8 @@ module.exports = {
 
       const categoryMenu = new Builders.UnsafeSelectMenuBuilder()
         .setCustomId('categoryMenu')
-        .addOptions(...Data.cTake)
+        .addOptions(...(Data.cTake ? Data.cTake : [{ label: '0', value: '0' }]))
+        .setDisabled(!Data.cTake?.length)
         .setMinValues(1)
         .setMaxValues(1)
         .setPlaceholder(msg.language.select.selfroles.select);
@@ -67,7 +68,8 @@ module.exports = {
       if (Data.currentRow) {
         const roleMenu = new Builders.UnsafeSelectMenuBuilder()
           .setCustomId('roleMenu')
-          .addOptions(...Data.rTake)
+          .addOptions(...(Data.rTake ? Data.rTake : [{ label: '0', value: '0' }]))
+          .setDisabled(!Data.rTake?.length)
           .setMinValues(1)
           .setMaxValues(Data.currentRow.onlyone ? 1 : Data.rTake.length)
           .setPlaceholder(

@@ -1814,8 +1814,8 @@
       "footer": "Executor ID {{user.id}}\nTarget ID {{target.id}}"
     },
     "kick": {
-      "description": "Bans a User from the Server",
-      "usage": ["ban [User ID or @Mention] (reason)"],
+      "description": "Kicks a User from the Server",
+      "usage": ["kick [User ID or @Mention] (reason)"],
       "category": "Moderation",
       "reason": "No Reason given"
     },

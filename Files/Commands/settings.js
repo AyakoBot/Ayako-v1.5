@@ -257,7 +257,7 @@ module.exports = {
       return null;
     };
 
-    const mmrDisplay = async (answer) => {
+    const mmrDisplay = async (answer, page) => {
       msg.lanSettings = msg.language.commands.settings;
       msg.lan = msg.lanSettings[msg.file.name];
       msg.client.constants.commands.settings.editReq.splice(2, 1);
@@ -310,7 +310,7 @@ module.exports = {
       const options = {
         allOptions: [],
         take: [],
-        page: 1,
+        page: page || 1,
       };
 
       res?.rows?.forEach((row) => {
@@ -333,7 +333,7 @@ module.exports = {
       options.take = [];
       for (
         let i = options.page * 25 - 25;
-        i < options.allOptions.length && i < options.page * 25 + 25;
+        i < options.allOptions.length && i < options.page * 25 + 25 && i < 25;
         i += 1
       ) {
         options.take.push(options.allOptions[i]);
@@ -373,10 +373,13 @@ module.exports = {
           }
           case 'next': {
             options.page += 1;
+            buttonsCollector.stop();
+            mmrDisplay(interaction, options.page + 1);
             break;
           }
           case 'prev': {
-            options.page -= 1;
+            buttonsCollector.stop();
+            mmrDisplay(interaction, options.page - 1);
             break;
           }
           case 'edit': {
@@ -853,7 +856,7 @@ const mmrEditList = async (msgData, sendData) => {
   options.take = [];
   for (
     let i = options.page * 25 - 25;
-    i < options.allOptions.length && i < options.page * 25 + 25;
+    i < options.allOptions.length && i < options.page * 25 + 25 && i < 25;
     i += 1
   ) {
     options.take.push(options.allOptions[i]);
