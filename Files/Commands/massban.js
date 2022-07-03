@@ -6,11 +6,17 @@ module.exports = {
   name: 'massban',
   perm: 4n,
   dm: false,
-  takesFirstArg: true,
+  takesFirstArg: false,
   aliases: ['namemassban', 'massbannames', 'massbanname'],
   type: 'mod',
   async execute(msg, answer) {
-    const args = await getArgs(msg);
+    const getFile = async () => {
+      const text = await msg.client.ch.convertTxtFileLinkToString(msg.attachments.first().url);
+      msg.content = `${msg.content} ${text}`;
+      return getArgs(msg);
+    };
+
+    const args = !msg.args[0] ? await getFile() : await getArgs(msg);
     if (!args) return;
 
     const users = [];
