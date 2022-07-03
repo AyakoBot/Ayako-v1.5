@@ -19,13 +19,11 @@ module.exports = {
     if (!member) return;
 
     const relatedReactions = await getRelatedReactions(reaction, baseRow);
-    const hasAnyOfRelated = getHasAnyOfRelated(relatedReactions, member);
+    const related = getHasAnyOfRelated(relatedReactions, member);
 
-    if (
-      (!hasAnyOfRelated && baseRow.onlyone && reactionRow.roles) ||
-      (!baseRow.onlyone && reactionRow.roles)
-    ) {
-      giveRoles(reactionRow, baseRow, hasAnyOfRelated, member);
+    if (reactionRow.roles) {
+      giveRoles(reactionRow, baseRow, related, member);
+      takeRelated(related, member, baseRow, reaction);
     }
   },
 };
@@ -55,34 +53,51 @@ const getRelatedReactions = async (reaction, baseRow) => {
 const getHasAnyOfRelated = (relatedReactions, member) => {
   if (!relatedReactions || !relatedReactions.length) return false;
 
-  let hasAnyOfRelated = false;
+  const related = [];
 
   relatedReactions.forEach((row) => {
     row.roles.forEach((role) => {
-      if (hasAnyOfRelated) return;
-      if (member.roles.cache.has(role)) hasAnyOfRelated = true;
+      if (member.roles.cache.has(role)) related.push(role);
     });
   });
 
-  return hasAnyOfRelated;
+  return related;
 };
 
-const giveRoles = (reactionRow, baseRow, hasAnyOfRelated, member) => {
+const giveRoles = (reactionRow, baseRow, relatedRoles, member) => {
   const rolesToAdd = [];
 
   reactionRow.roles.forEach((rID) => {
     if (!member.roles.cache.has(rID)) rolesToAdd.push(rID);
   });
 
-  if (hasAnyOfRelated && baseRow.anyroles && baseRow.anyroles.length) {
+  if (relatedRoles && baseRow.anyroles && baseRow.anyroles.length) {
     baseRow.anyroles.forEach((rID) => {
       if (!member.roles.cache.has(rID)) rolesToAdd.push(rID);
     });
   }
 
-  if (rolesToAdd.length) {
-    queue.push({ member, roles: rolesToAdd });
-  }
+  if (rolesToAdd.length) queue.push({ member, roles: rolesToAdd });
+};
+
+const takeRelated = async (relatedRoles, member, baseRow, reaction) => {
+  relatedRoles.forEach((r) => {
+    if (member.roles.cache.has(r)) member.roles.remove(r);
+  });
+
+  const [, , , , channelid, msgid] = baseRow.messagelink.split(/\/+/);
+  const m = await member.client.channels.cache.get(channelid).messages.fetch(msgid);
+  m.reactions.cache.forEach(async (r) => {
+    await r.users.fetch().catch(() => {});
+    if (r.users.cache.has(member.id)) {
+      if (
+        (r._emoji.id && r._emoji.id !== reaction._emoji.id) ||
+        (!r._emoji.id && r._emoji.name !== reaction._emoji.name)
+      ) {
+        r.users.remove(member.id).catch(() => {});
+      }
+    }
+  });
 };
 
 const getReactionRow = async (reaction, emoteIdentifier) => {
