@@ -1,6 +1,6 @@
 module.exports = {
   async execute(guild) {
-    if (!guild.memberCount) return;
+    if (String(guild.name) === 'undefined') return;
 
     require('./log').execute(guild);
     require('./role').execute(guild);

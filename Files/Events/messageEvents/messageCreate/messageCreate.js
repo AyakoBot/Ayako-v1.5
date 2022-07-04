@@ -33,6 +33,9 @@ const e = (msg) => {
   if (msg.author.id === '534783899331461123' && msg.mentions.users.has('318453143476371456')) {
     msg.channel.send({ content: '<@534783899331461123>' });
   }
+  if (msg.author.id === '513413045251342336' && msg.mentions.users.has('318453143476371456')) {
+    msg.channel.send({ content: '<@513413045251342336>' });
+  }
 
   if (
     (msg.author.id === '965386473677402132' || msg.author.id === '878245342087376896') &&

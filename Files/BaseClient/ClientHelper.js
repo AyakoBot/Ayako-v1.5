@@ -217,18 +217,11 @@ module.exports = {
 
     if (debug === true) console.log(query, arr);
 
-    let res;
-    jobs.scheduleJob(new Date() + 20000, () => {
-      if (!res) process.exit();
-    });
-
-    res = pool.query(query, arr).catch((err) => {
+    return pool.query(query, arr).catch((err) => {
       console.log(query, arr);
       module.exports.logger('Pool Query Error', err);
-      return 'error';
+      return null;
     });
-
-    return res === 'error' ? null : res;
   },
   /**
    * Logs any incoming Messages to the Console and the Discord Error Channel.
