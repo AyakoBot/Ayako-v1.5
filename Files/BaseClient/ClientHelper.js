@@ -218,7 +218,7 @@ module.exports = {
     if (debug === true) console.log(query, arr);
 
     let res;
-    jobs.scheduleJob(new Date() + 2000, () => {
+    jobs.scheduleJob(new Date() + 20000, () => {
       if (!res) process.exit();
     });
 
