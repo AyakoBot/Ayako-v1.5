@@ -29,13 +29,10 @@ module.exports = async () => {
     const roleSettings = await getRoleSettings(guild);
     if (!roleSettings) return;
 
-    const user = await client.users.fetch(rawUser.userid).catch(() => {});
-    if (!user) return;
-
     const rolesUserQualifiesFor = roleSettings.filter((role) => role.days <= rawUser.days);
     if (!rolesUserQualifiesFor) return;
 
-    const member = guild.members.cache.get(user.id);
+    const member = guild.members.cache.get(rawUser.userid);
     if (!member) return;
 
     const [rolesToAdd, rolesToRemove] = getRolesToAssign(
@@ -50,7 +47,7 @@ module.exports = async () => {
     if (rolesToAdd.length) member.roles.add(rolesToAdd);
     if (rolesToRemove.length) member.roles.remove(rolesToRemove);
 
-    log(rolesToAdd, rolesToRemove, guild, settings, user, rawUser.days);
+    log(rolesToAdd, rolesToRemove, guild, settings, member.user, rawUser.days);
   });
 };
 

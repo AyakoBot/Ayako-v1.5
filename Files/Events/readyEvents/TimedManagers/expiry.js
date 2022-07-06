@@ -36,7 +36,7 @@ module.exports = async () => {
     if (settingsRow.bans && settingsRow.banstime) {
       expire({ expire: settingsRow.banstime, guildid: settingsRow.guildid }, client, 'punish_bans');
     }
-    if (settingsRow.channelbans && settingsRow.channelbanstime) {
+    if (settingsRow.channelbanstime && settingsRow.channelbanstime) {
       expire(
         { expire: settingsRow.channelbans, guildid: settingsRow.guildid },
         client,
@@ -88,8 +88,6 @@ const logExpire = async (rows, client, guildid) => {
   const language = await client.ch.languageSelector(client.guilds.cache.get(guildid));
   const lan = language.expire;
   const con = client.constants.expire;
-
-  await Promise.all(rows.map((r) => client.users.fetch(r.userid).catch(() => {})));
 
   const embeds = rows.map((p) => {
     const embed = new Builders.UnsafeEmbedBuilder();
