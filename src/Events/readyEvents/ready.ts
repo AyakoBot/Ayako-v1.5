@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-import type * as Eris from 'eris';
 import Jobs from 'node-schedule';
 import client from '../../BaseClient/ErisClient';
 
