@@ -14,16 +14,18 @@ export default async (
     | Eris.PrivateThreadChannel
     | Eris.PublicThreadChannel,
 ) => {
+  const actionType = [10, 11, 12].includes(channel.type) ? 110 : 10;
+  const logType = [10, 11, 12].includes(channel.type) ? 'threadevents' : 'channelevents';
+
   const channels = (
     await client.ch
-      .query('SELECT channelevents FROM logchannels WHERE guildid = $1;', [channel.guild.id])
-      .then((r: DBT.logchannels[] | null) => (r ? r[0].channelevents : null))
+      .query(`SELECT ${logType} FROM logchannels WHERE guildid = $1;`, [channel.guild.id])
+      .then((r: DBT.logchannels[] | null) => (r ? r[0][logType] : null))
   )?.map((id: string) => channel.guild.channels.get(id));
 
   if (!channels) return;
 
   const language = await client.ch.languageSelector(channel.guild.id);
-  const actionType = [10, 11, 12].includes(channel.type) ? 110 : 10;
 
   const lan = language.events.channelCreate;
   const con = client.constants.events.channelCreate;
