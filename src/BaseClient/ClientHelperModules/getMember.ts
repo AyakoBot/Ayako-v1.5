@@ -4,11 +4,13 @@ export default async (id: string, guildID: string) => {
   const guild = client.guilds.get(guildID);
   if (!guild) return null;
 
-  let member;
+  let member = guild.members.get(id);
+  if (member) return member;
+
   const members = await guild.getRESTMembers().catch(() => []);
 
   if (members.length) member = members.find((m) => m.user.id === id);
-  else member = await guild.getRESTMember(id).catch(() => null);
+  else member = await guild.getRESTMember(id).catch(() => undefined);
 
   return member;
 };
