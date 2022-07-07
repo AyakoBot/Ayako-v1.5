@@ -8,7 +8,10 @@
     "stageUpdate": {
       "descDetails": "User <@{{user.id}}> / `{{user.username}}#{{user.discriminator}}` / `{{user.id}}`\nupdated\nStage <#{{channel.id}}> / `{{channel.name}}` / `{{channel.id}}`",
       "desc": "Stage <#{{channel.id}}> / `{{channel.name}}` / `{{channel.id}}`\nwas updated",
-      "title": "Stage was updated"
+      "title": "Stage was updated",
+      "discoverableDisabled": "Disabled Discoverability",
+      "privacyLevel": "Privacy Level",
+      "topic": "Stage Topic"
     },
     "stageClose": {
       "descDetails": "User <@{{user.id}}> / `{{user.username}}#{{user.discriminator}}` / `{{user.id}}`\nclosed\nStage <#{{channel.id}}> / `{{channel.name}}` / `{{channel.id}}`",
@@ -4120,6 +4123,10 @@
       }
     }
   },
+  "stagePrivacyLevels": [
+    "Public",
+    "Server Only"
+  ],
   "featuresName": "Features",
   "none": "None",
   "before": "Before",
