@@ -95,6 +95,7 @@ class Client extends Eris.Client {
       disableEvents: {
         TYPING_START: true,
         PRESENCE_UPDATE: true,
+        THREAD_MEMBER_UPDATE: true,
       },
     });
 
