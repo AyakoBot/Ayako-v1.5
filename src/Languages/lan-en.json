@@ -1,6 +1,6 @@
 {
   "events": {
-    "stageCreate": {
+    "stageOpen": {
       "descDetails": "User <@{{user.id}}> / `{{user.username}}#{{user.discriminator}}` / `{{user.id}}`\nopened\nStage <#{{channel.id}}> / `{{channel.name}}` / `{{channel.id}}`",
       "desc": "Stage <#{{channel.id}}> / `{{channel.name}}` / `{{channel.id}}`\nwas opened",
       "title": "Stage was opened"

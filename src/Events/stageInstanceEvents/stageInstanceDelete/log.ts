@@ -16,8 +16,8 @@ export default async (stage: Eris.StageInstance) => {
 
   const language = await client.ch.languageSelector(guild.id);
 
-  const lan = language.events.stageOpen;
-  const con = client.constants.events.stageOpen;
+  const lan = language.events.stageClose;
+  const con = client.constants.events.stageClose;
 
   const audit = await getAudit(guild);
 
@@ -47,7 +47,7 @@ export default async (stage: Eris.StageInstance) => {
 const getAudit = async (guild: Eris.Guild) => {
   if (!guild?.members.get(client.user.id)?.permissions.has(128n)) return null;
 
-  const audits = await guild.getAuditLog({ limit: 5, actionType: 83 });
+  const audits = await guild.getAuditLog({ limit: 5, actionType: 85 });
   if (!audits || !audits.entries) return null;
 
   return audits.entries.sort((a, b) => client.ch.getUnix(b.id) - client.ch.getUnix(a.id))[0];
