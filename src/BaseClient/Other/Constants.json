@@ -1,5 +1,17 @@
 {
   "events": {
+    "stageCreate": {
+      "color": 65280,
+      "image": "https://ayakobot.com/cdn/Ayako_Assets/Events/StageInstanceOpen.png"
+    },
+    "stageUpdate": {
+      "color": 16776960,
+      "image": "https://ayakobot.com/cdn/Ayako_Assets/Events/StageInstanceUpdate.png"
+    },
+    "stageClose": {
+      "color": 16711680,
+      "image": "https://ayakobot.com/cdn/Ayako_Assets/Events/StageInstanceClose.png"
+    },
     "channelCreate": {
       "color": 65280,
       "TextChannelCreate": "https://ayakobot.com/cdn/Ayako_Assets/Events/TextChannelCreate.png",

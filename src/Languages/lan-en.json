@@ -1,5 +1,20 @@
 {
   "events": {
+    "stageCreate": {
+      "descDetails": "User <@{{user.id}}> / `{{user.username}}#{{user.discriminator}}` / `{{user.id}}`\nopened\nStage <#{{channel.id}}> / `{{channel.name}}` / `{{channel.id}}`",
+      "desc": "Stage <#{{channel.id}}> / `{{channel.name}}` / `{{channel.id}}`\nwas opened",
+      "title": "Stage was opened"
+    },
+    "stageUpdate": {
+      "descDetails": "User <@{{user.id}}> / `{{user.username}}#{{user.discriminator}}` / `{{user.id}}`\nupdated\nStage <#{{channel.id}}> / `{{channel.name}}` / `{{channel.id}}`",
+      "desc": "Stage <#{{channel.id}}> / `{{channel.name}}` / `{{channel.id}}`\nwas updated",
+      "title": "Stage was updated"
+    },
+    "stageClose": {
+      "descDetails": "User <@{{user.id}}> / `{{user.username}}#{{user.discriminator}}` / `{{user.id}}`\nclosed\nStage <#{{channel.id}}> / `{{channel.name}}` / `{{channel.id}}`",
+      "desc": "Stage <#{{channel.id}}> / `{{channel.name}}` / `{{channel.id}}`\nwas closed",
+      "title": "Stage was closed"
+    },
     "channelCreate": {
       "descDetails": "User <@{{user.id}}> / `{{user.username}}#{{user.discriminator}}` / `{{user.id}}`\ncreated\n{{type}} <#{{channel.id}}> / `{{channel.name}}` / `{{channel.id}}`",
       "desc": "{{type}} <#{{channel.id}}> / `{{channel.name}}` / `{{channel.id}}` was created",

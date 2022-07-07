@@ -290,6 +290,7 @@ export type logchannels = {
   stickerevents?: string[];
   threadevents?: string[];
   guildmemberevents?: string[];
+  stageevents?: string[];
 };
 
 export type modroles = {
