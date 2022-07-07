@@ -1,7 +1,7 @@
 import type * as Eris from 'eris';
-import client from '../../../BaseClient/ErisClient';
-import type DBT from '../../../typings/DataBaseTypings';
-import type CT from '../../../typings/CustomTypings';
+import client from '../../BaseClient/ErisClient';
+import type DBT from '../../typings/DataBaseTypings';
+import type CT from '../../typings/CustomTypings';
 
 export default async (guild: Eris.Guild, user: Eris.User, oldUser: CT.OldUser) => {
   const channels = (

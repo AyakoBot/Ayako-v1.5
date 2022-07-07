@@ -1,6 +1,6 @@
 import type * as Eris from 'eris';
-import type CT from '../../../typings/CustomTypings';
-import client from '../../../BaseClient/ErisClient';
+import type CT from '../../typings/CustomTypings';
+import client from '../../BaseClient/ErisClient';
 
 export default async (user: Eris.User, oldUser: CT.OldUser | null) => {
   const guildsWithThisUser = await Promise.all(
