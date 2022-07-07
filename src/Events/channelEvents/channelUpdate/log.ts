@@ -1,5 +1,7 @@
 import * as Eris from 'eris';
 import Discord from 'discord.js';
+import moment from 'moment';
+import 'moment-duration-format';
 import client from '../../../BaseClient/ErisClient';
 import type DBT from '../../../typings/DataBaseTypings';
 
@@ -10,8 +12,15 @@ export default async (
     | Eris.CategoryChannel
     | Eris.StoreChannel
     | Eris.NewsChannel
-    | Eris.GuildChannel,
-  oldChannel: Eris.OldGuildChannel | Eris.OldGuildTextChannel | Eris.OldTextVoiceChannel,
+    | Eris.GuildChannel
+    | Eris.NewsThreadChannel
+    | Eris.PrivateThreadChannel
+    | Eris.PublicThreadChannel,
+  oldChannel:
+    | Eris.OldGuildChannel
+    | Eris.OldGuildTextChannel
+    | Eris.OldTextVoiceChannel
+    | Eris.OldThread,
 ) => {
   const channels = (
     await client.ch
@@ -46,10 +55,13 @@ export default async (
 
   const embed = getEmbed();
   const changedKeys: string[] = [];
+  let actionType = 10;
 
   const bitrate = () => {
     if (!('bitrate' in channel)) return;
+    if (!('bitrate' in oldChannel)) return;
     changedKeys.push('bitrate');
+
     embed.fields?.push({
       name: lan.bitrate,
       value: client.ch.stp(language.defaultValuesLog, {
@@ -62,6 +74,7 @@ export default async (
 
   const parentID = () => {
     if (!('parentID' in channel)) return;
+    if (!('parentID' in oldChannel)) return;
     changedKeys.push('parentID');
 
     let oldParentString: string;
@@ -87,6 +100,9 @@ export default async (
   };
 
   const permissionOverwrites = () => {
+    if (!('permissionOverwrites' in channel)) return;
+    if (!('permissionOverwrites' in oldChannel)) return;
+
     changedKeys.push('permissionOverwrites');
     const removedPerms = Array.from(oldChannel.permissionOverwrites.keys()).filter(
       (a1) => !Array.from(channel.permissionOverwrites.keys()).includes(a1),
@@ -244,10 +260,67 @@ export default async (
     });
   };
 
-  let actionType = 10;
+  const threadBasic = (
+    key: 'archived' | 'locked',
+    data: Eris.ThreadMetadata,
+    oldData: Eris.OldThread['threadMetadata'],
+  ) => {
+    changedKeys.push(key);
+    embed.fields?.push({
+      name: lan[key],
+      value: client.ch.stp(language.defaultValuesLog, {
+        before: oldData[key as never] || language.none,
+        after: data[key as never] || language.none,
+      }),
+      inline: false,
+    });
+  };
+
+  const autoArchiveDuration = (
+    data: Eris.ThreadMetadata,
+    oldData: Eris.OldThread['threadMetadata'],
+  ) => {
+    changedKeys.push('autoArchiveDuration');
+    embed.fields?.push({
+      name: lan.autoArchiveDuration,
+      value: client.ch.stp(language.defaultValuesLog, {
+        before: oldData.autoArchiveDuration
+          ? `<t:${String(oldData.autoArchiveDuration * 1000 + Date.now()).slice(
+              0,
+              -3,
+            )}:F> (<t:${String(oldData.autoArchiveDuration * 1000 + Date.now()).slice(
+              0,
+              -3,
+            )}:R>)\n\`${moment
+              .duration(oldData.autoArchiveDuration)
+              .format(
+                `Y [${language.time.years}], M [${language.time.months}], W [${language.time.weeks}], D [${language.time.days}], H [${language.time.hours}], m [${language.time.minutes}], s [${language.time.seconds}]`,
+                { trim: 'all' },
+              )}\``
+          : language.none,
+        after: data.autoArchiveDuration
+          ? `<t:${String(data.autoArchiveDuration * 1000 + Date.now()).slice(
+              0,
+              -3,
+            )}:F> (<t:${String(data.autoArchiveDuration * 1000 + Date.now()).slice(
+              0,
+              -3,
+            )}:R>)\n\`${moment
+              .duration(data.autoArchiveDuration)
+              .format(
+                `Y [${language.time.years}], M [${language.time.months}], W [${language.time.weeks}], D [${language.time.days}], H [${language.time.hours}], m [${language.time.minutes}], s [${language.time.seconds}]`,
+                { trim: 'all' },
+              )}\``
+          : language.none,
+      }),
+      inline: false,
+    });
+  };
 
   switch (true) {
-    case 'bitrate' in channel && channel.bitrate !== oldChannel.bitrate: {
+    case 'bitrate' in channel &&
+      'bitrate' in oldChannel &&
+      channel.bitrate !== oldChannel.bitrate: {
       bitrate();
       break;
     }
@@ -255,22 +328,23 @@ export default async (
       basic('name');
       break;
     }
-    case channel.nsfw !== oldChannel.nsfw: {
+    case 'nsfw' in oldChannel && channel.nsfw !== oldChannel.nsfw: {
       basic('nsfw');
       break;
     }
-    case channel.parentID !== oldChannel.parentID: {
+    case 'parentID' in oldChannel && channel.parentID !== oldChannel.parentID: {
       parentID();
       break;
     }
-    case channel.permissionOverwrites
-      .map((o) => o)
-      .sort((a, b) => client.ch.getUnix(a.id) - client.ch.getUnix(b.id))
-      .join(' ') !==
-      oldChannel.permissionOverwrites
+    case 'permissionOverwrites' in oldChannel &&
+      channel.permissionOverwrites
         .map((o) => o)
         .sort((a, b) => client.ch.getUnix(a.id) - client.ch.getUnix(b.id))
-        .join(' '): {
+        .join(' ') !==
+        oldChannel.permissionOverwrites
+          .map((o) => o)
+          .sort((a, b) => client.ch.getUnix(a.id) - client.ch.getUnix(b.id))
+          .join(' '): {
       permissionOverwrites();
       break;
     }
@@ -279,15 +353,17 @@ export default async (
       basic('rateLimitPerUser');
       break;
     }
-    case 'rtcRegion' in channel && channel.rtcRegion !== oldChannel.rtcRegion: {
+    case 'rtcRegion' in channel &&
+      'rtcRegion' in oldChannel &&
+      channel.rtcRegion !== oldChannel.rtcRegion: {
       basic('rtcRegion');
       break;
     }
-    case 'topic' in channel && channel.topic !== oldChannel.topic: {
+    case 'topic' in channel && 'topic' in oldChannel && channel.topic !== oldChannel.topic: {
       basic('topic');
       break;
     }
-    case 'type' in channel && channel.type !== oldChannel.type: {
+    case 'type' in channel && 'type' in oldChannel && channel.type !== oldChannel.type: {
       basic('type');
       break;
     }
@@ -301,6 +377,33 @@ export default async (
       'videoQualityMode' in oldChannel &&
       channel.videoQualityMode !== oldChannel.videoQualityMode: {
       basic('videoQualityMode');
+      break;
+    }
+    case 'threadMetadata' in channel && 'threadMetadata' in oldChannel: {
+      if (!('threadMetadata' in channel)) return;
+      if (!('threadMetadata' in oldChannel)) return;
+
+      actionType = 111;
+
+      const oldData = oldChannel.threadMetadata;
+      const data = channel.threadMetadata;
+      switch (true) {
+        case oldData.autoArchiveDuration !== data.autoArchiveDuration: {
+          autoArchiveDuration(data, oldData);
+          break;
+        }
+        case oldData.archived !== data.archived: {
+          threadBasic('archived', data, oldData);
+          break;
+        }
+        case oldData.locked !== data.locked: {
+          threadBasic('locked', data, oldData);
+          break;
+        }
+        default: {
+          break;
+        }
+      }
       break;
     }
     default: {

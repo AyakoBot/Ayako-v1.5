@@ -7,8 +7,15 @@ export default async (
     | Eris.CategoryChannel
     | Eris.StoreChannel
     | Eris.NewsChannel
-    | Eris.GuildChannel,
-  oldChannel: Eris.OldGuildChannel | Eris.OldGuildTextChannel | Eris.OldTextVoiceChannel,
+    | Eris.GuildChannel
+    | Eris.NewsThreadChannel
+    | Eris.PrivateThreadChannel
+    | Eris.PublicThreadChannel,
+  oldChannel:
+    | Eris.OldGuildChannel
+    | Eris.OldGuildTextChannel
+    | Eris.OldTextVoiceChannel
+    | Eris.OldThread,
 ) => {
   (await import('./log')).default(channel, oldChannel);
   (await import('./sticky')).default(channel, oldChannel);

@@ -9,7 +9,10 @@ export default async (
     | Eris.CategoryChannel
     | Eris.StoreChannel
     | Eris.NewsChannel
-    | Eris.GuildChannel,
+    | Eris.GuildChannel
+    | Eris.NewsThreadChannel
+    | Eris.PrivateThreadChannel
+    | Eris.PublicThreadChannel,
 ) => {
   const channels = (
     await client.ch
@@ -20,6 +23,7 @@ export default async (
   if (!channels) return;
 
   const language = await client.ch.languageSelector(channel.guild.id);
+  const actionType = [10, 11, 12].includes(channel.type) ? 110 : 10;
 
   const lan = language.events.channelCreate;
   const con = client.constants.events.channelCreate;
@@ -27,7 +31,7 @@ export default async (
   const getAuditLogEntry = async () => {
     if (!channel.guild.members.get(client.user.id)?.permissions.has(128n)) return null;
 
-    const audits = await channel.guild.getAuditLog({ limit: 5, actionType: 10 });
+    const audits = await channel.guild.getAuditLog({ limit: 5, actionType });
     if (!audits || !audits.entries) return null;
 
     return audits.entries

@@ -56,7 +56,10 @@
       "revoked": "Revoked Permissions",
       "name": "Name",
       "nsfw": "NSFW",
-      "type": "Channel Type"
+      "type": "Channel Type",
+      "archived": "Archived",
+      "locked": "Locked",
+      "autoArchiveDuration": "Auto Archive Duration"
     },
     "emojiCreate": {
       "descDetails": "User <@{{user.id}}> / `{{user.username}}#{{user.discriminator}}` / `{{user.id}}`\ncreated\nEmoji {{emojiMention}} / `{{emoji.name}}` / `{{emoji.id}}`",

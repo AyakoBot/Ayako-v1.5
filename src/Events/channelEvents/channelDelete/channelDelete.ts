@@ -7,7 +7,10 @@ export default async (
     | Eris.CategoryChannel
     | Eris.StoreChannel
     | Eris.NewsChannel
-    | Eris.GuildChannel,
+    | Eris.GuildChannel
+    | Eris.NewsThreadChannel
+    | Eris.PrivateThreadChannel
+    | Eris.PublicThreadChannel,
 ) => {
   (await import('./log')).default(channel);
 };

@@ -2,7 +2,11 @@ import jobs from 'node-schedule';
 import type * as Eris from 'eris';
 import client from '../../../BaseClient/ErisClient';
 
-type OldChannel = Eris.OldGuildChannel | Eris.OldGuildTextChannel | Eris.OldTextVoiceChannel;
+type OldChannel =
+  | Eris.OldGuildChannel
+  | Eris.OldGuildTextChannel
+  | Eris.OldTextVoiceChannel
+  | Eris.OldThread;
 type Channel =
   | Eris.TextChannel
   | Eris.TextVoiceChannel
@@ -12,6 +16,8 @@ type Channel =
   | Eris.GuildChannel;
 
 export default async (channel: Channel, oldChannel: OldChannel) => {
+  if (!('permissionOverwrites' in oldChannel)) return;
+
   const permDeleted = oldChannel.permissionOverwrites.filter(
     (overwrite) => !channel.permissionOverwrites.has(overwrite.id),
   );
