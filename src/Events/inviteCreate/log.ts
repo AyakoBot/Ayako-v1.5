@@ -48,7 +48,7 @@ export default async (guild: Eris.Guild, invite: Eris.Invite) => {
     const expire = String(Date.now() + invite.maxAge).slice(0, -3);
     embed.fields?.push({
       name: lan.expires,
-      value: `<t:${expire}:F> (<t:${expire}:R)\n\`${moment
+      value: `<t:${expire}:F> (<t:${expire}:R>)\n\`${moment
         .duration(invite.maxAge)
         .format(
           `Y [${language.time.years}], M [${language.time.months}], W [${language.time.weeks}], D [${language.time.days}], H [${language.time.hours}], m [${language.time.minutes}], s [${language.time.seconds}]`,

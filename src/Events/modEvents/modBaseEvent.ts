@@ -14,7 +14,6 @@ export default async (args: CT.ModBaseEventOptions) => {
   let { m } = args;
 
   if (!target) return;
-  if (!msg.guildID) return;
 
   const mExistedPreviously = !!m;
   const language = msg?.language || (await client.ch.languageSelector(guild.id));
@@ -35,8 +34,8 @@ export default async (args: CT.ModBaseEventOptions) => {
       if (reply) m = reply;
     }
 
-    const targetMember = await client.ch.getMember(target.id, msg.guildID);
-    const executingMember = await client.ch.getMember(executor.id, msg.guildID);
+    const targetMember = await client.ch.getMember(target.id, guild.id);
+    const executingMember = await client.ch.getMember(executor.id, guild.id);
     if (!executingMember) return;
 
     const roleCheckAllowed = await roleCheck(
@@ -194,7 +193,7 @@ const logEmbed = async (language: Language, reason: string, args: CT.ModBaseEven
       .then((r: DBT.logchannels[] | null) => (r ? r[0].modlogs : null));
 
     if (logchannelsRow) {
-      return logchannelsRow.map((cid) => args.msg.guild?.channels.get(cid)).filter((c) => !!c);
+      return logchannelsRow.map((cid) => args.guild.channels.get(cid)).filter((c) => !!c);
     }
     return null;
   };
@@ -1036,11 +1035,11 @@ const doDataBaseAction = async (args: CT.ModBaseEventOptions) => {
           args.target.id,
           args.reason,
           Date.now(),
-          args.msg.channel.id,
-          'name' in args.msg.channel ? args.msg.channel.name : 'None',
+          args.msg?.channel.id,
+          args.msg && 'name' in args.msg.channel ? args.msg.channel.name : 'None',
           args.executor.id,
           `${args.executor.username}#${args.executor.discriminator}`,
-          args.msg.id,
+          args.msg?.id,
           ...extraArgs,
         ]
       : [
@@ -1048,11 +1047,11 @@ const doDataBaseAction = async (args: CT.ModBaseEventOptions) => {
           args.target.id,
           args.reason,
           Date.now(),
-          args.msg.channel.id,
-          'name' in args.msg.channel ? args.msg.channel.name : 'None',
+          args.msg?.channel.id,
+          args.msg && 'name' in args.msg.channel ? args.msg.channel.name : 'None',
           args.executor.id,
           `${args.executor.username}#${args.executor.discriminator}`,
-          args.msg.id,
+          args.msg?.id,
         ];
 
     client.ch.query(
