@@ -280,10 +280,11 @@
     "ownerID": "318453143476371456",
     "patreon": "https://www.patreon.com/Lars_und_so",
     "error": "https://ayakobot.com/cdn/Ayako_Assets/Warning.png",
-    "guildAvatarURL": "https://cdn.discordapp.com/guilds/{{guild.id}}/users/{{member.user.id}}/avatars/{{member.avatar}}.{{fileEnd}}",
-    "guildIconURL": "https://cdn.discordapp.com/icons/{{guild.id}}/{{guild.avatar}}.{{fileEnd}}",
+    "guildAvatarURL": "https://cdn.discordapp.com/guilds/{{guild.id}}/users/{{member.user.id}}/avatars/{{member.avatar}}.{{fileEnd}}?size=2048",
+    "guildIconURL": "https://cdn.discordapp.com/icons/{{guild.id}}/{{guild.avatar}}.{{fileEnd}}?size=2048",
     "emojiURL": "https://cdn.discordapp.com/emojis/{{emoji.id}}.{{fileEnd}}?size=2048",
-    "roleIconURL": "https://cdn.discordapp.com/role-icons/{{guild.id}}/{{role.icon}}.png?size=2048"
+    "roleIconURL": "https://cdn.discordapp.com/role-icons/{{guild.id}}/{{role.icon}}.png?size=2048",
+    "userAvatarURL": "https://cdn.discordapp.com/avatars/318453143476371456/033a005736226c02fbbe15537497801c.png?size=4096"
   },
   "mod": {
     "strike": {

@@ -113,3 +113,9 @@ export interface TopGGGuildVote {
   user: string;
   type: 'upvote' | 'test';
 }
+
+export interface OldUser {
+  username: string;
+  discriminator: string;
+  avatar?: string;
+}
