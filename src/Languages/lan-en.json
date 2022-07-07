@@ -1,5 +1,11 @@
 {
   "events": {
+    "threadMembersUpdate": {
+      "desc": "Members of\nThread <#{{channel.id}}> / `{{channel.name}}` / `{{channel.id}}`\nwere updated",
+      "title": "Thread Members updated",
+      "joined": "Joined Members",
+      "left": "Left Members"
+    },
     "stageOpen": {
       "descDetails": "User <@{{user.id}}> / `{{user.username}}#{{user.discriminator}}` / `{{user.id}}`\nopened\nStage <#{{channel.id}}> / `{{channel.name}}` / `{{channel.id}}`",
       "desc": "Stage <#{{channel.id}}> / `{{channel.name}}` / `{{channel.id}}`\nwas opened",

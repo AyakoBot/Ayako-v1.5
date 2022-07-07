@@ -1,5 +1,9 @@
 {
   "events": {
+    "threadMembersUpdate": {
+      "color": 16776960,
+      "image": "https://ayakobot.com/cdn/Ayako_Assets/Events/MemberUpdate.png"
+    },
     "stageOpen": {
       "color": 65280,
       "image": "https://ayakobot.com/cdn/Ayako_Assets/Events/StageInstanceOpen.png"
