@@ -48,12 +48,6 @@ export default async (guild: Eris.Guild, role: Eris.Role, oldRole: Eris.OldRole)
 
   const icon = async () => {
     changedKeys.push('icon');
-    const oldIcon = oldRole.icon
-      ? client.ch.stp(client.constants.standard.roleIconURL, {
-          guild,
-          role,
-        })
-      : null;
     const newIcon = guild.icon
       ? client.ch.stp(client.constants.standard.roleIconURL, {
           role,
@@ -61,15 +55,8 @@ export default async (guild: Eris.Guild, role: Eris.Role, oldRole: Eris.OldRole)
         })
       : null;
 
-    const [oldIconFile, newIconFile] = await client.ch.fileURL2Buffer([oldIcon, newIcon]);
+    const [newIconFile] = await client.ch.fileURL2Buffer([newIcon]);
 
-    if (oldIconFile) {
-      oldIconFile.name = `${oldRole.icon}.png`;
-      embed.thumbnail = {
-        url: `attachment://${oldRole.icon}.png`,
-      };
-      files.push(oldIconFile);
-    }
     if (newIconFile) {
       newIconFile.name = `${role.icon}.png`;
       embed.image = {
@@ -78,7 +65,7 @@ export default async (guild: Eris.Guild, role: Eris.Role, oldRole: Eris.OldRole)
       files.push(newIconFile);
     }
 
-    if (oldIconFile || newIconFile) {
+    if (newIconFile) {
       embed.fields?.push({
         name: lan.icon,
         value: lan.iconAppear,

@@ -124,13 +124,6 @@ export default async (
     if (!('avatar' in oldMember)) return;
     changedKeys.push('avatar');
 
-    const oldAvatar = oldMember.avatar
-      ? client.ch.stp(client.constants.standard.guildAvatarURL, {
-          member: oldMember,
-          guild,
-          fileEnd: oldMember.avatar.startsWith('a_') ? 'gif' : 'png',
-        })
-      : null;
     const newAvatar = member.avatar
       ? client.ch.stp(client.constants.standard.guildAvatarURL, {
           member,
@@ -139,19 +132,8 @@ export default async (
         })
       : null;
 
-    const [oldAvatarFile, newAvatarFile] = await client.ch.fileURL2Buffer([oldAvatar, newAvatar]);
+    const [newAvatarFile] = await client.ch.fileURL2Buffer([newAvatar]);
 
-    if (oldAvatarFile) {
-      oldAvatarFile.name = `${oldMember.avatar}.${
-        oldMember.avatar?.startsWith('a_') ? 'gif' : 'png'
-      }`;
-      embed.thumbnail = {
-        url: `attachment://${oldMember.avatar}.${
-          oldMember.avatar?.startsWith('a_') ? 'gif' : 'png'
-        }`,
-      };
-      files.push(oldAvatarFile);
-    }
     if (newAvatarFile) {
       newAvatarFile.name = `${member.avatar}.${member.avatar?.startsWith('a_') ? 'gif' : 'png'}`;
       embed.image = {
@@ -160,7 +142,7 @@ export default async (
       files.push(newAvatarFile);
     }
 
-    if (oldAvatar || newAvatar) {
+    if (newAvatar) {
       embed.fields?.push({
         name: lan.avatar,
         value: lan.avatarAppear,

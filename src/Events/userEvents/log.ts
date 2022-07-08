@@ -47,12 +47,7 @@ export default async (guild: Eris.Guild, user: Eris.User, oldUser: CT.OldUser) =
 
   const avatar = async () => {
     changedKeys.push('avatar');
-    const oldAvatar = oldUser.avatar
-      ? client.ch.stp(client.constants.standard.userAvatarURL, {
-          user: oldUser,
-          fileEnd: oldUser.avatar.startsWith('a_') ? 'gif' : 'png',
-        })
-      : null;
+
     const newAvatar = user.avatar
       ? client.ch.stp(client.constants.standard.userAvatarURL, {
           user,
@@ -60,15 +55,8 @@ export default async (guild: Eris.Guild, user: Eris.User, oldUser: CT.OldUser) =
         })
       : null;
 
-    const [oldAvatarFile, newAvatarFile] = await client.ch.fileURL2Buffer([oldAvatar, newAvatar]);
+    const [newAvatarFile] = await client.ch.fileURL2Buffer([newAvatar]);
 
-    if (oldAvatarFile) {
-      oldAvatarFile.name = `${oldUser.avatar}.${oldUser.avatar?.startsWith('a_') ? 'gif' : 'png'}`;
-      embed.thumbnail = {
-        url: `attachment://${oldUser.avatar}.${oldUser.avatar?.startsWith('a_') ? 'gif' : 'png'}`,
-      };
-      files.push(oldAvatarFile);
-    }
     if (newAvatarFile) {
       newAvatarFile.name = `${oldUser.avatar}.${user.avatar?.startsWith('a_') ? 'gif' : 'png'}`;
       embed.image = {
@@ -77,7 +65,7 @@ export default async (guild: Eris.Guild, user: Eris.User, oldUser: CT.OldUser) =
       files.push(newAvatarFile);
     }
 
-    if (oldAvatarFile || newAvatarFile) {
+    if (newAvatarFile) {
       embed.fields?.push({
         name: lan.avatar,
         value: lan.avatarAppear,

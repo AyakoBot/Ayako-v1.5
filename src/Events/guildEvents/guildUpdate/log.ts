@@ -83,12 +83,7 @@ export default async (
 
   const banner = async () => {
     changedKeys.push('banner');
-    const oldBanner = oldGuild.banner
-      ? client.ch.stp(client.constants.standard.guildIconURL, {
-          guild,
-          fileEnd: oldGuild.banner.startsWith('a_') ? 'gif' : 'png',
-        })
-      : null;
+
     const newBanner = guild.banner
       ? client.ch.stp(client.constants.standard.guildIconURL, {
           guild,
@@ -96,17 +91,8 @@ export default async (
         })
       : null;
 
-    const [oldBannerFile, newBannerFile] = await client.ch.fileURL2Buffer([oldBanner, newBanner]);
+    const [newBannerFile] = await client.ch.fileURL2Buffer([newBanner]);
 
-    if (oldBannerFile) {
-      oldBannerFile.name = `${oldGuild.banner}.${
-        oldGuild.banner?.startsWith('a_') ? 'gif' : 'png'
-      }`;
-      embed.thumbnail = {
-        url: `attachment://${oldGuild.banner}.${oldGuild.banner?.startsWith('a_') ? 'gif' : 'png'}`,
-      };
-      files.push(oldBannerFile);
-    }
     if (newBannerFile) {
       newBannerFile.name = `${guild.banner}.${guild.banner?.startsWith('a_') ? 'gif' : 'png'}`;
       embed.image = {
@@ -115,7 +101,7 @@ export default async (
       files.push(newBannerFile);
     }
 
-    if (oldBannerFile || newBannerFile) {
+    if (newBannerFile) {
       embed.fields?.push({
         name: lan.banner,
         value: lan.bannerAppear,
@@ -193,12 +179,7 @@ export default async (
 
   const icon = async () => {
     changedKeys.push('icon');
-    const oldIcon = oldGuild.icon
-      ? client.ch.stp(client.constants.standard.guildIconURL, {
-          guild,
-          fileEnd: oldGuild.icon.startsWith('a_') ? 'gif' : 'png',
-        })
-      : null;
+
     const newIcon = guild.icon
       ? client.ch.stp(client.constants.standard.guildIconURL, {
           guild,
@@ -206,15 +187,8 @@ export default async (
         })
       : null;
 
-    const [oldIconFile, newIconFile] = await client.ch.fileURL2Buffer([oldIcon, newIcon]);
+    const [newIconFile] = await client.ch.fileURL2Buffer([newIcon]);
 
-    if (oldIconFile) {
-      oldIconFile.name = `${oldGuild.icon}.${oldGuild.icon?.startsWith('a_') ? 'gif' : 'png'}`;
-      embed.thumbnail = {
-        url: `attachment://${oldGuild.icon}.${oldGuild.icon?.startsWith('a_') ? 'gif' : 'png'}`,
-      };
-      files.push(oldIconFile);
-    }
     if (newIconFile) {
       newIconFile.name = `${guild.icon}.${guild.icon?.startsWith('a_') ? 'gif' : 'png'}`;
       embed.image = {
@@ -223,7 +197,7 @@ export default async (
       files.push(newIconFile);
     }
 
-    if (oldIconFile || newIconFile) {
+    if (newIconFile) {
       embed.fields?.push({
         name: lan.icon,
         value: lan.iconAppear,
@@ -397,12 +371,7 @@ export default async (
 
   const splash = async () => {
     changedKeys.push('splash');
-    const oldSplash = oldGuild.banner
-      ? client.ch.stp(client.constants.standard.guildIconURL, {
-          guild,
-          fileEnd: oldGuild.banner.startsWith('a_') ? 'gif' : 'png',
-        })
-      : null;
+
     const newSplash = guild.banner
       ? client.ch.stp(client.constants.standard.guildIconURL, {
           guild,
@@ -410,17 +379,8 @@ export default async (
         })
       : null;
 
-    const [oldSplashFile, newSplashFile] = await client.ch.fileURL2Buffer([oldSplash, newSplash]);
+    const [newSplashFile] = await client.ch.fileURL2Buffer([newSplash]);
 
-    if (oldSplashFile) {
-      oldSplashFile.name = `${oldGuild.splash}.${
-        oldGuild.splash?.startsWith('a_') ? 'gif' : 'png'
-      }`;
-      embed.thumbnail = {
-        url: `attachment://${oldGuild.splash}.${oldGuild.splash?.startsWith('a_') ? 'gif' : 'png'}`,
-      };
-      files.push(oldSplashFile);
-    }
     if (newSplashFile) {
       newSplashFile.name = `${guild.splash}.${guild.splash?.startsWith('a_') ? 'gif' : 'png'}`;
       embed.image = {
@@ -429,7 +389,7 @@ export default async (
       files.push(newSplashFile);
     }
 
-    if (oldSplashFile || newSplashFile) {
+    if (newSplashFile) {
       embed.fields?.push({
         name: lan.splash,
         value: lan.splashAppear,
