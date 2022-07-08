@@ -99,16 +99,18 @@ export default async (
     const [oldBannerFile, newBannerFile] = await client.ch.fileURL2Buffer([oldBanner, newBanner]);
 
     if (oldBannerFile) {
-      oldBannerFile.name = `bannerOld.${oldGuild.banner?.startsWith('a_') ? 'gif' : 'png'}`;
+      oldBannerFile.name = `${oldGuild.banner}.${
+        oldGuild.banner?.startsWith('a_') ? 'gif' : 'png'
+      }`;
       embed.thumbnail = {
-        url: `attachment://bannerOld.${oldGuild.banner?.startsWith('a_') ? 'gif' : 'png'}`,
+        url: `attachment://${oldGuild.banner}.${oldGuild.banner?.startsWith('a_') ? 'gif' : 'png'}`,
       };
       files.push(oldBannerFile);
     }
     if (newBannerFile) {
-      newBannerFile.name = `bannerNew.${guild.banner?.startsWith('a_') ? 'gif' : 'png'}`;
+      newBannerFile.name = `${guild.banner}.${guild.banner?.startsWith('a_') ? 'gif' : 'png'}`;
       embed.image = {
-        url: `attachment://bannerNew.${guild.banner?.startsWith('a_') ? 'gif' : 'png'}`,
+        url: `attachment://${guild.banner}.${guild.banner?.startsWith('a_') ? 'gif' : 'png'}`,
       };
       files.push(newBannerFile);
     }
@@ -207,16 +209,16 @@ export default async (
     const [oldIconFile, newIconFile] = await client.ch.fileURL2Buffer([oldIcon, newIcon]);
 
     if (oldIconFile) {
-      oldIconFile.name = `iconOld.${oldGuild.icon?.startsWith('a_') ? 'gif' : 'png'}`;
+      oldIconFile.name = `${oldGuild.icon}.${oldGuild.icon?.startsWith('a_') ? 'gif' : 'png'}`;
       embed.thumbnail = {
-        url: `attachment://iconOld.${oldGuild.icon?.startsWith('a_') ? 'gif' : 'png'}`,
+        url: `attachment://${oldGuild.icon}.${oldGuild.icon?.startsWith('a_') ? 'gif' : 'png'}`,
       };
       files.push(oldIconFile);
     }
     if (newIconFile) {
-      newIconFile.name = `iconNew.${guild.icon?.startsWith('a_') ? 'gif' : 'png'}`;
+      newIconFile.name = `${guild.icon}.${guild.icon?.startsWith('a_') ? 'gif' : 'png'}`;
       embed.image = {
-        url: `attachment://iconNew.${guild.icon?.startsWith('a_') ? 'gif' : 'png'}`,
+        url: `attachment://${guild.icon}.${guild.icon?.startsWith('a_') ? 'gif' : 'png'}`,
       };
       files.push(newIconFile);
     }
@@ -411,16 +413,18 @@ export default async (
     const [oldSplashFile, newSplashFile] = await client.ch.fileURL2Buffer([oldSplash, newSplash]);
 
     if (oldSplashFile) {
-      oldSplashFile.name = `splashOld.${oldGuild.splash?.startsWith('a_') ? 'gif' : 'png'}`;
+      oldSplashFile.name = `${oldGuild.splash}.${
+        oldGuild.splash?.startsWith('a_') ? 'gif' : 'png'
+      }`;
       embed.thumbnail = {
-        url: `attachment://splashOld.${oldGuild.splash?.startsWith('a_') ? 'gif' : 'png'}`,
+        url: `attachment://${oldGuild.splash}.${oldGuild.splash?.startsWith('a_') ? 'gif' : 'png'}`,
       };
       files.push(oldSplashFile);
     }
     if (newSplashFile) {
-      newSplashFile.name = `splashNew.${guild.splash?.startsWith('a_') ? 'gif' : 'png'}`;
+      newSplashFile.name = `${guild.splash}.${guild.splash?.startsWith('a_') ? 'gif' : 'png'}`;
       embed.image = {
-        url: `attachment://splashNew.${guild.splash?.startsWith('a_') ? 'gif' : 'png'}`,
+        url: `attachment://${guild.splash}.${guild.splash?.startsWith('a_') ? 'gif' : 'png'}`,
       };
       files.push(newSplashFile);
     }

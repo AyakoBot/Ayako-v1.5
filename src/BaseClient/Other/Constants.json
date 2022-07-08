@@ -284,7 +284,7 @@
     "guildIconURL": "https://cdn.discordapp.com/icons/{{guild.id}}/{{guild.avatar}}.{{fileEnd}}?size=2048",
     "emojiURL": "https://cdn.discordapp.com/emojis/{{emoji.id}}.{{fileEnd}}?size=2048",
     "roleIconURL": "https://cdn.discordapp.com/role-icons/{{guild.id}}/{{role.icon}}.png?size=2048",
-    "userAvatarURL": "https://cdn.discordapp.com/avatars/318453143476371456/033a005736226c02fbbe15537497801c.png?size=4096"
+    "userAvatarURL": "https://cdn.discordapp.com/avatars/{{user.id}}/{{user.avatar}}.{{fileEnd}}?size=4096"
   },
   "mod": {
     "strike": {

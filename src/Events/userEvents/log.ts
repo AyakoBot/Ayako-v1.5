@@ -6,8 +6,8 @@ import type CT from '../../typings/CustomTypings';
 export default async (guild: Eris.Guild, user: Eris.User, oldUser: CT.OldUser) => {
   const channels = (
     await client.ch
-      .query('SELECT inviteevents FROM logchannels WHERE guildid = $1;', [guild.id])
-      .then((r: DBT.logchannels[] | null) => (r ? r[0].inviteevents : null))
+      .query('SELECT userevents FROM logchannels WHERE guildid = $1;', [guild.id])
+      .then((r: DBT.logchannels[] | null) => (r ? r[0].userevents : null))
   )?.map((id: string) => guild.channels.get(id));
 
   if (!channels) return;
@@ -38,8 +38,8 @@ export default async (guild: Eris.Guild, user: Eris.User, oldUser: CT.OldUser) =
     embed.fields?.push({
       name: lan[key],
       value: client.ch.stp(language.defaultValuesLog, {
-        before: oldUser[key as never] || language.none,
-        after: user[key as never] || language.none,
+        oldValue: oldUser[key as never] || language.none,
+        newValue: user[key as never] || language.none,
       }),
       inline: false,
     });
@@ -49,13 +49,13 @@ export default async (guild: Eris.Guild, user: Eris.User, oldUser: CT.OldUser) =
     changedKeys.push('avatar');
     const oldAvatar = oldUser.avatar
       ? client.ch.stp(client.constants.standard.userAvatarURL, {
-          guild,
+          user: oldUser,
           fileEnd: oldUser.avatar.startsWith('a_') ? 'gif' : 'png',
         })
       : null;
     const newAvatar = user.avatar
       ? client.ch.stp(client.constants.standard.userAvatarURL, {
-          guild,
+          user,
           fileEnd: user.avatar.startsWith('a_') ? 'gif' : 'png',
         })
       : null;
@@ -63,16 +63,16 @@ export default async (guild: Eris.Guild, user: Eris.User, oldUser: CT.OldUser) =
     const [oldAvatarFile, newAvatarFile] = await client.ch.fileURL2Buffer([oldAvatar, newAvatar]);
 
     if (oldAvatarFile) {
-      oldAvatarFile.name = `avatarOld.${oldUser.avatar?.startsWith('a_') ? 'gif' : 'png'}`;
+      oldAvatarFile.name = `${oldUser.avatar}.${oldUser.avatar?.startsWith('a_') ? 'gif' : 'png'}`;
       embed.thumbnail = {
-        url: `attachment://avatarOld.${oldUser.avatar?.startsWith('a_') ? 'gif' : 'png'}`,
+        url: `attachment://${oldUser.avatar}.${oldUser.avatar?.startsWith('a_') ? 'gif' : 'png'}`,
       };
       files.push(oldAvatarFile);
     }
     if (newAvatarFile) {
-      newAvatarFile.name = `avatarNew.${user.avatar?.startsWith('a_') ? 'gif' : 'png'}`;
+      newAvatarFile.name = `${oldUser.avatar}.${user.avatar?.startsWith('a_') ? 'gif' : 'png'}`;
       embed.image = {
-        url: `attachment://avatarNew.${user.avatar?.startsWith('a_') ? 'gif' : 'png'}`,
+        url: `attachment://${oldUser.avatar}.${user.avatar?.startsWith('a_') ? 'gif' : 'png'}`,
       };
       files.push(newAvatarFile);
     }

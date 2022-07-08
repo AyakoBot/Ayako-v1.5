@@ -64,16 +64,16 @@ export default async (guild: Eris.Guild, role: Eris.Role, oldRole: Eris.OldRole)
     const [oldIconFile, newIconFile] = await client.ch.fileURL2Buffer([oldIcon, newIcon]);
 
     if (oldIconFile) {
-      oldIconFile.name = `iconOld.png`;
+      oldIconFile.name = `${oldRole.icon}.png`;
       embed.thumbnail = {
-        url: `attachment://iconOld.png`,
+        url: `attachment://${oldRole.icon}.png`,
       };
       files.push(oldIconFile);
     }
     if (newIconFile) {
-      newIconFile.name = `iconNew.png`;
+      newIconFile.name = `${role.icon}.png`;
       embed.image = {
-        url: `attachment://iconNew.png`,
+        url: `attachment://${role.icon}.png`,
       };
       files.push(newIconFile);
     }

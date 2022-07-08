@@ -142,16 +142,20 @@ export default async (
     const [oldAvatarFile, newAvatarFile] = await client.ch.fileURL2Buffer([oldAvatar, newAvatar]);
 
     if (oldAvatarFile) {
-      oldAvatarFile.name = `old.${oldMember.avatar?.startsWith('a_') ? 'gif' : 'png'}`;
+      oldAvatarFile.name = `${oldMember.avatar}.${
+        oldMember.avatar?.startsWith('a_') ? 'gif' : 'png'
+      }`;
       embed.thumbnail = {
-        url: `attachment://old.${oldMember.avatar?.startsWith('a_') ? 'gif' : 'png'}`,
+        url: `attachment://${oldMember.avatar}.${
+          oldMember.avatar?.startsWith('a_') ? 'gif' : 'png'
+        }`,
       };
       files.push(oldAvatarFile);
     }
     if (newAvatarFile) {
-      newAvatarFile.name = `new.${member.avatar?.startsWith('a_') ? 'gif' : 'png'}`;
+      newAvatarFile.name = `${member.avatar}.${member.avatar?.startsWith('a_') ? 'gif' : 'png'}`;
       embed.image = {
-        url: `attachment://new.${member.avatar?.startsWith('a_') ? 'gif' : 'png'}`,
+        url: `attachment://${member.avatar}.${member.avatar?.startsWith('a_') ? 'gif' : 'png'}`,
       };
       files.push(newAvatarFile);
     }
