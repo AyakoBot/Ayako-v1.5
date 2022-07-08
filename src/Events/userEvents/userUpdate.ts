@@ -3,9 +3,7 @@ import type CT from '../../typings/CustomTypings';
 import client from '../../BaseClient/ErisClient';
 
 export default async (user: Eris.User, oldUser: CT.OldUser | null) => {
-  const guildsWithThisUser = await Promise.all(
-    client.guilds.filter((g) => !!client.ch.getMember(user.id, g.id)),
-  );
+  const guildsWithThisUser = client.guilds.filter((g) => g.members.has(user.id));
 
   if (!oldUser) return;
 
