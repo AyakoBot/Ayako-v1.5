@@ -58,9 +58,9 @@ export default async (guild: Eris.Guild, user: Eris.User, oldUser: CT.OldUser) =
     const [newAvatarFile] = await client.ch.fileURL2Buffer([newAvatar]);
 
     if (newAvatarFile) {
-      newAvatarFile.name = `${oldUser.avatar}.${user.avatar?.startsWith('a_') ? 'gif' : 'png'}`;
-      embed.image = {
-        url: `attachment://${oldUser.avatar}.${user.avatar?.startsWith('a_') ? 'gif' : 'png'}`,
+      newAvatarFile.name = `${user.avatar}.${user.avatar?.startsWith('a_') ? 'gif' : 'png'}`;
+      embed.thumbnail = {
+        url: `attachment://${user.avatar}.${user.avatar?.startsWith('a_') ? 'gif' : 'png'}`,
       };
       files.push(newAvatarFile);
     }

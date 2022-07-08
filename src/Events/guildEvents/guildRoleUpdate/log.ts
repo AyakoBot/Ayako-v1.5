@@ -59,7 +59,7 @@ export default async (guild: Eris.Guild, role: Eris.Role, oldRole: Eris.OldRole)
 
     if (newIconFile) {
       newIconFile.name = `${role.icon}.png`;
-      embed.image = {
+      embed.thumbnail = {
         url: `attachment://${role.icon}.png`,
       };
       files.push(newIconFile);

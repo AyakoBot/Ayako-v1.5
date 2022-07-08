@@ -136,7 +136,7 @@ export default async (
 
     if (newAvatarFile) {
       newAvatarFile.name = `${member.avatar}.${member.avatar?.startsWith('a_') ? 'gif' : 'png'}`;
-      embed.image = {
+      embed.thumbnail = {
         url: `attachment://${member.avatar}.${member.avatar?.startsWith('a_') ? 'gif' : 'png'}`,
       };
       files.push(newAvatarFile);

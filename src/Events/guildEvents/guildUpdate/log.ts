@@ -95,7 +95,7 @@ export default async (
 
     if (newBannerFile) {
       newBannerFile.name = `${guild.banner}.${guild.banner?.startsWith('a_') ? 'gif' : 'png'}`;
-      embed.image = {
+      embed.thumbnail = {
         url: `attachment://${guild.banner}.${guild.banner?.startsWith('a_') ? 'gif' : 'png'}`,
       };
       files.push(newBannerFile);
@@ -191,7 +191,7 @@ export default async (
 
     if (newIconFile) {
       newIconFile.name = `${guild.icon}.${guild.icon?.startsWith('a_') ? 'gif' : 'png'}`;
-      embed.image = {
+      embed.thumbnail = {
         url: `attachment://${guild.icon}.${guild.icon?.startsWith('a_') ? 'gif' : 'png'}`,
       };
       files.push(newIconFile);
@@ -383,7 +383,7 @@ export default async (
 
     if (newSplashFile) {
       newSplashFile.name = `${guild.splash}.${guild.splash?.startsWith('a_') ? 'gif' : 'png'}`;
-      embed.image = {
+      embed.thumbnail = {
         url: `attachment://${guild.splash}.${guild.splash?.startsWith('a_') ? 'gif' : 'png'}`,
       };
       files.push(newSplashFile);
