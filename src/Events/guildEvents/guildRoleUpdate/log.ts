@@ -92,8 +92,8 @@ export default async (guild: Eris.Guild, role: Eris.Role, oldRole: Eris.OldRole)
     embed.fields?.push({
       name: lan[key],
       value: client.ch.stp(language.defaultValuesLog, {
-        before: oldRole[key] || language.none,
-        after: role[key] || language.none,
+        oldValue: oldRole[key] || language.none,
+        newValue: role[key] || language.none,
       }),
       inline: false,
     });

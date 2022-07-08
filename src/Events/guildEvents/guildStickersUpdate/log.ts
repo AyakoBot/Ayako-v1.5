@@ -169,8 +169,8 @@ const stickerUpdated = async (
     embed.fields?.push({
       name: lan[key],
       value: client.ch.stp(language.defaultValuesLog, {
-        before: oldSticker[key as never] || language.none,
-        after: sticker[key as never] || language.none,
+        oldValue: oldSticker[key as never] || language.none,
+        newValue: sticker[key as never] || language.none,
       }),
       inline: false,
     });

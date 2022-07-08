@@ -47,8 +47,8 @@ export default async (stage: Eris.StageInstance, oldStage: Eris.OldStageInstance
     embed.fields?.push({
       name: lan.privacyLevel,
       value: client.ch.stp(language.defaultValuesLog, {
-        before: language.stagePrivacyLevels[oldStage.privacyLevel] || language.none,
-        after: language.stagePrivacyLevels[stage.privacyLevel] || language.none,
+        oldValue: language.stagePrivacyLevels[oldStage.privacyLevel] || language.none,
+        newValue: language.stagePrivacyLevels[stage.privacyLevel] || language.none,
       }),
       inline: false,
     });
@@ -59,8 +59,8 @@ export default async (stage: Eris.StageInstance, oldStage: Eris.OldStageInstance
     embed.fields?.push({
       name: lan[key],
       value: client.ch.stp(language.defaultValuesLog, {
-        before: oldStage[key as never] || language.none,
-        after: stage[key as never] || language.none,
+        oldValue: oldStage[key as never] || language.none,
+        newValue: stage[key as never] || language.none,
       }),
       inline: false,
     });

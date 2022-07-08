@@ -255,8 +255,8 @@ export default async (
     embed.fields?.push({
       name: lan[key],
       value: client.ch.stp(language.defaultValuesLog, {
-        before: oldChannel[key as never] || language.none,
-        after: channel[key as never] || language.none,
+        oldValue: oldChannel[key as never] || language.none,
+        newValue: channel[key as never] || language.none,
       }),
       inline: false,
     });
@@ -271,8 +271,8 @@ export default async (
     embed.fields?.push({
       name: lan[key],
       value: client.ch.stp(language.defaultValuesLog, {
-        before: oldData[key as never] || language.none,
-        after: data[key as never] || language.none,
+        oldValue: oldData[key as never] || language.none,
+        newValue: data[key as never] || language.none,
       }),
       inline: false,
     });
@@ -286,7 +286,7 @@ export default async (
     embed.fields?.push({
       name: lan.autoArchiveDuration,
       value: client.ch.stp(language.defaultValuesLog, {
-        before: oldData.autoArchiveDuration
+        oldValue: oldData.autoArchiveDuration
           ? `<t:${String(oldData.autoArchiveDuration * 1000 + Date.now()).slice(
               0,
               -3,
@@ -300,7 +300,7 @@ export default async (
                 { trim: 'all' },
               )}\``
           : language.none,
-        after: data.autoArchiveDuration
+        newValue: data.autoArchiveDuration
           ? `<t:${String(data.autoArchiveDuration * 1000 + Date.now()).slice(
               0,
               -3,
