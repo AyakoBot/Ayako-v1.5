@@ -1,5 +1,9 @@
 {
   "events": {
+    "voiceChannelJoin": {
+      "desc": "Member <@{{member.user.id}}> / `{{member.user.username}}#{{member.user.discriminator}}` / `{{member.user.id}}`\nhas joined\n{{type}} <#{{channel.id}}> / `{{channel.name}}` / `{{channel.id}}`",
+      "title": "Member joined {{type}}"
+    },
     "threadMembersUpdate": {
       "desc": "Members of\nThread <#{{channel.id}}> / `{{channel.name}}` / `{{channel.id}}`\nwere updated",
       "title": "Thread Members updated",

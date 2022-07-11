@@ -1,5 +1,17 @@
 {
   "events": {
+    "voiceChannelJoin": {
+      "color": 65280,
+      "image": "https://ayakobot.com/cdn/Ayako_Assets/Events/MemberCreate.png"
+    },
+    "voiceChannelLeave": {
+      "color": 16711680,
+      "image": "https://ayakobot.com/cdn/Ayako_Assets/Events/MemberDelete.png"
+    },
+    "voiceChannelUpdate": {
+      "color": 16776960,
+      "image": "https://ayakobot.com/cdn/Ayako_Assets/Events/MemberUpdate.png"
+    },
     "threadMembersUpdate": {
       "color": 16776960,
       "image": "https://ayakobot.com/cdn/Ayako_Assets/Events/MemberUpdate.png"
