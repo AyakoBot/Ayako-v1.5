@@ -31,7 +31,7 @@ export default async (stage: Eris.StageInstance) => {
     color: con.color,
     description: audit
       ? client.ch.stp(lan.descDetails, { user: audit.user, channel: stage.channel })
-      : lan.desc,
+      : client.ch.stp(lan.desc, { channel: stage.channel }),
     fields: [],
   });
 
