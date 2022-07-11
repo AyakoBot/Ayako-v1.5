@@ -14,4 +14,5 @@ export default async (
   (await import('./willis')).default(msg, reaction, user);
   (await import('./reactionRoles')).default(msg, reaction, user);
   (await import('./log')).default(msg, reaction, user);
+  (await import('./deleter')).default(msg, reaction, user);
 };
