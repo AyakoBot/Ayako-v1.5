@@ -15,6 +15,7 @@ export default async (guild: Eris.Guild) => {
   channelBans(guild, language);
   disboardBumpReminders(guild, language);
   giveaways(guild, language);
+  webhooks(guild);
 };
 
 const invites = async (guild: Eris.Guild) => {
@@ -182,5 +183,15 @@ const giveaways = async (guild: Eris.Guild, language: Language) => {
         (await import('../../../SlashCommands/giveaway/end')).end(giveaway, language);
       }),
     );
+  });
+};
+
+const webhooks = (guild: Eris.Guild) => {
+  guild.channels.forEach(async (channel) => {
+    if (!('getWebhooks' in channel)) return;
+    const wh = await channel.getWebhooks().catch(() => null);
+
+    if (!wh) return;
+    client.webhooks.set(channel.id, wh);
   });
 };

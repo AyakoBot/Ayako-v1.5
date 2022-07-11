@@ -32,4 +32,5 @@ export default async () => {
   (await import('./startupTasks/separators')).default();
   (await import('./startupTasks/invitesAnimekos')).default();
   (await import('./startupTasks/invites')).default();
+  (await import('./startupTasks/webhooks')).default();
 };

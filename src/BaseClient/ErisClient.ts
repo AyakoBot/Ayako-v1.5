@@ -75,6 +75,7 @@ class Client extends Eris.Client {
   objectEmotes: typeof ObjectEmotes;
   stringEmotes: typeof StringEmotes;
   reactionEmotes: typeof ReactionEmotes;
+  webhooks: Map<string, Eris.Webhook[]>;
   mainID: string;
   channelQueue: Map<string, CT.MessagePayload[]>;
   channelTimeout: Map<string, Jobs.Job>;
@@ -109,6 +110,7 @@ class Client extends Eris.Client {
     this.giveaways = new Map();
     this.invites = new Map();
     this.verificationCodes = new Map();
+    this.webhooks = new Map();
 
     this.neko = NekoClient;
     this.constants = Constants;
