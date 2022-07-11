@@ -23,7 +23,11 @@ export default async (member: Eris.Member, channel: Eris.TextVoiceChannel | Eris
       url: `https://discord.com/users/${member.user.id}`,
     },
     color: con.color,
-    description: client.ch.stp(lan.desc, { member, type: language.channelTypes[channel.type] }),
+    description: client.ch.stp(lan.desc, {
+      member,
+      type: language.channelTypes[channel.type],
+      channel,
+    }),
   });
 
   const embed = getEmbed();
