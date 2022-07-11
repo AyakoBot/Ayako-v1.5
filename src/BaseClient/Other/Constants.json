@@ -1,5 +1,9 @@
 {
   "events": {
+    "voiceStateUpdate": {
+      "color": 16711680,
+      "image": "https://ayakobot.com/cdn/Ayako_Assets/Events/MemberUpdate.png"
+    },
     "voiceChannelJoin": {
       "color": 65280,
       "LockedVoiceCreate": "https://ayakobot.com/cdn/Ayako_Assets/Events/LockedVoiceCreate.png",

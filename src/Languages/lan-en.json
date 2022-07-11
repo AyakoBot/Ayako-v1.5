@@ -1,16 +1,27 @@
 {
   "events": {
+    "voiceStateUpdate": {
+      "desc": "Voice State of\nUser <@{{user.id}}> / `{{user.username}}#{{user.discriminator}}` / `{{user.id}}`\nhas updated",
+      "descDetails": "Executor <@{{user.id}}> / `{{user.username}}#{{user.discriminator}}` / `{{user.id}}`\nhas updated the Voice State of\nUser <@{{target.id}}> / `{{target.username}}#{{target.discriminator}}` / `{{target.id}}`",
+      "title": "Voice State updated",
+      "deaf": "Server Deafened",
+      "mute": "Server Muted",
+      "selfDeaf": "Self Deafened",
+      "selfMute": "Self Muted",
+      "selfStream": "Streaming",
+      "selfVideo": "Video"
+    },
     "voiceChannelJoin": {
-      "desc": "Member <@{{member.user.id}}> / `{{member.user.username}}#{{member.user.discriminator}}` / `{{member.user.id}}`\nhas joined\n{{type}} <#{{channel.id}}> / `{{channel.name}}` / `{{channel.id}}`",
-      "title": "Member joined {{type}}"
+      "desc": "User <@{{member.user.id}}> / `{{member.user.username}}#{{member.user.discriminator}}` / `{{member.user.id}}`\nhas joined\n{{type}} <#{{channel.id}}> / `{{channel.name}}` / `{{channel.id}}`",
+      "title": "User joined {{type}}"
     },
     "voiceChannelLeave": {
-      "desc": "Member <@{{member.user.id}}> / `{{member.user.username}}#{{member.user.discriminator}}` / `{{member.user.id}}`\nhas left\n{{type}} <#{{channel.id}}> / `{{channel.name}}` / `{{channel.id}}`",
-      "title": "Member left {{type}}"
+      "desc": "User <@{{member.user.id}}> / `{{member.user.username}}#{{member.user.discriminator}}` / `{{member.user.id}}`\nhas left\n{{type}} <#{{channel.id}}> / `{{channel.name}}` / `{{channel.id}}`",
+      "title": "User left {{type}}"
     },
     "voiceChannelSwitch": {
-      "desc": "Member <@{{member.user.id}}> / `{{member.user.username}}#{{member.user.discriminator}}` / `{{member.user.id}}`\nhas switched from\n{{oldType}} <#{{oldChannel.id}}> / `{{oldChannel.name}}` / `{{oldChannel.id}}`\nto\n{{newType}} <#{{newChannel.id}}> / `{{newChannel.name}}` / `{{newChannel.id}}`",
-      "title": "Member switched from {{oldType}} to {{newType}}"
+      "desc": "User <@{{member.user.id}}> / `{{member.user.username}}#{{member.user.discriminator}}` / `{{member.user.id}}`\nhas switched from\n{{oldType}} <#{{oldChannel.id}}> / `{{oldChannel.name}}` / `{{oldChannel.id}}`\nto\n{{newType}} <#{{newChannel.id}}> / `{{newChannel.name}}` / `{{newChannel.id}}`",
+      "title": "User switched from {{oldType}} to {{newType}}"
     },
     "threadMembersUpdate": {
       "desc": "Members of\nThread <#{{channel.id}}> / `{{channel.name}}` / `{{channel.id}}`\nwere updated",
