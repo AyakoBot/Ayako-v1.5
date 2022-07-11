@@ -18,6 +18,7 @@ export default async (
   const language = await client.ch.languageSelector(member.guild.id);
   const lan = language.events.voiceChannelSwitch;
   const con = client.constants.events.voiceChannelSwitch;
+  const image = getImage(channel, con);
 
   const getEmbed = (): Eris.Embed => ({
     type: 'rich',
@@ -26,7 +27,7 @@ export default async (
         newType: language.channelTypes[channel.type],
         oldType: language.channelTypes[oldChannel.type],
       }),
-      icon_url: con.image,
+      icon_url: image,
       url: `https://discord.com/users/${member.user.id}`,
     },
     color: con.color,
@@ -42,4 +43,22 @@ export default async (
   const embed = getEmbed();
 
   client.ch.send(channels, { embeds: [embed] }, language, null, 10000);
+};
+
+const getImage = (
+  channel: Eris.TextVoiceChannel | Eris.StageChannel,
+  con: typeof client.constants['events']['voiceChannelSwitch'],
+) => {
+  switch (channel.type as number) {
+    case 2: {
+      if (channel.permissionOverwrites.size) return con.LockedVoiceUpdate;
+      return con.VoiceUpdate;
+    }
+    case 13: {
+      return con.StageUpdate;
+    }
+    default: {
+      return con.VoiceUpdate;
+    }
+  }
 };

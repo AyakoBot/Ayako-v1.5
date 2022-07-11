@@ -2,15 +2,21 @@
   "events": {
     "voiceChannelJoin": {
       "color": 65280,
-      "image": "https://ayakobot.com/cdn/Ayako_Assets/Events/MemberCreate.png"
+      "LockedVoiceCreate": "https://ayakobot.com/cdn/Ayako_Assets/Events/LockedVoiceCreate.png",
+      "VoiceCreate": "https://ayakobot.com/cdn/Ayako_Assets/Events/VoiceCreate.png",
+      "StageCreate": "https://ayakobot.com/cdn/Ayako_Assets/Events/StageCreate.png"
     },
     "voiceChannelLeave": {
       "color": 16711680,
-      "image": "https://ayakobot.com/cdn/Ayako_Assets/Events/MemberDelete.png"
+      "LockedVoiceDelete": "https://ayakobot.com/cdn/Ayako_Assets/Events/LockedVoiceDelete.png",
+      "VoiceDelete": "https://ayakobot.com/cdn/Ayako_Assets/Events/VoiceDelete.png",
+      "StageDelete": "https://ayakobot.com/cdn/Ayako_Assets/Events/StageDelete.png"
     },
     "voiceChannelSwitch": {
       "color": 16776960,
-      "image": "https://ayakobot.com/cdn/Ayako_Assets/Events/MemberUpdate.png"
+      "LockedVoiceUpdate": "https://ayakobot.com/cdn/Ayako_Assets/Events/Events/LockedVoiceUpdate.png",
+      "VoiceUpdate": "https://ayakobot.com/cdn/Ayako_Assets/Events/VoiceUpdate.png",
+      "StageUpdate": "https://ayakobot.com/cdn/Ayako_Assets/Events/StageUpdate.png"
     },
     "threadMembersUpdate": {
       "color": 16776960,
