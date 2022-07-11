@@ -8,7 +8,7 @@
       "color": 16711680,
       "image": "https://ayakobot.com/cdn/Ayako_Assets/Events/MemberDelete.png"
     },
-    "voiceChannelUpdate": {
+    "voiceChannelSwitch": {
       "color": 16776960,
       "image": "https://ayakobot.com/cdn/Ayako_Assets/Events/MemberUpdate.png"
     },

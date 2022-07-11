@@ -9,8 +9,8 @@
       "title": "Member left {{type}}"
     },
     "voiceChannelSwitch": {
-      "desc": "Member <@{{member.user.id}}> / `{{member.user.username}}#{{member.user.discriminator}}` / `{{member.user.id}}`\nhas switch\n{{type}} <#{{channel.id}}> / `{{channel.name}}` / `{{channel.id}}`",
-      "title": "Member switched {{type}}"
+      "desc": "Member <@{{member.user.id}}> / `{{member.user.username}}#{{member.user.discriminator}}` / `{{member.user.id}}`\nhas switched from\n{{oldType}} <#{{oldChannel.id}}> / `{{oldChannel.name}}` / `{{oldChannel.id}}`\nto\n{{newType}} <#{{newChannel.id}}> / `{{newChannel.name}}` / `{{newChannel.id}}`",
+      "title": "Member switched from {{oldType}} to {{newType}}"
     },
     "threadMembersUpdate": {
       "desc": "Members of\nThread <#{{channel.id}}> / `{{channel.name}}` / `{{channel.id}}`\nwere updated",
