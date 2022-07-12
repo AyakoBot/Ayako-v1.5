@@ -1,5 +1,21 @@
 {
   "events": {
+    "webhookUpdate": {
+      "title": "Webhook Updated",
+      "desc": "User <@{{user.id}}> / `{{user.username}}#{{user.discriminator}}` / `{{user.id}}`\nhas updated\nWebhook `{{webhook.username}}` / `{{webhook.id}}`\nin\n{{type}} <#{{channel.id}}> / `{{channel.name}}` / `{{channel.id}}`",
+      "name": "Name",
+      "avatar": "Avatar",
+      "channelID": "Channel",
+      "avatarAppear": "Its new Avatar should appear as this Embeds Thumbnail, if there is one (right)"
+    },
+    "webhookCreate": {
+      "title": "Webhook Created",
+      "desc": "User <@{{user.id}}> / `{{user.username}}#{{user.discriminator}}` / `{{user.id}}`\nhas created\nWebhook `{{webhook.name}}` / `{{webhook.id}}`\nin\n{{type}} <#{{channel.id}}> / `{{channel.name}}` / `{{channel.id}}`"
+    },
+    "webhookDelete": {
+      "title": "Webhook Deleted",
+      "desc": "User <@{{user.id}}> / `{{user.username}}#{{user.discriminator}}` / `{{user.id}}`\nhas deleted\nWebhook `{{webhook.name}}` / `{{webhook.id}}`\nfrom\n{{type}} <#{{channel.id}}> / `{{channel.name}}` / `{{channel.id}}`"
+    },
     "voiceStateUpdate": {
       "desc": "Voice State of\nUser <@{{user.id}}> / `{{user.username}}#{{user.discriminator}}` / `{{user.id}}`\nhas updated",
       "descDetails": "Executor <@{{user.id}}> / `{{user.username}}#{{user.discriminator}}` / `{{user.id}}`\nhas updated the Voice State of\nUser <@{{target.id}}> / `{{target.username}}#{{target.discriminator}}` / `{{target.id}}`",
@@ -359,19 +375,6 @@
       "unsetSuppress": "Moved to Audience in\nStage Channel {{newChannel}} / `{{newChannel.name}}` / `{{newChannel.id}}`",
       "loweredHand": "Lowered their Hand",
       "raisedHand": "Raised their Hand"
-    },
-    "webhookCreate": {
-      "title": "Webhook Created",
-      "desc": "User <@{{user.id}}> / `{{user.username}}#{{user.discriminator}}` / `{{user.id}}`\nhas created\nWebhook `{{webhook.name}}` / `{{webhook.id}}`\nin\nChannel <#{{channel.id}}> / `{{channel.name}}` / `{{channel.id}}`"
-    },
-    "webhookUpdate": {
-      "title": "Webhook Updated",
-      "desc": "User <@{{user.id}}> / `{{user.username}}#{{user.discriminator}}` / `{{user.id}}`\nhas updated\nWebhook `{{webhook.name}}` / `{{webhook.id}}`\nin\nChannel <#{{channel.id}}> / `{{channel.name}}` / `{{channel.id}}`",
-      "avatar": "New Avatar should appear at the right side of this Embed, if there is one"
-    },
-    "webhookDelete": {
-      "title": "Webhook Deleted",
-      "desc": "User <@{{user.id}}> / `{{user.username}}#{{user.discriminator}}` / `{{user.id}}`\nhas deleted a Webhook from\nChannel <#{{channel.id}}> / `{{channel.name}}` / `{{channel.id}}`"
     },
     "commandCreate": {
       "title": "Command Created",
