@@ -44,8 +44,8 @@ module.exports = async () => {
       rawUser.days,
     );
 
-    if (rolesToAdd.length) member.roles.add(rolesToAdd);
-    if (rolesToRemove.length) member.roles.remove(rolesToRemove);
+    if (rolesToAdd.length) member.roles.add(rolesToAdd).catch(() => {});
+    if (rolesToRemove.length) member.roles.remove(rolesToRemove).catch(() => {});
 
     log(rolesToAdd, rolesToRemove, guild, settings, member.user, rawUser.days);
   });

@@ -59,7 +59,7 @@ const roleReward = async (voteData) => {
     return;
   }
 
-  await member.roles.add('982440576895045635');
+  await member.roles.add('982440576895045635').catch(() => {});
   announcement(voter, guild.roles.cache.get('982440576895045635'));
 
   const delTime = Date.now() + 43200000;

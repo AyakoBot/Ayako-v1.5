@@ -161,7 +161,10 @@ const interactionHandler = async (msg, m) => {
     }
 
     const role = msg.guild.roles.cache.get(r[0]);
-    msg.guild.members.cache.get(interaction.user.id)?.roles.add(role);
+    msg.guild.members.cache
+      .get(interaction.user.id)
+      ?.roles.add(role)
+      .catch(() => {});
   });
 
   collector.on('end', (collected, reason) => {

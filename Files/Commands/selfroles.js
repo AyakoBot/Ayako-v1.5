@@ -164,8 +164,12 @@ module.exports = {
         });
       }
 
-      if (add.length) await msg.member.roles.add(add, msg.language.autotypes.selfroles);
-      if (remove.length) await msg.member.roles.remove(remove, msg.language.autotypes.selfroles);
+      if (add.length) {
+        await msg.member.roles.add(add, msg.language.autotypes.selfroles).catch(() => {});
+      }
+      if (remove.length) {
+        await msg.member.roles.remove(remove, msg.language.autotypes.selfroles).catch(() => {});
+      }
 
       return embed;
     };

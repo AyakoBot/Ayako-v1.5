@@ -62,11 +62,11 @@ const doRoles = async (r, msg, user) => {
   if (member) {
     if (r.addroles && r.addroles.length) {
       const roles = checkRoles(r.addroles, msg.guild);
-      await member.roles.add(roles, msg.language.autotypes.autopunish);
+      await member.roles.add(roles, msg.language.autotypes.autopunish).catch(() => {});
     }
     if (r.removeroles && r.removeroles.length) {
       const roles = checkRoles(r.removeroles, msg.guild);
-      await member.roles.remove(roles, msg.language.autotypes.autopunish);
+      await member.roles.remove(roles, msg.language.autotypes.autopunish).catch(() => {});
     }
   }
 };

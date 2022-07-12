@@ -84,7 +84,7 @@ const takeRelated = async (relatedRoles, member, baseRow, reaction) => {
   if (baseRow.onlyone !== true) return;
 
   relatedRoles.forEach((r) => {
-    if (member.roles.cache.has(r)) member.roles.remove(r);
+    if (member.roles.cache.has(r)) member.roles.remove(r).catch(() => {});
   });
 
   const [, , , , channelid, msgid] = baseRow.messagelink.split(/\/+/);

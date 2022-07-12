@@ -77,7 +77,7 @@ const roleReward = async (voteData) => {
 
   const gettingThisRole = roles[index];
 
-  await member.roles.add(gettingThisRole);
+  await member.roles.add(gettingThisRole).catch(() => {});
   announcement(voter, gettingThisRole);
 
   const delTime = Date.now() + 43200000;
