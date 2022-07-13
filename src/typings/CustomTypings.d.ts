@@ -15,16 +15,36 @@ export interface Command {
   type: 'mod' | 'other' | 'owner';
   deleteCommandRow?: DBT.deletecommands;
   cooldown?: number;
-  execute: <T extends keyof typeof import('../../../Languages/lan-en.json')['commands']>(
+  execute: <T extends keyof typeof import('../Languages/lan-en.json')['commands']>(
     msg: Eris.Message,
     {
       language,
       lan,
     }: {
-      language: typeof import('.././Languages/lan-en.json');
-      lan: typeof import('.././Languages/lan-en.json').commands[T];
+      language: typeof import('../Languages/lan-en.json');
+      lan: typeof import('../Languages/lan-en.json').commands[T];
     },
     command: Command,
+    object?: { [key: string]: unknown },
+  ) => void;
+}
+
+type PartialSlashCommand = Omit<
+  Command,
+  'cooldownRows' | 'deleteCommandRows' | 'deleteCommandRow' | 'execute'
+>;
+
+export interface SlashCommand extends PartialSlashCommand {
+  execute: <T extends keyof typeof import('../Languages/lan-en.json')['slashCommands']>(
+    cmd: Interaction,
+    {
+      language,
+      lan,
+    }: {
+      language: typeof import('../Languages/lan-en.json');
+      lan: typeof import('../Languages/lan-en.json').slashCommands[T];
+    },
+    command: SlashCommand,
     object?: { [key: string]: unknown },
   ) => void;
 }
@@ -70,6 +90,24 @@ export interface Message extends Eris.Message {
   guild?: Eris.Guild;
   language: typeof import('../Languages/lan-en.json');
   edits?: Eris.OldMessage[];
+}
+
+export interface CommandInteraction extends Eris.CommandInteraction {
+  user: Eris.User;
+  guild?: Eris.Guild;
+  language: typeof import('../Languages/lan-en.json');
+}
+
+export interface AutocompleteInteraction extends Eris.AutocompleteInteraction {
+  user: Eris.User;
+  guild?: Eris.Guild;
+  language: typeof import('../Languages/lan-en.json');
+}
+
+export interface ComponentInteraction extends Eris.ComponentInteraction {
+  user: Eris.User;
+  guild?: Eris.Guild;
+  language: typeof import('../Languages/lan-en.json');
 }
 
 export interface ModBaseEventOptions {

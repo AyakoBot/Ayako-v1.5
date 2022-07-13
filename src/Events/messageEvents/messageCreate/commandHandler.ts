@@ -98,7 +98,7 @@ export const getCommand = async (args: string[]) => {
   const isDisallowed = (file: string) =>
     ['.d.ts', '.d.ts.map', '.js.map'].some((end) => file.endsWith(end));
 
-  const dir = `${process.cwd()}/dist/Commands`;
+  const dir = `${process.cwd()}/dist/Commands/TextCommands`;
   const files = fs.readdirSync(dir).filter((f) => !isDisallowed(dir) && f.endsWith('.js'));
   const searchedFileName = args.shift()?.toLowerCase();
   const possibleFiles = await Promise.all(files.map((f) => import(`${dir}/${f}`)));
@@ -370,11 +370,11 @@ const commandExe = async (msg: CT.Message, command: CT.Command, triedCMD?: unkno
 
   try {
     // eslint-disable-next-line no-console
-    console.log(`Command executed: ${command.name} | ${msg.jumpLink}`);
+    console.log(`[Command Executed] ${command.name} | ${msg.jumpLink}`);
     command.execute(msg, { language: msg.language, lan }, command, { triedCMD });
   } catch (e) {
     // eslint-disable-next-line no-console
-    console.error(e);
+    console.error(`[Command Error] ${command.name}:`, e);
   }
 };
 
