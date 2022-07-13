@@ -48,9 +48,9 @@ export default async (
     const addedRoles = updatedRoles.filter((a1) => member.roles.includes(a1));
 
     const removedContent = removedRoles
-      .map((r) => `${client.stringEmotes.minusBG} <@$${r}>`)
+      .map((r) => `${client.stringEmotes.minusBG} <@&${r}>`)
       .join('\n');
-    const addedContent = addedRoles.map((r) => `${client.stringEmotes.plusBG} <@$${r}>`).join('\n');
+    const addedContent = addedRoles.map((r) => `${client.stringEmotes.plusBG} <@&${r}>`).join('\n');
 
     if (removedContent) {
       embed.fields?.push({
