@@ -1,7 +1,6 @@
 import jobs from 'node-schedule';
 import client from '../../../BaseClient/ErisClient';
 import type DBT from '../../../typings/DataBaseTypings';
-import { end } from '../../../SlashCommands/giveaway/end';
 
 export default async () => {
   const giveawaysRows = (
@@ -11,13 +10,13 @@ export default async () => {
   )?.filter((r) => client.guilds.has(r.guildid));
   if (!giveawaysRows) return;
 
-  giveawaysRows.forEach((row) => {
+  giveawaysRows.forEach(async (row) => {
     if (Number(row.endtime) > Date.now()) {
-      const job = jobs.scheduleJob(new Date(Number(row.endtime)), () => {
-        end(row);
+      const job = jobs.scheduleJob(new Date(Number(row.endtime)), async () => {
+        (await import('../../../Commands/SlashCommands/giveaway/end')).end(row);
       });
 
       client.giveaways.set(`${row.msgid}-${row.guildid}`, job);
-    } else end(row);
+    } else (await import('../../../Commands/SlashCommands/giveaway/end')).end(row);
   });
 };
