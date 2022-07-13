@@ -230,7 +230,7 @@ const getConfirmation = async (
       components: client.ch.buttonRower([[yes, no]]),
     },
     msg.language,
-    await import('../../Commands/strike'),
+    await import('../../Commands/TextCommands/strike'),
   );
   if (!m) return false;
 

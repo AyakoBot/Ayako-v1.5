@@ -25,7 +25,7 @@ export default async (
   const dm = await member.user.getDMChannel().catch(() => null);
   if (!dm) return;
 
-  (await import('../../../SlashCommands/verify')).startVerification(
+  (await import('../../../Commands/SlashCommands/verify')).startVerification(
     { member, guild },
     language,
     language.verification,

@@ -7,7 +7,7 @@ export default async (
   embed: Eris.Embed,
   page: number,
 ) =>
-  (await import(`${process.cwd()}/dist/Commands/embedbuilder`)).builder(
+  (await import(`${process.cwd()}/dist/Commands/TextCommands/embedbuilder`)).builder(
     msg,
     answer,
     embed,
