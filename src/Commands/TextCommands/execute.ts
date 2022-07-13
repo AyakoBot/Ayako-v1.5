@@ -3,9 +3,9 @@
 /* eslint-disable no-console */
 
 import type * as Eris from 'eris';
-import type CT from '../typings/CustomTypings';
+import type CT from '../../typings/CustomTypings';
 // @ts-ignore
-import client from '../BaseClient/ErisClient';
+import client from '../../BaseClient/ErisClient';
 
 const cmd: CT.Command = {
   name: 'execute',
