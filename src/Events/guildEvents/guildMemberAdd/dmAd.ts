@@ -118,6 +118,6 @@ const policyReminder = async (member: Eris.Member, guild: Eris.Guild) => {
 
   client.ch.edit(m, {
     embeds: [embed],
-    content: 'This Reminder will only be sent to you __once__\nhttps://discord.gg/GNpcspBbDr',
+    content: 'This Reminder will only be sent to you __once__\nhttps://discord.gg/euTdctganf',
   });
 };
