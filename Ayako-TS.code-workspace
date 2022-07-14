@@ -3,5 +3,10 @@
         {
             "path": "."
         }
-    ]
+    ],
+    "settings": {
+        "typescript.validate.enable": true,
+        "javascript.validate.enable": true,
+        "typescript.suggest.autoimports": true,
+    }
 }

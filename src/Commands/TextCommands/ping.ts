@@ -1,5 +1,5 @@
-import type CT from '../typings/CustomTypings';
-import client from '../BaseClient/ErisClient';
+import type CT from '../../typings/CustomTypings';
+import client from '../../BaseClient/ErisClient';
 
 const cmd: CT.Command = {
   name: 'ping',
@@ -12,11 +12,11 @@ const cmd: CT.Command = {
     msg.addReaction('🏓').catch(() => null);
     if (!m) return;
 
-    let ping;
+    let ping: number;
     if (msg.editedTimestamp) ping = m.createdAt - msg.editedTimestamp;
     else ping = m.createdAt - msg.createdAt;
 
-    let shardPing = ping;
+    let shardPing = Number(ping);
     if (msg.guildID && client.guilds.get(msg.guildID)) {
       shardPing = client.guilds.get(msg.guildID)?.shard.latency ?? ping;
       if (shardPing === Infinity) shardPing = ping;
