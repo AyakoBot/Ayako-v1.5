@@ -38,7 +38,7 @@ export default async (guild: Eris.Guild, role: Eris.Role) => {
     const audit = await getAuditLogEntry();
     if (role.managed && role.tags?.bot_id) {
       const manager = await client.ch.getUser(role.tags?.bot_id);
-      if (manager && !guild.members.get(manager?.id)) {
+      if (manager && !(await client.ch.getMember(manager.id, guild.id))) {
         embed.description = client.ch.stp(lan.descDetails, {
           user: manager,
           role,
@@ -68,6 +68,7 @@ export default async (guild: Eris.Guild, role: Eris.Role) => {
   };
 
   const embed = await getEmbed();
+  if (!embed.description) return;
 
   client.ch.send(channels, { embeds: [embed] }, language, null, 10000);
 };

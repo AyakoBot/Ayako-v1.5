@@ -365,11 +365,11 @@ const pinLog = async (
   };
 
   switch (true) {
-    case oldMsg.pinned && !msg.pinned: {
+    case !oldMsg.pinned && msg.pinned: {
       await pinned();
       break;
     }
-    case !oldMsg.pinned && msg.pinned: {
+    case oldMsg.pinned && !msg.pinned: {
       unpinned();
       break;
     }
