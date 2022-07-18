@@ -139,17 +139,19 @@ export interface ModBaseEventOptions {
   role?: Eris.Role;
 }
 
-export interface TopGGBotVote {
-  bot: string;
+interface basicTopGGVote {
   user: string;
   type: 'upvote' | 'test';
+  authorization: string;
+  guild: Eris.Guild;
+}
+export interface TopGGBotVote extends basicTopGGVote {
+  bot: string;
   isWeekend: boolean;
 }
 
-export interface TopGGGuildVote {
-  guild: string;
-  user: string;
-  type: 'upvote' | 'test';
+export interface TopGGGuildVote extends basicTopGGVote {
+  guildID: string;
 }
 
 export interface OldUser {

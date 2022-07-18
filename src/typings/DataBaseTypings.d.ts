@@ -638,3 +638,8 @@ export type levelingmultiplierroles = {
   multiplier?: number;
   uniquetimestamp: string;
 };
+
+export type votetokens = {
+  guildid: string;
+  token: string;
+};
