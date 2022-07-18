@@ -4156,7 +4156,8 @@
         "invalidTime": "The given Time was not valid",
         "noChanges": "No valid changes were made",
         "success": "Successfully edited Giveaway",
-        "button": "Get to Giveaway"
+        "button": "Get to Giveaway",
+        "noOptionsProvided": "Please provide Options to change"
       },
       "reroll": {
         "description": "Re-roll a Giveaway",

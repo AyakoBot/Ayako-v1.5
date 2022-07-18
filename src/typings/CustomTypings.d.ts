@@ -62,6 +62,13 @@ export type AutocompleteCommand = <
   },
 ) => void;
 
+export type ComponentCommand = <
+  T extends keyof typeof import('../Languages/lan-en.json')['slashCommands'],
+>(
+  cmd: Interaction,
+  language: typeof import('../Languages/lan-en.json'),
+) => void;
+
 export interface MessagePayload extends Eris.AdvancedMessageContent {
   embeds?: Eris.EmbedOptions[];
   files?: Eris.FileContent[];

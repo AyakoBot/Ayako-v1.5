@@ -10,7 +10,7 @@ export default async (cmd: CT.ComponentInteraction) => {
   if (!rawCommand) return;
   const { command, name } = rawCommand;
 
-  if (command.cooldown && cooldowns.has(cmd.user.id)) {
+  if (cooldowns.has(cmd.user.id)) {
     const timeleft = Math.abs(cooldowns.get(cmd.user.id) - Date.now());
 
     client.ch.reply(
@@ -26,19 +26,15 @@ export default async (cmd: CT.ComponentInteraction) => {
     return;
   }
 
-  if (command.cooldown) {
-    cooldowns.set(cmd.user.id, Date.now());
-    Jobs.scheduleJob(new Date(Date.now() + command.cooldown), () => {
-      cooldowns.delete(cmd.user.id);
-    });
-  }
+  cooldowns.set(cmd.user.id, Date.now());
+  Jobs.scheduleJob(new Date(Date.now() + 2000), () => {
+    cooldowns.delete(cmd.user.id);
+  });
 
   try {
-    const lan = cmd.language.slashCommands[name as keyof typeof cmd.language.slashCommands];
-
     // eslint-disable-next-line no-console
     console.log(`[ComponentCommand Executed] ${name} | ${cmd.channel.id}`);
-    command.execute(cmd, { language: cmd.language, lan }, command);
+    command(cmd, cmd.language);
   } catch (e) {
     // eslint-disable-next-line no-console
     console.error(`[ComponentCommand Error] ${name}:`, e);
@@ -53,9 +49,9 @@ const getCommand = async (cmd: CT.ComponentInteraction) => {
   const files = fs.readdirSync(dir).filter((f) => !isDisallowed(dir) && f.endsWith('.js'));
   const possibleFiles = await Promise.all(files.map((f) => import(`${dir}/${f}`)));
 
-  const file: { command: CT.SlashCommand; name: string } | undefined | null = files
+  const file: { command: CT.ComponentCommand; name: string } | undefined | null = files
     .map((f, i) => {
-      const { default: possibleFile }: { default: CT.SlashCommand } = possibleFiles[i];
+      const { default: possibleFile }: { default: CT.ComponentCommand } = possibleFiles[i];
 
       if (f.replace('.js', '') === cmd.data.custom_id) {
         return { command: possibleFile, name: f.replace('.js', '') };
