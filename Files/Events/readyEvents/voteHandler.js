@@ -14,7 +14,7 @@ module.exports = async () => {
   });
 
   socket.on('TOP_GG', async (voteData) => {
-    const res = client.ch.query(`SELECT * FROM votetokens WHERE token = $1;`, [
+    const res = await client.ch.query(`SELECT * FROM votetokens WHERE token = $1;`, [
       voteData.authorization,
     ]);
     if (!res || !res.rowCount) return;
