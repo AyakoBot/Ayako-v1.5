@@ -22,7 +22,7 @@ const getReturnables = async (cmd: CT.AutocompleteInteraction) => {
     .then((r: DBT.giveaways[] | null) => r || null);
   if (!giveawaysRows) return [];
 
-  await Promise.all(
+  const messages = await Promise.all(
     giveawaysRows.map((g) => {
       const guild = client.guilds.get(g.guildid);
       if (!guild) return null;
@@ -42,7 +42,7 @@ const getReturnables = async (cmd: CT.AutocompleteInteraction) => {
       const channel = guild.channels.get(g.channelid) as Eris.TextableChannel;
       if (!channel) return null;
 
-      const message = channel.messages.get(g.msgid);
+      const message = messages.find((m) => m?.id === g.msgid);
       if (!message) return null;
 
       return {
