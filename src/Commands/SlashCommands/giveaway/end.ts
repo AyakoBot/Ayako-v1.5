@@ -27,8 +27,8 @@ export const manualEnd = async (
     .then((r: DBT.giveaways[] | null) => (r ? r[0] : null));
   if (!giveawaysRow) return;
 
-  client.giveaways.get(giveawaysRow.msgid)?.cancel();
-  client.giveaways.delete(giveawaysRow.msgid);
+  client.giveaways.get(`${giveawaysRow.msgid}-${giveawaysRow.guildid}`)?.cancel();
+  client.giveaways.delete(`${giveawaysRow.msgid}-${giveawaysRow.guildid}`);
 
   const lan = lang.end;
 

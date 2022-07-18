@@ -119,10 +119,10 @@ const rescheduleGiveaway = (
   language: typeof import('../../../Languages/lan-en.json'),
   lan: typeof import('../../../Languages/lan-en.json')['slashCommands']['giveaway'],
 ) => {
-  client.giveaways.get(msgid)?.cancel();
+  client.giveaways.get(`${msgid}-${giveaway.guildid}`)?.cancel();
 
   client.giveaways.set(
-    msgid,
+    `${msgid}-${giveaway.guildid}`,
     jobs.scheduleJob(new Date(Number(giveaway.endtime)), async () => {
       (await import('./end')).end(giveaway, lan.end, language);
     }),

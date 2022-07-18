@@ -87,7 +87,7 @@ export default async (
   client.ch.reply(cmd, { embeds: [embed], ephemeral: true }, language);
 
   client.giveaways.set(
-    m.id,
+    `${m.id}-${m.guildID}`,
     jobs.scheduleJob(new Date(Number(endtime)), async () => {
       if (!cmd.guildID) return;
 
