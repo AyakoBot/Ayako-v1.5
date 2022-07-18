@@ -29,10 +29,16 @@ export default async (
     messageID: msg.id,
   };
 
-  const sentMessage = await msg.channel.createMessage(payload, payload.files).catch((err) => {
-    // eslint-disable-next-line no-console
-    console.log('reply err', err);
-  });
+  const sentMessage =
+    msg instanceof Eris.Message
+      ? await msg.channel.createMessage(payload, payload.files).catch((err) => {
+          // eslint-disable-next-line no-console
+          console.log('reply err', err);
+        })
+      : await msg.createMessage(payload, payload.files).catch((err) => {
+          // eslint-disable-next-line no-console
+          console.log('reply err', err);
+        });
 
   cooldownHandler(msg, sentMessage, command);
   deleteCommandHandler(msg, sentMessage, language, command);
