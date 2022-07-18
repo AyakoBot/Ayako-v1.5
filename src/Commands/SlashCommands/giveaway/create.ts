@@ -169,7 +169,7 @@ const createGiveaway = (
   if (role) {
     embed.fields?.push({
       name: lan.roleRequire,
-      value: `${role}`,
+      value: `<@&${role.id}>`,
       inline: true,
     });
   }
