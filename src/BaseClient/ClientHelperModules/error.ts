@@ -1,4 +1,4 @@
-import Eris from 'eris';
+import type Eris from 'eris';
 import edit from './edit';
 import reply from './reply';
 import objectEmotes from '../Other/ObjectEmotes.json' assert { type: 'json' };
@@ -20,7 +20,7 @@ export default (
     description: content,
   };
 
-  if (!(msg instanceof Eris.Message)) {
+  if (!('jumpLink' in msg)) {
     return reply(msg, { embeds: [embed], flags: 64 }, language);
   }
 
