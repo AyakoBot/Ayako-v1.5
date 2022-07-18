@@ -13,7 +13,7 @@ export default {
   ) => {
     const heartbeat = await client.ch
       .query('SELECT heartbeat FROM stats;')
-      .then((r: DBT.stats[] | null) => (r ? Number(r[0].heartbeat) : null));
+      .then((r: DBT.stats[] | null) => (r ? Number(r[0].heartbeat) : 0));
 
     let shardPing = Number(heartbeat);
     if (cmd.guildID && client.guilds.get(cmd.guildID)) {
