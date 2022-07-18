@@ -90,7 +90,7 @@ export const end = async (
   ]);
   if (!winners.length) return;
 
-  const claimEnd = Date.now() + Number(row.collecttime);
+  const claimEnd = Number(row.endtime) + Number(row.collecttime);
 
   await sendCongraz(msg, row, lan, language, winners, host);
   const sentMessages = await reward(msg, row, lan, language, winners, host, claimEnd);

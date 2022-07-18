@@ -15,6 +15,8 @@ export default async (
     lan: typeof import('../../../Languages/lan-en.json')['slashCommands']['giveaway'];
   },
 ) => {
+  console.log(1);
+
   if (!cmd.guild) return;
   if (!cmd.data.options?.[0]) return;
   if (!('options' in cmd.data.options[0])) return;

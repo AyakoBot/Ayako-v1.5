@@ -17,15 +17,18 @@ export default async () => {
     const user = await client.ch.getUser(row.userid);
     if (!user) return;
 
-    if (Number(row.endtime) > Date.now()) {
-      const job = jobs.scheduleJob(new Date(Number(row.endtime)), async () => {
-        (await import('../../../Commands/SlashCommands/giveaway/end')).runTimeEnded(
-          giveawayRow,
-          user,
-          row.msgid,
-          row.endtime,
-        );
-      });
+    if (Number(row.endtime) + Number(giveawayRow.endtime) > Date.now()) {
+      const job = jobs.scheduleJob(
+        new Date(Number(row.endtime) + Number(giveawayRow.endtime)),
+        async () => {
+          (await import('../../../Commands/SlashCommands/giveaway/end')).runTimeEnded(
+            giveawayRow,
+            user,
+            row.msgid,
+            row.endtime,
+          );
+        },
+      );
 
       client.giveawayClaimTimeout.set(`${row.msgid}-${row.userid}`, job);
     } else {

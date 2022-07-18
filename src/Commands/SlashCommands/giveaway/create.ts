@@ -207,7 +207,7 @@ const getEndTime = (value: string) => {
     return ms(`${a}`);
   });
 
-  const endTime = timeArgs.filter((a) => !!a).reduce((a, b) => Number(a) + Number(b), Date.now());
+  const endTime = timeArgs.filter((a) => !!a).reduce((a, b) => Number(a) + Number(b));
 
   return endTime;
 };
