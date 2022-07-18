@@ -62,9 +62,7 @@ export type AutocompleteCommand = <
   },
 ) => void;
 
-export type ComponentCommand = <
-  T extends keyof typeof import('../Languages/lan-en.json')['slashCommands'],
->(
+export type ComponentCommand = (
   cmd: Interaction,
   language: typeof import('../Languages/lan-en.json'),
 ) => void;
