@@ -15,25 +15,27 @@ export default async (
     lan: typeof import('../../../Languages/lan-en.json')['slashCommands']['giveaway'];
   },
 ) => {
-  console.log(1);
-
   if (!cmd.guild) return;
   if (!cmd.data.options?.[0]) return;
   if (!('options' in cmd.data.options[0])) return;
   const { options } = cmd.data.options[0];
   if (!options) return;
 
-  const channel = cmd.guild.channels.get(
-    client.ch.util.checkVal(options.find((o) => o.name === 'channel')) as string,
-  ) as Eris.GuildTextableChannel;
-  if (!channel) return;
+  const lan = lang.edit;
+
+  if (options.length === 1) {
+    client.ch.error(cmd, lan.noOptionsProvided, language);
+    return;
+  }
 
   const description = client.ch.util.checkVal(
     options.find((o) => o.name === 'prize-description'),
   ) as string;
 
-  const winnerCount = client.ch.util.checkVal(options.find((o) => o.name === 'winners')) as number;
-  const rawTime = client.ch.util.checkVal(options.find((o) => o.name === 'time')) as string;
+  const winnerCount = client.ch.util.checkVal(options.find((o) => o.name === 'winners')) as
+    | number
+    | null;
+  const rawTime = client.ch.util.checkVal(options.find((o) => o.name === 'time')) as string | null;
 
   const roleID = client.ch.util.checkVal(options.find((o) => o.name === 'role')) as string | null;
   const role = roleID ? cmd.guild.roles.get(roleID) : null;
@@ -46,16 +48,22 @@ export default async (
   const host = hostArg ? client.users.get(hostArg) || cmd.user : cmd.user;
 
   const msgid = client.ch.util.checkVal(options.find((o) => o.name === 'giveaway')) as string;
-  const lan = lang.edit;
 
   const insert = {
-    endtime: handleEndTime(cmd, rawTime, { lan, language }),
-    description,
-    winnercount: winnerCount,
-    reqrole: role?.id,
-    actualprize: actualPrize,
-    host: host.id,
+    endtime: rawTime ? handleEndTime(cmd, rawTime, { lan, language }) : undefined,
+    description: description || undefined,
+    winnercount: winnerCount || undefined,
+    reqrole: role?.id || undefined,
+    actualprize: actualPrize || undefined,
+    host: host.id || undefined,
   };
+
+  if (!insert.endtime) delete insert.endtime;
+  if (!insert.description) delete insert.description;
+  if (!insert.winnercount) delete insert.winnercount;
+  if (!insert.reqrole) delete insert.reqrole;
+  if (!insert.actualprize) delete insert.actualprize;
+  if (!insert.host) delete insert.host;
 
   if (!Object.keys(insert).length) {
     client.ch.error(cmd, lan.noChanges, language);
@@ -180,7 +188,7 @@ const updateEmbed = async (cmd: CT.CommandInteraction, giveaway: DBT.giveaways) 
     },
     color: client.ch.colorSelector(cmd.guild.members.get(client.user.id)),
     description: giveaway.description,
-    title: `${Number(giveaway.participants?.length)} ${lan.participants}`,
+    title: `${Number(giveaway.participants?.length || 0)} ${lan.participants}`,
     fields: [
       {
         name: `${lan.winners} ${giveaway.winnercount}`,
