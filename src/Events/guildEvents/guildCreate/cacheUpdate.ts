@@ -180,7 +180,11 @@ const giveaways = async (guild: Eris.Guild, language: Language) => {
     client.giveaways.set(
       `${giveaway.msgid}-${giveaway.guildid}`,
       Jobs.scheduleJob(new Date(endTime), async () => {
-        (await import('../../../Commands/SlashCommands/giveaway/end')).end(giveaway, language);
+        (await import('../../../Commands/SlashCommands/giveaway/end')).end(
+          giveaway,
+          language.slashCommands.giveaway.end,
+          language,
+        );
       }),
     );
   });

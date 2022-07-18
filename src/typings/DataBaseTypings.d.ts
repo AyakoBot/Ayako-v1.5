@@ -187,6 +187,7 @@ export type giveaways = {
   ended: boolean;
   channelid: string;
   participants?: string[];
+  collecttime?: number;
 };
 
 export type guildsettings = {
@@ -643,3 +644,10 @@ export type votetokens = {
   guildid: string;
   token: string;
 };
+
+export interface giveawaycollecttime {
+  userid: string;
+  giveaway: string;
+  msgid: string;
+  endtime: number;
+}

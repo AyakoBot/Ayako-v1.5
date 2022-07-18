@@ -9,8 +9,9 @@ import type CT from '../../typings/CustomTypings';
 import type DBT from '../../typings/DataBaseTypings';
 
 const execute = async (cmd: CT.CommandInteraction) => {
-  const command = await getCommand(cmd);
-  if (!command) return;
+  const rawCommand = await getCommand(cmd);
+  if (!rawCommand) return;
+  const { command } = rawCommand;
 
   if (!cmd.guild && cmd.channel.type === 1) {
     runDMCommand({ cmd, command });
@@ -70,10 +71,13 @@ const getCommand = async (cmd: CT.CommandInteraction) => {
   const files = fs.readdirSync(dir).filter((f) => !isDisallowed(dir) && f.endsWith('.js'));
   const possibleFiles = await Promise.all(files.map((f) => import(`${dir}/${f}`)));
 
-  const file: CT.SlashCommand | undefined | null = files
-    .map((_, i) => {
+  const file: { command: CT.SlashCommand; name: string } | undefined | null = files
+    .map((f, i) => {
       const { default: possibleFile }: { default: CT.SlashCommand } = possibleFiles[i];
-      if (possibleFile.name === cmd.data.name) return possibleFile;
+
+      if (f.replace('.js', '') === cmd.data.name) {
+        return { command: possibleFile, name: f.replace('.js', '') };
+      }
       return null;
     })
     .filter((f) => !!f)

@@ -4112,6 +4112,7 @@
       "description": "Create a Giveaway",
       "usage": ["giveaway"],
       "category": "Giveaway",
+      "noneFound": "No Giveaways found",
       "create": {
         "description": "Create a Giveaway",
         "missingPermissions": "I can't send or view Messages in this Channel",
@@ -4139,7 +4140,10 @@
         "noValidEntries": "No valid Entries | No Winner picked",
         "checkDMs": "Check your DMs! | If you had your DMs closed, DM or @Mention the User below",
         "button": "Get to Giveaway",
-        "manuallyEnded": "Manually Ended Giveaway"
+        "manuallyEnded": "Manually Ended Giveaway",
+        "clickButton": "Click the Button below to claim your Prize",
+        "limitedTime": "Your prize expires {{inTime}} ({{time}})",
+        "timeRanOut": "You can no longer claim your Prize since you took too long to claim it\nI will now re-roll the Giveaway"
       },
       "participate": {
         "cantEnter": "You don't meet the Requirements to participate in this Giveaway",
@@ -4161,10 +4165,7 @@
       }
     }
   },
-  "stagePrivacyLevels": [
-    "Public",
-    "Server Only"
-  ],
+  "stagePrivacyLevels": ["Public", "Server Only"],
   "featuresName": "Features",
   "none": "None",
   "before": "Before",

@@ -6,8 +6,9 @@ import client from '../../BaseClient/ErisClient';
 const cooldowns = new Map();
 
 export default async (cmd: CT.ComponentInteraction) => {
-  const command = await getCommand(cmd);
-  if (!command) return;
+  const rawCommand = await getCommand(cmd);
+  if (!rawCommand) return;
+  const { command, name } = rawCommand;
 
   if (command.cooldown && cooldowns.has(cmd.user.id)) {
     const timeleft = Math.abs(cooldowns.get(cmd.user.id) - Date.now());
@@ -33,14 +34,14 @@ export default async (cmd: CT.ComponentInteraction) => {
   }
 
   try {
-    const lan = cmd.language.slashCommands[command.name as keyof typeof cmd.language.slashCommands];
+    const lan = cmd.language.slashCommands[name as keyof typeof cmd.language.slashCommands];
 
     // eslint-disable-next-line no-console
-    console.log(`[ComponentCommand Executed] ${command.name} | ${cmd.channel.id}`);
+    console.log(`[ComponentCommand Executed] ${name} | ${cmd.channel.id}`);
     command.execute(cmd, { language: cmd.language, lan }, command);
   } catch (e) {
     // eslint-disable-next-line no-console
-    console.error(`[ComponentCommand Error] ${command.name}:`, e);
+    console.error(`[ComponentCommand Error] ${name}:`, e);
   }
 };
 
@@ -52,10 +53,13 @@ const getCommand = async (cmd: CT.ComponentInteraction) => {
   const files = fs.readdirSync(dir).filter((f) => !isDisallowed(dir) && f.endsWith('.js'));
   const possibleFiles = await Promise.all(files.map((f) => import(`${dir}/${f}`)));
 
-  const file: CT.SlashCommand | undefined | null = files
-    .map((_, i) => {
+  const file: { command: CT.SlashCommand; name: string } | undefined | null = files
+    .map((f, i) => {
       const { default: possibleFile }: { default: CT.SlashCommand } = possibleFiles[i];
-      if (possibleFile.name === cmd.data.custom_id) return possibleFile;
+
+      if (f.replace('.js', '') === cmd.data.custom_id) {
+        return { command: possibleFile, name: f.replace('.js', '') };
+      }
       return null;
     })
     .filter((f) => !!f)

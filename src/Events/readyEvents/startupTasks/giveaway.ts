@@ -11,12 +11,18 @@ export default async () => {
   if (!giveawaysRows) return;
 
   giveawaysRows.forEach(async (row) => {
+    const guild = client.guilds.get(row.guildid);
+    if (!guild) return;
+
+    const language = await client.ch.languageSelector(guild.id);
+    const lan = language.slashCommands.giveaway.end;
+
     if (Number(row.endtime) > Date.now()) {
       const job = jobs.scheduleJob(new Date(Number(row.endtime)), async () => {
-        (await import('../../../Commands/SlashCommands/giveaway/end')).end(row);
+        (await import('../../../Commands/SlashCommands/giveaway/end')).end(row, lan, language);
       });
 
       client.giveaways.set(`${row.msgid}-${row.guildid}`, job);
-    } else (await import('../../../Commands/SlashCommands/giveaway/end')).end(row);
+    } else (await import('../../../Commands/SlashCommands/giveaway/end')).end(row, lan, language);
   });
 };

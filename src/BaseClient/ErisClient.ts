@@ -62,6 +62,7 @@ const getEvents = () => {
 
 class Client extends Eris.Client {
   eventPaths: string[];
+
   mutes: Map<string, Jobs.Job>;
   bans: Map<string, Jobs.Job>;
   channelBans: Map<string, Jobs.Job>;
@@ -70,16 +71,22 @@ class Client extends Eris.Client {
   giveaways: Map<string, Jobs.Job>;
   invites: Map<string, Eris.Invite[]>;
   verificationCodes: Map<string, string>;
+  webhooks: Map<string, Eris.Webhook[]>;
+  giveawayClaimTimeout: Map<string, Jobs.Job>;
+
   neko: typeof NekoClient;
   constants: typeof Constants;
+
   objectEmotes: typeof ObjectEmotes;
   stringEmotes: typeof StringEmotes;
   reactionEmotes: typeof ReactionEmotes;
-  webhooks: Map<string, Eris.Webhook[]>;
+
   mainID: string;
+
   channelQueue: Map<string, CT.MessagePayload[]>;
   channelTimeout: Map<string, Jobs.Job>;
   channelCharLimit: Map<string, number>;
+
   ch: typeof ch;
   decrementMaxListeners: () => void;
   incrementMaxListeners: () => void;
@@ -111,9 +118,11 @@ class Client extends Eris.Client {
     this.invites = new Map();
     this.verificationCodes = new Map();
     this.webhooks = new Map();
+    this.giveawayClaimTimeout = new Map();
 
     this.neko = NekoClient;
     this.constants = Constants;
+
     this.objectEmotes = ObjectEmotes;
     this.stringEmotes = StringEmotes;
     this.reactionEmotes = ReactionEmotes;

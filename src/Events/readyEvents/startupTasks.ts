@@ -24,6 +24,7 @@ export default async () => {
   });
 
   (await import('./startupTasks/giveaway')).default();
+  (await import('./startupTasks/giveawayCollectTime')).default();
   (await import('./startupTasks/punishments')).default();
   (await import('./startupTasks/voteHandle')).default();
   (await import('./startupTasks/nitro')).default();
