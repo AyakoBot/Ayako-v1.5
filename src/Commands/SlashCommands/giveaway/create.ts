@@ -53,7 +53,7 @@ export default async (
     return;
   }
 
-  const endtime = getEndTime(rawTime);
+  const endtime = getEndTime(rawTime, true);
   if (!endtime) {
     client.ch.error(cmd, lan.invalidTime, language);
     return;
@@ -192,7 +192,7 @@ const createGiveaway = (
   );
 };
 
-const getEndTime = (value: string) => {
+const getEndTime = (value: string, addDateNow?: boolean) => {
   const args = value
     .split(/ +/)
     .map((a) => (ms(a.replace(/,/g, '.')) ? ms(a.replace(/,/g, '.')) : a));
@@ -207,7 +207,8 @@ const getEndTime = (value: string) => {
     return ms(`${a}`);
   });
 
-  const endTime = timeArgs.filter((a) => !!a).reduce((a, b) => Number(a) + Number(b));
-
+  const endTime = timeArgs
+    .filter((a) => !!a)
+    .reduce((a, b) => Number(a) + Number(b), addDateNow ? Date.now() : 0);
   return endTime;
 };
