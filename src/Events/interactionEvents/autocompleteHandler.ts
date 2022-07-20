@@ -11,7 +11,11 @@ export default async (cmd: CT.AutocompleteInteraction) => {
 
     // eslint-disable-next-line no-console
     console.log(`[AutocompleteCommand Executed] ${name} | ${cmd.channel.id}`);
-    command(cmd, { language: cmd.language, lan });
+
+    const returnables = await command(cmd, cmd.language, lan as never);
+    if (!returnables.length) returnables.push({ name: lan.noneFound, value: 'nothing' });
+
+    cmd.result(returnables).catch(() => null);
   } catch (e) {
     // eslint-disable-next-line no-console
     console.error(`[AutocompleteCommand Error] ${name}:`, e);

@@ -36,7 +36,7 @@ type PartialSlashCommand = Omit<
 
 export interface SlashCommand extends PartialSlashCommand {
   execute: <T extends keyof typeof import('../Languages/lan-en.json')['slashCommands']>(
-    cmd: Interaction,
+    cmd: CommandInteraction,
     {
       language,
       lan,
@@ -49,21 +49,14 @@ export interface SlashCommand extends PartialSlashCommand {
   ) => void;
 }
 
-export type AutocompleteCommand = <
-  T extends keyof typeof import('../Languages/lan-en.json')['slashCommands'],
->(
-  cmd: Interaction,
-  {
-    language,
-    lan,
-  }: {
-    language: typeof import('../Languages/lan-en.json');
-    lan: typeof import('../Languages/lan-en.json').slashCommands[T];
-  },
-) => void;
+export type AutocompleteCommand = (
+  cmd: AutocompleteInteraction,
+  language: typeof import('../Languages/lan-en.json'),
+  lan: never,
+) => Promise<Eris.ApplicationCommandOptionChoice<unknown>[]>;
 
 export type ComponentCommand = (
-  cmd: Interaction,
+  cmd: ComponentInteraction,
   language: typeof import('../Languages/lan-en.json'),
 ) => void;
 
