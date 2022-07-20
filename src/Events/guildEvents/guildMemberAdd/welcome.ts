@@ -47,7 +47,7 @@ const getEmbed = async (welcomeRow: DBT.welcome, member: Eris.Member, guild: Eri
 
     return {
       type: 'rich',
-      description: language.welcome.author,
+      description: language.welcome,
       color: client.ch.colorSelector(member),
     };
   };

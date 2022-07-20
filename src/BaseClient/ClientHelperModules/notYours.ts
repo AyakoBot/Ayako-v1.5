@@ -14,7 +14,7 @@ export default (
       url: constants.standard.invite,
     },
     color: constants.colors.warning,
-    description: language.notYours,
+    description: language.errors.notYours,
   };
 
   reply(interaction, { embeds: [embed], ephemeral: true }, language);

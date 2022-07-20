@@ -5,7 +5,7 @@ import edit from './edit';
 export default (msg: Eris.Message, language: typeof import('../../Languages/lan-en.json')) => {
   const embed = {
     type: 'rich',
-    description: language.timeError,
+    description: language.errors.time,
     color: constants.colors.warning,
   };
 
