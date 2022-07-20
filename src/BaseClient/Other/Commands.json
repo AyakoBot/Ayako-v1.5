@@ -1,0 +1,200 @@
+{
+  "giveaway": {
+    "name": "giveaway",
+    "description": "Giveaway Management Commands",
+    "defaultPermission": true,
+    "type": 1,
+    "options": [
+      {
+        "type": 1,
+        "name": "create",
+        "description": "Create a Givaway",
+        "options": [
+          {
+            "type": 7,
+            "name": "channel",
+            "description": "The Channel to start the Giveaway in",
+            "required": true,
+            "channel_types": [0, 5, 10, 11, 12]
+          },
+          {
+            "type": 3,
+            "name": "prize-description",
+            "description": "A Description of the Prize the Winners will win",
+            "required": true,
+            "min_length": 1,
+            "max_length": 2000
+          },
+          {
+            "type": 10,
+            "name": "winners",
+            "description": "Amount of Winners this Giveaway can have",
+            "required": true,
+            "min_value": 1,
+            "max_value": 1000
+          },
+          {
+            "type": 3,
+            "name": "time",
+            "description": "The Time after which the Winner will be chosen (Example: 5 days 20h 15 mins)",
+            "required": true,
+            "min_length": 2,
+            "max_length": 50
+          },
+          {
+            "type": 8,
+            "name": "role",
+            "description": "Role required to enter this Giveaway",
+            "required": false
+          },
+          {
+            "type": 6,
+            "name": "host",
+            "description": "The User who hosts this Giveaway",
+            "required": false
+          },
+          {
+            "type": 3,
+            "name": "actual-prize",
+            "description": "The actual Prize (If defined, the Prize will be sent to the winners automatically)",
+            "required": false
+          },
+          {
+            "type": 3,
+            "name": "collect-prize-time",
+            "description": "The Time Winners have to claim the Prize (Example: 5 days 20h 15 mins)",
+            "required": false,
+            "min_length": 2,
+            "max_length": 50
+          }
+        ]
+      },
+      {
+        "type": 1,
+        "name": "edit",
+        "description": "Edits a Giveaway",
+        "options": [
+          {
+            "autocomplete": true,
+            "type": 3,
+            "name": "giveaway",
+            "description": "The Giveaway to edit",
+            "required": true
+          },
+          {
+            "max_value": 9999999,
+            "min_value": 1,
+            "type": 4,
+            "name": "winners",
+            "description": "The Amount of Winners this Giveaway has",
+            "required": false
+          },
+          {
+            "name": "role",
+            "description": "Role required to participate in this Giveaway",
+            "required": false,
+            "type": 8
+          },
+          {
+            "type": 3,
+            "name": "prize-description",
+            "description": "A Description of the Prize the Winners will win",
+            "required": false
+          },
+          {
+            "type": 3,
+            "name": "actual-prize",
+            "description": "The actual Prize (If given, the Prize will be sent to winners automatically)",
+            "required": false
+          },
+          {
+            "type": 3,
+            "name": "time",
+            "description": "The Time after which the Winner will be chosen (Example: 5 days 20h 15 mins)",
+            "required": false
+          },
+          {
+            "name": "host",
+            "description": "The User who hosts the Giveaway",
+            "required": false,
+            "type": 6
+          }
+        ]
+      },
+      {
+        "type": 1,
+        "name": "end",
+        "description": "Ends a Giveaway manually",
+        "options": [
+          {
+            "autocomplete": true,
+            "type": 3,
+            "name": "giveaway",
+            "description": "The Giveaway to end",
+            "required": true
+          }
+        ]
+      },
+      {
+        "type": 1,
+        "name": "reroll",
+        "description": "Re-rolls a Giveaway and picks a new Winner",
+        "options": [
+          {
+            "autocomplete": true,
+            "type": 3,
+            "name": "giveaway",
+            "description": "The Giveaway to re-roll",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "settings": {
+    "name": "settings",
+    "description": "Manage Ayakos behavioural Settings",
+    "defaultPermission": true,
+    "type": 1,
+    "options": [
+      {
+        "type": 3,
+        "choices": [
+          {
+            "name": "auto-moderation",
+            "value": "auto-moderation"
+          },
+          {
+            "name": "automation",
+            "value": "automation"
+          },
+          {
+            "name": "moderation",
+            "value": "moderation"
+          },
+          {
+            "name": "other",
+            "value": "other"
+          }
+        ],
+        "name": "category",
+        "description": "The Settings Category",
+        "required": false
+      },
+      {
+        "type": 3,
+        "name": "setting",
+        "description": "The Setting",
+        "required": false,
+        "autocomplete": true,
+        "min_length": 1
+      },
+      {
+        "type": 5,
+        "name": "edit-mode",
+        "description": "Whether to jump directly into editing",
+        "required": false
+      }
+    ]
+  }
+}
