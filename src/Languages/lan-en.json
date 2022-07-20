@@ -520,7 +520,30 @@
   },
   "slashCommands": {
     "settings": {
+      "noneFound": "No Settings found",
       "author": "Ayako {{type}} Settings",
+      "declareCategory": "Declare a Category first",
+      "categories": {
+        "auto-moderation": ["anti-spam", "anti-virus", "auto-punish", "blacklist"],
+        "moderation": ["mod-roles", "expiry"],
+        "automation": [
+          "auto-roles",
+          "cooldowns",
+          "disabled-commands",
+          "disboard-reminders",
+          "self-roles",
+          "seprators",
+          "sticky",
+          "suggestions",
+          "verification",
+          "welcome",
+          "leveling",
+          "nitro",
+          "reaction-roles",
+          "delete-commands"
+        ],
+        "other": ["logs", "language", "overview", "prefix"]
+      },
       "separators": {
         "type": "Separator",
         "edit": {

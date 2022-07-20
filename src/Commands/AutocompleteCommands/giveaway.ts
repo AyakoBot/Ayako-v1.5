@@ -3,17 +3,7 @@ import type CT from '../../typings/CustomTypings';
 import type DBT from '../../typings/DataBaseTypings';
 import client from '../../BaseClient/ErisClient';
 
-export default async (
-  cmd: CT.AutocompleteInteraction,
-  { lan }: { lan: typeof import('../../Languages/lan-en.json')['slashCommands']['giveaway'] },
-) => {
-  const returnables = await getReturnables(cmd);
-  if (!returnables.length) returnables.push({ name: lan.noneFound, value: 'nothing' });
-
-  cmd.result(returnables).catch(() => null);
-};
-
-const getReturnables = async (cmd: CT.AutocompleteInteraction) => {
+const run: CT.AutocompleteCommand = async (cmd: CT.AutocompleteInteraction) => {
   const giveawaysRows = await client.ch
     .query(`SELECT * FROM giveaways WHERE guildid = $1 AND ended = $2;`, [
       cmd.guildID,
@@ -54,3 +44,5 @@ const getReturnables = async (cmd: CT.AutocompleteInteraction) => {
 
   return returnables;
 };
+
+export default run;
