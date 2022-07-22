@@ -606,7 +606,7 @@ const takeAction = async (punishmentType, targetMember, executingMember, args, l
         `${guild?.id}-${args.target.id}`,
         jobs.scheduleJob(
           `${guild?.id}-${args.target.id}`,
-          new Date(Date.now() + args.duration),
+          new Date(Date.now() + Number(args.duration)),
           () => {
             args.executor.client.emit(
               'modBaseEvent',
