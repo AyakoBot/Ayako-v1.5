@@ -5,9 +5,8 @@ module.exports = {
     if (user.id === reaction.client.user.id) return;
     if (!reaction.message.guild) return;
 
-    const emoteIdentifier = reaction.emoji.name.match(reaction.client.ch.regexes.emojiTester)
-      ? reaction.emoji.name
-      : reaction.emoji.id;
+    const emoteIdentifier =
+      reaction.emoji.id?.replace(/\s/g, '') || reaction.emoji.name?.replace(/\s/g, '');
 
     const reactionRow = await getReactionRow(reaction, emoteIdentifier);
     if (!reactionRow) return;
