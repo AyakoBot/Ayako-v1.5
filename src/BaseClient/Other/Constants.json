@@ -284,8 +284,7 @@
     "warning": 16711680,
     "success": 65280,
     "ephemeral": 3092790,
-    "loading": 16776960,
-    "ephemeralColor": 3092790
+    "loading": 16776960
   },
   "standard": {
     "color": 11599616,
@@ -421,27 +420,58 @@
       "image": "https://ayakobot.com/cdn/Ayako_Assets/help.png"
     },
     "settings": {
-      "categories": {
-        "auto-moderation": ["anti-spam", "anti-virus", "auto-punish", "blacklist"],
-        "moderation": ["mod-roles", "expiry"],
-        "automation": [
-          "auto-roles",
-          "cooldowns",
-          "disabled-commands",
-          "disboard-reminders",
-          "self-roles",
-          "seprators",
-          "sticky",
-          "suggestions",
-          "verification",
-          "welcome",
-          "leveling",
-          "nitro",
-          "reaction-roles",
-          "delete-commands"
-        ],
-        "other": ["logs", "language", "overview", "prefix"]
-      }
+      "colors": {
+        "other": "🔵",
+        "roles": "🔴",
+        "channels": "🟢",
+        "chats": "🟡"
+      },
+      "categories": [
+        {
+          "name": "auto-moderation",
+          "categories": [
+            { "name": "anti-spam", "category": "chats" },
+            { "name": "anti-virus", "category": "chats" },
+            { "name": "auto-punish", "category": "other" },
+            { "name": "blacklist", "category": "chats" }
+          ]
+        },
+        {
+          "name": "moderation",
+          "categories": [
+            { "name": "mod-roles", "category": "roles" },
+            { "name": "expiry", "category": "other" }
+          ]
+        },
+        {
+          "name": "automation",
+          "categories": [
+            { "name": "auto-roles", "category": "roles" },
+            { "name": "cooldowns", "category": "chats" },
+            { "name": "disabled-commands", "category": "chats" },
+            { "name": "disboard-reminders", "category": "other" },
+            { "name": "self-roles", "category": "roles" },
+            { "name": "seprators", "category": "roles" },
+            { "name": "sticky", "category": "roles" },
+            { "name": "verification", "category": "roles" },
+            { "name": "welcome", "category": "chats" },
+            { "name": "leveling", "category": "other" },
+            { "name": "nitro", "category": "roles" },
+            { "name": "reaction-roles", "category": "roles" },
+            { "name": "delete-commands", "category": "chats" },
+            { "name": "suggestions", "category": "other" }
+          ]
+        },
+        {
+          "name": "other",
+          "categories": [
+            { "name": "logs", "category": "other" },
+            { "name": "language", "category": "chats" },
+            { "name": "overview", "category": "other" },
+            { "name": "prefix", "category": "chats" }
+          ]
+        }
+      ]
     }
   }
 }
