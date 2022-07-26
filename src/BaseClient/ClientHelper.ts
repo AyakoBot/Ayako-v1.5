@@ -21,7 +21,6 @@ export const modRoleWaiter              = (await import(`./ClientHelperModules/m
 export const txtFileWriter              = (await import(`./ClientHelperModules/txtFileWriter`)).default;
 export const util                       =  await import(`./ClientHelperModules/util`);
 export const error                      = (await import(`./ClientHelperModules/error`)).default;
-export const edit                       = (await import(`./ClientHelperModules/edit`)).default;
 export const permError                  = (await import(`./ClientHelperModules/permError`)).default;
 export const notYours                   = (await import(`./ClientHelperModules/notYours`)).default;
 export const buttonRower                = (await import(`./ClientHelperModules/buttonRower`)).default;
