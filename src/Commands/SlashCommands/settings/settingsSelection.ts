@@ -51,7 +51,7 @@ export default (
   const categorySelect: Eris.SelectMenu = {
     type: 3,
     disabled: false,
-    custom_id: 'settings_select',
+    custom_id: 'settingsCategorySelect',
     placeholder: lan.selectCategory,
     options: client.constants.commands.settings.categories.map((c) => ({
       label: lan.categories[c.name as keyof typeof lan.categories],
