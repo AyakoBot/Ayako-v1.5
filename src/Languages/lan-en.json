@@ -566,6 +566,32 @@
         "prefix": "Prefix",
         "seprators": "Role Separators"
       },
+      "settingsDescriptions": {
+        "anti-spam": "Stopping Members from spamming in the Server",
+        "anti-virus": "Stopping Members and hacked Accounts from sending phishing and in other ways malicious Links in the Server",
+        "auto-punish": "Consistenly punish Members for misbehaving using a custom punishment Setup and a new Command",
+        "blacklist": "Stopping Members from saying Words or Phrases you'd rather not have them say on your Server",
+        "mod-roles": "Define which Commands can be used by which Role or User, and even overwrite their Discord Permissions",
+        "expiry": "Let Punishments expire after a certain Amount of Time",
+        "auto-roles": "Automatically assign Roles to newly joining Members or Bots, or Members and Bots",
+        "cooldowns": "Define custom Cooldowns on Ayakos Commands",
+        "disabled-commands": "Disable certain Commands of Ayako in some Channels, by Role, or across the whole Server",
+        "disboard-reminders": "Let Ayako remind you to Bump your server on Disboard",
+        "self-roles": "Set Roles as self-assignable, good for Color Roles, Region Roles, Age Roles and similar",
+        "separators": "Group the Roles a User has by their Category, good for Servers with many self-assignable and reaction Roles",
+        "sticky": "Make Roles and Channel Permissions stick to a Member across re-joins",
+        "suggestions": "Give your Members a chance to send share their Thoughts about improving your Server/Project and let them Vote on others Suggestions",
+        "verification": "Raise the Effort required to participate in your Server, or certain Channels, with a Text Captcha",
+        "welcome": "Send a warm Welcome to newly joining Members",
+        "leveling": "Reward Members for their Activity with Roles, and let them compete for the top Spots on a Leaderboard",
+        "nitro": "Monitor your Servers Boosters, and reward them with continuously boosting",
+        "reaction-roles": "Let Members pick their own Roles by Reactions or Buttons",
+        "delete-commands": "Delete Commands issued by Users after a certain Amount of Time, or/and Ayakos Response to them",
+        "logs": "Log Events of every kind into designated Log Channels",
+        "language": "Change the display Language of Ayako",
+        "overview": "Get a quick Overview over the most important Settings of Ayako",
+        "prefix": "Assign a custom Prefix to Ayako"
+      },
       "separators": {
         "type": "Separator",
         "edit": {

@@ -219,8 +219,10 @@ const updateEmbed = async (cmd: CT.CommandInteraction, giveaway: DBT.giveaways) 
     emoji: client.objectEmotes.gift,
   };
 
-  client.ch.edit(message, {
-    embeds: [embed],
-    components: client.ch.buttonRower([[participateButton]]),
-  });
+  message
+    .edit({
+      embeds: [embed],
+      components: client.ch.buttonRower([[participateButton]]),
+    })
+    .catch(() => null);
 };

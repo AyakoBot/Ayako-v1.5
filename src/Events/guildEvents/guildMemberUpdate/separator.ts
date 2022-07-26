@@ -164,12 +164,12 @@ export const oneTimeRunner = async (
     if (!membersWithRoles) {
       embed.description = language.slashCommands.settings.separators.edit.oneTimeRunner.finished;
 
-      client.ch.edit(m, { embeds: [embed], components: [] });
+      m.edit({ embeds: [embed], components: [] }).catch(() => null);
     } else {
       embed.description =
         language.slashCommands.settings.separators.edit.oneTimeRunner.stillrunning;
 
-      client.ch.edit(m, { embeds: [embed], components: [] });
+      m.edit({ embeds: [embed], components: [] }).catch(() => null);
     }
   } else {
     membersWithRoles.forEach((mem) => {
@@ -215,7 +215,7 @@ export const oneTimeRunner = async (
       },
     );
 
-    client.ch.edit(m, { embeds: [embed], components: [] });
+    m.edit({ embeds: [embed], components: [] }).catch(() => null);
     client.ch.query(
       'UPDATE roleseparatorsettings SET stillrunning = $1, duration = $3, startat = $4, channelid = $5, messageid = $6 WHERE guildid = $2;',
       [
@@ -386,7 +386,7 @@ const assinger = async (
     };
 
     embed.description = language.slashCommands.settings.separators.edit.oneTimeRunner.finished;
-    client.ch.edit(m, { embeds: [embed], components: [] });
+    m.edit({ embeds: [embed], components: [] }).catch(() => null);
     client.ch.query(
       'UPDATE roleseparatorsettings SET stillrunning = $1, duration = $3, startat = $4 WHERE guildid = $2;',
       [false, msg.guildID, null, null],
@@ -425,7 +425,7 @@ const assinger = async (
           embed.description =
             language.slashCommands.settings.separators.edit.oneTimeRunner.finished;
 
-          client.ch.edit(m, { embeds: [embed], components: [] });
+          m.edit({ embeds: [embed], components: [] }).catch(() => null);
           client.ch.query(
             'UPDATE roleseparatorsettings SET stillrunning = $1, duration = $3, startat = $4 WHERE guildid = $2;',
             [false, msg.guildID, null, null],

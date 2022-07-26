@@ -159,9 +159,11 @@ export default async (
 
     if (!noticeEmbed2) return;
 
-    client.ch.edit(message, {
-      embeds: [embed, noticeEmbed2],
-    });
+    message
+      .edit({
+        embeds: [embed, noticeEmbed2],
+      })
+      .catch(() => null);
   });
 };
 

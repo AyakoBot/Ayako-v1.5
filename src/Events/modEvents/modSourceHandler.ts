@@ -1,6 +1,5 @@
 import Jobs from 'node-schedule';
 import type * as Eris from 'eris';
-import client from '../../BaseClient/ErisClient';
 import type DBT from '../../typings/DataBaseTypings';
 
 export default async (
@@ -27,7 +26,7 @@ export default async (
           embed.fields = [];
 
           Jobs.scheduleJob(new Date(Date.now() + minimizeTimeout), () => {
-            if (m) client.ch.edit(m, { embeds: [embed] });
+            if (m) m.edit({ embeds: [embed] }).catch(() => null);
           });
         }
 

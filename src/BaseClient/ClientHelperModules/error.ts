@@ -1,5 +1,4 @@
 import type Eris from 'eris';
-import edit from './edit';
 import reply from './reply';
 import objectEmotes from '../Other/ObjectEmotes.json' assert { type: 'json' };
 import constants from '../Other/Constants.json' assert { type: 'json' };
@@ -24,6 +23,6 @@ export default (
     return reply(msg, { embeds: [embed], flags: 64 }, language);
   }
 
-  if (m) return edit(m, { embeds: [embed] });
+  if (m) return m.edit({ embeds: [embed] }).catch(() => null);
   return reply(msg, { embeds: [embed] }, language);
 };

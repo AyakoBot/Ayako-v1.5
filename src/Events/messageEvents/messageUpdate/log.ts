@@ -296,9 +296,11 @@ const updateLog = async (
       color: client.constants.colors.ephemeral,
     };
 
-    client.ch.edit(message, {
-      embeds: [embed, noticeEmbed2],
-    });
+    message
+      .edit({
+        embeds: [embed, noticeEmbed2],
+      })
+      .catch(() => null);
   });
 };
 

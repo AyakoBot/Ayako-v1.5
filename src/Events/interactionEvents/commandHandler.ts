@@ -258,8 +258,8 @@ const getCooldown = async (cmd: CT.CommandInteraction, command: CT.SlashCommand)
       .then((m) => {
         if (!usedEmote && m) {
           jobs.scheduleJob(new Date(Date.now() + (timeLeft - 60000)), () => {
-            client.ch
-              .edit(m, {
+            m
+              .edit({
                 content: client.ch.stp(cmd.language.commands.commandHandler.pleaseWait, {
                   time: client.stringEmotes.timers[60],
                 }),

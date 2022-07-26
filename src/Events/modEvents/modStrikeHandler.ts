@@ -241,11 +241,11 @@ const getConfirmation = async (
       if (button.user.id === msg.author.id) {
         if (button.customId === 'yes') {
           buttonsCollector.stop();
-          button.client.ch.edit(button, { components: [] });
+          button.editParent({ components: [] });
           resolve(true);
         } else if (button.customId === 'no') {
           buttonsCollector.stop();
-          button.client.ch.edit(button, { components: [] });
+          button.editParent(button, { components: [] });
           resolve(false);
         }
       } else client.ch.notYours(button, msg.language);

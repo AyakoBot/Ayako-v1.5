@@ -223,8 +223,8 @@ const editGiveaway = async (
   });
   if (embed.author) embed.author.name += ` | ${lan.ended}`;
 
-  await client.ch
-    .edit(msg, {
+  await msg
+    .edit({
       embeds: [embed],
       components: [],
     })
@@ -324,5 +324,5 @@ export const runTimeEnded = async (
     fields: [],
   };
 
-  client.ch.edit(m, { embeds: [embed], components: [] });
+  m.edit({ embeds: [embed], components: [] }).catch(() => null);
 };

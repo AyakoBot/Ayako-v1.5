@@ -52,7 +52,7 @@ export default async (
   const embed = cmd.message.embeds[0];
   embed.title = `${giveaway.participants.length} ${lan.participants}`;
 
-  await client.ch.edit(cmd.message, { embeds: [embed] });
+  await cmd.message.edit({ embeds: [embed] }).catch(() => null);
   await client.ch.query(
     `UPDATE giveaways SET participants = $1 WHERE msgid = $2 AND guildid = $3;`,
     [giveaway.participants, cmd.message.id, cmd.guild.id],

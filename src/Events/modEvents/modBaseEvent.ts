@@ -28,7 +28,7 @@ export default async (args: CT.ModBaseEventOptions) => {
     if (!embed) return;
 
     if (msg && mExistedPreviously && m) {
-      await client.ch.edit(m, { embeds: [embed] });
+      await m.edit({ embeds: [embed] }).catch(() => null);
     } else if (msg) {
       const reply = await client.ch.reply(msg, { embeds: [embed] }, msg.language);
       if (reply) m = reply;
@@ -135,7 +135,7 @@ const declareSuccess = async (
   }
 
   if (args.m) {
-    await client.ch.edit(args.m, { embeds: [embed] });
+    await args.m.edit({ embeds: [embed] }).catch(() => null);
   }
 };
 
@@ -177,7 +177,7 @@ const errorEmbed = async (
   }
 
   if (args.m) {
-    await client.ch.edit(args.m, { embeds: [embed] });
+    await args.m.edit({ embeds: [embed] }).catch(() => null);
   }
 };
 
@@ -318,7 +318,7 @@ const roleCheck = async (
     deleter(args);
   }
 
-  await client.ch.edit(args.m, { embeds: [embed] });
+    await args.m.edit({ embeds: [embed] }).catch(() => null);
   return false;
 };
 
@@ -357,7 +357,7 @@ const checkSelfPunish = async (
   }
 
   if (mExistedPreviously && args.m) {
-    await client.ch.edit(args.m, { embeds: [embed] });
+    await args.m.edit({ embeds: [embed] }).catch(() => null);
   }
   return true;
 };
@@ -395,8 +395,8 @@ const checkMePunish = async (
     deleter(args);
   }
 
-  if (args.m) await client.ch.edit(args.m, { embeds: [embed] });
-  return true;
+  if (args.m) await args.m.edit({ embeds: [embed] }).catch(() => null);
+    return true;
 };
 
 const checkPunishable = async (
@@ -481,7 +481,7 @@ const checkPunishable = async (
     }
   }
 
-  if (args.m) await client.ch.edit(args.m, { embeds: [embed] });
+  if (args.m) await args.m.edit({ embeds: [embed] }).catch(() => null);
   return false;
 };
 
@@ -633,7 +633,7 @@ const checkActionTaken = async (
       deleter(args);
     }
 
-    if (args.m) await client.ch.edit(args.m, { embeds: [embed] });
+    if (args.m) await args.m.edit({ embeds: [embed] }).catch(() => null);
     return true;
   }
 

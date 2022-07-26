@@ -116,8 +116,8 @@ const policyReminder = async (member: Eris.Member, guild: Eris.Guild) => {
     content: 'Ayako Terms and Privacy Notice',
   });
 
-  client.ch.edit(m, {
+  m.edit({
     embeds: [embed],
     content: 'This Reminder will only be sent to you __once__\nhttps://discord.gg/euTdctganf',
-  });
+  }).catch(() => null);
 };

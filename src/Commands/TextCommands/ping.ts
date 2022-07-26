@@ -22,9 +22,9 @@ const cmd: CT.Command = {
       if (shardPing === Infinity) shardPing = ping;
     }
 
-    client.ch.edit(m, {
+    m.edit({
       content: `🏓 \n**Response Time:** ${ping}ms\n**Last Heartbeat:** ${shardPing}ms`,
-    });
+    }).catch(() => null);
   },
 };
 

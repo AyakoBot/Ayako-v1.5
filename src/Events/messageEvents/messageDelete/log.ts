@@ -156,8 +156,10 @@ export default async (msg: CT.Message) => {
       color: client.constants.colors.ephemeral,
     };
 
-    client.ch.edit(message, {
-      embeds: [embed, noticeEmbed2],
-    });
+    message
+      .edit({
+        embeds: [embed, noticeEmbed2],
+      })
+      .catch(() => null);
   });
 };

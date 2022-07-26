@@ -1,6 +1,5 @@
 import type Eris from 'eris';
 import constants from '../Other/Constants.json' assert { type: 'json' };
-import edit from './edit';
 
 export default (msg: Eris.Message, language: typeof import('../../Languages/lan-en.json')) => {
   const embed = {
@@ -9,5 +8,5 @@ export default (msg: Eris.Message, language: typeof import('../../Languages/lan-
     color: constants.colors.warning,
   };
 
-  return edit(msg, { embeds: [embed], components: [] });
+  return msg.edit({ embeds: [embed], components: [] }).catch(() => null);
 };
