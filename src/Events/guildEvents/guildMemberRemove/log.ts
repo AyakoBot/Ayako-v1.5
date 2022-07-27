@@ -7,8 +7,8 @@ import type DBT from '../../../typings/DataBaseTypings';
 export default async (guild: Eris.Guild, member: Eris.Member | { id: string; user: Eris.User }) => {
   const channels = (
     await client.ch
-      .query('SELECT messageevents FROM logchannels WHERE guildid = $1;', [guild.id])
-      .then((r: DBT.logchannels[] | null) => (r ? r[0].messageevents : null))
+      .query('SELECT guildmemberevents FROM logchannels WHERE guildid = $1;', [guild.id])
+      .then((r: DBT.logchannels[] | null) => (r ? r[0].guildmemberevents : null))
   )?.map((id: string) => guild.channels.get(id));
 
   if (!channels) return;
