@@ -98,13 +98,13 @@
       "title": "{{type}} was deleted"
     },
     "channelPin": {
-      "descDetails": "User <@{{user.id}}> / `{{user.username}}#{{user.discriminator}}` / `{{user.id}}`\npinned [this Message](https://discord.com/channels/{{guild.id}}/{{msg.channel.id}}/{{msg.id}} \"Click to jump to Message\")\nfrom <@{{msg.author.id}}> / `{{msg.author.username}}#{{msg.author.discriminator}}` / `{{msg.author.id}}`\nin Channel <#{{msg.channel.id}}> / `{{msg.channel.name}}` / `{{msg.channel.id}}`",
-      "desc": "[this Message](https://discord.com/channels/{{guild.id}}/{{msg.channel.id}}/{{msg.id}} \"Click to jump to Message\")\nfrom <@{{msg.author.id}}> / `{{msg.author.username}}#{{msg.author.discriminator}}` / `{{msg.author.id}}`\nin Channel <#{{msg.channel.id}}> / `{{msg.channel.name}}` / `{{msg.channel.id}}`\nwas pinned",
+      "descDetails": "User <@{{user.id}}> / `{{user.username}}#{{user.discriminator}}` / `{{user.id}}`\npinned [this Message]({{msg.jumpLink}} \"Click to jump to Message\")\nfrom <@{{msg.author.id}}> / `{{msg.author.username}}#{{msg.author.discriminator}}` / `{{msg.author.id}}`\nin Channel <#{{msg.channel.id}}> / `{{msg.channel.name}}` / `{{msg.channel.id}}`",
+      "desc": "[This Message]({{msg.jumpLink}} \"Click to jump to Message\")\nfrom <@{{msg.author.id}}> / `{{msg.author.username}}#{{msg.author.discriminator}}` / `{{msg.author.id}}`\nin Channel <#{{msg.channel.id}}> / `{{msg.channel.name}}` / `{{msg.channel.id}}`\nwas pinned",
       "title": "Message was pinned"
     },
     "channelUnPin": {
-      "descDetails": "User <@{{user.id}}> / `{{user.username}}#{{user.discriminator}}` / `{{user.id}}`\nunpinned [this Message](https://discord.com/channels/{{guild.id}}/{{msg.channel.id}}/{{msg.id}} \"Click to jump to Message\")\nfrom <@{{msg.author.id}}> / `{{msg.author.username}}#{{msg.author.discriminator}}` / `{{msg.author.id}}`\nin Channel <#{{msg.channel.id}}> / `{{msg.channel.name}}` / `{{msg.channel.id}}`",
-      "desc": "[this Message](https://discord.com/channels/{{guild.id}}/{{msg.channel.id}}/{{msg.id}} \"Click to jump to Message\")\nfrom <@{{msg.author.id}}> / `{{msg.author.username}}#{{msg.author.discriminator}}` / `{{msg.author.id}}`\nin Channel <#{{msg.channel.id}}> / `{{msg.channel.name}}` / `{{msg.channel.id}}`\nwas unpinned",
+      "descDetails": "User <@{{user.id}}> / `{{user.username}}#{{user.discriminator}}` / `{{user.id}}`\nunpinned [this Message]({{msg.jumpLink}} \"Click to jump to Message\")\nfrom <@{{msg.author.id}}> / `{{msg.author.username}}#{{msg.author.discriminator}}` / `{{msg.author.id}}`\nin Channel <#{{msg.channel.id}}> / `{{msg.channel.name}}` / `{{msg.channel.id}}`",
+      "desc": "[This Message]({{msg.jumpLink}} \"Click to jump to Message\")\nfrom <@{{msg.author.id}}> / `{{msg.author.username}}#{{msg.author.discriminator}}` / `{{msg.author.id}}`\nin Channel <#{{msg.channel.id}}> / `{{msg.channel.name}}` / `{{msg.channel.id}}`\nwas unpinned",
       "title": "Message was unpinned"
     },
     "channelUpdate": {
@@ -336,7 +336,7 @@
       },
       "LogPublish": {
         "title": "Message Published",
-        "description": "[this Message]({{msg.jumpLink}} \"Click to jump to the Message\")\nfrom\nAuthor <@{{msg.author.id}}> / `{{msg.author.username}}#{{msg.author.discriminator}}` / `{{msg.author.id}}`\nin\nChannel <#{{msg.channel.id}}> / `{{msg.channel.name}}` / `{{msg.channel.id}}`\nwas published"
+        "description": "[This Message]({{msg.jumpLink}} \"Click to jump to the Message\")\nfrom\nAuthor <@{{msg.author.id}}> / `{{msg.author.username}}#{{msg.author.discriminator}}` / `{{msg.author.id}}`\nin\nChannel <#{{msg.channel.id}}> / `{{msg.channel.name}}` / `{{msg.channel.id}}`\nwas published"
       }
     },
     "roleCreate": {
