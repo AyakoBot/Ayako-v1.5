@@ -14,9 +14,9 @@ export default async (data: { channelID: string; guildID: string }) => {
 const logs = async (guild: Eris.Guild, channel: Eris.GuildTextableChannel) => {
   const audit = (
     await Promise.all([
-      getAuditLogEntry(guild, 50),
-      getAuditLogEntry(guild, 51),
-      getAuditLogEntry(guild, 52),
+      client.ch.getAudit(guild, 50),
+      client.ch.getAudit(guild, 51),
+      client.ch.getAudit(guild, 52),
     ])
   ).sort(
     (a, b) =>
@@ -61,13 +61,4 @@ const logs = async (guild: Eris.Guild, channel: Eris.GuildTextableChannel) => {
       break;
     }
   }
-};
-
-const getAuditLogEntry = async (guild: Eris.Guild, actionType: number) => {
-  if (!guild.members.get(client.user.id)?.permissions.has(128n)) return null;
-
-  const audits = await guild.getAuditLog({ limit: 5, actionType });
-  if (!audits || !audits.entries) return null;
-
-  return audits.entries.sort((a, b) => client.ch.getUnix(b.id) - client.ch.getUnix(a.id))[0];
 };

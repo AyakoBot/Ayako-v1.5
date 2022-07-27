@@ -63,8 +63,7 @@ const stickerCreated = async (
       fields: [],
     };
 
-    const audit = await getAuditLogEntry(guild, sticker, 90);
-
+    const audit = await client.ch.getAudit(guild, 90, sticker);
     if (audit) {
       embed.description = client.ch.stp(lan.descDetails, {
         user: audit.user,
@@ -106,8 +105,7 @@ const stickerDeleted = async (
       fields: [],
     };
 
-    const audit = await getAuditLogEntry(guild, sticker, 92);
-
+    const audit = await client.ch.getAudit(guild, 92, sticker);
     if (audit) {
       embed.description = client.ch.stp(lan.descDetails, {
         user: audit.user,
@@ -144,7 +142,7 @@ const stickerUpdated = async (
   const lan = language.events.stickerUpdate;
 
   const changedKeys: string[] = [];
-  const audit = await getAuditLogEntry(guild, sticker, 91);
+  const audit = await client.ch.getAudit(guild, 91, sticker);
 
   const getEmbed = (): Eris.Embed => ({
     type: 'rich',
@@ -196,19 +194,4 @@ const stickerUpdated = async (
 
   if (!changedKeys.length) return null;
   return { embeds: [embed] };
-};
-
-const getAuditLogEntry = async (
-  guild: Eris.Guild,
-  sticker: Eris.Sticker,
-  actionType: 90 | 91 | 92,
-) => {
-  if (!guild.members.get(client.user.id)?.permissions.has(128n)) return null;
-
-  const audits = await guild.getAuditLog({ limit: 5, actionType });
-  if (!audits || !audits.entries) return null;
-
-  return audits.entries
-    .filter((a) => a.targetID === sticker.id)
-    .sort((a, b) => client.ch.getUnix(b.id) - client.ch.getUnix(a.id))[0];
 };

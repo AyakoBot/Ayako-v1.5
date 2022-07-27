@@ -47,19 +47,8 @@ export default async (
   });
 
   const getBotEmbed = async (): Promise<Eris.Embed> => {
-    const getAuditLogEntry = async () => {
-      if (!guild?.members.get(client.user.id)?.permissions.has(128n)) return null;
-
-      const audits = await guild.getAuditLog({ limit: 3, actionType: 28 });
-      if (!audits || !audits.entries) return null;
-
-      return audits.entries
-        .filter((a) => a.targetID === member.user.id)
-        .sort((a, b) => client.ch.getUnix(b.id) - client.ch.getUnix(a.id))[0];
-    };
-
     const baseEmbed = getEmbed();
-    const audit = await getAuditLogEntry();
+    const audit = await client.ch.getAudit(guild, 28, member.user);
 
     if (baseEmbed.author) {
       baseEmbed.author.name = lan.titleBot;

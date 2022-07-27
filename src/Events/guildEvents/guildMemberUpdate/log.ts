@@ -68,8 +68,7 @@ export default async (
       });
     }
 
-    const audit = await getAudit(guild, member, 25);
-
+    const audit = await client.ch.getAudit(guild, 25, member.user);
     if (audit) {
       descriptions.push(
         client.ch.stp(lan.descriptionRoles, {
@@ -106,7 +105,7 @@ export default async (
       },
     );
 
-    const audit = await getAudit(guild, member, 24);
+    const audit = await client.ch.getAudit(guild, 24, member.user);
 
     if (audit && audit.user.id === member.user.id) {
       descriptions.push(client.ch.stp(lan.descriptionNickSelf, { user: member.user }));
@@ -158,8 +157,7 @@ export default async (
     if (!('communicationDisabledUntil' in oldMember)) return;
     changedKeys.push('communicationDisabledUntil');
 
-    const audit = await getAudit(guild, member, 24);
-
+    const audit = await client.ch.getAudit(guild, 24, member.user);
     if (audit) {
       if (oldMember.communicationDisabledUntil && !member.communicationDisabledUntil) {
         descriptions.push(
@@ -261,15 +259,4 @@ export default async (
   if (!changedKeys.length) return;
 
   client.ch.send(channels, { files, embeds: [embed] }, language, null, 10000);
-};
-
-const getAudit = async (guild: Eris.Guild, member: Eris.Member, actionType: number) => {
-  if (!guild?.members.get(client.user.id)?.permissions.has(128n)) return null;
-
-  const audits = await guild.getAuditLog({ limit: 5, actionType });
-  if (!audits || !audits.entries) return null;
-
-  return audits.entries
-    .filter((a) => a.targetID === member.user.id)
-    .sort((a, b) => client.ch.getUnix(b.id) - client.ch.getUnix(a.id))[0];
 };

@@ -31,15 +31,6 @@ export default async (guild: Eris.Guild) => {
     }),
   });
 
-  const getAudit = async () => {
-    const audits = await guild.getAuditLog({ limit: 3, actionType: 28 }).catch(() => null);
-    if (!audits || !audits.entries) return null;
-
-    return audits.entries
-      .filter((a) => a.targetID === client.user.id)
-      .sort((a, b) => client.ch.getUnix(b.id) - client.ch.getUnix(a.id))[0];
-  };
-
   const getChannel = () =>
     guild.channels
       .filter(
@@ -50,7 +41,7 @@ export default async (guild: Eris.Guild) => {
       .sort((a, b) => a.position - b.position)[0];
 
   const embed = getEmbed();
-  const audit = await getAudit();
+  const audit = await client.ch.getAudit(guild, 28, client.user);
   const content = audit ? `Thanks <@${audit.user.id}>, for adding me to your Server!` : undefined;
   const channel = getChannel();
   const language = await client.ch.languageSelector(null);

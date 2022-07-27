@@ -5,6 +5,7 @@ import type DBT from '../../../typings/DataBaseTypings';
 
 export default async (msg: CT.Message) => {
   if (!msg.guildID) return;
+  if (!msg.guild) return;
 
   const channels = (
     await client.ch
@@ -17,19 +18,12 @@ export default async (msg: CT.Message) => {
   const lan = msg.language.events.messageDelete;
   const con = client.constants.events.messageDelete;
 
-  const getAuditLogEntry = async () => {
-    if (!msg.guild?.members.get(client.user.id)?.permissions.has(128n)) return null;
-
-    const audits = await msg.guild.getAuditLog({ limit: 5, actionType: 72 });
-    if (!audits || !audits.entries) return null;
-
-    return audits.entries
-      .filter((a) => a.targetID === msg.author.id && a.channel?.id === msg.channel.id)
-      .sort((a, b) => client.ch.getUnix(b.id) - client.ch.getUnix(a.id))[0];
-  };
-
-  const auditLogEntry = await getAuditLogEntry();
-
+  const audit = await client.ch.getAudit(
+    msg.guild,
+    72,
+    msg.author,
+    (a) => a.channel?.id === msg.channel.id,
+  );
   const getEmbedWithEntry = () => {
     const embed: Eris.Embed = {
       type: 'rich',
@@ -38,7 +32,7 @@ export default async (msg: CT.Message) => {
         icon_url: con.image,
       },
       description: client.ch.stp(lan.descDetails, {
-        user: auditLogEntry?.user,
+        user: audit?.user,
         target: msg.author,
         channel: msg.channel,
       }),
@@ -46,8 +40,8 @@ export default async (msg: CT.Message) => {
       fields: [],
     };
 
-    if (auditLogEntry?.reason) {
-      embed.fields?.push({ name: msg.language.reason, value: auditLogEntry.reason });
+    if (audit?.reason) {
+      embed.fields?.push({ name: msg.language.reason, value: audit.reason });
     }
 
     return embed;
@@ -72,7 +66,7 @@ export default async (msg: CT.Message) => {
   };
 
   const maxFieldSize = 1024;
-  const embed = auditLogEntry ? getEmbedWithEntry() : getEmbedWithoutEntry();
+  const embed = audit ? getEmbedWithEntry() : getEmbedWithoutEntry();
 
   const getContentFields = () => {
     if (!msg.content?.length) return;

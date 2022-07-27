@@ -413,7 +413,7 @@ export default async (
     }
   }
 
-  const audit = await getAuditLogEntry(channel, actionType);
+  const audit = await client.ch.getAudit(channel.guild, actionType, channel);
   if (audit) {
     embed.description = client.ch.stp(lan.descDetails, {
       user: audit.user,
@@ -483,15 +483,4 @@ const getImage = (
       return con.TextChannelUpdate;
     }
   }
-};
-
-const getAuditLogEntry = async (channel: Eris.GuildChannel, actionType: number) => {
-  if (!channel.guild.members.get(client.user.id)?.permissions.has(128n)) return null;
-
-  const audits = await channel.guild.getAuditLog({ limit: 5, actionType });
-  if (!audits || !audits.entries) return null;
-
-  return audits.entries
-    .filter((a) => a.targetID === channel.id)
-    .sort((a, b) => client.ch.getUnix(b.id) - client.ch.getUnix(a.id))[0];
 };

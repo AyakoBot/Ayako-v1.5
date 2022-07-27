@@ -16,17 +16,6 @@ export default async (guild: Eris.Guild, role: Eris.Role) => {
   const lan = language.events.roleCreate;
   const con = client.constants.events.roleCreate;
 
-  const getAuditLogEntry = async () => {
-    if (!guild.members.get(client.user.id)?.permissions.has(128n)) return null;
-
-    const audits = await guild.getAuditLog({ limit: 5, actionType: 30 });
-    if (!audits || !audits.entries) return null;
-
-    return audits.entries
-      .filter((a) => a.targetID === role.id)
-      .sort((a, b) => client.ch.getUnix(b.id) - client.ch.getUnix(a.id))[0];
-  };
-
   const getEmbed = async () => {
     const embed: Eris.Embed = {
       type: 'rich',
@@ -35,7 +24,7 @@ export default async (guild: Eris.Guild, role: Eris.Role) => {
       fields: [],
     };
 
-    const audit = await getAuditLogEntry();
+    const audit = await client.ch.getAudit(guild, 30, role);
     if (role.managed && role.tags?.bot_id) {
       const manager = guild.members.get(role.tags?.bot_id);
       if (manager) {

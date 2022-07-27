@@ -21,7 +21,7 @@ export default async (
   const language = await client.ch.languageSelector(guild.id);
   const lan = language.events.messageDeleteBulk;
   const con = client.constants.events.messageDeleteBulk;
-  const audit = await getAuditLogEntry(guild, msgs[0].channel.id);
+  const audit = await client.ch.getAudit(guild, 73, msgs[0].channel);
 
   const embed: Eris.Embed = {
     type: 'rich',
@@ -165,17 +165,6 @@ export default async (
       })
       .catch(() => null);
   });
-};
-
-const getAuditLogEntry = async (guild: Eris.Guild, channelID: string) => {
-  if (!guild?.members.get(client.user.id)?.permissions.has(128n)) return null;
-
-  const audits = await guild.getAuditLog({ limit: 5, actionType: 73 });
-  if (!audits || !audits.entries) return null;
-
-  return audits.entries
-    .filter((a) => a.target && a.target.id === channelID)
-    .sort((a, b) => client.ch.getUnix(b.id) - client.ch.getUnix(a.id))[0];
 };
 
 const getAllAttachments = async (

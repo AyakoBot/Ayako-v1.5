@@ -39,3 +39,4 @@ export const getEmote                   = (await import(`./ClientHelperModules/g
 export const isManageable               = (await import(`./ClientHelperModules/isManageable`)).default;
 export const msgCTConvert               = (await import(`./ClientHelperModules/msgCTConvert`)).default;
 export const getMember                  = (await import(`./ClientHelperModules/getMember`)).default;
+export const getAudit                   = (await import(`./ClientHelperModules/getAudit`)).default;

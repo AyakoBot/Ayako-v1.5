@@ -59,8 +59,7 @@ const emojiCreated = async (
       fields: [],
     };
 
-    const audit = await getAuditLogEntry(guild, emoji, 60);
-
+    const audit = await client.ch.getAudit(guild, 60, emoji);
     if (audit) {
       embed.description = client.ch.stp(lan.descDetails, {
         user: audit.user,
@@ -116,8 +115,7 @@ const emojiDeleted = async (
       fields: [],
     };
 
-    const audit = await getAuditLogEntry(guild, emoji, 62);
-
+    const audit = await client.ch.getAudit(guild, 62, emoji);
     if (audit) {
       embed.description = client.ch.stp(lan.descDetails, {
         user: audit.user,
@@ -167,7 +165,7 @@ const emojiUpdated = async (
   const lan = language.events.emojiUpdate;
 
   const changedKeys: string[] = [];
-  const audit = await getAuditLogEntry(guild, emoji, 61);
+  const audit = await client.ch.getAudit(guild, 61, emoji);
 
   const getEmbed = (): Eris.Embed => ({
     type: 'rich',
@@ -253,15 +251,4 @@ const emojiUpdated = async (
 
   if (!changedKeys.length) return null;
   return { embeds: [embed], files: file ? [file] : undefined };
-};
-
-const getAuditLogEntry = async (guild: Eris.Guild, emoji: Eris.Emoji, actionType: 60 | 61 | 62) => {
-  if (!guild.members.get(client.user.id)?.permissions.has(128n)) return null;
-
-  const audits = await guild.getAuditLog({ limit: 5, actionType });
-  if (!audits || !audits.entries) return null;
-
-  return audits.entries
-    .filter((a) => a.targetID === emoji.id)
-    .sort((a, b) => client.ch.getUnix(b.id) - client.ch.getUnix(a.id))[0];
 };

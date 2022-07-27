@@ -315,26 +315,16 @@ const pinLog = async (
     type: 'rich',
     fields: [],
   });
-
-  const getAuditLogEntry = async (actionType: 74 | 75) => {
-    if (!msg.guild?.members.get(client.user.id)?.permissions.has(128n)) return null;
-
-    const audits = await msg.guild?.getAuditLog({ limit: 5, actionType });
-    if (!audits || !audits.entries) return null;
-
-    return audits.entries
-      .filter((a) => a.targetID === msg.id)
-      .sort((a, b) => client.ch.getUnix(b.id) - client.ch.getUnix(a.id))[0];
-  };
-
   const embed = getEmbed();
   const changedKeys: string[] = [];
 
   const pinned = async () => {
+    if (!msg.guild) return;
     changedKeys.push('pin');
+
     const con = client.constants.events.channelPin;
     const lan = msg.language.events.channelPin;
-    const audit = await getAuditLogEntry(74);
+    const audit = await client.ch.getAudit(msg.guild, 74, msg);
 
     if (audit) embed.description = client.ch.stp(lan.descDetails, { user: audit.user, msg });
     else embed.description = client.ch.stp(lan.desc, { msg });
@@ -349,10 +339,12 @@ const pinLog = async (
   };
 
   const unpinned = async () => {
+    if (!msg.guild) return;
     changedKeys.push('unpin');
+
     const con = client.constants.events.channelUnPin;
     const lan = msg.language.events.channelUnPin;
-    const audit = await getAuditLogEntry(75);
+    const audit = await client.ch.getAudit(msg.guild, 75, msg);
 
     if (audit) embed.description = client.ch.stp(lan.descDetails, { user: audit.user, msg });
     else embed.description = client.ch.stp(lan.desc, { msg });

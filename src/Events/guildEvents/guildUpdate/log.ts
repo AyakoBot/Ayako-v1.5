@@ -601,19 +601,9 @@ export default async (
 
   if (!changedKeys.length) return;
 
-  const audit = await getAudit(guild);
-
+  const audit = await client.ch.getAudit(guild, 1);
   if (audit) embed.description = client.ch.stp(lan.description, { user: audit.user });
   else embed.description = lan.descriptionNoAudit;
 
   client.ch.send(channels, { embeds: [embed], files }, language, null, 10000);
-};
-
-const getAudit = async (guild: Eris.Guild) => {
-  if (!guild?.members.get(client.user.id)?.permissions.has(128n)) return null;
-
-  const audits = await guild.getAuditLog({ limit: 5, actionType: 1 });
-  if (!audits || !audits.entries) return null;
-
-  return audits.entries.sort((a, b) => client.ch.getUnix(b.id) - client.ch.getUnix(a.id))[0];
 };

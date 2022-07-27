@@ -14,7 +14,7 @@ export default async (member: Eris.Member, oldState: Eris.OldVoiceState) => {
   const language = await client.ch.languageSelector(member.guild.id);
   const lan = language.events.voiceStateUpdate;
   const con = client.constants.events.voiceStateUpdate;
-  const audit = await getAuditLogEntry(member.guild, member.user);
+  const audit = await client.ch.getAudit(member.guild, 24, member.user);
 
   const getEmbed = (): Eris.Embed => ({
     type: 'rich',
@@ -82,15 +82,4 @@ export default async (member: Eris.Member, oldState: Eris.OldVoiceState) => {
   if (!changedKeys.length) return;
 
   client.ch.send(channels, { embeds: [embed] }, language, null, 10000);
-};
-
-const getAuditLogEntry = async (guild: Eris.Guild, user: Eris.User) => {
-  if (!guild.members.get(client.user.id)?.permissions.has(128n)) return null;
-
-  const audits = await guild.getAuditLog({ limit: 5, actionType: 24 });
-  if (!audits || !audits.entries) return null;
-
-  return audits.entries
-    .filter((a) => a.targetID === user.id)
-    .sort((a, b) => client.ch.getUnix(b.id) - client.ch.getUnix(a.id))[0];
 };

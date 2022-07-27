@@ -16,17 +16,6 @@ export default async (guild: Eris.Guild, user: Eris.User) => {
   const lan = language.events.guildBanRemove;
   const con = client.constants.events.guildBanRemove;
 
-  const getAuditLogEntry = async () => {
-    if (!guild.members.get(client.user.id)?.permissions.has(128n)) return null;
-
-    const audits = await guild.getAuditLog({ limit: 5, actionType: 22 });
-    if (!audits || !audits.entries) return null;
-
-    return audits.entries
-      .filter((a) => a.targetID === user.id)
-      .sort((a, b) => client.ch.getUnix(b.id) - client.ch.getUnix(a.id))[0];
-  };
-
   const getEmbed = async () => {
     const embed: Eris.Embed = {
       type: 'rich',
@@ -35,7 +24,7 @@ export default async (guild: Eris.Guild, user: Eris.User) => {
       fields: [],
     };
 
-    const audit = await getAuditLogEntry();
+    const audit = await client.ch.getAudit(guild, 22, user);
     if (audit) {
       embed.description = client.ch.stp(lan.descDetails, {
         user: audit.user,

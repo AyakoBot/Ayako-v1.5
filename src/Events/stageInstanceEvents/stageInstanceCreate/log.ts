@@ -15,11 +15,9 @@ export default async (stage: Eris.StageInstance) => {
   if (!channels) return;
 
   const language = await client.ch.languageSelector(guild.id);
-
   const lan = language.events.stageOpen;
   const con = client.constants.events.stageOpen;
-
-  const audit = await getAudit(guild);
+  const audit = await client.ch.getAudit(guild, 83);
 
   const getEmbed = (): Eris.Embed => ({
     type: 'rich',
@@ -42,13 +40,4 @@ export default async (stage: Eris.StageInstance) => {
   }
 
   client.ch.send(channels, { embeds: [embed] }, language, null, 10000);
-};
-
-const getAudit = async (guild: Eris.Guild) => {
-  if (!guild?.members.get(client.user.id)?.permissions.has(128n)) return null;
-
-  const audits = await guild.getAuditLog({ limit: 5, actionType: 83 });
-  if (!audits || !audits.entries) return null;
-
-  return audits.entries.sort((a, b) => client.ch.getUnix(b.id) - client.ch.getUnix(a.id))[0];
 };

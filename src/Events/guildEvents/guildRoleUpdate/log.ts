@@ -12,22 +12,9 @@ export default async (guild: Eris.Guild, role: Eris.Role, oldRole: Eris.OldRole)
   if (!channels) return;
 
   const language = await client.ch.languageSelector(guild.id);
-
   const lan = language.events.roleUpdate;
   const con = client.constants.events.roleUpdate;
-
-  const getAuditLogEntry = async () => {
-    if (!guild.members.get(client.user.id)?.permissions.has(128n)) return null;
-
-    const audits = await guild.getAuditLog({ limit: 5, actionType: 31 });
-    if (!audits || !audits.entries) return null;
-
-    return audits.entries
-      .filter((a) => a.targetID === role.id)
-      .sort((a, b) => client.ch.getUnix(b.id) - client.ch.getUnix(a.id))[0];
-  };
-
-  const audit = await getAuditLogEntry();
+  const audit = await client.ch.getAudit(guild, 31, role);
 
   const getEmbed = (): Eris.Embed => ({
     type: 'rich',
