@@ -274,9 +274,9 @@
       "channel": "This Invite leads to",
       "url": "Invite URL",
       "expires": "Expires at",
-      "age": "The maximum age before this Invite expires",
-      "uses": "The maximum uses before this Invite expires",
-      "used": "The amount of times this Invite was used",
+      "age": "Maxiumum Age",
+      "uses": "Maximum Uses",
+      "used": "Uses",
       "descDetails": "User <@{{user.id}}> / `{{user.username}}#{{user.discriminator}}` / `{{user.id}}`\nhas created an Invite"
     },
     "inviteDelete": {
