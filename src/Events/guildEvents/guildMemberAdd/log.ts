@@ -111,21 +111,25 @@ export default async (
 
       let mention: string;
       let tag: string;
+      let id: string;
 
       if (!usedInvite.inviter) {
         tag = language.unknown;
         mention = language.unknown;
+        id = language.unknown;
       } else if (usedInvite.inviter.id === guild.id) {
         tag = guild.name;
         mention = guild.name;
+        id = guild.id;
       } else {
         tag = `${usedInvite.inviter.username}#${usedInvite.inviter.discriminator}`;
         mention = `<@${usedInvite.inviter.id}>`;
+        id = usedInvite.inviter.id;
       }
 
       baseEmbed.fields?.push({
         name: lan.usedInvite,
-        value: client.ch.stp(lan.inviteInfo, { invite: usedInvite, tag, mention }),
+        value: client.ch.stp(lan.inviteInfo, { invite: usedInvite, tag, mention, id }),
         inline: false,
       });
     }

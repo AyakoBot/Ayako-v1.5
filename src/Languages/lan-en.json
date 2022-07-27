@@ -194,7 +194,7 @@
       "descriptionBot": "User <@{{user.id}}> / `{{user.username}}#{{user.discriminator}}` / `{{user.id}}`\nadded\nBot {{bot}} / `{{bot.tag}}` / `{{bot.id}}`\nto the Server",
       "descriptionBotNoAudit": "Bot {{bot}} / `{{bot.tag}}` / `{{bot.id}}`\nwas added to the Server",
       "usedInvite": "Invite Info",
-      "inviteInfo": "__Invite used:__ https://discord.gg/{{invite.code}} / `{{invite.code}}`\n__Inviter__: {{mention}} / `{{tag}}` / `{{inviter.id}}`\n__Invite uses:__ `{{invite.uses}}`",
+      "inviteInfo": "Invite used: https://discord.gg/{{invite.code}} / `{{invite.code}}`\nInviter: {{mention}} / `{{tag}}` / `{{id}}`\nInvite uses: `{{invite.uses}}`",
       "descriptionUser": "User <@{{user.id}}> / `{{user.username}}#{{user.discriminator}}` / `{{user.id}}`\nhas joined the Server",
       "verificationReason": "Ayako Verification"
     },
