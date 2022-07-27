@@ -181,7 +181,7 @@
     },
     "guildIntegrationsRemove": {
       "withoutAudit": "Executor <@{{user.id}}> / `{{user.username}}#{{user.discriminator}}` / `{{user.id}}`\nremoved\nIntegration Name: `{{integration.name}}` / ID: `{{integration.id}}`\n\nAdditional Information (if any):",
-      "withAudit": "Executor <@{{user.id}}> / `{{user.username}}#{{user.discriminator}}` / `{{user.id}}`\nremoved\nIntegration Name: `{{integration.name}}` / ID: `{{integration.id}}`\nby removing\nBot {{bot}} / `{{bot.tag}}` / `{{bot.id}}`\n\nAdditional Information (if any):",
+      "withAudit": "Executor <@{{user.id}}> / `{{user.username}}#{{user.discriminator}}` / `{{user.id}}`\nremoved\nIntegration Name: `{{integration.name}}` / ID: `{{integration.id}}`\nby removing\nBot <@{{bot.id}}> / `{{bot.username}}#{{bot.discriminator}}` / `{{bot.id}}`\n\nAdditional Information (if any):",
       "title": "Integration was removed"
     },
     "guildIntegrationsCreate": {
@@ -191,8 +191,8 @@
     "guildMemberAdd": {
       "titleUser": "Member Joined",
       "titleBot": "Bot was added",
-      "descriptionBot": "User <@{{user.id}}> / `{{user.username}}#{{user.discriminator}}` / `{{user.id}}`\nadded\nBot {{bot}} / `{{bot.tag}}` / `{{bot.id}}`\nto the Server",
-      "descriptionBotNoAudit": "Bot {{bot}} / `{{bot.tag}}` / `{{bot.id}}`\nwas added to the Server",
+      "descriptionBot": "User <@{{user.id}}> / `{{user.username}}#{{user.discriminator}}` / `{{user.id}}`\nadded\nBot <@{{bot.id}}> / `{{bot.username}}#{{bot.discriminator}}` / `{{bot.id}}`\nto the Server",
+      "descriptionBotNoAudit": "Bot <@{{bot.id}}> / `{{bot.username}}#{{bot.discriminator}}` / `{{bot.id}}`\nwas added to the Server",
       "usedInvite": "Invite Info",
       "inviteInfo": "Invite used: https://discord.gg/{{invite.code}} / `{{invite.code}}`\nInviter: {{mention}} / `{{tag}}` / `{{id}}`\nInvite uses: `{{invite.uses}}`",
       "descriptionUser": "User <@{{user.id}}> / `{{user.username}}#{{user.discriminator}}` / `{{user.id}}`\nhas joined the Server",
@@ -315,7 +315,7 @@
       "title": "Message Bulk Deleted",
       "desc": "{{amount}} Message(s) in\nChannel <#{{channel.id}}> / `{{channel.name}}` / `{{channel.id}}`\nwere bulk deleted",
       "descDetails": "{{amount}} Message(s) in\nChannel <#{{channel.id}}> / `{{channel.name}}` / `{{channel.id}}`\nwere bulk deleted by\nUser <@{{user.id}}> / `{{user.username}}#{{user.discriminator}}` / `{{user.id}}`",
-      "log": "{{author.id}} - {{author.tag}} | {{jumpLink}} | {{createdTime}}\n{{content}}\nEmbeds: {{embedLength}} | Attachments: {{attachmentsLength}}",
+      "log": "{{author.id}} - {{author.username}}#{{author.discriminator}} | {{jumpLink}} | {{createdTime}}\n{{content}}\nEmbeds: {{embedLength}} | Attachments: {{attachmentsLength}}",
       "deleteLog": "This Message had Attachments\nClick [here]({{jumpLink}}) to Jump to the Attachments Log",
       "attachmentsLog": "This is the Attachments Log to a Delete Message\nClick [here]({{jumpLink}}) to Jump to the Delete Log",
       "noContent": "No or Unknown Content"
@@ -348,7 +348,7 @@
     "roleRemove": {
       "title": "Role Deleted",
       "descDetails": "User <@{{user.id}}> / `{{user.username}}#{{user.discriminator}}` / `{{user.id}}`\nhas deleted\nRole `{{role.name}}` / `{{role.id}}`",
-      "descriptionAutorole": "Autorole `{{role.name}}` / `{{role.id}}`\nwas deleted since\nBot {{bot}} / `{{bot.username}}#{{bot.discriminator}}` / `{{bot.id}}`\nwas kicked from, or left, the Server",
+      "descriptionAutorole": "Autorole `{{role.name}}` / `{{role.id}}`\nwas deleted since\nBot <@{{bot.id}}> / `{{bot.username}}#{{bot.discriminator}}` / `{{bot.id}}`\nwas kicked from, or left, the Server",
       "desc": "Role `{{role.name}}` / `{{role.id}}`\nwas deleted"
     },
     "roleUpdate": {
