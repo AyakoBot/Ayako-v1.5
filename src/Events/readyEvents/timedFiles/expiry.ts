@@ -41,7 +41,7 @@ const expire = async (row: { expire: string; guildid: string }, tableName: strin
   const tableRows = (await client.ch
     .query(`SELECT * FROM ${tableName} WHERE guildid = $1 AND uniquetimestamp < $2;`, [
       row.guildid,
-      Date.now() - Number(row.expire),
+      Math.abs(Date.now() - Number(row.expire)),
     ])
     .then((r) => r || null)) as unknown as
     | DBT.punish_warns[]

@@ -172,7 +172,7 @@ export default async (
             target: member.user,
             time: String(member.communicationDisabledUntil).slice(0, -3),
             fullTime: moment
-              .duration(Date.now() - Number(member.communicationDisabledUntil))
+              .duration(Math.abs(Date.now() - Number(member.communicationDisabledUntil)))
               .format(
                 `Y [${language.time.years}], M [${language.time.months}], W [${language.time.weeks}], D [${language.time.days}], H [${language.time.hours}], m [${language.time.minutes}], s [${language.time.seconds}]`,
                 { trim: 'all' },
@@ -190,7 +190,7 @@ export default async (
           target: member.user,
           time: String(member.communicationDisabledUntil).slice(0, -3),
           fullTime: moment
-            .duration(Date.now() - Number(member.communicationDisabledUntil))
+            .duration(Math.abs(Date.now() - Number(member.communicationDisabledUntil)))
             .format(
               `Y [${language.time.years}], M [${language.time.months}], W [${language.time.weeks}], D [${language.time.days}], H [${language.time.hours}], m [${language.time.minutes}], s [${language.time.seconds}]`,
               { trim: 'all' },

@@ -25,7 +25,7 @@ export default async () => {
       guild.members
         .filter((m) => m.roles.includes(unverifiedRole.id))
         .forEach(async (member) => {
-          if (Number(member.joinedAt) >= Date.now() - Number(r.kickafter) * 60000) return;
+          if (Number(member.joinedAt) >= Math.abs(Date.now() - Number(r.kickafter) * 60000)) return;
           if (isKickable(member)) {
             const DM = await member.user.getDMChannel().catch(() => null);
             if (DM) await client.ch.send(DM, { embeds: [embed] }, language);
@@ -38,7 +38,7 @@ export default async () => {
     const noRoleCheck = () => {
       const members = guild.members.filter((m) => m.roles.length === 1);
       members.forEach(async (member) => {
-        if (Number(member.joinedAt) >= Date.now() - Number(r.kickafter) * 60000) return;
+        if (Number(member.joinedAt) >= Math.abs(Date.now() - Number(r.kickafter) * 60000)) return;
         if (isKickable(member)) {
           const DM = await member.user.getDMChannel().catch(() => null);
           if (DM) await client.ch.send(DM, { embeds: [embed] }, language);
