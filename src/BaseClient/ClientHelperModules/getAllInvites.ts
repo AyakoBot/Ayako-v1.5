@@ -1,4 +1,4 @@
-import Eris from 'eris';
+import type * as Eris from 'eris';
 
 export default async (guild: Eris.Guild) => {
   const client = (await import('../ErisClient')).default;
@@ -64,7 +64,7 @@ export default async (guild: Eris.Guild) => {
     maxAge: Infinity,
     maxUses: Infinity,
     uses: vanity.uses,
-    channel: guild.channels.filter((c) => c instanceof Eris.TextChannel)[0],
+    channel: guild.channels.filter((c) => 'createInvite' in c)[0],
     createdAt: guild.createdAt,
     memberCount: null,
     presenceCount: null,
