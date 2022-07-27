@@ -43,14 +43,15 @@ export default async (
     if (!('roles' in oldMember)) return;
     changedKeys.push('roles');
 
-    const updatedRoles = oldMember.roles.filter((a1) => !member.roles.includes(a1));
-    const removedRoles = updatedRoles.filter((a1) => !member.roles.includes(a1));
-    const addedRoles = updatedRoles.filter((a1) => member.roles.includes(a1));
+    const removedRoles = oldMember.roles.filter((a1) => !member.roles.includes(a1));
+    const addedRoles = member.roles.filter((a1) => !oldMember.roles.includes(a1));
 
     const removedContent = removedRoles
-      .map((r) => `${client.stringEmotes.minusBG} <@&${r}>`)
+      .map((r) => `${client.stringEmotes.minusBG} <@&${r}> / \`${guild.roles.get(r)?.name}\``)
       .join('\n');
-    const addedContent = addedRoles.map((r) => `${client.stringEmotes.plusBG} <@&${r}>`).join('\n');
+    const addedContent = addedRoles
+      .map((r) => `${client.stringEmotes.plusBG} <@&${r}> / \`${guild.roles.get(r)?.name}\``)
+      .join('\n');
 
     if (removedContent) {
       embed.fields?.push({
@@ -61,7 +62,7 @@ export default async (
     }
     if (addedContent) {
       embed.fields?.push({
-        name: lan.removed,
+        name: lan.added,
         value: addedContent,
         inline: false,
       });
