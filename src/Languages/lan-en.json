@@ -593,6 +593,9 @@
         "prefix": "Assign a custom Prefix to Ayako"
       },
       "settings": {
+        "anti-spam": {
+          
+        },
         "separators": {
           "type": "Separator",
           "edit": {

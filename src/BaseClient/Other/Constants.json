@@ -471,7 +471,12 @@
             { "name": "prefix", "category": "chats" }
           ]
         }
-      ]
+      ],
+      "settings": {
+        "anti-spam": {
+          
+        }
+      }
     }
   }
 }

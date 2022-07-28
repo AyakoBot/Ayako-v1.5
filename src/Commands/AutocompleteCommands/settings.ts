@@ -10,11 +10,13 @@ const run: CT.AutocompleteCommand = async (
   if (!declaredCategory) return [{ name: lan.declareCategory, value: 'nothing' }];
   if (!('value' in declaredCategory)) return [{ name: language.error, value: 'nothing' }];
 
-  const { categories } =
-    client.constants.commands.settings.categories[declaredCategory.value as never];
+  const category = client.constants.commands.settings.categories.find(
+    (c) => c.name === declaredCategory.value,
+  );
+  if (!category) return [{ name: language.error, value: 'nothing' }];
 
-  return categories.map((c) => ({
-    name: lan.categories[c.name as keyof typeof lan.categories],
+  return category.categories.map((c) => ({
+    name: lan.settingsNames[c.name as keyof typeof lan.settingsNames],
     value: c.name,
   }));
 };

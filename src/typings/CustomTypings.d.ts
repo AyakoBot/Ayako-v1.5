@@ -172,8 +172,11 @@ export interface OldUser {
 }
 
 export interface SettingsFile {
-  default: (
-    interaction: Eris.Interaction,
-    language: typeof import('../../Languages/lan-en.json'),
-  ) => void;
+  default: {
+    displayEmbed: (
+      interaction: Eris.Interaction,
+      language: typeof import('../Languages/lan-en.json'),
+      embed: Eris.Embed,
+    ) => Promise<Eris.Embed>;
+  };
 }
