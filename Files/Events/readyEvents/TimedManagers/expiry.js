@@ -93,12 +93,14 @@ const logExpire = async (rows, client, guildid) => {
     const embed = new Builders.UnsafeEmbedBuilder();
     const user = client.users.cache.get(p.userid);
 
-    const endedAt = client.ch.stp(lan.endedAt, {
-      time: `<t:${String(Number(p.uniquetimestamp) + Number(p.duration)).slice(
-        0,
-        -3,
-      )}:F> (<t:${String(Number(p.uniquetimestamp) + Number(p.duration)).slice(0, -3)}:R>)`,
-    });
+    const endedAt = p.duration
+      ? client.ch.stp(lan.endedAt, {
+          time: `<t:${String(Number(p.uniquetimestamp) + Number(p.duration)).slice(
+            0,
+            -3,
+          )}:F> (<t:${String(Number(p.uniquetimestamp) + Number(p.duration)).slice(0, -3)}:R>)`,
+        })
+      : language.none;
 
     embed
       .setDescription(`**${language.reason}:**\n${p.reason}`)
