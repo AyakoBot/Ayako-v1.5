@@ -46,7 +46,7 @@ const stickyroles = async (
     await client.ch.roleManager.add(
       member,
       rolesToAdd,
-      language.slashCommands.settings.sticky.roleReason,
+      language.slashCommands.settings.settings.sticky.roleReason,
     );
   }
 };
@@ -124,6 +124,6 @@ const addPerms = async (
       stickypermmembersRow.allowbits || 0,
       stickypermmembersRow.denybits || 0,
       1,
-      language.slashCommands.settings.sticky.permReason,
+      language.slashCommands.settings.settings.sticky.permReason,
     );
   });

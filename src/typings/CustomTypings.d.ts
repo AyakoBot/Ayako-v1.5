@@ -170,3 +170,10 @@ export interface OldUser {
   discriminator: string;
   avatar?: string;
 }
+
+export interface SettingsFile {
+  default: (
+    interaction: Eris.Interaction,
+    language: typeof import('../../Languages/lan-en.json'),
+  ) => void;
+}
