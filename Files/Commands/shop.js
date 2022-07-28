@@ -87,7 +87,7 @@ module.exports = {
         embeds: [embed],
         components: msg.client.ch.buttonRower([menu]),
       });
-      interactionHandler(msg, m, menu);
+      interactionHandler(msg, m);
     } else if (msg.guild.id === '266632338883084290') {
       const embed = new Builders.UnsafeEmbedBuilder()
         .setAuthor({
@@ -161,10 +161,30 @@ const interactionHandler = async (msg, m) => {
     }
 
     const role = msg.guild.roles.cache.get(r[0]);
+
+    if (interaction.member.roles.cache.has(role.id)) {
+      msg.client.ch.reply(interaction, {
+        content: `You already have this Role!`,
+        ephemeral: true,
+      });
+      return;
+    }
+
     msg.guild.members.cache
       .get(interaction.user.id)
       ?.roles.add(role)
       .catch(() => {});
+
+    msg.client.ch.query(`UPDATE balance SET balance = $1 WHERE userid = $2 AND guildid = $3;`, [
+      Math.abs(Number(r[1]) - Number(coins)),
+      interaction.user.id,
+      interaction.guild.id,
+    ]);
+
+    msg.client.ch.reply(interaction, {
+      content: `Congraz, you now have ${role}\nThis has cost you ${r[1]} <a:AMLantern:982432370814759003>`,
+      ephemeral: true,
+    });
   });
 
   collector.on('end', (collected, reason) => {
