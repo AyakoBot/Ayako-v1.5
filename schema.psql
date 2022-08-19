@@ -1,0 +1,1606 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 14.4 (Ubuntu 14.4-1.pgdg20.04+1)
+-- Dumped by pg_dump version 14.4 (Ubuntu 14.4-1.pgdg20.04+1)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: afk; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.afk (
+    userid character varying NOT NULL,
+    text text NOT NULL,
+    since numeric NOT NULL,
+    guildid character varying NOT NULL
+);
+
+
+ALTER TABLE public.afk OWNER TO postgres;
+
+--
+-- Name: antiraidsettings; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.antiraidsettings (
+    guildid character varying NOT NULL,
+    active boolean NOT NULL,
+    punishment boolean NOT NULL,
+    posttof boolean,
+    postchannel character varying,
+    pingroles character varying[],
+    pingusers character varying[],
+    "time" numeric NOT NULL,
+    jointhreshold numeric NOT NULL,
+    punishmenttof boolean
+);
+
+
+ALTER TABLE public.antiraidsettings OWNER TO postgres;
+
+--
+-- Name: antispamsettings; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.antispamsettings (
+    guildid character varying NOT NULL,
+    active boolean NOT NULL,
+    giveofficialwarnstof boolean NOT NULL,
+    muteafterwarnsamount numeric NOT NULL,
+    kickafterwarnsamount numeric NOT NULL,
+    banafterwarnsamount numeric NOT NULL,
+    muteenabledtof boolean NOT NULL,
+    kickenabledtof boolean NOT NULL,
+    banenabledtof boolean NOT NULL,
+    readofwarnstof boolean NOT NULL,
+    bpuserid character varying[],
+    bpchannelid character varying[],
+    bproleid character varying[],
+    forcedisabled boolean
+);
+
+
+ALTER TABLE public.antispamsettings OWNER TO postgres;
+
+--
+-- Name: antispamsettings_banafterwarnsamount_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.antispamsettings_banafterwarnsamount_seq
+    AS smallint
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.antispamsettings_banafterwarnsamount_seq OWNER TO postgres;
+
+--
+-- Name: antispamsettings_banafterwarnsamount_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.antispamsettings_banafterwarnsamount_seq OWNED BY public.antispamsettings.banafterwarnsamount;
+
+
+--
+-- Name: antispamsettings_kickafterwarnsamount_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.antispamsettings_kickafterwarnsamount_seq
+    AS smallint
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.antispamsettings_kickafterwarnsamount_seq OWNER TO postgres;
+
+--
+-- Name: antispamsettings_kickafterwarnsamount_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.antispamsettings_kickafterwarnsamount_seq OWNED BY public.antispamsettings.kickafterwarnsamount;
+
+
+--
+-- Name: antispamsettings_muteafterwarnsamount_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.antispamsettings_muteafterwarnsamount_seq
+    AS smallint
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.antispamsettings_muteafterwarnsamount_seq OWNER TO postgres;
+
+--
+-- Name: antispamsettings_muteafterwarnsamount_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.antispamsettings_muteafterwarnsamount_seq OWNED BY public.antispamsettings.muteafterwarnsamount;
+
+
+--
+-- Name: antivirus; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.antivirus (
+    guildid character varying NOT NULL,
+    active boolean NOT NULL,
+    bantof boolean NOT NULL,
+    warntof boolean NOT NULL,
+    kicktof boolean NOT NULL,
+    mutetof boolean NOT NULL,
+    verbaltof boolean NOT NULL,
+    muteafterwarnsamount numeric,
+    banafterwarnsamount numeric,
+    kickafterwarnsamount numeric,
+    warnafterwarnsamount numeric,
+    minimize numeric,
+    delete numeric,
+    linklogging boolean NOT NULL,
+    linklogchannels character varying[]
+);
+
+
+ALTER TABLE public.antivirus OWNER TO postgres;
+
+--
+-- Name: antiviruslog; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.antiviruslog (
+    guildid character varying NOT NULL,
+    userid character varying NOT NULL,
+    type text NOT NULL,
+    dateofwarn numeric NOT NULL
+);
+
+
+ALTER TABLE public.antiviruslog OWNER TO postgres;
+
+--
+-- Name: autopunish; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.autopunish (
+    guildid character varying NOT NULL,
+    uniquetimestamp numeric NOT NULL,
+    duration numeric,
+    warnamount numeric NOT NULL,
+    punishment numeric,
+    active boolean NOT NULL,
+    addroles character varying[],
+    removeroles character varying[],
+    sendtof boolean NOT NULL,
+    sendchannels character varying[],
+    confirmationreq boolean NOT NULL,
+    punishmentawaittime numeric
+);
+
+
+ALTER TABLE public.autopunish OWNER TO postgres;
+
+--
+-- Name: autorole; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.autorole (
+    guildid character varying NOT NULL,
+    active boolean NOT NULL,
+    botroleid character varying[],
+    userroleid character varying[],
+    allroleid character varying[]
+);
+
+
+ALTER TABLE public.autorole OWNER TO postgres;
+
+--
+-- Name: balance; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.balance (
+    userid character varying NOT NULL,
+    guildid character varying NOT NULL,
+    balance numeric
+);
+
+
+ALTER TABLE public.balance OWNER TO postgres;
+
+--
+-- Name: blacklists; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.blacklists (
+    active boolean NOT NULL,
+    warntof boolean NOT NULL,
+    kicktof boolean NOT NULL,
+    bantof boolean NOT NULL,
+    warnafter numeric,
+    muteafter numeric,
+    kickafter numeric,
+    banafter numeric,
+    bpchannelid character varying[],
+    bproleid character varying[],
+    bpuserid character varying[],
+    words text[],
+    guildid character varying NOT NULL,
+    mutetof boolean NOT NULL
+);
+
+
+ALTER TABLE public.blacklists OWNER TO postgres;
+
+--
+-- Name: cooldowns; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.cooldowns (
+    command text NOT NULL,
+    cooldown numeric NOT NULL,
+    active boolean NOT NULL,
+    bpchannelid character varying[],
+    bproleid character varying[],
+    bpuserid character varying[],
+    activechannelid character varying[],
+    uniquetimestamp numeric NOT NULL,
+    guildid character varying NOT NULL
+);
+
+
+ALTER TABLE public.cooldowns OWNER TO postgres;
+
+--
+-- Name: customembeds; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.customembeds (
+    color text,
+    title text,
+    url text,
+    authorname text,
+    authoriconurl text,
+    authorurl text,
+    description text,
+    thumbnail text,
+    fieldnames text[],
+    fieldvalues text[],
+    fieldinlines boolean[],
+    image text,
+    footertext text,
+    footericonurl text,
+    uniquetimestamp numeric NOT NULL,
+    guildid character varying NOT NULL,
+    name text,
+    "timestamp" text
+);
+
+
+ALTER TABLE public.customembeds OWNER TO postgres;
+
+--
+-- Name: deletecommands; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.deletecommands (
+    uniquetimestamp numeric NOT NULL,
+    guildid character varying NOT NULL,
+    deletecommand boolean NOT NULL,
+    deletereply boolean NOT NULL,
+    deletetimeout numeric,
+    active boolean NOT NULL,
+    commands text[]
+);
+
+
+ALTER TABLE public.deletecommands OWNER TO postgres;
+
+--
+-- Name: disabledcommands; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.disabledcommands (
+    guildid character varying NOT NULL,
+    active boolean NOT NULL,
+    commands text[],
+    channels character varying[],
+    bproleid character varying[],
+    blroleid character varying[],
+    bpuserid character varying[],
+    bluserid character varying[],
+    uniquetimestamp numeric
+);
+
+
+ALTER TABLE public.disabledcommands OWNER TO postgres;
+
+--
+-- Name: disboard; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.disboard (
+    guildid character varying NOT NULL,
+    active boolean NOT NULL,
+    nextbump numeric,
+    channelid character varying,
+    repeatreminder numeric,
+    roles character varying[],
+    users character varying[],
+    tempchannelid character varying,
+    deletereply boolean NOT NULL,
+    msgid character varying
+);
+
+
+ALTER TABLE public.disboard OWNER TO postgres;
+
+--
+-- Name: giveawaycollecttime; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.giveawaycollecttime (
+    userid character varying NOT NULL,
+    giveaway character varying NOT NULL,
+    endtime numeric NOT NULL,
+    msgid character varying NOT NULL
+);
+
+
+ALTER TABLE public.giveawaycollecttime OWNER TO postgres;
+
+--
+-- Name: giveaways; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.giveaways (
+    guildid character varying NOT NULL,
+    msgid character varying NOT NULL,
+    description text NOT NULL,
+    winnercount numeric NOT NULL,
+    endtime numeric NOT NULL,
+    reqrole character varying,
+    actualprize text,
+    host character varying NOT NULL,
+    ended boolean NOT NULL,
+    channelid character varying NOT NULL,
+    participants character varying[],
+    collecttime numeric
+);
+
+
+ALTER TABLE public.giveaways OWNER TO postgres;
+
+--
+-- Name: guildsettings; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.guildsettings (
+    guildid character varying NOT NULL,
+    prefix text,
+    interactionsmode boolean NOT NULL,
+    lan text NOT NULL,
+    errorchannel character varying,
+    vanity text,
+    voterole character varying
+);
+
+
+ALTER TABLE public.guildsettings OWNER TO postgres;
+
+--
+-- Name: level; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.level (
+    userid character varying NOT NULL,
+    guildid character varying DEFAULT 1 NOT NULL,
+    type text NOT NULL,
+    xp numeric NOT NULL,
+    level numeric
+);
+
+
+ALTER TABLE public.level OWNER TO postgres;
+
+--
+-- Name: leveling; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.leveling (
+    guildid character varying NOT NULL,
+    active boolean NOT NULL,
+    xpmultiplier numeric NOT NULL,
+    blchannels character varying[],
+    blroles character varying[],
+    blusers character varying[],
+    wlchannels character varying[],
+    wlroles character varying[],
+    wlusers character varying[],
+    xppermsg numeric NOT NULL,
+    rolemode boolean NOT NULL,
+    lvlupmode numeric,
+    lvlupdeltimeout numeric,
+    lvlupchannels character varying[],
+    lvlupemotes character varying[],
+    embed numeric,
+    ignoreprefixes boolean NOT NULL,
+    prefixes text[]
+);
+
+
+ALTER TABLE public.leveling OWNER TO postgres;
+
+--
+-- Name: levelingmultiplierchannels; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.levelingmultiplierchannels (
+    guildid character varying NOT NULL,
+    channels character varying[],
+    multiplier numeric NOT NULL,
+    uniquetimestamp numeric NOT NULL
+);
+
+
+ALTER TABLE public.levelingmultiplierchannels OWNER TO postgres;
+
+--
+-- Name: levelingmultiplierroles; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.levelingmultiplierroles (
+    guildid character varying NOT NULL,
+    roles character varying[],
+    multiplier numeric,
+    uniquetimestamp numeric NOT NULL
+);
+
+
+ALTER TABLE public.levelingmultiplierroles OWNER TO postgres;
+
+--
+-- Name: levelingroles; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.levelingroles (
+    guildid character varying NOT NULL,
+    level numeric,
+    roles character varying[],
+    uniquetimestamp numeric NOT NULL
+);
+
+
+ALTER TABLE public.levelingroles OWNER TO postgres;
+
+--
+-- Name: levelingruleschannels; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.levelingruleschannels (
+    guildid character varying NOT NULL,
+    channels character varying[],
+    rules numeric,
+    uniquetimestamp numeric NOT NULL,
+    hasleastattachments numeric,
+    hasmostattachments numeric,
+    hasleastcharacters numeric,
+    hasmostcharacters numeric,
+    hasleastwords numeric,
+    hasmostwords numeric,
+    mentionsleastusers numeric,
+    mentionsmostusers numeric,
+    mentionsleastchannels numeric,
+    mentionsmostchannels numeric,
+    mentionsleastroles numeric,
+    mentionsmostroles numeric,
+    hasleastlinks numeric,
+    hasmostlinks numeric,
+    hasleastemotes numeric,
+    hasmostemotes numeric,
+    hasleastmentions numeric,
+    hasmostmentions numeric
+);
+
+
+ALTER TABLE public.levelingruleschannels OWNER TO postgres;
+
+--
+-- Name: logchannels; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.logchannels (
+    guildid character varying NOT NULL,
+    emojievents character varying[],
+    guildevents character varying[],
+    inviteevents character varying[],
+    messageevents character varying[],
+    modlogs character varying[],
+    roleevents character varying[],
+    userevents character varying[],
+    voiceevents character varying[],
+    webhookevents character varying[],
+    settingslog character varying[],
+    channelevents character varying[],
+    stageinstanceevents character varying[],
+    stickerevents character varying[],
+    threadevents character varying[],
+    guildmemberevents character varying[],
+    stageevents character varying[]
+);
+
+
+ALTER TABLE public.logchannels OWNER TO postgres;
+
+--
+-- Name: modroles; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.modroles (
+    guildid character varying NOT NULL,
+    roleid character varying NOT NULL,
+    perms bigint,
+    whitelistedcommands text[],
+    whitelistedusers character varying[],
+    whitelistedroles character varying[],
+    blacklistedroles character varying[],
+    blacklistedusers character varying[],
+    active boolean NOT NULL,
+    blacklistedcommands text[],
+    uniquetimestamp numeric NOT NULL,
+    mutedurationdefault numeric
+);
+
+
+ALTER TABLE public.modroles OWNER TO postgres;
+
+--
+-- Name: modsettings; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.modsettings (
+    guildid character varying NOT NULL,
+    bans boolean NOT NULL,
+    channelbans boolean NOT NULL,
+    kicks boolean NOT NULL,
+    mutes boolean NOT NULL,
+    warns boolean NOT NULL,
+    banstime numeric,
+    channelbanstime numeric,
+    kickstime numeric,
+    mutestime numeric,
+    warnstime numeric
+);
+
+
+ALTER TABLE public.modsettings OWNER TO postgres;
+
+--
+-- Name: nitroroles; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.nitroroles (
+    guildid character varying NOT NULL,
+    uniquetimestamp numeric NOT NULL,
+    roles character varying[],
+    days numeric
+);
+
+
+ALTER TABLE public.nitroroles OWNER TO postgres;
+
+--
+-- Name: nitrosettings; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.nitrosettings (
+    guildid character varying NOT NULL,
+    active boolean NOT NULL,
+    logchannels character varying[],
+    rolemode boolean NOT NULL
+);
+
+
+ALTER TABLE public.nitrosettings OWNER TO postgres;
+
+--
+-- Name: nitrousers; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.nitrousers (
+    guildid character varying NOT NULL,
+    userid character varying NOT NULL,
+    booststart numeric NOT NULL,
+    boostend numeric
+);
+
+
+ALTER TABLE public.nitrousers OWNER TO postgres;
+
+--
+-- Name: policy_guilds; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.policy_guilds (
+    guildid character varying NOT NULL
+);
+
+
+ALTER TABLE public.policy_guilds OWNER TO postgres;
+
+--
+-- Name: policy_users; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.policy_users (
+    userid character varying NOT NULL
+);
+
+
+ALTER TABLE public.policy_users OWNER TO postgres;
+
+--
+-- Name: punish_bans; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.punish_bans (
+    guildid character varying NOT NULL,
+    userid character varying NOT NULL,
+    reason text,
+    uniquetimestamp numeric NOT NULL,
+    channelid character varying NOT NULL,
+    channelname text NOT NULL,
+    executorid character varying NOT NULL,
+    executorname text NOT NULL,
+    msgid numeric NOT NULL,
+    duration numeric
+);
+
+
+ALTER TABLE public.punish_bans OWNER TO postgres;
+
+--
+-- Name: punish_channelbans; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.punish_channelbans (
+    guildid character varying NOT NULL,
+    userid character varying NOT NULL,
+    reason text,
+    uniquetimestamp numeric NOT NULL,
+    channelid character varying NOT NULL,
+    channelname text NOT NULL,
+    executorid character varying NOT NULL,
+    executorname text NOT NULL,
+    msgid character varying NOT NULL,
+    banchannelid character varying NOT NULL,
+    duration numeric
+);
+
+
+ALTER TABLE public.punish_channelbans OWNER TO postgres;
+
+--
+-- Name: punish_kicks; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.punish_kicks (
+    guildid character varying NOT NULL,
+    userid character varying NOT NULL,
+    reason text,
+    uniquetimestamp numeric NOT NULL,
+    channelid character varying NOT NULL,
+    channelname text NOT NULL,
+    executorid character varying NOT NULL,
+    executorname text NOT NULL,
+    msgid numeric NOT NULL
+);
+
+
+ALTER TABLE public.punish_kicks OWNER TO postgres;
+
+--
+-- Name: punish_mutes; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.punish_mutes (
+    guildid character varying NOT NULL,
+    userid character varying NOT NULL,
+    reason text,
+    uniquetimestamp numeric NOT NULL,
+    channelid character varying NOT NULL,
+    channelname text NOT NULL,
+    executorid character varying NOT NULL,
+    executorname text NOT NULL,
+    msgid character varying NOT NULL,
+    duration numeric
+);
+
+
+ALTER TABLE public.punish_mutes OWNER TO postgres;
+
+--
+-- Name: punish_tempbans; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.punish_tempbans (
+    guildid character varying NOT NULL,
+    userid character varying NOT NULL,
+    reason text,
+    uniquetimestamp numeric NOT NULL,
+    channelid character varying NOT NULL,
+    channelname text NOT NULL,
+    executorid character varying NOT NULL,
+    executorname text NOT NULL,
+    msgid character varying NOT NULL,
+    duration numeric NOT NULL
+);
+
+
+ALTER TABLE public.punish_tempbans OWNER TO postgres;
+
+--
+-- Name: punish_tempchannelbans; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.punish_tempchannelbans (
+    guildid character varying NOT NULL,
+    userid character varying NOT NULL,
+    reason text,
+    uniquetimestamp numeric NOT NULL,
+    channelid character varying NOT NULL,
+    channelname text NOT NULL,
+    executorid character varying NOT NULL,
+    executorname text NOT NULL,
+    msgid character varying NOT NULL,
+    banchannelid character varying NOT NULL,
+    duration numeric NOT NULL
+);
+
+
+ALTER TABLE public.punish_tempchannelbans OWNER TO postgres;
+
+--
+-- Name: punish_tempmutes; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.punish_tempmutes (
+    guildid character varying NOT NULL,
+    userid character varying NOT NULL,
+    reason text,
+    uniquetimestamp numeric NOT NULL,
+    channelid character varying NOT NULL,
+    channelname text NOT NULL,
+    executorid character varying NOT NULL,
+    executorname text NOT NULL,
+    msgid character varying NOT NULL,
+    duration numeric NOT NULL
+);
+
+
+ALTER TABLE public.punish_tempmutes OWNER TO postgres;
+
+--
+-- Name: punish_warns; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.punish_warns (
+    guildid character varying NOT NULL,
+    userid character varying NOT NULL,
+    reason text,
+    uniquetimestamp numeric NOT NULL,
+    channelid character varying NOT NULL,
+    channelname text NOT NULL,
+    executorid character varying NOT NULL,
+    executorname text NOT NULL,
+    msgid character varying NOT NULL
+);
+
+
+ALTER TABLE public.punish_warns OWNER TO postgres;
+
+--
+-- Name: reminders; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.reminders (
+    userid character varying NOT NULL,
+    channelid character varying NOT NULL,
+    reason text NOT NULL,
+    uniquetimestamp numeric NOT NULL,
+    endtime numeric NOT NULL,
+    msgid numeric NOT NULL
+);
+
+
+ALTER TABLE public.reminders OWNER TO postgres;
+
+--
+-- Name: roleseparator; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.roleseparator (
+    guildid character varying NOT NULL,
+    separator character varying NOT NULL,
+    active boolean NOT NULL,
+    stoprole character varying,
+    isvarying boolean NOT NULL,
+    roles character varying[],
+    uniquetimestamp numeric NOT NULL
+);
+
+
+ALTER TABLE public.roleseparator OWNER TO postgres;
+
+--
+-- Name: roleseparatorsettings; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.roleseparatorsettings (
+    guildid character varying NOT NULL,
+    stillrunning boolean NOT NULL,
+    channelid character varying,
+    messageid character varying,
+    duration numeric,
+    startat numeric,
+    index numeric,
+    length numeric
+);
+
+
+ALTER TABLE public.roleseparatorsettings OWNER TO postgres;
+
+--
+-- Name: rrbuttons; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.rrbuttons (
+    uniquetimestamp numeric NOT NULL,
+    roles character varying[],
+    emoteid character varying,
+    buttontext text,
+    active boolean NOT NULL,
+    messagelink text NOT NULL,
+    guildid character varying NOT NULL
+);
+
+
+ALTER TABLE public.rrbuttons OWNER TO postgres;
+
+--
+-- Name: rrreactions; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.rrreactions (
+    uniquetimestamp numeric NOT NULL,
+    emoteid character varying NOT NULL,
+    roles character varying[],
+    active boolean NOT NULL,
+    messagelink text NOT NULL,
+    guildid character varying NOT NULL
+);
+
+
+ALTER TABLE public.rrreactions OWNER TO postgres;
+
+--
+-- Name: rrsettings; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.rrsettings (
+    guildid character varying NOT NULL,
+    messagelink text NOT NULL,
+    uniquetimestamp numeric NOT NULL,
+    name text NOT NULL,
+    onlyone boolean,
+    active boolean NOT NULL,
+    anyroles character varying[]
+);
+
+
+ALTER TABLE public.rrsettings OWNER TO postgres;
+
+--
+-- Name: selfroles; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.selfroles (
+    guildid character varying NOT NULL,
+    roles character varying[],
+    onlyone boolean,
+    uniquetimestamp numeric NOT NULL,
+    blacklistedroles character varying[],
+    blacklistedusers character varying[],
+    whitelistedroles character varying[],
+    whitelistedusers character varying[],
+    active boolean NOT NULL,
+    name text NOT NULL
+);
+
+
+ALTER TABLE public.selfroles OWNER TO postgres;
+
+--
+-- Name: stats; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.stats (
+    usercount numeric NOT NULL,
+    guildcount numeric NOT NULL,
+    channelcount numeric NOT NULL,
+    rolecount numeric NOT NULL,
+    allusers numeric NOT NULL,
+    willis text[],
+    count numeric,
+    antispam boolean NOT NULL,
+    verbosity boolean NOT NULL,
+    heartbeat numeric NOT NULL
+);
+
+
+ALTER TABLE public.stats OWNER TO postgres;
+
+--
+-- Name: statschannel; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.statschannel (
+    guildid character varying NOT NULL,
+    channelid character varying NOT NULL,
+    type text
+);
+
+
+ALTER TABLE public.statschannel OWNER TO postgres;
+
+--
+-- Name: sticky; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.sticky (
+    guildid character varying NOT NULL,
+    roles character varying[],
+    stickyrolesmode boolean NOT NULL,
+    stickyrolesactive boolean NOT NULL,
+    stickypermsactive boolean NOT NULL
+);
+
+
+ALTER TABLE public.sticky OWNER TO postgres;
+
+--
+-- Name: stickypermmembers; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.stickypermmembers (
+    userid character varying NOT NULL,
+    guildid character varying NOT NULL,
+    channelid character varying NOT NULL,
+    denybits bigint,
+    allowbits bigint
+);
+
+
+ALTER TABLE public.stickypermmembers OWNER TO postgres;
+
+--
+-- Name: stickyrolemembers; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.stickyrolemembers (
+    userid character varying NOT NULL,
+    guildid character varying NOT NULL,
+    roles character varying[] NOT NULL
+);
+
+
+ALTER TABLE public.stickyrolemembers OWNER TO postgres;
+
+--
+-- Name: suggestionsettings; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.suggestionsettings (
+    guildid character varying NOT NULL,
+    active boolean NOT NULL,
+    channelid character varying,
+    novoteroles character varying[],
+    novoteusers character varying[],
+    approverroleid character varying[],
+    anon boolean NOT NULL,
+    nosendroles character varying[],
+    nosendusers character varying[]
+);
+
+
+ALTER TABLE public.suggestionsettings OWNER TO postgres;
+
+--
+-- Name: suggestionvotes; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.suggestionvotes (
+    guildid character varying NOT NULL,
+    msgid character varying NOT NULL,
+    authorid character varying NOT NULL,
+    downvoted character varying[],
+    upvoted character varying[],
+    ended boolean NOT NULL
+);
+
+
+ALTER TABLE public.suggestionvotes OWNER TO postgres;
+
+--
+-- Name: toxicitycheck; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.toxicitycheck (
+    guildid character varying NOT NULL,
+    userid character varying NOT NULL,
+    amount numeric NOT NULL
+);
+
+
+ALTER TABLE public.toxicitycheck OWNER TO postgres;
+
+--
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.users (
+    userid character varying NOT NULL,
+    votereminders boolean
+);
+
+
+ALTER TABLE public.users OWNER TO postgres;
+
+--
+-- Name: verification; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.verification (
+    guildid character varying NOT NULL,
+    logchannel character varying,
+    finishedrole character varying,
+    pendingrole character varying,
+    startchannel character varying,
+    selfstart boolean NOT NULL,
+    kickafter numeric,
+    kicktof boolean NOT NULL,
+    active boolean NOT NULL
+);
+
+
+ALTER TABLE public.verification OWNER TO postgres;
+
+--
+-- Name: votereminder; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.votereminder (
+    userid character varying NOT NULL,
+    removetime numeric NOT NULL,
+    voted character varying NOT NULL
+);
+
+
+ALTER TABLE public.votereminder OWNER TO postgres;
+
+--
+-- Name: voterewards; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.voterewards (
+    userid character varying NOT NULL,
+    roleid character varying NOT NULL,
+    removetime numeric NOT NULL,
+    voted character varying NOT NULL
+);
+
+
+ALTER TABLE public.voterewards OWNER TO postgres;
+
+--
+-- Name: votetokens; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.votetokens (
+    guildid character varying NOT NULL,
+    token text NOT NULL
+);
+
+
+ALTER TABLE public.votetokens OWNER TO postgres;
+
+--
+-- Name: welcome; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.welcome (
+    guildid character varying NOT NULL,
+    channelid character varying,
+    active boolean NOT NULL,
+    embed numeric,
+    pingroles character varying[],
+    pingusers character varying[]
+);
+
+
+ALTER TABLE public.welcome OWNER TO postgres;
+
+--
+-- Name: antispamsettings muteafterwarnsamount; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.antispamsettings ALTER COLUMN muteafterwarnsamount SET DEFAULT nextval('public.antispamsettings_muteafterwarnsamount_seq'::regclass);
+
+
+--
+-- Name: antispamsettings kickafterwarnsamount; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.antispamsettings ALTER COLUMN kickafterwarnsamount SET DEFAULT nextval('public.antispamsettings_kickafterwarnsamount_seq'::regclass);
+
+
+--
+-- Name: antispamsettings banafterwarnsamount; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.antispamsettings ALTER COLUMN banafterwarnsamount SET DEFAULT nextval('public.antispamsettings_banafterwarnsamount_seq'::regclass);
+
+
+--
+-- Name: antiraidsettings antiraidsettings_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.antiraidsettings
+    ADD CONSTRAINT antiraidsettings_pkey PRIMARY KEY (guildid);
+
+
+--
+-- Name: antispamsettings antispamsettings_guildid_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.antispamsettings
+    ADD CONSTRAINT antispamsettings_guildid_key UNIQUE (guildid);
+
+
+--
+-- Name: antispamsettings antispamsettings_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.antispamsettings
+    ADD CONSTRAINT antispamsettings_pkey PRIMARY KEY (guildid);
+
+
+--
+-- Name: antivirus antivirus_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.antivirus
+    ADD CONSTRAINT antivirus_pkey PRIMARY KEY (guildid);
+
+
+--
+-- Name: autorole autorole_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.autorole
+    ADD CONSTRAINT autorole_pkey PRIMARY KEY (guildid);
+
+
+--
+-- Name: balance balance_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.balance
+    ADD CONSTRAINT balance_pkey PRIMARY KEY (userid, guildid);
+
+
+--
+-- Name: blacklists blacklists_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.blacklists
+    ADD CONSTRAINT blacklists_pkey PRIMARY KEY (guildid);
+
+
+--
+-- Name: cooldowns cooldowns_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cooldowns
+    ADD CONSTRAINT cooldowns_pkey PRIMARY KEY (uniquetimestamp);
+
+
+--
+-- Name: customembeds customembeds_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.customembeds
+    ADD CONSTRAINT customembeds_pkey PRIMARY KEY (uniquetimestamp);
+
+
+--
+-- Name: deletecommands deletecommand_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.deletecommands
+    ADD CONSTRAINT deletecommand_pkey PRIMARY KEY (uniquetimestamp);
+
+
+--
+-- Name: disabledcommands disabledCommands_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.disabledcommands
+    ADD CONSTRAINT "disabledCommands_pkey" PRIMARY KEY (guildid);
+
+
+--
+-- Name: giveawaycollecttime giveawaycollecttime_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.giveawaycollecttime
+    ADD CONSTRAINT giveawaycollecttime_pkey PRIMARY KEY (msgid);
+
+
+--
+-- Name: giveaways giveaways_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.giveaways
+    ADD CONSTRAINT giveaways_pkey PRIMARY KEY (msgid);
+
+
+--
+-- Name: disboard guildsettings_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.disboard
+    ADD CONSTRAINT guildsettings_pkey PRIMARY KEY (guildid);
+
+
+--
+-- Name: guildsettings guildsettings_pkey1; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.guildsettings
+    ADD CONSTRAINT guildsettings_pkey1 PRIMARY KEY (guildid);
+
+
+--
+-- Name: level level_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.level
+    ADD CONSTRAINT level_pkey PRIMARY KEY (userid, guildid, type);
+
+
+--
+-- Name: leveling leveling_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.leveling
+    ADD CONSTRAINT leveling_pkey PRIMARY KEY (guildid);
+
+
+--
+-- Name: levelingmultiplierchannels levelingmultiplierchannels_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.levelingmultiplierchannels
+    ADD CONSTRAINT levelingmultiplierchannels_pkey PRIMARY KEY (uniquetimestamp);
+
+
+--
+-- Name: levelingmultiplierroles levelingmultiplierroles_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.levelingmultiplierroles
+    ADD CONSTRAINT levelingmultiplierroles_pkey PRIMARY KEY (uniquetimestamp);
+
+
+--
+-- Name: levelingroles levelingroles_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.levelingroles
+    ADD CONSTRAINT levelingroles_pkey PRIMARY KEY (uniquetimestamp);
+
+
+--
+-- Name: levelingruleschannels levelingruleschannels_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.levelingruleschannels
+    ADD CONSTRAINT levelingruleschannels_pkey PRIMARY KEY (uniquetimestamp);
+
+
+--
+-- Name: logchannels logchannels_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.logchannels
+    ADD CONSTRAINT logchannels_pkey PRIMARY KEY (guildid);
+
+
+--
+-- Name: modsettings modsettings_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.modsettings
+    ADD CONSTRAINT modsettings_pkey PRIMARY KEY (guildid);
+
+
+--
+-- Name: punish_bans mutes_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.punish_bans
+    ADD CONSTRAINT mutes_pkey PRIMARY KEY (uniquetimestamp);
+
+
+--
+-- Name: nitroroles nitroroles_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.nitroroles
+    ADD CONSTRAINT nitroroles_pkey PRIMARY KEY (uniquetimestamp);
+
+
+--
+-- Name: nitrosettings nitrosettings_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.nitrosettings
+    ADD CONSTRAINT nitrosettings_pkey PRIMARY KEY (guildid);
+
+
+--
+-- Name: nitrousers nitrousers_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.nitrousers
+    ADD CONSTRAINT nitrousers_pkey PRIMARY KEY (booststart);
+
+
+--
+-- Name: policy_guilds policy_guilds_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.policy_guilds
+    ADD CONSTRAINT policy_guilds_pkey PRIMARY KEY (guildid);
+
+
+--
+-- Name: policy_users policy_users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.policy_users
+    ADD CONSTRAINT policy_users_pkey PRIMARY KEY (userid);
+
+
+--
+-- Name: punish_channelbans punish_channelban_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.punish_channelbans
+    ADD CONSTRAINT punish_channelban_pkey PRIMARY KEY (uniquetimestamp);
+
+
+--
+-- Name: punish_kicks punish_kicks_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.punish_kicks
+    ADD CONSTRAINT punish_kicks_pkey PRIMARY KEY (uniquetimestamp);
+
+
+--
+-- Name: punish_mutes punish_mutes_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.punish_mutes
+    ADD CONSTRAINT punish_mutes_pkey PRIMARY KEY (uniquetimestamp);
+
+
+--
+-- Name: punish_tempbans punish_tempbans_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.punish_tempbans
+    ADD CONSTRAINT punish_tempbans_pkey PRIMARY KEY (uniquetimestamp);
+
+
+--
+-- Name: punish_tempchannelbans punish_tempchannelban_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.punish_tempchannelbans
+    ADD CONSTRAINT punish_tempchannelban_pkey PRIMARY KEY (uniquetimestamp);
+
+
+--
+-- Name: punish_tempmutes punish_tempmutes_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.punish_tempmutes
+    ADD CONSTRAINT punish_tempmutes_pkey PRIMARY KEY (uniquetimestamp);
+
+
+--
+-- Name: punish_warns punish_warns_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.punish_warns
+    ADD CONSTRAINT punish_warns_pkey PRIMARY KEY (uniquetimestamp);
+
+
+--
+-- Name: reminders reminders_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.reminders
+    ADD CONSTRAINT reminders_pkey PRIMARY KEY (uniquetimestamp);
+
+
+--
+-- Name: roleseparator roleseparator_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.roleseparator
+    ADD CONSTRAINT roleseparator_pkey PRIMARY KEY (uniquetimestamp);
+
+
+--
+-- Name: roleseparatorsettings roleseparatorsettings_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.roleseparatorsettings
+    ADD CONSTRAINT roleseparatorsettings_pkey PRIMARY KEY (guildid);
+
+
+--
+-- Name: rrbuttons rrbuttons_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.rrbuttons
+    ADD CONSTRAINT rrbuttons_pkey PRIMARY KEY (uniquetimestamp);
+
+
+--
+-- Name: rrreactions rrreactions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.rrreactions
+    ADD CONSTRAINT rrreactions_pkey PRIMARY KEY (uniquetimestamp);
+
+
+--
+-- Name: rrsettings rrsettings_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.rrsettings
+    ADD CONSTRAINT rrsettings_pkey PRIMARY KEY (uniquetimestamp);
+
+
+--
+-- Name: stats stats_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.stats
+    ADD CONSTRAINT stats_pkey PRIMARY KEY (usercount);
+
+
+--
+-- Name: stickyrolemembers stickyrolemembers_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.stickyrolemembers
+    ADD CONSTRAINT stickyrolemembers_pkey PRIMARY KEY (userid, guildid);
+
+
+--
+-- Name: sticky stickyroles_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.sticky
+    ADD CONSTRAINT stickyroles_pkey PRIMARY KEY (guildid);
+
+
+--
+-- Name: suggestionsettings suggestionsettings_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.suggestionsettings
+    ADD CONSTRAINT suggestionsettings_pkey PRIMARY KEY (guildid);
+
+
+--
+-- Name: modroles unique; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.modroles
+    ADD CONSTRAINT "unique" UNIQUE (guildid, roleid);
+
+
+--
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (userid);
+
+
+--
+-- Name: verification verification_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.verification
+    ADD CONSTRAINT verification_pkey PRIMARY KEY (guildid);
+
+
+--
+-- Name: votereminder votereminder_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.votereminder
+    ADD CONSTRAINT votereminder_pkey PRIMARY KEY (userid, voted);
+
+
+--
+-- Name: voterewards voterewards_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.voterewards
+    ADD CONSTRAINT voterewards_pkey PRIMARY KEY (userid, voted);
+
+
+--
+-- Name: votetokens votetokens_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.votetokens
+    ADD CONSTRAINT votetokens_pkey PRIMARY KEY (token);
+
+
+--
+-- Name: welcome welcome_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.welcome
+    ADD CONSTRAINT welcome_pkey PRIMARY KEY (guildid);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
