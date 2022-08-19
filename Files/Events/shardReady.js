@@ -8,6 +8,5 @@ module.exports = {
       );
     } else client.ch.logger(`Discord Client Shard with ID ${id} is Ready.`);
 
-    if (unavailableGuilds?.size > 10) process.exit();
   },
 };

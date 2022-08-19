@@ -17,9 +17,9 @@ module.exports = {
       oldMember.communicationDisabledUntilTimestamp !==
         newMember.communicationDisabledUntilTimestamp; */
 
-    const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);
-    if (res && res.rowCount > 0) {
-      const channels = res.rows[0].guildmemberevents
+    const logChannels = member.client.logChannels.get(member.guild.id)?.guildmemberevents;
+    if (logChannels?.length) {
+      const channels = logChannels
         ?.map((id) =>
           typeof client.channels.cache.get(id)?.send === 'function'
             ? client.channels.cache.get(id)

@@ -2,7 +2,7 @@ const Builders = require('@discordjs/builders');
 
 module.exports = {
   async execute(guild) {
-    if (['936932672561872896', '814476583347814430'].includes(guild.id)) return;
+    if (['936932672561872896', '814476583347814430', '980345575012704286', '1004919883387121664', '814476583347814430'].includes(guild.id)) return;
 
     const { client } = guild;
     const { ch } = client;

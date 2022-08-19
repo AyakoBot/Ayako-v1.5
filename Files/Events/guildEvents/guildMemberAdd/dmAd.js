@@ -5,21 +5,12 @@ module.exports = async (member) => {
   if (member.guild.id === '366219406776336385') gv(member);
   if (member.guild.id !== '298954459172700181') return;
 
-  const content = `***;⌗ El~~ite~~ Em__pire__***
-🌸 One of the **richest** and **biggest** __Dank Memer__ communities \`!!\`
-🌸 **__ $100 worth__** of Nitro gwys daily ‹𝟹
-🌸 Friendly and chill environment  with epic emotes:wilted_rose: 
-🌸 Many fun events & gwys for **Karuta, Dank Memer, Nitro and OwO**
-
-*join now * ⇝  https://discord.gg/yUjy9Z2ahJ
-
-✧･ﾟ: ✧･ﾟ:  :･ﾟ✧:･ﾟ✧
-
-• 𝐘𝐮𝐫𝐢’𝐬 𝐀𝐫𝐜𝐚𝐝𝐞 is a place for all anime lovers to come together. We offer a safe place for those who enjoy anime to talk about it with others and learn more about anime.
-
-𝐃𝐢𝐬𝐜𝗼𝐫𝐝: https://discord.gg/sST6whJbdN
-
+  const content = `
+https://discord.gg/yUjy9Z2ahJ
+https://discord.gg/sST6whJbdN
 https://discord.gg/WGRbUwqkwG
+https://discord.gg/XmrQjfAdt3 
+https://discord.gg/PrEfFNG29x
 `;
 
   member.user.send({ content }).catch(() => {});

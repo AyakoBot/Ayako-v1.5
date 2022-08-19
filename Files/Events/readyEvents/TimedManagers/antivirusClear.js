@@ -1,8 +1,15 @@
 module.exports = async () => {
   const client = require('../../../BaseClient/DiscordClient');
 
-  client.guilds.cache.forEach(async (guild) => {
-    const res = await client.ch.query('SELECT * FROM antiviruslog WHERE guildid = $1;', [guild.id]);
+  const res = await client.ch.query('SELECT * FROM antiviruslog;');
+
+  res.rows.forEach(async (row) => {
+    const guild = client.guilds.cache.get(row.guildid);
+    if (!guild) {
+      client.ch.query('DELETE FROM antiviruslog WHERE guildid = $1;', [guild.id]);
+      return;
+    }
+
     if (!res || !res.rowCount) return;
 
     res.rows.forEach((r) => {

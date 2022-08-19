@@ -28,6 +28,8 @@ module.exports = {
 };
 
 const getBaseRow = async (reaction, reactionRow) => {
+  if (!reactionRow.messagelink) return [];
+
   const res = await reaction.client.ch.query(
     `SELECT * FROM rrsettings WHERE messagelink = $1 AND guildid = $2 AND active = true;`,
     [reactionRow.messagelink, reaction.message.guild.id],
@@ -38,6 +40,8 @@ const getBaseRow = async (reaction, reactionRow) => {
 };
 
 const getRelatedReactions = async (reaction, baseRow) => {
+  if (!baseRow.messagelink) return [];
+
   const res = await reaction.client.ch.query(
     `SELECT * FROM rrbuttons WHERE guildid = $1 AND messagelink = $2 AND active = true;`,
     [reaction.message.guild.id, baseRow.messagelink],

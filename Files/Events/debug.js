@@ -5,11 +5,12 @@ module.exports = {
     const client = require('../BaseClient/DiscordClient');
 
     if (
-      `${log}`.includes('Tried to send packet') ||
-      `${log}`.includes('Destroying and reconnecting') ||
-      `${log}`.includes('No token available to identify a new session') ||
-      `${log}`.includes('Manager was destroyed') ||
-      `${log}`.includes('Destroy: Attempting to close the WebSocket')
+      // `${log}`.includes('Tried to send packet') ||
+      // `${log}`.includes('Destroying and reconnecting') ||
+      // `${log}`.includes('No token available to identify a new session') ||
+      // `${log}`.includes('Manager was destroyed') ||
+      // `${log}`.includes('Destroy: Attempting to close the WebSocket')
+      false
     ) {
       client.destroy();
       client.login(auth.token).catch(() => {});

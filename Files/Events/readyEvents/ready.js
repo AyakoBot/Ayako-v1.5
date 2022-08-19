@@ -51,5 +51,8 @@ module.exports = {
     require('./disboard')();
     require('./separators')();
     require('./inviteLogger')();
+    setTimeout(() => {
+    //  process.exit();
+    }, 86400000);
   },
 };

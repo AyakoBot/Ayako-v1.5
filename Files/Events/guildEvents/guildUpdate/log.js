@@ -4,9 +4,9 @@ module.exports = async (oldGuild, newGuild) => {
   const client = oldGuild ? oldGuild.client : newGuild.client;
   const { ch } = client;
   const Constants = client.constants;
-  const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [newGuild.id]);
-  if (res && res.rowCount > 0) {
-    const channels = res.rows[0].guildevents
+  const logChannels = client.logChannels.get(newGuild.id)?.guildevents;
+  if (logChannels?.length) {
+    const channels = logChannels
       ?.map((id) =>
         typeof client.channels.cache.get(id)?.send === 'function'
           ? client.channels.cache.get(id)

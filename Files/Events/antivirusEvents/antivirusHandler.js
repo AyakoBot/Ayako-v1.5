@@ -8,6 +8,7 @@ module.exports = async (msg, rawLink, type) => {
   msg.source = 'antivirus';
 
   let amountOfTimes = 0;
+
   const res = await client.ch.query('SELECT * FROM antiviruslog WHERE userid = $1;', [user.id]);
   if (res && res.rowCount > 0) amountOfTimes = res.rowCount;
   client.ch.query(

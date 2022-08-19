@@ -85,6 +85,7 @@ class Client extends Discord.Client {
     this.reminders = new Discord.Collection();
     this.disboardBumpReminders = new Discord.Collection();
     this.giveaways = new Discord.Collection();
+    this.logChannels = new Discord.Collection();
 
     this.invites = new Discord.Collection();
     this.verificationCodes = new Discord.Collection();

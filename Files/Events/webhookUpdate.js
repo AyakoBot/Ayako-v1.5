@@ -7,9 +7,9 @@ module.exports = {
     const { ch } = client;
     const Constants = client.constants;
     const { guild } = data;
-    const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [guild.id]);
-    if (res && res.rowCount > 0) {
-      const channels = res.rows[0].webhookevents
+    const logChannels = client.logChannels.get(guild.id)?.webhookevents;
+    if (logChannels?.length) {
+      const channels = logChannels
         ?.map((id) =>
           typeof client.channels.cache.get(id)?.send === 'function'
             ? client.channels.cache.get(id)

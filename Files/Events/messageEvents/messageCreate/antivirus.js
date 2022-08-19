@@ -2,11 +2,11 @@ const urlCheck = require('valid-url');
 const request = require('request');
 const fs = require('fs');
 const Builders = require('@discordjs/builders');
-
+const axios = require('axios');
 const jobs = require('node-schedule');
-
 const { Worker } = require('worker_threads');
 
+const auth = require('../../../BaseClient/auth.json');
 const blocklists = require('../../../blocklist.json');
 const client = require('../../../BaseClient/DiscordClient');
 
@@ -466,6 +466,11 @@ const saveToBadLink = async (linkObject, msg, hrefLogging) => {
 
     const appended = hrefLogging ? linkObject.href : linkObject.baseURL;
     fs.appendFile('/root/Bots/Website/CDN/antivirus/badLinks.txt', `\n${appended}`, () => {});
+
+    axios.post('https://yuri.bots.lostluma.dev/phish/report', {
+      body: { url: appended, reason: 'Malicious' },
+      authorization: auth.phishAPI,
+    });
   }
 };
 

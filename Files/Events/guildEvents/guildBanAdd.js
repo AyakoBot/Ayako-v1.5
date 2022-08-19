@@ -5,9 +5,9 @@ module.exports = {
     const { client } = ban;
     const { ch } = client;
     const Constants = client.constants;
-    const res = await ch.query('SELECT * FROM logchannels WHERE guildid = $1;', [ban.guild.id]);
-    if (res && res.rowCount > 0) {
-      const channels = res.rows[0].guildevents
+    const logChannels = client.logChannels.get(ban.guild.id)?.guildevents;
+    if (logChannels?.length) {
+      const channels = logChannels
         ?.map((id) =>
           typeof client.channels.cache.get(id)?.send === 'function'
             ? client.channels.cache.get(id)
