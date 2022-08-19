@@ -1,7 +1,8 @@
 const readline = require('readline');
 const auth = require('./Files/BaseClient/auth.json');
 const client = require('./Files/BaseClient/DiscordClient');
-require('./Files/BaseClient/DataBase');
+
+client.pool = require('./Files/BaseClient/DataBase');
 client.ch = require('./Files/BaseClient/ClientHelper');
 
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout });

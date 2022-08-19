@@ -213,15 +213,21 @@ module.exports = {
    * @param {boolean} debug - Wether the Query should be logged in the Console when arriving here.
    */
   query: async (query, arr, debug) => {
-    const { pool } = require('./DataBase');
+    const client = require('./DiscordClient');
 
     if (debug === true) console.log(query, arr);
 
-    return pool.query(query, arr).catch((err) => {
+    const res = await client.pool.query(query, arr).catch((err) => {
       console.log(query, arr);
       module.exports.logger('Pool Query Error', err);
       return null;
     });
+
+    if (!res) return null;
+
+    res.rowCount = Number(res?.rows?.length);
+
+    return res;
   },
   /**
    * Logs any incoming Messages to the Console and the Discord Error Channel.

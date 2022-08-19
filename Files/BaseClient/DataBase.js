@@ -25,4 +25,4 @@ pool.on('error', (err) => {
   ch.logger('Unexpected error on idle pool client', err);
 });
 
-module.exports = { pool };
+module.exports = pool;
