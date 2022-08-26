@@ -1,6 +1,10 @@
 import pool from '../DataBase';
 
-export default async (string: string, args?: unknown[], debug?: boolean) => {
+export default async (
+  string: string,
+  args?: (string | number | boolean | null)[],
+  debug?: boolean,
+) => {
   // eslint-disable-next-line no-console
   if (debug) console.log(string, args);
 
@@ -8,6 +12,6 @@ export default async (string: string, args?: unknown[], debug?: boolean) => {
     throw new Error(err);
   });
 
-  if (!res || !res.rowCount) return null;
-  return res.rows;
+  if (!res || !res.length) return null;
+  return res;
 };
