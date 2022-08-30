@@ -48,8 +48,7 @@ export default async (
 
   const categorySelect: Eris.SelectMenu = {
     type: 3,
-    disabled: false,
-    custom_id: 'settingsCategorySelect',
+    custom_id: `settingsCategorySelect_${cmd.user.id}`,
     placeholder: lan.selectCategory,
     options: client.constants.commands.settings.categories.map((c) => ({
       label: lan.categories[c.name as keyof typeof lan.categories],
@@ -60,7 +59,8 @@ export default async (
 
   const settingsSelect: Eris.SelectMenu = {
     type: 3,
-    custom_id: 'settingsSelect',
+    custom_id: `settingsSelect_${cmd.user.id}`,
+    placeholder: lan.selectSetting,
     options: settingsObj.categories.map((c) => ({
       label: lan.settingsNames[c.name as keyof typeof lan.settingsNames],
       value: c.name,
@@ -73,16 +73,18 @@ export default async (
     })),
   };
 
-  const components: Eris.ActionRow[] = [
-    {
-      type: 1,
-      components: [categorySelect],
-    },
-    {
-      type: 1,
-      components: [settingsSelect],
-    },
-  ];
+  const components = client.ch.buttonRower([
+    [categorySelect],
+    [settingsSelect],
+    [
+      {
+        type: 2,
+        custom_id: `settings_${cmd.user.id}_goto_base`,
+        emoji: { id: null, name: '🔙' },
+        style: 4,
+      },
+    ],
+  ]);
 
   cmd.editParent({ embeds: [embed], components }).catch(() => null);
 };
