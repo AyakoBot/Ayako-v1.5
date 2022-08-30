@@ -2,7 +2,14 @@ import pool from '../DataBase';
 
 export default async (
   string: string,
-  args?: (string | number | boolean | null | undefined)[],
+  args?: (
+    | string
+    | number
+    | boolean
+    | null
+    | undefined
+    | (string | number | boolean | null | undefined)[]
+  )[],
   debug?: boolean,
 ) => {
   // eslint-disable-next-line no-console
