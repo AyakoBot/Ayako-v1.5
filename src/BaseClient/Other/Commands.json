@@ -158,42 +158,64 @@
     "type": 1,
     "options": [
       {
-        "type": 3,
-        "choices": [
+        "type": 1,
+        "name": "auto-moderation",
+        "description": "Lets you view and automate selected Parts of Ayakos Moderation",
+        "options": [
           {
-            "name": "auto-moderation",
-            "value": "auto-moderation"
-          },
-          {
-            "name": "automation",
-            "value": "automation"
-          },
-          {
-            "name": "moderation",
-            "value": "moderation"
-          },
-          {
-            "name": "other",
-            "value": "other"
+            "type": 3,
+            "name": "setting",
+            "description": "The Setting to view and automate",
+            "required": false,
+            "autocomplete": true,
+            "min_length": 1
           }
-        ],
-        "name": "category",
-        "description": "The Settings Category",
-        "required": false
+        ]
       },
       {
-        "type": 3,
-        "name": "setting",
-        "description": "The Setting",
-        "required": false,
-        "autocomplete": true,
-        "min_length": 1
+        "type": 1,
+        "name": "automation",
+        "description": "Lets you view and automate selected Parts of Ayakos Management",
+        "options": [
+          {
+            "type": 3,
+            "name": "setting",
+            "description": "The Setting to view and automate",
+            "required": false,
+            "autocomplete": true,
+            "min_length": 1
+          }
+        ]
       },
       {
-        "type": 5,
-        "name": "edit-mode",
-        "description": "Whether to jump directly into editing",
-        "required": false
+        "type": 1,
+        "name": "moderation",
+        "description": "Lets you view and edit Ayakos moderational Behaviour",
+        "options": [
+          {
+            "type": 3,
+            "name": "setting",
+            "description": "The Setting to view and edit",
+            "required": false,
+            "autocomplete": true,
+            "min_length": 1
+          }
+        ]
+      },
+      {
+        "type": 1,
+        "name": "other",
+        "description": "Lets you view and edit other Parts of Ayakos Behaviour",
+        "options": [
+          {
+            "type": 3,
+            "name": "setting",
+            "description": "The Setting to view and edit",
+            "required": false,
+            "autocomplete": true,
+            "min_length": 1
+          }
+        ]
       }
     ]
   }

@@ -6,12 +6,11 @@ const run: CT.AutocompleteCommand = async (
   language,
   lan: typeof import('../../Languages/lan-en.json')['slashCommands']['settings'],
 ) => {
-  const declaredCategory = cmd.data.options.find((o) => o.name === 'category');
+  const declaredCategory = cmd.data.options[0].name;
   if (!declaredCategory) return [{ name: lan.declareCategory, value: 'nothing' }];
-  if (!('value' in declaredCategory)) return [{ name: language.error, value: 'nothing' }];
 
   const category = client.constants.commands.settings.categories.find(
-    (c) => c.name === declaredCategory.value,
+    (c) => c.name === declaredCategory,
   );
   if (!category) return [{ name: language.error, value: 'nothing' }];
 
