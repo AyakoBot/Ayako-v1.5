@@ -520,8 +520,9 @@
   },
   "slashCommands": {
     "settings": {
+      "mmrPlaceholder": "Select an entry to view",
       "noneFound": "No Settings found",
-      "authorType": "Ayako {{type}} Settings Management",
+      "authorType": "Ayako \"{{type}}\" Settings Management",
       "author": "Ayako Settings Management",
       "declareCategory": "Declare a Category first",
       "nameDescription": "Colour Code Explanation",
@@ -542,7 +543,7 @@
       "settingsNames": {
         "anti-spam": "Anti-Spam",
         "anti-virus": "Anti-Virus",
-        "auto-punish": "Auto Punishing",
+        "auto-punish": "Auto Punish",
         "blacklist": "Blacklist",
         "mod-roles": "Moderation Roles",
         "expiry": "Expiry",
@@ -593,8 +594,10 @@
         "prefix": "Assign a custom Prefix to Ayako"
       },
       "settings": {
-        "anti-spam": {
-          
+        "anti-spam": {},
+        "auto-punish": {
+          "description": "**How to use**\nTo use the Auto-Punishment System\n__use__ </strike:1014158232299778048>\ninstead of regular Moderation Commands\n\nThe Auto-Punish System does not take your ability to use regular Moderation Commands, it just guarantees consisten Punishments\n\n\u200b",
+          "requiredWarns": "Required Warns:"
         },
         "separators": {
           "type": "Separator",
@@ -971,7 +974,7 @@
     "lackingAccess": "I'm lacking access to these emotes: {{emotes}}",
     "channelNotManageable": "I'm lacking Permissions to edit that Channel",
     "roleNotFound": "Role not Found",
-    "notYours": "You cannot interact with someone else's Messages",
+    "notYours": "You can't interact with someone elses Messages",
     "time": "Time ran out"
   },
   "channelRules": {
@@ -1178,5 +1181,9 @@
   "createdAt": "Created At",
   "roles": "Roles",
   "large": "Large",
-  "loading": "Loading"
+  "loading": "Loading",
+  "Enabled": "Enabled",
+  "Disabled": "Disabled",
+  "Number": "Number",
+  "Punishment": "Punishment"
 }

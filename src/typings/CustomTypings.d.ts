@@ -172,11 +172,28 @@ export interface OldUser {
 }
 
 export interface SettingsFile {
-  default: {
-    displayEmbed: (
-      interaction: Eris.Interaction,
-      language: typeof import('../Languages/lan-en.json'),
-      embed: Eris.Embed,
-    ) => Promise<Eris.Embed>;
-  };
+  type: 'single' | 'multi';
+  name: string;
+  displayEmbed: (BaseSettingsObject) => Promise<void>;
+  buttons: (BaseSettingsObject) => Promise<Eris.ActionRow[]>;
 }
+
+export interface MultiSettings extends SettingsFile {
+  listEmbed: (BaseSettingsObject) => Promise<void>;
+}
+
+export interface SingleSettings extends SettingsFile {}
+
+export type Language = typeof import('../Languages/lan-en.json');
+
+export interface BaseSettingsObject {
+  setting: SettingsFile;
+  interactions: (CommandInteraction | ComponentInteraction)[];
+  embed: Eris.Embed;
+  page: number;
+  language: Language;
+}
+
+export type BasicReturnType = {
+  [key: string]: boolean | number | string | null | (boolean | number | string | null)[];
+};
