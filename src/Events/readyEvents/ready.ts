@@ -1,3 +1,5 @@
+// TODO: re-enable startup tasks
+
 /* eslint-disable no-console */
 import Jobs from 'node-schedule';
 import client from '../../BaseClient/ErisClient';
@@ -13,5 +15,5 @@ export default async () => {
     console.log(`=> Current Date: ${new Date().toLocaleString()}`);
   });
 
-  (await import('./startupTasks')).default();
+  // (await import('./startupTasks')).default();
 };
