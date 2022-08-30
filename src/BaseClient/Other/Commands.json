@@ -2,7 +2,8 @@
   "giveaway": {
     "name": "giveaway",
     "description": "Giveaway Management Commands",
-    "defaultPermission": true,
+    "dm_permission": false,
+    "default_member_permissions": 32,
     "type": 1,
     "options": [
       {
@@ -154,7 +155,8 @@
   "settings": {
     "name": "settings",
     "description": "Manage Ayakos behavioural Settings",
-    "defaultPermission": true,
+    "dm_permission": false,
+    "default_member_permissions": 32,
     "type": 1,
     "options": [
       {
@@ -249,6 +251,28 @@
             ]
           }
         ]
+      }
+    ]
+  },
+  "strike": {
+    "type": 1,
+    "name": "strike",
+    "description": "Strike a User using Ayakos Auto-Punishment System",
+    "dm_permission": false,
+    "default_member_permissions": 1099511627776,
+    "options": [
+      {
+        "type": 6,
+        "name": "target",
+        "description": "The Target to Strike",
+        "required": true
+      },
+      {
+        "type": 3,
+        "name": "reason",
+        "description": "The Strike Reason",
+        "required": false,
+        "autocomplete": true
       }
     ]
   }
