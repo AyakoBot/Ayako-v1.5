@@ -292,7 +292,6 @@
     "prefix": "t!",
     "invite": "https://discord.com/api/oauth2/authorize?client_id=650691698409734151&permissions=1642787630327&scope=bot%20applications.commands",
     "image": "https://ayakobot.com/DefaultEmbedImage",
-    "errorImage": "https://ayakobot.com/DefaultErrorImage",
     "support": "https://discord.gg/euTdctganf",
     "discordUrl": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}",
     "discordUrlDB": "https://discord.com/channels/{{guildid}}/{{channelid}}/{{msgid}}",
@@ -451,7 +450,7 @@
             { "name": "disabled-commands", "category": "chats" },
             { "name": "disboard-reminders", "category": "other" },
             { "name": "self-roles", "category": "roles" },
-            { "name": "seprators", "category": "roles" },
+            { "name": "separators", "category": "roles" },
             { "name": "sticky", "category": "roles" },
             { "name": "verification", "category": "roles" },
             { "name": "welcome", "category": "chats" },
@@ -473,9 +472,61 @@
         }
       ],
       "settings": {
-        "anti-spam": {
-          
-        }
+        "anti-spam": {},
+        "auto-punish": {}
+      },
+      "tableNames": {
+        "anti-raid": "antiraidsettings",
+        "anti-virus": "antivirus",
+        "auto-punish": "autopunish",
+        "blacklist": "blacklists",
+        "mod-roles": "modroles",
+        "auto-roles": "autorole",
+        "cooldowns": "cooldowns",
+        "expiry": "modsettings",
+        "disabled-commands": "disabledcommands",
+        "disboard-reminders": "disboard",
+        "self-roles": "selfroles",
+        "separators": "roleseparator",
+        "sticky": "sticky",
+        "verification": "verification",
+        "welcome": "welcome",
+        "leveling": "leveling",
+        "nitro": "nitrosettings",
+        "reaction-roles": "rrsettings",
+        "delete-commands": "deletecommands",
+        "suggestions": "suggestionsettings",
+        "logs": "logchannels",
+        "language": "guildsettings",
+        "prefix": "guildsettings",
+        "overview": "guildsettings",
+        "leveling-multi-channels": "levelingmultiplierchannels",
+        "leveling-multi-roles": "levelingmultiplierroles",
+        "level-roles": "levelingroles",
+        "level-rules-channels": "levelingruleschannels",
+        "nitro-rules": "nitrorules",
+        "reaction-button-settings": "rrbuttons",
+        "reaction-role-settings": "rrreactions"
+      },
+      "mrmIdentifiers": {
+        "deletecommands": [{ "ident": "commands", "type": "text" }],
+        "reactionroles": [{ "ident": "name", "type": "text" }],
+        "rrbuttons": [
+          { "ident": "buttontext", "type": "text" },
+          { "ident": "emote", "type": "emote" }
+        ],
+        "rrreactions": [{ "ident": "emote", "type": "emote" }],
+        "disabled": [{ "ident": "commands", "type": "text" }],
+        "cooldowns": [{ "ident": "commands", "type": "text" }],
+        "nitroroles": [],
+        "selfroles": [{ "ident": "name", "type": "text" }],
+        "separators": [{ "ident": "separator", "type": "role" }],
+        "autopunish": [{ "ident": "warnamount", "type": "text" }],
+        "levelroles": [{ "ident": "level", "type": "text" }],
+        "multiroles": [{ "ident": "multiplier", "type": "text" }],
+        "ruleschannels": [],
+        "multichannels": [{ "ident": "multiplier", "type": "text" }],
+        "modroles": [{ "ident": "roleid", "type": "role" }]
       }
     }
   }
