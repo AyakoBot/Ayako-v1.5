@@ -172,8 +172,13 @@
             "name": "setting",
             "description": "The Setting to view and automate",
             "required": true,
-            "autocomplete": true,
-            "min_length": 1
+            "min_length": 1,
+            "choices": [
+              { "name": "Anti-Spam", "value": "anti-spam" },
+              { "name": "Anti-Virus", "value": "anti-virus" },
+              { "name": "Auto-Punish", "value": "auto-punish" },
+              { "name": "Blacklist", "value": "blacklist" }
+            ]
           }
         ]
       },
@@ -187,8 +192,11 @@
             "name": "setting",
             "description": "The Setting to view and automate",
             "required": true,
-            "autocomplete": true,
-            "min_length": 1
+            "min_length": 1,
+            "choices": [
+              { "name": "Mod-Roles", "value": "mod-roles" },
+              { "name": "Expiry", "value": "expiry" }
+            ]
           }
         ]
       },
@@ -202,8 +210,23 @@
             "name": "setting",
             "description": "The Setting to view and edit",
             "required": true,
-            "autocomplete": true,
-            "min_length": 1
+            "min_length": 1,
+            "choices": [
+              { "name": "Auto-Roles", "value": "auto-roles" },
+              { "name": "Cooldowns", "value": "cooldowns" },
+              { "name": "Disabled-Commands", "value": "disabled-commands" },
+              { "name": "Disboard-Reminders", "value": "disboard-reminders" },
+              { "name": "Self-Roles", "value": "self-roles" },
+              { "name": "Separators", "value": "separators" },
+              { "name": "Sticky", "value": "sticky" },
+              { "name": "Verification", "value": "verification" },
+              { "name": "Welcome", "value": "welcome" },
+              { "name": "Leveling", "value": "leveling" },
+              { "name": "Nitro", "value": "nitro" },
+              { "name": "Reaction-Roles", "value": "reaction-roles" },
+              { "name": "Delete-Commands", "value": "delete-commands" },
+              { "name": "Suggestions", "value": "suggestions" }
+            ]
           }
         ]
       },
@@ -217,8 +240,13 @@
             "name": "setting",
             "description": "The Setting to view and edit",
             "required": true,
-            "autocomplete": true,
-            "min_length": 1
+            "min_length": 1,
+            "choices": [
+              { "name": "Logs", "value": "logs" },
+              { "name": "Language", "value": "language" },
+              { "name": "Overview", "value": "overview" },
+              { "name": "Prefix", "value": "prefix" }
+            ]
           }
         ]
       }
