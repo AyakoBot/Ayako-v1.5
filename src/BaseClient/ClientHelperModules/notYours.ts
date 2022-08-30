@@ -10,7 +10,7 @@ export default (
     type: 'rich',
     author: {
       name: language.error,
-      icon_url: constants.standard.image,
+      icon_url: constants.standard.error,
       url: constants.standard.invite,
     },
     color: constants.colors.warning,
