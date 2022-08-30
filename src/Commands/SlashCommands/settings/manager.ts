@@ -192,14 +192,23 @@ const getSelectedSetting = (cmd: CT.CommandInteraction | CT.ComponentInteraction
     return { selectedSetting: cmd.data.values[0], isSlashCommand: false, isComponent: true };
   }
 
-  const { options } = cmd.data;
-  if (!options) return { selectedSetting: null };
+  if (
+    !cmd.data.options ||
+    !cmd.data.options[0] ||
+    !('options' in cmd.data.options[0]) ||
+    !(cmd.data.options[0].options?.[0] as Eris.InteractionDataOptionsString).value
+  ) {
+    return { selectedSetting: null };
+  }
 
-  const option = options.find((s) => s.name === 'setting');
-  if (!option) return { selectedSetting: null };
-  if (!('value' in option)) return { selectedSetting: null };
-
-  return { selectedSetting: option.value as string, isSlashCommand: true, isComponent: false };
+  return {
+    selectedSetting: (
+      ((cmd as CT.CommandInteraction).data.options?.[0] as Eris.InteractionDataOptionsSubCommand)
+        .options?.[0] as Eris.InteractionDataOptionsString
+    ).value as string,
+    isSlashCommand: true,
+    isComponent: false,
+  };
 };
 
 const getSettingsFile = async (name: string) => {
