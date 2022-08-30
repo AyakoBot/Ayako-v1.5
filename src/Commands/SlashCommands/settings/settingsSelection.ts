@@ -3,7 +3,7 @@ import type CT from '../../../typings/CustomTypings';
 import client from '../../../BaseClient/ErisClient';
 
 export default (
-  cmd: CT.CommandInteraction,
+  cmd: CT.CommandInteraction | CT.ComponentInteraction,
   {
     language,
     lan,
