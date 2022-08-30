@@ -30,7 +30,7 @@ const getCommand = async (cmd: CT.ComponentInteraction) => {
     .map((f, i) => {
       const { default: possibleFile }: { default: CT.ComponentCommand } = possibleFiles[i];
 
-      if (f.replace('.js', '') === cmd.data.custom_id) {
+      if (f.replace('.js', '') === cmd.data.custom_id.split(/_/g)[0]) {
         return { command: possibleFile, name: f.replace('.js', '') };
       }
       return null;
