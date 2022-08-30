@@ -159,6 +159,11 @@
     "options": [
       {
         "type": 1,
+        "name": "base",
+        "description": "Display Ayakos base Settings Emobed"
+      },
+      {
+        "type": 1,
         "name": "auto-moderation",
         "description": "Lets you view and automate selected Parts of Ayakos Moderation",
         "options": [
@@ -166,7 +171,7 @@
             "type": 3,
             "name": "setting",
             "description": "The Setting to view and automate",
-            "required": false,
+            "required": true,
             "autocomplete": true,
             "min_length": 1
           }
@@ -181,7 +186,7 @@
             "type": 3,
             "name": "setting",
             "description": "The Setting to view and automate",
-            "required": false,
+            "required": true,
             "autocomplete": true,
             "min_length": 1
           }
@@ -196,7 +201,7 @@
             "type": 3,
             "name": "setting",
             "description": "The Setting to view and edit",
-            "required": false,
+            "required": true,
             "autocomplete": true,
             "min_length": 1
           }
@@ -211,7 +216,7 @@
             "type": 3,
             "name": "setting",
             "description": "The Setting to view and edit",
-            "required": false,
+            "required": true,
             "autocomplete": true,
             "min_length": 1
           }
