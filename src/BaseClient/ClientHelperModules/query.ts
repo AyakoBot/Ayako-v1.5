@@ -15,5 +15,6 @@ export default async (
     });
 
   if (!res || !res.length) return null;
-  return res as unknown as never[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return res as unknown as any[];
 };
