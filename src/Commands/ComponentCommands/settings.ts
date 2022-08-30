@@ -15,7 +15,7 @@ export default async (cmd: CT.ComponentInteraction, language: CT.Language) => {
       break;
     }
     default: {
-      (cmd.data as unknown as Eris.ComponentInteractionSelectMenuData).values = [args[2]];
+      (cmd.data as unknown as Eris.ComponentInteractionSelectMenuData).values = [args[3]];
       (await import('./settingsCategorySelect')).default(cmd, language);
       break;
     }
