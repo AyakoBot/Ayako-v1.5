@@ -961,7 +961,7 @@ const doDataBaseAction = async (args: CT.ModBaseEventOptions) => {
         extraSelectArgs
           ? `${extraSelectArgs.map((arg, i) => `AND ${arg} = $${i + 3}`).join('')}`
           : ''
-      }`,
+      };`,
       selectArray,
     );
 
@@ -969,7 +969,7 @@ const doDataBaseAction = async (args: CT.ModBaseEventOptions) => {
       await client.ch.query(
         `DELETE FROM ${table} WHERE userid = $1 AND guildid = $2 AND uniquetimestamp = $3;`,
         [args.target.id, args.guild.id, rows[0].uniquetimestamp],
-      ); // js
+      );
 
       const [row] = rows;
 
