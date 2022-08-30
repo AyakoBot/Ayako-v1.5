@@ -1,5 +1,4 @@
 import fs from 'fs';
-import Jobs from 'node-schedule';
 import type CT from '../../typings/CustomTypings';
 import client from '../../BaseClient/ErisClient';
 
@@ -7,6 +6,12 @@ export default async (cmd: CT.ComponentInteraction) => {
   const rawCommand = await getCommand(cmd);
   if (!rawCommand) return;
   const { command, name } = rawCommand;
+
+  const userID = cmd.data.custom_id.split(/_/g)[1];
+  if (userID !== cmd.user.id) {
+    client.ch.notYours(cmd, cmd.language);
+    return;
+  }
 
   try {
     // eslint-disable-next-line no-console
