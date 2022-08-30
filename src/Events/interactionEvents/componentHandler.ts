@@ -3,33 +3,10 @@ import Jobs from 'node-schedule';
 import type CT from '../../typings/CustomTypings';
 import client from '../../BaseClient/ErisClient';
 
-const cooldowns = new Map();
-
 export default async (cmd: CT.ComponentInteraction) => {
   const rawCommand = await getCommand(cmd);
   if (!rawCommand) return;
   const { command, name } = rawCommand;
-
-  if (cooldowns.has(cmd.user.id)) {
-    const timeleft = Math.abs(cooldowns.get(cmd.user.id) - Date.now());
-
-    client.ch.reply(
-      cmd,
-      {
-        content: client.ch.stp(cmd.language.commands.commandHandler.pleaseWait, {
-          time: `${Math.ceil(timeleft / 1000)} ${cmd.language.time.seconds}`,
-        }),
-        ephemeral: true,
-      },
-      cmd.language,
-    );
-    return;
-  }
-
-  cooldowns.set(cmd.user.id, Date.now());
-  Jobs.scheduleJob(new Date(Date.now() + 2000), () => {
-    cooldowns.delete(cmd.user.id);
-  });
 
   try {
     // eslint-disable-next-line no-console
