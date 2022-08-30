@@ -7,7 +7,7 @@ export default async (
   cmd: CT.CommandInteraction | CT.ComponentInteraction,
   language: CT.Language,
 ) => {
-  const { selectedSetting, isSlashCommand, isComponent } = getSelectedSetting(cmd);
+  const selectedSetting = getSelectedSetting(cmd);
   if (!selectedSetting) return;
 
   const rawSettingsFile = await getSettingsFile(selectedSetting);
@@ -186,10 +186,10 @@ const getBaseEmbed = ({
 });
 
 const getSelectedSetting = (cmd: CT.CommandInteraction | CT.ComponentInteraction) => {
-  if (!('values' in cmd.data) && !('options' in cmd.data)) return { selectedSetting: null };
+  if (!('values' in cmd.data) && !('options' in cmd.data)) return null;
 
   if ('values' in cmd.data) {
-    return { selectedSetting: cmd.data.values[0], isSlashCommand: false, isComponent: true };
+    return cmd.data.values[0];
   }
 
   if (
@@ -198,17 +198,13 @@ const getSelectedSetting = (cmd: CT.CommandInteraction | CT.ComponentInteraction
     !('options' in cmd.data.options[0]) ||
     !(cmd.data.options[0].options?.[0] as Eris.InteractionDataOptionsString).value
   ) {
-    return { selectedSetting: null };
+    return null;
   }
 
-  return {
-    selectedSetting: (
-      ((cmd as CT.CommandInteraction).data.options?.[0] as Eris.InteractionDataOptionsSubCommand)
-        .options?.[0] as Eris.InteractionDataOptionsString
-    ).value as string,
-    isSlashCommand: true,
-    isComponent: false,
-  };
+  return (
+    ((cmd as CT.CommandInteraction).data.options?.[0] as Eris.InteractionDataOptionsSubCommand)
+      .options?.[0] as Eris.InteractionDataOptionsString
+  ).value as string;
 };
 
 const getSettingsFile = async (name: string) => {
