@@ -50,8 +50,7 @@ export default (
 
   const categorySelect: Eris.SelectMenu = {
     type: 3,
-    disabled: false,
-    custom_id: 'settingsCategorySelect',
+    custom_id: `settingsCategorySelect_${cmd.user.id}`,
     placeholder: lan.selectCategory,
     options: client.constants.commands.settings.categories.map((c) => ({
       label: lan.categories[c.name as keyof typeof lan.categories],
@@ -67,18 +66,13 @@ export default (
     options: [{ label: 'placeholder', value: 'placeholder' }],
   };
 
-  const components: Eris.ActionRow[] = [
-    {
-      type: 1,
-      components: [categorySelect],
-    },
-    {
-      type: 1,
-      components: [settingsSelect],
-    },
-  ];
+  const components = client.ch.buttonRower([[categorySelect], [settingsSelect]]);
 
-  client.ch.reply(cmd, { embeds: [embed], components }, language);
+  if (!('editParent' in cmd)) {
+    client.ch.reply(cmd, { embeds: [embed], components }, language);
+  } else {
+    cmd.editParent({ embeds: [embed], components }).catch(() => null);
+  }
 };
 
 const spaces = (amount: number, text: string) =>
