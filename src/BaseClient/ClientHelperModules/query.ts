@@ -11,6 +11,8 @@ export default async (
   const res = await pool
     .query(string, args as (string | number | boolean | null)[])
     .catch((err) => {
+      // eslint-disable-next-line no-console
+      console.error(string, args);
       throw new Error(err);
     });
 
