@@ -8,253 +8,208 @@ export default async (
   executor: Eris.User,
   target: Eris.User,
   reason: string,
-  msg: CT.Message,
-  rows: DBT.autopunish[],
-  command: CT.Command,
+  cmd: CT.Message | CT.CommandInteraction,
+  command?: CT.Command,
 ) => {
-  const lan = msg.language.mod.strike;
   const con = client.constants.mod.strike;
-  if (!rows || !rows.length) {
+  const autopunish = await getAutoPunish(cmd);
+
+  if (!autopunish || !autopunish.length) {
     const em: Eris.Embed = {
       type: 'rich',
       color: con.color,
-      description: client.ch.stp(lan.notEnabled, { prefix: client.constants.standard.prefix }),
+      description: client.ch.stp(cmd.language.slashCommands.strike.notEnabled, {
+        prefix: client.constants.standard.prefix,
+      }),
     };
 
-    client.ch.reply(msg, { embeds: [em] }, msg.language, command);
+    client.ch.reply(cmd, { embeds: [em] }, cmd.language, command);
     return;
   }
 
-  const existingWarns = await getWarns(msg, target);
-  let r = rows.find((re) => Number(re.warnamount) === existingWarns);
-  if (!r) return;
+  if (!cmd.guildID) return;
+  const guild = client.guilds.get(cmd.guildID);
+  if (!guild) return;
 
-  const doPunish = (type: CT.ModBaseEventOptions['type']) => {
-    if (!r) return;
-    punish(type, executor, target, reason, msg, r);
+  const punishObj: CT.ModBaseEventOptions = {
+    executor,
+    target,
+    reason,
+    msg: cmd,
+    guild,
+    source: 'strike',
+    type: 'warnAdd',
   };
 
-  if (!r) {
-    doPunish('warnAdd');
+  const existingWarns = (await getAllPunishments(cmd, target)) || [];
+  const punishmentToApply = autopunish.find((p) => Number(p.warnamount) === existingWarns.length);
+
+  if (!punishmentToApply) {
+    client.emit('modBaseEvent', punishObj);
     return;
   }
 
-  let punNumber = Number(r.punishment);
-  if (punNumber < 7 && punNumber > 0) {
-    const punishments: CT.ModBaseEventOptions['type'][] = [
-      'tempchannelbanAdd',
-      'warnAdd',
-      'banAdd',
-      'tempbanAdd',
-      'kickAdd',
-      'tempmuteAdd',
-      'warnAdd',
-    ];
+  punishObj.duration = Number(punishmentToApply.duration || 60000);
+  punishObj.type = getType(punishmentToApply);
 
-    doPunish(punishments[punNumber]);
-    return;
-  }
-  const higher = isHigher(
-    existingWarns,
-    rows.map((re) => Number(re.warnamount)),
-  );
+  const confirmation = await getConfirmation(punishmentToApply, cmd);
+  if (!confirmation) return;
 
-  if (!higher) {
-    doPunish('warnAdd');
-    return;
-  }
-  const neededPunishmentWarnNr = getClosest(
-    existingWarns,
-    rows.map((re) => Number(re.warnamount)),
-  );
-  r = rows.find((re) => Number(re.warnamount) === neededPunishmentWarnNr);
+  await doRoles(punishmentToApply, punishObj, cmd);
 
-  if (!r) {
-    doPunish('warnAdd');
-    return;
-  }
-
-  punNumber = Number(r.punishment);
-  if (punNumber < 7 && punNumber > 0) {
-    const punishments: CT.ModBaseEventOptions['type'][] = [
-      'tempchannelbanAdd',
-      'warnAdd',
-      'banAdd',
-      'tempbanAdd',
-      'kickAdd',
-      'tempmuteAdd',
-      'warnAdd',
-    ];
-
-    doPunish(punishments[punNumber]);
-    return;
-  }
-  doPunish('warnAdd');
+  client.emit('modBaseEvent', punishObj);
 };
 
-const doRoles = async (r: DBT.autopunish, msg: CT.Message, user: Eris.User) => {
-  if (!r) return;
-  if (!msg.guildID) return;
-  if (!msg.guild) return;
-
-  const member = await client.ch.getMember(user.id, msg.guildID);
-  if (!member) return;
-  if (r.addroles && r.addroles.length) {
-    const roles = checkRoles(r.addroles, msg.guild);
-    await client.ch.roleManager.add(member, roles, msg.language.autotypes.autopunish);
-  }
-  if (r.removeroles && r.removeroles.length) {
-    const roles = checkRoles(r.removeroles, msg.guild);
-    await client.ch.roleManager.remove(member, roles, msg.language.autotypes.autopunish);
-  }
-};
-
-const punish = async (
-  punishment: CT.ModBaseEventOptions['type'],
-  executor: Eris.User,
-  target: Eris.User,
-  reason: string,
-  msg: CT.Message,
-  r: DBT.autopunish,
+const doRoles = async (
+  punishmentToApply: DBT.autopunish,
+  punishObj: CT.ModBaseEventOptions,
+  cmd: CT.Message | CT.CommandInteraction,
 ) => {
-  const lan = msg.language.mod.strike;
-  const con = client.constants.mod.strike;
-  await doRoles(r, msg, target);
-  if (punishment === 'warnAdd') {
-    client.emit('modBaseEvent', { executor, target, reason, msg, guild: msg.guild }, 'warnAdd');
-  } else {
-    const agreed = await getConfirmation(msg, lan, target, con, r);
-    if (!agreed) punishment = 'warnAdd';
-    client.emit(
-      'modBaseEvent',
-      {
-        executor,
-        target,
-        reason,
-        msg,
-        duration: r.duration ? r.duration : 60,
-        guild: msg.guild,
-        channel: msg.channel,
-      },
-      punishment,
-    );
+  if (!cmd.guildID) return;
+
+  const member = await client.ch.getMember(punishObj.target.id, cmd.guildID);
+  if (!member) return;
+
+  if (punishmentToApply.removeroles?.length) {
+    const rolesToRemove = member.roles.filter((r) => punishmentToApply.removeroles?.includes(r));
+    await client.ch.roleManager.remove(member, rolesToRemove, punishObj.reason, 1);
   }
-};
 
-const getClosest = (num: number, arr: number[]) => {
-  arr = arr.reverse();
-  let curr = arr[0];
-  let diff = Math.abs(num - curr);
-  for (let val = 0; val < arr.length; val += 1) {
-    const newdiff = Math.abs(num - arr[val]);
-    if (newdiff < diff) {
-      diff = newdiff;
-      curr = arr[val];
-    }
+  if (punishmentToApply.addroles?.length) {
+    const rolesToRemove = member.roles.filter((r) => punishmentToApply.addroles?.includes(r));
+    await client.ch.roleManager.add(member, rolesToRemove, punishObj.reason, 1);
   }
-  return curr;
-};
-
-const isHigher = (num: number, arr: number[]) => {
-  for (let i = 0; i < arr.length; i += 1) {
-    if (num <= arr[i]) return false;
-  }
-  return true;
-};
-
-const checkRoles = (roles: string[], guild: Eris.Guild) => {
-  roles.forEach((r, i) => {
-    const role = guild.roles.get(r);
-    if (!role || !role.id) roles.splice(i, 1);
-  });
-  return roles;
-};
-
-const getWarns = async (msg: CT.Message, target: Eris.User) => {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const results = await Promise.all(
-    ['warns', 'kicks', 'mutes', 'bans', 'channelbans'].map((table) =>
-      client.ch
-        .query(`SELECT * FROM punish_${table} WHERE guildid = $1 AND userid = $2;`, [
-          msg.guildID,
-          target.id,
-        ])
-        .then((r) => r || null),
-    ),
-  );
-
-  return results.map((r) => Number(r?.length)).reduce((partialSum, a) => partialSum + a, 0);
 };
 
 const getConfirmation = async (
-  msg: CT.Message,
-  lan: typeof import('../../Languages/lan-en.json')['mod']['strike'],
-  target: Eris.User,
-  con: typeof client.constants.mod.strike,
-  r: DBT.autopunish,
+  punishmentToApply: DBT.autopunish,
+  cmd: CT.Message | CT.CommandInteraction,
 ) => {
-  if (!r.confirmationreq) return true;
-
   const embed: Eris.Embed = {
     type: 'rich',
+    color: client.constants.colors.warning,
+    description: cmd.language.slashCommands.strike.areYouSure,
     author: {
-      name: lan.confirmEmbed.author,
+      name: cmd.language.slashCommands.strike.confirmAuthor,
+      icon_url: client.constants.standard.error,
+      url: client.constants.standard.invite,
     },
-    description: client.ch.stp(lan.confirmEmbed.description, {
-      user: target,
-      punishment: msg.language.autopunish[Number(r.punishment)],
-    }),
-    color: con.color,
   };
 
-  const yes: Eris.Button = {
-    type: 2,
-    label: msg.language.Yes,
-    style: 3,
-    custom_id: 'yes',
-  };
-
-  const no: Eris.Button = {
-    type: 2,
-    label: msg.language.No,
-    style: 4,
-    custom_id: 'no',
-  };
-
-  if (!msg.command) return false;
   const m = await client.ch.reply(
-    msg,
+    cmd,
     {
+      ephemeral: true,
       embeds: [embed],
-      components: client.ch.buttonRower([[yes, no]]),
+      components: client.ch.buttonRower([
+        {
+          type: 2,
+          label: cmd.language.mod.warning.proceed,
+          emoji: client.objectEmotes.tickWithBackground,
+          custom_id: 'strike_proceed',
+          style: 2,
+        },
+        {
+          type: 2,
+          label: cmd.language.mod.warning.abort,
+          emoji: client.objectEmotes.crossWithBackground,
+          custom_id: 'strike_abort',
+          style: 3,
+        },
+      ]),
     },
-    msg.language,
-    await import('../../Commands/TextCommands/strike'),
+    cmd.language,
   );
+
   if (!m) return false;
 
-  const agreed = await new Promise((resolve) => {
-    const buttonsCollector = new InteractionCollector(m, Number(r.punishmentawaittime) || 60000);
+  const collector = new InteractionCollector(
+    m,
+    Number(punishmentToApply.punishmentawaittime || 20000),
+  );
 
-    buttonsCollector.on('collect', (button) => {
-      if (button.user.id === msg.author.id) {
-        if (button.customId === 'yes') {
-          buttonsCollector.stop();
-          button.editParent({ components: [] });
-          resolve(true);
-        } else if (button.customId === 'no') {
-          buttonsCollector.stop();
-          button.editParent(button, { components: [] });
-          resolve(false);
+  return new Promise((res) => {
+    collector.on('collect', (btn: Eris.ComponentInteraction) => {
+      if (btn.data.custom_id === 'strike_proceed') res(true);
+      if (btn.data.custom_id === 'strike_abort') {
+        const abortEmbed = embed;
+
+        embed.description = undefined;
+        if (embed.author) {
+          embed.author.name = cmd.language.Aborted;
+          embed.author.icon_url = client.objectEmotes.cross.link;
         }
-      } else client.ch.notYours(button, msg.language);
+
+        btn.editParent({ embeds: [abortEmbed], components: [] });
+        res(false);
+      }
     });
 
-    buttonsCollector.on('end', (endReason) => {
-      if (endReason === 'time') resolve(true);
+    collector.on('end', (reason) => {
+      if (reason === 'time') {
+        res(true);
+      }
     });
   });
-
-  return agreed;
 };
+
+const getType = (punishmentToApply: DBT.autopunish) => {
+  switch (Number(punishmentToApply.punishment)) {
+    case 0: {
+      return 'tempmuteAdd';
+    }
+    case 1: {
+      return 'kickAdd';
+      break;
+    }
+    case 2: {
+      return 'tempbanAdd';
+      break;
+    }
+    case 3: {
+      return 'banAdd';
+      break;
+    }
+    case 5: {
+      return 'tempchannelbanAdd';
+      break;
+    }
+    case 6: {
+      return 'channelbanAdd';
+      break;
+    }
+    default: {
+      return 'warnAdd';
+      break;
+    }
+  }
+};
+
+const getAutoPunish = async (cmd: CT.Message | CT.CommandInteraction) =>
+  client.ch
+    .query(`SELECT * FROM autopunish WHERE guildid = $1 AND active = true;`, [cmd.guildID])
+    .then((r: DBT.autopunish[] | null) => r);
+
+const getAllPunishments = async (cmd: CT.CommandInteraction | CT.Message, target: Eris.User) =>
+  client.ch
+    .query(
+      `SELECT * FROM punish_bans WHERE guildid = $1 AND userid = $2 AND active = true;
+  SELECT * FROM punish_channelbans WHERE guildid = $1 AND userid = $2 AND active = true;
+  SELECT * FROM punish_mutes WHERE guildid = $1 AND userid = $2 AND active = true;
+  SELECT * FROM punish_kicks WHERE guildid = $1 AND userid = $2 AND active = true;
+  SELECT * FROM punish_warns WHERE guildid = $1 AND userid = $2 AND active = true;`,
+      [cmd.guildID, target.id],
+    )
+    .then(
+      (
+        r:
+          | (
+              | DBT.punish_bans[]
+              | DBT.punish_channelbans[]
+              | DBT.punish_kicks[]
+              | DBT.punish_mutes[]
+              | DBT.punish_warns[]
+            )[]
+          | null,
+      ) => r,
+    );
