@@ -182,8 +182,6 @@ export interface MultiSettings extends SettingsFile {
   listEmbed: (BaseSettingsObject) => Promise<void>;
 }
 
-export interface SingleSettings extends SettingsFile {}
-
 export type Language = typeof import('../Languages/lan-en.json');
 
 export interface BaseSettingsObject {
