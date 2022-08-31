@@ -520,7 +520,10 @@
   },
   "slashCommands": {
     "strike": {
-      "noneFound": "Your most used Reasons will appear here"
+      "noneFound": "Your most used Reasons will appear here",
+      "areYouSure": "You are about to strike **{{user}}**\nDue to their Amount of Warns, this will {{punishment}} them\n**Do you want to proceed?**",
+      "confirmAuthor": "Confirm Strike",
+      "notEnabled": "The Strike System is not enabled\nuse </settings auto-moderation:1014159057919156366> `setting: Auto-Punish` to enable it"
     },
     "settings": {
       "active": "Active",
@@ -707,13 +710,6 @@
       "text": "You just issued a **Moderation Command** on a User with a **Mod Role**. \nDo you want to **proceed** or **abort**.",
       "proceed": "Proceed",
       "abort": "Abort"
-    },
-    "strike": {
-      "notEnabled": "The strike System is not enabled\nuse `{{prefix}}settings autopunish` to enable it",
-      "confirmEmbed": {
-        "author": "Confirm Strike",
-        "description": "You are about to strike **<@{{user.id}}>**\nDue to their Amount of Warns, this will {{punishment}} them\n**Do you want to proceed?**"
-      }
     },
     "tempmuteAdd": {
       "author": "{{args.target.username}}#{{args.target.discriminator}} was Temp-Muted",
@@ -1194,5 +1190,6 @@
   "Disabled": "Disabled",
   "Number": "Number",
   "Punishment": "Punishment",
-  "noReasonProvided": "No Reason provided"
+  "noReasonProvided": "No Reason provided",
+  "Aborted": "Aborted"
 }
