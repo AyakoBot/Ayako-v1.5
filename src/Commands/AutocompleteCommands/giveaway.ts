@@ -10,7 +10,9 @@ const run: CT.AutocompleteCommand = async (cmd: CT.AutocompleteInteraction) => {
       cmd.data.options[0].name === 'reroll',
     ])
     .then((r: DBT.giveaways[] | null) => r || null);
-  if (!giveawaysRows) return [];
+  if (!giveawaysRows) {
+    return [{ name: cmd.language.slashCommands.giveaway.noneFound, value: 'Not a valid Number' }];
+  }
 
   const messages = await Promise.all(
     giveawaysRows.map((g) => {
