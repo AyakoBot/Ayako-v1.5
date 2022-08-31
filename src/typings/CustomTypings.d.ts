@@ -26,12 +26,12 @@ export interface Command {
     },
     command: Command,
     object?: { [key: string]: unknown },
-  ) => void;
+  ) => void | Promise<void>;
 }
 
 type PartialSlashCommand = Omit<
   Command,
-  'cooldownRows' | 'deleteCommandRows' | 'deleteCommandRow' | 'execute'
+  'cooldownRows' | 'deleteCommandRows' | 'deleteCommandRow' | 'execute' | 'takesFirstArg'
 >;
 
 export interface SlashCommand extends PartialSlashCommand {
@@ -46,7 +46,7 @@ export interface SlashCommand extends PartialSlashCommand {
     },
     command: SlashCommand,
     object?: { [key: string]: unknown },
-  ) => void;
+  ) => void | Promise<void>;
 }
 
 export type AutocompleteCommand = (
