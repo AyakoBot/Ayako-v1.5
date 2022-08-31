@@ -519,7 +519,11 @@
     }
   },
   "slashCommands": {
+    "strike": {
+      "noneFound": "Your most used Reasons will appear here"
+    },
     "settings": {
+      "active": "Active",
       "mmrPlaceholder": "Select an entry to view",
       "noneFound": "No Settings found",
       "authorType": "Ayako \"{{type}}\" Settings Management",
@@ -594,7 +598,11 @@
         "prefix": "Assign a custom Prefix to Ayako"
       },
       "settings": {
-        "anti-spam": {},
+        "anti-spam": {
+          "wlchannelid": "Whitelisted Channels",
+          "wluserid": "Whitelisted Users",
+          "wlroleid": "Whitelisted Roles"
+        },
         "auto-punish": {
           "description": "**How to use**\nTo use the Auto-Punishment System\n__use__ </strike:1014158232299778048>\ninstead of regular Moderation Commands\n\nThe Auto-Punish System does not take your ability to use regular Moderation Commands, it just guarantees consisten Punishments\n\n\u200b",
           "requiredWarns": "Required Warns:"
@@ -1185,5 +1193,6 @@
   "Enabled": "Enabled",
   "Disabled": "Disabled",
   "Number": "Number",
-  "Punishment": "Punishment"
+  "Punishment": "Punishment",
+  "noReasonProvided": "No Reason provided"
 }
