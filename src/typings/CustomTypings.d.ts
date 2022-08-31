@@ -125,7 +125,7 @@ export interface ModBaseEventOptions {
   executor: Eris.User;
   target: Eris.User;
   reason: string;
-  msg?: Message;
+  msg?: Message | CommandInteraction;
   guild: Eris.Guild;
   type:
     | 'banAdd'

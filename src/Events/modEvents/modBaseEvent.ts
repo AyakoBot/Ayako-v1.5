@@ -318,7 +318,7 @@ const roleCheck = async (
     deleter(args);
   }
 
-    await args.m.edit({ embeds: [embed] }).catch(() => null);
+  await args.m.edit({ embeds: [embed] }).catch(() => null);
   return false;
 };
 
@@ -396,7 +396,7 @@ const checkMePunish = async (
   }
 
   if (args.m) await args.m.edit({ embeds: [embed] }).catch(() => null);
-    return true;
+  return true;
 };
 
 const checkPunishable = async (
@@ -1022,7 +1022,7 @@ const doDataBaseAction = async (args: CT.ModBaseEventOptions) => {
         }) VALUES
       (${insertArgs ? `${insertArgs.map((_arg, i) => `$${i + 1}`).join(', ')}` : ''});`,
         insertArgs,
-      );
+      ); // js
       return row;
     }
     return null;
@@ -1060,7 +1060,7 @@ const doDataBaseAction = async (args: CT.ModBaseEventOptions) => {
       }) VALUES (
         ${insertArgs ? `${insertArgs.map((_arg, i) => `$${i + 1}`).join(', ')}` : ''});`,
       insertArgs,
-    );
+    ); // js
   };
 
   switch (args.type) {
@@ -1125,7 +1125,9 @@ const doDataBaseAction = async (args: CT.ModBaseEventOptions) => {
 const deleter = (args: CT.ModBaseEventOptions) => {
   jobs.scheduleJob(new Date(Date.now() + 10000), () => {
     if (args.m) args.m.delete().catch(() => null);
-    if (args.msg) args.msg.delete().catch(() => null);
+    if (args.msg && 'delete' in args.msg) {
+      args.msg.delete().catch(() => null);
+    }
   });
 };
 
