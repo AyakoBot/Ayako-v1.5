@@ -472,10 +472,16 @@
         }
       ],
       "settings": {
-        "anti-spam": {},
+        "anti-spam": {
+          "active": "boolean",
+          "wlchannelid": "channels",
+          "wluserid": "users",
+          "wlroleid": "roles"
+        },
         "auto-punish": {}
       },
       "tableNames": {
+        "anti-spam": "antispam",
         "anti-raid": "antiraidsettings",
         "anti-virus": "antivirus",
         "auto-punish": "autopunish",

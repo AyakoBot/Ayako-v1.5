@@ -37,16 +37,34 @@ export default async (
     embed: getBaseEmbed({ language, setting: settingsFile }),
   };
 
-  await getDisplayEmbed(baseObject);
+  const proceed = await getDisplayEmbed(baseObject);
+  if (!proceed) return;
+
+  const components = await baseObject.setting.buttons(baseObject);
+  components.push([
+    {
+      type: 2,
+      custom_id: `settings_${baseObject.interactions[0].user.id}_goto_${
+        client.constants.commands.settings.categories.find((c) =>
+          c.categories.find((c2) => c2.name === baseObject.setting.name),
+        )?.name
+      }`,
+      emoji: { id: null, name: '🔙' },
+      style: 4,
+    },
+  ]);
+
+  await edit(baseObject, client.ch.buttonRower(components));
 };
 
 const getDisplayEmbed = async (baseObject: CT.BaseSettingsObject) => {
-  if (baseObject.setting.type === 'single') return baseObject.setting.displayEmbed(baseObject);
-
-  if (baseObject.setting.type === 'multi') {
-    return getSelectedRowFromSetting(baseObject);
+  if (baseObject.setting.type === 'single') {
+    await baseObject.setting.displayEmbed(baseObject);
+    return true;
   }
-  return null;
+
+  getSelectedRowFromSetting(baseObject);
+  return false;
 };
 
 const getSelectedRowFromSetting = async (baseObject: CT.BaseSettingsObject) => {
@@ -137,6 +155,10 @@ const getSelectedRowFromSetting = async (baseObject: CT.BaseSettingsObject) => {
     ],
   ]);
 
+  await edit(baseObject, components);
+};
+
+const edit = async (baseObject: CT.BaseSettingsObject, components: Eris.ActionRow[] = []) => {
   if (!('editParent' in baseObject.interactions[0])) {
     await client.ch.reply(
       baseObject.interactions[0],

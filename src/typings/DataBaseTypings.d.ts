@@ -23,21 +23,18 @@ export type antiraidsettings = {
   punishmenttof?: boolean;
 };
 
-export type antispamsettings = {
+export type antispam = {
   guildid: string;
   active: boolean;
-  giveofficialwarnstof: boolean;
-  muteafterwarnsamount: string;
-  kickafterwarnsamount: string;
-  banafterwarnsamount: string;
-  muteenabledtof: boolean;
-  kickenabledtof: boolean;
-  banenabledtof: boolean;
-  readofwarnstof: boolean;
-  bpuserid?: string[];
-  bproleid?: string[];
-  bpchannelid?: string[];
+  wluserid?: string[];
+  wlroleid?: string[];
+  wlchannelid?: string[];
   forcedisabled?: boolean;
+  msgthreshold: number;
+  dupemsgthreshold: number;
+  timeout: number;
+  verbal: boolean;
+  deletespam: boolean;
 };
 
 export type antivirus = {
@@ -74,8 +71,6 @@ export type autopunish = {
   active: boolean;
   addroles?: string[];
   removeroles?: string[];
-  sendtof: boolean;
-  sendchannels?: string[];
   confirmationreq: boolean;
   punishmentawaittime: string;
 };

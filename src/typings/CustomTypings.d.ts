@@ -174,8 +174,9 @@ export interface OldUser {
 export interface SettingsFile {
   type: 'single' | 'multi';
   name: string;
+  relatedSettings?: string[];
   displayEmbed: (BaseSettingsObject) => Promise<void>;
-  buttons: (BaseSettingsObject) => Promise<Eris.ActionRow[]>;
+  buttons: (BaseSettingsObject) => Promise<Eris.Button[][]>;
 }
 
 export interface MultiSettings extends SettingsFile {
@@ -195,3 +196,12 @@ export interface BaseSettingsObject {
 export type BasicReturnType = {
   [key: string]: boolean | number | string | null | (boolean | number | string | null)[];
 };
+
+export interface Editor {
+  run: (
+    cmd: ComponentInteraction,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    earlierRow: any[],
+    field: string,
+  ) => Promise<BasicReturnType> | BasicReturnType;
+}

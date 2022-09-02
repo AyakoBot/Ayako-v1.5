@@ -40,3 +40,4 @@ export const isManageable               = (await import(`./ClientHelperModules/i
 export const msgCTConvert               = (await import(`./ClientHelperModules/msgCTConvert`)).default;
 export const getMember                  = (await import(`./ClientHelperModules/getMember`)).default;
 export const getAudit                   = (await import(`./ClientHelperModules/getAudit`)).default;
+export const database                   = (await import(`./DataBase`));
