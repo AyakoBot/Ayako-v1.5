@@ -134,8 +134,8 @@ const announcement = async (voter, usedRole) => {
       voter.tag
     }** for [voting for Ayako](<https://top.gg/bot/650691698409734151/vote> "Click me to Vote too!")!${
       usedRole
-        ? `\nYou have been given ${usedRole} as gift for the next 12 Hours and 120 <a:AMLantern:982432370814759003>~`
-        : '\nYou have been given 120 <a:AMLantern:982432370814759003> ~'
+        ? `\nYou have been given ${usedRole} as gift for the next 12 Hours and 120 <a:AMAyakoBookGIF:1010325150949969930>~`
+        : '\nYou have been given 120 <a:AMAyakoBookGIF:1010325150949969930> ~'
     }`,
     allowedMentions: {
       users: [],

@@ -29,39 +29,39 @@ module.exports = {
         })
         .addFields(
           {
-            name: '**#1 - 15000<a:AMLantern:982432370814759003>**',
+            name: '**#1 - 15000<a:AMAyakoBookGIF:1010325150949969930>**',
             value: '<@&330766391999463424>',
             inline: true,
           },
           {
-            name: '**#2 - 10000<a:AMLantern:982432370814759003>**',
+            name: '**#2 - 10000<a:AMAyakoBookGIF:1010325150949969930>**',
             value: '<@&358778201868075008>',
             inline: true,
           },
           {
-            name: '**#3 - 5000<a:AMLantern:982432370814759003>**',
+            name: '**#3 - 5000<a:AMAyakoBookGIF:1010325150949969930>**',
             value: '<@&332858829706362882>',
             inline: true,
           },
           {
-            name: '**#4 - 500<a:AMLantern:982432370814759003>**',
+            name: '**#4 - 500<a:AMAyakoBookGIF:1010325150949969930>**',
             value: '<@&389601915958198283>',
             inline: true,
           },
           {
-            name: '**#5 - 200<a:AMLantern:982432370814759003>**',
+            name: '**#5 - 200<a:AMAyakoBookGIF:1010325150949969930>**',
             value: '<@&349652217885622273>',
             inline: true,
           },
           { name: '\u200b', value: '\u200b', inline: false },
           {
             name: 'https://top.gg/bot/650691698409734151/vote\nhttps://top.gg/servers/298954459172700181/vote',
-            value: 'Earn <a:AMLantern:982432370814759003> by voting for Animekos and/or Ayako',
+            value: 'Earn <a:AMAyakoBookGIF:1010325150949969930> by voting for Animekos and/or Ayako',
             inline: false,
           },
         )
         .setDescription(
-          `Buy Roles through the Select Menu below\nYou currently have ${coins} <a:AMLantern:982432370814759003>`,
+          `Buy Roles through the Select Menu below\nYou currently have ${coins} <a:AMAyakoBookGIF:1010325150949969930>`,
         )
         .setColor(msg.client.ch.colorSelector(msg.guild.members.me));
 
@@ -154,7 +154,7 @@ const interactionHandler = async (msg, m) => {
 
     if (r[1] > coins) {
       msg.client.ch.reply(interaction, {
-        content: 'You do not have enough <a:AMLantern:982432370814759003>',
+        content: 'You do not have enough <a:AMAyakoBookGIF:1010325150949969930>',
         ephemeral: true,
       });
       return;
@@ -182,7 +182,7 @@ const interactionHandler = async (msg, m) => {
     ]);
 
     msg.client.ch.reply(interaction, {
-      content: `Congraz, you now have ${role}\nThis has cost you ${r[1]} <a:AMLantern:982432370814759003>`,
+      content: `Congraz, you now have ${role}\nThis has cost you ${r[1]} <a:AMAyakoBookGIF:1010325150949969930>`,
       ephemeral: true,
     });
   });

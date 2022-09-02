@@ -9,7 +9,7 @@ module.exports = {
       msg.content.toLowerCase().startsWith('.balance')
     ) {
       msg.channel.send(
-        'Balance required for Role purchases was switched to Ayako <a:AMLantern:982432370814759003>Read\nhttps://canary.discord.com/channels/298954459172700181/388441229064667157/982460958310027324\nto find out how to gain <a:AMLantern:982432370814759003>\n__You can also have your Nadeko Balance transferred into Ayako__',
+        'Balance required for Role purchases was switched to Ayako <a:AMAyakoBookGIF:1010325150949969930>Read\nhttps://canary.discord.com/channels/298954459172700181/388441229064667157/982460958310027324\nto find out how to gain <a:AMAyakoBookGIF:1010325150949969930>\n__You can also have your Nadeko Balance transferred into Ayako__',
       );
     }
   },

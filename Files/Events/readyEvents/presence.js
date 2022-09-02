@@ -6,13 +6,24 @@ module.exports = async () => {
   const users = await getUsers(client);
 
   if (random > 5) {
-    client.user.setActivity(`${users} Users | v1.5- | ${client.constants.standard.prefix}invite`, {
-      type: Discord.ActivityType.Watching,
-    });
+    client.user.setActivity(
+      `${Number(users)
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} Users | v1.5- | ${
+        client.constants.standard.prefix
+      }invite`,
+      {
+        type: Discord.ActivityType.Watching,
+      },
+    );
   }
   if (random < 5) {
     client.user.setActivity(
-      `${client.guilds.cache.size} Servers | v1.5- | Default Prefix: ${client.constants.standard.prefix}`,
+      `${Number(client.guilds.cache.size)
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} Servers | v1.5- | Default Prefix: ${
+        client.constants.standard.prefix
+      }`,
       {
         type: Discord.ActivityType.Competing,
       },

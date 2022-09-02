@@ -64,11 +64,8 @@ module.exports = {
 
     const embed = new Builders.UnsafeEmbedBuilder()
       .setImage(`attachment://${file.name}`)
-      .setAuthor({
-        name: lan.author.name,
-        iconURL: cmd.client.constants.standard.image,
-        url: cmd.client.constants.standard.invite,
-      })
+      .setTitle(lan.author.name)
+      .setURL(cmd.client.constants.standard.invite)
       .setDescription(cmd.client.ch.stp(lan.description, { guild: cmd.guild }))
       .addFields({ name: language.hint, value: lan.hintmsg })
       .setColor(cmd.client.constants.standard.color);
@@ -182,12 +179,17 @@ module.exports = {
         if (cmd.m) await cmd.client.ch.edit(cmd.m, { attachments: [] });
         cmd.client.ch
           .edit(cmd.m, {
-            embeds: [],
+            embeds: [
+              {
+                type: 'rich',
+                color: cmd.client.constants.standard.color,
+                description: `${cmd.client.ch.stp(lan.timeError, {
+                  channel: r.startchannel,
+                  prefix: cmd.client.constants.standard.prefix,
+                })}`,
+              },
+            ],
             components: [],
-            content: `${cmd.client.ch.stp(lan.timeError, {
-              channel: r.startchannel,
-              prefix: cmd.client.constants.standard.prefix,
-            })}`,
           })
           .catch(() => {});
       }
@@ -217,19 +219,49 @@ module.exports = {
       cmd.client.ch.send(logchannel, { embeds: [log] }, 5000);
     }
     const embed = new Builders.UnsafeEmbedBuilder()
-      .setTitle(
-        lan.author.name,
-        cmd.client.constants.standard.image,
-        cmd.client.constants.standard.invite,
-      )
+      .setTitle(lan.author.name)
+      .setURL(cmd.client.constants.standard.invite)
       .setDescription(cmd.client.ch.stp(lan.finishDesc, { guild: cmd.guild }))
       .setColor(cmd.client.constants.standard.color);
+
+    if (cmd.guild.id === '298954459172700181') {
+      embed
+        .setDescription(
+          "I'm happy you made it.\nNow you can go ahead and introduce yourself in <#763132467041140737>\nAlso drop in and say hi in <#298954459172700181>! We don't bite~",
+        )
+        .setColor(Math.floor(Math.random() * 16777215));
+    }
+
     cmd.client.ch.send(cmd.DM, { embeds: [embed] });
     if (cmd.guild.id === '366219406776336385') {
       cmd.client.ch.send(cmd.DM, {
         content: `**Also worth checking out:**\n<:AMcatbaby:774005429469708300> **Animekos | Anime & Art | Ayako Bot Support | 400+ Emotes | Self Promotion Channels** <:AMcatlove:774010328978686052>\n🌸 https://discord.gg/tMb3QZaWHA 🌸`,
       });
     }
+
+    if (cmd.guild.id === '298954459172700181') {
+      const messages = [
+        `Hi ${cmd.user}, we're so excited to have you here! <:AMahhshit:767189664846708746>`,
+        `Oooh look! A cute ${cmd.user} has joined!~ <:AMlove5:709789932066963578>`,
+        `Can we be best friends, ${cmd.user}? <:AMblushgiggle:854718466821324850>`,
+        `The main character, ${cmd.user}, has appeared! <a:AMwavehigif:709789935070347296>`,
+        `Ayako's favorite ${cmd.user} just joined! <a:AMKokomiShy:888205118971994153>`,
+        `I'm so glad you finally arrived ${cmd.user} !! <a:AMpanic:709789939537150142>`,
+        `Welcome to your new fav server ${cmd.user}~ <:AMblush:709808103570538568>`,
+        `I'm happy you found us ${cmd.user}! <a:AMhyperneko:700772299120443464>`,
+        `Hi ${cmd.user}, new friendships await you here! <:AMhappu:342064276703412234>`,
+        `Having you here ${cmd.user} couldn't be more exciting! <:AMHeadpat:708130511561949234>`,
+      ];
+
+      const messageToSend = `${
+        messages[Math.floor(Math.random() * messages.length)]
+      }\nIntroduce yourself in <#763132467041140737> and customize your profile in <#845171979358044190>!`;
+      cmd.client.channels.cache
+        .get('298954459172700181')
+        .send({ content: messageToSend })
+        .catch(() => {});
+    }
+
     if (cmd.r.finishedrole) cmd.member.roles.add(cmd.r.finishedrole).catch(() => {});
     if (cmd.r.pendingrole) cmd.member.roles.remove(cmd.r.pendingrole).catch(() => {});
   },

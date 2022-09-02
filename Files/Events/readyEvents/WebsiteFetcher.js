@@ -1,7 +1,6 @@
 // eslint-disable-next-line no-shadow
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 const { AutoPoster } = require('topgg-autoposter');
-const jobs = require('node-schedule');
 const auth = require('../../BaseClient/auth.json');
 
 const APIDiscordBotList = 'https://discordbotlist.com/api/v1/bots/650691698409734151/stats';
@@ -13,7 +12,7 @@ module.exports = async () => {
   let allusers = await getAllUsers(client);
   if (!allusers) allusers = client.users.cache.size;
 
-  jobs.scheduleJob('0 0 */1 * * *', () => {
+  setInterval(() => {
     fetch(APIDiscordBots, {
       method: 'post',
       body: JSON.stringify({
@@ -36,7 +35,7 @@ module.exports = async () => {
         Authorization: auth.DBListToken,
       },
     }).catch(() => {});
-  });
+  }, 3600000);
 
   AutoPoster(auth.topGGtoken, client);
 };

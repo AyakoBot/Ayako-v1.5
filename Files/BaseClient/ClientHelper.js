@@ -214,6 +214,15 @@ module.exports = {
    */
   query: async (query, arr, debug) => {
     const client = require('./DiscordClient');
+    let tableName = query.split(/\s+/)[1];
+    if (query.toLowerCase().startsWith('select')) [, , , tableName] = query.split(/\s+/);
+    if (query.toLowerCase().startsWith('delete') || query.toLowerCase().startsWith('insert')) {
+      [, , tableName] = query.split(/\s+/);
+    }
+
+    if (client.executedQueries[tableName.replace(';', '')]) {
+      client.executedQueries[tableName.replace(';', '')] += 1;
+    } else client.executedQueries[tableName.replace(';', '')] = 1;
 
     if (debug === true) console.log(query, arr);
 

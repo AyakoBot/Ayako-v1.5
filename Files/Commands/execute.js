@@ -22,9 +22,30 @@ module.exports = {
   takesFirstArg: false,
   type: 'owner',
   execute: async (msg) => {
-    msg.client.channels.cache.get('827302309368561715').send({
-      content: `This is a Channel about Support for <@650691698409734151>\n**Do not send Messages here if you don't need help with Ayako**\nThis is not a general Support Channel`,
-    });
+    const m = await msg.client.channels.cache
+      .get('554487212276842534')
+      .messages.fetch('1013981979580043344');
+
+    const e = new Builders.UnsafeEmbedBuilder(m.embeds[0]);
+
+    e.setDescription(
+      '**Want to post your artwork?**\n' +
+        '- Apply for the <@&972491319912067092> role\n' +
+        '- Talk in <#298954459172700181> to gain <@&334832484581769217>\n' +
+        '\n' +
+        '**How to apply for <@&972491319912067092>**\n' +
+        "1. DM an <@&809261905855643668> 3 of your artworks. These images will be reverse image searched, so don't try to pull anything funny!\n" +
+        '2. A staff member will verify you as an Artist!\n' +
+        '\n' +
+        '**General Art posting Rules**\n' +
+        '- Do not steal Art\n' +
+        '- Do not post NSFW Art\n' +
+        '- Line Tracing posts are allowed __as long as__ you provide a link to the original artwork\n' +
+        'Failure to adhere to these rules will result in punishment and exclusion.',
+    );
+    e.setColor(11599616);
+
+    m.edit({ embeds: [e] });
   },
 };
 

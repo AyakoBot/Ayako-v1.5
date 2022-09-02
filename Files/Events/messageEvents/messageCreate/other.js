@@ -121,6 +121,32 @@ module.exports = {
     ) {
       msg.delete().catch(() => {});
     }
+
+    if (
+      msg.channel.id === '554487212276842534' ||
+      (msg.attachments.size > 0 && msg.author.id !== '650691698409734151')
+    ) {
+      const res = await msg.client.ch.query(
+        `SELECT * FROM stickymessages WHERE guildid = $1 AND channelid = $2;`,
+        [msg.guild.id, msg.channel.id],
+      );
+      if (!res || !res.rowCount) return;
+
+      const r = res.rows[0];
+      const lastMsg = await msg.channel.messages.fetch(r.lastmsgid);
+      const newMsg = {
+        content: lastMsg.content,
+        embeds: lastMsg.embeds,
+        attachments: lastMsg.attachments,
+      };
+      await lastMsg.delete();
+      const newM = await msg.channel.send(newMsg);
+      msg.client.ch.query(
+        `UPDATE stickymessages SET lastmsgid = $1 WHERE guildid = $2 AND lastmsgid = $3;`,
+        [newM.id, msg.guild.id, r.lastmsgid],
+      );
+    }
+
     if (msg.guild.id === '298954459172700181') {
       if (
         msg.content.toLocaleLowerCase().includes('http://') ||

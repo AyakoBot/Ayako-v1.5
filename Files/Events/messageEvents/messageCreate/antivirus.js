@@ -469,7 +469,7 @@ const saveToBadLink = async (linkObject, msg, hrefLogging) => {
 
     axios.post('https://yuri.bots.lostluma.dev/phish/report', {
       body: { url: appended, reason: 'Malicious' },
-      authorization: auth.phishAPI,
+      Authorization: auth.phishAPI,
     });
   }
 };

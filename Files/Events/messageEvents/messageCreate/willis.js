@@ -2,9 +2,12 @@ module.exports = {
   async execute(msg) {
     if (!msg.channel || msg.channel.type === 1) return;
     if (
-      !['979811225212956722', '887353453666512997', '1007037376821985391'].includes(
-        msg.channel.id,
-      ) ||
+      ![
+        '979811225212956722',
+        '887353453666512997',
+        '1007037376821985391',
+        '803246561995522059',
+      ].includes(msg.channel.id) ||
       !msg.author
     ) {
       return;

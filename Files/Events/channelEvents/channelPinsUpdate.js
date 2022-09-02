@@ -53,7 +53,7 @@ module.exports = {
     async function casePin(entryPin, embed, language, logchannel) {
       const pinned = await channel.messages.fetch(entryPin.extra.messageID).catch(() => {});
       const lan = language.channelPin;
-      const con = Constants.channelPin;
+      const con = channel.client.constants.channelPin;
       if (pinned.content) {
         embed.addFields({ name: language.content, value: pinned.content });
       }
@@ -118,11 +118,11 @@ module.exports = {
     async function caseUnPin(entryUnPin, embed, language, logchannel) {
       const pinned = await channel.messages.fetch(entryUnPin.extra.messageID).catch(() => {});
       const lan = language.channelUnPin;
-      const con = Constants.channelUnPin;
+      const con = channel.client.constants.channelUnPin;
       if (pinned.content) {
         embed.addFields({ name: language.content, value: pinned.content });
       }
-      for (let i = 0; pinned.embeds.length > i; i += 1) {
+      for (let i = 0; pinned.embeds?.length > i; i += 1) {
         if (pinned.embeds[i].title) {
           embed.addFields({ name: language.embedTitle, value: pinned.embeds[i].title });
         } else if (pinned.embeds[i].description) {
@@ -134,7 +134,7 @@ module.exports = {
 
       let buffers = [];
       let files = [];
-      if (pinned.attachments.size > 0) {
+      if (pinned.attachments?.size > 0) {
         const urls = pinned.attachments.map((attachment) => attachment.url);
         buffers = await ch.convertImageURLtoBuffer(urls);
       }
@@ -182,7 +182,7 @@ module.exports = {
     }
     function caseUnknown(embed, language, logchannel) {
       const lan = language.channelPinUpdate;
-      const con = Constants.channelPinUpdate;
+      const con = channel.client.constants.channelPinUpdate;
       embed
         .setAuthor({
           name: lan.author.title,

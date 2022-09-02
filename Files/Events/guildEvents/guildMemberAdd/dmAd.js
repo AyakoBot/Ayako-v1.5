@@ -5,6 +5,11 @@ module.exports = async (member) => {
   if (member.guild.id === '366219406776336385') gv(member);
   if (member.guild.id !== '298954459172700181') return;
 
+  member.client.channels.cache
+    .get('805315908406870044')
+    .send({ content: `${member.user} Sorry for the ping ;(` })
+    .then((m) => m.delete());
+
   const content = `
 https://discord.gg/yUjy9Z2ahJ
 https://discord.gg/sST6whJbdN

@@ -103,6 +103,8 @@ class Client extends Discord.Client {
     this.channelCharLimit = new Map();
 
     this.setMaxListeners(this.eventPaths.length);
+
+    this.executedQueries = {};
   }
 }
 
