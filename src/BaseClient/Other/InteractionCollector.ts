@@ -2,7 +2,7 @@ import { EventEmitter } from 'events';
 import type Eris from 'eris';
 import client from '../ErisClient';
 
-class MessageCollector extends EventEmitter {
+class InteractionCollector extends EventEmitter {
   ended: boolean;
   time: number;
   recieved: number;
@@ -80,4 +80,4 @@ class MessageCollector extends EventEmitter {
   }
 }
 
-export default MessageCollector;
+export default InteractionCollector;
