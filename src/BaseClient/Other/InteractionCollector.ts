@@ -68,6 +68,7 @@ class InteractionCollector extends EventEmitter {
   }
 
   handleInteraction(interaction: Eris.ComponentInteraction) {
+    if (interaction.type !== 3) return;
     if (interaction.message.id === this.message.id) {
       this.emit('collect', interaction);
     }

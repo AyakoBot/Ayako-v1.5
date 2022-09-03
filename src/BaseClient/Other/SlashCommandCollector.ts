@@ -59,6 +59,7 @@ class SlashCommandCollector extends EventEmitter {
   }
 
   handleSlashCommand(interaction: Eris.CommandInteraction) {
+    if (interaction.type !== 2) return;
     if (interaction.channel.id === this.channel.id) {
       this.emit('collect', interaction);
     }
