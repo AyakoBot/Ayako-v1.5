@@ -31,7 +31,7 @@ export default async (
 
   const baseObject: CT.BaseSettingsObject = {
     setting: settingsFile,
-    interactions: [cmd],
+    interactions: [cmd as CT.CommandInteraction],
     page: 0,
     language,
     embed: getBaseEmbed({ language, setting: settingsFile }),
@@ -159,7 +159,12 @@ const getSelectedRowFromSetting = async (baseObject: CT.BaseSettingsObject) => {
 };
 
 const edit = async (baseObject: CT.BaseSettingsObject, components: Eris.ActionRow[] = []) => {
-  if (!('editParent' in baseObject.interactions[0])) {
+  if (baseObject.interactions[0].acknowledged) {
+    await baseObject.interactions[0].editOriginalMessage({
+      embeds: [baseObject.embed],
+      components,
+    });
+  } else if (!('editParent' in baseObject.interactions[0])) {
     await client.ch.reply(
       baseObject.interactions[0],
       { embeds: [baseObject.embed], components },

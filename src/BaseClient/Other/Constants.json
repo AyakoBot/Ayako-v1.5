@@ -533,6 +533,16 @@
         "ruleschannels": [],
         "multichannels": [{ "ident": "multiplier", "type": "text" }],
         "modroles": [{ "ident": "roleid", "type": "role" }]
+      },
+      "fieldTypes": {
+        "anti-spam": {
+          "wluserid": "users",
+          "wlchannelid": "channels",
+          "wlroleid": "roles",
+          "msgthreshold": "number",
+          "dupemsgthreshold": "number",
+          "timeout": "seconds"
+        }
       }
     }
   }

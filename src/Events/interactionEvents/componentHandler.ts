@@ -3,6 +3,8 @@ import type CT from '../../typings/CustomTypings';
 import client from '../../BaseClient/ErisClient';
 
 export default async (cmd: CT.ComponentInteraction) => {
+  if (cmd.data.custom_id.startsWith('nocmd_')) return;
+
   const rawCommand = await getCommand(cmd);
   if (!rawCommand) return;
   const { command, name } = rawCommand;

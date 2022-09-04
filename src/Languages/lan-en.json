@@ -535,6 +535,9 @@
       "nameDescription": "Colour Code Explanation",
       "selectCategory": "Select a Category",
       "selectSetting": "Select a Setting",
+      "editingAuthor": "Editing Ayako Settings",
+      "commandDesc": "Use this Command to edit your currently selected Setting",
+      "useToEdit": "Use </{{command.name}}:{{command.id}}> to edit this Setting",
       "colorNames": {
         "other": "Other",
         "roles": "Roles",

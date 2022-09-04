@@ -2,6 +2,9 @@ import type Eris from 'eris';
 import type Jobs from 'node-schedule';
 import type DBT from './DataBaseTypings';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type AnyArray = any[];
+
 export interface Command {
   name: string;
   cooldownRows?: DBT.cooldowns;
@@ -198,10 +201,16 @@ export type BasicReturnType = {
 };
 
 export interface Editor {
+  handles: string[];
   run: (
     cmd: ComponentInteraction,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    earlierRow: any[],
-    field: string,
-  ) => Promise<BasicReturnType> | BasicReturnType;
+    earlierRow: BasicReturnType,
+    typeOfField: string,
+  ) => Promise<BasicReturnType | null> | null | BasicReturnType;
+  getSelected?: () => Promise<string> | string;
+}
+
+export interface ManagedEditor {
+  getOptions: () => BasicReturnType[];
 }

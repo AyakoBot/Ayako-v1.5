@@ -58,8 +58,10 @@ const edit = async (cmd: CT.ComponentInteraction) => {
   const earlierRow = await getSetting(cmd, name, Number(uniquetimestamp));
   if (!earlierRow) return;
 
-  const newRow = await editor.run(cmd, earlierRow, field);
-  await putNewSettings(cmd, name, newRow, Number(uniquetimestamp));
+  const newRow = await editor.run(cmd, earlierRow, typeOfField);
+  if (newRow) {
+    await putNewSettings(cmd, name, newRow, Number(uniquetimestamp));
+  }
 
   (cmd.data as Eris.ComponentInteractionSelectMenuData).values = [name];
   (await import('../SlashCommands/settings/manager')).default(cmd, cmd.language);
@@ -116,11 +118,156 @@ const getEditor = async (type: string) => {
     .map((f, i) => {
       const { default: possibleFile }: { default: CT.Editor } = possibleFiles[i];
 
-      if (f.replace('.js', '') === type) return possibleFile;
+      if (possibleFile.handles.includes(type) || f.replace('.js', '') === type) return possibleFile;
       return null;
     })
     .filter((f) => !!f)
     .shift();
 
   return file;
+};
+
+export const getEditingEmbed = async (
+  cmd: CT.ComponentInteraction,
+  oldRow: CT.BasicReturnType,
+  editor: CT.Editor,
+  command: Eris.ApplicationCommand,
+): Promise<Eris.Embed> => {
+  const [, , , , name, field] = cmd.data.custom_id.split(/_/g);
+
+  const embed: Eris.Embed = {
+    type: 'rich',
+    author: {
+      name: cmd.language.slashCommands.settings.editingAuthor,
+      icon_url: client.objectEmotes.settings.link,
+      url: client.constants.standard.invite,
+    },
+    color: client.constants.colors.ephemeral,
+    description: await getSelected(cmd, oldRow, field, name, editor),
+    fields: [
+      {
+        name: '\u200b',
+        value: client.ch.stp(cmd.language.slashCommands.settings.useToEdit, { command }),
+      },
+    ],
+  };
+
+  return embed;
+};
+
+const getSelected = (
+  cmd: CT.ComponentInteraction,
+  oldRow: CT.BasicReturnType,
+  field: string,
+  settingsName: string,
+  editor: CT.Editor,
+) => {
+  const error = (
+    expected: string,
+    actual: string | number | boolean | (string | number | boolean | null)[] | null,
+  ) => {
+    throw new Error(
+      `Wrong type of oldData passed\nExpected: "${expected}", actual: "${JSON.stringify(
+        actual,
+        null,
+        2,
+      )}"`,
+    );
+  };
+
+  if (!cmd.guild) return '';
+  if (!cmd.guildID) return '';
+
+  const oldData = oldRow[field as keyof typeof oldRow];
+
+  const settingsType =
+    client.constants.commands.settings.fieldTypes[
+      settingsName as keyof typeof client.constants.commands.settings.fieldTypes
+    ];
+  if (!settingsType) throw new Error(`Missing settingsType for "${settingsName}"`);
+
+  const type = settingsType[field as keyof typeof settingsType];
+  if (!type) throw new Error(`Missing type for "${type}" in "${settingsName}"`);
+  if (!oldData || (Array.isArray(oldData) && !oldData.length)) return cmd.language.none;
+
+  switch (type) {
+    case 'users': {
+      if (!Array.isArray(oldData)) {
+        error('User Array', oldData);
+        return '';
+      }
+
+      return oldData.map((id) => `<@${id}>`).join(', ');
+    }
+    case 'user': {
+      if (typeof oldData !== 'string') {
+        error('User String', oldData);
+        return '';
+      }
+
+      return `<@${oldData}>`;
+    }
+    case 'channels': {
+      if (!Array.isArray(oldData)) {
+        error('Channel Array', oldData);
+        return '';
+      }
+
+      return oldData.map((id) => `<#${id}>`).join(', ');
+    }
+    case 'channel': {
+      if (typeof oldData !== 'string') {
+        error('Channel String', oldData);
+        return '';
+      }
+
+      return `<#${oldData}>`;
+    }
+    case 'roles': {
+      if (!Array.isArray(oldData)) {
+        error('Role Array', oldData);
+        return '';
+      }
+
+      return oldData.map((id) => `<@&${id}>`).join(', ');
+    }
+    case 'role': {
+      if (typeof oldData !== 'string') {
+        error('Role String', oldData);
+        return '';
+      }
+
+      return `<@&${oldData}>`;
+    }
+    case 'number': {
+      if (typeof oldData !== 'string' || Number.isNaN(+oldData)) {
+        error('Number', oldData);
+        return '';
+      }
+
+      return oldData;
+    }
+    case 'string':
+    case 'command': {
+      if (typeof oldData !== 'string') {
+        error('String or Command', oldData);
+        return '';
+      }
+
+      return oldData;
+    }
+    case 'strings':
+    case 'commands': {
+      if (!Array.isArray(oldData)) {
+        error('String Array or Command Array', oldData);
+        return '';
+      }
+
+      return oldData.map((s) => `\`${s}\``).join(', ');
+    }
+    default: {
+      if (!editor.getSelected) throw new Error(`Type for ${type} has no handler`);
+      return editor.getSelected();
+    }
+  }
 };
