@@ -177,6 +177,7 @@
             "min_length": 1,
             "choices": [
               { "name": "Anti-Spam", "value": "anti-spam" },
+              { "name": "Anti-Spam Punishments", "value": "anti-spam-punishments" },
               { "name": "Anti-Virus", "value": "anti-virus" },
               { "name": "Auto-Punish", "value": "auto-punish" },
               { "name": "Blacklist", "value": "blacklist" }

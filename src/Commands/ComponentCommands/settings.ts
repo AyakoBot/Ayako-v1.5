@@ -28,6 +28,11 @@ export default async (cmd: CT.ComponentInteraction, language: CT.Language) => {
       edit(cmd);
       break;
     }
+    case 'gotosetting': {
+      (cmd.data as unknown as Eris.ComponentInteractionSelectMenuData).values = [args[3]];
+      (await import('../SlashCommands/settings/manager')).default(cmd, cmd.language);
+      break;
+    }
     default: {
       break;
     }
@@ -150,9 +155,40 @@ export const getEditingEmbed = async (
       {
         name: '\u200b',
         value: client.ch.stp(cmd.language.slashCommands.settings.useToEdit, { command }),
+        inline: false,
       },
     ],
   };
+
+  if (!name) return embed;
+  if (!field) return embed;
+
+  if (
+    !(
+      name in
+      cmd.language.slashCommands.settings.settings[
+        name as keyof typeof cmd.language.slashCommands.settings.settings
+      ]
+    )
+  ) {
+    throw new Error(`${name} does not exist in Settings Language`);
+  }
+
+  const settingsLan =
+    cmd.language.slashCommands.settings.settings[
+      name as keyof typeof cmd.language.slashCommands.settings.settings
+    ];
+
+  if (!(field in settingsLan)) throw new Error(`${field} does not exist in ${name} Language`);
+  const fieldLan = settingsLan[field as keyof typeof settingsLan] as { name: string; desc: string };
+
+  if (embed.fields) {
+    embed.fields.push({
+      name: fieldLan.name,
+      value: fieldLan.desc,
+      inline: false,
+    });
+  }
 
   return embed;
 };

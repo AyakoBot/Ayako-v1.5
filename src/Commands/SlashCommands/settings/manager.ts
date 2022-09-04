@@ -54,6 +54,24 @@ export default async (
     },
   ]);
 
+  const related =
+    client.constants.commands.settings.relatedSettings[
+      baseObject.setting.name as keyof typeof client.constants.commands.settings.relatedSettings
+    ];
+  if (related) {
+    related.forEach((setting) =>
+      components[components.length - 1].push({
+        type: 2,
+        label:
+          cmd.language.slashCommands.settings.settingsNames[
+            setting as keyof typeof cmd.language.slashCommands.settings.settingsNames
+          ],
+        custom_id: `settings_${baseObject.interactions[0].user.id}_gotosetting_${setting}`,
+        style: 2,
+      }),
+    );
+  }
+
   await edit(baseObject, client.ch.buttonRower(components));
 };
 
@@ -68,7 +86,7 @@ const getDisplayEmbed = async (baseObject: CT.BaseSettingsObject) => {
 };
 
 const getSelectedRowFromSetting = async (baseObject: CT.BaseSettingsObject) => {
-  (baseObject.setting as CT.MultiSettings).listEmbed(baseObject);
+  await (baseObject.setting as unknown as CT.MultiSettings).listEmbed(baseObject);
 
   const rows = await getMultiRows(baseObject);
 
@@ -125,19 +143,20 @@ const getSelectedRowFromSetting = async (baseObject: CT.BaseSettingsObject) => {
       : [{ label: 'placeholder', value: 'placeholder' }],
   };
 
-  const components = client.ch.buttonRower([
-    [listMenu],
+  const components: Eris.Button[][] = [
     [
       {
         type: 2,
         custom_id: `settings_${baseObject.interactions[0].user.id}_${baseObject.setting.name}_page_${baseObject.page}_prev`,
         emoji: { id: null, name: '⬅️' },
+        disabled: true,
         style: 2,
       },
       {
         type: 2,
         custom_id: `settings_${baseObject.interactions[0].user.id}_${baseObject.setting.name}_page_${baseObject.page}_next`,
         emoji: { id: null, name: '➡️' },
+        disabled: Number(rows?.length) <= 25,
         style: 2,
       },
     ],
@@ -153,9 +172,27 @@ const getSelectedRowFromSetting = async (baseObject: CT.BaseSettingsObject) => {
         style: 4,
       },
     ],
-  ]);
+  ];
 
-  await edit(baseObject, components);
+  const related =
+    client.constants.commands.settings.relatedSettings[
+      baseObject.setting.name as keyof typeof client.constants.commands.settings.relatedSettings
+    ];
+  if (related) {
+    related.forEach((setting) =>
+      components[components.length - 1].push({
+        type: 2,
+        label:
+          baseObject.language.slashCommands.settings.settingsNames[
+            setting as keyof typeof baseObject.language.slashCommands.settings.settingsNames
+          ],
+        custom_id: `settings_${baseObject.interactions[0].user.id}_gotosetting_${setting}`,
+        style: 2,
+      }),
+    );
+  }
+
+  await edit(baseObject, client.ch.buttonRower([[listMenu], ...components]));
 };
 
 const edit = async (baseObject: CT.BaseSettingsObject, components: Eris.ActionRow[] = []) => {
@@ -171,12 +208,10 @@ const edit = async (baseObject: CT.BaseSettingsObject, components: Eris.ActionRo
       baseObject.language,
     );
   } else {
-    await baseObject.interactions[0]
-      .editParent({
-        embeds: [baseObject.embed],
-        components,
-      })
-      .catch(() => null);
+    await baseObject.interactions[0].editParent({
+      embeds: [baseObject.embed],
+      components,
+    });
   }
 };
 

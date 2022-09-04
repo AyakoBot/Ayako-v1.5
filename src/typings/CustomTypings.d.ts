@@ -183,7 +183,9 @@ export interface SettingsFile {
 }
 
 export interface MultiSettings extends SettingsFile {
-  listEmbed: (BaseSettingsObject) => Promise<void>;
+  listEmbed: (baseObject: BaseSettingsObject) => Promise<void>;
+  displayEmbed: (baseObject: BaseSettingsObject, uniquetimestamp: number) => Promise<void>;
+  buttons: (baseObject: BaseSettingsObject, uniquetimestamp: number) => Promise<Eris.Button[][]>;
 }
 
 export type Language = typeof import('../Languages/lan-en.json');

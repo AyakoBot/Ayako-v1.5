@@ -430,6 +430,7 @@
           "name": "auto-moderation",
           "categories": [
             { "name": "anti-spam", "category": "chats" },
+            { "name": "anti-spam-punishments", "category": "chats" },
             { "name": "anti-virus", "category": "chats" },
             { "name": "auto-punish", "category": "other" },
             { "name": "blacklist", "category": "chats" }
@@ -478,10 +479,14 @@
           "wluserid": "users",
           "wlroleid": "roles"
         },
-        "auto-punish": {}
+        "anti-spam-punishments": {
+          "warnamount": "number",
+          "punishment": "punishment"
+        }
       },
       "tableNames": {
         "anti-spam": "antispam",
+        "anti-spam-punishments": "antispampunishments",
         "anti-raid": "antiraidsettings",
         "anti-virus": "antivirus",
         "auto-punish": "autopunish",
@@ -543,6 +548,10 @@
           "dupemsgthreshold": "number",
           "timeout": "seconds"
         }
+      },
+      "relatedSettings": {
+        "anti-spam": ["anti-spam-punishments"],
+        "anti-spam-punishments": ["anti-spam"]
       }
     }
   }

@@ -551,6 +551,7 @@
         "other": "Other"
       },
       "settingsNames": {
+        "anti-spam-punishments": "Anti-Spam Punishments",
         "anti-spam": "Anti-Spam",
         "anti-virus": "Anti-Virus",
         "auto-punish": "Auto Punish",
@@ -605,9 +606,40 @@
       },
       "settings": {
         "anti-spam": {
-          "wlchannelid": "Whitelisted Channels",
-          "wluserid": "Whitelisted Users",
-          "wlroleid": "Whitelisted Roles"
+          "wlchannelid": {
+            "name": "Whitelisted Channels",
+            "desc": "Channels ignored by Ayako Anti-Spam"
+          },
+          "wluserid": {
+            "name": "Whitelisted Users",
+            "desc": "Users ignored by Ayako Anti-Spam"
+          },
+          "wlroleid": {
+            "name": "Whitelisted Roles",
+            "desc": "Roles ignored by Ayako Anti-Spam"
+          },
+          "msgthreshold": {
+            "name": "Message Threshold",
+            "desc": "Used in combination with `Timeout`\nUser will be punished after exceeding the set `Message Threshold` within the set `Timeout`"
+          },
+          "dupemsgthreshold": {
+            "name": "Duplicate Message Threshold",
+            "desc": "Used in combination with `Timeout`\nUser will be punished after exceeding the set `Duplicate Message Threshold` within the set `Timeout`"
+          },
+          "timeout": {
+            "name": "Timeout",
+            "desc": "Used in combination with `Message Threshold` and `Duplicate Message Threshold`\nUser will be punished after exceeding the set `Message Threshold` or `Duplicate Message Threshold` within the set `Timeout`"
+          }
+        },
+        "anti-spam-punishments": {
+          "warnamount": {
+            "name": "Warn Amount",
+            "desc": "Number of Warns at which this Punishment is applied"
+          },
+          "punishment": {
+            "name": "Punishment",
+            "desc": "Punishment to apply"
+          }
         },
         "auto-punish": {
           "description": "**How to use**\nTo use the Auto-Punishment System\n__use__ </strike:1014158232299778048>\ninstead of regular Moderation Commands\n\nThe Auto-Punish System does not take your ability to use regular Moderation Commands, it just guarantees consisten Punishments\n\n\u200b",
@@ -1194,5 +1226,6 @@
   "Number": "Number",
   "Punishment": "Punishment",
   "noReasonProvided": "No Reason provided",
-  "Aborted": "Aborted"
+  "Aborted": "Aborted",
+  "Description": "Description"
 }
