@@ -118,7 +118,9 @@ const getEditor = async (type: string) => {
     .map((f, i) => {
       const { default: possibleFile }: { default: CT.Editor } = possibleFiles[i];
 
-      if (possibleFile.handles.includes(type) || f.replace('.js', '') === type) return possibleFile;
+      if (possibleFile.handles?.includes(type) || f.replace('.js', '') === type) {
+        return possibleFile;
+      }
       return null;
     })
     .filter((f) => !!f)
@@ -129,7 +131,7 @@ const getEditor = async (type: string) => {
 
 export const getEditingEmbed = async (
   cmd: CT.ComponentInteraction,
-  oldRow: CT.BasicReturnType,
+  row: CT.BasicReturnType,
   editor: CT.Editor,
   command: Eris.ApplicationCommand,
 ): Promise<Eris.Embed> => {
@@ -143,7 +145,7 @@ export const getEditingEmbed = async (
       url: client.constants.standard.invite,
     },
     color: client.constants.colors.ephemeral,
-    description: await getSelected(cmd, oldRow, field, name, editor),
+    description: await getSelected(cmd, row, field, name, editor),
     fields: [
       {
         name: '\u200b',
@@ -157,7 +159,7 @@ export const getEditingEmbed = async (
 
 const getSelected = (
   cmd: CT.ComponentInteraction,
-  oldRow: CT.BasicReturnType,
+  row: CT.BasicReturnType,
   field: string,
   settingsName: string,
   editor: CT.Editor,
@@ -167,7 +169,7 @@ const getSelected = (
     actual: string | number | boolean | (string | number | boolean | null)[] | null,
   ) => {
     throw new Error(
-      `Wrong type of oldData passed\nExpected: "${expected}", actual: "${JSON.stringify(
+      `Wrong type of data passed\nExpected: "${expected}", actual: "${JSON.stringify(
         actual,
         null,
         2,
@@ -178,7 +180,7 @@ const getSelected = (
   if (!cmd.guild) return '';
   if (!cmd.guildID) return '';
 
-  const oldData = oldRow[field as keyof typeof oldRow];
+  const data = row[field as keyof typeof row];
 
   const settingsType =
     client.constants.commands.settings.fieldTypes[
@@ -188,82 +190,82 @@ const getSelected = (
 
   const type = settingsType[field as keyof typeof settingsType];
   if (!type) throw new Error(`Missing type for "${type}" in "${settingsName}"`);
-  if (!oldData || (Array.isArray(oldData) && !oldData.length)) return cmd.language.none;
+  if (!data || (Array.isArray(data) && !data.length)) return cmd.language.none;
 
   switch (type) {
     case 'users': {
-      if (!Array.isArray(oldData)) {
-        error('User Array', oldData);
+      if (!Array.isArray(data)) {
+        error('User Array', data);
         return '';
       }
 
-      return oldData.map((id) => `<@${id}>`).join(', ');
+      return data.map((id) => `<@${id}>`).join(', ');
     }
     case 'user': {
-      if (typeof oldData !== 'string') {
-        error('User String', oldData);
+      if (typeof data !== 'string') {
+        error('User String', data);
         return '';
       }
 
-      return `<@${oldData}>`;
+      return `<@${data}>`;
     }
     case 'channels': {
-      if (!Array.isArray(oldData)) {
-        error('Channel Array', oldData);
+      if (!Array.isArray(data)) {
+        error('Channel Array', data);
         return '';
       }
 
-      return oldData.map((id) => `<#${id}>`).join(', ');
+      return data.map((id) => `<#${id}>`).join(', ');
     }
     case 'channel': {
-      if (typeof oldData !== 'string') {
-        error('Channel String', oldData);
+      if (typeof data !== 'string') {
+        error('Channel String', data);
         return '';
       }
 
-      return `<#${oldData}>`;
+      return `<#${data}>`;
     }
     case 'roles': {
-      if (!Array.isArray(oldData)) {
-        error('Role Array', oldData);
+      if (!Array.isArray(data)) {
+        error('Role Array', data);
         return '';
       }
 
-      return oldData.map((id) => `<@&${id}>`).join(', ');
+      return data.map((id) => `<@&${id}>`).join(', ');
     }
     case 'role': {
-      if (typeof oldData !== 'string') {
-        error('Role String', oldData);
+      if (typeof data !== 'string') {
+        error('Role String', data);
         return '';
       }
 
-      return `<@&${oldData}>`;
+      return `<@&${data}>`;
     }
     case 'number': {
-      if (typeof oldData !== 'string' || Number.isNaN(+oldData)) {
-        error('Number', oldData);
+      if (typeof data !== 'string' || Number.isNaN(+data)) {
+        error('Number', data);
         return '';
       }
 
-      return oldData;
+      return data;
     }
     case 'string':
     case 'command': {
-      if (typeof oldData !== 'string') {
-        error('String or Command', oldData);
+      if (typeof data !== 'string') {
+        error('String or Command', data);
         return '';
       }
 
-      return oldData;
+      return data;
     }
     case 'strings':
     case 'commands': {
-      if (!Array.isArray(oldData)) {
-        error('String Array or Command Array', oldData);
+      if (!Array.isArray(data)) {
+        error('String Array or Command Array', data);
         return '';
       }
 
-      return oldData.map((s) => `\`${s}\``).join(', ');
+      return data.map((s) => `\`${s}\``).join(', ');
     }
     default: {
       if (!editor.getSelected) throw new Error(`Type for ${type} has no handler`);

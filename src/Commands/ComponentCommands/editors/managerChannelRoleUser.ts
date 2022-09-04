@@ -75,6 +75,11 @@ const handleCollectors = async (
   c: Eris.ApplicationCommand,
 ): Promise<CT.BasicReturnType | null> => {
   const finishedData: string[] = (oldRow[field as keyof typeof oldRow] as string[]) || [];
+  const newRow: CT.BasicReturnType = {};
+
+  Object.entries(oldRow).forEach(([k, v]) => {
+    newRow[k] = v;
+  });
 
   return new Promise((res) => {
     const interactionCollector = new InteractionCollector(cmd.message, 360000);
@@ -111,14 +116,6 @@ const handleCollectors = async (
       }
 
       if (button.data.custom_id === 'nocmd_settings_done') {
-        const newRow: CT.BasicReturnType = {};
-
-        Object.entries(oldRow).forEach(([k, v]) => {
-          newRow[k] = v;
-        });
-
-        newRow[field as keyof typeof newRow] = finishedData;
-
         interactionCollector.stop();
         commandCollector.stop();
 
@@ -138,17 +135,16 @@ const handleCollectors = async (
       command.data.options.forEach((option) => {
         if (!('value' in option)) return;
 
-        if (!finishedData.includes(String(option.value))) {
-          finishedData.push(String(option.value));
-        } else {
-          finishedData.splice(finishedData.indexOf(String(option.value)), 1);
-        }
+        if (!finishedData.includes(String(option.value))) finishedData.push(String(option.value));
+        else finishedData.splice(finishedData.indexOf(String(option.value)), 1);
+
+        newRow[field as keyof typeof newRow] = finishedData;
       });
 
       await command.createMessage({ content: client.stringEmotes.tick }).catch(() => null);
       command.deleteOriginalMessage().catch(() => null);
 
-      const embed = await (await import('../settings')).getEditingEmbed(cmd, oldRow, editor, c);
+      const embed = await (await import('../settings')).getEditingEmbed(cmd, newRow, editor, c);
       cmd.message.edit({ embeds: [embed] }).catch(() => null);
     });
   });
