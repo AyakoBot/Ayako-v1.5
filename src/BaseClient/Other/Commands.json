@@ -275,5 +275,35 @@
         "autocomplete": true
       }
     ]
+  },
+  "test": {
+    "type": 1,
+    "name": "test",
+    "description": "test command",
+    "dm_permission": false,
+    "default_member_permissions": 8,
+    "options": [
+      {
+        "type": 7,
+        "name": "channel-1",
+        "description": "Channel Option No. 1",
+        "required": true,
+        "channel_types": [0, 2, 5, 10, 11, 12, 15]
+      },
+      {
+        "type": 7,
+        "name": "channel-2",
+        "description": "Channel Option No. 2",
+        "required": true,
+        "channel_types": [0, 2, 5, 10, 11, 12, 15]
+      },
+      {
+        "type": 7,
+        "name": "channel-3",
+        "description": "Channel Option No. 3",
+        "required": false,
+        "channel_types": [0, 2, 5, 10, 11, 12, 15]
+      }
+    ]
   }
 }
