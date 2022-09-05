@@ -184,8 +184,8 @@ export interface SettingsFile {
 
 export interface MultiSettings extends SettingsFile {
   listEmbed: (baseObject: BaseSettingsObject) => Promise<void>;
-  displayEmbed: (baseObject: BaseSettingsObject, uniquetimestamp: number) => Promise<void>;
-  buttons: (baseObject: BaseSettingsObject, uniquetimestamp: number) => Promise<Eris.Button[][]>;
+  displayEmbed: (baseObject: MultiSettingsObject) => Promise<void>;
+  buttons: (baseObject: MultiSettingsObject) => Promise<Eris.Button[][]>;
 }
 
 export type Language = typeof import('../Languages/lan-en.json');
@@ -196,6 +196,16 @@ export interface BaseSettingsObject {
   embed: Eris.Embed;
   page: number;
   language: Language;
+}
+
+type PartialMultiSettingsObject = Omit<BaseSettingsObject, 'setting', 'page'>;
+
+export interface MultiSettingsObject extends PartialMultiSettingsObject {
+  setting: MultiSettings;
+  interactions: (CommandInteraction | ComponentInteraction)[];
+  embed: Eris.Embed;
+  language: Language;
+  uniquetimestamp: number;
 }
 
 export type BasicReturnType = {
