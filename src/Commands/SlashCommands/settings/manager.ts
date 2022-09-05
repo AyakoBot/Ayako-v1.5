@@ -34,7 +34,7 @@ export default async (
     interactions: [cmd as CT.CommandInteraction],
     page: 0,
     language,
-    embed: getBaseEmbed({ language, setting: settingsFile }),
+    embed: getBaseEmbed({ language, name: settingsFile.name }),
   };
 
   const proceed = await getDisplayEmbed(baseObject);
@@ -92,12 +92,12 @@ const getSelectedRowFromSetting = async (baseObject: CT.BaseSettingsObject) => {
 
   const listMenu: Eris.SelectMenu = {
     type: 3,
-    custom_id: `${baseObject.setting.name}_${baseObject.interactions[0].user.id}_settingsSelect_multi`,
+    custom_id: `settings_${baseObject.interactions[0].user.id}_view`,
     placeholder: baseObject.language.slashCommands.settings.mmrPlaceholder,
-    disabled: !rows,
+    disabled: !rows?.length,
     min_values: 1,
     max_values: 1,
-    options: rows
+    options: rows?.length
       ? rows.slice(0, 25).map((r, i) => {
           const identifiers =
             client.constants.commands.settings.mrmIdentifiers[
@@ -111,24 +111,60 @@ const getSelectedRowFromSetting = async (baseObject: CT.BaseSettingsObject) => {
           identifiers.forEach((identifier) => {
             if (!identifier) return;
             if (label) return;
+            const settingsLan =
+              baseObject.language.slashCommands.settings.settings[
+                baseObject.setting
+                  .name as keyof typeof baseObject.language.slashCommands.settings.settings
+              ];
+
+            if (
+              !settingsLan ||
+              !(baseObject.setting.name in baseObject.language.slashCommands.settings.settings)
+            ) {
+              return;
+            }
+
+            const fieldLan = settingsLan[identifier.ident as keyof typeof settingsLan] as {
+              name: string;
+              desc: string;
+            };
+            if (!fieldLan || !(identifier.ident in settingsLan)) return;
+            const identName = fieldLan.name;
 
             switch (identifier.type) {
               case 'role': {
-                label = `<@&${identifier.ident}>`;
+                label = `${identName}: ${
+                  r[identifier.ident]
+                    ? baseObject.interactions[0].guild?.roles.get(String(r[identifier.ident]))?.name
+                    : [identifier.ident]
+                }`;
                 break;
               }
               case 'channel': {
-                label = `<#${identifier.ident}>`;
+                label = `${identName}: ${
+                  r[identifier.ident]
+                    ? baseObject.interactions[0].guild?.channels.get(String(r[identifier.ident]))
+                        ?.name
+                    : [identifier.ident]
+                }>`;
                 break;
               }
               case 'emote': {
-                emoji.animated = identifier.ident.startsWith('<a');
-                emoji.id = identifier.ident.split(/:/g)[emoji.animated ? 1 : 0].replace(/</g, '');
-                emoji.name = identifier.ident.split(/:/g)[emoji.animated ? 2 : 1].replace(/>/g, '');
+                emoji.animated = String(r[identifier.ident])?.startsWith('<a');
+                emoji.id = String(r[identifier.ident])?.split(/:/g)[
+                  // required for formatting
+                  emoji.animated ? 1 : 0
+                ].replace(/</g, '');
+                emoji.name = String(r[identifier.ident])?.split(/:/g)[
+                  // required for formatting
+                  emoji.animated ? 2 : 1
+                ].replace(/>/g, '');
                 break;
               }
               default: {
-                label = String(r[identifier.ident]);
+                label = `${identName}: ${
+                  String(r[identifier.ident]) === 'null' ? '-' : String(r[identifier.ident])
+                }`;
                 break;
               }
             }
@@ -136,7 +172,9 @@ const getSelectedRowFromSetting = async (baseObject: CT.BaseSettingsObject) => {
 
           return {
             label: `${label ? `ID: ${i} | ${label}` : `ID: ${i}`}`,
-            value: String(r.uniquetimestamp),
+            value: `settings_${baseObject.interactions[0].user.id}_view_${
+              baseObject.setting.name
+            }_${String(r.uniquetimestamp)}`,
             emoji: emoji.name ? emoji : undefined,
           };
         })
@@ -151,6 +189,12 @@ const getSelectedRowFromSetting = async (baseObject: CT.BaseSettingsObject) => {
         emoji: { id: null, name: '⬅️' },
         disabled: true,
         style: 2,
+      },
+      {
+        type: 2,
+        custom_id: `settings_${baseObject.interactions[0].user.id}_add_${baseObject.setting.name}`,
+        emoji: client.objectEmotes.plusBG,
+        style: 3,
       },
       {
         type: 2,
@@ -195,7 +239,10 @@ const getSelectedRowFromSetting = async (baseObject: CT.BaseSettingsObject) => {
   await edit(baseObject, client.ch.buttonRower([[listMenu], ...components]));
 };
 
-const edit = async (baseObject: CT.BaseSettingsObject, components: Eris.ActionRow[] = []) => {
+export const edit = async (
+  baseObject: CT.BaseSettingsObject,
+  components: Eris.ActionRow[] = [],
+) => {
   if (baseObject.interactions[0].acknowledged) {
     await baseObject.interactions[0].editOriginalMessage({
       embeds: [baseObject.embed],
@@ -225,20 +272,20 @@ const getMultiRows = (baseObject: CT.BaseSettingsObject) =>
       } WHERE guildid = $1;`,
       [baseObject.interactions[0].guildID],
     )
-    .then((r: { [key: string]: string | number | null | boolean }[] | null) => r);
+    .then((r: { [key: string]: string | number | null | boolean }[] | null) => r || []);
 
-const getBaseEmbed = ({
+export const getBaseEmbed = ({
   language,
-  setting,
+  name,
 }: {
   language: CT.Language;
-  setting: CT.SettingsFile;
+  name: string;
 }): Eris.Embed => ({
   type: 'rich',
   author: {
     name: client.ch.stp(language.slashCommands.settings.authorType, {
       type: language.slashCommands.settings.settingsNames[
-        setting.name as keyof typeof language.slashCommands.settings.settingsNames
+        name as keyof typeof language.slashCommands.settings.settingsNames
       ],
     }),
     icon_url: client.objectEmotes.settings.link,
