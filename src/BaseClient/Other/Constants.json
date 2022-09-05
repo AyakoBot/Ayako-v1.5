@@ -520,6 +520,7 @@
         "reaction-role-settings": "rrreactions"
       },
       "mrmIdentifiers": {
+        "anti-spam-punishments": [{"ident": "warnamount", "type": "string"}],
         "deletecommands": [{ "ident": "commands", "type": "text" }],
         "reactionroles": [{ "ident": "name", "type": "text" }],
         "rrbuttons": [
