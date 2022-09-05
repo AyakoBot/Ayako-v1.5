@@ -36,7 +36,9 @@ const editor: CT.Editor = {
       options: managedEditor.getOptions(),
     });
 
-    const embed = await (await import('../settings')).getEditingEmbed(cmd, oldRow, editor, command);
+    const embed = await (
+      await import('../settingsEditingEmbed')
+    ).default(cmd, oldRow, editor, command);
     const components = client.ch.buttonRower([
       {
         type: 2,
@@ -144,7 +146,7 @@ const handleCollectors = async (
       await command.createMessage({ content: client.stringEmotes.tick }).catch(() => null);
       command.deleteOriginalMessage().catch(() => null);
 
-      const embed = await (await import('../settings')).getEditingEmbed(cmd, newRow, editor, c);
+      const embed = await (await import('../settingsEditingEmbed')).default(cmd, newRow, editor, c);
       cmd.message.edit({ embeds: [embed] }).catch(() => null);
     });
   });
