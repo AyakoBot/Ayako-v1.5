@@ -34,7 +34,7 @@ export default async (
   const embed: Eris.EmbedOptions = {
     author: {
       name: language.error,
-      icon_url: client.constants.standard.errorImage,
+      icon_url: client.constants.standard.error,
       url: client.constants.standard.invite,
     },
     color: client.constants.colors.warning,
