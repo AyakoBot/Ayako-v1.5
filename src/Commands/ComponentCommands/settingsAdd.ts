@@ -17,6 +17,9 @@ export default async (cmd: CT.ComponentInteraction) => {
     [false, cmd.guildID, uniquetimestamp],
   );
 
-  (cmd.data as Eris.ComponentInteractionSelectMenuData).values = [name];
-  (await import('../SlashCommands/settings/manager')).default(cmd, cmd.language);
+  (cmd.data as Eris.ComponentInteractionSelectMenuData).values = [
+    `settings_${cmd.user.id}_view_${name}_${uniquetimestamp}`,
+  ];
+  (cmd.data as Eris.ComponentInteractionSelectMenuData).custom_id = `settings_${cmd.user.id}_view`;
+  (await import('./settingsView')).default(cmd);
 };
