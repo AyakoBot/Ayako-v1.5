@@ -26,9 +26,25 @@ export default async (cmd: CT.ComponentInteraction) => {
   };
 
   await setting.displayEmbed(baseObject);
+  const components = await setting.buttons(baseObject);
+  components.push([
+    {
+      type: 2,
+      custom_id: `settings_${baseObject.interactions[0].user.id}_gotosetting_${setting.name}`,
+      emoji: { id: null, name: '🔙' },
+      style: 4,
+    },
+    {
+      type: 2,
+      custom_id: `settings_${baseObject.interactions[0].user.id}_delete_${setting.name}_${baseObject.uniquetimestamp}`,
+      emoji: client.objectEmotes.trash,
+      style: 2,
+    },
+  ]);
+
   await (
     await import('../SlashCommands/settings/manager')
-  ).edit(baseObject as unknown as CT.BaseSettingsObject);
+  ).edit(baseObject as unknown as CT.BaseSettingsObject, client.ch.buttonRower(components));
 };
 
 const getSettingsFile = async (name: string) => {
