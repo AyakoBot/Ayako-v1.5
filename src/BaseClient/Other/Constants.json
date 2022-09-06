@@ -477,9 +477,13 @@
           "active": "boolean",
           "wlchannelid": "channels",
           "wluserid": "users",
-          "wlroleid": "roles"
+          "wlroleid": "roles",
+          "msgthreshold": "number",
+          "dupemsgthreshold": "number",
+          "timeout": "seconds"
         },
         "anti-spam-punishments": {
+          "active": "boolean",
           "warnamount": "number",
           "punishment": "punishment"
         }
@@ -520,7 +524,7 @@
         "reaction-role-settings": "rrreactions"
       },
       "mrmIdentifiers": {
-        "anti-spam-punishments": [{"ident": "warnamount", "type": "string"}],
+        "anti-spam-punishments": [{ "ident": "warnamount", "type": "string" }],
         "deletecommands": [{ "ident": "commands", "type": "text" }],
         "reactionroles": [{ "ident": "name", "type": "text" }],
         "rrbuttons": [
@@ -539,16 +543,6 @@
         "ruleschannels": [],
         "multichannels": [{ "ident": "multiplier", "type": "text" }],
         "modroles": [{ "ident": "roleid", "type": "role" }]
-      },
-      "fieldTypes": {
-        "anti-spam": {
-          "wluserid": "users",
-          "wlchannelid": "channels",
-          "wlroleid": "roles",
-          "msgthreshold": "number",
-          "dupemsgthreshold": "number",
-          "timeout": "seconds"
-        }
       },
       "relatedSettings": {
         "anti-spam": ["anti-spam-punishments"],
