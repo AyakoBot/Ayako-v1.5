@@ -646,3 +646,11 @@ export interface giveawaycollecttime {
   msgid: string;
   endtime: number;
 }
+
+export interface antispampunishments {
+  guildid: string;
+  punishment: string;
+  warnamount: string;
+  uniquetimestamp: string;
+  active: boolean;
+}
