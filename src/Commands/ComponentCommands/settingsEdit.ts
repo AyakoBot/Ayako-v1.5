@@ -32,8 +32,18 @@ export default async (cmd: CT.ComponentInteraction) => {
     await putNewSettings(cmd, name, newRow, Number(uniquetimestamp));
   }
 
-  (cmd.data as Eris.ComponentInteractionSelectMenuData).values = [name];
-  (await import('../SlashCommands/settings/manager')).default(cmd, cmd.language);
+  if (!uniquetimestamp) {
+    (cmd.data as Eris.ComponentInteractionSelectMenuData).values = [name];
+    (await import('../SlashCommands/settings/manager')).default(cmd, cmd.language);
+  } else {
+    (cmd.data as Eris.ComponentInteractionSelectMenuData).values = [
+      `settings_${cmd.user.id}_view_${name}_${uniquetimestamp}`,
+    ];
+    (
+      cmd.data as Eris.ComponentInteractionSelectMenuData
+    ).custom_id = `settings_${cmd.user.id}_view`;
+    (await import('./settingsView')).default(cmd);
+  }
 };
 
 const putNewSettings = async (
@@ -87,6 +97,7 @@ const getEditor = async (type: string) => {
     .map((f, i) => {
       const { default: possibleFile }: { default: CT.Editor } = possibleFiles[i];
 
+      if (!possibleFile) return null;
       if (possibleFile.handles?.includes(type) || f.replace('.js', '') === type) {
         return possibleFile;
       }
