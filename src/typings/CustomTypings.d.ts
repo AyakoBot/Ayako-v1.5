@@ -224,5 +224,5 @@ export interface Editor {
 }
 
 export interface ManagedEditor {
-  getOptions: () => BasicReturnType[];
+  getOptions: (cmd: ComponentInteraction) => Eris.CommandOptions[];
 }
