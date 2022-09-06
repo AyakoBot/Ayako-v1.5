@@ -6,7 +6,7 @@ import InteractionCollector from '../../../BaseClient/Other/InteractionCollector
 import SlashCommandCollector from '../../../BaseClient/Other/SlashCommandCollector';
 
 const editor: CT.Editor = {
-  handles: ['channels', 'roles', 'users'],
+  handles: ['channels', 'roles', 'users', 'number', 'punishment'],
   run: async (cmd, oldRow, typeOfField) => {
     if (!cmd.guildID) return null;
     if (!cmd.guild) return null;
@@ -14,8 +14,8 @@ const editor: CT.Editor = {
     const [, , , , name, field] = cmd.data.custom_id.split(/_/g);
 
     const settingsType =
-      client.constants.commands.settings.fieldTypes[
-        name as keyof typeof client.constants.commands.settings.fieldTypes
+      client.constants.commands.settings.settings[
+        name as keyof typeof client.constants.commands.settings.settings
       ];
     if (!settingsType) throw new Error(`Missing settingsType for "${name}"`);
 
@@ -33,7 +33,7 @@ const editor: CT.Editor = {
       default_member_permissions: 32,
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      options: managedEditor.getOptions(),
+      options: managedEditor.getOptions(cmd),
     });
 
     const embed = await (
@@ -76,7 +76,7 @@ const handleCollectors = async (
   oldRow: CT.BasicReturnType,
   c: Eris.ApplicationCommand,
 ): Promise<CT.BasicReturnType | null> => {
-  const finishedData: string[] = (oldRow[field as keyof typeof oldRow] as string[]) || [];
+  let finishedData = getFinishedData(oldRow, field, c);
   const newRow: CT.BasicReturnType = {};
 
   Object.entries(oldRow).forEach(([k, v]) => {
@@ -134,11 +134,16 @@ const handleCollectors = async (
       }
 
       if (!command.data.options || !('values' in command.data.options)) return;
+
       command.data.options.forEach((option) => {
         if (!('value' in option)) return;
 
-        if (!finishedData.includes(String(option.value))) finishedData.push(String(option.value));
-        else finishedData.splice(finishedData.indexOf(String(option.value)), 1);
+        if (Array.isArray(finishedData)) {
+          if (!finishedData.includes(String(option.value))) finishedData.push(String(option.value));
+          else finishedData.splice(finishedData.indexOf(String(option.value)), 1);
+        } else {
+          finishedData = String(option.value);
+        }
 
         newRow[field as keyof typeof newRow] = finishedData;
       });
@@ -171,4 +176,16 @@ const getManagedEditor = async (type: string) => {
     .shift();
 
   return file;
+};
+
+const getFinishedData = (oldRow: CT.BasicReturnType, field: string, c: Eris.ApplicationCommand) => {
+  const f = oldRow[field as keyof typeof oldRow];
+
+  if (Number(c.options?.length) > 1) {
+    if (!f) return [];
+    return f;
+  }
+
+  if (!f) return null;
+  return f;
 };
