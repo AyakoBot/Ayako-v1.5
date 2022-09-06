@@ -1197,9 +1197,17 @@
       "managePermissions": "Manage Permissions"
     }
   },
+  "punishments": {
+    "warn": "Warn",
+    "ban": "Ban",
+    "kick": "Kick",
+    "tempban": "Temp-Ban",
+    "channelban": "Channel-Ban",
+    "tempchannelban": "Temp-Channel-Ban",
+    "tempmute": "Temp-Mute"
+  },
   "welcome": "Welcome {{member.user.username}}#{{member.user.discriminator}} to {{member.guild.name}} <:AMayakowave:924071188957913108>",
   "result": "Result",
-  "autopunish": ["Temp-Mute", "Kick", "Temp-Ban", "Ban", "Warn", "Temp-Channel-Ban", "Channel-Ban"],
   "stagePrivacyLevels": ["Public", "Server Only"],
   "none": "None",
   "defaultValuesLog": "__Before:__\n{{oldValue}}\n\n__After:__\n{{newValue}}",
