@@ -1,3 +1,5 @@
+import moment from 'moment';
+import 'moment-duration-format';
 import type CT from '../../../../typings/CustomTypings';
 import type DBT from '../../../../typings/DataBaseTypings';
 import client from '../../../../BaseClient/ErisClient';
@@ -25,7 +27,28 @@ const setting: CT.SettingsFile = {
         inline: false,
       },
       {
-        name: lan.wlchannelid,
+        name: lan.msgthreshold.name,
+        value: `${settings.msgthreshold}`,
+        inline: false,
+      },
+      {
+        name: lan.dupemsgthreshold.name,
+        value: `${settings.dupemsgthreshold}`,
+        inline: false,
+      },
+      {
+        name: lan.timeout.name,
+        value: `${moment
+          .duration(Number(settings.timeout))
+          .format(
+            `y [${baseObject.language.time.years}], M [${baseObject.language.time.months}], d [${baseObject.language.time.days}], h [${baseObject.language.time.hours}], m [${baseObject.language.time.minutes}], s [${baseObject.language.time.seconds}]`,
+            { trim: 'all' },
+          )}`,
+        inline: false,
+      },
+
+      {
+        name: lan.wlchannelid.name,
         value: `${
           settings.wlchannelid && settings.wlchannelid.length
             ? settings.wlchannelid.map((id) => ` <#${id}>`)
@@ -34,7 +57,7 @@ const setting: CT.SettingsFile = {
         inline: false,
       },
       {
-        name: lan.wluserid,
+        name: lan.wluserid.name,
         value: `${
           settings.wluserid && settings.wluserid.length
             ? settings.wluserid.map((id) => ` <@${id}>`)
@@ -43,7 +66,7 @@ const setting: CT.SettingsFile = {
         inline: false,
       },
       {
-        name: lan.wlroleid,
+        name: lan.wlroleid.name,
         value: `${
           settings.wlroleid && settings.wlroleid.length
             ? settings.wlroleid.map((id) => ` <@&${id}>`)
@@ -71,19 +94,19 @@ const setting: CT.SettingsFile = {
       [
         {
           type: 2,
-          label: lan.wlchannelid,
+          label: lan.wlchannelid.name,
           custom_id: `${baseCustomID}_wlchannelid`,
           style: 1,
         },
         {
           type: 2,
-          label: lan.wluserid,
+          label: lan.wluserid.name,
           custom_id: `${baseCustomID}_wluserid`,
           style: 1,
         },
         {
           type: 2,
-          label: lan.wlroleid,
+          label: lan.wlroleid.name,
           custom_id: `${baseCustomID}_wlroleid`,
           style: 1,
         },
