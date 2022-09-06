@@ -34,6 +34,10 @@ export default async (cmd: CT.ComponentInteraction, language: CT.Language) => {
       (await import('./settingsView')).default(cmd);
       break;
     }
+    case 'delete': {
+      (await import('./settingsDelete')).default(cmd);
+      break;
+    }
     case 'gotosetting': {
       (cmd.data as unknown as Eris.ComponentInteractionSelectMenuData).values = [args[3]];
       (await import('../SlashCommands/settings/manager')).default(cmd, cmd.language);
