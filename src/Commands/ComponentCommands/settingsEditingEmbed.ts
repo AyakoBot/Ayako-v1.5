@@ -80,8 +80,8 @@ const getSelected = (
   const data = row[field as keyof typeof row];
 
   const settingsType =
-    client.constants.commands.settings.fieldTypes[
-      settingsName as keyof typeof client.constants.commands.settings.fieldTypes
+    client.constants.commands.settings.settings[
+      settingsName as keyof typeof client.constants.commands.settings.settings
     ];
   if (!settingsType) throw new Error(`Missing settingsType for "${settingsName}"`);
 
@@ -163,6 +163,14 @@ const getSelected = (
       }
 
       return data.map((s) => `\`${s}\``).join(', ');
+    }
+    case 'punishment': {
+      if (typeof data !== 'string') {
+        error('String', data);
+        return '';
+      }
+
+      return cmd.language.punishments[data as keyof typeof cmd.language.punishments];
     }
     default: {
       if (!editor.getSelected) throw new Error(`Type for ${type} has no handler`);
