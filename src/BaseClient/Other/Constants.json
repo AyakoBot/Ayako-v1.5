@@ -480,12 +480,14 @@
           "wlroleid": "roles",
           "msgthreshold": "number",
           "dupemsgthreshold": "number",
-          "timeout": "seconds"
+          "timeout": "seconds",
+          "deletespam": "boolean"
         },
         "anti-spam-punishments": {
           "active": "boolean",
           "warnamount": "number",
-          "punishment": "punishment"
+          "punishment": "punishment",
+          "duration": "duration"
         }
       },
       "tableNames": {

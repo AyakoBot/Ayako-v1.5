@@ -9,14 +9,6 @@ let messageCache: {
   time: number;
 }[] = [];
 
-const getSettings = async (msg: CT.Message) =>
-  client.ch
-    .query(
-      'SELECT * FROM antispam WHERE guildid = $1 AND active = true AND forcedisabled = false;',
-      [msg.guildID],
-    )
-    .then((r: DBT.antispam[] | null) => (r ? r[0] : null));
-
 export default async (msg: CT.Message) => {
   if (!msg.channel) return;
   if (!msg.guild) return;
@@ -24,6 +16,7 @@ export default async (msg: CT.Message) => {
 
   const antispam = await getSettings(msg);
   if (!antispam) return;
+  if (antispam.forcedisabled) return;
 
   if (
     !msg.member ||
@@ -37,8 +30,6 @@ export default async (msg: CT.Message) => {
 
   const me = msg.guild?.members.get(client.user.id);
   if (!me) return;
-
-  const warnUser = async () => softwarn(msg);
 
   messageCache.push({
     content: msg.content,
@@ -59,24 +50,115 @@ export default async (msg: CT.Message) => {
 
   if (
     antispam.verbal &&
-    (dupeMatches === antispam.dupemsgthreshold || normalMatches === antispam.msgthreshold)
+    (dupeMatches === Number(antispam.dupemsgthreshold) - 2 ||
+      normalMatches === Number(antispam.msgthreshold) - 2)
   ) {
-    warnUser();
+    softwarn(msg);
     return;
   }
 
   const matches = normalMatches > dupeMatches ? normalMatches : dupeMatches;
-  deleteMessages(msg, matches);
+  deleteMessages(msg, matches, antispam);
 
-  (await import('../../modEvents/modStrikeHandler')).default(
-    client.user,
-    msg.author,
-    msg.language.autotypes.antispam,
-    msg,
-  );
+  if (
+    dupeMatches === Number(antispam.dupemsgthreshold) ||
+    normalMatches === Number(antispam.msgthreshold)
+  ) {
+    runPunishment(msg);
+  }
 };
 
-const deleteMessages = async (msg: CT.Message, matches: number) => {
+const runPunishment = async (msg: CT.Message) => {
+  if (!msg.guild) return;
+
+  const allPunishments = (await getAllPunishments(msg))?.flat(1) || [];
+  const punishment = await getPunishment(msg, allPunishments.length);
+
+  const obj: CT.ModBaseEventOptions = {
+    type: 'warnAdd',
+    executor: client.user,
+    target: msg.author,
+    msg,
+    reason: msg.language.autotypes.antispam,
+    guild: msg.guild,
+    source: 'antispam',
+  };
+
+  if (!punishment) {
+    client.emit('modBaseEvent', obj);
+    return;
+  }
+
+  switch (punishment.punishment) {
+    case 'ban': {
+      obj.type = 'banAdd';
+      break;
+    }
+    case 'kick': {
+      obj.type = 'kickAdd';
+      break;
+    }
+    case 'tempban': {
+      obj.type = 'tempbanAdd';
+      break;
+    }
+    case 'channelban': {
+      obj.type = 'channelbanAdd';
+      break;
+    }
+    case 'tempchannelban': {
+      obj.type = 'tempchannelbanAdd';
+      break;
+    }
+    case 'tempmute': {
+      obj.type = 'tempmuteAdd';
+      break;
+    }
+    default: {
+      break;
+    }
+  }
+
+  if (obj.type.includes('temp')) obj.duration = Number(punishment.duration);
+
+  client.emit('modBaseEvent', obj);
+};
+
+const getAllPunishments = async (msg: CT.Message) =>
+  client.ch
+    .query(
+      `SELECT * FROM punish_bans WHERE guildid = $1 AND userid = $2 AND active = true;
+  SELECT * FROM punish_channelbans WHERE guildid = $1 AND userid = $2 AND active = true;
+  SELECT * FROM punish_mutes WHERE guildid = $1 AND userid = $2 AND active = true;
+  SELECT * FROM punish_kicks WHERE guildid = $1 AND userid = $2 AND active = true;
+  SELECT * FROM punish_warns WHERE guildid = $1 AND userid = $2 AND active = true;`,
+      [msg.guildID, msg.author.id],
+    )
+    .then(
+      (
+        r:
+          | (
+              | DBT.punish_bans[]
+              | DBT.punish_channelbans[]
+              | DBT.punish_kicks[]
+              | DBT.punish_mutes[]
+              | DBT.punish_warns[]
+            )[]
+          | null,
+      ) => r,
+    );
+
+const getPunishment = async (msg: CT.Message, warns: number) =>
+  client.ch
+    .query(`SELECT * FROM antispampunishments WHERE guildid = $1 AND warnamount = $2;`, [
+      msg.guildID,
+      warns,
+    ])
+    .then((r: DBT.antispampunishments[] | null) => (r ? r[0] : null));
+
+const deleteMessages = async (msg: CT.Message, matches: number, antispam: DBT.antispam) => {
+  if (!antispam.deletespam) return;
+
   const msgs = (await msg.channel.getMessages({ limit: 100 }).catch(() => null)) as
     | Eris.Message[]
     | null;
@@ -107,3 +189,11 @@ const softwarn = (msg: CT.Message) => {
     msg.language,
   );
 };
+
+const getSettings = async (msg: CT.Message) =>
+  client.ch
+    .query(
+      'SELECT * FROM antispam WHERE guildid = $1 AND active = true AND forcedisabled = false;',
+      [msg.guildID],
+    )
+    .then((r: DBT.antispam[] | null) => (r ? r[0] : null));

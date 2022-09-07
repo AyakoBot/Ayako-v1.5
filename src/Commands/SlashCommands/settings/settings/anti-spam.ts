@@ -29,12 +29,12 @@ const setting: CT.SettingsFile = {
       {
         name: lan.msgthreshold.name,
         value: `${settings.msgthreshold}`,
-        inline: false,
+        inline: true,
       },
       {
         name: lan.dupemsgthreshold.name,
         value: `${settings.dupemsgthreshold}`,
-        inline: false,
+        inline: true,
       },
       {
         name: lan.timeout.name,
@@ -44,9 +44,15 @@ const setting: CT.SettingsFile = {
             `y [${baseObject.language.time.years}], M [${baseObject.language.time.months}], d [${baseObject.language.time.days}], h [${baseObject.language.time.hours}], m [${baseObject.language.time.minutes}], s [${baseObject.language.time.seconds}]`,
             { trim: 'all' },
           )}`,
+        inline: true,
+      },
+      {
+        name: lan.deletespam.name,
+        value: settings.deletespam
+          ? `${client.stringEmotes.enabled} ${baseObject.language.Enabled}`
+          : `${client.stringEmotes.disabled} ${baseObject.language.Disabled}`,
         inline: false,
       },
-
       {
         name: lan.wlchannelid.name,
         value: `${

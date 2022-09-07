@@ -43,10 +43,10 @@ const setting: CT.MultiSettings = {
       ];
     }
   },
-  displayEmbed: async (baseObject: CT.BaseSettingsObject) => {
-    baseObject.embed.title = 'displayEmbed';
+  displayEmbed: async (baseObject, uniquetimestamp) => {
+    
   },
-  buttons: async () =>
+  buttons: async (baseObject, uniquetimestamp) =>
     client.ch.buttonRower([{ type: 2, label: 'test', custom_id: 'test', style: 1 }]),
 };
 

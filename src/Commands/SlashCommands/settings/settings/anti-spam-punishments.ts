@@ -1,3 +1,5 @@
+import moment from 'moment';
+import 'moment-duration-format';
 import type CT from '../../../../typings/CustomTypings';
 import type DBT from '../../../../typings/DataBaseTypings';
 import client from '../../../../BaseClient/ErisClient';
@@ -59,7 +61,7 @@ const setting: CT.MultiSettings = {
       {
         name: lan.warnamount.name,
         value: `${Number(settings.warnamount) || '-'}`,
-        inline: false,
+        inline: true,
       },
       {
         name: lan.punishment.name,
@@ -68,7 +70,17 @@ const setting: CT.MultiSettings = {
             settings.punishment as keyof typeof baseObject.language.punishments
           ] || baseObject.language.none
         }`,
-        inline: false,
+        inline: true,
+      },
+      {
+        name: lan.duration.name,
+        value: `${moment
+          .duration(Number(settings.duration))
+          .format(
+            `y [${baseObject.language.time.years}], M [${baseObject.language.time.months}], d [${baseObject.language.time.days}], h [${baseObject.language.time.hours}], m [${baseObject.language.time.minutes}], s [${baseObject.language.time.seconds}]`,
+            { trim: 'all' },
+          )}`,
+        inline: true,
       },
     ];
   },

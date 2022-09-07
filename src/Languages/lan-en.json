@@ -606,6 +606,10 @@
       },
       "settings": {
         "anti-spam": {
+          "deletespam": {
+            "name": "Delete Spam",
+            "desc": "Delete spammed Messages"
+          },
           "wlchannelid": {
             "name": "Whitelisted Channels",
             "desc": "Channels ignored by Ayako Anti-Spam"
@@ -632,6 +636,10 @@
           }
         },
         "anti-spam-punishments": {
+          "duration": {
+            "name": "Duration of Punishment",
+            "desc": "Only applies to Punishments prefixed with `Temp`"
+          },
           "warnamount": {
             "name": "Warn Amount",
             "desc": "Number of Warns at which this Punishment is applied"

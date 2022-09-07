@@ -30,9 +30,9 @@ export type antispam = {
   wlroleid?: string[];
   wlchannelid?: string[];
   forcedisabled?: boolean;
-  msgthreshold: number;
-  dupemsgthreshold: number;
-  timeout: number;
+  msgthreshold: string;
+  dupemsgthreshold: string;
+  timeout: string;
   verbal: boolean;
   deletespam: boolean;
 };
@@ -653,4 +653,5 @@ export interface antispampunishments {
   warnamount: string;
   uniquetimestamp: string;
   active: boolean;
+  duration: string;
 }
