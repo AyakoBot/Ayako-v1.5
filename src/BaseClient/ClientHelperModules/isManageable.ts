@@ -8,7 +8,6 @@ export default (
   if (!comparedMember) return false;
 
   if (member.user.id === comparedMember.user.id) return false;
-  if (!comparedMember.permissions.has(134217728n)) return false;
 
   const memberHighestRole = member.roles
     .sort(
