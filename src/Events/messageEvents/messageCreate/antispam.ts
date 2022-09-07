@@ -42,28 +42,28 @@ export default async (msg: CT.Message) => {
       m.time > Date.now() - Number(antispam.timeout) &&
       m.content === msg.content &&
       m.author === msg.author.id,
-  ).length;
+  );
 
   const normalMatches = messageCache.filter(
     (m) => m.time > Date.now() - Number(antispam.timeout) && m.author === msg.author.id,
-  ).length;
+  );
 
   if (
-    antispam.verbal &&
-    (dupeMatches === Number(antispam.dupemsgthreshold) - 2 ||
-      normalMatches === Number(antispam.msgthreshold) - 2)
+    dupeMatches.length === Number(antispam.dupemsgthreshold) ||
+    normalMatches.length === Number(antispam.msgthreshold)
   ) {
     softwarn(msg);
     return;
   }
 
-  const matches = normalMatches > dupeMatches ? normalMatches : dupeMatches;
-  deleteMessages(msg, matches, antispam);
+  const matches =
+    normalMatches.length > dupeMatches.length ? normalMatches.length : dupeMatches.length;
 
   if (
-    dupeMatches === Number(antispam.dupemsgthreshold) ||
-    normalMatches === Number(antispam.msgthreshold)
+    dupeMatches.length > Number(antispam.dupemsgthreshold) + 1 ||
+    normalMatches.length > Number(antispam.msgthreshold) + 1
   ) {
+    deleteMessages(msg, matches, antispam);
     runPunishment(msg);
   }
 };
@@ -88,6 +88,8 @@ const runPunishment = async (msg: CT.Message) => {
     client.emit('modBaseEvent', obj);
     return;
   }
+
+  obj.duration = Number(punishment.duration);
 
   switch (punishment.punishment) {
     case 'ban': {
@@ -118,8 +120,6 @@ const runPunishment = async (msg: CT.Message) => {
       break;
     }
   }
-
-  if (obj.type.includes('temp')) obj.duration = Number(punishment.duration);
 
   client.emit('modBaseEvent', obj);
 };
@@ -181,7 +181,7 @@ const softwarn = (msg: CT.Message) => {
   client.ch.send(
     msg.channel,
     {
-      content: `${msg.author} ${msg.language.mod.warnAdd.antispam.description}`,
+      content: `${msg.author.mention} ${msg.language.mod.warnAdd.antispam.description}`,
       allowedMentions: {
         users: [msg.author.id],
       },

@@ -33,7 +33,6 @@ export type antispam = {
   msgthreshold: string;
   dupemsgthreshold: string;
   timeout: string;
-  verbal: boolean;
   deletespam: boolean;
 };
 
