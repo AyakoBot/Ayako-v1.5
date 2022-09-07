@@ -193,11 +193,11 @@ const getAutoPunish = async (cmd: CT.Message | CT.CommandInteraction) =>
 const getAllPunishments = async (cmd: CT.CommandInteraction | CT.Message, target: Eris.User) =>
   client.ch
     .query(
-      `SELECT * FROM punish_bans WHERE guildid = $1 AND userid = $2 AND active = true;
-  SELECT * FROM punish_channelbans WHERE guildid = $1 AND userid = $2 AND active = true;
-  SELECT * FROM punish_mutes WHERE guildid = $1 AND userid = $2 AND active = true;
-  SELECT * FROM punish_kicks WHERE guildid = $1 AND userid = $2 AND active = true;
-  SELECT * FROM punish_warns WHERE guildid = $1 AND userid = $2 AND active = true;`,
+      `SELECT * FROM punish_bans WHERE guildid = $1 AND userid = $2;
+  SELECT * FROM punish_channelbans WHERE guildid = $1 AND userid = $2;
+  SELECT * FROM punish_mutes WHERE guildid = $1 AND userid = $2;
+  SELECT * FROM punish_kicks WHERE guildid = $1 AND userid = $2;
+  SELECT * FROM punish_warns WHERE guildid = $1 AND userid = $2;`,
       [cmd.guildID, target.id],
     )
     .then(

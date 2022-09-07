@@ -60,8 +60,8 @@ export default async (msg: CT.Message) => {
     normalMatches.length > dupeMatches.length ? normalMatches.length : dupeMatches.length;
 
   if (
-    dupeMatches.length > Number(antispam.dupemsgthreshold) + 1 ||
-    normalMatches.length > Number(antispam.msgthreshold) + 1
+    (normalMatches.length - Number(antispam.msgthreshold)) % 3 === 0 ||
+    (dupeMatches.length - Number(antispam.dupemsgthreshold)) % 3 === 0
   ) {
     deleteMessages(msg, matches, antispam);
     runPunishment(msg);
@@ -72,7 +72,9 @@ const runPunishment = async (msg: CT.Message) => {
   if (!msg.guild) return;
 
   const allPunishments = (await getAllPunishments(msg))?.flat(1) || [];
+  console.log(allPunishments);
   const punishment = await getPunishment(msg, allPunishments.length);
+  console.log(punishment);
 
   const obj: CT.ModBaseEventOptions = {
     type: 'warnAdd',
@@ -82,6 +84,7 @@ const runPunishment = async (msg: CT.Message) => {
     reason: msg.language.autotypes.antispam,
     guild: msg.guild,
     source: 'antispam',
+    forceFinish: true,
   };
 
   if (!punishment) {
@@ -127,11 +130,11 @@ const runPunishment = async (msg: CT.Message) => {
 const getAllPunishments = async (msg: CT.Message) =>
   client.ch
     .query(
-      `SELECT * FROM punish_bans WHERE guildid = $1 AND userid = $2 AND active = true;
-  SELECT * FROM punish_channelbans WHERE guildid = $1 AND userid = $2 AND active = true;
-  SELECT * FROM punish_mutes WHERE guildid = $1 AND userid = $2 AND active = true;
-  SELECT * FROM punish_kicks WHERE guildid = $1 AND userid = $2 AND active = true;
-  SELECT * FROM punish_warns WHERE guildid = $1 AND userid = $2 AND active = true;`,
+      `SELECT * FROM punish_bans WHERE guildid = $1 AND userid = $2;
+  SELECT * FROM punish_channelbans WHERE guildid = $1 AND userid = $2;
+  SELECT * FROM punish_mutes WHERE guildid = $1 AND userid = $2;
+  SELECT * FROM punish_kicks WHERE guildid = $1 AND userid = $2;
+  SELECT * FROM punish_warns WHERE guildid = $1 AND userid = $2;`,
       [msg.guildID, msg.author.id],
     )
     .then(
@@ -150,10 +153,10 @@ const getAllPunishments = async (msg: CT.Message) =>
 
 const getPunishment = async (msg: CT.Message, warns: number) =>
   client.ch
-    .query(`SELECT * FROM antispampunishments WHERE guildid = $1 AND warnamount = $2;`, [
-      msg.guildID,
-      warns,
-    ])
+    .query(
+      `SELECT * FROM antispampunishments WHERE guildid = $1 AND warnamount = $2 AND active = true;`,
+      [msg.guildID, warns],
+    )
     .then((r: DBT.antispampunishments[] | null) => (r ? r[0] : null));
 
 const deleteMessages = async (msg: CT.Message, matches: number, antispam: DBT.antispam) => {
