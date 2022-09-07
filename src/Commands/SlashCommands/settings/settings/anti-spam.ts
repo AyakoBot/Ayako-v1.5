@@ -117,6 +117,14 @@ const setting: CT.SettingsFile = {
           style: 1,
         },
       ],
+      [
+        {
+          type: 2,
+          label: lan.deletespam.name,
+          custom_id: `${baseCustomID}_deletespam`,
+          style: settings.deletespam ? 1 : 2,
+        },
+      ],
     ];
   },
 };

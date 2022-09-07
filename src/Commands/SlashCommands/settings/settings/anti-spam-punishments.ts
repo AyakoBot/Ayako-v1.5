@@ -113,6 +113,12 @@ const setting: CT.MultiSettings = {
           custom_id: `${baseCustomID}_punishment`,
           style: 1,
         },
+        {
+          type: 2,
+          label: lan.duration.name,
+          custom_id: `${baseCustomID}_duration`,
+          style: 1,
+        },
       ],
     ];
   },
