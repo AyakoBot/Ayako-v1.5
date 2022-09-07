@@ -11,11 +11,10 @@ type Language = typeof import('../../Languages/lan-en.json');
 
 export default async (args: CT.ModBaseEventOptions) => {
   const { executor, target, reason, msg, guild, type, source } = args;
-  let { m } = args;
 
   if (!target) return;
 
-  const mExistedPreviously = !!m;
+  const mExistedPreviously = !!args.m;
   const language = msg?.language || (await client.ch.languageSelector(guild.id));
 
   let action;
@@ -27,11 +26,11 @@ export default async (args: CT.ModBaseEventOptions) => {
     embed = loadingEmbed(mExistedPreviously, language, args);
     if (!embed) return;
 
-    if (msg && mExistedPreviously && m) {
-      await m.edit({ embeds: [embed] }).catch(() => null);
+    if (msg && mExistedPreviously && args.m) {
+      await args.m.edit({ embeds: [embed] }).catch(() => null);
     } else if (msg) {
       const reply = await client.ch.reply(msg, { embeds: [embed] }, msg.language);
-      if (reply) m = reply;
+      if (reply) args.m = reply;
     }
 
     const targetMember = await client.ch.getMember(target.id, guild.id);
@@ -99,7 +98,7 @@ export default async (args: CT.ModBaseEventOptions) => {
 
   doDataBaseAction(args);
 
-  if (msg && source) client.emit('modSourceHandler', m, source, null, embed);
+  if (msg && source) client.emit('modSourceHandler', args.m, source, null, embed);
 };
 
 const declareSuccess = async (
