@@ -32,7 +32,7 @@ export default async (cmd: CT.ComponentInteraction) => {
     await putNewSettings(cmd, name, newRow, Number(uniquetimestamp));
   }
 
-  if (!uniquetimestamp) {
+  if (!Number(uniquetimestamp)) {
     (cmd.data as Eris.ComponentInteractionSelectMenuData).values = [name];
     (await import('../SlashCommands/settings/manager')).default(cmd, cmd.language);
   } else {
