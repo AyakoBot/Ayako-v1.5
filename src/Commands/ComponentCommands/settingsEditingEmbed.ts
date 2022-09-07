@@ -1,4 +1,6 @@
 import type * as Eris from 'eris';
+import moment from 'moment';
+import 'moment-duration-format';
 import type CT from '../../typings/CustomTypings';
 import client from '../../BaseClient/ErisClient';
 
@@ -171,6 +173,19 @@ const getSelected = (
       }
 
       return cmd.language.punishments[data as keyof typeof cmd.language.punishments];
+    }
+    case 'duration': {
+      if (typeof data !== 'string') {
+        error('String', data);
+        return '';
+      }
+
+      return moment
+        .duration(data)
+        .format(
+          `y [${cmd.language.time.years}], M [${cmd.language.time.months}], d [${cmd.language.time.days}], h [${cmd.language.time.hours}], m [${cmd.language.time.minutes}], s [${cmd.language.time.seconds}]`,
+          { trim: 'all' },
+        );
     }
     default: {
       if (!editor.getSelected) throw new Error(`Type for ${type} has no handler`);
