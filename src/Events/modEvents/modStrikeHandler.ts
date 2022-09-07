@@ -41,7 +41,7 @@ export default async (
     type: 'warnAdd',
   };
 
-  const existingWarns = (await getAllPunishments(cmd, target)) || [];
+  const existingWarns = (await getAllPunishments(cmd, target))?.flat(1) || [];
   const punishmentToApply = autopunish.find((p) => Number(p.warnamount) === existingWarns.length);
 
   if (!punishmentToApply) {
