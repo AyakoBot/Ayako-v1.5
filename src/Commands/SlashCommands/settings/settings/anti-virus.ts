@@ -5,11 +5,12 @@ import type DBT from '../../../../typings/DataBaseTypings';
 import client from '../../../../BaseClient/ErisClient';
 
 const setting: CT.SettingsFile = {
-  name: 'anti-raid',
+  name: 'anti-virus',
   type: 'single',
+  relatedSettings: ['anti-virus-punishments'],
   displayEmbed: async (baseObject: CT.BaseSettingsObject) => {
     const lanSetting = baseObject.language.slashCommands.settings;
-    const lan = baseObject.language.slashCommands.settings.settings['anti-raid'];
+    const lan = baseObject.language.slashCommands.settings.settings['anti-virus'];
     let settings = await getSettings(baseObject);
 
     if (!settings) {
@@ -26,14 +27,16 @@ const setting: CT.SettingsFile = {
         inline: false,
       },
       {
-        name: lan.jointhreshold.name,
-        value: `${settings.jointhreshold}`,
+        name: lan.minimizetof.name,
+        value: settings.minimizetof
+          ? `${client.stringEmotes.enabled} ${baseObject.language.Enabled}`
+          : `${client.stringEmotes.disabled} ${baseObject.language.Disabled}`,
         inline: true,
       },
       {
-        name: lan.time.name,
+        name: lan.minimize.name,
         value: `${moment
-          .duration(Number(settings.time))
+          .duration(Number(settings.minimize))
           .format(
             `y [${baseObject.language.time.years}], M [${baseObject.language.time.months}], d [${baseObject.language.time.days}], h [${baseObject.language.time.hours}], m [${baseObject.language.time.minutes}], s [${baseObject.language.time.seconds}]`,
             { trim: 'all' },
@@ -46,19 +49,20 @@ const setting: CT.SettingsFile = {
         inline: false,
       },
       {
-        name: lan.punishmenttof.name,
-        value: settings.punishmenttof
+        name: lan.deletetof.name,
+        value: settings.deletetof
           ? `${client.stringEmotes.enabled} ${baseObject.language.Enabled}`
           : `${client.stringEmotes.disabled} ${baseObject.language.Disabled}`,
         inline: true,
       },
       {
-        name: lan.punishment.name,
-        value: `${
-          baseObject.language.punishments[
-            settings.punishment as keyof typeof baseObject.language.punishments
-          ] || baseObject.language.none
-        }`,
+        name: lan.delete.name,
+        value: `${moment
+          .duration(Number(settings.delete))
+          .format(
+            `y [${baseObject.language.time.years}], M [${baseObject.language.time.months}], d [${baseObject.language.time.days}], h [${baseObject.language.time.hours}], m [${baseObject.language.time.minutes}], s [${baseObject.language.time.seconds}]`,
+            { trim: 'all' },
+          )}`,
         inline: true,
       },
       {
@@ -67,31 +71,17 @@ const setting: CT.SettingsFile = {
         inline: false,
       },
       {
-        name: lan.posttof.name,
-        value: settings.posttof
+        name: lan.linklogging.name,
+        value: settings.linklogging
           ? `${client.stringEmotes.enabled} ${baseObject.language.Enabled}`
           : `${client.stringEmotes.disabled} ${baseObject.language.Disabled}`,
-        inline: true,
-      },
-      {
-        name: lan.postchannel.name,
-        value: `${settings.postchannel ? `<#${settings.postchannel}>` : baseObject.language.none}`,
-        inline: true,
-      },
-      {
-        name: lan.pingroles.name,
-        value: `${
-          settings.pingroles && settings.pingroles.length
-            ? settings.pingroles.map((id) => ` <@&${id}>`)
-            : baseObject.language.none
-        }`,
         inline: false,
       },
       {
-        name: lan.pingusers.name,
+        name: lan.linklogchannels.name,
         value: `${
-          settings.pingusers && settings.pingusers.length
-            ? settings.pingusers.map((id) => ` <@${id}>`)
+          settings.linklogchannels && settings.linklogchannels.length
+            ? settings.linklogchannels.map((id) => ` <#${id}>`)
             : baseObject.language.none
         }`,
         inline: false,
@@ -99,7 +89,7 @@ const setting: CT.SettingsFile = {
     ];
   },
   buttons: async (baseObject: CT.BaseSettingsObject) => {
-    const lan = baseObject.language.slashCommands.settings.settings['anti-raid'];
+    const lan = baseObject.language.slashCommands.settings.settings['anti-virus'];
     const baseCustomID = `settings_${baseObject.interactions[0].user.id}_edit_0_${baseObject.setting.name}`;
     const settings = await getSettings(baseObject);
     if (!settings) return [];
@@ -116,54 +106,42 @@ const setting: CT.SettingsFile = {
       [
         {
           type: 2,
-          label: lan.jointhreshold.name,
-          custom_id: `${baseCustomID}_jointhreshold`,
-          style: 1,
+          label: lan.minimizetof.name,
+          custom_id: `${baseCustomID}_minimizetof`,
+          style: settings.minimizetof ? 3 : 4,
         },
         {
           type: 2,
-          label: lan.time.name,
-          custom_id: `${baseCustomID}_time`,
-          style: 1,
-        },
-      ],
-      [
-        {
-          type: 2,
-          label: lan.punishmenttof.name,
-          custom_id: `${baseCustomID}_punishmenttof`,
-          style: settings.punishmenttof ? 3 : 4,
-        },
-        {
-          type: 2,
-          label: lan.punishment.name,
-          custom_id: `${baseCustomID}_punishment`,
+          label: lan.minimize.name,
+          custom_id: `${baseCustomID}_minimize`,
           style: 1,
         },
       ],
       [
         {
           type: 2,
-          label: lan.posttof.name,
-          custom_id: `${baseCustomID}_posttof`,
-          style: settings.posttof ? 3 : 4,
+          label: lan.deletetof.name,
+          custom_id: `${baseCustomID}_deletetof`,
+          style: settings.deletetof ? 3 : 4,
         },
         {
           type: 2,
-          label: lan.postchannel.name,
-          custom_id: `${baseCustomID}_postchannel`,
+          label: lan.delete.name,
+          custom_id: `${baseCustomID}_delete`,
           style: 1,
         },
+      ],
+      [
         {
           type: 2,
-          label: lan.pingroles.name,
-          custom_id: `${baseCustomID}_pingroles`,
-          style: 1,
+          label: lan.linklogging.name,
+          custom_id: `${baseCustomID}_linklogging`,
+          style: settings.linklogging ? 3 : 4,
         },
         {
           type: 2,
-          label: lan.pingusers.name,
-          custom_id: `${baseCustomID}_pingusers`,
+          label: lan.linklogchannels.name,
+          custom_id: `${baseCustomID}_linklogchannels`,
           style: 1,
         },
       ],
@@ -175,10 +153,10 @@ export default setting;
 
 const getSettings = (baseObject: CT.BaseSettingsObject) =>
   client.ch
-    .query(`SELECT * FROM antiraid WHERE guildid = $1;`, [baseObject.interactions[0].guildID])
-    .then((r: DBT.antiraid[] | null) => (r ? r[0] : r));
+    .query(`SELECT * FROM antivirus WHERE guildid = $1;`, [baseObject.interactions[0].guildID])
+    .then((r: DBT.antivirus[] | null) => (r ? r[0] : r));
 
 const setup = (baseObject: CT.BaseSettingsObject) =>
   client.ch
-    .query(`INSERT INTO antiraid (guildid) VALUES ($1);`, [baseObject.interactions[0].guildID])
-    .then((r: DBT.antiraid[] | null) => (r ? r[0] : null));
+    .query(`INSERT INTO antivirus (guildid) VALUES ($1);`, [baseObject.interactions[0].guildID])
+    .then((r: DBT.antivirus[] | null) => (r ? r[0] : null));

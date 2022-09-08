@@ -432,6 +432,7 @@
             { "name": "anti-spam", "category": "chats" },
             { "name": "anti-spam-punishments", "category": "chats" },
             { "name": "anti-virus", "category": "chats" },
+            { "name": "anti-virus-punishments", "category": "chats" },
             { "name": "anti-raid", "category": "other" },
             { "name": "auto-punish", "category": "other" },
             { "name": "blacklist", "category": "chats" }
@@ -474,6 +475,15 @@
         }
       ],
       "settings": {
+        "anti-virus": {
+          "active": "boolean",
+          "minimize": "seconds",
+          "delete": "seconds",
+          "linklogging": "boolean",
+          "linklogchannels": "channels",
+          "minimizetof": "boolean",
+          "deletetof": "boolean"
+        },
         "anti-raid": {
           "active": "boolean",
           "punishment": "punishment",
@@ -500,11 +510,18 @@
           "warnamount": "number",
           "punishment": "punishment",
           "duration": "duration"
+        },
+        "anti-virus-punishments": {
+          "active": "boolean",
+          "warnamount": "number",
+          "punishment": "punishment",
+          "duration": "duration"
         }
       },
       "tableNames": {
         "anti-spam": "antispam",
         "anti-spam-punishments": "antispampunishments",
+        "anti-virus-punishments": "antiviruspunishments",
         "anti-raid": "antiraid",
         "anti-virus": "antivirus",
         "auto-punish": "autopunish",
@@ -539,6 +556,7 @@
       },
       "mrmIdentifiers": {
         "anti-spam-punishments": [{ "ident": "warnamount", "type": "string" }],
+        "anti-virus-punishments": [{ "ident": "warnamount", "type": "string" }],
         "deletecommands": [{ "ident": "commands", "type": "text" }],
         "reactionroles": [{ "ident": "name", "type": "text" }],
         "rrbuttons": [
@@ -560,7 +578,9 @@
       },
       "relatedSettings": {
         "anti-spam": ["anti-spam-punishments"],
-        "anti-spam-punishments": ["anti-spam"]
+        "anti-spam-punishments": ["anti-spam"],
+        "anti-virus": ["anti-virus-punishments"],
+        "anti-virus-punishments": ["anti-virus"]
       }
     }
   }

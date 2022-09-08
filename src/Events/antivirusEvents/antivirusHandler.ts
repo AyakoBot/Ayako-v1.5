@@ -3,83 +3,108 @@ import client from '../../BaseClient/ErisClient';
 import type CT from '../../typings/CustomTypings';
 import type DBT from '../../typings/DataBaseTypings';
 
-export default async (msg: CT.Message, m: Eris.Message, type: string) => {
+export default async (msg: CT.Message, m: Eris.Message) => {
   if (msg) msg.delete().catch(() => null);
 
-  let amountOfTimes = await client.ch
-    .query('SELECT * FROM antiviruslog WHERE userid = $1;', [msg.author.id])
-    .then((r: DBT.antiviruslog[] | null) => (r ? r.length : 0));
+  const settingsRow = await getSettings(msg);
+  if (!settingsRow) return;
 
-  client.ch.query(
-    'INSERT INTO antiviruslog (guildid, userid, type, dateofwarn) VALUES ($1, $2, $3, $4);',
-    [msg.guildID, msg.author.id, type, Date.now()],
-  );
-  amountOfTimes += 1;
-
-  const settingsRow = await client.ch
-    .query('SELECT * FROM antivirus WHERE guildid = $1 AND active = true;', [msg.guildID])
-    .then((r: DBT.antivirus[] | null) => (r ? r[0] : null));
-
-  if (settingsRow) {
-    switch (true) {
-      case amountOfTimes >= Number(settingsRow.banafterwarnsamount) &&
-        settingsRow.bantof === true: {
-        doPunish('banAdd', msg, m);
-        return;
-      }
-      case amountOfTimes >= Number(settingsRow.kickafterwarnsamount) &&
-        settingsRow.kicktof === true: {
-        doPunish('kickAdd', msg, m);
-        return;
-      }
-      case amountOfTimes >= Number(settingsRow.muteafterwarnsamount) &&
-        settingsRow.mutetof === true: {
-        doPunish('tempmuteAdd', msg, m);
-        return;
-      }
-      case amountOfTimes >= Number(settingsRow.warnafterwarnsamount) &&
-        settingsRow.warntof === true: {
-        doPunish('warnAdd', msg, m);
-        return;
-      }
-      case amountOfTimes >= 1 && settingsRow.verbaltof === true: {
-        softwarn(msg);
-        return;
-      }
-      default: {
-        break;
-      }
-    }
-  }
+  await runPunishment(msg, m);
 
   client.emit('modSourceHandler', m, 'antivirus', settingsRow);
 };
 
-const doPunish = (type: CT.ModBaseEventOptions['type'], msg: CT.Message, m: Eris.Message) => {
+const getSettings = async (msg: CT.Message) =>
+  client.ch
+    .query('SELECT * FROM antivirus WHERE guildid = $1 AND active = true;', [msg.guildID])
+    .then((r: DBT.antivirus[] | null) => (r ? r[0] : null));
+
+const runPunishment = async (msg: CT.Message, m: Eris.Message) => {
   if (!msg.guild) return;
 
-  const options: CT.ModBaseEventOptions = {
+  const allPunishments = (await getAllPunishments(msg))?.flat(1) || [];
+  const punishment = await getPunishment(msg, allPunishments.length);
+
+  const obj: CT.ModBaseEventOptions = {
+    type: 'warnAdd',
     executor: client.user,
     target: msg.author,
-    reason: msg.language.autotypes.antivirus,
     msg,
-    m,
+    reason: msg.language.autotypes.antivirus,
     guild: msg.guild,
-    type,
+    source: 'antivirus',
+    forceFinish: true,
+    m,
   };
 
-  client.emit('modBaseEvent', options);
+  if (!punishment) {
+    client.emit('modBaseEvent', obj);
+    return;
+  }
+
+  obj.duration = Number(punishment.duration);
+
+  switch (punishment.punishment) {
+    case 'ban': {
+      obj.type = 'banAdd';
+      break;
+    }
+    case 'kick': {
+      obj.type = 'kickAdd';
+      break;
+    }
+    case 'tempban': {
+      obj.type = 'tempbanAdd';
+      break;
+    }
+    case 'channelban': {
+      obj.type = 'channelbanAdd';
+      break;
+    }
+    case 'tempchannelban': {
+      obj.type = 'tempchannelbanAdd';
+      break;
+    }
+    case 'tempmute': {
+      obj.type = 'tempmuteAdd';
+      break;
+    }
+    default: {
+      break;
+    }
+  }
+
+  client.emit('modBaseEvent', obj);
 };
 
-const softwarn = (msg: CT.Message) => {
-  client.ch.send(
-    msg.channel,
-    {
-      content: `${msg.author} ${msg.language.mod.warnAdd.antivirus.description}`,
-      allowedMentions: {
-        users: [msg.author.id],
-      },
-    },
-    msg.language,
-  );
-};
+const getAllPunishments = async (msg: CT.Message) =>
+  client.ch
+    .query(
+      `SELECT * FROM punish_bans WHERE guildid = $1 AND userid = $2;
+  SELECT * FROM punish_channelbans WHERE guildid = $1 AND userid = $2;
+  SELECT * FROM punish_mutes WHERE guildid = $1 AND userid = $2;
+  SELECT * FROM punish_kicks WHERE guildid = $1 AND userid = $2;
+  SELECT * FROM punish_warns WHERE guildid = $1 AND userid = $2;`,
+      [msg.guildID, msg.author.id],
+    )
+    .then(
+      (
+        r:
+          | (
+              | DBT.punish_bans[]
+              | DBT.punish_channelbans[]
+              | DBT.punish_kicks[]
+              | DBT.punish_mutes[]
+              | DBT.punish_warns[]
+            )[]
+          | null,
+      ) => r,
+    );
+
+const getPunishment = async (msg: CT.Message, warns: number) =>
+  client.ch
+    .query(
+      `SELECT * FROM antiviruspunishments WHERE guildid = $1 AND warnamount = $2 AND active = true;`,
+      [msg.guildID, warns],
+    )
+    .then((r: DBT.antiviruspunishments[] | null) => (r ? r[0] : null));

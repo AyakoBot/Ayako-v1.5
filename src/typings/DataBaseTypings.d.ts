@@ -39,26 +39,12 @@ export type antispam = {
 export type antivirus = {
   guildid: string;
   active: boolean;
-  bantof: boolean;
-  warntof: boolean;
-  kicktof: boolean;
-  mutetof: boolean;
-  verbaltof: boolean;
-  muteafterwarnsamount?: string;
-  warnafterwarnsamount?: string;
-  banafterwarnsamount?: string;
-  kickafterwarnsamount?: string;
   minimize?: string;
   delete?: string;
+  minimizetof: boolean;
+  deletetof: boolean;
   linklogging: boolean;
   linklogchannels?: string[];
-};
-
-export type antiviruslog = {
-  guildid: string;
-  userid: string;
-  type: string;
-  dateofwarn: string;
 };
 
 export type autopunish = {
@@ -647,6 +633,15 @@ export interface giveawaycollecttime {
 }
 
 export interface antispampunishments {
+  guildid: string;
+  punishment: string;
+  warnamount: string;
+  uniquetimestamp: string;
+  active: boolean;
+  duration: string;
+}
+
+export interface antiviruspunishments {
   guildid: string;
   punishment: string;
   warnamount: string;

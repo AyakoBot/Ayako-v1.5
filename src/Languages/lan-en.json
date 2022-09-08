@@ -607,14 +607,50 @@
         "prefix": "Assign a custom Prefix to Ayako"
       },
       "settings": {
+        "anti-virus-punishments": {
+          "duration": {
+            "name": "Duration of Punishment",
+            "desc": "Only applies to Punishments prefixed with `Temp`"
+          },
+          "warnamount": {
+            "name": "Warn Amount",
+            "desc": "Number of Warns at which this Punishment is applied"
+          },
+          "punishment": {
+            "name": "Punishment",
+            "desc": "Punishment to apply"
+          }
+        },
+        "anti-virus": {
+          "minimize": {
+            "name": "Minimize Timeout",
+            "desc": "Timeout to minimize punishment Embed"
+          },
+          "delete": {
+            "name": "Delete Timeout",
+            "desc": "Timeout to delete punishment Embed"
+          },
+          "minimizetof": {
+            "name": "Minimize"
+          },
+          "deletetof": {
+            "name": "Delete"
+          },
+          "linklogging": {
+            "name": "Link Logging"
+          },
+          "linklogchannels": {
+            "name": "Link Log-Channels",
+            "desc": "Channels in which to Log all detected Links in"
+          }
+        },
         "anti-raid": {
           "punishment": {
             "name": "Punishment",
             "desc": "Punishment to apply to Raiders"
           },
           "posttof": {
-            "name": "Raid Notice",
-            "desc": "Post a Raid Notice for Server Staff"
+            "name": "Raid Notice"
           },
           "postchannel": {
             "name": "Raid Notice Channel",
@@ -637,14 +673,12 @@
             "desc": "Used in combination with `Timeout`\nUsers will be punished after exceeding the set `Join Threshold` within the set `Timeout`"
           },
           "punishmenttof": {
-            "name": "Punish Raiders",
-            "desc": "Wether to Punish Raiders"
+            "name": "Punish Raiders"
           }
         },
         "anti-spam": {
           "deletespam": {
-            "name": "Delete Spam",
-            "desc": "Delete spammed Messages"
+            "name": "Delete Spam"
           },
           "wlchannelid": {
             "name": "Whitelisted Channels",
