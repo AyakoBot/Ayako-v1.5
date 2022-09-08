@@ -554,6 +554,7 @@
         "anti-spam-punishments": "Anti-Spam Punishments",
         "anti-spam": "Anti-Spam",
         "anti-virus": "Anti-Virus",
+        "anti-raid": "Anti-Raid",
         "auto-punish": "Auto Punish",
         "blacklist": "Blacklist",
         "mod-roles": "Moderation Roles",
@@ -605,6 +606,40 @@
         "prefix": "Assign a custom Prefix to Ayako"
       },
       "settings": {
+        "anti-raid": {
+          "punishment": {
+            "name": "Punishment",
+            "desc": "Punishment to apply to Raiders"
+          },
+          "posttof": {
+            "name": "Raid Notice",
+            "desc": "Post a Raid Notice for Server Staff"
+          },
+          "postchannel": {
+            "name": "Raid Notice Channel",
+            "desc": "Channel to post the Raid Notice in"
+          },
+          "pingroles": {
+            "name": "Raid Notice Ping Roles",
+            "desc": "Roles to Ping when a Raid Notice is posted"
+          },
+          "pingusers": {
+            "name": "Raid Notice Ping Users",
+            "desc": "Users to Ping when a Raid Notice is posted"
+          },
+          "time": {
+            "name": "Timeout",
+            "desc": "Used in combination with `Join Threshold`\nUsers will be punished after exceeding the set `Join Threshold` within the set `Timeout`"
+          },
+          "jointhreshold": {
+            "name": "Join Threshold",
+            "desc": "Used in combination with `Timeout`\nUsers will be punished after exceeding the set `Join Threshold` within the set `Timeout`"
+          },
+          "punishmenttof": {
+            "name": "Punish Raiders",
+            "desc": "Wether to Punish Raiders"
+          }
+        },
         "anti-spam": {
           "deletespam": {
             "name": "Delete Spam",

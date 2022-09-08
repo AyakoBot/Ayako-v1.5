@@ -35,10 +35,10 @@ CREATE TABLE public.afk (
 ALTER TABLE public.afk OWNER TO postgres;
 
 --
--- Name: antiraidsettings; Type: TABLE; Schema: public; Owner: postgres
+-- Name: antiraid; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.antiraidsettings (
+CREATE TABLE public.antiraid (
     guildid character varying NOT NULL,
     active boolean NOT NULL,
     punishment boolean NOT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE public.antiraidsettings (
 );
 
 
-ALTER TABLE public.antiraidsettings OWNER TO postgres;
+ALTER TABLE public.antiraid OWNER TO postgres;
 
 --
 -- Name: antispamsettings; Type: TABLE; Schema: public; Owner: postgres
@@ -1177,11 +1177,11 @@ ALTER TABLE ONLY public.antispamsettings ALTER COLUMN banafterwarnsamount SET DE
 
 
 --
--- Name: antiraidsettings antiraidsettings_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: antiraid antiraid_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.antiraidsettings
-    ADD CONSTRAINT antiraidsettings_pkey PRIMARY KEY (guildid);
+ALTER TABLE ONLY public.antiraid
+    ADD CONSTRAINT antiraid_pkey PRIMARY KEY (guildid);
 
 
 --

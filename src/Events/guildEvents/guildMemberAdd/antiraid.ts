@@ -13,16 +13,16 @@ export default async (
 ) => {
   if (!member || !guild) return;
 
-  const antiraidsettingsRow = await client.ch
-    .query('SELECT * FROM antiraidsettings WHERE guildid = $1 AND active = true;', [guild.id])
-    .then((r: DBT.antiraidsettings[] | null) => (r ? r[0] : null));
-  if (!antiraidsettingsRow) return;
+  const antiraidRow = await client.ch
+    .query('SELECT * FROM antiraid WHERE guildid = $1 AND active = true;', [guild.id])
+    .then((r: DBT.antiraid[] | null) => (r ? r[0] : null));
+  if (!antiraidRow) return;
 
-  addMember(member, guild, antiraidsettingsRow);
-  check(guild, antiraidsettingsRow, language);
+  addMember(member, guild, antiraidRow);
+  check(guild, antiraidRow, language);
 };
 
-const addMember = (member: Eris.Member, guild: Eris.Guild, r: DBT.antiraidsettings) => {
+const addMember = (member: Eris.Member, guild: Eris.Guild, r: DBT.antiraid) => {
   if (!member.joinedAt) return;
 
   const cache = antiraidCache.get(guild.id);
@@ -39,7 +39,7 @@ const addMember = (member: Eris.Member, guild: Eris.Guild, r: DBT.antiraidsettin
 
 const check = (
   guild: Eris.Guild,
-  r: DBT.antiraidsettings,
+  r: DBT.antiraid,
   language: typeof import('../../../Languages/lan-en.json'),
 ) => {
   if (!antiraidCache.has(guild.id)) return null;

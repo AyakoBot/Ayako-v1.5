@@ -432,6 +432,7 @@
             { "name": "anti-spam", "category": "chats" },
             { "name": "anti-spam-punishments", "category": "chats" },
             { "name": "anti-virus", "category": "chats" },
+            { "name": "anti-raid", "category": "other" },
             { "name": "auto-punish", "category": "other" },
             { "name": "blacklist", "category": "chats" }
           ]
@@ -473,6 +474,17 @@
         }
       ],
       "settings": {
+        "anti-raid": {
+          "active": "boolean",
+          "punishment": "punishment",
+          "posttof": "boolean",
+          "postchannel": "channels",
+          "pingroles": "roles",
+          "pingusers": "users",
+          "time": "seconds",
+          "jointhreshold": "number",
+          "punishmenttof": "boolean"
+        },
         "anti-spam": {
           "active": "boolean",
           "wlchannelid": "channels",
@@ -493,7 +505,7 @@
       "tableNames": {
         "anti-spam": "antispam",
         "anti-spam-punishments": "antispampunishments",
-        "anti-raid": "antiraidsettings",
+        "anti-raid": "antiraid",
         "anti-virus": "antivirus",
         "auto-punish": "autopunish",
         "blacklist": "blacklists",

@@ -10,10 +10,10 @@ export type afk = {
   since: string;
 };
 
-export type antiraidsettings = {
+export type antiraid = {
   guildid: string;
   active: boolean;
-  punishment: boolean;
+  punishment: string;
   posttof?: boolean;
   postchannel?: string;
   pingroles?: string[];

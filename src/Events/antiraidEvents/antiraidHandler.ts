@@ -7,8 +7,8 @@ type Language = typeof import('../../Languages/lan-en.json');
 
 export default async (
   data: { time: number; joins: number },
-  guild: Eris.Guild,
-  r: DBT.antiraidsettings,
+  guild: Eris.antiraid,
+  r: DBT.antiraid,
   language: Language,
 ) => {
   if (data.joins) checkAll(guild, language, r, data);
@@ -17,7 +17,7 @@ export default async (
 const checkAll = async (
   guild: Eris.Guild,
   language: Language,
-  r: DBT.antiraidsettings,
+  r: DBT.antiraid,
   { time }: { time: number },
 ) => {
   const memberIDs = await getMemberIDs(guild, time, Number(r.time));
@@ -46,7 +46,7 @@ const checkAll = async (
   run(guild, language, r, [...new Set([...newIDs, ...similarUsers])]);
 };
 
-const run = (guild: Eris.Guild, language: Language, r: DBT.antiraidsettings, members: string[]) => {
+const run = (guild: Eris.Guild, language: Language, r: DBT.antiraid, members: string[]) => {
   if (r.posttof) sendMessage(guild, language, r, members);
   if (r.punishmenttof) {
     if (r.punishment) {
@@ -61,7 +61,7 @@ const run = (guild: Eris.Guild, language: Language, r: DBT.antiraidsettings, mem
 const sendMessage = (
   guild: Eris.Guild,
   language: Language,
-  r: DBT.antiraidsettings,
+  r: DBT.antiraid,
   members: string[],
 ) => {
   if (!r.postchannel) return;
