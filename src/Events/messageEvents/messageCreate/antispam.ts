@@ -72,9 +72,7 @@ const runPunishment = async (msg: CT.Message) => {
   if (!msg.guild) return;
 
   const allPunishments = (await getAllPunishments(msg))?.flat(1) || [];
-  console.log(allPunishments);
   const punishment = await getPunishment(msg, allPunishments.length);
-  console.log(punishment);
 
   const obj: CT.ModBaseEventOptions = {
     type: 'warnAdd',
