@@ -478,7 +478,7 @@
           "active": "boolean",
           "punishment": "punishment",
           "posttof": "boolean",
-          "postchannel": "channels",
+          "postchannel": "channel",
           "pingroles": "roles",
           "pingusers": "users",
           "time": "seconds",
