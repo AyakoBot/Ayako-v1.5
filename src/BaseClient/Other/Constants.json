@@ -475,6 +475,12 @@
         }
       ],
       "settings": {
+        "auto-roles": {
+          "active": "boolean",
+          "botroleid": "roles",
+          "userroleid": "roles",
+          "allroleid": "roles"
+        },
         "anti-virus": {
           "active": "boolean",
           "minimize": "seconds",
@@ -527,7 +533,7 @@
         "auto-punish": "autopunish",
         "blacklist": "blacklists",
         "mod-roles": "modroles",
-        "auto-roles": "autorole",
+        "auto-roles": "autoroles",
         "cooldowns": "cooldowns",
         "expiry": "modsettings",
         "disabled-commands": "disabledcommands",

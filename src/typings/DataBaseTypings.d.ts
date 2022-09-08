@@ -60,7 +60,7 @@ export type autopunish = {
   punishmentawaittime: string;
 };
 
-export type autorole = {
+export type autoroles = {
   guildid: string;
   active: boolean;
   botroleid?: string[];

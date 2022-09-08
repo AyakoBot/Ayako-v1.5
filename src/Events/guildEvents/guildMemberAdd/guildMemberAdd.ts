@@ -9,5 +9,6 @@ export default async (guild: Eris.Guild, member: Eris.Member) => {
   (await import('./verification')).default(member, guild, language);
   (await import('./antiraid')).default(member, guild, language);
   (await import('./sticky')).default(member, guild, language);
+  (await import('./autoroles')).default(member, guild, language);
   (await import('./dmAd')).default(member, guild);
 };

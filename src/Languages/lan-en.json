@@ -607,6 +607,20 @@
         "prefix": "Assign a custom Prefix to Ayako"
       },
       "settings": {
+        "auto-roles": {
+          "botroleid": {
+            "name": "Bot Roles",
+            "desc": "Roles added to joining Bots"
+          },
+          "userroleid": {
+            "name": "User Roles",
+            "desc": "Roles added to joining Users"
+          },
+          "allroleid": {
+            "name": "All Roles",
+            "desc": "Roles added to joining Users and Bots"
+          }
+        },
         "anti-virus-punishments": {
           "duration": {
             "name": "Duration of Punishment",
@@ -816,7 +830,8 @@
     "separators": "Ayako Separators",
     "autopunish": "Ayako Auto-Punish",
     "selfroles": "Ayako Self-Roles",
-    "nitro": "Ayako Nitro-Monitoring"
+    "nitro": "Ayako Nitro-Monitoring",
+    "autoroles": "Ayako Auto-Roles"
   },
   "mod": {
     "warning": {
