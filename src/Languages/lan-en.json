@@ -581,6 +581,7 @@
       },
       "settingsDescriptions": {
         "anti-spam": "Stopping Members from spamming in the Server",
+        "anti-raid": "Stop Raids while they happen! Or at least be notified about one happening",
         "anti-virus": "Stopping Members and hacked Accounts from sending phishing and in other ways malicious Links in the Server",
         "auto-punish": "Consistenly punish Members for misbehaving using a custom punishment Setup and a new Command",
         "blacklist": "Stopping Members from saying Words or Phrases you'd rather not have them say on your Server",
