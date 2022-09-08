@@ -198,8 +198,19 @@
             "required": true,
             "min_length": 1,
             "choices": [
-              { "name": "Mod-Roles", "value": "mod-roles" },
-              { "name": "Expiry", "value": "expiry" }
+              { "name": "Cooldowns", "value": "cooldowns" },
+              { "name": "Disabled-Commands", "value": "disabled-commands" },
+              { "name": "Disboard-Reminders", "value": "disboard-reminders" },
+              { "name": "Self-Roles", "value": "self-roles" },
+              { "name": "Separators", "value": "separators" },
+              { "name": "Sticky", "value": "sticky" },
+              { "name": "Verification", "value": "verification" },
+              { "name": "Welcome", "value": "welcome" },
+              { "name": "Leveling", "value": "leveling" },
+              { "name": "Nitro", "value": "nitro" },
+              { "name": "Reaction-Roles", "value": "reaction-roles" },
+              { "name": "Delete-Commands", "value": "delete-commands" },
+              { "name": "Suggestions", "value": "suggestions" }
             ]
           }
         ]
@@ -216,20 +227,8 @@
             "required": true,
             "min_length": 1,
             "choices": [
-              { "name": "Auto-Roles", "value": "auto-roles" },
-              { "name": "Cooldowns", "value": "cooldowns" },
-              { "name": "Disabled-Commands", "value": "disabled-commands" },
-              { "name": "Disboard-Reminders", "value": "disboard-reminders" },
-              { "name": "Self-Roles", "value": "self-roles" },
-              { "name": "Separators", "value": "separators" },
-              { "name": "Sticky", "value": "sticky" },
-              { "name": "Verification", "value": "verification" },
-              { "name": "Welcome", "value": "welcome" },
-              { "name": "Leveling", "value": "leveling" },
-              { "name": "Nitro", "value": "nitro" },
-              { "name": "Reaction-Roles", "value": "reaction-roles" },
-              { "name": "Delete-Commands", "value": "delete-commands" },
-              { "name": "Suggestions", "value": "suggestions" }
+              { "name": "Mod-Roles", "value": "mod-roles" },
+              { "name": "Expiry", "value": "expiry" }
             ]
           }
         ]
