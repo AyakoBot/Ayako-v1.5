@@ -7,7 +7,7 @@ type Language = typeof import('../../Languages/lan-en.json');
 
 export default async (
   data: { time: number; joins: number },
-  guild: Eris.antiraid,
+  guild: Eris.Guild,
   r: DBT.antiraid,
   language: Language,
 ) => {
@@ -58,12 +58,7 @@ const run = (guild: Eris.Guild, language: Language, r: DBT.antiraid, members: st
   }
 };
 
-const sendMessage = (
-  guild: Eris.Guild,
-  language: Language,
-  r: DBT.antiraid,
-  members: string[],
-) => {
+const sendMessage = (guild: Eris.Guild, language: Language, r: DBT.antiraid, members: string[]) => {
   if (!r.postchannel) return;
   const lan = language.commands.antiraidHandler;
 
