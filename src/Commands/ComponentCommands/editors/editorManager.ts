@@ -16,6 +16,7 @@ const editor: CT.Editor = {
     'role',
     'user',
     'strings',
+    'command',
   ],
   run: async (cmd, oldRow, typeOfField) => {
     if (!cmd.guildID) return null;
@@ -43,7 +44,7 @@ const editor: CT.Editor = {
       default_member_permissions: 32,
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      options: managedEditor.getOptions(cmd),
+      options: await managedEditor.getOptions(cmd),
     });
 
     const embed = await (
@@ -146,9 +147,16 @@ const handleCollectors = async (
       if (!command.data.options || !('values' in command.data.options)) return;
 
       command.data.options.forEach((option) => {
-        if (!('value' in option)) return;
+        if (!('value' in option)) {
+          const { value } = option.options?.[0] as Eris.InteractionDataOptionsString;
 
-        if (Array.isArray(finishedData)) {
+          if (Array.isArray(finishedData)) {
+            if (!finishedData.includes(String(value))) finishedData.push(String(value));
+            else finishedData.splice(finishedData.indexOf(String(value)), 1);
+          } else {
+            finishedData = String(value);
+          }
+        } else if (Array.isArray(finishedData)) {
           if (!finishedData.includes(String(option.value))) finishedData.push(String(option.value));
           else finishedData.splice(finishedData.indexOf(String(option.value)), 1);
         } else {
@@ -191,7 +199,13 @@ const getManagedEditor = async (type: string) => {
 const getFinishedData = (oldRow: CT.BasicReturnType, field: string, c: Eris.ApplicationCommand) => {
   const f = oldRow[field as keyof typeof oldRow];
 
-  if (Number(c.options?.length) > 1) {
+  if (
+    Number(c.options?.length) > 1 &&
+    !(
+      (c.options?.[0] as Eris.InteractionDataOptionsSubCommandGroup)
+        ?.options as Eris.InteractionDataOptionsString[]
+    )?.length
+  ) {
     if (!f) return [];
     return f;
   }
