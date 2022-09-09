@@ -475,6 +475,13 @@
         }
       ],
       "settings": {
+        "blacklist": {
+          "active": "boolean",
+          "bpchannelid": "channels",
+          "bproleid": "roles",
+          "bpuserid": "users",
+          "words": "strings"
+        },
         "auto-punish": {
           "duration": "duration",
           "warnamount": "number",
@@ -532,12 +539,19 @@
           "warnamount": "number",
           "punishment": "punishment",
           "duration": "duration"
+        },
+        "blacklist-punishments": {
+          "active": "boolean",
+          "warnamount": "number",
+          "punishment": "punishment",
+          "duration": "duration"
         }
       },
       "tableNames": {
         "anti-spam": "antispam",
         "anti-spam-punishments": "antispampunishments",
         "anti-virus-punishments": "antiviruspunishments",
+        "blacklist-punishments": "blacklistpunishments",
         "anti-raid": "antiraid",
         "anti-virus": "antivirus",
         "auto-punish": "autopunish",
@@ -573,6 +587,7 @@
       "mrmIdentifiers": {
         "anti-spam-punishments": [{ "ident": "warnamount", "type": "string" }],
         "anti-virus-punishments": [{ "ident": "warnamount", "type": "string" }],
+        "blacklist-punishments": [{ "ident": "warnamount", "type": "string" }],
         "deletecommands": [{ "ident": "commands", "type": "text" }],
         "reactionroles": [{ "ident": "name", "type": "text" }],
         "rrbuttons": [
@@ -596,7 +611,9 @@
         "anti-spam": ["anti-spam-punishments"],
         "anti-spam-punishments": ["anti-spam"],
         "anti-virus": ["anti-virus-punishments"],
-        "anti-virus-punishments": ["anti-virus"]
+        "anti-virus-punishments": ["anti-virus"],
+        "blacklist": ["blacklist-punishments"],
+        "blacklist-punishments": ["blacklist"]
       }
     }
   }

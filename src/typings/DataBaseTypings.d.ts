@@ -75,7 +75,6 @@ export type blacklist = {
   bpuserid?: string[];
   words?: string[];
   guildid: string;
-  mutetof: boolean;
 };
 
 export type cooldowns = {

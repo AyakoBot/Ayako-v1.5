@@ -554,6 +554,8 @@
         "anti-spam-punishments": "Anti-Spam Punishments",
         "anti-spam": "Anti-Spam",
         "anti-virus": "Anti-Virus",
+        "anti-virus-punishments": "Anti-Virus Punishments",
+        "blacklist-punishments": "Blacklist Punishments",
         "anti-raid": "Anti-Raid",
         "auto-punish": "Auto Punish",
         "blacklist": "Blacklist",
@@ -607,6 +609,24 @@
         "prefix": "Assign a custom Prefix to Ayako"
       },
       "settings": {
+        "blacklist": {
+          "bpchannelid": {
+            "name": "Whitelisted Channels",
+            "desc": "Channels ignored by Ayako Blacklist"
+          },
+          "bpuserid": {
+            "name": "Whitelisted Users",
+            "desc": "Users ignored by Ayako Blacklist"
+          },
+          "bproleid": {
+            "name": "Whitelisted Roles",
+            "desc": "Roles ignored by Ayako Blacklist"
+          },
+          "words": {
+            "name": "Words/Phrases",
+            "desc": "Blacklisted Words and Phrases"
+          }
+        },
         "auto-punish": {
           "description": "**How to use**\nTo use the Auto-Punishment System\n__use__ </strike:1014158232299778048>\ninstead of regular Moderation Commands\n\nThe Auto-Punish System does not take your ability to use regular Moderation Commands, it just guarantees consisten Punishments\n\n\u200b",
           "duration": {
@@ -750,6 +770,20 @@
           }
         },
         "anti-spam-punishments": {
+          "duration": {
+            "name": "Punishment Duration",
+            "desc": "Only applies to Punishments prefixed with `Temp`"
+          },
+          "warnamount": {
+            "name": "Warn Amount",
+            "desc": "Number of Warns at which this Punishment is applied"
+          },
+          "punishment": {
+            "name": "Punishment",
+            "desc": "Punishment to apply"
+          }
+        },
+        "blacklist-punishments": {
           "duration": {
             "name": "Punishment Duration",
             "desc": "Only applies to Punishments prefixed with `Temp`"
