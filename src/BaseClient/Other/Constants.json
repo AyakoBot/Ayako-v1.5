@@ -475,6 +475,16 @@
         }
       ],
       "settings": {
+        "auto-punish": {
+          "duration": "duration",
+          "warnamount": "number",
+          "punishment": "punishment",
+          "active": "boolean",
+          "addroles": "roles",
+          "removeroles": "roles",
+          "confirmationreq": "boolean",
+          "punishmentawaittime": "seconds"
+        },
         "auto-roles": {
           "active": "boolean",
           "botroleid": "roles",
@@ -575,7 +585,7 @@
         "nitroroles": [],
         "selfroles": [{ "ident": "name", "type": "text" }],
         "separators": [{ "ident": "separator", "type": "role" }],
-        "autopunish": [{ "ident": "warnamount", "type": "text" }],
+        "auto-punish": [{ "ident": "warnamount", "type": "text" }],
         "levelroles": [{ "ident": "level", "type": "text" }],
         "multiroles": [{ "ident": "multiplier", "type": "text" }],
         "ruleschannels": [],

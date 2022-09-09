@@ -607,6 +607,36 @@
         "prefix": "Assign a custom Prefix to Ayako"
       },
       "settings": {
+        "auto-punish": {
+          "description": "**How to use**\nTo use the Auto-Punishment System\n__use__ </strike:1014158232299778048>\ninstead of regular Moderation Commands\n\nThe Auto-Punish System does not take your ability to use regular Moderation Commands, it just guarantees consisten Punishments\n\n\u200b",
+          "duration": {
+            "name": "Punishment Duration",
+            "desc": "Only applies to Punishments prefixed with `Temp`"
+          },
+          "warnamount": {
+            "name": "Warn Amount",
+            "desc": "Number of Warns at which this Punishment is applied"
+          },
+          "punishment": {
+            "name": "Punishment",
+            "desc": "Punishment to apply"
+          },
+          "addroles": {
+            "name": "Add Roles",
+            "desc": "Roles to add when the Punishment is applied"
+          },
+          "removeroles": {
+            "name": "Remove Roles",
+            "desc": "Roles to remove when the Punishment is applied"
+          },
+          "confirmationreq": {
+            "name": "Confirmation Required"
+          },
+          "punishmentawaittime": {
+            "name": "Confirmation Timeout",
+            "desc": "How long to wait for the Punishment approval\nIf no Response is received the Punishment will be applied"
+          }
+        },
         "auto-roles": {
           "botroleid": {
             "name": "Bot Roles",
@@ -623,7 +653,7 @@
         },
         "anti-virus-punishments": {
           "duration": {
-            "name": "Duration of Punishment",
+            "name": "Punishment Duration",
             "desc": "Only applies to Punishments prefixed with `Temp`"
           },
           "warnamount": {
@@ -721,7 +751,7 @@
         },
         "anti-spam-punishments": {
           "duration": {
-            "name": "Duration of Punishment",
+            "name": "Punishment Duration",
             "desc": "Only applies to Punishments prefixed with `Temp`"
           },
           "warnamount": {
@@ -732,10 +762,6 @@
             "name": "Punishment",
             "desc": "Punishment to apply"
           }
-        },
-        "auto-punish": {
-          "description": "**How to use**\nTo use the Auto-Punishment System\n__use__ </strike:1014158232299778048>\ninstead of regular Moderation Commands\n\nThe Auto-Punish System does not take your ability to use regular Moderation Commands, it just guarantees consisten Punishments\n\n\u200b",
-          "requiredWarns": "Required Warns:"
         },
         "separators": {
           "type": "Separator",

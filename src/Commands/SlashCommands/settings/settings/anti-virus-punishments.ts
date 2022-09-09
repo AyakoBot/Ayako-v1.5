@@ -13,7 +13,7 @@ const setting: CT.MultiSettings = {
       .query(`SELECT * FROM antiviruspunishments WHERE guildid = $1;`, [
         baseObject.interactions[0].guildID,
       ])
-      .then((r: DBT.autopunish[] | null) => r);
+      .then((r: DBT.antiviruspunishments[] | null) => r);
 
     if (!existing) {
       baseObject.embed.footer = {
