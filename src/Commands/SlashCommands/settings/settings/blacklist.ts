@@ -15,7 +15,9 @@ const setting: CT.SettingsFile = {
       if (!settings) return;
     }
 
-    baseObject.embed.description = settings.words?.map((word) => spaces(20, word)).join('|');
+    baseObject.embed.description = settings.words?.length
+      ? `${settings.words.map((word) => `\`${word}\``).join(' | ')}`
+      : undefined;
 
     baseObject.embed.fields = [
       {
@@ -112,5 +114,3 @@ const setup = (baseObject: CT.BaseSettingsObject) =>
   client.ch
     .query(`INSERT INTO blacklist (guildid) VALUES ($1);`, [baseObject.interactions[0].guildID])
     .then((r: DBT.blacklist[] | null) => (r ? r[0] : null));
-
-const spaces = (num: number, str: string) => `${str}${' '.repeat(Math.abs(num - str.length))}`;

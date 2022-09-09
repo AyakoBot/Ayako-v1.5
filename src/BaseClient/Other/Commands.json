@@ -180,8 +180,10 @@
               { "name": "Anti-Spam Punishments", "value": "anti-spam-punishments" },
               { "name": "Anti-Raid", "value": "anti-raid" },
               { "name": "Anti-Virus", "value": "anti-virus" },
+              { "name": "Anti-Virus Punishments", "value": "anti-virus-punishments" },
               { "name": "Auto Punish", "value": "auto-punish" },
-              { "name": "Blacklist", "value": "blacklist" }
+              { "name": "Blacklist", "value": "blacklist" },
+              { "name": "Blacklist Punishments", "value": "blacklist-punishments" }
             ]
           }
         ]

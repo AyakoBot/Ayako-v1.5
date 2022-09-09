@@ -435,7 +435,8 @@
             { "name": "anti-virus-punishments", "category": "chats" },
             { "name": "anti-raid", "category": "other" },
             { "name": "auto-punish", "category": "other" },
-            { "name": "blacklist", "category": "chats" }
+            { "name": "blacklist", "category": "chats" },
+            { "name": "blacklist-punishments", "category": "chats" }
           ]
         },
         {
@@ -555,7 +556,7 @@
         "anti-raid": "antiraid",
         "anti-virus": "antivirus",
         "auto-punish": "autopunish",
-        "blacklist": "blacklists",
+        "blacklist": "blacklist",
         "mod-roles": "modroles",
         "auto-roles": "autoroles",
         "cooldowns": "cooldowns",
