@@ -84,7 +84,9 @@ const doRoles = async (
 const getConfirmation = async (
   punishmentToApply: DBT.autopunish,
   cmd: CT.Message | CT.CommandInteraction,
-) => {
+): Promise<boolean> => {
+  if (!punishmentToApply.confirmationreq) return true;
+
   const embed: Eris.Embed = {
     type: 'rich',
     color: client.constants.colors.warning,
