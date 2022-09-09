@@ -610,6 +610,9 @@
       },
       "settings": {
         "blacklist": {
+          "authorName": "Blacklisted Word said",
+          "description": "Please refrain from using any of the following Words\nThis __includes__ not blacklisted Variations of following Words\n*Server Staff may punish more strictly for bypassing the Blacklist*\n{{words}}",
+          "field": "You used following Words",
           "bpchannelid": {
             "name": "Whitelisted Channels",
             "desc": "Channels ignored by Ayako Blacklist"
@@ -1105,12 +1108,9 @@
       "author": "{{args.target.username}}#{{args.target.discriminator}} was Warned",
       "description": "Target {{args.target}} / `{{args.target.username}}#{{args.target.discriminator}}` / `{{args.target.id}}`\nwas Warned by\nExecutor <@{{user.id}}> / `{{user.username}}#{{user.discriminator}}` / `{{user.id}}`",
       "exeNoPerms": "You can't Warn this Member",
-      "antispam": {
-        "description": "**Please stop Spamming**"
-      },
-      "antivirus": {
-        "description": "**Please do not post Malicious Links**"
-      },
+      "antispam": "**Please stop Spamming**",
+      "antivirus": "**Please do not post Malicious Links**",
+      "blacklist": "**Please do not send Blacklisted Words**\nCheck your DMs for a List of them",
       "success": "User <@{{target.id}}> was Warned",
       "loading": "Warning User...",
       "selfPunish": "You can't Warn yourself",

@@ -1,180 +1,153 @@
-import jobs from 'node-schedule';
 import type Eris from 'eris';
 import type CT from '../../../typings/CustomTypings';
 import type DBT from '../../../typings/DataBaseTypings';
 import client from '../../../BaseClient/ErisClient';
 
+let messageCache: string[] = [];
+
 export default async (msg: CT.Message) => {
-  if (!msg.channel) return;
-  if (typeof msg.channel.type !== 'number' || msg.channel.type === 1) return;
-  if (!msg.author || msg.author.bot) return;
-  if (!msg.member) return;
-  if (!client.ch.isManageable(msg.member, msg.guild?.members.get(client.user.id))) return;
+  if (!msg.guild) return;
+  if (!msg.guildID) return;
+  if (!msg.content?.length) return;
 
-  const blacklistsRow = await client.ch
-    .query('SELECT * FROM blacklists WHERE guildid = $1 AND active = true;', [msg.guildID])
-    .then((r: DBT.blacklists[] | null) => (r ? r[0] : null));
+  const settings = await getSettings(msg);
+  if (!settings) return;
+  if (!settings.words?.length) return;
 
-  if (!blacklistsRow) return;
+  if (
+    !msg.member ||
+    msg.member.permissions.has(8n) ||
+    (settings.bpchannelid && settings.bpchannelid.includes(msg.channel.id)) ||
+    (settings.bpuserid && settings.bpuserid.includes(msg.author.id)) ||
+    (settings.bproleid && msg.member.roles.some((role) => settings.bproleid?.includes(role)))
+  ) {
+    return;
+  }
 
-  if (blacklistsRow.bpchannelid?.includes(msg.channel.id)) return;
-  if (blacklistsRow.bpuserid?.includes(msg.author.id)) return;
-  if (msg.member?.roles.some((r) => blacklistsRow.bproleid?.includes(r))) return;
-  if (!blacklistsRow.words) return;
-
-  const blwords = blacklistsRow.words;
-  const words: string[] = [];
-
-  const included = blwords
-    .map((w) => {
-      if (msg.content.toLowerCase().includes(w.toLowerCase())) {
-        words.push(w);
-        return true;
-      }
-      return false;
+  const saidWords = settings.words
+    ?.map((word) => {
+      if (msg.content.toLowerCase().includes(word.toLowerCase())) return word;
+      return null;
     })
-    .filter((s) => !!s);
+    .filter((w): w is string => !!w);
 
-  if (!included.length) return;
+  if (!saidWords.length) return;
 
-  await msg.delete().catch(() => null);
+  msg.delete().catch(() => null);
 
-  const language = await client.ch.languageSelector(msg.guildID);
+  softWarn(msg, saidWords, settings);
+  messageCache.push(msg.author.id);
 
-  const m = await client.ch.send(
-    msg.channel,
-    { content: client.ch.stp(language.commands.toxicityCheck.warning, { user: msg.author }) },
-    msg.language,
-  );
+  const amount = messageCache.filter((a) => a === msg.author.id).length;
+  if (amount === 1) return;
 
-  if (m) {
-    if (Array.isArray(m)) return;
-    jobs.scheduleJob(new Date(Date.now() + 10000), async () => {
-      if (m) m.delete().catch(() => null);
-    });
-  }
-
-  sendDm(msg, words);
-
-  const amount = await getAmount(msg);
-
-  if (
-    blacklistsRow.warntof === true &&
-    amount === Number(blacklistsRow.warnafter) &&
-    amount !== Number(blacklistsRow.muteafter)
-  ) {
-    client.emit(
-      'modBaseEvent',
-      {
-        executor: client.user,
-        target: msg.author,
-        reason: language.commands.toxicityCheck.warnReason,
-        msg,
-        guild: msg.guild,
-      },
-      'warnAdd',
-    );
-    return;
-  }
-
-  if (
-    blacklistsRow.mutetof === true &&
-    amount % Number(blacklistsRow.muteafter) === 0 &&
-    amount !== Number(blacklistsRow.kickafter)
-  ) {
-    client.emit(
-      'modBaseEvent',
-      {
-        executor: client.user,
-        target: msg.author,
-        reason: language.commands.toxicityCheck.warnReason,
-        msg,
-        guild: msg.guild,
-        duration: 3600000,
-      },
-      'tempmuteAdd',
-    );
-    return;
-  }
-
-  if (
-    blacklistsRow.kicktof === true &&
-    amount % Number(blacklistsRow.kickafter) === 0 &&
-    amount !== Number(blacklistsRow.banafter)
-  ) {
-    client.emit(
-      'modBaseEvent',
-      {
-        executor: client.user,
-        target: msg.author,
-        reason: language.commands.toxicityCheck.warnReason,
-        msg,
-        guild: msg.guild,
-      },
-      'kickAdd',
-    );
-    return;
-  }
-
-  if (blacklistsRow.bantof === true && amount >= Number(blacklistsRow.banafter)) {
-    client.emit(
-      'modBaseEvent',
-      {
-        executor: client.user,
-        target: msg.author,
-        reason: language.commands.toxicityCheck.warnReason,
-        msg,
-        guild: msg.guild,
-      },
-      'banAdd',
-    );
-  }
+  runPunishment(msg);
 };
 
-const getAmount = async (msg: CT.Message) => {
-  let amount;
+const runPunishment = async (msg: CT.Message) => {
+  if (!msg.guild) return;
 
-  const toxicitycheckRow = await client.ch
-    .query('SELECT * FROM toxicitycheck WHERE userid = $2 AND guildid = $1;', [
-      msg.guildID,
-      msg.author.id,
-    ])
-    .then((r: DBT.toxicitycheck[] | null) => (r ? r[0] : null));
+  const amountOfTimes = messageCache.filter((a) => a === msg.author.id).length;
+  const punishment = await getPunishment(msg, amountOfTimes);
 
-  if (toxicitycheckRow) {
-    client.ch.query('UPDATE toxicitycheck SET amount = $2 WHERE userid = $3 AND guildid = $1;', [
-      msg.guildID,
-      Number(toxicitycheckRow.amount) + 1,
-      msg.author.id,
-    ]);
-    amount = Number(toxicitycheckRow.amount);
-  } else {
-    client.ch.query('INSERT INTO toxicitycheck (guildid, userid, amount) VALUES ($1, $3, $2);', [
-      msg.guildID,
-      1,
-      msg.author.id,
-    ]);
-    amount = 0;
-  }
-  amount += 1;
-
-  return amount;
-};
-
-const sendDm = async (msg: CT.Message, words: string[]) => {
-  const embed: Eris.Embed = {
-    type: 'rich',
-    author: {
-      name: msg.language.commands.toxicityCheck.author,
-      icon_url: client.objectEmotes.warning.link,
-      url: client.constants.standard.invite,
-    },
-    description: `${client.ch.stp(msg.language.commands.toxicityCheck.info, {
-      guild: msg.guild,
-    })} ${words.map((w) => `\`${w}\``)}`,
-    color: client.constants.commands.toxicityCheck,
+  const obj: CT.ModBaseEventOptions = {
+    type: 'warnAdd',
+    executor: client.user,
+    target: msg.author,
+    msg,
+    reason: msg.language.autotypes.blacklist,
+    guild: msg.guild,
+    source: 'blacklist',
+    forceFinish: true,
   };
 
-  const DMchannel = await msg.author.getDMChannel().catch(() => null);
-  if (DMchannel) client.ch.send(DMchannel, { embeds: [embed] }, msg.language);
+  if (!punishment) {
+    client.emit('modBaseEvent', obj);
+    return;
+  }
+
+  obj.duration = Number(punishment.duration);
+
+  switch (punishment.punishment) {
+    case 'ban': {
+      obj.type = 'banAdd';
+      break;
+    }
+    case 'kick': {
+      obj.type = 'kickAdd';
+      break;
+    }
+    case 'tempban': {
+      obj.type = 'tempbanAdd';
+      break;
+    }
+    case 'channelban': {
+      obj.type = 'channelbanAdd';
+      break;
+    }
+    case 'tempchannelban': {
+      obj.type = 'tempchannelbanAdd';
+      break;
+    }
+    case 'tempmute': {
+      obj.type = 'tempmuteAdd';
+      break;
+    }
+    default: {
+      break;
+    }
+  }
+
+  client.emit('modBaseEvent', obj);
 };
+
+export const resetData = () => {
+  messageCache = [];
+};
+
+const softWarn = async (msg: CT.Message, words: string[], settings: DBT.blacklist) => {
+  const embed: Eris.Embed = {
+    type: 'rich',
+    color: client.constants.colors.warning,
+    author: {
+      icon_url: client.constants.standard.error,
+      url: client.constants.standard.invite,
+      name: msg.language.slashCommands.settings.settings.blacklist.authorName,
+    },
+    description: client.ch.stp(msg.language.slashCommands.settings.settings.blacklist.description, {
+      words: settings.words?.map((w) => `\`${w}\``).join(' | '),
+    }),
+    fields: [
+      {
+        name: msg.language.slashCommands.settings.settings.blacklist.field,
+        value: `${words.map((w) => `\`${w}\``).join(' | ')}`,
+        inline: false,
+      },
+    ],
+  };
+
+  client.ch.send(await msg.author.getDMChannel(), { embeds: [embed] }, msg.language);
+  client.ch.send(
+    msg.channel,
+    {
+      content: `${msg.author.mention} ${msg.language.mod.warnAdd.blacklist}`,
+      allowedMentions: {
+        users: [msg.author.id],
+      },
+    },
+    msg.language,
+  );
+};
+
+const getSettings = async (msg: CT.Message) =>
+  client.ch
+    .query(`SELECT * FROM blacklist WHERE guildid = $1 AND active = true;`, [msg.guildID])
+    .then((r: DBT.blacklist[] | null) => (r ? r[0] : null));
+
+const getPunishment = async (msg: CT.Message, warns: number) =>
+  client.ch
+    .query(
+      `SELECT * FROM blacklistpunishments WHERE guildid = $1 AND warnamount = $2 AND active = true;`,
+      [msg.guildID, warns],
+    )
+    .then((r: DBT.BasicPunishmentsTable[] | null) => (r ? r[0] : null));

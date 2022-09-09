@@ -562,12 +562,6 @@ export type suggestionvotes = {
   ended?: boolean;
 };
 
-export type toxicitycheck = {
-  guildid: string;
-  userid: string;
-  amount: string;
-};
-
 export type users = {
   userid: string;
   votereminders?: boolean;
