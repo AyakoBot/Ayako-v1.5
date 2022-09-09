@@ -6,7 +6,17 @@ import InteractionCollector from '../../../BaseClient/Other/InteractionCollector
 import SlashCommandCollector from '../../../BaseClient/Other/SlashCommandCollector';
 
 const editor: CT.Editor = {
-  handles: ['channels', 'roles', 'users', 'number', 'punishment', 'channel', 'role', 'user'],
+  handles: [
+    'channels',
+    'roles',
+    'users',
+    'number',
+    'punishment',
+    'channel',
+    'role',
+    'user',
+    'strings',
+  ],
   run: async (cmd, oldRow, typeOfField) => {
     if (!cmd.guildID) return null;
     if (!cmd.guild) return null;
