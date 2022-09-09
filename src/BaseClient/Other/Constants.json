@@ -476,6 +476,15 @@
         }
       ],
       "settings": {
+        "cooldowns": {
+          "active": "boolean",
+          "command": "command",
+          "cooldown": "duration",
+          "bpchannelid": "channels",
+          "bproleid": "roles",
+          "bpuserid": "users",
+          "activechannelid": "channels"
+        },
         "blacklist": {
           "active": "boolean",
           "bpchannelid": "channels",
@@ -597,7 +606,7 @@
         ],
         "rrreactions": [{ "ident": "emote", "type": "emote" }],
         "disabled": [{ "ident": "commands", "type": "text" }],
-        "cooldowns": [{ "ident": "commands", "type": "text" }],
+        "cooldowns": [{ "ident": "command", "type": "text" }],
         "nitroroles": [],
         "selfroles": [{ "ident": "name", "type": "text" }],
         "separators": [{ "ident": "separator", "type": "role" }],

@@ -609,6 +609,32 @@
         "prefix": "Assign a custom Prefix to Ayako"
       },
       "settings": {
+        "cooldowns": {
+          "command": {
+            "name": "Command",
+            "desc": "Command this Cooldown applies to"
+          },
+          "cooldown": {
+            "name": "Cooldown",
+            "desc": "Cooldown applied to the Command"
+          },
+          "bpchannelid": {
+            "name": "Whitelisted Channels",
+            "desc": "Channels ignored by Ayako Blacklist"
+          },
+          "bpuserid": {
+            "name": "Whitelisted Users",
+            "desc": "Users ignored by Ayako Blacklist"
+          },
+          "bproleid": {
+            "name": "Whitelisted Roles",
+            "desc": "Roles ignored by Ayako Blacklist"
+          },
+          "activechannelid": {
+            "name": "Active Channels",
+            "desc": "Channels this Cooldown applies to\nIf no Channels are specified the Cooldown applies to all Channels"
+          }
+        },
         "blacklist": {
           "authorName": "Blacklisted Word said",
           "description": "Please refrain from using any of the following Words\nThis __includes__ not blacklisted Variations of following Words\n*Server Staff may punish more strictly for bypassing the Blacklist*\n{{words}}",
@@ -1388,5 +1414,6 @@
   "Punishment": "Punishment",
   "noReasonProvided": "No Reason provided",
   "Aborted": "Aborted",
-  "Description": "Description"
+  "Description": "Description",
+  "Command": "Command"
 }
