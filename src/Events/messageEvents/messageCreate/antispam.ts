@@ -9,6 +9,8 @@ let messageCache: {
   time: number;
 }[] = [];
 
+let authorCache: string[] = [];
+
 export default async (msg: CT.Message) => {
   if (!msg.channel) return;
   if (!msg.guild) return;
@@ -44,6 +46,8 @@ export default async (msg: CT.Message) => {
       m.author === msg.author.id,
   );
 
+  authorCache.push(msg.author.id);
+
   const normalMatches = messageCache.filter(
     (m) => m.time > Date.now() - Number(antispam.timeout) && m.author === msg.author.id,
   );
@@ -71,8 +75,8 @@ export default async (msg: CT.Message) => {
 const runPunishment = async (msg: CT.Message) => {
   if (!msg.guild) return;
 
-  const allPunishments = (await getAllPunishments(msg))?.flat(1) || [];
-  const punishment = await getPunishment(msg, allPunishments.length);
+  const allPunishments = authorCache.filter((a) => a === msg.author.id).length;
+  const punishment = await getPunishment(msg, allPunishments);
 
   const obj: CT.ModBaseEventOptions = {
     type: 'warnAdd',
@@ -125,37 +129,13 @@ const runPunishment = async (msg: CT.Message) => {
   client.emit('modBaseEvent', obj);
 };
 
-const getAllPunishments = async (msg: CT.Message) =>
-  client.ch
-    .query(
-      `SELECT * FROM punish_bans WHERE guildid = $1 AND userid = $2;
-  SELECT * FROM punish_channelbans WHERE guildid = $1 AND userid = $2;
-  SELECT * FROM punish_mutes WHERE guildid = $1 AND userid = $2;
-  SELECT * FROM punish_kicks WHERE guildid = $1 AND userid = $2;
-  SELECT * FROM punish_warns WHERE guildid = $1 AND userid = $2;`,
-      [msg.guildID, msg.author.id],
-    )
-    .then(
-      (
-        r:
-          | (
-              | DBT.punish_bans[]
-              | DBT.punish_channelbans[]
-              | DBT.punish_kicks[]
-              | DBT.punish_mutes[]
-              | DBT.punish_warns[]
-            )[]
-          | null,
-      ) => r,
-    );
-
 const getPunishment = async (msg: CT.Message, warns: number) =>
   client.ch
     .query(
       `SELECT * FROM antispampunishments WHERE guildid = $1 AND warnamount = $2 AND active = true;`,
       [msg.guildID, warns],
     )
-    .then((r: DBT.antispampunishments[] | null) => (r ? r[0] : null));
+    .then((r: DBT.BasicPunishmentsTable[] | null) => (r ? r[0] : null));
 
 const deleteMessages = async (msg: CT.Message, matches: number, antispam: DBT.antispam) => {
   if (!antispam.deletespam) return;
@@ -175,6 +155,7 @@ const deleteMessages = async (msg: CT.Message, matches: number, antispam: DBT.an
 };
 
 export const resetData = () => {
+  authorCache = [];
   messageCache = [];
 };
 
@@ -182,7 +163,7 @@ const softwarn = (msg: CT.Message) => {
   client.ch.send(
     msg.channel,
     {
-      content: `${msg.author.mention} ${msg.language.mod.warnAdd.antispam.description}`,
+      content: `${msg.author.mention} ${msg.language.mod.warnAdd.antispam}`,
       allowedMentions: {
         users: [msg.author.id],
       },

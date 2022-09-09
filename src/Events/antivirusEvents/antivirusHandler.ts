@@ -3,15 +3,23 @@ import client from '../../BaseClient/ErisClient';
 import type CT from '../../typings/CustomTypings';
 import type DBT from '../../typings/DataBaseTypings';
 
+let messageCache: string[] = [];
+
 export default async (msg: CT.Message, m: Eris.Message) => {
   if (msg) msg.delete().catch(() => null);
 
   const settingsRow = await getSettings(msg);
   if (!settingsRow) return;
 
+  messageCache.push(msg.author.id);
+
   await runPunishment(msg, m);
 
   client.emit('modSourceHandler', m, 'antivirus', settingsRow);
+};
+
+export const resetData = () => {
+  messageCache = [];
 };
 
 const getSettings = async (msg: CT.Message) =>
@@ -22,8 +30,8 @@ const getSettings = async (msg: CT.Message) =>
 const runPunishment = async (msg: CT.Message, m: Eris.Message) => {
   if (!msg.guild) return;
 
-  const allPunishments = (await getAllPunishments(msg))?.flat(1) || [];
-  const punishment = await getPunishment(msg, allPunishments.length);
+  const amountOfTimes = messageCache.filter((a) => a === msg.author.id).length;
+  const punishment = await getPunishment(msg, amountOfTimes);
 
   const obj: CT.ModBaseEventOptions = {
     type: 'warnAdd',
@@ -77,34 +85,10 @@ const runPunishment = async (msg: CT.Message, m: Eris.Message) => {
   client.emit('modBaseEvent', obj);
 };
 
-const getAllPunishments = async (msg: CT.Message) =>
-  client.ch
-    .query(
-      `SELECT * FROM punish_bans WHERE guildid = $1 AND userid = $2;
-  SELECT * FROM punish_channelbans WHERE guildid = $1 AND userid = $2;
-  SELECT * FROM punish_mutes WHERE guildid = $1 AND userid = $2;
-  SELECT * FROM punish_kicks WHERE guildid = $1 AND userid = $2;
-  SELECT * FROM punish_warns WHERE guildid = $1 AND userid = $2;`,
-      [msg.guildID, msg.author.id],
-    )
-    .then(
-      (
-        r:
-          | (
-              | DBT.punish_bans[]
-              | DBT.punish_channelbans[]
-              | DBT.punish_kicks[]
-              | DBT.punish_mutes[]
-              | DBT.punish_warns[]
-            )[]
-          | null,
-      ) => r,
-    );
-
 const getPunishment = async (msg: CT.Message, warns: number) =>
   client.ch
     .query(
       `SELECT * FROM antiviruspunishments WHERE guildid = $1 AND warnamount = $2 AND active = true;`,
       [msg.guildID, warns],
     )
-    .then((r: DBT.antiviruspunishments[] | null) => (r ? r[0] : null));
+    .then((r: DBT.BasicPunishmentsTable[] | null) => (r ? r[0] : null));

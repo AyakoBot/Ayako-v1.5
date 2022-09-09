@@ -11,7 +11,11 @@ export default async () => {
     (await import('./nitroCycle')).default();
 
     if (client.user.id === client.mainID) (await import('./websiteFetcher')).default();
-    if (new Date().getHours() === 0) client.ch.query('DELETE FROM toxicitycheck;');
+    if (new Date().getHours() === 0) {
+      (await import('../messageEvents/messageCreate/antispam')).resetData();
+      (await import('../messageEvents/messageCreate/blacklist')).resetData();
+      (await import('../antivirusEvents/antivirusHandler')).resetData();
+    }
   });
 
   Jobs.scheduleJob('*/1 * * * *', async () => {
