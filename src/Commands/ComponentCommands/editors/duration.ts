@@ -34,7 +34,7 @@ const editor: CT.Editor = {
       default_member_permissions: 32,
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      options: managedEditor.getOptions(cmd),
+      options: await managedEditor.getOptions(cmd),
     });
 
     const embed = await (

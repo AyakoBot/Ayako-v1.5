@@ -610,6 +610,7 @@
       },
       "settings": {
         "cooldowns": {
+          "slashCommandDescription": "Type of Command",
           "command": {
             "name": "Command",
             "desc": "Command this Cooldown applies to"
@@ -1385,6 +1386,10 @@
     "tempchannelban": "Temp-Channel-Ban",
     "tempmute": "Temp-Mute"
   },
+  "commandTypes": {
+    "slashCommands": "Slash Commands",
+    "textCommands": "Text Commands"
+  },
   "welcome": "Welcome {{member.user.username}}#{{member.user.discriminator}} to {{member.guild.name}} <:AMayakowave:924071188957913108>",
   "result": "Result",
   "stagePrivacyLevels": ["Public", "Server Only"],
@@ -1415,5 +1420,7 @@
   "noReasonProvided": "No Reason provided",
   "Aborted": "Aborted",
   "Description": "Description",
-  "Command": "Command"
+  "Command": "Command",
+  "Type": "Type",
+  "noAliases": "No Aliases"
 }

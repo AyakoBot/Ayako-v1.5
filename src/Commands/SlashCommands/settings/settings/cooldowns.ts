@@ -29,7 +29,7 @@ const setting: CT.MultiSettings = {
             ? `${client.stringEmotes.enabled} ${baseObject.language.Enabled}`
             : `${client.stringEmotes.disabled} ${baseObject.language.Disabled}`
         }`,
-        value: `${baseObject.language.Command}: ${r.command || null}`,
+        value: `${baseObject.language.Command}: ${r.command || baseObject.language.none}`,
         inline: true,
       });
     }

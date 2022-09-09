@@ -17,7 +17,7 @@ export default async (cmd: CT.AutocompleteInteraction) => {
       returnables.push({ name: 'Error using AutoComplete', value: 'nothing' });
     }
 
-    cmd.result(returnables).catch(() => null);
+    cmd.result(returnables.splice(0, 25)).catch(() => null);
   } catch (e) {
     // eslint-disable-next-line no-console
     console.error(`[AutocompleteCommand Error] ${name}:`, e);
