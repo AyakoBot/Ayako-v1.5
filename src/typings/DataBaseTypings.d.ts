@@ -68,15 +68,8 @@ export type autoroles = {
   allroleid?: string[];
 };
 
-export type blacklists = {
+export type blacklist = {
   active: boolean;
-  warntof: boolean;
-  kicktof: boolean;
-  bantof: boolean;
-  warnafter?: string;
-  muteafter?: string;
-  kickafter?: string;
-  banafter?: string;
   bpchannelid?: string[];
   bproleid?: string[];
   bpuserid?: string[];
@@ -632,16 +625,7 @@ export interface giveawaycollecttime {
   endtime: number;
 }
 
-export interface antispampunishments {
-  guildid: string;
-  punishment: string;
-  warnamount: string;
-  uniquetimestamp: string;
-  active: boolean;
-  duration: string;
-}
-
-export interface antiviruspunishments {
+interface BasicPunishmentsTable {
   guildid: string;
   punishment: string;
   warnamount: string;

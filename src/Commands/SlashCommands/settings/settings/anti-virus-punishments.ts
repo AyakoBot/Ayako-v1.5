@@ -13,7 +13,7 @@ const setting: CT.MultiSettings = {
       .query(`SELECT * FROM antiviruspunishments WHERE guildid = $1;`, [
         baseObject.interactions[0].guildID,
       ])
-      .then((r: DBT.antiviruspunishments[] | null) => r);
+      .then((r: DBT.BasicPunishmentsTable[] | null) => r);
 
     if (!existing) {
       baseObject.embed.footer = {
@@ -132,4 +132,4 @@ const getSettings = (baseObject: CT.MultiSettingsObject) =>
       baseObject.interactions[0].guildID,
       baseObject.uniquetimestamp,
     ])
-    .then((r: DBT.antiviruspunishments[] | null) => (r ? r[0] : r));
+    .then((r: DBT.BasicPunishmentsTable[] | null) => (r ? r[0] : r));
