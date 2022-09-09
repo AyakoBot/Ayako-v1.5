@@ -7,7 +7,6 @@ import client from '../../../../BaseClient/ErisClient';
 const setting: CT.SettingsFile = {
   name: 'anti-virus',
   type: 'single',
-  relatedSettings: ['anti-virus-punishments'],
   displayEmbed: async (baseObject: CT.BaseSettingsObject) => {
     const lanSetting = baseObject.language.slashCommands.settings;
     const lan = baseObject.language.slashCommands.settings.settings['anti-virus'];

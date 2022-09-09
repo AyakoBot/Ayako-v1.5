@@ -177,7 +177,6 @@ export interface OldUser {
 export interface SettingsFile {
   type: 'single' | 'multi';
   name: string;
-  relatedSettings?: string[];
   displayEmbed: (BaseSettingsObject) => Promise<void>;
   buttons: (BaseSettingsObject) => Promise<Eris.Button[][]>;
 }
