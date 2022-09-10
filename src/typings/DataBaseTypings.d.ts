@@ -117,7 +117,9 @@ export type deletecommands = {
   deletereply: boolean;
   deletetimeout?: string;
   active: boolean;
-  commands: string[];
+  command: string;
+  wlchannelid: string[];
+  activechannelid: string[];
 };
 
 export type disabledcommands = {

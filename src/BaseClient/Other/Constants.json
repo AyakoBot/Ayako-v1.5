@@ -476,6 +476,13 @@
         }
       ],
       "settings": {
+        "delete-commands": {
+          "deletecommand": "boolean",
+          "deletereply": "boolean",
+          "deletetimeout": "seconds",
+          "active": "boolean",
+          "commands": "command"
+        },
         "cooldowns": {
           "active": "boolean",
           "command": "command",
@@ -598,7 +605,7 @@
         "anti-spam-punishments": [{ "ident": "warnamount", "type": "string" }],
         "anti-virus-punishments": [{ "ident": "warnamount", "type": "string" }],
         "blacklist-punishments": [{ "ident": "warnamount", "type": "string" }],
-        "deletecommands": [{ "ident": "commands", "type": "text" }],
+        "deletecommands": [{ "ident": "command", "type": "text" }],
         "reactionroles": [{ "ident": "name", "type": "text" }],
         "rrbuttons": [
           { "ident": "buttontext", "type": "text" },

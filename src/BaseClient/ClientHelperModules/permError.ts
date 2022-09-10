@@ -60,9 +60,9 @@ export default async (
   };
 
   if (msg instanceof Eris.CommandInteraction || msg instanceof Eris.ComponentInteraction) {
-    reply(msg, { embeds: [embed], ephemeral: true }, language);
+    reply(msg, { embeds: [embed], ephemeral: true });
     return;
   }
 
-  reply(msg, { embeds: [embed] }, language);
+  reply(msg, { embeds: [embed] });
 };

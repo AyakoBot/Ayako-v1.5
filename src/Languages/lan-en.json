@@ -609,6 +609,30 @@
         "prefix": "Assign a custom Prefix to Ayako"
       },
       "settings": {
+        "delete-commands": {
+          "deletecommand": {
+            "name": "Delete Command"
+          },
+          "deletereply": {
+            "name": "Delete Reply"
+          },
+          "deletetimeout": {
+            "name": "Timeout",
+            "desc": "Time to wait before deleting the Reply and/or the Command"
+          },
+          "command": {
+            "name": "Command",
+            "desc": "The Command on this Setting applies to"
+          },
+          "wlchannelid": {
+            "name": "Whitelisted Channels",
+            "desc": "Channels this Deletion does not apply to"
+          },
+          "activechannelid": {
+            "name": "Active Channels",
+            "desc": "Channels this Deletion applies to\nIf no Channels are specified the Deletion applies to all Channels"
+          }
+        },
         "cooldowns": {
           "slashCommandDescription": "Type of Command",
           "command": {

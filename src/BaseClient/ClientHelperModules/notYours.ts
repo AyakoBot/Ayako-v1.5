@@ -17,5 +17,5 @@ export default (
     description: language.errors.notYours,
   };
 
-  reply(interaction, { embeds: [embed], ephemeral: true }, language);
+  reply(interaction, { embeds: [embed], ephemeral: true });
 };

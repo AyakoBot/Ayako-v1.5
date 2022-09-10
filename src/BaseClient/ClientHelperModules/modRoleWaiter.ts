@@ -27,15 +27,11 @@ export default async (
     },
   ];
 
-  const m = await reply(
-    msg,
-    {
-      content: language.mod.warning.text,
-      components: buttonRower([buttons]),
-      allowedMentions: { repliedUser: true },
-    },
-    language,
-  );
+  const m = await reply(msg, {
+    content: language.mod.warning.text,
+    components: buttonRower([buttons]),
+    allowedMentions: { repliedUser: true },
+  });
 
   if (!m) return false;
 

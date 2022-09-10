@@ -20,9 +20,9 @@ export default (
   };
 
   if (!('jumpLink' in msg)) {
-    return reply(msg, { embeds: [embed], flags: 64 }, language);
+    return reply(msg, { embeds: [embed], flags: 64 });
   }
 
   if (m) return m.edit({ embeds: [embed] }).catch(() => null);
-  return reply(msg, { embeds: [embed] }, language);
+  return reply(msg, { embeds: [embed] });
 };

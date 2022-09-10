@@ -1,5 +1,5 @@
 import * as Eris from 'eris';
-import jobs from 'node-schedule';
+import jobs, { scheduleJob } from 'node-schedule';
 import query from './query';
 import type CT from '../../typings/CustomTypings';
 import type DBT from '../../typings/DataBaseTypings';
@@ -14,7 +14,6 @@ export default async (
     | Eris.Message<Eris.TextableChannel>
     | void,
   payload: CT.MessagePayload,
-  language: typeof import('../../Languages/lan-en.json'),
   command?: CT.Command,
 ) => {
   if (!msg) return null;
@@ -41,7 +40,7 @@ export default async (
         });
 
   cooldownHandler(msg, sentMessage, command);
-  deleteCommandHandler(msg, sentMessage, language, command);
+  deleteCommandHandler(msg, sentMessage);
 
   return sentMessage;
 };
@@ -77,7 +76,7 @@ const cooldownHandler = async (
   if (!author) return;
   if (r.bpuserid?.includes(author.id)) return;
   if (r.bpchannelid?.includes(msg.channel.id)) return;
-  if (r.bproleid?.some((id: string) => msg.member?.roles.includes(id))) return;
+  if (r.bproleid?.some((id) => msg.member?.roles.includes(id))) return;
   if (r.activechannelid?.length && !r.activechannelid?.includes(msg.channel.id)) return;
 
   let emote: string;
@@ -111,7 +110,7 @@ const cooldownHandler = async (
   });
 };
 
-const deleteCommandHandler = (
+const deleteCommandHandler = async (
   msg:
     | Eris.CommandInteraction
     | Eris.ComponentInteraction
@@ -124,41 +123,51 @@ const deleteCommandHandler = (
     | Eris.Message<Eris.TextChannel>
     | void
     | Eris.Message<Eris.TextableChannel>,
-  language: typeof import('../../Languages/lan-en.json'),
   command?: CT.Command,
 ) => {
   if (!msg) return;
   if (!sentMessage) return;
   if (!command) return;
 
-  const r = command.deleteCommandRow;
-  if (!r) return;
-  if (!r.commands?.includes(command.name)) return;
-  if (!r.deletetimeout || Number(r.deletetimeout) === 0) return;
+  const settings = await getDeleteSettings(msg, command.name);
+  if (!settings) return;
 
-  if (r.deletecommand && r.deletetimeout) {
-    jobs.scheduleJob(new Date(Date.now() + Number(r.deletetimeout)), () => {
-      if (
-        !(msg instanceof Eris.CommandInteraction) &&
-        !(msg instanceof Eris.ComponentInteraction)
-      ) {
-        msg.delete(language.commands.deleteHandler.reasonCommand).catch(() => null);
-      }
-    });
-  } else if (r.deletecommand) {
-    if (!(msg instanceof Eris.CommandInteraction) && !(msg instanceof Eris.ComponentInteraction)) {
-      msg.delete(language.commands.deleteHandler.reasonCommand).catch(() => null);
+  const applyingSettings = settings
+    .map((s) => {
+      if (s.wlchannelid.includes(msg.channel.id)) return null;
+      if (s.activechannelid.includes(msg.channel.id)) return s;
+      if (!s.activechannelid?.length) return s;
+
+      return null;
+    })
+    .filter((s): s is DBT.deletecommands => !!s);
+  if (!applyingSettings.length) return;
+
+  const s = applyingSettings.sort((a, b) => Number(b.deletetimeout) - Number(a.deletetimeout))[0];
+  if (!s.deletetimeout) return;
+
+  scheduleJob(Date.now() + Number(s.deletetimeout), () => {
+    if (s.deletereply) sentMessage.delete().catch(() => null);
+    if (s.deletecommand) {
+      if ('delete' in msg) msg.delete().catch(() => null);
+      if ('deleteOriginalMessage' in msg) msg.deleteOriginalMessage().catch(() => null);
     }
-  }
-
-  if (r.deletereply && r.deletetimeout) {
-    jobs.scheduleJob(new Date(Date.now() + Number(r.deletetimeout)), () => {
-      sentMessage.delete(language.commands.deleteHandler.reasonReply).catch(() => null);
-    });
-  } else if (r.deletereply) {
-    sentMessage.delete(language.commands.deleteHandler.reasonReply).catch(() => null);
-  }
+  });
 };
+
+const getDeleteSettings = async (
+  msg:
+    | Eris.CommandInteraction
+    | Eris.ComponentInteraction
+    | Eris.Message<Eris.PrivateChannel>
+    | Eris.Message<Eris.TextChannel>
+    | Eris.Message<Eris.TextableChannel>,
+  commandName: string,
+) =>
+  query(`SELECT * FROM deletecommands WHERE active = true AND guildid = $1 AND command = $2;`, [
+    msg.guildID,
+    commandName,
+  ]).then((r: DBT.deletecommands[] | null) => r);
 
 const getCooldownRow = (
   msg:
