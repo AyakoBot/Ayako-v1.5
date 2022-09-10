@@ -35,7 +35,7 @@ const logPerms = (perms: Eris.PermissionOverwrite[], channel: Channel) => {
   perms.forEach((perm) => {
     client.ch.query(
       `INSERT INTO stickypermmembers (guildid, userid, channelid, allowbits, denybits) VALUES ($1, $2, $3, $4, $5);`,
-      [channel.guild.id, perm.id, channel.id, perm.allow, perm.deny],
+      [channel.guild.id, perm.id, channel.id, perm.allow as never, perm.deny as never],
     );
   });
 };

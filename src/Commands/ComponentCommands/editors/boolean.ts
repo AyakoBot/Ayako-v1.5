@@ -1,6 +1,7 @@
 import type CT from '../../../typings/CustomTypings';
 
 const editor: CT.Editor = {
+  handles: ['boolean'],
   run: (cmd, earlierRow) => {
     const newRow: CT.BasicReturnType = {};
     const [, , , , , field] = cmd.data.custom_id.split(/_/g);
