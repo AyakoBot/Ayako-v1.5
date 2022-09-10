@@ -84,7 +84,7 @@ export default async (
     description: client.ch.stp(lan.sent, { channel }),
   };
 
-  client.ch.reply(cmd, { embeds: [embed], ephemeral: true }, language);
+  client.ch.reply(cmd, { embeds: [embed], ephemeral: true });
 
   client.giveaways.set(
     `${m.id}-${m.guildID}`,

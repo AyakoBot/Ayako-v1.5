@@ -102,15 +102,11 @@ export default async (
     style: 5,
   };
 
-  client.ch.reply(
-    cmd,
-    {
-      content: lan.success,
-      ephemeral: true,
-      components: client.ch.buttonRower([[getToGiveawayButton]]),
-    },
-    language,
-  );
+  client.ch.reply(cmd, {
+    content: lan.success,
+    ephemeral: true,
+    components: client.ch.buttonRower([[getToGiveawayButton]]),
+  });
 };
 
 const rescheduleGiveaway = (

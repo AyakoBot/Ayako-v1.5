@@ -7,10 +7,7 @@ export default {
   perm: null,
   dm: true,
   type: 'other',
-  execute: async (
-    cmd: CT.CommandInteraction,
-    { language }: { language: typeof import('../../Languages/lan-en.json') },
-  ) => {
+  execute: async (cmd: CT.CommandInteraction) => {
     const heartbeat = await client.ch
       .query('SELECT heartbeat FROM stats;')
       .then((r: DBT.stats[] | null) => (r ? Number(r[0].heartbeat) : 0));
@@ -21,13 +18,9 @@ export default {
       if (shardPing === Infinity) shardPing = Number(heartbeat);
     }
 
-    client.ch.reply(
-      cmd,
-      {
-        content: `🏓 \n**Response Time:** ${shardPing}ms\n**Last Heartbeat:** ${heartbeat}ms`,
-        ephemeral: true,
-      },
-      language,
-    );
+    client.ch.reply(cmd, {
+      content: `🏓 \n**Response Time:** ${shardPing}ms\n**Last Heartbeat:** ${heartbeat}ms`,
+      ephemeral: true,
+    });
   },
 };

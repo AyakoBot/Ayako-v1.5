@@ -288,15 +288,11 @@ const getCooldown = async (msg: CT.Message, command: CT.Command) => {
     const { emote, usedEmote } = getEmote(Math.ceil(timeLeft / 1000));
 
     client.ch
-      .reply(
-        msg,
-        {
-          content: client.ch.stp(msg.language.commands.commandHandler.pleaseWait, {
-            time: emote,
-          }),
-        },
-        msg.language,
-      )
+      .reply(msg, {
+        content: client.ch.stp(msg.language.commands.commandHandler.pleaseWait, {
+          time: emote,
+        }),
+      })
       .then((m) => {
         if (!usedEmote && m) {
           jobs.scheduleJob(new Date(Date.now() + (timeLeft - 60000)), () => {
@@ -398,14 +394,10 @@ const editCheck = async (msg: CT.Message, command: CT.Command) => {
       },
     ];
 
-    const m = await client.ch.reply(
-      msg,
-      {
-        content: msg.language.commands.commandHandler.verifyMessage,
-        components: client.ch.buttonRower(buttons),
-      },
-      msg.language,
-    );
+    const m = await client.ch.reply(msg, {
+      content: msg.language.commands.commandHandler.verifyMessage,
+      components: client.ch.buttonRower(buttons),
+    });
 
     if (!m) return false;
 

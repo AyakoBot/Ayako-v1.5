@@ -36,11 +36,10 @@ export default async (rawMsg: Eris.Message) => {
       ['534783899331461123', '228182903140515841', '513413045251342336'].includes(msg.author.id) &&
       msg.mentions.find((u) => u.id === '318453143476371456')
     ) {
-      client.ch.reply(
-        msg,
-        { content: `<@${msg.author.id}>`, allowedMentions: { users: [msg.author.id] } },
-        msg.language,
-      );
+      client.ch.reply(msg, {
+        content: `<@${msg.author.id}>`,
+        allowedMentions: { users: [msg.author.id] },
+      });
     }
   };
 

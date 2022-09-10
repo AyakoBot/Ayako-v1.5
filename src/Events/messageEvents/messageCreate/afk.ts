@@ -32,7 +32,7 @@ const doSelfAFKCheck = async (msg: CT.Message) => {
   if (!isOldEnoug) return;
 
   const embed = getAFKdeletedEmbed(msg, afkRow);
-  const m = await client.ch.reply(msg as Eris.Message, { embeds: [embed] }, msg.language);
+  const m = await client.ch.reply(msg as Eris.Message, { embeds: [embed] });
   jobs.scheduleJob(new Date(Date.now() + 30000), async () => {
     m?.delete().catch(() => null);
   });
@@ -49,7 +49,7 @@ const doMentionAFKcheck = (msg: CT.Message) => {
     if (!afkRow) return;
 
     const embed = getIsAFKEmbed(msg, mention, afkRow);
-    const m = await client.ch.reply(msg as Eris.Message, { embeds: [embed] }, msg.language);
+    const m = await client.ch.reply(msg as Eris.Message, { embeds: [embed] });
     jobs.scheduleJob(new Date(Date.now() + 10000), async () => {
       m?.delete().catch(() => null);
     });

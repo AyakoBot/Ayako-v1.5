@@ -5,7 +5,6 @@ import client from '../../../BaseClient/ErisClient';
 export default (
   cmd: CT.CommandInteraction | CT.ComponentInteraction,
   {
-    language,
     lan,
   }: {
     language: typeof import('../../../Languages/lan-en.json');
@@ -69,7 +68,7 @@ export default (
   const components = client.ch.buttonRower([[categorySelect], [settingsSelect]]);
 
   if (!('editParent' in cmd)) {
-    client.ch.reply(cmd, { embeds: [embed], components }, language);
+    client.ch.reply(cmd, { embeds: [embed], components });
   } else {
     cmd.editParent({ embeds: [embed], components }).catch(() => null);
   }

@@ -49,15 +49,11 @@ export const manualEnd = async (
     style: 5,
   };
 
-  client.ch.reply(
-    cmd,
-    {
-      embeds: [embed],
-      ephemeral: true,
-      components: client.ch.buttonRower([[getToGiveawayButton]]),
-    },
-    language,
-  );
+  client.ch.reply(cmd, {
+    embeds: [embed],
+    ephemeral: true,
+    components: client.ch.buttonRower([[getToGiveawayButton]]),
+  });
 
   end(giveawaysRow, lan, language);
 };
@@ -92,7 +88,7 @@ export const end = async (
 
   const claimEnd = Number(row.endtime) + Number(row.collecttime);
 
-  await sendCongraz(msg, row, lan, language, winners, host);
+  await sendCongraz(msg, row, lan, winners, host);
   const sentMessages = await reward(msg, row, lan, language, winners, host, claimEnd);
   if (row.collecttime) applyCollectTimeout(winners, row, claimEnd, sentMessages);
 };
@@ -101,7 +97,6 @@ const sendCongraz = async (
   msg: Eris.Message<Eris.TextChannel> | Eris.Message<Eris.TextVoiceChannel>,
   giveaway: DBT.giveaways,
   lan: typeof import('../../../Languages/lan-en.json')['slashCommands']['giveaway']['end'],
-  language: typeof import('../../../Languages/lan-en.json'),
   winners: Eris.Member[],
   host: Eris.User,
 ) => {
@@ -122,14 +117,10 @@ const sendCongraz = async (
     ],
   };
 
-  await client.ch.reply(
-    msg,
-    {
-      embeds: [embed],
-      content: winners.map((winner) => `${winner}`).join(', '),
-    },
-    language,
-  );
+  await client.ch.reply(msg, {
+    embeds: [embed],
+    content: winners.map((winner) => `${winner}`).join(', '),
+  });
 };
 
 const reward = async (

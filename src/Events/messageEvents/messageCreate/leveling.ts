@@ -599,7 +599,7 @@ const infoEmbed = (msg: CT.Message, reactions: Eris.Emoji[] | null) => {
     }),
   };
 
-  client.ch.reply(msg, { embeds: [embed] }, msg.language).then((m) => {
+  client.ch.reply(msg, { embeds: [embed] }).then((m) => {
     const date = new Date(Date.now() + 30000);
     jobs.scheduleJob(date, () => {
       m?.delete().catch(() => null);

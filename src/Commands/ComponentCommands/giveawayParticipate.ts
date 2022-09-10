@@ -36,7 +36,7 @@ export default async (
       description: lan.left,
     };
 
-    client.ch.reply(cmd, { embeds: [embed], ephemeral: true }, language);
+    client.ch.reply(cmd, { embeds: [embed], ephemeral: true });
   } else {
     giveaway.participants.push(cmd.user.id);
 
@@ -46,7 +46,7 @@ export default async (
       description: lan.entered,
     };
 
-    client.ch.reply(cmd, { embeds: [embed], ephemeral: true }, language);
+    client.ch.reply(cmd, { embeds: [embed], ephemeral: true });
   }
 
   const embed = cmd.message.embeds[0];

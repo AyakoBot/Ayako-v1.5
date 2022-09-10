@@ -29,7 +29,7 @@ export default async (args: CT.ModBaseEventOptions) => {
     if (msg && mExistedPreviously && args.m) {
       await args.m.edit({ embeds: [embed] }).catch(() => null);
     } else if (msg) {
-      const reply = await client.ch.reply(msg, { embeds: [embed] }, msg.language);
+      const reply = await client.ch.reply(msg, { embeds: [embed] });
       if (reply) args.m = reply;
     }
 

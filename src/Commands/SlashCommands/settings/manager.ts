@@ -249,11 +249,7 @@ export const edit = async (
       components,
     });
   } else if (!('editParent' in baseObject.interactions[0])) {
-    await client.ch.reply(
-      baseObject.interactions[0],
-      { embeds: [baseObject.embed], components },
-      baseObject.language,
-    );
+    await client.ch.reply(baseObject.interactions[0], { embeds: [baseObject.embed], components });
   } else {
     await baseObject.interactions[0].editParent({
       embeds: [baseObject.embed],

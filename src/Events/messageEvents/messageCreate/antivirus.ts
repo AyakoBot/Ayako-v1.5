@@ -300,7 +300,7 @@ const doesntExist = async (
   embed.fields = [];
   if (check) embed.fields.push({ name: lan.checking, value: linkObject.href });
 
-  client.ch.reply(msg, { embeds: [embed] }, msg.language);
+  client.ch.reply(msg, { embeds: [embed] });
 
   linkLog(
     msg,
@@ -342,7 +342,7 @@ const blacklisted = async (
 
     if (check) embed.fields?.push({ name: lan.checking, value: linkObject.href });
 
-    await client.ch.reply(msg, { embeds: [embed] }, msg.language);
+    await client.ch.reply(msg, { embeds: [embed] });
   } else {
     const embed: Eris.Embed = {
       type: 'rich',
@@ -355,7 +355,7 @@ const blacklisted = async (
     embed.fields = [];
     if (check) embed.fields.push({ name: lan.checking, value: linkObject.href });
 
-    const m = await client.ch.reply(msg, { embeds: [embed] }, msg.language);
+    const m = await client.ch.reply(msg, { embeds: [embed] });
 
     client.ch.send(
       client.guilds.get('669893888856817665')?.channels.get('726252103302905907'),
@@ -409,7 +409,7 @@ const severeLink = async (
 
   if (check) embed.fields.push({ name: lan.checking, value: linkObject.href });
 
-  const m = await client.ch.reply(msg, { embeds: [embed] }, msg.language);
+  const m = await client.ch.reply(msg, { embeds: [embed] });
 
   client.ch.send(
     client.guilds.get('669893888856817665')?.channels.get('726252103302905907'),
@@ -453,7 +453,7 @@ const ccscam = async (
   embed.fields = [];
   if (check) embed.fields.push({ name: lan.checking, value: linkObject.href });
 
-  const m = await client.ch.reply(msg, { embeds: [embed] }, msg.language);
+  const m = await client.ch.reply(msg, { embeds: [embed] });
 
   client.ch.send(
     client.guilds.get('669893888856817665')?.channels.get('726252103302905907'),
@@ -498,7 +498,7 @@ const newUrl = async (
   embed.fields = [];
   if (check) embed.fields.push({ name: lan.checking, value: linkObject.href });
 
-  const m = await client.ch.reply(msg, { embeds: [embed] }, msg.language);
+  const m = await client.ch.reply(msg, { embeds: [embed] });
 
   client.ch.send(
     client.guilds.get('669893888856817665')?.channels.get('726252103302905907'),
@@ -563,7 +563,7 @@ const whitelisted = async (
   embed.fields = [];
   if (check) {
     embed.fields.push({ name: lan.checking, value: linkObject.href });
-    client.ch.reply(msg, { embeds: [embed] }, msg.language);
+    client.ch.reply(msg, { embeds: [embed] });
   }
 
   linkLog(
@@ -599,7 +599,7 @@ const cloudFlare = async (
   embed.fields = [];
   if (check) embed.fields.push({ name: lan.checking, value: linkObject.href });
 
-  client.ch.reply(msg, { embeds: [embed] }, msg.language);
+  client.ch.reply(msg, { embeds: [embed] });
 
   client.ch.send(
     client.guilds.get('669893888856817665')?.channels.get('726252103302905907'),
@@ -642,7 +642,7 @@ const VTfail = (
   embed.fields = [];
   if (check) embed.fields.push({ name: lan.checking, value: linkObject.href });
 
-  client.ch.reply(msg, { embeds: [embed] }, msg.language);
+  client.ch.reply(msg, { embeds: [embed] });
 
   linkLog(
     msg,

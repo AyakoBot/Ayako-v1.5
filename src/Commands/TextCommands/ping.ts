@@ -7,8 +7,8 @@ const cmd: CT.Command = {
   takesFirstArg: false,
   aliases: [],
   type: 'other',
-  async execute(msg, { language }) {
-    const m = await client.ch.reply(msg, { content: '🏓​' }, language);
+  async execute(msg) {
+    const m = await client.ch.reply(msg, { content: '🏓​' });
     msg.addReaction('🏓').catch(() => null);
     if (!m) return;
 

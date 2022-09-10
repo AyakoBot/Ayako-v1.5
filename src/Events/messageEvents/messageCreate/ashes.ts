@@ -5,25 +5,17 @@ import client from '../../../BaseClient/ErisClient';
 export default async (msg: CT.Message) => {
   if (msg.channel.id === '757879586439823440' && msg.author.id === '646937666251915264') {
     if (msg.content.includes('since this server is currently active')) {
-      client.ch.reply(
-        msg as Eris.Message,
-        {
-          content: '<@&893986129773207582> Karuta has dropped Cards! Move or lose.',
-          allowedMentions: { roles: ['893986129773207582'] },
-        },
-        msg.language,
-      );
+      client.ch.reply(msg as Eris.Message, {
+        content: '<@&893986129773207582> Karuta has dropped Cards! Move or lose.',
+        allowedMentions: { roles: ['893986129773207582'] },
+      });
     }
 
     if (msg.content.includes('A card from your wishlist is dropping')) {
-      client.ch.reply(
-        msg as Eris.Message,
-        {
-          content: '<@&893986129773207582> a wished Card was dropped! Move or lose.',
-          allowedMentions: { roles: ['893986129773207582'] },
-        },
-        msg.language,
-      );
+      client.ch.reply(msg as Eris.Message, {
+        content: '<@&893986129773207582> a wished Card was dropped! Move or lose.',
+        allowedMentions: { roles: ['893986129773207582'] },
+      });
     }
   }
 

@@ -44,15 +44,11 @@ export default async (
     style: 5,
   };
 
-  client.ch.reply(
-    cmd,
-    {
-      embeds: [embed],
-      ephemeral: true,
-      components: client.ch.buttonRower([[getToGiveawayButton]]),
-    },
-    language,
-  );
+  client.ch.reply(cmd, {
+    embeds: [embed],
+    ephemeral: true,
+    components: client.ch.buttonRower([[getToGiveawayButton]]),
+  });
 
   (await import('./end')).end(giveawaysRow, lang.end, language, true);
 };

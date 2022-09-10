@@ -23,7 +23,7 @@ export default async (
       }),
     };
 
-    client.ch.reply(cmd, { embeds: [em] }, cmd.language, command);
+    client.ch.reply(cmd, { embeds: [em] }, command);
     return;
   }
 
@@ -98,30 +98,26 @@ const getConfirmation = async (
     },
   };
 
-  const m = await client.ch.reply(
-    cmd,
-    {
-      ephemeral: true,
-      embeds: [embed],
-      components: client.ch.buttonRower([
-        {
-          type: 2,
-          label: cmd.language.mod.warning.proceed,
-          emoji: client.objectEmotes.tickWithBackground,
-          custom_id: 'strike_proceed',
-          style: 2,
-        },
-        {
-          type: 2,
-          label: cmd.language.mod.warning.abort,
-          emoji: client.objectEmotes.crossWithBackground,
-          custom_id: 'strike_abort',
-          style: 3,
-        },
-      ]),
-    },
-    cmd.language,
-  );
+  const m = await client.ch.reply(cmd, {
+    ephemeral: true,
+    embeds: [embed],
+    components: client.ch.buttonRower([
+      {
+        type: 2,
+        label: cmd.language.mod.warning.proceed,
+        emoji: client.objectEmotes.tickWithBackground,
+        custom_id: 'strike_proceed',
+        style: 2,
+      },
+      {
+        type: 2,
+        label: cmd.language.mod.warning.abort,
+        emoji: client.objectEmotes.crossWithBackground,
+        custom_id: 'strike_abort',
+        style: 3,
+      },
+    ]),
+  });
 
   if (!m) return false;
 
