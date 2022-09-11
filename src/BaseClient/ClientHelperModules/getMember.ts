@@ -10,7 +10,9 @@ export default async (id: string, guildID: string) => {
   const members = await guild.getRESTMembers().catch(() => []);
 
   if (members.length) member = members.find((m) => m.user.id === id);
-  else member = await guild.getRESTMember(id).catch(() => undefined);
+  if (member) return member;
+
+  member = await guild.getRESTMember(id).catch(() => undefined);
 
   return member;
 };
