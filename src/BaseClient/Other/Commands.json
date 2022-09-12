@@ -201,7 +201,6 @@
             "min_length": 1,
             "choices": [
               { "name": "Cooldowns", "value": "cooldowns" },
-              { "name": "Disabled-Commands", "value": "disabled-commands" },
               { "name": "Disboard-Reminders", "value": "disboard-reminders" },
               { "name": "Self-Roles", "value": "self-roles" },
               { "name": "Separators", "value": "separators" },
