@@ -5,7 +5,7 @@
       "unban": "Automatically Un-Banned",
       "unmute": "Automatically Un-Muted",
       "disboard": {
-        "desc": "You can now Bump this Server again!\n\nPlease type `/bump`",
+        "desc": "You can now Bump this Server again!\n\nPlease type </bump:947088344167366698>",
         "title": "Ayako DISBOARD Bump Reminder"
       },
       "reminder": {
@@ -609,6 +609,30 @@
         "prefix": "Assign a custom Prefix to Ayako"
       },
       "settings": {
+        "disboard-reminders": {
+          "repeatenabled": {
+            "name": "Repeat"
+          },
+          "repeatreminder": {
+            "name": "Repeat Timeout",
+            "desc": "Time after which the Discord Reminder will be reposted if no one used </bump:947088344167366698> yet"
+          },
+          "channelid": {
+            "name": "Reminder Channel",
+            "desc": "Channel the Reminder will be posted in\nIf no Channel is specified, the Reminder will be posted in the Channel </bump:947088344167366698> was last used in"
+          },
+          "roles": {
+            "name": "Ping Roles",
+            "desc": "Roles pinged with the Bump Reminder"
+          },
+          "users": {
+            "name": "Ping Users",
+            "desc": "Users pinged with the Bump Reminder"
+          },
+          "deletereply": {
+            "name": "Delete DISBOARD Reply"
+          }
+        },
         "delete-commands": {
           "deletecommand": {
             "name": "Delete Command"

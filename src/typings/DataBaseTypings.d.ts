@@ -141,12 +141,13 @@ export type disboard = {
   active: boolean;
   nextbump?: string;
   channelid?: string;
-  repeatreminder?: string;
+  repeatreminder: string;
   roles?: string[];
   users?: string[];
   tempchannelid?: string;
   deletereply: boolean;
   msgid?: string;
+  repeatenabled: boolean;
 };
 
 export type giveaways = {

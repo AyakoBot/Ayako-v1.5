@@ -476,6 +476,15 @@
         }
       ],
       "settings": {
+        "disboard-reminders": {
+          "active": "boolean",
+          "repeatreminder": "minutes",
+          "channelid": "channel",
+          "roles": "roles",
+          "users": "users",
+          "deletereply": "boolean",
+          "repeatenabled": "boolean"
+        },
         "delete-commands": {
           "deletecommand": "boolean",
           "deletereply": "boolean",
