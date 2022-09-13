@@ -609,6 +609,28 @@
         "prefix": "Assign a custom Prefix to Ayako"
       },
       "settings": {
+        "overview": {
+          "requiresAdmin": "This Setting requires Administrator Permissions",
+          "prefix": {
+            "name": "Prefix",
+            "desc": "Ayako Custom Prefix"
+          },
+          "interactionsmode": {
+            "name": "Interactions Size"
+          },
+          "lan": {
+            "name": "Language",
+            "desc": "Ayakos display Language"
+          },
+          "errorchannel": {
+            "name": "Error Channel",
+            "desc": "Channel where Error Messages will be posted in"
+          },
+          "vanity": {
+            "name": "Auto-Vanity",
+            "desc": "Automatically applied Vanity URL when the Server meets requirements\n(requires Administrator Permission, does not apply when the Vanity URL is taken)"
+          }
+        },
         "disboard-reminders": {
           "repeatenabled": {
             "name": "Repeat"
@@ -1437,6 +1459,9 @@
   "commandTypes": {
     "slashCommands": "Slash Commands",
     "textCommands": "Text Commands"
+  },
+  "languages": {
+    "en": "English | Finished"
   },
   "welcome": "Welcome {{member.user.username}}#{{member.user.discriminator}} to {{member.guild.name}} <:AMayakowave:924071188957913108>",
   "result": "Result",

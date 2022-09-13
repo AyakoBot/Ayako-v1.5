@@ -476,6 +476,13 @@
         }
       ],
       "settings": {
+        "overview": {
+          "prefix": "string",
+          "interactionsmode": "boolean",
+          "lan": "language",
+          "errorchannel": "channel",
+          "vanity": "string"
+        },
         "disboard-reminders": {
           "active": "boolean",
           "repeatreminder": "minutes",
