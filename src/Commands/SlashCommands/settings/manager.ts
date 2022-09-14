@@ -243,7 +243,12 @@ export const edit = async (
   baseObject: CT.BaseSettingsObject,
   components: Eris.ActionRow[] = [],
 ) => {
-  if (baseObject.embed.description) {
+  const tutorials =
+    client.constants.commands.settings.tutorials[
+      baseObject.setting.name as keyof typeof client.constants.commands.settings.tutorials
+    ];
+
+  if (tutorials && baseObject.embed.description?.length) {
     baseObject.embed.description = `${baseObject.embed.description}\n\n${client.ch.stp(
       baseObject.language.slashCommands.settings.tutorial,
       {
@@ -253,7 +258,7 @@ export const edit = async (
           ],
       },
     )}`;
-  } else {
+  } else if (baseObject.embed.description?.length) {
     baseObject.embed.description = client.ch.stp(
       baseObject.language.slashCommands.settings.tutorial,
       {
