@@ -476,6 +476,14 @@
         "separators": ["https://youtu.be/yLKgn-Ecduc"]
       },
       "settings": {
+        "welcome": {
+          "channelid": "channel",
+          "active": "boolean",
+          "embed": "embed",
+          "pingroles": "roles",
+          "pingusers": "users",
+          "pingjoin": "boolean"
+        },
         "verification": {
           "logchannel": "channel",
           "pendingrole": "role",

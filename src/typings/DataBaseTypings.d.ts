@@ -587,6 +587,7 @@ export type welcome = {
   embed: string;
   pingroles?: string[];
   pingusers?: string[];
+  pingjoin: boolean;
 };
 
 export type levelingmultiplierroles = {

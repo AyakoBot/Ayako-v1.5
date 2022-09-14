@@ -608,6 +608,27 @@
         "prefix": "Assign a custom Prefix to Ayako"
       },
       "settings": {
+        "welcome": {
+          "channelid": {
+            "name": "Channel",
+            "desc": "Channel in which the Welcome Message will be sent"
+          },
+          "embed": {
+            "name": "Embed",
+            "desc": "Embed which will be used to greet arriving Members"
+          },
+          "pingroles": {
+            "name": "Ping Roles",
+            "desc": "Roles to Ping once a new Member joins"
+          },
+          "pingusers": {
+            "name": "Ping Users",
+            "desc": "Users to Ping once a new Member joins"
+          },
+          "pingjoin": {
+            "name": "Ping joined Member"
+          }
+        },
         "verification": {
           "logchannel": {
             "name": "Log-Channel",
@@ -1722,5 +1743,6 @@
   "Description": "Description",
   "Command": "Command",
   "Type": "Type",
-  "noAliases": "No Aliases"
+  "noAliases": "No Aliases",
+  "Default": "Default"
 }
