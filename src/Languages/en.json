@@ -608,6 +608,38 @@
         "prefix": "Assign a custom Prefix to Ayako"
       },
       "settings": {
+        "suggestions": {
+          "channelid": {
+            "name": "Channel",
+            "desc": "The Channel Suggestions will be posted in"
+          },
+          "novoteroles": {
+            "name": "No-Vote Roles",
+            "desc": "Members with any of these Roles cannot vote"
+          },
+          "novoteusers": {
+            "name": "No-Vote Users",
+            "desc": "Users listed here cannot vote"
+          },
+          "approverroleid": {
+            "name": "Approver Roles",
+            "desc": "Members with any of these Roles can approve and deny Suggestions"
+          },
+          "anonvote": {
+            "name": "Anonymous Votes"
+          },
+          "anonsuggestion": {
+            "name": "Anonymous Suggestions"
+          },
+          "nosendroles": {
+            "name": "No-Suggestion Roles",
+            "desc": "Members with any of these Roles cannot send Suggestions"
+          },
+          "nosendusers": {
+            "name": "No-Suggestion Users",
+            "desc": "Users listed here cannot send Suggestions"
+          }
+        },
         "self-roles": {
           "name": {
             "name": "Name",

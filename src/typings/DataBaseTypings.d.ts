@@ -537,7 +537,8 @@ export type suggestionsettings = {
   novoteroles?: string[];
   novoteusers?: string[];
   approverroleid?: string[];
-  anon: boolean;
+  anonvote: boolean;
+  anonsuggestion: boolean;
   nosendroles?: string[];
   nosendusers?: string[];
 };

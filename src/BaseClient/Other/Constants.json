@@ -476,6 +476,17 @@
         "separators": ["https://youtu.be/yLKgn-Ecduc"]
       },
       "settings": {
+        "suggestions": {
+          "active": "boolean",
+          "channelid": "channel",
+          "novoteroles": "roles",
+          "novoteusers": "users",
+          "approverroleid": "roles",
+          "anonvote": "boolean",
+          "anonsuggestion": "boolean",
+          "nosendroles": "roles",
+          "nosendusers": "users"
+        },
         "sticky": {
           "roles": "roles",
           "stickyrolesmode": "boolean",
