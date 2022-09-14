@@ -620,7 +620,6 @@
         "anti-virus": "antivirus",
         "auto-punish": "autopunish",
         "blacklist": "blacklist",
-        "mod-roles": "modroles",
         "auto-roles": "autoroles",
         "cooldowns": "cooldowns",
         "expiry": "modsettings",
@@ -668,8 +667,7 @@
         "levelroles": [{ "ident": "level", "type": "text" }],
         "multiroles": [{ "ident": "multiplier", "type": "text" }],
         "ruleschannels": [],
-        "multichannels": [{ "ident": "multiplier", "type": "text" }],
-        "modroles": [{ "ident": "roleid", "type": "role" }]
+        "multichannels": [{ "ident": "multiplier", "type": "text" }]
       },
       "relatedSettings": {
         "anti-spam": ["anti-spam-punishments"],

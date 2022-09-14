@@ -268,21 +268,6 @@ export type logchannels = {
   stageevents?: string[];
 };
 
-export type modroles = {
-  guildid: string;
-  roleid: string;
-  perms?: bigint;
-  whitelistedcommands?: string[];
-  whitelistedusers?: string[];
-  whitelistedroles?: string[];
-  blacklistedroles?: string[];
-  blacklistedusers?: string[];
-  active: boolean;
-  blacklistedcommands?: string[];
-  uniquetimestamp: string;
-  mutedurationdefault?: string;
-};
-
 export type modsettings = {
   guildid: string;
   bans: boolean;

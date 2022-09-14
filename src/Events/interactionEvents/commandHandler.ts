@@ -1,5 +1,5 @@
 import fs from 'fs';
-import * as Eris from 'eris';
+import type * as Eris from 'eris';
 import jobs from 'node-schedule';
 import moment from 'moment';
 import 'moment-duration-format';
@@ -126,94 +126,8 @@ const getCommandIsDisabled = async (cmd: CT.CommandInteraction, command: CT.Slas
 };
 
 const getPermAllowed = async (cmd: CT.CommandInteraction, command: CT.SlashCommand) => {
-  if (command.perm === 0) {
-    if (cmd.user.id !== auth.ownerID) {
-      client.ch.error(cmd, cmd.language.commands.commandHandler.creatorOnly, cmd.language);
-      return false;
-    }
-    return true;
-  }
-
-  const getModRoles = () =>
-    client.ch
-      .query('SELECT * FROM modroles WHERE guildid = $1 AND active = true;', [cmd.guildID])
-      .then((r: DBT.modroles[] | null) => r || null);
-
-  const checkModRoles = async (modRoles: DBT.modroles[]) => {
-    if (!command.perm) return { finished: true };
-
-    const applyingRows = modRoles
-      ? modRoles.filter((row) => cmd.member?.roles.includes(row.roleid))
-      : [];
-    if (!applyingRows || !applyingRows.length) return { noRoles: true, finished: false };
-
-    const [roleToApply] = applyingRows.sort((a, b) => {
-      const roleA = cmd.guild?.roles.get(b.roleid);
-      const roleB = cmd.guild?.roles.get(a.roleid);
-      return Number(roleB?.position) - Number(roleA?.position);
-    });
-
-    if (
-      !roleToApply.whitelistedusers?.includes(cmd.user.id) &&
-      roleToApply.whitelistedusers?.length
-    ) {
-      return { noRoles: false, finished: false };
-    }
-
-    if (
-      !cmd.member?.roles.some((r) => roleToApply.whitelistedroles?.includes(r)) &&
-      roleToApply.whitelistedroles?.length
-    ) {
-      return { noRoles: false, finished: false };
-    }
-
-    if (roleToApply.blacklistedusers?.includes(cmd.user.id)) {
-      return { noRoles: false, finished: false };
-    }
-    if (roleToApply.blacklistedroles?.some((r) => cmd.member?.roles.includes(r))) {
-      return { noRoles: false, finished: false };
-    }
-
-    if (
-      (!roleToApply.perms ||
-        !new Eris.Permission(roleToApply.perms).has(BigInt(command.perm)) ||
-        !roleToApply.blacklistedcommands ||
-        roleToApply.blacklistedcommands.includes(command.name)) &&
-      roleToApply.whitelistedcommands &&
-      !roleToApply.whitelistedcommands.includes(command.name)
-    ) {
-      return { noRoles: false, finished: false };
-    }
-    return { noRoles: false, finished: true };
-  };
-
-  if (!command.perm) return true;
-  if (!cmd.guildID) return true;
-
-  const perms = new Eris.Permission(command.perm);
-  if (!cmd.guild) return true;
-
-  if (command.type === 'mod') {
-    const modRoles = await getModRoles();
-
-    if (modRoles) {
-      const { noRoles, finished } = await checkModRoles(modRoles);
-      if (!noRoles && !finished) {
-        client.ch.error(cmd, cmd.language.commands.commandHandler.modRoleError, cmd.language);
-        return false;
-      }
-
-      if (finished === true) return false;
-    }
-  }
-
-  if (!cmd.member?.permissions.has(BigInt(command.perm))) {
-    client.ch.permError(cmd, command.perm, cmd.language, false);
-    return false;
-  }
-
-  if (!cmd.guild.members.get(client.user.id)?.permissions.has(perms.allow)) {
-    client.ch.permError(cmd, perms.allow, cmd.language, true);
+  if (command.perm === 0 && cmd.user.id !== auth.ownerID) {
+    client.ch.error(cmd, cmd.language.commands.commandHandler.creatorOnly, cmd.language);
     return false;
   }
 

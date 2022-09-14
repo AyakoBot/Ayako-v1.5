@@ -228,7 +228,6 @@
             "required": true,
             "min_length": 1,
             "choices": [
-              { "name": "Mod-Roles", "value": "mod-roles" },
               { "name": "Expiry", "value": "expiry" }
             ]
           }
