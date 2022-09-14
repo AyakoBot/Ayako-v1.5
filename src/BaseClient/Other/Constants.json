@@ -476,6 +476,16 @@
         "separators": ["https://youtu.be/yLKgn-Ecduc"]
       },
       "settings": {
+        "verification": {
+          "logchannel": "channel",
+          "pendingrole": "role",
+          "finishedrole": "role",
+          "startchannel": "channel",
+          "selfstart": "boolean",
+          "kickafter": "duration",
+          "kicktof": "boolean",
+          "active": "boolean"
+        },
         "suggestions": {
           "active": "boolean",
           "channelid": "channel",

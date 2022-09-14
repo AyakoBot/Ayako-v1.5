@@ -608,6 +608,34 @@
         "prefix": "Assign a custom Prefix to Ayako"
       },
       "settings": {
+        "verification": {
+          "logchannel": {
+            "name": "Log-Channel",
+            "desc": "Verification Log-Channel"
+          },
+          "finishedrole": {
+            "name": "Finished Role",
+            "desc": "Role given to a Member once they finished Verification"
+          },
+          "pendingrole": {
+            "name": "Pending Role",
+            "desc": "Role given to a Member upon joining the Server to mark them as \"pending\""
+          },
+          "startchannel": {
+            "name": "Start Channel",
+            "desc": "Channel arriving Members will be able to re-/start the Verification in"
+          },
+          "selfstart": {
+            "name": "Self-Start"
+          },
+          "kickafter": {
+            "name": "Kick Timeout",
+            "desc": "Time after which un-verified Members will be kicked from the Server"
+          },
+          "kicktof": {
+            "name": "Kick Unverified Members"
+          }
+        },
         "suggestions": {
           "channelid": {
             "name": "Channel",
