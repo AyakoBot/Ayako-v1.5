@@ -245,16 +245,12 @@ const getCooldown = async (cmd: CT.CommandInteraction, command: CT.SlashCommand)
     const { emote, usedEmote } = getEmote(Math.ceil(timeLeft / 1000));
 
     client.ch
-      .reply(
-        cmd,
-        {
-          content: client.ch.stp(cmd.language.commands.commandHandler.pleaseWait, {
-            time: emote,
-          }),
-          ephemeral: true,
-        },
-        cmd.language,
-      )
+      .reply(cmd, {
+        content: client.ch.stp(cmd.language.commands.commandHandler.pleaseWait, {
+          time: emote,
+        }),
+        ephemeral: true,
+      })
       .then((m) => {
         if (!usedEmote && m) {
           jobs.scheduleJob(new Date(Date.now() + (timeLeft - 60000)), () => {
