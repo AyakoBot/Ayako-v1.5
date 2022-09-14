@@ -478,13 +478,14 @@ export type rrsettings = {
 export type selfroles = {
   guildid: string;
   roles?: string[];
-  onlyone?: boolean;
+  onlyone: boolean;
   uniquetimestamp: string;
   blacklistedroles?: string[];
   blacklistedusers?: string[];
   whitelistedroles?: string[];
   whitelistedusers?: string[];
   active: boolean;
+  name: string;
 };
 
 export type stats = {

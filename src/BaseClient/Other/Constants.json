@@ -475,6 +475,16 @@
         }
       ],
       "settings": {
+        "self-roles": {
+          "active": "boolean",
+          "roles": "roles",
+          "onlyone": "boolean",
+          "blacklistedroles": "roles",
+          "blacklistedusers": "users",
+          "whitelistedroles": "roles",
+          "whitelistedusers": "users",
+          "name": "string"
+        },
         "expiry": {
           "bans": "boolean",
           "channelbans": "boolean",

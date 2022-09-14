@@ -607,6 +607,36 @@
         "prefix": "Assign a custom Prefix to Ayako"
       },
       "settings": {
+        "self-roles": {
+          "name": {
+            "name": "Name",
+            "desc": "Name of this Category"
+          },
+          "roles": {
+            "name": "Roles",
+            "desc": "The self-assignable Roles"
+          },
+          "onlyone": {
+            "name": "Only One",
+            "desc": "Whether only one of the Roles can be picked"
+          },
+          "blacklistedroles": {
+            "name": "Blacklisted Roles",
+            "desc": "Members with any of these Roles cannot self-assign the Roles of this Category"
+          },
+          "blacklistedusers": {
+            "name": "Blacklisted Users",
+            "desc": "Users which cannot self-assign the Roles of this Category"
+          },
+          "whitelistedroles": {
+            "name": "Whitelisted Roles",
+            "desc": "Members with any of these Roles can self-assign the Roles of this Category, even if they have a Blacklisted Role"
+          },
+          "whitelistedusers": {
+            "name": "Whitelisted Users",
+            "desc": "Users which can self-assign the Roles of this Category, even if they have a Blacklisted Role"
+          }
+        },
         "expiry": {
           "desc": "⚠️Note:⚠️\nAll of these Settings are Ayako-Internal!\nExample: Setting Bans to expire after 5 Months will not lead to an Auto-Unban after 5 Months, the entry will just be deleted from Commands like </check:1019550801355624478>",
           "bans": {
@@ -641,7 +671,7 @@
             "desc": "Time after which Mutes expire"
           },
           "warnstime": {
-            "name": "Warns Expire Time",
+            "name": "Warn Expire Time",
             "desc": "Time after which Warns expire"
           }
         },
