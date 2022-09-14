@@ -7,9 +7,9 @@ import type DBT from '../../../typings/DataBaseTypings';
 export default async () => {
   const settingsRows = await client.ch
     .query(
-      `SELECT * FROM modsettings WHERE warns = true AND warnstime IS NOT NULL OR mutes = true AND mutestime IS NOT NULL OR kicks = true AND kickstime IS NOT NULL OR channelbans = true AND channelbanstime IS NOT NULL OR bans = true AND banstime IS NOT NULL;`,
+      `SELECT * FROM expiry WHERE warns = true AND warnstime IS NOT NULL OR mutes = true AND mutestime IS NOT NULL OR kicks = true AND kickstime IS NOT NULL OR channelbans = true AND channelbanstime IS NOT NULL OR bans = true AND banstime IS NOT NULL;`,
     )
-    .then((r: DBT.modsettings[] | null) => r || null);
+    .then((r: DBT.expiry[] | null) => r || null);
 
   if (!settingsRows) return;
 

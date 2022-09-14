@@ -442,7 +442,6 @@
         {
           "name": "moderation",
           "categories": [
-            { "name": "mod-roles", "category": "roles" },
             { "name": "expiry", "category": "other" }
           ]
         },
@@ -476,6 +475,18 @@
         }
       ],
       "settings": {
+        "expiry": {
+          "bans": "boolean",
+          "channelbans": "boolean",
+          "kicks": "boolean",
+          "mutes": "boolean",
+          "warns": "boolean",
+          "banstime": "duration",
+          "channelbanstime": "duration",
+          "kickstime": "duration",
+          "mutestime": "duration",
+          "warnstime": "duration"
+        },
         "logs": {
           "emojievents": "channels",
           "guildevents": "channels",
@@ -622,7 +633,7 @@
         "blacklist": "blacklist",
         "auto-roles": "autoroles",
         "cooldowns": "cooldowns",
-        "expiry": "modsettings",
+        "expiry": "expiry",
         "disabled-commands": "disabledcommands",
         "disboard-reminders": "disboard",
         "self-roles": "selfroles",

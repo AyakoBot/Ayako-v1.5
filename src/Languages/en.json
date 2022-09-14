@@ -559,7 +559,6 @@
         "anti-raid": "Anti-Raid",
         "auto-punish": "Auto Punish",
         "blacklist": "Blacklist",
-        "mod-roles": "Moderation Roles",
         "expiry": "Expiry",
         "auto-roles": "Auto Roles",
         "cooldowns": "Cooldowns",
@@ -587,7 +586,6 @@
         "anti-virus": "Stopping Members and hacked Accounts from sending phishing and in other ways malicious Links in the Server",
         "auto-punish": "Consistenly punish Members for misbehaving using a custom punishment Setup and a new Command",
         "blacklist": "Stopping Members from saying Words or Phrases you'd rather not have them say on your Server",
-        "mod-roles": "Define which Commands can be used by which Role or User, and even overwrite their Discord Permissions",
         "expiry": "Let Punishments expire after a certain Amount of Time",
         "auto-roles": "Automatically assign Roles to newly joining Members or Bots, or Members and Bots",
         "cooldowns": "Define custom Cooldowns on Ayakos Commands",
@@ -609,6 +607,44 @@
         "prefix": "Assign a custom Prefix to Ayako"
       },
       "settings": {
+        "expiry": {
+          "desc": "⚠️Note:⚠️\nAll of these Settings are Ayako-Internal!\nExample: Setting Bans to expire after 5 Months will not lead to an Auto-Unban after 5 Months, the entry will just be deleted from Commands like </check:1019550801355624478>",
+          "bans": {
+            "name": "Bans Expire"
+          },
+          "channelbans": {
+            "name": "Channel-Bans Expire"
+          },
+          "kicks": {
+            "name": "Kicks Expire"
+          },
+          "mutes": {
+            "name": "Mutes Expire"
+          },
+          "warns": {
+            "name": "Warns Expire"
+          },
+          "banstime": {
+            "name": "Ban Expire Time",
+            "desc": "Time after which Bans expire"
+          },
+          "channelbanstime": {
+            "name": "Channel-Ban Expire Time",
+            "desc": "Time after which Channel-Ban expire"
+          },
+          "kickstime": {
+            "name": "Kick Expire Time",
+            "desc": "Time after which Kicks expire"
+          },
+          "mutestime": {
+            "name": "Mute Expire Time",
+            "desc": "Time after which Mutes expire"
+          },
+          "warnstime": {
+            "name": "Warns Expire Time",
+            "desc": "Time after which Warns expire"
+          }
+        },
         "logs": {
           "ayako": "Ayako Logs",
           "guild": "Discord Logs",

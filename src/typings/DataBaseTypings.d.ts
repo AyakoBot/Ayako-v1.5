@@ -268,7 +268,7 @@ export type logchannels = {
   stageevents?: string[];
 };
 
-export type modsettings = {
+export type expiry = {
   guildid: string;
   bans: boolean;
   channelbans: boolean;

@@ -227,9 +227,7 @@
             "description": "The Setting to view and edit",
             "required": true,
             "min_length": 1,
-            "choices": [
-              { "name": "Expiry", "value": "expiry" }
-            ]
+            "choices": [{ "name": "Expiry", "value": "expiry" }]
           }
         ]
       },
@@ -304,6 +302,20 @@
         "description": "Channel Option No. 3",
         "required": false,
         "channel_types": [0, 2, 5, 10, 11, 12, 15]
+      }
+    ]
+  },
+  "check": {
+    "type": 1,
+    "name": "check",
+    "description": "Check for User Punishments",
+    "dm_permission": false,
+    "options": [
+      {
+        "type": 6,
+        "name": "user",
+        "description": "The User to check",
+        "required": false
       }
     ]
   }
