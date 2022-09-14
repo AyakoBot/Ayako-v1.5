@@ -476,6 +476,12 @@
         "separators": ["https://youtu.be/yLKgn-Ecduc"]
       },
       "settings": {
+        "sticky": {
+          "roles": "roles",
+          "stickyrolesmode": "boolean",
+          "stickyrolesactive": "boolean",
+          "stickypermsactive": "boolean"
+        },
         "separators": {
           "separator": "role",
           "active": "boolean",

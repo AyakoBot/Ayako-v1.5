@@ -1065,7 +1065,24 @@
         },
         "sticky": {
           "roleReason": "Ayako Sticky Roles",
-          "permReason": "Ayako Sticky Perms"
+          "permReason": "Ayako Sticky Perms",
+          "unstickyroles": {
+            "name": "Un-Sticky Roles",
+            "desc": "Roles which are excluded from being sticky"
+          },
+          "stickyroles": {
+            "name": "Sticky Roles",
+            "desc": "Roles which are sticky"
+          },
+          "stickyrolesmode": {
+            "name": "Sticky Roles Mode"
+          },
+          "stickyrolesactive": {
+            "name": "Sticky Roles Active"
+          },
+          "stickypermsactive": {
+            "name": "Sticky Perms Active"
+          }
         }
       }
     },
