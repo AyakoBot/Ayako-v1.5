@@ -473,7 +473,7 @@
         }
       ],
       "tutorials": {
-        "separators": "https://youtu.be/yLKgn-Ecduc"
+        "separators": ["https://youtu.be/yLKgn-Ecduc"]
       },
       "settings": {
         "separators": {

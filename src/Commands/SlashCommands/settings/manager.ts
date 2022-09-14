@@ -243,6 +243,28 @@ export const edit = async (
   baseObject: CT.BaseSettingsObject,
   components: Eris.ActionRow[] = [],
 ) => {
+  if (baseObject.embed.description) {
+    baseObject.embed.description = `${baseObject.embed.description}\n\n${client.ch.stp(
+      baseObject.language.slashCommands.settings.tutorial,
+      {
+        tutorials:
+          client.constants.commands.settings.tutorials[
+            baseObject.setting.name as keyof typeof client.constants.commands.settings.tutorials
+          ],
+      },
+    )}`;
+  } else {
+    baseObject.embed.description = client.ch.stp(
+      baseObject.language.slashCommands.settings.tutorial,
+      {
+        tutorials:
+          client.constants.commands.settings.tutorials[
+            baseObject.setting.name as keyof typeof client.constants.commands.settings.tutorials
+          ],
+      },
+    );
+  }
+
   if (baseObject.interactions[0].acknowledged) {
     await baseObject.interactions[0].editOriginalMessage({
       embeds: [baseObject.embed],
