@@ -247,9 +247,9 @@
             "min_length": 1,
             "choices": [
               { "name": "Logs", "value": "logs" },
-              { "name": "Language", "value": "language" },
+              { "name": "Language", "value": "overview" },
               { "name": "Overview", "value": "overview" },
-              { "name": "Prefix", "value": "prefix" }
+              { "name": "Prefix", "value": "overview" }
             ]
           }
         ]

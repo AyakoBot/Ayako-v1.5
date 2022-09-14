@@ -3,7 +3,7 @@ import type DBT from '../../../../typings/DataBaseTypings';
 import client from '../../../../BaseClient/ErisClient';
 
 const setting: CT.SettingsFile = {
-  name: 'guildsettings',
+  name: 'overview',
   type: 'single',
   displayEmbed: async (baseObject: CT.BaseSettingsObject) => {
     const lan = baseObject.language.slashCommands.settings.settings.overview;

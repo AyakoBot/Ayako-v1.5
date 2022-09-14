@@ -609,6 +609,8 @@
         "prefix": "Assign a custom Prefix to Ayako"
       },
       "settings": {
+        "prefix": {},
+        "language": {},
         "overview": {
           "requiresAdmin": "This Setting requires Administrator Permissions",
           "prefix": {

@@ -483,6 +483,20 @@
           "errorchannel": "channel",
           "vanity": "string"
         },
+        "language": {
+          "prefix": "string",
+          "interactionsmode": "boolean",
+          "lan": "language",
+          "errorchannel": "channel",
+          "vanity": "string"
+        },
+        "prefix": {
+          "prefix": "string",
+          "interactionsmode": "boolean",
+          "lan": "language",
+          "errorchannel": "channel",
+          "vanity": "string"
+        },
         "disboard-reminders": {
           "active": "boolean",
           "repeatreminder": "minutes",
