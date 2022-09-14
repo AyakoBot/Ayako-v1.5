@@ -162,12 +162,12 @@ export const oneTimeRunner = async (
 
   if (!Array.isArray(membersWithRoles)) {
     if (!membersWithRoles) {
-      embed.description = language.slashCommands.settings.settings.separators.edit.oneTimeRunner.finished;
+      embed.description = language.slashCommands.settings.settings.separators.oneTimeRunner.finished;
 
       m.edit({ embeds: [embed], components: [] }).catch(() => null);
     } else {
       embed.description =
-        language.slashCommands.settings.settings.separators.edit.oneTimeRunner.stillrunning;
+        language.slashCommands.settings.settings.separators.oneTimeRunner.stillrunning;
 
       m.edit({ embeds: [embed], components: [] }).catch(() => null);
     }
@@ -207,7 +207,7 @@ export const oneTimeRunner = async (
       url: client.constants.standard.invite,
     };
     embed.description = client.ch.stp(
-      language.slashCommands.settings.settings.separators.edit.oneTimeRunner.stats,
+      language.slashCommands.settings.settings.separators.oneTimeRunner.stats,
       {
         members: membersWithRoles && membersWithRoles.length ? membersWithRoles.length : '0',
         roles: membersWithRoles && membersWithRoles.length ? membersWithRoles.length * 4 : '0',
@@ -385,7 +385,7 @@ const assinger = async (
       url: client.constants.standard.invite,
     };
 
-    embed.description = language.slashCommands.settings.settings.separators.edit.oneTimeRunner.finished;
+    embed.description = language.slashCommands.settings.settings.separators.oneTimeRunner.finished;
     m.edit({ embeds: [embed], components: [] }).catch(() => null);
     client.ch.query(
       'UPDATE roleseparatorsettings SET stillrunning = $1, duration = $3, startat = $4 WHERE guildid = $2;',
@@ -423,7 +423,7 @@ const assinger = async (
             url: client.constants.standard.invite,
           };
           embed.description =
-            language.slashCommands.settings.settings.separators.edit.oneTimeRunner.finished;
+            language.slashCommands.settings.settings.separators.oneTimeRunner.finished;
 
           m.edit({ embeds: [embed], components: [] }).catch(() => null);
           client.ch.query(

@@ -441,9 +441,7 @@
         },
         {
           "name": "moderation",
-          "categories": [
-            { "name": "expiry", "category": "other" }
-          ]
+          "categories": [{ "name": "expiry", "category": "other" }]
         },
         {
           "name": "automation",
@@ -474,7 +472,18 @@
           ]
         }
       ],
+      "tutorials": {
+        "separators": "https://youtu.be/yLKgn-Ecduc"
+      },
       "settings": {
+        "separators": {
+          "separator": "role",
+          "active": "boolean",
+          "stoprole": "role",
+          "isvarying": "boolean",
+          "roles": "roles",
+          "name": "string"
+        },
         "self-roles": {
           "active": "boolean",
           "roles": "roles",
@@ -683,7 +692,7 @@
         "cooldowns": [{ "ident": "command", "type": "text" }],
         "nitroroles": [],
         "selfroles": [{ "ident": "name", "type": "text" }],
-        "separators": [{ "ident": "separator", "type": "role" }],
+        "separators": [{ "ident": "name", "type": "text" }],
         "auto-punish": [{ "ident": "warnamount", "type": "text" }],
         "levelroles": [{ "ident": "level", "type": "text" }],
         "multiroles": [{ "ident": "multiplier", "type": "text" }],

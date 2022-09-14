@@ -433,6 +433,7 @@ export type roleseparator = {
   isvarying: boolean;
   roles?: string[];
   uniquetimestamp: string;
+  name: string;
 };
 
 export type roleseparatorsettings = {
