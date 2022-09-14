@@ -81,7 +81,7 @@ const getAfkRow = (msg: CT.Message, mention?: Eris.User) =>
     ])
     .then((r: DBT.afk[] | null) => (r ? r[0] : null));
 
-const getTime = (afkRow: DBT.afk, language: typeof import('../../../Languages/lan-en.json')) =>
+const getTime = (afkRow: DBT.afk, language: typeof import('../../../Languages/en.json')) =>
   moment
     .duration(Number(afkRow.since) - Date.now())
     .format(

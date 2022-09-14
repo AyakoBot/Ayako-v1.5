@@ -3,9 +3,9 @@ import type DBT from '../../typings/DataBaseTypings';
 
 export default async (
   guildID: string | undefined | null,
-): Promise<typeof import('../../Languages/lan-en.json')> => {
+): Promise<typeof import('../../Languages/en.json')> => {
   if (!guildID) {
-    const { default: language } = await import(`../../Languages/lan-en.json`, {
+    const { default: language } = await import(`../../Languages/en.json`, {
       assert: { type: 'json' },
     });
 
@@ -16,7 +16,7 @@ export default async (
     (r: DBT.guildsettings[] | null) => (r ? r[0].lan : null),
   );
 
-  const { default: language } = await import(`../../Languages/lan-${lan || 'en'}.json`, {
+  const { default: language } = await import(`../../Languages/${lan || 'en'}.json`, {
     assert: { type: 'json' },
   });
   return language;

@@ -9,8 +9,8 @@ export default async (
     lan: lang,
     language,
   }: {
-    language: typeof import('../../../Languages/lan-en.json');
-    lan: typeof import('../../../Languages/lan-en.json')['slashCommands']['giveaway'];
+    language: typeof import('../../../Languages/en.json');
+    lan: typeof import('../../../Languages/en.json')['slashCommands']['giveaway'];
   },
 ) => {
   if (!cmd.guild) return;

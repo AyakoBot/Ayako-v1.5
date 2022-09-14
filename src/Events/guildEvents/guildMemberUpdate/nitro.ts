@@ -6,7 +6,7 @@ export default async (
   guild: Eris.Guild,
   member: Eris.Member,
   oldMember: Eris.OldMember | { user: Eris.User; id: string },
-  language: typeof import('../../../Languages/lan-en.json'),
+  language: typeof import('../../../Languages/en.json'),
 ) => {
   if ('premiumSince' in oldMember && oldMember.premiumSince && member.premiumSince) return;
 
@@ -53,7 +53,7 @@ const stoppedBoost = (member: Eris.Member, guild: Eris.Guild) =>
 
 const logEnd = async (
   member: Eris.Member,
-  language: typeof import('../../../Languages/lan-en.json'),
+  language: typeof import('../../../Languages/en.json'),
   channels: (Eris.AnyGuildChannel | undefined)[],
 ) => {
   const embed = getEmbed(member);
@@ -69,7 +69,7 @@ const logEnd = async (
 
 const logStart = async (
   member: Eris.Member,
-  language: typeof import('../../../Languages/lan-en.json'),
+  language: typeof import('../../../Languages/en.json'),
   channels: (Eris.AnyGuildChannel | undefined)[],
 ) => {
   const embed = getEmbed(member);

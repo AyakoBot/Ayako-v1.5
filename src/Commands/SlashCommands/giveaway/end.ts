@@ -10,8 +10,8 @@ export const manualEnd = async (
     lan: lang,
     language,
   }: {
-    language: typeof import('../../../Languages/lan-en.json');
-    lan: typeof import('../../../Languages/lan-en.json')['slashCommands']['giveaway'];
+    language: typeof import('../../../Languages/en.json');
+    lan: typeof import('../../../Languages/en.json')['slashCommands']['giveaway'];
   },
 ) => {
   if (!cmd.guild) return;
@@ -60,8 +60,8 @@ export const manualEnd = async (
 
 export const end = async (
   row: DBT.giveaways,
-  lan: typeof import('../../../Languages/lan-en.json')['slashCommands']['giveaway']['end'],
-  language: typeof import('../../../Languages/lan-en.json'),
+  lan: typeof import('../../../Languages/en.json')['slashCommands']['giveaway']['end'],
+  language: typeof import('../../../Languages/en.json'),
   isReroll?: boolean,
 ) => {
   const guild = client.guilds.get(row.guildid);
@@ -96,7 +96,7 @@ export const end = async (
 const sendCongraz = async (
   msg: Eris.Message<Eris.TextChannel> | Eris.Message<Eris.TextVoiceChannel>,
   giveaway: DBT.giveaways,
-  lan: typeof import('../../../Languages/lan-en.json')['slashCommands']['giveaway']['end'],
+  lan: typeof import('../../../Languages/en.json')['slashCommands']['giveaway']['end'],
   winners: Eris.Member[],
   host: Eris.User,
 ) => {
@@ -126,8 +126,8 @@ const sendCongraz = async (
 const reward = async (
   msg: Eris.Message<Eris.TextChannel> | Eris.Message<Eris.TextVoiceChannel>,
   giveaway: DBT.giveaways,
-  lan: typeof import('../../../Languages/lan-en.json')['slashCommands']['giveaway']['end'],
-  language: typeof import('../../../Languages/lan-en.json'),
+  lan: typeof import('../../../Languages/en.json')['slashCommands']['giveaway']['end'],
+  language: typeof import('../../../Languages/en.json'),
   winners: Eris.Member[],
   host: Eris.User,
   claimEnd: number,
@@ -189,7 +189,7 @@ const reward = async (
 const editGiveaway = async (
   msg: Eris.Message<Eris.TextChannel> | Eris.Message<Eris.TextVoiceChannel>,
   giveaway: DBT.giveaways,
-  lan: typeof import('../../../Languages/lan-en.json')['slashCommands']['giveaway']['end'],
+  lan: typeof import('../../../Languages/en.json')['slashCommands']['giveaway']['end'],
   winners: Eris.Member[],
   isReroll?: boolean,
 ) => {

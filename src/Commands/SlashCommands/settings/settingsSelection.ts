@@ -7,8 +7,8 @@ export default (
   {
     lan,
   }: {
-    language: typeof import('../../../Languages/lan-en.json');
-    lan: typeof import('../../../Languages/lan-en.json')['slashCommands']['settings'];
+    language: typeof import('../../../Languages/en.json');
+    lan: typeof import('../../../Languages/en.json')['slashCommands']['settings'];
   },
 ) => {
   const embed: Eris.Embed = {

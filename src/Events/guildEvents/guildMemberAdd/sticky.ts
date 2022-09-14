@@ -5,7 +5,7 @@ import type DBT from '../../../typings/DataBaseTypings';
 export default async (
   member: Eris.Member,
   guild: Eris.Guild,
-  language: typeof import('../../../Languages/lan-en.json'),
+  language: typeof import('../../../Languages/en.json'),
 ) => {
   stickyroles(member, guild, language);
   stickyperms(member, guild, language);
@@ -14,7 +14,7 @@ export default async (
 const stickyroles = async (
   member: Eris.Member,
   guild: Eris.Guild,
-  language: typeof import('../../../Languages/lan-en.json'),
+  language: typeof import('../../../Languages/en.json'),
 ) => {
   const stickyrolemembersRow = await client.ch
     .query(`SELECT * FROM stickyrolemembers WHERE userid = $1 AND guildid = $2;`, [
@@ -83,7 +83,7 @@ const getRoles = (mode: boolean, roles: string[], memberRoles: string[], guild: 
 const stickyperms = async (
   member: Eris.Member,
   guild: Eris.Guild,
-  language: typeof import('../../../Languages/lan-en.json'),
+  language: typeof import('../../../Languages/en.json'),
 ) => {
   const stickypermmembersRows = await client.ch
     .query(`SELECT * FROM stickypermmembers WHERE userid = $1 AND guildid = $2;`, [
@@ -113,7 +113,7 @@ const stickyperms = async (
 const addPerms = async (
   stickypermmembersRows: DBT.stickypermmembers[],
   guild: Eris.Guild,
-  language: typeof import('../../../Languages/lan-en.json'),
+  language: typeof import('../../../Languages/en.json'),
 ) =>
   stickypermmembersRows.forEach((stickypermmembersRow) => {
     const channel = guild.channels.get(stickypermmembersRow.channelid);

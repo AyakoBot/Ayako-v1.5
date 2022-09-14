@@ -3,7 +3,7 @@ import type * as Eris from 'eris';
 import type DBT from '../../typings/DataBaseTypings';
 import client from '../../BaseClient/ErisClient';
 
-type Language = typeof import('../../Languages/lan-en.json');
+type Language = typeof import('../../Languages/en.json');
 
 export default async (
   data: { time: number; joins: number },
@@ -198,7 +198,7 @@ const doPunish = async (
   targets: string[],
   reason: string,
   guild: Eris.Guild,
-  language: typeof import('../../Languages/lan-en.json'),
+  language: typeof import('../../Languages/en.json'),
 ) => {
   let punishments;
   if (type === 'banAdd') {

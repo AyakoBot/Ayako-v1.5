@@ -10,7 +10,7 @@ import type CT from '../../../typings/CustomTypings';
 import type DBT from '../../../typings/DataBaseTypings';
 import client from '../../../BaseClient/ErisClient';
 
-type Language = typeof import('../../../Languages/lan-en.json');
+type Language = typeof import('../../../Languages/en.json');
 interface LinkObject {
   href: string;
   url: string;

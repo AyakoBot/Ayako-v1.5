@@ -46,7 +46,7 @@ export default async (guild: Eris.Guild, emojis: Eris.Emoji[], oldEmojis: Eris.E
 const emojiCreated = async (
   guild: Eris.Guild,
   emoji: Eris.Emoji,
-  language: typeof import('../../../Languages/lan-en.json'),
+  language: typeof import('../../../Languages/en.json'),
 ) => {
   const con = client.constants.events.emojiCreate;
   const lan = language.events.emojiCreate;
@@ -102,7 +102,7 @@ const emojiCreated = async (
 const emojiDeleted = async (
   guild: Eris.Guild,
   emoji: Eris.Emoji,
-  language: typeof import('../../../Languages/lan-en.json'),
+  language: typeof import('../../../Languages/en.json'),
 ) => {
   const con = client.constants.events.emojiDelete;
   const lan = language.events.emojiDelete;
@@ -159,7 +159,7 @@ const emojiUpdated = async (
   guild: Eris.Guild,
   emoji: Eris.Emoji,
   oldEmoji: Eris.Emoji,
-  language: typeof import('../../../Languages/lan-en.json'),
+  language: typeof import('../../../Languages/en.json'),
 ) => {
   const con = client.constants.events.emojiUpdate;
   const lan = language.events.emojiUpdate;

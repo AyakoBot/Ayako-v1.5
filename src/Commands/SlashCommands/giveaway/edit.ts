@@ -11,8 +11,8 @@ export default async (
     lan: lang,
     language,
   }: {
-    language: typeof import('../../../Languages/lan-en.json');
-    lan: typeof import('../../../Languages/lan-en.json')['slashCommands']['giveaway'];
+    language: typeof import('../../../Languages/en.json');
+    lan: typeof import('../../../Languages/en.json')['slashCommands']['giveaway'];
   },
 ) => {
   if (!cmd.guild) return;
@@ -112,8 +112,8 @@ export default async (
 const rescheduleGiveaway = (
   giveaway: DBT.giveaways,
   msgid: string,
-  language: typeof import('../../../Languages/lan-en.json'),
-  lan: typeof import('../../../Languages/lan-en.json')['slashCommands']['giveaway'],
+  language: typeof import('../../../Languages/en.json'),
+  lan: typeof import('../../../Languages/en.json')['slashCommands']['giveaway'],
 ) => {
   client.giveaways.get(`${msgid}-${giveaway.guildid}`)?.cancel();
 
@@ -132,8 +132,8 @@ const handleEndTime = (
     lan,
     language,
   }: {
-    language: typeof import('../../../Languages/lan-en.json');
-    lan: typeof import('../../../Languages/lan-en.json')['slashCommands']['giveaway']['edit'];
+    language: typeof import('../../../Languages/en.json');
+    lan: typeof import('../../../Languages/en.json')['slashCommands']['giveaway']['edit'];
   },
 ) => {
   const endtime = getEndTime(rawTime);

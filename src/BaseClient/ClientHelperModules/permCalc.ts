@@ -2,7 +2,7 @@ import * as Eris from 'eris';
 
 export default (
   bits: number,
-  lan: typeof import('../../Languages/lan-en.json'),
+  lan: typeof import('../../Languages/en.json'),
   isntRole: false,
 ) => {
   const bitField = new Eris.Permission(BigInt(bits));

@@ -60,7 +60,7 @@ export default (
   guild: Eris.Guild,
   rawMember: Eris.Member,
   oldMember: Eris.OldMember | { user: Eris.User; id: string },
-  language: typeof import('../../../Languages/lan-en.json'),
+  language: typeof import('../../../Languages/en.json'),
 ) => {
   if (
     'roles' in oldMember &&
@@ -369,7 +369,7 @@ const assinger = async (
     takeTheseRoles: string[];
   }[],
   embed: Eris.Embed,
-  language: typeof import('../../../Languages/lan-en.json'),
+  language: typeof import('../../../Languages/en.json'),
   lastTime?: boolean,
 ) => {
   if (!msg.guildID) return;

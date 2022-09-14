@@ -9,7 +9,7 @@ const sendings: Map<string, { time: number; joins: number; timeout: Jobs.Job }> 
 export default async (
   member: Eris.Member,
   guild: Eris.Guild,
-  language: typeof import('../../../Languages/lan-en.json'),
+  language: typeof import('../../../Languages/en.json'),
 ) => {
   if (!member || !guild) return;
 
@@ -40,7 +40,7 @@ const addMember = (member: Eris.Member, guild: Eris.Guild, r: DBT.antiraid) => {
 const check = (
   guild: Eris.Guild,
   r: DBT.antiraid,
-  language: typeof import('../../../Languages/lan-en.json'),
+  language: typeof import('../../../Languages/en.json'),
 ) => {
   if (!antiraidCache.has(guild.id)) return null;
 

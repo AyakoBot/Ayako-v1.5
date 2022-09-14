@@ -8,8 +8,8 @@ export default {
   execute: async (
     cmd: CT.CommandInteraction,
     langArgs: {
-      language: typeof import('../../Languages/lan-en.json');
-      lan: typeof import('../../Languages/lan-en.json')['slashCommands']['settings'];
+      language: typeof import('../../Languages/en.json');
+      lan: typeof import('../../Languages/en.json')['slashCommands']['settings'];
     },
   ) => {
     if (!cmd.data.options || cmd.data.options[0].name === 'base') {

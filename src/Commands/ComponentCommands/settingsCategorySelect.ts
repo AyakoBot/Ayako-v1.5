@@ -4,7 +4,7 @@ import client from '../../BaseClient/ErisClient';
 
 export default async (
   cmd: CT.ComponentInteraction,
-  language: typeof import('../../Languages/lan-en.json'),
+  language: typeof import('../../Languages/en.json'),
 ) => {
   const lan = language.slashCommands.settings;
 

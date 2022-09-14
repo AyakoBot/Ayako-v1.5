@@ -42,7 +42,7 @@ const setReminder = async (
   guild: Eris.Guild,
   isBump: boolean,
   settings: DBT.disboard,
-  language: typeof import('../../../Languages/lan-en.json'),
+  language: typeof import('../../../Languages/en.json'),
 ) => {
   if (!isBump && !Number(settings.repeatreminder)) {
     client.ch.query(`UPDATE disboard SET nextbump = NULL WHERE guildid = $1;`, [guild.id]);
@@ -69,7 +69,7 @@ const setReminder = async (
 
 export const endReminder = async (
   guild: Eris.Guild,
-  language: typeof import('../../../Languages/lan-en.json'),
+  language: typeof import('../../../Languages/en.json'),
 ) => {
   const settings = await getSettings(guild);
   if (!settings) return;

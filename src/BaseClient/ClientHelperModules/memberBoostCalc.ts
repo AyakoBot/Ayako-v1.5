@@ -3,7 +3,7 @@ import stringEmotes from '../Other/StringEmotes.json' assert { type: 'json' };
 
 export default async (
   bits: number,
-  lan: typeof import('../../Languages/lan-en.json'),
+  lan: typeof import('../../Languages/en.json'),
   emotes = false,
 ) => {
   if (!bits) return [];

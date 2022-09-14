@@ -5,7 +5,7 @@ import type DBT from '../../../typings/DataBaseTypings';
 export default async (
   member: Eris.Member,
   guild: Eris.Guild,
-  language: typeof import('../../../Languages/lan-en.json'),
+  language: typeof import('../../../Languages/en.json'),
 ) => {
   const settings = await getSettings(guild);
   if (!settings) return;

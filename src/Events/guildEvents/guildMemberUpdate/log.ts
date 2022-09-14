@@ -8,7 +8,7 @@ export default async (
   guild: Eris.Guild,
   member: Eris.Member,
   oldMember: Eris.OldMember | { user: Eris.User; id: string },
-  language: typeof import('../../../Languages/lan-en.json'),
+  language: typeof import('../../../Languages/en.json'),
 ) => {
   const channels = (
     await client.ch

@@ -7,7 +7,7 @@ import client from '../../BaseClient/ErisClient';
 import type CT from '../../typings/CustomTypings';
 import type DBT from '../../typings/DataBaseTypings';
 
-type Language = typeof import('../../Languages/lan-en.json');
+type Language = typeof import('../../Languages/en.json');
 
 export default async (args: CT.ModBaseEventOptions) => {
   const { executor, target, reason, msg, guild, type, source } = args;

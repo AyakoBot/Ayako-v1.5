@@ -18,14 +18,14 @@ export interface Command {
   type: 'mod' | 'other' | 'owner';
   deleteCommandRow?: DBT.deletecommands;
   cooldown?: number;
-  execute: <T extends keyof typeof import('../Languages/lan-en.json')['commands']>(
+  execute: <T extends keyof typeof import('../Languages/en.json')['commands']>(
     msg: Eris.Message,
     {
       language,
       lan,
     }: {
-      language: typeof import('../Languages/lan-en.json');
-      lan: typeof import('../Languages/lan-en.json').commands[T];
+      language: typeof import('../Languages/en.json');
+      lan: typeof import('../Languages/en.json').commands[T];
     },
     command: Command,
     object?: { [key: string]: unknown },
@@ -38,14 +38,14 @@ type PartialSlashCommand = Omit<
 >;
 
 export interface SlashCommand extends PartialSlashCommand {
-  execute: <T extends keyof typeof import('../Languages/lan-en.json')['slashCommands']>(
+  execute: <T extends keyof typeof import('../Languages/en.json')['slashCommands']>(
     cmd: CommandInteraction,
     {
       language,
       lan,
     }: {
-      language: typeof import('../Languages/lan-en.json');
-      lan: typeof import('../Languages/lan-en.json').slashCommands[T];
+      language: typeof import('../Languages/en.json');
+      lan: typeof import('../Languages/en.json').slashCommands[T];
     },
     command: SlashCommand,
     object?: { [key: string]: unknown },
@@ -54,13 +54,13 @@ export interface SlashCommand extends PartialSlashCommand {
 
 export type AutocompleteCommand = (
   cmd: AutocompleteInteraction,
-  language: typeof import('../Languages/lan-en.json'),
+  language: typeof import('../Languages/en.json'),
   lan: never,
 ) => Promise<Eris.ApplicationCommandOptionChoice<unknown>[]>;
 
 export type ComponentCommand = (
   cmd: ComponentInteraction,
-  language: typeof import('../Languages/lan-en.json'),
+  language: typeof import('../Languages/en.json'),
 ) => void;
 
 export interface MessagePayload extends Eris.AdvancedMessageContent {
@@ -102,26 +102,26 @@ export interface OldMessage extends Eris.OldMessage {
 
 export interface Message extends Eris.Message {
   guild?: Eris.Guild;
-  language: typeof import('../Languages/lan-en.json');
+  language: typeof import('../Languages/en.json');
   edits?: Eris.OldMessage[];
 }
 
 export interface CommandInteraction extends Eris.CommandInteraction {
   user: Eris.User;
   guild?: Eris.Guild;
-  language: typeof import('../Languages/lan-en.json');
+  language: typeof import('../Languages/en.json');
 }
 
 export interface AutocompleteInteraction extends Eris.AutocompleteInteraction {
   user: Eris.User;
   guild?: Eris.Guild;
-  language: typeof import('../Languages/lan-en.json');
+  language: typeof import('../Languages/en.json');
 }
 
 export interface ComponentInteraction extends Eris.ComponentInteraction {
   user: Eris.User;
   guild?: Eris.Guild;
-  language: typeof import('../Languages/lan-en.json');
+  language: typeof import('../Languages/en.json');
 }
 
 export interface ModBaseEventOptions {
@@ -187,7 +187,7 @@ export interface MultiSettings extends SettingsFile {
   buttons: (baseObject: MultiSettingsObject) => Promise<Eris.Button[][]>;
 }
 
-export type Language = typeof import('../Languages/lan-en.json');
+export type Language = typeof import('../Languages/en.json');
 
 export interface BaseSettingsObject {
   setting: SettingsFile;

@@ -4,7 +4,7 @@ import client from '../../../BaseClient/ErisClient';
 import type DBT from '../../../typings/DataBaseTypings';
 import type CT from '../../../typings/CustomTypings';
 
-type Language = typeof import('../../../Languages/lan-en.json');
+type Language = typeof import('../../../Languages/en.json');
 
 export default async (guild: Eris.Guild) => {
   const language = await client.ch.languageSelector(guild.id);

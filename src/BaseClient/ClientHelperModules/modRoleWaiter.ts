@@ -5,7 +5,7 @@ import buttonRower from './buttonRower';
 
 export default async (
   msg: Eris.Message,
-  language: typeof import('../../Languages/lan-en.json'),
+  language: typeof import('../../Languages/en.json'),
 ) => {
   const { default: client } = await import('../ErisClient');
   const { default: InteractionCollector } = await import('../Other/InteractionCollector');

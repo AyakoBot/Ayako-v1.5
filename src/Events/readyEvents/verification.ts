@@ -55,7 +55,7 @@ export default async () => {
 
 const getEmbed = (
   guild: Eris.Guild,
-  lan: typeof import('../../Languages/lan-en.json')['verification'],
+  lan: typeof import('../../Languages/en.json')['verification'],
 ): Eris.Embed => ({
   type: 'rich',
   description: client.ch.stp(lan.kickMsg, { guild }),

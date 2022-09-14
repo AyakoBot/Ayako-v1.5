@@ -12,21 +12,21 @@ type ChannelTypes =
 async function send(
   channel: ChannelTypes,
   payload: CT.MessagePayload,
-  language: typeof import('../../Languages/lan-en.json'),
+  language: typeof import('../../Languages/en.json'),
   command?: CT.Command | null,
   timeout?: number,
 ): Promise<Eris.Message | null>;
 async function send(
   channel: ChannelTypes[],
   payload: CT.MessagePayload,
-  language: typeof import('../../Languages/lan-en.json'),
+  language: typeof import('../../Languages/en.json'),
   command?: CT.Command | null,
   timeout?: number,
 ): Promise<Eris.Message[] | null>;
 async function send(
   channel: ChannelTypes | ChannelTypes[],
   payload: CT.MessagePayload,
-  language: typeof import('../../Languages/lan-en.json'),
+  language: typeof import('../../Languages/en.json'),
   command?: CT.Command | null,
   timeout?: number,
 ): Promise<Eris.Message | Eris.Message[] | null> {
@@ -64,7 +64,7 @@ const combineMessages = async (
     | Eris.AnyThreadChannel,
   payload: CT.MessagePayload,
   timeout: number,
-  language: typeof import('../../Languages/lan-en.json'),
+  language: typeof import('../../Languages/en.json'),
 ) => {
   if (!('createMessage' in channel)) return;
 
@@ -146,7 +146,7 @@ const queueSend = async (
     | Eris.TextableChannel
     | Eris.AnyThreadChannel,
   timeout: number,
-  language: typeof import('../../Languages/lan-en.json'),
+  language: typeof import('../../Languages/en.json'),
 ) => {
   if (!('createMessage' in channel)) return;
   const { default: client } = await import('../ErisClient');

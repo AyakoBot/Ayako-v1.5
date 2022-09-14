@@ -51,7 +51,7 @@ export default async (guild: Eris.Guild, stickers: Eris.Sticker[], oldStickers: 
 const stickerCreated = async (
   guild: Eris.Guild,
   sticker: Eris.Sticker,
-  language: typeof import('../../../Languages/lan-en.json'),
+  language: typeof import('../../../Languages/en.json'),
 ) => {
   const con = client.constants.events.stickerCreate;
   const lan = language.events.stickerCreate;
@@ -93,7 +93,7 @@ const stickerCreated = async (
 const stickerDeleted = async (
   guild: Eris.Guild,
   sticker: Eris.Sticker,
-  language: typeof import('../../../Languages/lan-en.json'),
+  language: typeof import('../../../Languages/en.json'),
 ) => {
   const con = client.constants.events.stickerDelete;
   const lan = language.events.stickerDelete;
@@ -136,7 +136,7 @@ const stickerUpdated = async (
   guild: Eris.Guild,
   sticker: Eris.Sticker,
   oldSticker: Eris.Sticker,
-  language: typeof import('../../../Languages/lan-en.json'),
+  language: typeof import('../../../Languages/en.json'),
 ) => {
   const con = client.constants.events.stickerUpdate;
   const lan = language.events.stickerUpdate;

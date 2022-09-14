@@ -7,7 +7,7 @@ export default async (
     lan,
     language,
   }: {
-    language: typeof import('../../Languages/lan-en.json');
+    language: typeof import('../../Languages/en.json');
     lan: { author: string; loading?: string };
   },
 ) => {

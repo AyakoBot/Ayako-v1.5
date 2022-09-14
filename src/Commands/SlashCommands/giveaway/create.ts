@@ -10,8 +10,8 @@ export default async (
     language,
     lan: lang,
   }: {
-    language: typeof import('../../../Languages/lan-en.json');
-    lan: typeof import('../../../Languages/lan-en.json')['slashCommands']['giveaway'];
+    language: typeof import('../../../Languages/en.json');
+    lan: typeof import('../../../Languages/en.json')['slashCommands']['giveaway'];
   },
 ) => {
   if (!cmd.guild) return;
@@ -132,8 +132,8 @@ export default async (
 
 const createGiveaway = (
   cmd: CT.CommandInteraction,
-  lan: typeof import('../../../Languages/lan-en.json')['slashCommands']['giveaway']['create'],
-  language: typeof import('../../../Languages/lan-en.json'),
+  lan: typeof import('../../../Languages/en.json')['slashCommands']['giveaway']['create'],
+  language: typeof import('../../../Languages/en.json'),
   description: string,
   role: Eris.Role | null | undefined,
   endtime: number,

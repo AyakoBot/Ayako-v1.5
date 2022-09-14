@@ -5,7 +5,7 @@ import type DBT from '../../../typings/DataBaseTypings';
 export default async (
   member: Eris.Member,
   guild: Eris.Guild,
-  language: typeof import('../../../Languages/lan-en.json'),
+  language: typeof import('../../../Languages/en.json'),
 ) => {
   const verificationRow = await client.ch
     .query('SELECT * FROM verification WHERE guildid = $1 AND active = $2;', [guild.id, true])

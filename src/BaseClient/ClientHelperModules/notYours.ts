@@ -4,7 +4,7 @@ import reply from './reply';
 
 export default (
   interaction: Eris.CommandInteraction | Eris.ComponentInteraction,
-  language: typeof import('../../Languages/lan-en.json'),
+  language: typeof import('../../Languages/en.json'),
 ) => {
   const embed: Eris.Embed = {
     type: 'rich',

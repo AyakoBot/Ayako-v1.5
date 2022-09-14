@@ -97,7 +97,7 @@ const run = async ({
     guildid: string;
   };
   linkObject: LinkObject;
-  lan: typeof import('../../../Languages/lan-en.json')['antivirus'];
+  lan: typeof import('../../../Languages/en.json')['antivirus'];
   includedBadLink: boolean;
   check: boolean;
   blacklist: string[];

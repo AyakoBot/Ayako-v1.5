@@ -10,7 +10,7 @@ interface Data {
   guildroles: Map<string, Eris.Role>;
   highest: Eris.Role;
   res: DBT.roleseparator[];
-  language: typeof import('../../../Languages/lan-en.json');
+  language: typeof import('../../../Languages/en.json');
 }
 
 parentPort?.on('message', (data: Data) => {

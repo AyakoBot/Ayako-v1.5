@@ -12,7 +12,7 @@ export default async (
     | Eris.Message<Eris.TextableChannel>
     | void,
   bits: bigint | number,
-  language: typeof import('../../Languages/lan-en.json'),
+  language: typeof import('../../Languages/en.json'),
   me?: boolean,
 ) => {
   const { default: client } = await import('../ErisClient');

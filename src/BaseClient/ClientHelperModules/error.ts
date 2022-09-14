@@ -6,7 +6,7 @@ import constants from '../Other/Constants.json' assert { type: 'json' };
 export default (
   msg: Eris.Message | Eris.CommandInteraction | Eris.ComponentInteraction,
   content: string,
-  language: typeof import('../../Languages/lan-en.json'),
+  language: typeof import('../../Languages/en.json'),
   m?: Eris.Message,
 ) => {
   const embed: Eris.EmbedOptions = {

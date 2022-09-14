@@ -1,6 +1,6 @@
 import ChannelRules from '../Other/ChannelRules';
 
-export default (bits: number, lan: typeof import('../../Languages/lan-en.json')) => {
+export default (bits: number, lan: typeof import('../../Languages/en.json')) => {
   if (!bits) return [];
   const BitField = new ChannelRules(bits);
   const Rules = [];
