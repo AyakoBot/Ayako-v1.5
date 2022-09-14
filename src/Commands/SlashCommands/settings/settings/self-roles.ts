@@ -28,7 +28,7 @@ const setting: CT.MultiSettings = {
             ? `${client.stringEmotes.enabled} ${baseObject.language.Enabled}`
             : `${client.stringEmotes.disabled} ${baseObject.language.Disabled}`
         }`,
-        value: `${baseObject.language.name}: ${setting.name}`,
+        value: `${baseObject.language.name}: ${r.name || baseObject.language.none}`,
         inline: true,
       });
     }
