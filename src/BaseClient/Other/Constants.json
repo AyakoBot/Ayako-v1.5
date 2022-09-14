@@ -476,6 +476,23 @@
         }
       ],
       "settings": {
+        "logs": {
+          "emojievents": "channels",
+          "guildevents": "channels",
+          "inviteevents": "channels",
+          "messageevents": "channels",
+          "modlogs": "channels",
+          "roleevents": "channels",
+          "userevents": "channels",
+          "voiceevents": "channels",
+          "webhookevents": "channels",
+          "settingslog": "channels",
+          "channelevents": "channels",
+          "stickerevents": "channels",
+          "threadevents": "channels",
+          "guildmemberevents": "channels",
+          "stageevents": "channels"
+        },
         "overview": {
           "prefix": "string",
           "interactionsmode": "boolean",

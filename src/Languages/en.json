@@ -609,6 +609,70 @@
         "prefix": "Assign a custom Prefix to Ayako"
       },
       "settings": {
+        "logs": {
+          "ayako": "Ayako Logs",
+          "guild": "Discord Logs",
+          "emojievents": {
+            "name": "Emoji Events",
+            "desc": "Log-Channels for changes to this Servers Emojis"
+          },
+          "guildevents": {
+            "name": "Server Events",
+            "desc": "Log-Channels for changes to this Server"
+          },
+          "inviteevents": {
+            "name": "Invite Events",
+            "desc": "Log-Channels for changes to this Servers Invites"
+          },
+          "messageevents": {
+            "name": "Message Events",
+            "desc": "Log-Channels for changes to Messages"
+          },
+          "modlogs": {
+            "name": "Mod Log",
+            "desc": "Log-Channels for Mod Commands"
+          },
+          "roleevents": {
+            "name": "Role Events",
+            "desc": "Log-Channels for changes to this Servers Roles"
+          },
+          "userevents": {
+            "name": "User Events",
+            "desc": "Log-Channels for changes to Users"
+          },
+          "voiceevents": {
+            "name": "Voice Events",
+            "desc": "Log-Channels for changes to Voice States"
+          },
+          "webhookevents": {
+            "name": "Emoji Events",
+            "desc": "Log-Channels for changes to this Servers Webhooks"
+          },
+          "settingslog": {
+            "name": "Setting Log",
+            "desc": "Log-Channels for changes to this Ayakos Settings"
+          },
+          "channelevents": {
+            "name": "Channel Events",
+            "desc": "Log-Channels for changes to this Servers Channels"
+          },
+          "stickerevents": {
+            "name": "Sticker Events",
+            "desc": "Log-Channels for changes to this Servers Stickers"
+          },
+          "threadevents": {
+            "name": "Thread Events",
+            "desc": "Log-Channels for changes to Threads"
+          },
+          "guildmemberevents": {
+            "name": "Member Events",
+            "desc": "Log-Channels for changes to Members"
+          },
+          "stageevents": {
+            "name": "Stage Events",
+            "desc": "Log-Channels for changes to Stages"
+          }
+        },
         "prefix": {},
         "language": {},
         "overview": {

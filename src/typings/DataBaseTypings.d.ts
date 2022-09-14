@@ -262,7 +262,6 @@ export type logchannels = {
   webhookevents?: string[];
   settingslog?: string[];
   channelevents?: string[];
-  stageinstanceevents?: string[];
   stickerevents?: string[];
   threadevents?: string[];
   guildmemberevents?: string[];
