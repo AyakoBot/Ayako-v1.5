@@ -49,7 +49,7 @@ const setting: CT.MultiSettings = {
       },
       {
         name: lan.name.name,
-        value: `${settings.name}`,
+        value: `${settings.name || baseObject.language.none}`,
         inline: false,
       },
       {
