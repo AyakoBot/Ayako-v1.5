@@ -17,6 +17,7 @@ const editor: CT.Editor = {
     'user',
     'strings',
     'command',
+    'string',
   ],
   run: async (cmd, oldRow, typeOfField) => {
     if (!cmd.guildID) return null;
