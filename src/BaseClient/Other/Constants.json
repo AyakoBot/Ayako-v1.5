@@ -674,6 +674,10 @@
           "warnamount": "number",
           "punishment": "punishment",
           "duration": "duration"
+        },
+        "level-roles": {
+          "level": "number",
+          "roles": "roles"
         }
       },
       "tableNames": {
@@ -729,10 +733,10 @@
         "selfroles": [{ "ident": "name", "type": "text" }],
         "separators": [{ "ident": "name", "type": "text" }],
         "auto-punish": [{ "ident": "warnamount", "type": "text" }],
-        "levelroles": [{ "ident": "level", "type": "text" }],
-        "multiroles": [{ "ident": "multiplier", "type": "text" }],
-        "ruleschannels": [],
-        "multichannels": [{ "ident": "multiplier", "type": "text" }]
+        "level-roles": [{ "ident": "level", "type": "text" }],
+        "leveling-multi-roles": [{ "ident": "multiplier", "type": "text" }],
+        "level-rules-channels": [],
+        "leveling-multi-channels": [{ "ident": "multiplier", "type": "text" }]
       },
       "relatedSettings": {
         "anti-spam": ["anti-spam-punishments"],
@@ -740,7 +744,12 @@
         "anti-virus": ["anti-virus-punishments"],
         "anti-virus-punishments": ["anti-virus"],
         "blacklist": ["blacklist-punishments"],
-        "blacklist-punishments": ["blacklist"]
+        "blacklist-punishments": ["blacklist"],
+        "level-roles": ["leveling", "leveling-multi-channels", "multiroles", "level-rules-channels"],
+        "leveling": ["leveling-multi-roles", "leveling-multi-channels", "multiroles", "level-rules-channels"],
+        "leveling-multi-channels": ["leveling-multi-roles", "leveling", "multiroles", "level-rules-channels"],
+        "leveling-multi-roles": ["leveling-multi-roles", "leveling", "leveling-multi-channels", "level-rules-channels"],
+        "level-rules-channels": ["leveling-multi-roles", "leveling", "leveling-multi-channels", "multiroles"]
       }
     }
   }

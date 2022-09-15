@@ -608,6 +608,16 @@
         "prefix": "Assign a custom Prefix to Ayako"
       },
       "settings": {
+        "level-roles": {
+          "level": {
+            "name": "Level",
+            "desc": "Level required to gain this Role"
+          },
+          "roles": {
+            "name": "Roles",
+            "desc": "Roles given to the Member who reached this Level"
+          }
+        },
         "welcome": {
           "channelid": {
             "name": "Channel",
@@ -1587,7 +1597,6 @@
     "Boost18": "Boosting since at least 18 Months",
     "Boost24": "Boosting since at least 24 Months"
   },
-
   "features": {
     "ANIMATED_ICON": "`Animated Icon` `(Server can set an animated Server Icon)`",
     "ANIMATED_BANNER": "`Animated Banner` `(Server can set an animated Server Banner)`",
@@ -1744,5 +1753,6 @@
   "Command": "Command",
   "Type": "Type",
   "noAliases": "No Aliases",
-  "Default": "Default"
+  "Default": "Default",
+  "Level": "Level"
 }
