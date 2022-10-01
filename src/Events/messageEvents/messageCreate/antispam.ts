@@ -46,28 +46,38 @@ export default async (msg: CT.Message) => {
       m.author === msg.author.id,
   );
 
-  authorCache.push(msg.author.id);
-
   const normalMatches = messageCache.filter(
     (m) => m.time > Date.now() - Number(antispam.timeout) && m.author === msg.author.id,
   );
 
   if (
-    dupeMatches.length === Number(antispam.dupemsgthreshold) ||
-    normalMatches.length === Number(antispam.msgthreshold)
+    (dupeMatches.length === Number(antispam.dupemsgthreshold) - 3 ||
+      normalMatches.length === Number(antispam.msgthreshold) - 3) &&
+    !authorCache.includes(msg.author.id)
   ) {
     softwarn(msg);
+    authorCache.push(msg.author.id);
     return;
   }
 
-  const matches =
-    normalMatches.length > dupeMatches.length ? normalMatches.length : dupeMatches.length;
+  if (
+    dupeMatches.length < Number(antispam.dupemsgthreshold) &&
+    normalMatches.length < Number(antispam.msgthreshold)
+  ) {
+    return;
+  }
+
+  authorCache.push(msg.author.id);
 
   if (
     (normalMatches.length - Number(antispam.msgthreshold)) % 3 === 0 ||
     (dupeMatches.length - Number(antispam.dupemsgthreshold)) % 3 === 0
   ) {
-    deleteMessages(msg, matches, antispam);
+    deleteMessages(
+      msg,
+      normalMatches.length > dupeMatches.length ? normalMatches.length : dupeMatches.length,
+      antispam,
+    );
     runPunishment(msg);
   }
 };
