@@ -185,22 +185,26 @@ export type level = {
 export type leveling = {
   guildid: string;
   active: boolean;
+
+  xppermsg: string;
   xpmultiplier: string;
+  rolemode: boolean;
+
+  lvlupmode?: string;
+  lvlupemotes?: (string | string)[];
+  lvlupdeltimeout?: string;
+  embed?: string;
+  lvlupchannels?: string[];
+
+  ignoreprefixes: boolean;
+  prefixes?: string[];
   blchannels?: string[];
+
   blroles?: string[];
   blusers?: string[];
   wlchannels?: string[];
   wlroles?: string[];
   wlusers?: string[];
-  xppermsg: string;
-  rolemode: boolean;
-  lvlupmode?: string;
-  lvlupdeltimeout?: string;
-  lvlupchannels?: string[];
-  lvlupemotes?: (string | string)[];
-  embed?: string;
-  ignoreprefixes: boolean;
-  prefixes?: string[];
 };
 
 export type levelingmultiplierchannels = {

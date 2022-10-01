@@ -579,7 +579,11 @@
         "language": "Language",
         "overview": "Overview",
         "prefix": "Prefix",
-        "seprators": "Role Separators"
+        "seprators": "Role Separators",
+        "leveling-multi-roles": "Leveling Multi-Roles",
+        "leveling-multi-channels": "Leveling Multi-Channels",
+        "level-roles": "Level Roles",
+        "level-rules-channels": "Leveling Rules-Channels"
       },
       "settingsDescriptions": {
         "anti-spam": "Stopping Members from spamming in the Server",
@@ -608,6 +612,74 @@
         "prefix": "Assign a custom Prefix to Ayako"
       },
       "settings": {
+        "leveling": {
+          "stack": "Stack",
+          "replace": "Replace",
+          "react": "React",
+          "silent": "Silent",
+          "embed": {
+            "name": "Embed",
+            "desc": "Embed to use for Level-Up Messages"
+          },
+          "xpmultiplier": {
+            "name": "XP Multiplier",
+            "desc": "Multiplier applied to `XP per Message`"
+          },
+          "xppermsg": {
+            "name": "XP per Message",
+            "desc": "XP added to a User per counted Message"
+          },
+          "rolemode": {
+            "name": "Role Mode"
+          },
+          "lvlupmode": {
+            "name": "Level-Up Mode",
+            "desc": "Embed | Reactions | Silent"
+          },
+          "lvlupdeltimeout": {
+            "name": "Delete Timeout",
+            "desc": "Time after which the Level-Up Message or Level-Up Reactions are deleted"
+          },
+          "lvlupchannels": {
+            "name": "Level-Up Channels",
+            "desc": "Channels in which Level-Up Messages are posted. If none are set the Level-Up Message will be posted as reply to the Message which caused the Level-Up"
+          },
+          "ignoreprefixes": {
+            "name": "Ignore Prefixes"
+          },
+          "prefixes": {
+            "name": "Prefixes",
+            "desc": "If any of the provided Prefixes is used, the Message is not awarded any XP"
+          },
+          "blchannels": {
+            "name": "Blacklisted Channels",
+            "desc": "Channels ignored by Ayako Leveling"
+          },
+          "blusers": {
+            "name": "Blacklisted Users",
+            "desc": "Users ignored by Ayako Leveling"
+          },
+          "blroles": {
+            "name": "Blacklisted Roles",
+            "desc": "Roles ignored by Ayako Leveling"
+          },
+          "wlchannels": {
+            "name": "Whitelisted Channels",
+            "desc": "Channels ignored by Ayako Anti-Spam"
+          },
+          "wlusers": {
+            "name": "Whitelisted Users",
+            "desc": "Users ignored by Ayako Anti-Spam"
+          },
+          "wlroles": {
+            "name": "Whitelisted Roles",
+            "desc": "Roles ignored by Ayako Anti-Spam"
+          },
+          "lvlupemotes": {
+            "name": "Reactions",
+            "desc": "The Reactions added to a Message on Level-Up"
+          }
+        },
         "level-roles": {
           "level": {
             "name": "Level",

@@ -476,6 +476,25 @@
         "separators": ["https://youtu.be/yLKgn-Ecduc"]
       },
       "settings": {
+        "leveling": {
+          "active": "boolean",
+          "xppermsg": "number",
+          "xpmultiplier": "number",
+          "rolemode": "boolean",
+          "lvlupmode": "lvlupmode",
+          "lvlupemotes": "emotes",
+          "lvlupdeltimeout": "seconds",
+          "embed": "embed",
+          "lvlupchannels": "channels",
+          "ignoreprefixes": "boolean",
+          "prefixes": "strings",
+          "blchannels": "channels",
+          "blroles": "roles",
+          "blusers": "usersy",
+          "wlchannels": "channels",
+          "wlroles": "roles",
+          "wlusers": "users"
+        },
         "welcome": {
           "channelid": "channel",
           "active": "boolean",
@@ -745,11 +764,38 @@
         "anti-virus-punishments": ["anti-virus"],
         "blacklist": ["blacklist-punishments"],
         "blacklist-punishments": ["blacklist"],
-        "level-roles": ["leveling", "leveling-multi-channels", "multiroles", "level-rules-channels"],
-        "leveling": ["leveling-multi-roles", "leveling-multi-channels", "multiroles", "level-rules-channels"],
-        "leveling-multi-channels": ["leveling-multi-roles", "leveling", "multiroles", "level-rules-channels"],
-        "leveling-multi-roles": ["leveling-multi-roles", "leveling", "leveling-multi-channels", "level-rules-channels"],
-        "level-rules-channels": ["leveling-multi-roles", "leveling", "leveling-multi-channels", "multiroles"]
+        "level-roles": [
+          "leveling",
+          "leveling-multi-channels",
+          "level-rules-channels",
+          "leveling-multi-roles"
+        ],
+        "leveling": [
+          "leveling-multi-roles",
+          "leveling-multi-channels",
+          "level-roles",
+          "level-rules-channels"
+        ],
+        "leveling-multi-channels": [
+          "leveling-multi-roles",
+          "leveling",
+          "level-roles",
+          "level-rules-channels"
+        ],
+        "leveling-multi-roles": [
+          "leveling-multi-roles",
+          "leveling",
+          "level-roles",
+          "leveling-multi-channels",
+          "level-rules-channels"
+        ],
+        "level-rules-channels": [
+          "leveling-multi-roles",
+          "leveling",
+          "leveling-multi-channels",
+          "multiroles",
+          "level-roles"
+        ]
       }
     }
   }
