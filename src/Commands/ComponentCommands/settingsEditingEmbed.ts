@@ -8,7 +8,8 @@ export default async (
   cmd: CT.ComponentInteraction,
   row: CT.BasicReturnType,
   editor: CT.Editor,
-  command: Eris.ApplicationCommand,
+  command?: Eris.ApplicationCommand,
+  type?: 'users' | 'user' | 'channel' | 'channels' | 'role' | 'roles',
 ): Promise<Eris.Embed> => {
   const [, , , , name, field] = cmd.data.custom_id.split(/_/g);
 
@@ -24,7 +25,13 @@ export default async (
     fields: [
       {
         name: '\u200b',
-        value: client.ch.stp(cmd.language.slashCommands.settings.useToEdit, { command }),
+        value: command
+          ? client.ch.stp(cmd.language.slashCommands.settings.useToEdit, { command })
+          : client.ch.stp(cmd.language.slashCommands.settings.selMenu, {
+              type: cmd.language.slashCommands.settings.types[
+                type as keyof typeof cmd.language.slashCommands.settings.types
+              ],
+            }),
         inline: false,
       },
     ],

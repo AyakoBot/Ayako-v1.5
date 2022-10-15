@@ -539,6 +539,15 @@
       "editingAuthor": "Editing Ayako Settings",
       "commandDesc": "Use this Command to edit your currently selected Setting",
       "useToEdit": "Use </{{command.name}}:{{command.id}}> to edit this Setting",
+      "selMenu": "Select the {{type}} you want to add or remove in the Select Menu below",
+      "types": {
+        "channel": "Channel",
+        "user": "User",
+        "role": "Role",
+        "channels": "Channels",
+        "users": "Users",
+        "roles": "Roles"
+      },
       "colorNames": {
         "other": "Other",
         "roles": "Roles",

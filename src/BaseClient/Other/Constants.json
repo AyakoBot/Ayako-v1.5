@@ -425,6 +425,13 @@
         "channels": "🟢",
         "chats": "🟡"
       },
+      "selectMenuTypes": {
+        "text": 3,
+        "user": 5,
+        "role": 6,
+        "all": 7,
+        "channels": 8
+      },
       "categories": [
         {
           "name": "auto-moderation",

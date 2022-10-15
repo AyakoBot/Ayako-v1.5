@@ -1,24 +1,11 @@
 import type * as Eris from 'eris';
-import fs from 'fs';
 import client from '../../../BaseClient/ErisClient';
 import type CT from '../../../typings/CustomTypings';
 import InteractionCollector from '../../../BaseClient/Other/InteractionCollector';
 import SlashCommandCollector from '../../../BaseClient/Other/SlashCommandCollector';
 
 const editor: CT.Editor = {
-  handles: [
-    'channels',
-    'roles',
-    'users',
-    'number',
-    'punishment',
-    'channel',
-    'role',
-    'user',
-    'strings',
-    'command',
-    'string',
-  ],
+  handles: ['number', 'punishment', 'strings', 'command', 'string'],
   run: async (cmd, oldRow, typeOfField) => {
     if (!cmd.guildID) return null;
     if (!cmd.guild) return null;
@@ -34,7 +21,7 @@ const editor: CT.Editor = {
     const type = settingsType[field as keyof typeof settingsType];
     if (!type) throw new Error(`Missing type for "${type}" in "${name}"`);
 
-    const managedEditor = await getManagedEditor(typeOfField);
+    const managedEditor = await (await import('./getManagedEditor')).default(typeOfField);
     if (!managedEditor) throw new Error(`Managed Editor for "${typeOfField}" not found`);
 
     const command = await client.createGuildCommand(cmd.guildID, {
@@ -88,7 +75,7 @@ const handleCollectors = async (
   oldRow: CT.BasicReturnType,
   c: Eris.ApplicationCommand,
 ): Promise<CT.BasicReturnType | null> => {
-  let finishedData = getFinishedData(oldRow, field, c);
+  let finishedData = (await import('./getFinishedData')).default(oldRow, field, c);
   const newRow: CT.BasicReturnType = {};
 
   Object.entries(oldRow).forEach(([k, v]) => {
@@ -174,43 +161,4 @@ const handleCollectors = async (
       cmd.message.edit({ embeds: [embed] }).catch(() => null);
     });
   });
-};
-
-const getManagedEditor = async (type: string) => {
-  const isDisallowed = (file: string) =>
-    ['.d.ts', '.d.ts.map', '.js.map'].some((end) => file.endsWith(end));
-
-  const dir = `${process.cwd()}/dist/Commands/ComponentCommands/editors`;
-  const files = fs.readdirSync(dir).filter((f) => !isDisallowed(dir) && f.endsWith('.js'));
-  const possibleFiles = await Promise.all(files.map((f) => import(`${dir}/${f}`)));
-
-  const file: CT.ManagedEditor | undefined | null = files
-    .map((f, i) => {
-      const { default: possibleFile }: { default: CT.ManagedEditor } = possibleFiles[i];
-
-      if (f.replace('.js', '').replace('-managed', '') === type) return possibleFile;
-      return null;
-    })
-    .filter((f) => !!f)
-    .shift();
-
-  return file;
-};
-
-const getFinishedData = (oldRow: CT.BasicReturnType, field: string, c: Eris.ApplicationCommand) => {
-  const f = oldRow[field as keyof typeof oldRow];
-
-  if (
-    Number(c.options?.length) > 1 &&
-    !(
-      (c.options?.[0] as Eris.InteractionDataOptionsSubCommandGroup)
-        ?.options as Eris.InteractionDataOptionsString[]
-    )?.length
-  ) {
-    if (!f) return [];
-    return f;
-  }
-
-  if (!f) return null;
-  return f;
 };
