@@ -20,8 +20,9 @@ module.exports = {
       statcord.autopost();
     }
 
-    jobs.scheduleJob('*/1 */1 */1 * *', () => {
+    jobs.scheduleJob('0 0 * * * *', () => {
       require('./nitroCycle')();
+      require('./serverReminder')();
 
       if (client.user.id === client.mainID) {
         require('./WebsiteFetcher')();
@@ -51,8 +52,9 @@ module.exports = {
     require('./disboard')();
     require('./separators')();
     require('./inviteLogger')();
+    require('./websiteUserFetch')();
     setTimeout(() => {
-    //  process.exit();
+      //  process.exit();
     }, 86400000);
   },
 };

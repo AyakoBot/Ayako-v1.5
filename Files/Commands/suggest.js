@@ -6,7 +6,7 @@ module.exports = {
   perm: null,
   dm: false,
   takesFirstArg: true,
-  aliases: [],
+  aliases: ['suggestion'],
   type: 'util',
   execute: async (msg) => {
     const isEnabled = await getSettings(msg);

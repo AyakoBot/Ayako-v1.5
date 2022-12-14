@@ -38,14 +38,14 @@ module.exports = {
                     .setAuthor({
                       name: 'Mega Giveaway!',
                       iconURL:
-                        'https://cdn.discordapp.com/attachments/764376037751521290/987061511769964634/unknown.png',
+                        'https://www.pngitem.com/pimgs/m/279-2798947_transparent-world-of-tanks-logo-png-world-of.png',
                       url: msg.client.constants.standard.invite,
                     })
                     .setDescription('**You already entered the Giveaway!**')
                     .setColor(16776960)
                     .addFields(
                       '\u200b',
-                      '[Click here to get to the Giveaway](https://clik.cc/A3KLb/)',
+                      '[Click here to get to the Giveaway](https://tanks.ly/3Ett0cE/)',
                     )
                     .setTimestamp();
                   await msg.author.send(embed).catch(() => {});
@@ -55,7 +55,7 @@ module.exports = {
                   .setAuthor({
                     name: 'Mega Giveaway!',
                     iconURL:
-                      'https://cdn.discordapp.com/attachments/764376037751521290/987061511769964634/unknown.png',
+                      'https://www.pngitem.com/pimgs/m/279-2798947_transparent-world-of-tanks-logo-png-world-of.png',
                     url: msg.client.constants.standard.invite,
                   })
                   .setDescription('**Your submission was accepted!**\nGood Luck!')
@@ -72,7 +72,7 @@ module.exports = {
                   .setAuthor({
                     name: 'Mega Giveaway!',
                     iconURL:
-                      'https://cdn.discordapp.com/attachments/764376037751521290/987061511769964634/unknown.png',
+                      'https://www.pngitem.com/pimgs/m/279-2798947_transparent-world-of-tanks-logo-png-world-of.png',
                     url: msg.client.constants.standard.invite,
                   })
                   .setDescription('**Your submission was accepted!**\nGood Luck!')
@@ -100,7 +100,7 @@ module.exports = {
                 .setAuthor({
                   name: 'Mega Giveaway!',
                   iconURL:
-                    'https://cdn.discordapp.com/attachments/764376037751521290/987061511769964634/unknown.png',
+                    'https://www.pngitem.com/pimgs/m/279-2798947_transparent-world-of-tanks-logo-png-world-of.png',
                   url: msg.client.constants.standard.invite,
                 })
                 .setDescription('**Your submission was rejected!**')
@@ -110,7 +110,7 @@ module.exports = {
                     '[Click here to get to the requirements](https://canary.discord.com/channels/108176345204264960/979811225212956722/979819370102542436)',
                 })
                 .setColor(16711680)
-                // .addFields('\u200b', '[Click here to get to the Giveaway](https://clik.cc/A3KLb/)')
+                // .addFields('\u200b', '[Click here to get to the Giveaway](https://tanks.ly/3Ett0cE/)')
                 .setTimestamp();
               await ch.send(msg.author, { embeds: [embed] });
             }

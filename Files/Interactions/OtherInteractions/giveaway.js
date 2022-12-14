@@ -25,17 +25,19 @@ module.exports = {
       cmd.client.ch.reply(cmd, { embeds: [embed], ephemeral: true });
     } else {
       giveaway.participants.push(cmd.user.id);
+
       const embed = new Builders.UnsafeEmbedBuilder()
         .setColor(cmd.client.constants.colors.success)
         .setDescription(lan.entered);
 
-      cmd.client.ch.reply(cmd, { embeds: [embed], ephemeral: true });
+      await cmd.client.ch.reply(cmd, { embeds: [embed], ephemeral: true });
     }
 
     const embed = new Builders.UnsafeEmbedBuilder(cmd.message.embeds[0].data).setTitle(
       `${giveaway.participants.length} ${lan.participants}`,
     );
-    await cmd.client.ch.edit(cmd.message, { embeds: [embed] });
+
+    cmd.client.ch.edit(cmd.message, { embeds: [embed] });
 
     await cmd.client.ch.query(
       `UPDATE giveaways SET participants = $1 WHERE msgid = $2 AND guildid = $3;`,

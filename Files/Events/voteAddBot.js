@@ -95,13 +95,10 @@ const roleReward = async (voteData) => {
   );
 };
 
-const removeRoles = (userid, delTime, member, guild, votedid) => {
+const removeRoles = async (userid, delTime, m, guild, votedid) => {
+  if (!m) return;
+  const member = await guild.members.fetch(m.id).catch(() => {});
   if (!member) return;
-  const roles = [
-    guild.roles.cache.get('327424359016824842'),
-    guild.roles.cache.get('910079633477730364'),
-    guild.roles.cache.get('910079643267252235'),
-  ];
 
   client.ch.query(`DELETE FROM voterewards WHERE userid = $1 AND removetime = $2 AND voted = $3;`, [
     userid,
@@ -109,9 +106,27 @@ const removeRoles = (userid, delTime, member, guild, votedid) => {
     votedid,
   ]);
 
-  if (member.roles.cache.has(roles[2].id)) member.roles.remove(roles[2].id).catch(() => {});
-  else if (member.roles.cache.has(roles[1].id)) member.roles.remove(roles[1].id).catch(() => {});
-  else if (member.roles.cache.has(roles[0].id)) member.roles.remove(roles[0].id).catch(() => {});
+  if (member.roles.cache.has('910079643267252235')) {
+    // eslint-disable-next-line no-console
+    console.log(
+      `Removing ${guild.roles.cache.get('910079643267252235').name} from ${member.displayName}`,
+    );
+
+    member.roles.remove('910079643267252235').catch(() => {});
+  } else if (member.roles.cache.has('910079633477730364')) {
+    // eslint-disable-next-line no-console
+    console.log(
+      `Removing ${guild.roles.cache.get('910079633477730364').name} from ${member.displayName}`,
+    );
+
+    member.roles.remove('910079633477730364').catch(() => {});
+  } else if (member.roles.cache.has('327424359016824842')) {
+    // eslint-disable-next-line no-console
+    console.log(
+      `Removing ${guild.roles.cache.get('327424359016824842').name} from ${member.displayName}`,
+    );
+    member.roles.remove('327424359016824842').catch(() => {});
+  }
 };
 
 const announcement = async (voter, usedRole) => {

@@ -64,7 +64,8 @@
     "10": { "name": "NewsThread", "id": "946325567513440367", "animated": false },
     "11": { "name": "Thread", "id": "946108238661820466", "animated": false },
     "12": { "name": "Thread", "id": "946108238661820466", "animated": false },
-    "13": { "name": "Stage", "id": "946108238791843851", "animated": false }
+    "13": { "name": "Stage", "id": "946108238791843851", "animated": false },
+    "15": { "name": "Forum", "id": "1024678588747878551", "animated": false }
   },
   "cross": {
     "name": "Cross",

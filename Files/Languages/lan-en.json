@@ -414,7 +414,7 @@
       "reason": "Automatically Un-Muted"
     },
     "disboard": {
-      "desc": "You can now Bump this Server again!\n\nPlease type `/bump`",
+      "desc": "You can now Bump this Server again!\n\nPlease type </bump:947088344167366698>",
       "title": "Ayako DISBOARD Bump Reminder"
     },
     "reminder": {

@@ -5,17 +5,13 @@ module.exports = async (member) => {
   if (member.guild.id === '366219406776336385') gv(member);
   if (member.guild.id !== '298954459172700181') return;
 
-  member.client.channels.cache
-    .get('805315908406870044')
-    .send({ content: `${member.user} Sorry for the ping ;(` })
-    .then((m) => m.delete());
-
   const content = `
 https://discord.gg/yUjy9Z2ahJ
-https://discord.gg/sST6whJbdN
 https://discord.gg/WGRbUwqkwG
 https://discord.gg/XmrQjfAdt3 
 https://discord.gg/PrEfFNG29x
+https://discord.gg/QjMDJTE2ns
+https://discord.gg/QK6AESTPCM
 `;
 
   member.user.send({ content }).catch(() => {});
@@ -26,6 +22,27 @@ https://discord.gg/PrEfFNG29x
       content: `${member.user} \`${member.user.id}\` has joined! <a:Wave:775409859339747349>`,
       allowedMentions: { users: [] },
     })
+    .catch(() => {});
+
+  const messages = [
+    `Hi ${member.user}, we're so excited to have you here! <:AMahhshit:767189664846708746>`,
+    `Oooh look! A cute ${member.user} has joined!~ <:AMlove5:709789932066963578>`,
+    `Can we be best friends, ${member.user}? <:AMblushgiggle:854718466821324850>`,
+    `The main character, ${member.user}, has appeared! <a:AMwavehigif:709789935070347296>`,
+    `Ayako's favorite ${member.user} just joined! <a:AMKokomiShy:888205118971994153>`,
+    `I'm so glad you finally arrived ${member.user} !! <a:AMpanic:709789939537150142>`,
+    `Welcome to your new fav server ${member.user}~ <:AMblush:709808103570538568>`,
+    `I'm happy you found us ${member.user}! <a:AMhyperneko:700772299120443464>`,
+    `Hi ${member.user}, new friendships await you here! <:AMhappu:342064276703412234>`,
+    `Having you here ${member.user} couldn't be more exciting! <:AMHeadpat:708130511561949234>`,
+  ];
+
+  const messageToSend = `${
+    messages[Math.floor(Math.random() * messages.length)]
+  }\nIntroduce yourself in <#763132467041140737> and customize your profile in <#845171979358044190>!`;
+  member.client.channels.cache
+    .get('298954459172700181')
+    .send({ content: messageToSend })
     .catch(() => {});
 };
 

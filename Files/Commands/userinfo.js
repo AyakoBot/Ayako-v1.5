@@ -112,6 +112,7 @@ module.exports = {
     if (botInfo) {
       userEmbed.addFields({ name: msg.language.description, value: botInfo.description });
     }
+
     if (userflags.length) {
       userEmbed.addFields({
         name: msg.lan.flags,
@@ -356,7 +357,7 @@ const getChannelOptions = (msg) => {
     new Builders.SelectMenuOptionBuilder()
       .setLabel(c.name)
       .setValue(c.id)
-      .setEmoji(msg.client.objectEmotes.channelTypes[c.type]),
+      .setEmoji(msg.client.objectEmotes.channelTypes[c.type] || undefined),
   );
   return options;
 };

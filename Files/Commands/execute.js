@@ -21,5 +21,12 @@ module.exports = {
   dm: true,
   takesFirstArg: false,
   type: 'owner',
-  execute: async (msg) => {},
+  execute: async (msg) => {
+    [`📣`, `🃏`, `🎊`].forEach((e) => {
+      msg.client.channels.cache
+        .get('1036036235149459506')
+        .messages.cache.get('1040364333558923307')
+        .react(e);
+    });
+  },
 };

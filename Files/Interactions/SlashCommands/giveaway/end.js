@@ -60,7 +60,7 @@ module.exports = {
     const lan = language.slashCommands.giveaway.end;
     const winners = await getWinners(guild, giveaway);
 
-    await editGiveaway(msg, giveaway, lan, winners, isReroll);
+    editGiveaway(msg, giveaway, lan, winners, isReroll);
 
     await client.ch.query(`UPDATE giveaways SET ended = true WHERE msgid = $1 AND guildid = $2;`, [
       msg.id,
