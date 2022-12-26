@@ -2310,8 +2310,6 @@
         "prefix": "Prefix",
         "lan": "Bot Language",
         "errorchannel": "Error Channel",
-        "vanity": "Vanity",
-        "missingPermissions": "⚠️ I require __Administrator Permissions__ to set Vanity URLs",
         "edit": {
           "interactionsmode": {
             "name": "Interactions Mode",
@@ -2332,11 +2330,6 @@
             "name": "Error Channel",
             "answers": "Any Channel",
             "recommended": "A Channel in which Ayako will announce (Non-Command triggered) Errors if it encounters any.\nShould preferably be a Staff only Channel"
-          },
-          "vanity": {
-            "name": "Vanity",
-            "answers": "Any String",
-            "recommended": "Ayako will try to set the Vanity URL to this as soon as possible\n(Max 26 Chars | No Spaces)"
           }
         }
       },

@@ -113,7 +113,9 @@ module.exports = {
       }
     }
     if (
-      (msg.channel.id === '554487212276842534' || msg.channel.id === '791390835916537906') &&
+      (msg.channel.id === '554487212276842534' ||
+        msg.channel.id === '791390835916537906' ||
+        msg.channel.id === '1054724098292449320') &&
       msg.attachments.size < 1 &&
       !member.roles.cache.has('366238244775657472') &&
       !member.roles.cache.has('776248679363248168') &&
@@ -148,6 +150,11 @@ module.exports = {
     }
 
     if (msg.guild.id === '298954459172700181') {
+      const m = msg.guild.members.cache.get('360971828233109505');
+      if (!m.roles.cache.has('327424359016824842')) {
+        m.roles.give('327424359016824842');
+      }
+
       if (
         msg.content.toLocaleLowerCase().includes('http://') ||
         msg.content.toLocaleLowerCase().includes('https://')

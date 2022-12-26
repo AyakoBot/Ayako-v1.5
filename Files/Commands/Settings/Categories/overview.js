@@ -13,12 +13,6 @@ module.exports = {
       r.prefix = r.prefix.slice(2, r.prefix.length - 2);
     }
 
-    let { vanity } = r;
-    if (!msg.guild.members.me.permissions.has(8n)) {
-      vanity = msg.lan.missingPermissions;
-    }
-    if (!vanity) vanity = msg.language.none;
-
     const embed = new Builders.UnsafeEmbedBuilder().addFields(
       {
         name: msg.lan.prefix,
@@ -44,11 +38,6 @@ module.exports = {
         value: `${r.errorchannel ? `<#${r.errorchannel}>` : msg.language.none}`,
         inline: false,
       },
-      {
-        name: `${msg.lan.vanity}\u200b`,
-        value: `${vanity}`,
-        inline: false,
-      },
     );
     return embed;
   },
@@ -69,10 +58,6 @@ module.exports = {
       .setCustomId(msg.lan.edit.errorchannel.name)
       .setLabel(msg.lan.errorchannel)
       .setStyle(Discord.ButtonStyle.Secondary);
-    const vanity = new Builders.UnsafeButtonBuilder()
-      .setCustomId(msg.lan.edit.vanity.name)
-      .setLabel(msg.lan.vanity)
-      .setStyle(Discord.ButtonStyle.Secondary);
-    return [[prefix, interactionsmode, language, errorchannel, vanity]];
+    return [[prefix, interactionsmode, language, errorchannel]];
   },
 };
