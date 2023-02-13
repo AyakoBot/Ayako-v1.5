@@ -24,7 +24,7 @@ module.exports = {
     const finishedRole = msg.guild.roles.cache.get(settings.finishedrole);
 
     if (pendingRole && member.roles.cache.has(pendingRole.id)) {
-      member.roles.remove(pendingRole).catch(() => {});
+      member.roles.remove(pendingRole, 'bypass').catch(() => {});
     }
 
     if (finishedRole && !member.roles.cache.has(finishedRole.id)) {

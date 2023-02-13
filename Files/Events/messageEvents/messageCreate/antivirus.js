@@ -189,7 +189,7 @@ const getBlocklist = () => {
 };
 
 const getWhitelist = () => {
-  const file = fs.readFileSync('/root/Bots/Website/CDN/antivirus/whitelisted.txt', {
+  const file = fs.readFileSync('/root/Bots/Ayako-VueJS/CDN/antivirus/whitelisted.txt', {
     encoding: 'utf8',
   });
   const whitelistRes = file ? file.split(/\n+/) : [];
@@ -198,7 +198,7 @@ const getWhitelist = () => {
 };
 
 const getBlacklist = () => {
-  const file = fs.readFileSync('/root/Bots/Website/CDN/antivirus/blacklisted.txt', {
+  const file = fs.readFileSync('/root/Bots/Ayako-VueJS/CDN/antivirus/blacklisted.txt', {
     encoding: 'utf8',
   });
   const blacklistRes = file ? file.split(/\n+/) : [];
@@ -207,7 +207,7 @@ const getBlacklist = () => {
 };
 
 const getBadLinks = () => {
-  const file = fs.readFileSync('/root/Bots/Website/CDN/antivirus/badLinks.txt', {
+  const file = fs.readFileSync('/root/Bots/Ayako-VueJS/CDN/antivirus/badLinks.txt', {
     encoding: 'utf8',
   });
   const badLinks = file ? file.split(/\n+/).filter((line) => !line.startsWith('//')) : [];
@@ -216,7 +216,7 @@ const getBadLinks = () => {
 };
 
 const getWhitelistCDN = () => {
-  const file = fs.readFileSync('/root/Bots/Website/CDN/antivirus/whitelistedCDN.txt', {
+  const file = fs.readFileSync('/root/Bots/Ayako-VueJS/CDN/antivirus/whitelistedCDN.txt', {
     encoding: 'utf8',
   });
   const whitelistCDNRes = file ? file.split(/\n+/) : [];
@@ -449,7 +449,7 @@ const newUrl = async ({ msg, lan, linkObject, check, language }, res) => {
 };
 
 const saveToBadLink = async (linkObject, msg, hrefLogging) => {
-  const file = fs.readFileSync('/root/Bots/Website/CDN/antivirus/badLinks.txt', {
+  const file = fs.readFileSync('/root/Bots/Ayako-VueJS/CDN/antivirus/badLinks.txt', {
     encoding: 'utf8',
   });
   const res = file ? file.split(/\n+/).map((entry) => entry.replace(/\r/g, '')) : [];
@@ -465,7 +465,7 @@ const saveToBadLink = async (linkObject, msg, hrefLogging) => {
     `);
 
     const appended = hrefLogging ? linkObject.href : linkObject.baseURL;
-    fs.appendFile('/root/Bots/Website/CDN/antivirus/badLinks.txt', `\n${appended}`, () => {});
+    fs.appendFile('/root/Bots/Ayako-VueJS/CDN/antivirus/badLinks.txt', `\n${appended}`, () => {});
 
     axios.post('https://yuri.bots.lostluma.dev/phish/report', {
       body: { url: appended, reason: 'Malicious' },

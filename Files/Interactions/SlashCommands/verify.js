@@ -262,7 +262,9 @@ module.exports = {
         .catch(() => {});
     }
 
-    if (cmd.r.finishedrole) cmd.member.roles.add(cmd.r.finishedrole).catch(() => {});
-    if (cmd.r.pendingrole) cmd.member.roles.remove(cmd.r.pendingrole).catch(() => {});
+    if (cmd.r.finishedrole) await cmd.member.roles.add(cmd.r.finishedrole).catch(() => {});
+    if (cmd.r.pendingrole) {
+      await cmd.member.roles.remove(cmd.r.pendingrole, 'verification').catch(() => {});
+    }
   },
 };

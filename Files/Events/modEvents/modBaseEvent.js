@@ -627,9 +627,12 @@ const takeAction = async (punishmentType, targetMember, executingMember, args, l
       break;
     }
     case 'banAdd': {
+      let deleteMessageDays = 7;
+      if (targetMember?.roles.cache.has('703694514035884162')) deleteMessageDays = 0;
+
       punished = await args.guild?.bans
         .create(args.target.id, {
-          deleteMessageDays: targetMember?.roles.cache.has('703694514035884162') ? 0 : 7,
+          deleteMessageDays,
           reason: `${args.executor.tag} ${args.reason ? `| ${args.reason}` : ''}`,
         })
         .catch((err) => {
@@ -640,7 +643,7 @@ const takeAction = async (punishmentType, targetMember, executingMember, args, l
     case 'softbanAdd': {
       punished = await args.guild?.bans
         .create(args.target.id, {
-          deleteMessageDays: targetMember?.roles.cache.has('703694514035884162') ? 0 : 7,
+          deleteMessageDays: 7,
           reason: `${args.executor.tag} ${args.reason ? `| ${args.reason}` : ''}`,
         })
         .catch((err) => {
@@ -658,9 +661,12 @@ const takeAction = async (punishmentType, targetMember, executingMember, args, l
       break;
     }
     case 'tempbanAdd': {
+      let deleteMessageDays = 7;
+      if (targetMember?.roles.cache.has('703694514035884162')) deleteMessageDays = 0;
+
       punished = await args.guild?.bans
         .create(args.target.id, {
-          deleteMessageDays: targetMember?.roles.cache.has('703694514035884162') ? 0 : 7,
+          deleteMessageDays,
           reason: `${args.executor.tag} ${args.reason ? `| ${args.reason}` : ''}`,
         })
         .catch((err) => {
@@ -810,7 +816,7 @@ const takeAction = async (punishmentType, targetMember, executingMember, args, l
       break;
     }
     case 'roleRemove': {
-      punished = targetMember?.roles.remove(args.role.id).catch((err) => {
+      punished = targetMember?.roles.remove(args.role.id, 'mod event').catch((err) => {
         error = err;
       });
       break;

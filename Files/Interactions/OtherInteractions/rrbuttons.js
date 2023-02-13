@@ -83,7 +83,7 @@ const takeRoles = async (cmd, reactionRow, baseRow, hasAnyOfRelated) => {
   }
 
   if (rolesToRemove.length) {
-    await cmd.member.roles.remove(rolesToRemove).catch(() => {});
+    await cmd.member.roles.remove(rolesToRemove, 'rr buttons').catch(() => {});
   }
   await cmd.deferUpdate().catch(() => {});
 };

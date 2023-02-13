@@ -5,6 +5,8 @@ const Builders = require('@discordjs/builders');
 // eslint-disable-next-line no-unused-vars
 const ms = require('ms');
 const util = require('util');
+// eslint-disable-next-line no-unused-vars
+const fs = require('fs');
 const auth = require('../BaseClient/auth.json');
 
 const reg = new RegExp(auth.token, 'g');

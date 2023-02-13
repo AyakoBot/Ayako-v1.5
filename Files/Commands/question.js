@@ -6,11 +6,11 @@ module.exports = {
   dm: false,
   takesFirstArg: true,
   aliases: ['ask', 'q', 'qotd'],
-  thisGuildOnly: ['298954459172700181'],
+  thisGuildOnly: ['298954459172700181', '1000271507303432274'],
   usage: ['question [qotd]'],
   type: 'fun',
   async execute(msg) {
-    if (msg.channel.id !== '715136490526474261') return;
+    if (!['715136490526474261', '1050885962248491129'].includes(msg.channel.id)) return;
     const e = new Builders.UnsafeEmbedBuilder()
       .setTitle('New Question of the Day!')
       .setColor(11599616)

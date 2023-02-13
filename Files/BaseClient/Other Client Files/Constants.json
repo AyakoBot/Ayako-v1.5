@@ -135,100 +135,100 @@
   },
   "guildUpdate": {
     "author": {
-      "image": ""
+      "image": null
     },
     "color": 16776960
   },
   "inviteCreate": {
     "author": {
-      "image": "",
+      "image": null,
       "link": "https://discord.com/channels/@me/{{user.id}}"
     },
     "color": 65280
   },
   "inviteDelete": {
     "author": {
-      "image": "",
+      "image": null,
       "link": "https://discord.com/channels/@me/{{user.id}}"
     },
     "color": 16711680
   },
   "messageDelete": {
     "author": {
-      "image": "",
+      "image": null,
       "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
     },
     "color": 16711680
   },
   "messageDeleteBulk": {
     "author": {
-      "image": "",
+      "image": null,
       "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}"
     },
     "color": 16711680
   },
   "messageReactionAddGiveaway": {
     "author": {
-      "image": ""
+      "image": null
     },
     "color": 16711680,
     "url": "https://discordapp.com/channels/{{reaction.message.guild.id}}/{{reaction.message.channel.id}}/{{reaction.message.id}}"
   },
   "messageReactionRemoveAll": {
     "author": {
-      "image": "",
+      "image": null,
       "link": "https://discordapp.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
     },
     "color": 16711680
   },
   "messageUpdateLogUpdate": {
     "author": {
-      "image": "",
+      "image": null,
       "link": "https://discordapp.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
     },
     "color": 16776960
   },
   "messageUpdateLogPublish": {
     "author": {
-      "image": "",
+      "image": null,
       "link": "https://discordapp.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
     },
     "color": 65280
   },
   "prune": {
     "author": {
-      "image": ""
+      "image": null
     },
     "color": 16711680
   },
   "roleCreate": {
     "author": {
-      "image": ""
+      "image": null
     },
     "color": 65280
   },
   "roleRemove": {
     "author": {
-      "image": ""
+      "image": null
     },
     "color": 16711680
   },
   "roleUpdate": {
     "author": {
-      "image": ""
+      "image": null
     },
     "color": 16776960
   },
   "userUpdate": {
     "author": {
-      "image": "",
+      "image": null,
       "link": "https://discord.com/channels/@me/{{user.id}}"
     },
     "color": 16776960
   },
   "voiceUpdate": {
     "author": {
-      "image": ""
+      "image": null
     },
     "color": 16776960,
     "joinColor": 65280,
@@ -236,19 +236,19 @@
   },
   "webhookCreate": {
     "author": {
-      "image": ""
+      "image": null
     },
     "color": 65280
   },
   "webhookUpdate": {
     "author": {
-      "image": ""
+      "image": null
     },
     "color": 16776960
   },
   "webhookDelete": {
     "author": {
-      "image": ""
+      "image": null
     },
     "color": 16711680
   },
@@ -256,28 +256,28 @@
     "color": 65280,
     "author": {
       "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673209342263296/commandCreate.png",
-      "link": ""
+      "link": null
     }
   },
   "commandDelete": {
     "color": 16711680,
     "author": {
       "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673209342263296/commandDelete.png",
-      "link": ""
+      "link": null
     }
   },
   "commandUpdate": {
     "color": 16776960,
     "author": {
       "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673221350162462/commandUpdate.png",
-      "link": ""
+      "link": null
     }
   },
   "antiraidMessage": {
     "color": 16711680,
     "author": {
       "image": "https://cdn.discordapp.com/attachments/760152457799401532/831673209342263296/Warning.png",
-      "link": ""
+      "link": null
     }
   },
   "discordMsgUrls": [
@@ -314,111 +314,111 @@
     "strike": {
       "color": 16711680,
       "author": {
-        "image": "",
+        "image": null,
         "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
       },
       "confirmEmbed": {
         "color": 16711680,
         "author": {
-          "image": ""
+          "image": null
         }
       }
     },
     "roleAdd": {
       "color": 65280,
       "author": {
-        "image": "",
+        "image": null,
         "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
       }
     },
     "roleRemove": {
       "color": 65280,
       "author": {
-        "image": "",
+        "image": null,
         "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
       }
     },
     "tempmuteAdd": {
       "color": 16711680,
       "author": {
-        "image": "",
+        "image": null,
         "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
       }
     },
     "tempbanAdd": {
       "color": 16711680,
       "author": {
-        "image": "",
+        "image": null,
         "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
       }
     },
     "muteRemove": {
       "color": 65280,
       "author": {
-        "image": "",
+        "image": null,
         "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
       }
     },
     "kickAdd": {
       "color": 16711680,
       "author": {
-        "image": "",
+        "image": null,
         "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
       }
     },
     "banAdd": {
       "color": 16711680,
       "author": {
-        "image": "",
+        "image": null,
         "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
       }
     },
     "softbanAdd": {
       "color": 16711680,
       "author": {
-        "image": "",
+        "image": null,
         "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
       }
     },
     "banRemove": {
       "color": 65280,
       "author": {
-        "image": "",
+        "image": null,
         "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
       }
     },
     "channelbanAdd": {
       "color": 16711680,
       "author": {
-        "image": "",
+        "image": null,
         "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
       }
     },
     "tempchannelbanAdd": {
       "color": 16711680,
       "author": {
-        "image": "",
+        "image": null,
         "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
       }
     },
     "channelbanRemove": {
       "color": 65280,
       "author": {
-        "image": "",
+        "image": null,
         "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
       }
     },
     "warnAdd": {
       "color": 16711680,
       "author": {
-        "image": "",
+        "image": null,
         "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
       }
     },
     "softwarnAdd": {
       "color": 16711680,
       "author": {
-        "image": "",
+        "image": null,
         "link": "https://discord.com/channels/{{msg.guild.id}}/{{msg.channel.id}}/{{msg.id}}"
       }
     }
@@ -466,13 +466,13 @@
       "methods": ["api", "lb", "lr"]
     },
     "userinfo": {
-      "authorImage": ""
+      "authorImage": null
     },
     "leaderboard": {
-      "authorImage": ""
+      "authorImage": null
     },
     "rank": {
-      "authorImage": ""
+      "authorImage": null
     },
     "afk": 16776960,
     "toxicityCheck": 16711680,
@@ -512,7 +512,7 @@
     "check": {
       "author": {
         "image": "https://ayakobot.com/cdn/Ayako_Assets/Warning.png",
-        "url": ""
+        "url": null
       }
     },
     "invite": {
@@ -1603,7 +1603,7 @@
           "cols": ["guildid, uniquetimestamp"],
           "vals": [["{{msg.guild.id}}", "{{values.uniquetimestamp}}"]],
           "add": [],
-          "ident": ""
+          "ident": null
         },
         "logs": {
           "cols": ["guildid"],
@@ -1640,7 +1640,9 @@
           "vals": [["{{msg.guild.id}}", false, false, false, false, false]]
         },
         "autopunish": {
-          "cols": ["guildid, active, uniquetimestamp, warnamount, confirmationreq, sendtof, duration"],
+          "cols": [
+            "guildid, active, uniquetimestamp, warnamount, confirmationreq, sendtof, duration"
+          ],
           "vals": [
             [
               "{{msg.guild.id}}",
@@ -1653,7 +1655,7 @@
             ]
           ],
           "add": ["warnamount"],
-          "ident": ""
+          "ident": null
         },
         "verification": {
           "cols": ["guildid, active, kickafter, kicktof, selfstart"],
@@ -1697,7 +1699,7 @@
           "cols": ["guildid, uniquetimestamp"],
           "vals": [["{{msg.guild.id}}", "{{values.uniquetimestamp}}"]],
           "add": [],
-          "ident": ""
+          "ident": null
         },
         "multichannels": {
           "cols": ["guildid, uniquetimestamp, multiplier"],

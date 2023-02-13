@@ -13,7 +13,7 @@ module.exports = async () => {
         const unverifiedRole = guild.roles.cache.get(r.pendingrole);
         if (unverifiedRole) {
           unverifiedRole.members.forEach(async (member) => {
-            if (member.joinedTimestamp < +Date.now() - r.kickafter * 60000) {
+            if (member.joinedTimestamp < Math.abs(Date.now() - Number(r.kickafter) * 60000)) {
               if (member.kickable) {
                 const language = await client.ch.languageSelector(guild);
                 const lan = language.verification;
@@ -30,15 +30,17 @@ module.exports = async () => {
         } else {
           const members = guild.members.cache.filter((m) => m.roles.cache.size === 1);
           members.forEach(async (member) => {
-            const language = await client.ch.languageSelector(guild);
-            const lan = language.verification;
+            if (member.joinedTimestamp < Math.abs(Date.now() - Number(r.kickafter) * 60000)) {
+              const language = await client.ch.languageSelector(guild);
+              const lan = language.verification;
 
-            const embed = getEmbed(guild, lan);
+              const embed = getEmbed(guild, lan);
 
-            const DM = await member.user.createDM().catch(() => {});
-            if (DM) await client.ch.send(DM, { embeds: [embed] });
+              const DM = await member.user.createDM().catch(() => {});
+              if (DM) await client.ch.send(DM, { embeds: [embed] });
 
-            member.kick(lan.kickReason).catch(() => {});
+              member.kick(lan.kickReason).catch(() => {});
+            }
           });
         }
       }

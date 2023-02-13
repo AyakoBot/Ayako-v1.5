@@ -45,7 +45,7 @@ module.exports = async () => {
     );
 
     if (rolesToAdd.length) member.roles.add(rolesToAdd).catch(() => {});
-    if (rolesToRemove.length) member.roles.remove(rolesToRemove).catch(() => {});
+    if (rolesToRemove.length) member.roles.remove(rolesToRemove, 'nitro cycle').catch(() => {});
 
     log(rolesToAdd, rolesToRemove, guild, settings, member.user, rawUser.days);
   });

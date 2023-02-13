@@ -1,14 +1,31 @@
 module.exports = async (msg) => {
-  if (msg.channel.id === '757879586439823440' && msg.author.id === '646937666251915264') {
+  if (
+    ['757879586439823440', '808095830677782558'].includes(msg.channel.id) &&
+    msg.author.id === '646937666251915264'
+  ) {
     if (msg.content.includes('since this server is currently active')) {
       msg.client.ch.reply(msg, {
-        content: '<@&893986129773207582> Karuta has dropped Cards! Move or lose.',
+        content: `<@&${
+          msg.guild.id === '298954459172700181' ? '1059212168962257068' : '893986129773207582'
+        }> Karuta has dropped Cards! Move or lose.`,
+        allowedMentions: {
+          roles: [
+            msg.guild.id === '298954459172700181' ? '1059212168962257068' : '893986129773207582',
+          ],
+        },
       });
     }
 
     if (msg.content.includes('A card from your wishlist is dropping')) {
       msg.client.ch.reply(msg, {
-        content: '<@&893986129773207582> a wished Card was dropped! Move or lose.',
+        content: `<@&${
+          msg.guild.id === '298954459172700181' ? '1059212168962257068' : '893986129773207582'
+        }> a wished Card was dropped! Move or lose.`,
+        allowedMentions: {
+          roles: [
+            msg.guild.id === '298954459172700181' ? '1059212168962257068' : '893986129773207582',
+          ],
+        },
       });
     }
   }

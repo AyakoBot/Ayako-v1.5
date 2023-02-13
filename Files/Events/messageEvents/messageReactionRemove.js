@@ -104,5 +104,5 @@ setInterval(() => {
   );
   indexes.forEach((index) => queue.splice(index, 1));
 
-  member.roles.remove(roles).catch(() => {});
+  member.roles.remove(roles, 'Message Reaction Remove').catch(() => {});
 }, 500);

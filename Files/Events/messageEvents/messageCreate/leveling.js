@@ -276,7 +276,7 @@ const roleAssign = async (msg, rolemode, newLevel) => {
   }
 
   if (rem.length) {
-    await msg.member.roles.remove(rem).catch(() => {});
+    await msg.member.roles.remove(rem, 'Leveling').catch(() => {});
   }
 };
 

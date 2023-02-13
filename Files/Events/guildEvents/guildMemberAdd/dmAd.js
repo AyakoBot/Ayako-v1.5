@@ -6,12 +6,13 @@ module.exports = async (member) => {
   if (member.guild.id !== '298954459172700181') return;
 
   const content = `
+<:AMayakoLove:874102206176034826> Check out our lovely Partners:
+
 https://discord.gg/yUjy9Z2ahJ
 https://discord.gg/WGRbUwqkwG
-https://discord.gg/XmrQjfAdt3 
 https://discord.gg/PrEfFNG29x
 https://discord.gg/QjMDJTE2ns
-https://discord.gg/QK6AESTPCM
+https://discord.gg/dkDp5yGqym
 `;
 
   member.user.send({ content }).catch(() => {});
@@ -40,10 +41,10 @@ https://discord.gg/QK6AESTPCM
   const messageToSend = `${
     messages[Math.floor(Math.random() * messages.length)]
   }\nIntroduce yourself in <#763132467041140737> and customize your profile in <#845171979358044190>!`;
-  member.client.channels.cache
-    .get('298954459172700181')
-    .send({ content: messageToSend })
-    .catch(() => {});
+  //member.client.channels.cache
+  //  .get('298954459172700181')
+  //  .send({ content: messageToSend })
+  //  .catch(() => {});
 };
 
 const gv = (member) => {

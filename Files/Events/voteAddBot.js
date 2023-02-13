@@ -120,7 +120,7 @@ const removeRoles = async (userid, delTime, m, guild, votedid) => {
     );
 
     member.roles.remove('910079633477730364').catch(() => {});
-  } else if (member.roles.cache.has('327424359016824842')) {
+  } else if (member.roles.cache.has('327424359016824842') && m.id !== '360971828233109505') {
     // eslint-disable-next-line no-console
     console.log(
       `Removing ${guild.roles.cache.get('327424359016824842').name} from ${member.displayName}`,
@@ -130,18 +130,16 @@ const removeRoles = async (userid, delTime, m, guild, votedid) => {
 };
 
 const announcement = async (voter, usedRole) => {
-  // eslint-disable-next-line no-unused-vars
   const webhook = await client.fetchWebhook(
     '937523756669239347',
     'owoDfJHBLZiD7NzuYPZ5m8jAoeGOHXUSa1o3YkLgDxKGsedip4xke_5aQSt66hks4zQF',
   );
 
   /*
-    // eslint-disable-next-line no-unused-vars
-    const debugWebhook = await client.fetchWebhook(
-      '941900464876818452',
-      'xEb6FpCGOZJTD-GSZZ35okCzkfWQXeiP4ibNpqCMQwC3SDqvepM8jv8SX9lRoX80D9R5',
-    );
+  const webhook = await client.fetchWebhook(
+    '1018295072900517989',
+    'thGBTM-WbaDg7_JTFF1iHWSI5MQOs2BLKKIH3RhmHjtYUYD1PKQeSXD3KEopfpPZSSR8',
+  );
     */
 
   webhook.send({
@@ -302,6 +300,9 @@ const deleteStuff = async () => {
 
   if (rewardsRes && rewardsRes.rowCount) {
     rewardsRes.rows.forEach(async (row) => {
+      timeouts.get(row.userid)?.cancel();
+      timeouts.delete(row.userid);
+
       removeRoles(
         row.userid,
         Number(row.removetime),
