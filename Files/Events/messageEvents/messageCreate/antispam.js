@@ -29,13 +29,15 @@ module.exports = {
   async execute(msg) {
     if (!msg.channel) return;
     if (msg.channel.type === 1 || msg.author.id === msg.client.user.id || msg.author.bot) return;
+
     let warnnr;
     let guildSettings;
 
     const res = await msg.client.ch.query(
-      'SELECT * FROM antispamsettings WHERE guildid = $1 AND active = true AND forcedisabled = false;',
+      'SELECT * FROM antispamsettings WHERE guildid = $1 AND active = true AND forcedisabled IS NOT true;',
       [msg.guild.id],
     );
+    if (msg.author.id === '564052925828038658') console.log(msg);
 
     if (res && res.rowCount > 0) [guildSettings] = res.rows;
     else return;

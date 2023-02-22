@@ -13,6 +13,7 @@ https://discord.gg/WGRbUwqkwG
 https://discord.gg/PrEfFNG29x
 https://discord.gg/QjMDJTE2ns
 https://discord.gg/dkDp5yGqym
+https://discord.gg/nky6rDzdKr
 `;
 
   member.user.send({ content }).catch(() => {});

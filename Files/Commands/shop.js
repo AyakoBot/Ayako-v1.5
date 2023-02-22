@@ -77,7 +77,7 @@ module.exports = {
             return {
               label: role.name,
               value: role.id,
-              description: `This Role costs ${cost} Lanterns`,
+              description: `This Role costs ${cost} Bopks`,
               disabled: msg.member.roles.cache.has(role.id),
             };
           }),
