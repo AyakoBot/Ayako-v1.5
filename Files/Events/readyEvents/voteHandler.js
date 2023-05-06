@@ -5,15 +5,15 @@ const { socketToken } = require('../../BaseClient/auth.json');
 module.exports = async () => {
   client.emit('voteAdd');
 
-  const socket = io('https://ayakobot.com', {
+  const socket = io('https://api.ayakobot.com', {
     transports: ['websocket'],
     auth: {
-      reason: 'top_gg_votes',
+      reason: 'topgg',
       code: socketToken,
     },
   });
 
-  socket.on('TOP_GG', async (voteData) => {
+  socket.on('topgg', async (voteData) => {
     const res = await client.ch.query(`SELECT * FROM votetokens WHERE token = $1;`, [
       voteData.authorization,
     ]);

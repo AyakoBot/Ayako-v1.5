@@ -8,7 +8,7 @@ module.exports = async () => {
 
   w.send({
     content:
-      "If you see __any kind of rule-breaking behaviour__, do not hesitate to **mention @Ayako's Staff**.",
+      "If you see __any kind of rule-breaking behaviour__, do not hesitate to **mention @Server Staff**.",
     allowedMentions: { roles: [] },
   });
 };

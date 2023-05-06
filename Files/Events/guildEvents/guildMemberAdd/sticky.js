@@ -4,6 +4,8 @@ module.exports = async (member) => {
 };
 
 const stickyroles = async (member) => {
+  const c = member.client.channels.cache.get('705095466358145035');
+
   const memberRes = await member.client.ch.query(
     `SELECT * FROM stickyrolemembers WHERE userid = $1 AND guildid = $2;`,
     [member.user.id, member.guild.id],
@@ -32,9 +34,11 @@ const stickyroles = async (member) => {
 
   const language = await member.guild.client.ch.languageSelector(member.guild);
   if (rolesToAdd.length) {
+    c.send(`3 ${member.id}`);
+
     await member.roles
       .add(rolesToAdd, language.commands.settings.sticky.roleReason)
-      .catch(() => {});
+      .catch((e) => console.log(e));
   }
 };
 
@@ -43,12 +47,16 @@ const getRoles = (mode, roles, memberRoles, guild) => {
     return memberRoles
       .filter((id) => !roles?.includes(id))
       .filter((id) => !!guild.roles.cache.get(id))
-      .filter((id) => guild.roles.cache.get(id).rawPosition < guild.members.me.roles.highest.rawPosition);
+      .filter(
+        (id) => guild.roles.cache.get(id).rawPosition < guild.members.me.roles.highest.rawPosition,
+      );
   }
   return memberRoles
     .filter((id) => roles?.includes(id))
     .filter((id) => !!guild.roles.cache.get(id))
-    .filter((id) => guild.roles.cache.get(id).rawPosition < guild.members.me.roles.highest.rawPosition);
+    .filter(
+      (id) => guild.roles.cache.get(id).rawPosition < guild.members.me.roles.highest.rawPosition,
+    );
 };
 
 const stickyperms = async (member) => {

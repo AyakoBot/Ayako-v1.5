@@ -41,7 +41,7 @@ module.exports = {
     }
 
     const embed = new Builders.UnsafeEmbedBuilder()
-      .setDescription(msg.client.ch.stp(msg.lan.reset, { amount: res.rowCount }))
+      .setDescription(msg.client.ch.stp(msg.lan.reset, { amount: String(res.rowCount) }))
       .setColor(msg.client.constants.colors.success)
       .setAuthor({
         name: msg.lan.author,

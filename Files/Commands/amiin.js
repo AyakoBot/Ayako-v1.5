@@ -17,7 +17,7 @@ module.exports = {
     if (res.rows[0].willis == null) {
       embed
         .setDescription(
-          `${msg.client.textEmotes.tick} You are NOT participating!\nGo to <#979811225212956722> and follow the instructions to enter`,
+          `${msg.client.textEmotes.tick} You are NOT participating!\nGo to <#1090288389296758954> and follow the instructions to enter`,
         )
         .setColor(16776960);
     } else if (res.rows[0].willis.includes(id)) {
@@ -27,7 +27,7 @@ module.exports = {
     } else {
       embed
         .setDescription(
-          `${msg.client.textEmotes.tick} You are NOT participating!\nGo to <#979811225212956722> and follow the instructions to enter`,
+          `${msg.client.textEmotes.tick} You are NOT participating!\nGo to <#1090288389296758954> and follow the instructions to enter`,
         )
         .setColor(16711680);
     }

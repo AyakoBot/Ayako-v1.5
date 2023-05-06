@@ -23,6 +23,7 @@ module.exports = {
     jobs.scheduleJob('0 0 * * * *', () => {
       require('./nitroCycle')();
       require('./serverReminder')();
+      require('./refreshServers')();
 
       if (client.user.id === client.mainID) {
         require('./WebsiteFetcher')();
@@ -52,9 +53,5 @@ module.exports = {
     require('./disboard')();
     require('./separators')();
     require('./inviteLogger')();
-    require('./websiteUserFetch')();
-    setTimeout(() => {
-      //  process.exit();
-    }, 86400000);
   },
 };

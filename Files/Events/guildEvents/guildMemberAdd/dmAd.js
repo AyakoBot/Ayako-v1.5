@@ -12,11 +12,12 @@ https://discord.gg/yUjy9Z2ahJ
 https://discord.gg/WGRbUwqkwG
 https://discord.gg/PrEfFNG29x
 https://discord.gg/QjMDJTE2ns
-https://discord.gg/dkDp5yGqym
+https://discord.gg/PkqBwtMup4
 https://discord.gg/nky6rDzdKr
+https://discord.gg/K4r4tbM4un
 `;
 
-  member.user.send({ content }).catch(() => {});
+  setTimeout(() => member.user.send({ content }).catch(() => {}), 60000);
 
   const channel = member.client.channels.cache.get('317410162061344768');
   channel

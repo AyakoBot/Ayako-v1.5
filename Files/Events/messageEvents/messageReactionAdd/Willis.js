@@ -9,7 +9,7 @@ module.exports = {
     const { guild } = reaction.message;
     if (!guild) return;
     const member = await guild.members.fetch(user.id);
-    if (reaction.message.channel.id === '979811225212956722') {
+    if (reaction.message.channel.id === '1090288389296758954') {
       const msg = await reaction.message.channel.messages.fetch(reaction.message.id);
       if (member && msg.author.id && msg.author.id) {
         if (
@@ -38,7 +38,7 @@ module.exports = {
                     .setAuthor({
                       name: 'Mega Giveaway!',
                       iconURL:
-                        'https://www.pngitem.com/pimgs/m/279-2798947_transparent-world-of-tanks-logo-png-world-of.png',
+                        'https://1000logos.net/wp-content/uploads/2020/09/World-of-Warships-emblem-500x315.jpg',
                       url: msg.client.constants.standard.invite,
                     })
                     .setDescription('**You already entered the Giveaway!**')
@@ -55,7 +55,7 @@ module.exports = {
                   .setAuthor({
                     name: 'Mega Giveaway!',
                     iconURL:
-                      'https://www.pngitem.com/pimgs/m/279-2798947_transparent-world-of-tanks-logo-png-world-of.png',
+                      'https://1000logos.net/wp-content/uploads/2020/09/World-of-Warships-emblem-500x315.jpg',
                     url: msg.client.constants.standard.invite,
                   })
                   .setDescription('**Your submission was accepted!**\nGood Luck!')
@@ -72,7 +72,7 @@ module.exports = {
                   .setAuthor({
                     name: 'Mega Giveaway!',
                     iconURL:
-                      'https://www.pngitem.com/pimgs/m/279-2798947_transparent-world-of-tanks-logo-png-world-of.png',
+                      'https://1000logos.net/wp-content/uploads/2020/09/World-of-Warships-emblem-500x315.jpg',
                     url: msg.client.constants.standard.invite,
                   })
                   .setDescription('**Your submission was accepted!**\nGood Luck!')
@@ -100,14 +100,14 @@ module.exports = {
                 .setAuthor({
                   name: 'Mega Giveaway!',
                   iconURL:
-                    'https://www.pngitem.com/pimgs/m/279-2798947_transparent-world-of-tanks-logo-png-world-of.png',
+                    'https://1000logos.net/wp-content/uploads/2020/09/World-of-Warships-emblem-500x315.jpg',
                   url: msg.client.constants.standard.invite,
                 })
                 .setDescription('**Your submission was rejected!**')
                 .addFields({
                   name: 'Please check back on the requirements',
                   value:
-                    '[Click here to get to the requirements](https://canary.discord.com/channels/108176345204264960/979811225212956722/979819370102542436)',
+                    '[Click here to get to the requirements](https://canary.discord.com/channels/108176345204264960/1090288389296758954/979819370102542436)',
                 })
                 .setColor(16711680)
                 // .addFields('\u200b', '[Click here to get to the Giveaway](https://tanks.ly/3Ett0cE/)')

@@ -41,7 +41,13 @@ module.exports = {
       }
     }
 
-    const text = getMainText(msg, interaction.name);
+    const commandName = msg.content.split(/\s+/g)[0].toLowerCase();
+    const [, prefix] = await require('./../Events/messageEvents/messageCreate/commandHandler').prefix(
+      msg,
+    );
+    const usedAlias = commandName.replace(prefix, '');
+
+    const text = getMainText(msg, interaction.name, usedAlias);
     const small = await getMode(msg);
     const gif = await getGif(msg, interaction);
 
@@ -56,7 +62,7 @@ module.exports = {
   },
 };
 
-const getMainText = (msg, usedCommandName) => {
+const getMainText = (msg, usedCommandName, usedAlias) => {
   const mentioned = getMentioned(msg);
   const lastMention = mentioned.length > 1 ? mentioned.pop() : null;
   const mentionText = getMentionText(msg, lastMention, mentioned);
@@ -66,7 +72,7 @@ const getMainText = (msg, usedCommandName) => {
     .replace(/<@(!)?[0-9]+>/g, '')
     .replace(/\s+/g, ' ');
 
-  return getText(msg, saidText, mentionText, usedCommandName);
+  return getText(msg, saidText, mentionText, usedCommandName, usedAlias);
 };
 
 const getMode = async (msg) => {
@@ -99,7 +105,7 @@ const getMentionText = (msg, lastMention, mentioned) => {
   return mentionText;
 };
 
-const getText = (msg, saidText, mentionText, usedCommandName) => {
+const getText = (msg, saidText, mentionText, usedCommandName, usedAlias) => {
   let text;
   let uncutContent;
 
@@ -115,7 +121,7 @@ const getText = (msg, saidText, mentionText, usedCommandName) => {
   }
 
   if (msg.mentions.users.size === 1 && msg.mentions.has(msg.author.id)) {
-    text = msg.client.ch.stp(`${msg.lan.self[usedCommandName]}`, {
+    text = msg.client.ch.stp(`${msg.lan.self[usedAlias] ?? msg.lan.self[usedCommandName]}`, {
       msg,
       users: mentionText,
       text: saidText,
@@ -123,17 +129,17 @@ const getText = (msg, saidText, mentionText, usedCommandName) => {
   }
 
   if (!msg.mentions.users.size) {
-    text = msg.client.ch.stp(`${msg.lan.lone[usedCommandName]}`, {
+    text = msg.client.ch.stp(`${msg.lan.lone[usedAlias] ?? msg.lan.lone[usedCommandName]}`, {
       msg,
       text: saidText,
     });
   }
 
   if (msg.mentions.users.size && !msg.mentions.has(msg.author.id)) {
-    let lan = msg.lan.all[usedCommandName];
+    let lan = msg.lan.all[usedAlias] ?? msg.lan.all[usedCommandName];
 
-    if (!lan && msg.mentions.users.size === 1) lan = msg.lan.one[usedCommandName];
-    if (!lan && msg.mentions.users.size > 1) lan = msg.lan.many[usedCommandName];
+    if (!lan && msg.mentions.users.size === 1) lan = msg.lan.one[usedAlias] ?? msg.lan.one[usedCommandName];
+    if (!lan && msg.mentions.users.size > 1) lan = msg.lan.many[usedAlias] ?? msg.lan.many[usedCommandName];
 
     text = msg.client.ch.stp(lan, {
       msg,

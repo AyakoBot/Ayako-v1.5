@@ -1,6 +1,6 @@
 module.exports = {
   name: 'disableprivacyandtermsreminder',
-  perm: 8n,
+  perm: 32n,
   dm: false,
   takesFirstArg: false,
   aliases: null,

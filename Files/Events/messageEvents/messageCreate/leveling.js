@@ -50,6 +50,8 @@ const globalLeveling = async (msg) => {
 };
 
 const guildLeveling = async (msg, language) => {
+  if (msg.guild.id === '108176345204264960' && msg.content.split(/\s+/g).length < 2) return;
+
   const isEnabled = await checkEnabled(msg);
   if (isEnabled === false) return;
 

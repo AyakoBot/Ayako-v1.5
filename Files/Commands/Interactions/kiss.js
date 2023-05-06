@@ -2,7 +2,7 @@ const getPurrAPIFetch = require('../../BaseClient/Other Client Files/purrAPIfetc
 
 module.exports = {
   name: 'kiss',
-  aliases: ['kith'],
+  aliases: ['kith', 'pash', 'smooch'],
   isAsync: true,
   gif: async (msg) => {
     const random = Math.round(Math.random() * 1);

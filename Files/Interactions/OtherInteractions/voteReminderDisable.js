@@ -6,10 +6,16 @@ module.exports = {
   split: false,
   execute: async (cmd) => {
     cmd.client.ch.query(
-      `INSERT INTO users (userid, votereminders) VALUES ($1, $2)
+      `INSERT INTO users (userid, votereminders, username, avatar, lastfetch) VALUES ($1, $2, $3, $4, $5)
         ON CONFLICT (userid) DO
         UPDATE SET votereminders = $2;`,
-      [cmd.user.id, false],
+      [
+        cmd.user.id,
+        false,
+        cmd.user.username,
+        cmd.user.displayAvatarUrl() ?? 'https://cdn.discordapp.com/embed/avatars/1.png',
+        Date.now(),
+      ],
     );
 
     const msg = await cmd.message.fetch().catch(() => {});

@@ -1169,6 +1169,7 @@
         "hug": "{{msg.author}} hugs {{users}}{{text}}",
         "smug": "{{msg.author}} smugs at {{users}}{{text}}",
         "pat": "{{msg.author}} pats {{users}}{{text}}",
+        "pash": "{{msg.author}} pashes {{users}}{{text}}",
         "kiss": "{{msg.author}} kisses {{users}}{{text}}",
         "bloodsuck": "{{msg.author}} sucks {{users}}'s blood{{text}}",
         "thighsleep": "{{msg.author}} sleeps on {{users}}'s thighs{{text}}",

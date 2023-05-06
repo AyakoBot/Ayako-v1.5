@@ -5,4 +5,5 @@ module.exports = async () => {
   require('./expiry')();
   require('./logchannelCacher')();
   require('./stats')();
+  require('./refreshUsers')();
 };
