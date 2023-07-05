@@ -52,6 +52,5 @@ module.exports = {
     require('./reminder')();
     require('./disboard')();
     require('./separators')();
-    require('./inviteLogger')();
   },
 };

@@ -10,7 +10,6 @@ module.exports = async (member) => {
 
 https://discord.gg/yUjy9Z2ahJ
 https://discord.gg/WGRbUwqkwG
-https://discord.gg/PrEfFNG29x
 https://discord.gg/QjMDJTE2ns
 https://discord.gg/PkqBwtMup4
 https://discord.gg/nky6rDzdKr

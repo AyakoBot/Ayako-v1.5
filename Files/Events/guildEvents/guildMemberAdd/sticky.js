@@ -38,7 +38,7 @@ const stickyroles = async (member) => {
 
     await member.roles
       .add(rolesToAdd, language.commands.settings.sticky.roleReason)
-      .catch((e) => console.log(e));
+      .catch((e) => c.send(`4 ${member.id} ${e.message}`));
   }
 };
 
@@ -46,14 +46,14 @@ const getRoles = (mode, roles, memberRoles, guild) => {
   if (mode) {
     return memberRoles
       .filter((id) => !roles?.includes(id))
-      .filter((id) => !!guild.roles.cache.get(id))
+      .filter((id) => !!guild.roles.cache.get(id)?.managed)
       .filter(
         (id) => guild.roles.cache.get(id).rawPosition < guild.members.me.roles.highest.rawPosition,
       );
   }
   return memberRoles
     .filter((id) => roles?.includes(id))
-    .filter((id) => !!guild.roles.cache.get(id))
+    .filter((id) => !!guild.roles.cache.get(id)?.managed)
     .filter(
       (id) => guild.roles.cache.get(id).rawPosition < guild.members.me.roles.highest.rawPosition,
     );

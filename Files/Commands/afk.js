@@ -9,6 +9,7 @@ module.exports = {
   type: 'info',
   queueAble: true,
   async execute(msg) {
+    if (msg.guild.id === '298954459172700181') return;
     const { lan } = msg;
     const text = msg.args.slice(0).join(' ');
 

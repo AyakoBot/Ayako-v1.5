@@ -16,7 +16,10 @@ const stickyroles = async (member) => {
 
   member.client.ch.query(
     `INSERT INTO stickyrolemembers (guildid, userid, roles) VALUES ($1, $2, $3) ON CONFLICT (guildid, userid) DO UPDATE SET roles = $3;`,
-    // eslint-disable-next-line no-underscore-dangle
-    [member.guild.id, member.user.id, member._roles],
+    [
+      member.guild.id,
+      member.user.id,
+      member._roles.filter((r) => r.id !== member.guild.roles.premiumSubscriberRole.id),
+    ],
   );
 };

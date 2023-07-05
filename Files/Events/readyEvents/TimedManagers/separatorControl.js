@@ -8,6 +8,8 @@ module.exports = async () => {
   ]);
   res.rows.forEach(async (row) => {
     const guild = client.guilds.cache.get(row.guildid);
+    if (!guild) return;
+
     if (client.separatorAssigner) {
       if (client.separatorAssigner[guild.id]) {
         Object.entries(client.separatorAssigner[guild.id]).forEach((_, index) => {

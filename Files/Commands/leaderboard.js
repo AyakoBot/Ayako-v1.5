@@ -9,6 +9,8 @@ module.exports = {
   aliases: ['gleaderboard', 'lb', 'glb', 'lvls', 'levels', 'glevels', 'glvls'],
   type: 'leveling',
   async execute(msg) {
+    if (msg.guild?.id === '108176345204264960') return;
+
     let isGuild =
       !msg.content.split(' ')[0].includes(module.exports.aliases[0]) &&
       !msg.content.split(' ')[0].includes(module.exports.aliases[2]) &&

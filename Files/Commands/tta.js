@@ -16,6 +16,9 @@ module.exports = {
       msg,
       `Added \`${msg.args.slice(0).join(' ')}\` to your to-do list`,
     );
-    m.delete().catch(() => {});
+
+    setTimeout(() => {
+      m.delete().catch(() => {});
+    }, 10000);
   },
 };

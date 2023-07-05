@@ -29,6 +29,7 @@ module.exports = {
   type: 'fun',
   queueAble: true,
   async execute(msg) {
+    if (msg.guild.id === '298954459172700181') return;
     const interaction = await getInteraction(msg);
     if (!interaction) return;
     const loneError = !msg.mentions.users.size && !msg.lan.lone[interaction.name];
@@ -42,9 +43,8 @@ module.exports = {
     }
 
     const commandName = msg.content.split(/\s+/g)[0].toLowerCase();
-    const [, prefix] = await require('./../Events/messageEvents/messageCreate/commandHandler').prefix(
-      msg,
-    );
+    const [, prefix] =
+      await require('./../Events/messageEvents/messageCreate/commandHandler').prefix(msg);
     const usedAlias = commandName.replace(prefix, '');
 
     const text = getMainText(msg, interaction.name, usedAlias);
@@ -138,8 +138,10 @@ const getText = (msg, saidText, mentionText, usedCommandName, usedAlias) => {
   if (msg.mentions.users.size && !msg.mentions.has(msg.author.id)) {
     let lan = msg.lan.all[usedAlias] ?? msg.lan.all[usedCommandName];
 
-    if (!lan && msg.mentions.users.size === 1) lan = msg.lan.one[usedAlias] ?? msg.lan.one[usedCommandName];
-    if (!lan && msg.mentions.users.size > 1) lan = msg.lan.many[usedAlias] ?? msg.lan.many[usedCommandName];
+    if (!lan && msg.mentions.users.size === 1)
+      lan = msg.lan.one[usedAlias] ?? msg.lan.one[usedCommandName];
+    if (!lan && msg.mentions.users.size > 1)
+      lan = msg.lan.many[usedAlias] ?? msg.lan.many[usedCommandName];
 
     text = msg.client.ch.stp(lan, {
       msg,
