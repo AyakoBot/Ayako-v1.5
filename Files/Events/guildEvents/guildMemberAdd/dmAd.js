@@ -5,19 +5,6 @@ module.exports = async (member) => {
   if (member.guild.id === '366219406776336385') gv(member);
   if (member.guild.id !== '298954459172700181') return;
 
-  const content = `
-<:AMayakoLove:874102206176034826> Check out our lovely Partners:
-
-https://discord.gg/yUjy9Z2ahJ
-https://discord.gg/WGRbUwqkwG
-https://discord.gg/QjMDJTE2ns
-https://discord.gg/PkqBwtMup4
-https://discord.gg/nky6rDzdKr
-https://discord.gg/K4r4tbM4un
-`;
-
-  setTimeout(() => member.user.send({ content }).catch(() => {}), 60000);
-
   const channel = member.client.channels.cache.get('317410162061344768');
   channel
     .send({
