@@ -15,11 +15,6 @@ module.exports = {
       console.log(new Date().toLocaleString());
     });
 
-    if (client.user.id === client.mainID) {
-      const statcord = require('../../BaseClient/Statcord');
-      statcord.autopost();
-    }
-
     jobs.scheduleJob('0 0 * * * *', () => {
       require('./nitroCycle')();
       require('./serverReminder')();

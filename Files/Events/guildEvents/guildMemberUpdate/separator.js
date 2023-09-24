@@ -18,7 +18,7 @@ const isWaiting = new Set();
 
 module.exports = {
   execute(oldMember, newMember) {
-    if (oldMember._roles.sort().join(',') === newMember._roles.sort().join(',')) return;
+    if (oldMember.roles.cache.map((o) => o).sort().join(',') === newMember.roles.cache.map((o) => o).sort().join(',')) return;
 
     if (isWaiting.has(`${newMember.user.id}-${newMember.guild.id}`)) return;
     isWaiting.add(`${newMember.user.id}-${newMember.guild.id}`);

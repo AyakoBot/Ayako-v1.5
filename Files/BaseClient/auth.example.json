@@ -16,6 +16,5 @@
   "promptAPIToken": "https://promptapi.com/ API Token",
   "topGGtoken": "https://top.gg/ Token",
   "DBToken": "https://discord.bots.gg Token",
-  "DBListToken": "https://discord.bots.gg Token",
-  "statcordKey": "https://statcord.com/ Token"
+  "DBListToken": "https://discord.bots.gg Token"
 }

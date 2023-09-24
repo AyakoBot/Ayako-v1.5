@@ -400,11 +400,6 @@ const commandExe = async (msg) => {
   if (msg.channel.type !== 1) await doLogChannels(msg);
 
   try {
-    if (msg.client.user.id === msg.client.mainID) {
-      const statcord = require('../../../BaseClient/Statcord');
-      statcord.postCommand(msg.command.name, msg.author.id).catch(() => {});
-    }
-
     // eslint-disable-next-line no-console
     console.log(`Command executed: ${msg.command.name} | ${msg.url}`);
     msg.command.execute(msg);

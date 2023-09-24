@@ -285,11 +285,6 @@ const commandExe = async (interaction) => {
   interaction.lan = interaction.language.slashCommands[interaction.cmd.name];
 
   try {
-    if (interaction.client.user.id === interaction.client.mainID) {
-      const statcord = require('../../BaseClient/Statcord');
-      statcord.postCommand(interaction.cmd.name, interaction.user.id).catch(() => {});
-    }
-
     // eslint-disable-next-line no-console
     console.log(`Slash-Command executed: ${interaction.cmd.name} | ${interaction.channel.id}`);
     interaction.cmd.execute(interaction, interaction.language);
