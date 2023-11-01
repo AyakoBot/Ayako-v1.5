@@ -269,6 +269,11 @@ packages:
     resolution: {integrity: sha512-NCC3zz2+nvYd+Ckfh87rA47zfu2QsQpvc6k1yzTk+b9KzRj0wkGa8LSoGOXN6Zv4lRf/EIoZ80biDh9HOI+RNQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
 
+  /@fastify/busboy@2.0.0:
+    resolution: {integrity: sha512-JUFJad5lv7jxj926GPgymrWQxxjPYuJNiNjNMzqT+HiuP6Vl3dk5xzG+8sTX96np0ZAluvaMzPsjhHZ5rNuNQQ==}
+    engines: {node: '>=14'}
+    dev: false
+
   /@humanwhocodes/config-array@0.11.11:
     resolution: {integrity: sha512-N2brEuAadi0CcdeMXUkhbZB84eskAc8MEX1By6qEchoVywSgXPIjou4rYsl0V3Hj0ZnuGycGCjdNgockbzeWNA==}
     engines: {node: '>=10.10.0'}
@@ -369,7 +374,7 @@ packages:
     resolution: {integrity: sha512-qWWYDKAwJHaKaA/5EyLYMzfR76MwCbmKVMSXTPMd9FZFPHuLWJHO+m7Q8dWpWtcnunHa6evRAwlB3p83cht7Ww==}
     dependencies:
       raw-body: 2.5.2
-      undici: 5.25.2
+      undici: 5.27.0
     dev: false
 
   /@types/cacheable-request@6.0.3:
@@ -3663,11 +3668,11 @@ packages:
       busboy: 1.6.0
     dev: false
 
-  /undici@5.25.2:
-    resolution: {integrity: sha512-tch8RbCfn1UUH1PeVCXva4V8gDpGAud/w0WubD6sHC46vYQ3KDxL+xv1A2UxK0N6jrVedutuPHxe1XIoqerwMw==}
+  /undici@5.27.0:
+    resolution: {integrity: sha512-l3ydWhlhOJzMVOYkymLykcRRXqbUaQriERtR70B9LzNkZ4bX52Fc8wbTDneMiwo8T+AemZXvXaTx+9o5ROxrXg==}
     engines: {node: '>=14.0'}
     dependencies:
-      busboy: 1.6.0
+      '@fastify/busboy': 2.0.0
     dev: false
 
   /unpipe@1.0.0:
