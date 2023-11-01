@@ -3,36 +3,31 @@ const Builders = require('@discordjs/builders');
 module.exports = async (member) => {
   policyReminder(member);
   if (member.guild.id === '366219406776336385') gv(member);
-  if (member.guild.id !== '298954459172700181') return;
+  if (member.guild.id !== '390037305659883521') return;
 
-  const channel = member.client.channels.cache.get('317410162061344768');
-  channel
+  const content = `୨  Welcome! Here's some of our partnered discord servers <3
+
+  ⠀    ୨  -  -  -  -  ︵ ︵ ︵
+  ⠀ ⠀\`🍰\`┊[Bee's Nest ( !! HUGE VOUCH !! )]( https://discord.com/invite/honeybee )
+  ⠀ ⠀\`🌸\`┊[X-Zone ( !! HUGE VOUCH !! )]( https://discord.gg/xzone )
+  ⠀ ⠀\`🍰\`︰[Night Raid]( https://discord.gg/nky6rDzdKr )
+  ⠀ ⠀\`🌸\`┊[Reiko's Cybercafe]( https://discord.gg/PkqBwtMup4 )
+  ⠀ ⠀\`🍰\`︰[Animekos]( https://discord.gg/PyPXShn4Qc )
+  ⠀ ⠀\`🌸\`┊[Kokoro]( https://discord.gg/kokoro )
+  ⠀ ⠀\`🍰\`︰[The TeaHouse]( https://discord.gg/sip )
+  
+  ・୨・┈┈┈┈・୨୧・┈┈┈┈・୧・`;
+
+  await member
     .send({
-      content: `${member.user} \`${member.user.id}\` has joined! <a:Wave:775409859339747349>`,
-      allowedMentions: { users: [] },
+      content,
+      files: [{ attachment: 'https://i.imgur.com/UFdAMWc.png', name: 'image0.png' }],
     })
     .catch(() => {});
 
-  const messages = [
-    `Hi ${member.user}, we're so excited to have you here! <:AMahhshit:767189664846708746>`,
-    `Oooh look! A cute ${member.user} has joined!~ <:AMlove5:709789932066963578>`,
-    `Can we be best friends, ${member.user}? <:AMblushgiggle:854718466821324850>`,
-    `The main character, ${member.user}, has appeared! <a:AMwavehigif:709789935070347296>`,
-    `Ayako's favorite ${member.user} just joined! <a:AMKokomiShy:888205118971994153>`,
-    `I'm so glad you finally arrived ${member.user} !! <a:AMpanic:709789939537150142>`,
-    `Welcome to your new fav server ${member.user}~ <:AMblush:709808103570538568>`,
-    `I'm happy you found us ${member.user}! <a:AMhyperneko:700772299120443464>`,
-    `Hi ${member.user}, new friendships await you here! <:AMhappu:342064276703412234>`,
-    `Having you here ${member.user} couldn't be more exciting! <:AMHeadpat:708130511561949234>`,
-  ];
-
-  const messageToSend = `${
-    messages[Math.floor(Math.random() * messages.length)]
-  }\nIntroduce yourself in <#763132467041140737> and customize your profile in <#845171979358044190>!`;
-  //member.client.channels.cache
-  //  .get('298954459172700181')
-  //  .send({ content: messageToSend })
-  //  .catch(() => {});
+  await member.send({
+    files: [{ attachment: 'https://i.ibb.co/qY85tHh/image0.gif', name: 'image0.gif' }],
+  });
 };
 
 const gv = (member) => {

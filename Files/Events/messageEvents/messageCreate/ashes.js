@@ -1,6 +1,6 @@
 module.exports = async (msg) => {
   if (
-    ['757879586439823440', '808095830677782558'].includes(msg.channel.id) &&
+    ['757879586439823440', '1055212496652349480'].includes(msg.channel.id) &&
     msg.author.id === '646937666251915264'
   ) {
     if (msg.content.includes('since this server is currently active')) {

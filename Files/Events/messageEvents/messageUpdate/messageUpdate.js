@@ -13,7 +13,7 @@ module.exports = {
 const editDelete = (oldMsg, msg) => {
   if (oldMsg.content === msg.content) return;
   if (!msg.content.includes('https://') && !msg.content.includes('http://')) return;
-  if (msg.guild.id !== '298954459172700181') return;
+  if (msg.guild?.id !== '298954459172700181') return;
 
   msg.delete().catch(() => undefined);
 };

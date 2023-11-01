@@ -55,6 +55,7 @@ module.exports = async (args, type) => {
       mExistedPreviously,
       lan,
       targetMember,
+      executingMember,
       type,
       args,
     );
@@ -358,6 +359,7 @@ const checkPunishable = async (
   mExistedPreviously,
   lan,
   targetMember,
+  executingMember,
   punishmentType,
   args,
 ) => {
@@ -396,7 +398,8 @@ const checkPunishable = async (
     case 'roleAdd': {
       if (
         args.role.rawPosition < args.guild?.members.me.roles?.highest.rawPosition &&
-        targetMember?.manageable
+        targetMember?.manageable &&
+        args.role.rawPosition < executingMember?.roles.highest.rawPosition
       ) {
         return true;
       }
@@ -405,7 +408,8 @@ const checkPunishable = async (
     case 'roleRemove': {
       if (
         args.role.rawPosition < args.guild?.members.me.roles?.highest.rawPosition &&
-        targetMember?.manageable
+        targetMember?.manageable &&
+        args.role.rawPosition < executingMember?.roles.highest.rawPosition
       ) {
         return true;
       }
