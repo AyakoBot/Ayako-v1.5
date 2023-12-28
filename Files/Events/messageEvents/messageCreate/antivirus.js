@@ -189,7 +189,7 @@ const getBlocklist = () => {
 };
 
 const getWhitelist = () => {
-  const file = fs.readFileSync('/root/Bots/Ayako-VueJS/Website-CDN/antivirus/whitelisted.txt', {
+  const file = fs.readFileSync('/root/Bots/Ayako-VueJS/Website-CDN/antivirus/allowlisted.txt', {
     encoding: 'utf8',
   });
   const whitelistRes = file ? file.split(/\n+/) : [];
@@ -198,7 +198,7 @@ const getWhitelist = () => {
 };
 
 const getBlacklist = () => {
-  const file = fs.readFileSync('/root/Bots/Ayako-VueJS/Website-CDN/antivirus/blacklisted.txt', {
+  const file = fs.readFileSync('/root/Bots/Ayako-VueJS/Website-CDN/antivirus/denylisted.txt', {
     encoding: 'utf8',
   });
   const blacklistRes = file ? file.split(/\n+/) : [];
@@ -216,7 +216,7 @@ const getBadLinks = () => {
 };
 
 const getWhitelistCDN = () => {
-  const file = fs.readFileSync('/root/Bots/Ayako-VueJS/Website-CDN/antivirus/whitelistedCDN.txt', {
+  const file = fs.readFileSync('/root/Bots/Ayako-VueJS/Website-CDN/antivirus/allowlistedCDN.txt', {
     encoding: 'utf8',
   });
   const whitelistCDNRes = file ? file.split(/\n+/) : [];

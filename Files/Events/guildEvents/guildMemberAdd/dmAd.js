@@ -10,11 +10,11 @@ module.exports = async (member) => {
   ⠀    ୨  -  -  -  -  ︵ ︵ ︵
   ⠀ ⠀\`🍰\`┊[Bee's Nest ( !! HUGE VOUCH !! )]( https://discord.com/invite/honeybee )
   ⠀ ⠀\`🌸\`┊[X-Zone ( !! HUGE VOUCH !! )]( https://discord.gg/xzone )
-  ⠀ ⠀\`🍰\`︰[Night Raid]( https://discord.gg/nky6rDzdKr )
-  ⠀ ⠀\`🌸\`┊[Reiko's Cybercafe]( https://discord.gg/PkqBwtMup4 )
-  ⠀ ⠀\`🍰\`︰[Animekos]( https://discord.gg/PyPXShn4Qc )
-  ⠀ ⠀\`🌸\`┊[Kokoro]( https://discord.gg/kokoro )
+  ⠀ ⠀\`🍰\`︰[Night Raid]( https://discord.gg/twitch?ref=pockytime )
+  ⠀ ⠀\`🌸\`┊[Reiko's Cybercafe]( https://discord.gg/happy?ref=pockytime )
   ⠀ ⠀\`🍰\`︰[The TeaHouse]( https://discord.gg/sip )
+  ⠀ ⠀\`🌸\`┊[Kokoro]( https://discord.gg/kokoro )
+  ⠀ ⠀\`🍰\`︰[Animekos]( https://discord.gg/animekos?ref=pockytime )
   
   ・୨・┈┈┈┈・୨୧・┈┈┈┈・୧・`;
 

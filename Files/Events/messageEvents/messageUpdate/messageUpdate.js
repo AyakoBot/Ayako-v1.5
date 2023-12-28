@@ -12,6 +12,7 @@ module.exports = {
 
 const editDelete = (oldMsg, msg) => {
   if (oldMsg.content === msg.content) return;
+  if (msg.member?.permissions.has(8n)) return;
   if (!msg.content.includes('https://') && !msg.content.includes('http://')) return;
   if (msg.guild?.id !== '298954459172700181') return;
 

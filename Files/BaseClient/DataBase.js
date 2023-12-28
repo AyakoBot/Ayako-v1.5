@@ -5,9 +5,9 @@ const ch = require('./ClientHelper');
 const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
-  database: 'Ayako-v1.5',
+  database: 'Ayako-v2',
   password: auth.pSQLpw,
-  port: 5432,
+  port: 5433,
 });
 pool.query('SELECT NOW() as now;', (err) => {
   if (err) {
